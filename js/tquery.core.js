@@ -1,11 +1,20 @@
-var tQuery	= function(object, rootNode)
+var tQuery	= function(object, root)
 {
-	if( object instanceof THREE.Geometry ){
+	if( object instanceof THREE.Object3D ){
+		return new tQuery.Object3D(object);
+
+	}else if( object instanceof THREE.Geometry ){
 		return new tQuery.Geometry(object);
+
+	}else if( object instanceof THREE.Material ){
+		return new tQuery.Material(object);
+
 	}else if( object instanceof THREE.Object3D ){
 		return new tQuery.Object3D(object);
+
 	}else if( typeof object === "string" ){
-		return new tQuery.Object3D(object);
+		return new tQuery.Object3D(object, root);
+
 	}else{
 		console.assert(false, "unsupported type")
 	}

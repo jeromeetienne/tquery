@@ -4,6 +4,7 @@ var scene	= tQuery.scene().camera(0,2,6).container(domElement);
 var loop	= tQuery.loop().scene(scene);
 tQuery.cube().appendTo(scene);
 tQuery.dragPanControls(scene).bind(loop);
+loop.start();
 
 tQuery.dragPanControls(scene)
 .get()		// return base

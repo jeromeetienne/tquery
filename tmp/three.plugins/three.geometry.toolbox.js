@@ -1,3 +1,7 @@
+// to make THREE.Geometry pluginable do
+// $ THREE.Plugins.mixin(THREE.Geometry);
+
+
 /**
  * Scale the geometry
 */

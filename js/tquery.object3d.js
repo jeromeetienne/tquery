@@ -11,6 +11,7 @@ tQuery.Object3D	= function(object){
 tQuery.Object3D.prototype = new THREE.Object3D();
 tQuery.Object3D.prototype.constructor = tQuery.Object3D;
 
+// Make tQuery.Object3D pluginable
 tQuery.Plugins.mixin(tQuery.Object3D);
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +35,10 @@ tQuery.Object3D.prototype.each	= function(callback){
 	return true;
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//		geometry and material						//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.Object3D.prototype.geometry	= function(){
 	var geometries	= [];
 	this.each(function(object3d){
@@ -42,17 +47,22 @@ tQuery.Object3D.prototype.geometry	= function(){
 	return new tQuery.Geometry(geometries);
 };
 
+tQuery.Object3D.prototype.material	= function(){
+	var materials	= [];
+	this.each(function(object3d){
+		materials.push(object3d.material)
+	});
+	return new tQuery.Material(material);
+};
 
 //////////////////////////////////////////////////////////////////////////////////
-//		Handle Classes							//
+//		Handle dom attribute						//
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D.prototype.id	= function(value)
 {
 	// sanity check 
 	console.assert(this.length <= 1, "tQuery.Object3D.id used on multi-elements" );
-
-
 	if( value !== undefined ){
 		if( this.length > 0 ){
 			var object3d	= this.get(0);
