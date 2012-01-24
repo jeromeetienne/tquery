@@ -1,0 +1,8 @@
+* some funky animation plugins
+  * geometry wobble
+    * from threex
+  * displacement
+  * tQuery.fx.siren.js
+  * tQuery.fx.cloud.js
+* tQuery.domEvent.js
+

@@ -9,6 +9,14 @@ deploy:
 	# so two lines: one if no commit, one if something to commit 
 	git commit -a -m "New deploy" && git push -f origin HEAD:gh-pages && git reset HEAD~
 
+JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
+
+docs:
+	java -jar ${JSDOC_ROOT}/jsrun.jar ${JSDOC_ROOT}/app/run.js	\
+			-t=${JSDOC_ROOT}/templates/Codeview/		\
+			-d=docs/					\
+			js/ js/plugins
+
 build:
 	echo 						>  build/tquery.js
 	cat js/tquery.object3d.js			>> build/tquery.js
@@ -18,4 +26,4 @@ build:
 	cat js/plugins/tquery.create.js			>> build/tquery.js
 	cat js/plugins/tquery.geometry.toolbox.js	>> build/tquery.js
 
-.PHONY: build
+.PHONY: build docs

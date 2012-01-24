@@ -67,14 +67,18 @@ tQuery.Scene.prototype.remove	= function(object3d)
 	return this;
 }
 
-tQuery.Scene.prototype.appendTo	= function(domElement)
+tQuery.Scene.prototype.fullpage	= function()
 {
-// FIXME this should not be here
-if(domElement === document.body){
+	// Should that be in pluging
+	var domElement	= document.body;
 	domElement.style.margin		= "0";
 	domElement.style.padding	= "0";
 	domElement.style.overflow	= 'hidden';
+	return this.appendTo(domElement);
 }
+
+tQuery.Scene.prototype.appendTo	= function(domElement)
+{
 	domElement.appendChild(this._renderer.domElement)
 	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
 	// for chained API

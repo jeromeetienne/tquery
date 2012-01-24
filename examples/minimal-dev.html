@@ -1,0 +1,29 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../vendor/require.js"></script>
+<script>
+var scene;
+
+require([
+	"../vendor/three.js/Three.js",
+	"../vendor/three.js/Detector.js",
+	"../js/tquery.core.js",
+
+	"../js/tquery.object3d.js",
+	"../js/tquery.geometry.js",
+	"../js/tquery.material.js",
+
+	"../js/tquery.scene.js",
+	"../js/tquery.loop.js",
+	"../js/plugins/tquery.geometry.toolbox.js",
+	"../js/plugins/tquery.object3d.geometry.js",
+	"../js/plugins/tquery.create.js",
+], function() {
+	scene		= tQuery.scene().fullpage();
+	var loop	= tQuery.loop(scene).start();
+	var mesh	= tQuery.torus().addTo(scene);
+
+	// 
+	//tQuery.loop(tQuery.scene().fullpage().add(tQuery.cube())).start();
+});
+
+</script>
