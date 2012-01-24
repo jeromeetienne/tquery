@@ -1,5 +1,4 @@
-var stats, scene, renderer;
-var camera, cameraControl;
+var scene;
 
 require([
 	"../js/tquery.core.js",
@@ -9,30 +8,28 @@ require([
 	"../js/tquery.material.js",
 
 	"../js/tquery.scene.js",
+	"../js/tquery.loop.js",
 	"../js/plugins/tquery.geometry.toolbox.js",
 	"../js/plugins/tquery.create.js",
 ], function() {
-	if( !init() )	animate();
-});
-
-// init the scene
-function init(){
-return true;
-	scene		= new tQuery.Scene().appendTo(document.body)
-
+	//new tQuery.Loop().start()
 	// What about this syntax ? which is tquery.create.js plugins
 	// - out of the core
-	//scene		= tQuery.create.scene().appendTo(document.body);
+	var container	= document.getElementById('container');
+	scene		= tQuery.create.scene().appendTo(container);
 
-/* TODO code tQuery.Mesh();	
-	var mesh	= new tQuery.Mesh().appendTo(scene);
-	mesh.normal().torus().geometry().normalize();
-	mesh.addClass("myClass1").addClass("myClass2");
+	var loop	= tQuery.loop(scene).start();
 
-	var mesh	= new tQuery.Mesh().appendTo(scene);
-	mesh.normal().cube().geometry().normalize();
-	mesh.addClass("myClass1").id("myId");
-*/
+	/* TODO code tQuery.Mesh();	
+		var mesh	= new tQuery.Mesh().appendTo(scene);
+		mesh.normal().torus().geometry().normalize();
+		mesh.addClass("myClass1").addClass("myClass2");
+	
+		var mesh	= new tQuery.Mesh().appendTo(scene);
+		mesh.normal().cube().geometry().normalize();
+		mesh.addClass("myClass1").id("myId");
+	*/
+
 	// here you add your objects
 	// - you will most likely replace this part by your own
 	var geometry	= new THREE.TorusGeometry( 0.5-0.15, 0.15 );
@@ -61,16 +58,30 @@ return true;
 //tQuery("superobj").addClass("myClass1").addClass("myClass2");
 //tQuery("superobj").addClass("myClass1").addClass("myClass3");
 //console.log("mesh", mesh)
-}
 
-// animation loop
-function animate() {
 
-	// loop on request animation loop
-	// - it has to be at the begining of the function
-	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-	requestAnimationFrame( animate );
-
-	// do the render
-	scene.render();
-}
+	// create a camera contol
+	var cameraControls	= new THREEx.DragPanControls(scene.camera())
+	loop.hookPreRender(function(){
+		cameraControls.update();
+	});
+	
+	// add Stats.js - https://github.com/mrdoob/stats.js
+	var stats	= new Stats();
+	stats.domElement.style.position	= 'absolute';
+	stats.domElement.style.bottom	= '0px';
+	document.body.appendChild( stats.domElement );
+	loop.hookPostRender(function(){
+		stats.update();
+	});
+	
+	// transparently support window resize
+	THREEx.WindowResize.bind(scene.renderer(), scene.camera());
+	// allow 'p' to make screenshot
+	THREEx.Screenshot.bindKey(scene.renderer());
+	// allow 'f' to go fullscreen where this feature is supported
+	if( THREEx.FullScreen.available() ){
+		THREEx.FullScreen.bindKey();		
+		document.getElementById('inlineDoc').innerHTML	+= "- <i>f</i> for fullscreen";
+	}
+});

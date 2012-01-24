@@ -3,6 +3,7 @@ tQuery.Geometry	= function(object){
 // IDEA:
 // here add backpointer as parameter to the ctor
 // and when we do geometry.back() it return this pointer
+// - same for material
 // tQuery.create.Mesh()
 // 		.geometry().scale(3).back()
 //		.material().phong().back()
