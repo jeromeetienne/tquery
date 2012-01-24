@@ -1,4 +1,10 @@
-// constructor
+/**
+ * Handle geometry
+ *
+ * @class include THREE.Geometry
+ *
+ * @param {THREE.Geometry} object an instance or an array of instance
+*/
 tQuery.Geometry	= function(object){
 // IDEA:
 // here add backpointer as parameter to the ctor
@@ -23,18 +29,36 @@ tQuery.Geometry	= function(object){
 };
 
 // make it pluginable
-tQuery.Plugins.mixin(tQuery.Geometry);
+tQuery.pluginsMixin(tQuery.Geometry);
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Retrieve the elements matched by the jQuery object
+ * 
+ * @param {Function} callback the function to notify. function(element){ }.
+ * 			loop interrupted if it returns false
+ * 
+ * @returns {Boolean} return true if completed, false if interrupted
+*/
 tQuery.Geometry.prototype.get	= function(idx){
+	if( idx === undefined )	return this._lists;
+
 	// sanity check - it MUST be defined
-	console.assert(this._lists[idx]);
+	console.assert(this._lists[idx], "element not defined");
 	return this._lists[idx];
 };
 
+/**
+ * loop over element
+ * 
+ * @param {Function} callback the function to notify. function(element){ }.
+ * 			loop interrupted if it returns false
+ * 
+ * @returns {Boolean} return true if completed, false if interrupted
+*/
 tQuery.Geometry.prototype.each	= function(callback){
 	for(var i = 0; i < this._lists.length; i++){
 		var object3d	= this._lists[i];

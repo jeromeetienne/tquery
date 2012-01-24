@@ -2,10 +2,13 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.scene	= function(){
-	return new tQuery.Scene();
-}
-// constructor
+/**
+ * Handle scene
+ *
+ * @class include THREE.Material
+ *
+ * @param {THREE.Material} object an instance or an array of instance
+*/
 tQuery.Scene	= function(){
 	// create a scene
 	this._scene	= new THREE.Scene();
@@ -35,7 +38,7 @@ tQuery.Scene	= function(){
 };
 
 // make it pluginable
-tQuery.Plugins.mixin(tQuery.Scene);
+tQuery.pluginsMixin(tQuery.Scene);
 
 
 tQuery.Scene.prototype.destroy	= function()

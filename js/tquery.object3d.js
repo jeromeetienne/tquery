@@ -1,4 +1,12 @@
-// constructor
+/**
+ * Handle object3D
+ *
+ * @class include THREE.Object3D
+ *
+ * @param {} object
+ * @param {THREE.Object3D} rootnode
+ * @returns {tQuery.*} the tQuery object created
+*/
 tQuery.Object3D	= function(object, root){
 	if( typeof object === "string"){
 		object	= tQuery.Object3D._select(object, root);
@@ -9,13 +17,21 @@ tQuery.Object3D	= function(object, root){
 
 
 // Make tQuery.Object3D pluginable
-tQuery.Plugins.mixin(tQuery.Object3D);
+tQuery.pluginsMixin(tQuery.Object3D);
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Retrieve the elements matched by the jQuery object
+ * 
+ * @param {Function} callback the function to notify. function(element){ }.
+ * 			loop interrupted if it returns false
+ * 
+ * @returns {Boolean} return true if completed, false if interrupted
+*/
 tQuery.Object3D.prototype.get	= function(idx){
 	if( idx === undefined )	return this._lists;
 
@@ -24,6 +40,15 @@ tQuery.Object3D.prototype.get	= function(idx){
 	return this._lists[idx];
 };
 
+
+/**
+ * loop over element
+ * 
+ * @param {Function} callback the function to notify. function(element){ }.
+ * 			loop interrupted if it returns false
+ * 
+ * @returns {Boolean} return true if completed, false if interrupted
+*/
 tQuery.Object3D.prototype.each	= function(callback){
 	for(var i = 0; i < this._lists.length; i++){
 		var object3d	= this._lists[i];
@@ -37,7 +62,12 @@ tQuery.Object3D.prototype.each	= function(callback){
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Object3D.prototype.geometry	= function(value){
+/**
+ * get geometry.
+ * 
+ * @returns {tQuery.Geometry} return the geometries from the tQuery.Object3D
+*/
+tQuery.Object3D.prototype.geometry	= function(){
 	var geometries	= [];
 	this.each(function(object3d){
 		geometries.push(object3d.geometry)
@@ -45,6 +75,11 @@ tQuery.Object3D.prototype.geometry	= function(value){
 	return new tQuery.Geometry(geometries);
 };
 
+/**
+ * get material.
+ * 
+ * @returns {tQuery.Material} return the materials from the tQuery.Object3D
+*/
 tQuery.Object3D.prototype.material	= function(){
 	var materials	= [];
 	this.each(function(object3d){
@@ -57,6 +92,12 @@ tQuery.Object3D.prototype.material	= function(){
 //			handling selection					//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * add all matched elements to a scene
+ * 
+ * @param {tQuery.Scene} scene to which add it
+ * @returns {tQuery.Object3D} chained API
+*/
 tQuery.Object3D.prototype.addTo	= function(scene)
 {
 	console.assert( scene instanceof tQuery.Scene )
@@ -66,6 +107,12 @@ tQuery.Object3D.prototype.addTo	= function(scene)
 	return this;
 }
 
+/**
+ * remove all matched elements from a scene
+ * 
+ * @param {tQuery.Scene} scene from which remove it
+ * @returns {tQuery.Object3D} chained API
+*/
 tQuery.Object3D.prototype.removeFrom	= function(scene)
 {
 	console.assert( scene instanceof tQuery.Scene )
@@ -79,6 +126,9 @@ tQuery.Object3D.prototype.removeFrom	= function(scene)
 //		Handle dom attribute						//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Getter/Setter for the id of the matched elements
+*/
 tQuery.Object3D.prototype.id	= function(value)
 {
 	// sanity check 
@@ -98,7 +148,12 @@ tQuery.Object3D.prototype.id	= function(value)
 	}
 };
 
-
+/**
+ * add a class to all matched elements
+ * 
+ * @param {string} className the name of the class to add
+ * @returns {tQuery.Object3D} chained API
+*/
 tQuery.Object3D.prototype.addClass	= function(className){
 	this.each(function(object3d){
 		// init ._tqClasses if needed
@@ -111,11 +166,23 @@ tQuery.Object3D.prototype.addClass	= function(className){
 	return this;
 };
 
+/**
+ * remove a class to all matched elements
+ * 
+ * @param {string} className the name of the class to remove
+ * @returns {tQuery.Object3D} chained API
+*/
 tQuery.Object3D.prototype.removeClass	= function(className){
 	console.assert(false, "not yet implemented")
 	return this;
 };
 
+/**
+ * return true if any of the matched elements has this class
+ * 
+ * @param {string} className the name of the class
+ * @returns {tQuery.Object3D} true if any of the matched elements has this class, false overwise
+*/
 tQuery.Object3D.prototype.hasClass	= function(className){
 	var completed	= this.each(function(object3d){
 		// init ._tqClasses if needed

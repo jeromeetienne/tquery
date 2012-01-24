@@ -2,11 +2,13 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.loop	= function(scene){
-	return new tQuery.Loop(scene);
-}
-
-// constructor
+/**
+ * Handle the rendering loop
+ *
+ * @class This class handle the rendering loop
+ *
+ * @param {THREE.Scene} the scene to display (optional)
+*/
 tQuery.Loop	= function(scene)
 {
 	// internally if scene present do that
@@ -20,9 +22,11 @@ tQuery.Loop	= function(scene)
 };
 
 // make it pluginable
-tQuery.Plugins.mixin(tQuery.Loop);
+tQuery.pluginsMixin(tQuery.Loop);
 
-
+/**
+ * destructor
+*/
 tQuery.Loop.prototype.destroy	= function()
 {
 	this.stop();
@@ -32,6 +36,11 @@ tQuery.Loop.prototype.destroy	= function()
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * start looping
+ * 
+ * @returns {tQuery.Loop} chained API
+*/
 tQuery.Loop.prototype.start	= function()
 {
 	if( this._timerId )	this.stop();
@@ -40,6 +49,11 @@ tQuery.Loop.prototype.start	= function()
 	return this;
 }
 
+/**
+ * stop looping
+ * 
+ * @returns {tQuery.Loop} chained API
+*/
 tQuery.Loop.prototype.stop	= function()
 {
 	cancelAnimationFrame(this._timerId);
@@ -55,10 +69,10 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
-	// run all the hooks - from lower level to higher - in order of registration
-	for(var level = 0; level <= this._hooks.length; level++){
-		if( this._hooks[level] === undefined )	continue;
-		var callbacks	= this._hooks[level].slice(0)
+	// run all the hooks - from lower priority to higher - in order of registration
+	for(var priority = 0; priority <= this._hooks.length; priority++){
+		if( this._hooks[priority] === undefined )	continue;
+		var callbacks	= this._hooks[priority].slice(0)
 		for(var i = 0; i < callbacks.length; i++){
 			callbacks[i](time);
 		}
@@ -73,27 +87,42 @@ tQuery.Loop.prototype.PRE_RENDER		= 20;
 tQuery.Loop.prototype.ON_RENDER		= 50;
 tQuery.Loop.prototype.POST_RENDER	= 80;
 
-tQuery.Loop.prototype.hook	= function(level, callback)
+/**
+ * hook a callback at a given priority
+ *
+ * @param {Number} priority for this callback
+ * @param {Function} the function which will be called function(time){}
+ * @returns {tQuery.Loop} chained API
+*/
+tQuery.Loop.prototype.hook	= function(priority, callback)
 {
-	this._hooks[level]	= this._hooks[level] || [];
-	console.assert(this._hooks[level].indexOf(callback) === -1)
-	this._hooks[level].push(callback);
+	this._hooks[priority]	= this._hooks[priority] || [];
+	console.assert(this._hooks[priority].indexOf(callback) === -1)
+	this._hooks[priority].push(callback);
 	// for chained API
 	return this;
 }
 
-tQuery.Loop.prototype.unhook	= function(level, callback)
+/**
+ * unhook a callback at a given priority
+ *
+ * @param {Number} priority for this callback
+ * @param {Function} the function which will be called function(time){}
+ * @returns {tQuery.Loop} chained API
+*/
+tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
-	var index	= this._hooks[level].indexof(callback);
+	var index	= this._hooks[priority].indexof(callback);
 	console.assert(index !== -1);
-	this._hooks[level].splice(idx, 1);
-	this._hooks[level].length === 0 && delete this._hooks[level]
+	this._hooks[priority].splice(idx, 1);
+	this._hooks[priority].length === 0 && delete this._hooks[priority]
 	// for chained API
 	return this;
 }
 
 
 // bunch of shortcut
+// - TODO should it be in a plugin ?
 
 tQuery.Loop.prototype.hookPreRender	= function(callback){
 	return this.hook(this.PRE_RENDER, callback)
