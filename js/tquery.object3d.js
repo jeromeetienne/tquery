@@ -7,9 +7,6 @@ tQuery.Object3D	= function(object, root){
 	this.length	= this._lists.length;
 };
 
-// handle inheritance - TODO what how jQuery does it 
-tQuery.Object3D.prototype = new THREE.Object3D();
-tQuery.Object3D.prototype.constructor = tQuery.Object3D;
 
 // Make tQuery.Object3D pluginable
 tQuery.Plugins.mixin(tQuery.Object3D);
@@ -40,7 +37,7 @@ tQuery.Object3D.prototype.each	= function(callback){
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Object3D.prototype.geometry	= function(){
+tQuery.Object3D.prototype.geometry	= function(value){
 	var geometries	= [];
 	this.each(function(object3d){
 		geometries.push(object3d.geometry)
@@ -55,6 +52,28 @@ tQuery.Object3D.prototype.material	= function(){
 	});
 	return new tQuery.Material(material);
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//			handling selection					//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Object3D.prototype.addTo	= function(scene)
+{
+	console.assert( scene instanceof tQuery.Scene )
+	this.each(function(object3d){
+		scene.add(object3d)
+	}.bind(this));
+	return this;
+}
+
+tQuery.Object3D.prototype.removeFrom	= function(scene)
+{
+	console.assert( scene instanceof tQuery.Scene )
+	this.each(function(object3d){
+		scene.remove(object3d)
+	}.bind(this));
+	return this;
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Handle dom attribute						//

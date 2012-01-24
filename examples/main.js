@@ -10,6 +10,7 @@ require([
 	"../js/tquery.scene.js",
 	"../js/tquery.loop.js",
 	"../js/plugins/tquery.geometry.toolbox.js",
+	"../js/plugins/tquery.object3d.geometry.js",
 	"../js/plugins/tquery.create.js",
 ], function() {
 	//new tQuery.Loop().start()
@@ -20,6 +21,15 @@ require([
 
 	var loop	= tQuery.loop(scene).start();
 
+	var mesh	= tQuery.cube().addTo(scene);
+	mesh.geometry().scale(2);
+	mesh.addClass("myClass1").addClass("myClass2").id('cubeId');
+
+	var mesh	= tQuery.torus().addTo(scene);
+	//mesh.geometry().scale(2);
+	mesh.get(0).position.x	+= 2;
+	mesh.addClass("myClass1").id('torusId');
+
 	/* TODO code tQuery.Mesh();	
 		var mesh	= new tQuery.Mesh().appendTo(scene);
 		mesh.normal().torus().geometry().normalize();
@@ -29,7 +39,7 @@ require([
 		mesh.normal().cube().geometry().normalize();
 		mesh.addClass("myClass1").id("myId");
 	*/
-
+if( false ){
 	// here you add your objects
 	// - you will most likely replace this part by your own
 	var geometry	= new THREE.TorusGeometry( 0.5-0.15, 0.15 );
@@ -50,6 +60,7 @@ require([
 
 	tQuery(mesh).id("myId");
 	tQuery(mesh).addClass("myClass1");
+}
 
 
 //geometry.center().normalize().scale(3).rotate(Math.PI/3, 0, 0).translate(-2,0,0);
