@@ -2,6 +2,9 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.scene	= function(){
+	return new tQuery.Scene();
+}
 // constructor
 tQuery.Scene	= function(){
 	// create a scene
@@ -46,9 +49,13 @@ tQuery.Scene.prototype.destroy	= function()
 
 tQuery.Scene.prototype.add	= function(object3d)
 {
-	// TODO make objects3d a possible array
-	console.assert(object3d instanceof THREE.Object3D)
-	this._scene.add(object3d)
+	if( object3d instanceof tQuery.Object3D ){
+		object3d.each(function(object3d){
+			this._scene.add(object3d)			
+		}.bind(this));
+	}else if( object3d instanceof THREE.Object3D ){
+		this._scene.add(object3d)		
+	}else	console.assert(false);
 	// for chained API
 	return this;
 }
@@ -62,7 +69,14 @@ tQuery.Scene.prototype.remove	= function(object3d)
 
 tQuery.Scene.prototype.appendTo	= function(domElement)
 {
+// FIXME this should not be here
+if(domElement === document.body){
+	domElement.style.margin		= "0";
+	domElement.style.padding	= "0";
+	domElement.style.overflow	= 'hidden';
+}
 	domElement.appendChild(this._renderer.domElement)
+	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
 	// for chained API
 	return this;
 }

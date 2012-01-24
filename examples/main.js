@@ -26,41 +26,10 @@ require([
 	mesh.addClass("myClass1").addClass("myClass2").id('cubeId');
 
 	var mesh	= tQuery.torus().addTo(scene);
-	//mesh.geometry().scale(2);
-	mesh.get(0).position.x	+= 2;
+	mesh.geometry().scale(2);
+	mesh.translate(2,0,0);
 	mesh.addClass("myClass1").id('torusId');
 
-	/* TODO code tQuery.Mesh();	
-		var mesh	= new tQuery.Mesh().appendTo(scene);
-		mesh.normal().torus().geometry().normalize();
-		mesh.addClass("myClass1").addClass("myClass2");
-	
-		var mesh	= new tQuery.Mesh().appendTo(scene);
-		mesh.normal().cube().geometry().normalize();
-		mesh.addClass("myClass1").id("myId");
-	*/
-if( false ){
-	// here you add your objects
-	// - you will most likely replace this part by your own
-	var geometry	= new THREE.TorusGeometry( 0.5-0.15, 0.15 );
-	geometry.dynamic= true;	// TODO should have be done here ?
-	var material	= new THREE.MeshNormalMaterial();
-	var mesh	= new THREE.Mesh( geometry, material );
-	//mesh.name	= "superobj";
-	scene.add( mesh );
-	
-	tQuery(mesh).addClass("myClass1").addClass("myClass2");
-
-	var geometry	= new THREE.CubeGeometry( 1, 1, 1 );
-	geometry.dynamic= true;	// TODO should have be done here ?
-	var material	= new THREE.MeshNormalMaterial();
-	var mesh	= new THREE.Mesh( geometry, material );
-	mesh.position.x	= 2;
-	scene.add( mesh );
-
-	tQuery(mesh).id("myId");
-	tQuery(mesh).addClass("myClass1");
-}
 
 
 //geometry.center().normalize().scale(3).rotate(Math.PI/3, 0, 0).translate(-2,0,0);
