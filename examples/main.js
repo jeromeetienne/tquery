@@ -30,12 +30,6 @@ function init(){
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.getElementById('container').appendChild(renderer.domElement);
 
-	// add Stats.js - https://github.com/mrdoob/stats.js
-	stats = new Stats();
-	stats.domElement.style.position	= 'absolute';
-	stats.domElement.style.bottom	= '0px';
-	document.body.appendChild( stats.domElement );
-
 	// create a scene
 	scene = new THREE.Scene();
 
@@ -44,18 +38,6 @@ function init(){
 	camera.position.set(0, 0, 5);
 	scene.add(camera);
 
-	// create a camera contol
-	cameraControls	= new THREEx.DragPanControls(camera)
-
-	// transparently support window resize
-	THREEx.WindowResize.bind(renderer, camera);
-	// allow 'p' to make screenshot
-	THREEx.Screenshot.bindKey(renderer);
-	// allow 'f' to go fullscreen where this feature is supported
-	if( THREEx.FullScreen.available() ){
-		THREEx.FullScreen.bindKey();		
-		document.getElementById('inlineDoc').innerHTML	+= "- <i>f</i> for fullscreen";
-	}
 
 	// here you add your objects
 	// - you will most likely replace this part by your own
@@ -106,7 +88,7 @@ function animate() {
 function render() {
 
 	// update camera controls
-	cameraControls.update();
+	//cameraControls.update();
 
 	// actually render the scene
 	renderer.render( scene, camera );

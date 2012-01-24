@@ -1,18 +1,15 @@
 var tQuery	= function(object, root)
 {
-	if( object instanceof THREE.Object3D ){
+	if( object instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
 
-	}else if( object instanceof THREE.Geometry ){
+	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
 
-	}else if( object instanceof THREE.Material ){
+	}else if( object instanceof THREE.Material && tQuery.Material){
 		return new tQuery.Material(object);
 
-	}else if( object instanceof THREE.Object3D ){
-		return new tQuery.Object3D(object);
-
-	}else if( typeof object === "string" ){
+	}else if( typeof object === "string" && tQuery.Object3D){
 		return new tQuery.Object3D(object, root);
 
 	}else{

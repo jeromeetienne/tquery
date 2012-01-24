@@ -11,10 +11,7 @@ tQuery.Geometry	= function(object){
 	});
 };
 
-// handle inheritance - TODO what how jQuery does it 
-tQuery.Geometry.prototype = new THREE.Geometry();
-tQuery.Geometry.prototype.constructor = tQuery.Geometry;
-
+// make it pluginable
 tQuery.Plugins.mixin(tQuery.Geometry);
 
 //////////////////////////////////////////////////////////////////////////////////
