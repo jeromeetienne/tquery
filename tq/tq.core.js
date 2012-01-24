@@ -1,0 +1,53 @@
+var tQuery	= function(object, rootNode)
+{
+	if( object instanceof THREE.Geometry ){
+		return new tQuery.Geometry(object);
+	}else if( object instanceof THREE.Object3D ){
+		return new tQuery.Object3D(object);
+	}else if( typeof object === "string" ){
+		return new tQuery.Object3D(object);
+	}else{
+		console.assert(false, "unsupported type")
+	}
+	return undefined;
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.each	= function(arr, callback){
+	for(var i = 0; i < arr.length; i++){
+		var keepLooping	= callback(arr[i])
+		if( keepLooping === false )	return false;
+	}
+	return true;
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Plugins	= {
+	mixin	: function(object){
+		var dest	= object.prototype || object;
+		object.register	= function(name, funct) {
+			if( dest[name] ){
+				throw new Error('Conflict! Already method called: ' + name);
+			}
+			dest[name]	= funct;
+		};
+		object.unregister	= function(name){
+			if( dest.hasOwnProperty(name) === false ){
+				throw new Error('Plugin not found: ' + name);
+			}
+			delete dest[name];
+		};
+		object.registered	= function(name){
+			return dest.hasOwnProperty(name) === true;
+		}
+	}
+};
+
