@@ -7,7 +7,7 @@
  *
  * @class This class handle the rendering loop
  *
- * @param {THREE.Scene} the scene to display (optional)
+ * @param {THREE.Scene} scene the scene to display (optional)
 */
 tQuery.Loop	= function(scene)
 {
@@ -91,7 +91,7 @@ tQuery.Loop.prototype.POST_RENDER	= 80;
  * hook a callback at a given priority
  *
  * @param {Number} priority for this callback
- * @param {Function} the function which will be called function(time){}
+ * @param {Function} callback the function which will be called function(time){}
  * @returns {tQuery.Loop} chained API
 */
 tQuery.Loop.prototype.hook	= function(priority, callback)
@@ -107,7 +107,7 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
  * unhook a callback at a given priority
  *
  * @param {Number} priority for this callback
- * @param {Function} the function which will be called function(time){}
+ * @param {Function} callback the function which will be called function(time){}
  * @returns {tQuery.Loop} chained API
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)

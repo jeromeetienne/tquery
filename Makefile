@@ -13,6 +13,7 @@ JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 
 docs:
 	java -jar ${JSDOC_ROOT}/jsrun.jar ${JSDOC_ROOT}/app/run.js	\
+			-D="noGlobal:true"	\
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/					\
 			js/ js/plugins

@@ -9,15 +9,15 @@ require([
 
 	"../js/tquery.scene.js",
 	"../js/tquery.loop.js",
+	"../js/tquery.core.create.js",
 	"../js/plugins/tquery.geometry.toolbox.js",
 	"../js/plugins/tquery.object3d.geometry.js",
-	"../js/plugins/tquery.create.js",
 ], function() {
 	//new tQuery.Loop().start()
 	// What about this syntax ? which is tquery.create.js plugins
 	// - out of the core
 	var container	= document.getElementById('container');
-	scene		= tQuery.create.scene().appendTo(container);
+	scene		= tQuery.scene().appendTo(container);
 
 	var loop	= tQuery.loop(scene).start();
 
@@ -39,6 +39,8 @@ require([
 //tQuery("superobj").addClass("myClass1").addClass("myClass3");
 //console.log("mesh", mesh)
 
+	//tQuery(scene.camera()).dragPanControls(loop);
+	//tQuery.ui.stats(loop);
 
 	// create a camera contol
 	var cameraControls	= new THREEx.DragPanControls(scene.camera())
@@ -54,6 +56,7 @@ require([
 	loop.hookPostRender(function(){
 		stats.update();
 	});
+	
 	
 	// transparently support window resize
 	THREEx.WindowResize.bind(scene.renderer(), scene.camera());

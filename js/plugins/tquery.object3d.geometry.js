@@ -75,6 +75,10 @@ tQuery.Object3D.register('translate', function(delta){
 	// return this, to get chained API	
 	return this;
 });
+tQuery.Object3D.register('translateX', function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Object3D.register('translateY', function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Object3D.register('translateZ', function(delta){ return this.translate(0, 0, delta);	});
+
 
 tQuery.Object3D.register('rotate', function(angles){
 	// handle parameters
@@ -91,5 +95,10 @@ tQuery.Object3D.register('rotate', function(angles){
 	// return this, to get chained API	
 	return this;
 });
+
+tQuery.Object3D.register('rotateX', function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Object3D.register('rotateY', function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Object3D.register('rotateZ', function(angle){ return this.rotate(0, 0, angle);	});
+
 
 });	// require.js end

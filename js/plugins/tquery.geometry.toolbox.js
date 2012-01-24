@@ -6,7 +6,7 @@ require([
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
-// confusion with the set scale in object3D. rename as zoom
+// confusion with the set scale in object3D. TODO rename as zoom
 tQuery.Geometry.register('scale', function(scale){
 	// handle parameters
 	if( typeof scale === "number" && arguments.length === 1 ){
