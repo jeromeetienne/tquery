@@ -1,5 +1,15 @@
 // constructor
 tQuery.Geometry	= function(object){
+// IDEA:
+// here add backpointer as parameter to the ctor
+// and when we do geometry.back() it return this pointer
+// tQuery.create.Mesh()
+// 		.geometry().scale(3).back()
+//		.material().phong().back()
+//		.material().get()
+// and here we are on tQuery.Mesh
+
+	
 	this._lists	= object instanceof Array ? object : [object];
 	this.length	= this._lists.length;
 	// sanity check - all items MUST be THREE.Geometery

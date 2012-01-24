@@ -1,3 +1,11 @@
+/**
+ * TODO
+ * - do something for crawling the three
+ *   - like python.walk ?
+ * - docs with jsdoc
+ *   - http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/
+*/
+
 var tQuery	= function(object, root)
 {
 	if( object instanceof THREE.Object3D  && tQuery.Object3D){
@@ -37,8 +45,8 @@ tQuery.each	= function(arr, callback){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Plugins	= {
-	mixin	: function(object){
-		var dest	= object.prototype || object;
+	mixin	: function(object, dest){
+		dest	= dest	|| object.prototype || object;
 		object.register	= function(name, funct) {
 			if( dest[name] ){
 				throw new Error('Conflict! Already method called: ' + name);
@@ -56,4 +64,9 @@ tQuery.Plugins	= {
 		}
 	}
 };
+
+
+// make it pluginable
+tQuery.Plugins.mixin(tQuery, tQuery);
+
 

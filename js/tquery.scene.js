@@ -28,9 +28,7 @@ tQuery.Scene	= function(){
 	// FIXME this window dimension is crap
 	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
 	this._camera.position.set(0, 0, 5);
-	this._scene.add(camera);
-
-	requestAnimationFrame( this._render.bind(this) );
+	this._scene.add(this._camera);
 };
 
 // make it pluginable
@@ -48,26 +46,38 @@ tQuery.Scene.prototype.destroy	= function()
 
 tQuery.Scene.prototype.add	= function(object3d)
 {
+	// TODO make objects3d a possible array
 	console.assert(object3d instanceof THREE.Object3D)
-	this._scene.remove(object3d)
+	this._scene.add(object3d)
+	// for chained API
+	return this;
 }
 tQuery.Scene.prototype.remove	= function(object3d)
 {
 	console.assert(object3d instanceof THREE.Object3D)
-	this._scene.add(object3d)
+	this._scene.remove(object3d)
+	// for chained API
+	return this;
 }
+
+tQuery.Scene.prototype.appendTo	= function(domElement)
+{
+	domElement.appendChild(this._renderer.domElement)
+	// for chained API
+	return this;
+}
+
+tQuery.Scene.prototype.renderer	= function(){ return this._renderer;	}
+tQuery.Scene.prototype.camera	= function(){ return this._camera;	}
+tQuery.Scene.prototype.scene	= function(){ return this._scene;	}
+tQuery.Scene.prototype.get	= function(){ return this._scene;	}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Scene.prototype._render	= function()
+tQuery.Scene.prototype.render	= function()
 {
-	// loop on request animation loop
-	// - it has to be at the begining of the function
-	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-	requestAnimationFrame( this._render.bind(this) );
-
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );
 }

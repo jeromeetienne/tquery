@@ -3,42 +3,36 @@ var camera, cameraControl;
 
 require([
 	"../js/tquery.core.js",
+
 	"../js/tquery.object3d.js",
 	"../js/tquery.geometry.js",
 	"../js/tquery.material.js",
-	"../js/plugins/tquery.geometry.toolbox.js"
+
+	"../js/tquery.scene.js",
+	"../js/plugins/tquery.geometry.toolbox.js",
+	"../js/plugins/tquery.create.js",
 ], function() {
 	if( !init() )	animate();
 });
 
 // init the scene
 function init(){
+return true;
+	scene		= new tQuery.Scene().appendTo(document.body)
 
-	if( Detector.webgl ){
-		renderer = new THREE.WebGLRenderer({
-			antialias		: true,	// to get smoother output
-			preserveDrawingBuffer	: true	// to allow screenshot
-		});
-		renderer.setClearColorHex( 0xBBBBBB, 1 );
-	// uncomment if webgl is required
-	//}else{
-	//	Detector.addGetWebGLMessage();
-	//	return true;
-	}else{
-		renderer	= new THREE.CanvasRenderer();
-	}
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	document.getElementById('container').appendChild(renderer.domElement);
+	// What about this syntax ? which is tquery.create.js plugins
+	// - out of the core
+	//scene		= tQuery.create.scene().appendTo(document.body);
 
-	// create a scene
-	scene = new THREE.Scene();
+/* TODO code tQuery.Mesh();	
+	var mesh	= new tQuery.Mesh().appendTo(scene);
+	mesh.normal().torus().geometry().normalize();
+	mesh.addClass("myClass1").addClass("myClass2");
 
-	// put a camera in the scene
-	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set(0, 0, 5);
-	scene.add(camera);
-
-
+	var mesh	= new tQuery.Mesh().appendTo(scene);
+	mesh.normal().cube().geometry().normalize();
+	mesh.addClass("myClass1").id("myId");
+*/
 	// here you add your objects
 	// - you will most likely replace this part by your own
 	var geometry	= new THREE.TorusGeometry( 0.5-0.15, 0.15 );
@@ -78,18 +72,5 @@ function animate() {
 	requestAnimationFrame( animate );
 
 	// do the render
-	render();
-
-	// update stats
-	stats.update();
-}
-
-// render the scene
-function render() {
-
-	// update camera controls
-	//cameraControls.update();
-
-	// actually render the scene
-	renderer.render( scene, camera );
+	scene.render();
 }

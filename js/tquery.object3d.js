@@ -1,7 +1,7 @@
 // constructor
-tQuery.Object3D	= function(object){
+tQuery.Object3D	= function(object, root){
 	if( typeof object === "string"){
-		object	= tQuery.Object3D._select(object);
+		object	= tQuery.Object3D._select(object, root);
 	}
 	this._lists	= object instanceof Array ? object : [object];
 	this.length	= this._lists.length;
@@ -13,6 +13,7 @@ tQuery.Object3D.prototype.constructor = tQuery.Object3D;
 
 // Make tQuery.Object3D pluginable
 tQuery.Plugins.mixin(tQuery.Object3D);
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -120,7 +121,7 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| scene;	// FIXME scene is global
+	root		= root	|| scene.scene();	// FIXME scene is global
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 	var lists	= this._crawls(root, selectItems)
 	return lists;
@@ -150,6 +151,7 @@ tQuery.Object3D._crawls	= function(root, selectItems)
 tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 {
 	// sanity check
+//console.log("!seleect", arguments)
 	console.assert( object3d instanceof THREE.Object3D );
 	console.assert( typeof selectItem === 'string' );
 

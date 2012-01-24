@@ -10,7 +10,8 @@ tQuery.Material	= function(object){
 tQuery.Material.prototype = new THREE.Material();
 tQuery.Material.prototype.constructor = tQuery.Material;
 
-tQuery.Plugins.mixin(tQuery.Material);
+tQuery.Plugins.mixin(tQuery.Material, tQuery.Material.prototype);
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
