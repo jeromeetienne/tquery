@@ -7,3 +7,7 @@
 * tQuery.domEvent.js
 * tQuery.csg.js
 * tQuery.modelLoad(url)
+* tQuery.debugLight()
+  * make light visible
+  * if possible
+* tQuery.axis().addTo(scene);

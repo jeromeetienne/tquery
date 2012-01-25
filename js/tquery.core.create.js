@@ -1,5 +1,5 @@
 /**
- * Create tQuery.Soop
+ * Create tQuery.Scene
 */
 tQuery.register('scene', function(){
 	return new tQuery.Scene();

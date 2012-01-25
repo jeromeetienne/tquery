@@ -37,6 +37,11 @@ var tQuery	= function(object, root)
 	return undefined;
 };
 
+/**
+ * The version of tQuery
+*/
+tQuery.VERSION	= "1.0.0";
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//

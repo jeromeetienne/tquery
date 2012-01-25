@@ -18,13 +18,25 @@ docs:
 			-d=docs/					\
 			js/ js/plugins
 
+
 build:
 	echo 						>  build/tquery.js
-	cat js/tquery.object3d.js			>> build/tquery.js
-	cat js/tquery.geometry.js			>> build/tquery.js
-	cat js/tquery.material.js			>> build/tquery.js
-	cat js/tquery.scene.js				>> build/tquery.js
-	cat js/plugins/tquery.create.js			>> build/tquery.js
-	cat js/plugins/tquery.geometry.toolbox.js	>> build/tquery.js
+	cat vendor/three.js/Three.js			>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat vendor/three.js/Detector.js			>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat vendor/three.js/Stats.js			>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat vendor/threex/THREEx.screenshot.js		>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat vendor/threex/THREEx.FullScreen.js		>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat vendor/threex/THREEx.WindowResize.js	>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat vendor/threex.dragpancontrols.js		>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat js/*.js					>> build/tquery.js
+	echo 						>> build/tquery.js
+	cat js/plugins/*.js				>> build/tquery.js
 
 .PHONY: build docs

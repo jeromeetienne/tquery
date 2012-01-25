@@ -1,5 +1,3 @@
-var scene;
-
 require([
 	"../js/tquery.core.js",
 
@@ -17,7 +15,7 @@ require([
 	// What about this syntax ? which is tquery.create.js plugins
 	// - out of the core
 	var container	= document.getElementById('container');
-	scene		= tQuery.scene().appendTo(container);
+	var scene	= tQuery.scene().appendTo(container);
 
 	var loop	= tQuery.loop(scene).start();
 

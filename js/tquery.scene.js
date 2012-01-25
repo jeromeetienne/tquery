@@ -9,7 +9,10 @@
  *
  * @param {THREE.Material} object an instance or an array of instance
 */
-tQuery.Scene	= function(){
+tQuery.Scene	= function()
+{	
+	tQuery._currentScene	= this;
+	
 	// create a scene
 	this._scene	= new THREE.Scene();
 

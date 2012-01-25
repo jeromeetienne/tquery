@@ -207,7 +207,7 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| scene.scene();	// FIXME scene is global
+	root		= root	|| tQuery._currentScene.scene();	// FIXME scene is global
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 	var lists	= this._crawls(root, selectItems)
 	return lists;
