@@ -6,10 +6,11 @@
  * @param {THREE.Node} object an instance or an array of instance
 */
 tQuery.Node	= function(object){
-	this._lists	= object instanceof Array ? object : [object];
+	// handle parameters
+	if( object instanceof Array )	this._lists	= object;
+	else if( !object )		this._lists	= [];
+	else				this._lists	= [object];
 	this.length	= this._lists.length;
-	// sanity check - all items MUST be THREE.Geometery
-	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Node); });
 };
 
 // Make it pluginable
@@ -46,8 +47,8 @@ tQuery.Node.prototype.get	= function(idx){
 */
 tQuery.Node.prototype.each	= function(callback){
 	for(var i = 0; i < this._lists.length; i++){
-		var object3d	= this._lists[i];
-		var keepLooping	= callback(object3d)
+		var element	= this._lists[i];
+		var keepLooping	= callback(element)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -59,9 +60,9 @@ tQuery.Node.prototype.each	= function(callback){
  * @param {Object} back the value to return when .back() is called. optional
  * 
 */
-tQuery.Node.prototype.back	= function(back){
-	if( back === undefined )	return this._back;
-	this._back	= back;
+tQuery.Node.prototype.back	= function(value){
+	if( value === undefined )	return this._back;
+	this._back	= value;
 	return this;
 };
 

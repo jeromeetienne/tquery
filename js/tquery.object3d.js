@@ -83,8 +83,10 @@ tQuery.Object3D.prototype.geometry	= function(){
 tQuery.Object3D.prototype.material	= function(){
 	var materials	= [];
 	this.each(function(object3d){
+console.log("material", object3d.material)
 		materials.push(object3d.material)
 	});
+console.log("materials", materials);
 	return new tQuery.Material(materials);
 };
 
