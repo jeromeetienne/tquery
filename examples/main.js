@@ -19,23 +19,14 @@ require([
 
 	var loop	= tQuery.loop(scene).start();
 
-	var mesh	= tQuery.cube().addTo(scene);
-	mesh.geometry().scale(2);
-	mesh.addClass("myClass1").addClass("myClass2").id('cubeId');
+	tQuery.cube().addTo(scene)
+		.geometry().scale(2).back()
+		.addClass("myClass1").addClass("myClass2").id('cubeId');
+	tQuery.torus().addTo(scene)
+		.geometry().scale(2).back()
+		.translate(2,0,0)
+		.addClass("myClass1").id('torusId');
 
-	var mesh	= tQuery.torus().addTo(scene);
-	mesh.geometry().scale(2);
-	mesh.translate(2,0,0);
-	mesh.addClass("myClass1").id('torusId');
-
-
-
-//geometry.center().normalize().scale(3).rotate(Math.PI/3, 0, 0).translate(-2,0,0);
-//console.log("query", tQuery(mesh.geometry).scale(2));
-//console.log("mesh tqgeometry", tQuery("superobj").geometry());
-//tQuery("superobj").addClass("myClass1").addClass("myClass2");
-//tQuery("superobj").addClass("myClass1").addClass("myClass3");
-//console.log("mesh", mesh)
 
 	//tQuery(scene.camera()).dragPanControls(loop);
 	//tQuery.ui.stats(loop);

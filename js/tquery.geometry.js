@@ -35,6 +35,11 @@ tQuery.pluginsMixin(tQuery.Geometry);
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+// TODO all this is in material too.
+// - should i make it a subclass ?
+// - thus tquery.loop/tquery.scene which are funky are they are single stuff
+// - they will use the same stuff
+
 /**
  * Retrieve the elements matched by the jQuery object
  * 
@@ -68,4 +73,15 @@ tQuery.Geometry.prototype.each	= function(callback){
 	return true;
 };
 
+/**
+ * getter/setter of the back pointer
+ *
+ * @param {Object} back the value to return when .back() is called. optional
+ * 
+*/
+tQuery.Geometry.prototype.back	= function(back){
+	if( back === undefined )	return this._back;
+	this._back	= back;
+	return this;
+};
 

@@ -6,21 +6,20 @@ require([
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
-// confusion with the set scale in object3D. TODO rename as zoom
-tQuery.Geometry.register('scale', function(scale){
+tQuery.Geometry.register('zoom', function(vector3){
 	// handle parameters
-	if( typeof scale === "number" && arguments.length === 1 ){
-		scale	= new THREE.Vector3(scale, scale, scale);
-	}else if( typeof scale === "number" && arguments.length === 3 ){
-		scale	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	if( typeof vector3 === "number" && arguments.length === 1 ){
+		vector3	= new THREE.Vector3(vector3, vector3, vector3);
+	}else if( typeof vector3 === "number" && arguments.length === 3 ){
+		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
-	console.assert(scale instanceof THREE.Vector3, "Geometry.scale parameter error");
+	console.assert(vector3 instanceof THREE.Vector3, "Geometry.vector3 parameter error");
 
 	// change all geometry.vertices
 	this.each(function(geometry){
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.position.multiplySelf(scale); 
+			vertex.position.multiplySelf(vector3); 
 		}
 		// mark the vertices as dirty
 		geometry.__dirtyVertices = true;

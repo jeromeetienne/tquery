@@ -3,6 +3,10 @@
   * other functions
   * other default
   * same semantic
+* a good api is
+  * clear
+  * stable
+  * well documented
 * you must be able to easily go back and forth between three.js and tQuery.
 * core has no require.js
 * dependancy between plugins handled by require.js

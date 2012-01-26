@@ -53,4 +53,17 @@ tQuery.Material.prototype.each	= function(callback){
 	return true;
 };
 
+/**
+ * getter/setter of the back pointer
+ *
+ * @param {Object} back the value to return when .back() is called. optional
+ * 
+*/
+tQuery.Material.prototype.back	= function(back){
+	if( back === undefined )	return this._back;
+	this._back	= back;
+	return this;
+};
+
+
 

@@ -75,10 +75,6 @@ tQuery.Object3D.register('translate', function(delta){
 	// return this, to get chained API	
 	return this;
 });
-// some shortcuts
-tQuery.Object3D.register('translateX', function(delta){ return this.translate(delta, 0, 0);	});
-tQuery.Object3D.register('translateY', function(delta){ return this.translate(0, delta, 0);	});
-tQuery.Object3D.register('translateZ', function(delta){ return this.translate(0, 0, delta);	});
 
 
 tQuery.Object3D.register('rotate', function(angles){
@@ -97,10 +93,34 @@ tQuery.Object3D.register('rotate', function(angles){
 	return this;
 });
 
+tQuery.Object3D.register('zoom', function(ratio){
+	// handle parameters
+	if( typeof ratio === "number" && arguments.length === 1 ){
+		ratio	= new THREE.Vector3(ratio, ratio, ratio);
+	}else if( typeof ratio === "number" && arguments.length === 3 ){
+		ratio	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}
+	console.assert(ratio instanceof THREE.Vector3, "Object3D.rotate parameter error");
+
+	// do the operation on each node
+	this.each(function(object3d){
+		object3d.scale.multiplySelf(ratio);
+	})
+
+	// return this, to get chained API	
+	return this;
+});
+
 // some shortcuts
-tQuery.Object3D.register('rotateX', function(angle){ return this.rotate(angle, 0, 0);	});
-tQuery.Object3D.register('rotateY', function(angle){ return this.rotate(0, angle, 0);	});
-tQuery.Object3D.register('rotateZ', function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 0, 0);	});
+tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0);	});
+tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
 
 
 });	// require.js end

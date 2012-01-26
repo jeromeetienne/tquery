@@ -1,3 +1,7 @@
+* implement back.
+  * tQuery(mesh).geometry().scale(2).back();
+
+
 * some funky animation plugins
   * geometry wobble
     * from threex
@@ -5,9 +9,19 @@
   * tQuery.fx.siren.js
   * tQuery.fx.cloud.js
 * tQuery.domEvent.js
+  * tQuery(mesh).on(function(object3d){tQuery(object3d).zoom(2)})
 * tQuery.csg.js
 * tQuery.modelLoad(url)
 * tQuery.debugLight()
   * make light visible
   * if possible
 * tQuery.axis().addTo(scene);
+
+* do a www.* site on www.tquery.org
+* do ghpage === docs/
+* do blog.* later
+* read about comparison between jQuery/dojo/mootools etc...
+  * learn from it
+* TODO learning webgl example in tQuery
+  * like philogl
+  * http://www.senchalabs.org/philogl/demos.html

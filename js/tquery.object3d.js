@@ -72,7 +72,7 @@ tQuery.Object3D.prototype.geometry	= function(){
 	this.each(function(object3d){
 		geometries.push(object3d.geometry)
 	});
-	return new tQuery.Geometry(geometries);
+	return new tQuery.Geometry(geometries).back(this);
 };
 
 /**
