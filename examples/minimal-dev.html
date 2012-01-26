@@ -18,9 +18,12 @@ require([
 	"../js/plugins/tquery.object3d.geometry.js",
 	"../js/plugins/tquery.create.js",
 ], function() {
-	scene		= tQuery.scene().fullpage();
-	var loop	= tQuery.loop(scene).start();
+	var scene	= tQuery.scene().fullpage();
 	var mesh	= tQuery.torus().addTo(scene);
+	var loop	= tQuery.loop(scene).start();
+	
+	tQuery.torus().addTo(scene);
+	
 
 	// 
 	//tQuery.loop(tQuery.scene().fullpage().add(tQuery.cube())).start();

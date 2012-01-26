@@ -85,7 +85,7 @@ tQuery.Object3D.prototype.material	= function(){
 	this.each(function(object3d){
 		materials.push(object3d.material)
 	});
-	return new tQuery.Material(material);
+	return new tQuery.Material(materials);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +207,7 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| tQuery._currentScene.scene();	// FIXME scene is global
+	root		= root	|| tQuery.scene.scene();	// FIXME scene is global
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 	var lists	= this._crawls(root, selectItems)
 	return lists;
@@ -237,7 +237,6 @@ tQuery.Object3D._crawls	= function(root, selectItems)
 tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 {
 	// sanity check
-//console.log("!seleect", arguments)
 	console.assert( object3d instanceof THREE.Object3D );
 	console.assert( typeof selectItem === 'string' );
 

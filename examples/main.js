@@ -10,42 +10,28 @@ require([
 	"../js/tquery.core.create.js",
 	"../js/plugins/tquery.geometry.toolbox.js",
 	"../js/plugins/tquery.object3d.geometry.js",
+	"../js/plugins/tquery.stats.js",
+	"../js/plugins/tquery.dragPanControls.js"
+
 ], function() {
-	//new tQuery.Loop().start()
-	// What about this syntax ? which is tquery.create.js plugins
-	// - out of the core
 	var container	= document.getElementById('container');
-	var scene	= tQuery.scene().appendTo(container);
+	var scene	= tQuery.createScene().appendTo(container);
 
-	var loop	= tQuery.loop(scene).start();
-
-	tQuery.cube().addTo(scene)
-		.geometry().scale(2).back()
+	tQuery.createCube().addTo(scene)
+		//.geometry().zoom(2).back()
 		.addClass("myClass1").addClass("myClass2").id('cubeId');
-	tQuery.torus().addTo(scene)
-		.geometry().scale(2).back()
+	tQuery.createTorus().addTo(scene)
+		//.geometry().zoom(2).back()
 		.translate(2,0,0)
 		.addClass("myClass1").id('torusId');
 
+	var loop	= tQuery.createLoop(scene).start();
 
-	//tQuery(scene.camera()).dragPanControls(loop);
-	//tQuery.ui.stats(loop);
-
-	// create a camera contol
-	var cameraControls	= new THREEx.DragPanControls(scene.camera())
-	loop.hookPreRender(function(){
-		cameraControls.update();
-	});
+	//tQuery.ui.stats(loop) ??
+	//tQuery.controls.createDragPan();
 	
-	// add Stats.js - https://github.com/mrdoob/stats.js
-	var stats	= new Stats();
-	stats.domElement.style.position	= 'absolute';
-	stats.domElement.style.bottom	= '0px';
-	document.body.appendChild( stats.domElement );
-	loop.hookPostRender(function(){
-		stats.update();
-	});
-	
+	tQuery.createStats();
+	tQuery.createDragPanControls();
 	
 	// transparently support window resize
 	THREEx.WindowResize.bind(scene.renderer(), scene.camera());

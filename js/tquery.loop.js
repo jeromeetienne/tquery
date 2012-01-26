@@ -11,6 +11,10 @@
 */
 tQuery.Loop	= function(scene)
 {
+	// update default scene.
+	// - TODO no sanity check ?
+	tQuery.loop	= this;
+	
 	// internally if scene present do that
 	this._scene	= scene;
 	this._hooks	= [];
@@ -112,9 +116,9 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
-	var index	= this._hooks[priority].indexof(callback);
+	var index	= this._hooks[priority].indexOf(callback);
 	console.assert(index !== -1);
-	this._hooks[priority].splice(idx, 1);
+	this._hooks[priority].splice(index, 1);
 	this._hooks[priority].length === 0 && delete this._hooks[priority]
 	// for chained API
 	return this;
@@ -124,13 +128,9 @@ tQuery.Loop.prototype.unhook	= function(priority, callback)
 // bunch of shortcut
 // - TODO should it be in a plugin ?
 
-tQuery.Loop.prototype.hookPreRender	= function(callback){
-	return this.hook(this.PRE_RENDER, callback)
-}
-
-tQuery.Loop.prototype.hookOnRender	= function(callback){
-	return this.hook(this.ON_RENDER, callback)
-}
-tQuery.Loop.prototype.hookPostRender	= function(callback){
-	return this.hook(this.POST_RENDER, callback)
-}
+tQuery.Loop.prototype.hookPreRender	= function(callback){ return this.hook(this.PRE_RENDER, callback);	};
+tQuery.Loop.prototype.hookOnRender	= function(callback){ return this.hook(this.ON_RENDER, callback);	};
+tQuery.Loop.prototype.hookPostRender	= function(callback){ return this.hook(this.POST_RENDER, callback);	};
+tQuery.Loop.prototype.unhookPreRender	= function(callback){ return this.unhook(this.PRE_RENDER, callback);	};
+tQuery.Loop.prototype.unhookOnRender	= function(callback){ return this.unhook(this.ON_RENDER, callback);	};
+tQuery.Loop.prototype.unhookPostRender	= function(callback){ return this.unhook(this.POST_RENDER, callback);	};

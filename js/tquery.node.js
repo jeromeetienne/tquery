@@ -1,33 +1,24 @@
 /**
- * Handle geometry
+ * implementation of the tQuery.Node
  *
- * @class include THREE.Geometry
+ * @class include THREE.Node
  *
- * @param {THREE.Geometry} object an instance or an array of instance
+ * @param {THREE.Node} object an instance or an array of instance
 */
-tQuery.Geometry	= function(object){
+tQuery.Node	= function(object){
 	this._lists	= object instanceof Array ? object : [object];
 	this.length	= this._lists.length;
 	// sanity check - all items MUST be THREE.Geometery
-	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Geometry);	});
-	
-	// compute bounding boxes
-	this.each(function(geometry){
-		geometry.computeBoundingBox();
-	});
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Node); });
 };
 
-// make it pluginable
-tQuery.pluginsMixin(tQuery.Geometry);
+// Make it pluginable
+tQuery.pluginsMixin(tQuery.Node, tQuery.Node.prototype);
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
-
-// TODO all this is in material too.
-// - should i make it a subclass ?
-// - thus tquery.loop/tquery.scene which are funky are they are single stuff
-// - they will use the same stuff
 
 /**
  * Retrieve the elements matched by the jQuery object
@@ -37,7 +28,7 @@ tQuery.pluginsMixin(tQuery.Geometry);
  * 
  * @returns {Boolean} return true if completed, false if interrupted
 */
-tQuery.Geometry.prototype.get	= function(idx){
+tQuery.Node.prototype.get	= function(idx){
 	if( idx === undefined )	return this._lists;
 
 	// sanity check - it MUST be defined
@@ -53,7 +44,7 @@ tQuery.Geometry.prototype.get	= function(idx){
  * 
  * @returns {Boolean} return true if completed, false if interrupted
 */
-tQuery.Geometry.prototype.each	= function(callback){
+tQuery.Node.prototype.each	= function(callback){
 	for(var i = 0; i < this._lists.length; i++){
 		var object3d	= this._lists[i];
 		var keepLooping	= callback(object3d)
@@ -68,9 +59,11 @@ tQuery.Geometry.prototype.each	= function(callback){
  * @param {Object} back the value to return when .back() is called. optional
  * 
 */
-tQuery.Geometry.prototype.back	= function(value){
-	if( value === undefined )	return this._back;
-	this._back	= value;
+tQuery.Node.prototype.back	= function(back){
+	if( back === undefined )	return this._back;
+	this._back	= back;
 	return this;
 };
+
+
 

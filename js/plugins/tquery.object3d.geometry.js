@@ -1,3 +1,7 @@
+/**
+ * @fileOverview Plugins for tQuery.Object3D to play with .position/.rotation/.scale
+*/
+
 require([
 	"../js/tquery.object3d.js",
 ], function(){

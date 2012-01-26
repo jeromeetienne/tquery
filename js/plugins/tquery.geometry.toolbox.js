@@ -1,3 +1,7 @@
+/**
+ * @fileOverview Plugins for tQuery.Geometry: tool box to play with geometry
+*/
+
 require([
 	"../js/tquery.geometry.js",
 ], function(){

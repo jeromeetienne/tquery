@@ -1,6 +1,3 @@
-* implement back.
-  * tQuery(mesh).geometry().scale(2).back();
-
 
 * some funky animation plugins
   * geometry wobble
@@ -15,8 +12,8 @@
 * tQuery.debugLight()
   * make light visible
   * if possible
-* tQuery.axis().addTo(scene);
 
+# webstuff
 * do a www.* site on www.tquery.org
 * do ghpage === docs/
 * do blog.* later
