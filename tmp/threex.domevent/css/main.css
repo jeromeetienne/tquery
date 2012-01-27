@@ -1,0 +1,45 @@
+body {
+	overflow	: hidden;
+	padding		: 0;
+	margin		: 0;
+
+	color		: #222;
+	background-color: #BBB;
+	font-family	: arial;
+	font-size	: 100%;
+}
+#info a {
+	color		: #66F;
+	text-decoration	: none;
+}
+#info a:hover {
+	text-decoration	: underline;
+}
+
+#info {
+	padding		: 5px;
+}
+#info .top {
+	position	: absolute;
+	top		: 0px;
+}
+#info .middle {
+	width		: 100%;
+	text-align	: center;
+}
+#info .bottom {
+	position	: absolute;
+	bottom		: 0px;
+	padding		: 5px;
+}
+#info .right {
+	position	: absolute;
+	right		: 5px;
+}
+
+#codeSample {
+	font-size	: 300%;
+}
+@media all and (max-width: 640px) {
+	#codeSample { font-size: 150%; }
+}
