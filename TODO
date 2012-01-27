@@ -1,17 +1,21 @@
 
-* some funky animation plugins
-  * geometry wobble
-    * from threex
-  * displacement
-  * tQuery.fx.siren.js
-  * tQuery.fx.cloud.js
+
+# plugins ideas
+* tQuery.geometry.wobble
+  * from threex
 * tQuery.domEvent.js
   * tQuery(mesh).on(function(object3d){tQuery(object3d).zoom(2)})
+  * with event bubling ?
 * tQuery.csg.js
-* tQuery.modelLoad(url)
+  * good to have fun
 * tQuery.debugLight()
   * make light visible
   * if possible
+* some funky animation plugins
+  * displacement
+  * all what is visual
+  * tQuery.fx.siren.js
+  * tQuery.fx.cloud.js
 
 # webstuff
 * do a www.* site on www.tquery.org

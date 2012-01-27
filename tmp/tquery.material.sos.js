@@ -1,34 +1,36 @@
 /**
- * implementation of the tQuery.Node
+ * Handle material
  *
- * @class include THREE.Node
+ * @class include THREE.Material
  *
- * @param {Object} object an instance or an array of instance
+ * @param {THREE.Material} object an instance or an array of instance
 */
-tQuery.Node	= function(object)
-{
-	// handle parameters
-	if( object instanceof Array )	this._lists	= object;
-	else if( !object )		this._lists	= [];
-	else				this._lists	= [object];
+tQuery.Material	= function(object){
+	this._lists	= object instanceof Array ? object : [object];
 	this.length	= this._lists.length;
+	// sanity check - all items MUST be THREE.Geometery
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Material); });
 };
+
+// Make it pluginable
+tQuery.pluginsMixin(tQuery.Material, tQuery.Material.prototype);
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Retrieve the elements matched by the tQuery object
+ * Retrieve the elements matched by the jQuery object
  * 
  * @param {Function} callback the function to notify. function(element){ }.
  * 			loop interrupted if it returns false
  * 
  * @returns {Boolean} return true if completed, false if interrupted
 */
-tQuery.Node.prototype.get	= function(idx)
-{
+tQuery.Material.prototype.get	= function(idx){
 	if( idx === undefined )	return this._lists;
+
 	// sanity check - it MUST be defined
 	console.assert(this._lists[idx], "element not defined");
 	return this._lists[idx];
@@ -42,11 +44,10 @@ tQuery.Node.prototype.get	= function(idx)
  * 
  * @returns {Boolean} return true if completed, false if interrupted
 */
-tQuery.Node.prototype.each	= function(callback)
-{
+tQuery.Material.prototype.each	= function(callback){
 	for(var i = 0; i < this._lists.length; i++){
-		var element	= this._lists[i];
-		var keepLooping	= callback(element);
+		var object3d	= this._lists[i];
+		var keepLooping	= callback(object3d)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -56,11 +57,11 @@ tQuery.Node.prototype.each	= function(callback)
  * getter/setter of the back pointer
  *
  * @param {Object} back the value to return when .back() is called. optional
+ * 
 */
-tQuery.Node.prototype.back	= function(value)
-{
-	if( value === undefined )	return this._back;
-	this._back	= value;
+tQuery.Material.prototype.back	= function(back){
+	if( back === undefined )	return this._back;
+	this._back	= back;
 	return this;
 };
 

@@ -19,11 +19,13 @@ require([
 	var scene	= tQuery.createScene().appendTo(container);
 
 	tQuery.createCube().addTo(scene)
-		//.geometry().zoom(2).back()
+		.geometry().zoom(2).back()
 		.addClass("myClass1").addClass("myClass2").id('cubeId');
-	tQuery.createTorus().addTo(scene)
-		//.geometry().zoom(2).back()
+	tQuery.createCube().addTo(scene)
 		.translate(2,0,0)
+		.addClass("myClass1").id('torusId');
+	tQuery.createCube().addTo(scene)
+		.translate(-2,0,0)
 		.addClass("myClass1").id('torusId');
 
 	var loop	= tQuery.createLoop(scene).start();

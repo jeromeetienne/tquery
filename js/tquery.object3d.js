@@ -83,10 +83,8 @@ tQuery.Object3D.prototype.geometry	= function(){
 tQuery.Object3D.prototype.material	= function(){
 	var materials	= [];
 	this.each(function(object3d){
-console.log("material", object3d.material)
 		materials.push(object3d.material)
 	});
-console.log("materials", materials);
 	return new tQuery.Material(materials);
 };
 
@@ -262,9 +260,11 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 			var geometry	= object3d.geometry;
 			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1) + "Geometry";
 			return geometry instanceof THREE[className];
-		}else	console.assert(false, "invalid selector: "+subItem);
+		}
+		// this point should never be reached
+		console.assert(false, "invalid selector: "+subItem);
 		return true;
 	}.bind(this));
-	
+
 	return completed ? true : false;
 }

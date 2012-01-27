@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+	<head>
+		<title>learningthree.js boiler plate for three.js</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+			
+		<script src="vendor/three.js/Three.js"></script>
+		<script src="vendor/three.js/Detector.js"></script>
+		<!-- see details at http://paulirish.com/2011/requestanimationframe-for-smart-animating/ -->
+		<script src="vendor/three.js/RequestAnimationFrame.js"></script>
+		<!-- https://github.com/mrdoob/stats.js -->
+		<script src="vendor/three.js/Stats.js"></script>
+
+		<script src="vendor/tween.js/Tween.js"></script>
+
+		<script src="vendor/threex/THREEx.screenshot.js"></script>
+		<script src="vendor/threex/THREEx.FullScreen.js"></script>
+		<script src="vendor/threex/THREEx.WindowResize.js"></script>
+		<script src="vendor/threex.dragpancontrols.js"></script>
+
+		<script src="../../threex.domevent.js"></script>
+
+		<link  href="css/main.css" rel="stylesheet"/>
+	</head>
+<body>
+	<!-- three.js container -->
+    	<div id="container"></div>
+	<!-- info on screen display -->
+	<div id="info">
+		<div class="top middle">
+			<a href="http://learningthreejs.com/blog/2012/01/17/dom-events-in-3d-space/" target="_blank">LearningThree.js</a>
+			demo for threex.domevents
+			<br/>
+			-
+			<br/>
+			<strong>Instructions: </strong> click on top - hover on right - press and hold on left
+		</div>
+		<div class="bottom right" id="inlineDoc" >
+			- <i>p</i> for screenshot
+		</div> 
+		<div class="bottom middle" id="codeSample">
+			<pre>object3d.on('click', function(){ ... })</pre>
+		</div>
+	</div> 
+
+	<script type="text/javascript">
+		var stats, scene, renderer, domEvent;
+		var camera, cameraControl;
+		var mouse = { x: 0, y: 0 };
+
+
+		if( !init() )	animate();
+
+		// init the scene
+		function init(){
+
+			if( Detector.webgl ){
+				renderer = new THREE.WebGLRenderer({
+					antialias		: true,	// to get smoother output
+					preserveDrawingBuffer	: true	// to allow screenshot
+				});
+				renderer.setClearColorHex( 0xBBBBBB, 1 );
+			// uncomment if webgl is required
+			//}else{
+			//	Detector.addGetWebGLMessage();
+			//	return true;
+			}else{
+				renderer	= new THREE.CanvasRenderer();
+			}
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.getElementById('container').appendChild(renderer.domElement);
+
+			// add Stats.js - https://github.com/mrdoob/stats.js
+			stats	= new Stats();
+			stats.domElement.style.position	= 'absolute';
+			stats.domElement.style.bottom	= '0px';
+			document.body.appendChild( stats.domElement );
+
+			// create a scene
+			scene	= new THREE.Scene();
+
+			var light = new THREE.DirectionalLight( 0xffffff, 2 );
+			light.position.set( 1, 1, 1 ).normalize();
+			scene.add( light );
+
+			var light = new THREE.DirectionalLight( 0xffffff );
+			light.position.set( -1, -1, -1 ).normalize();
+			scene.add( light );
+
+			// put a camera in the scene
+			camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.position.set(0, 1, 15);
+			scene.add(camera);
+
+			// create a camera contol
+			cameraControls	= new THREEx.DragPanControls(camera)
+
+			// transparently support window resize
+			THREEx.WindowResize.bind(renderer, camera);
+			// allow 'p' to make screenshot
+			THREEx.Screenshot.bindKey(renderer);
+			// allow 'f' to go fullscreen where this feature is supported
+			if( THREEx.FullScreen.available() ){
+				THREEx.FullScreen.bindKey();		
+				document.getElementById('inlineDoc').innerHTML	+= "- <i>f</i> for fullscreen";
+			}
+
+			// here you add your objects
+			// - you will most likely replace this part by your own
+			new THREE.JSONLoader().load('models/teapot.js', function(geometry){
+				var meshes	= buildMeshes(geometry);
+				bindEvents(meshes);
+			})
+		}
+		
+		function bindEvents(meshes){
+			meshes['sphere2'].on('mousedown', function(object3d){
+				var scale	= 1.4;
+				new TWEEN.Tween(object3d.scale)
+					.to({x: scale, y: scale, z: scale}, 100)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+				new TWEEN.Tween(object3d.material.color)
+					.to({r: 1, g: 0.5, b: 0}, 100)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+			}).on('mouseup', function(object3d){
+				var scale	= 1;
+				new TWEEN.Tween(object3d.scale)
+					.to({x: scale, y: scale, z: scale}, 300)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+				new TWEEN.Tween(object3d.material.color)
+					.to({r: 0.5, g: 0.75, b: 0.25}, 300)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+			});
+			meshes['sphere1'].on('click', function(object3d){
+				if( object3d.rotation.x < Math.PI/4 ){
+					var rotation	= {x: Math.PI/2};
+					var color	= {r: 1, g: 0.5, b: 0};
+				}else{
+					var rotation	= {x:0};
+					var color	= {r: 0.5, g: 0.75, b: 0.25};
+				}
+				new TWEEN.Tween(object3d.rotation).to(rotation, 800)
+					.easing(TWEEN.Easing.Bounce.EaseOut).start();
+				new TWEEN.Tween(object3d.material.color).to(color, 300)
+					.easing(TWEEN.Easing.Quartic.EaseIn).start();
+			});	
+
+			meshes['sphere3'].on('mouseover', function(object3d){
+				new TWEEN.Tween(object3d.scale)
+					.to({x: 1.5, y: 1.5, z: 1.5}, 200)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+				new TWEEN.Tween(object3d.material.color)
+					.to({r: 1, g: 0.5, b: 0}, 600)
+					.delay(400)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+				new TWEEN.Tween(object3d.rotation)
+					.to({y: 3*Math.PI}, 1000)
+					.easing(TWEEN.Easing.Quartic.EaseIn)
+					.start();
+			}).on('mouseout', function(object3d){
+				new TWEEN.Tween(object3d.scale)
+					.to({x: 1, y: 1, z: 1}, 300)
+					.easing(TWEEN.Easing.Quartic.EaseOut)
+					.start();
+				new TWEEN.Tween(object3d.material.color)
+					.to({r: 0.5, g: 0.75, b: 0.25}, 600)
+					.delay(400)
+					.easing(TWEEN.Easing.Quartic.EaseOut)
+					.start();
+				new TWEEN.Tween(object3d.rotation)
+					.to({y: Math.PI}, 1000)
+					.easing(TWEEN.Easing.Quartic.EaseOut)
+					.start();
+			});
+		}
+		
+		function buildMeshes(geometry){
+			var meshes	= {};
+			var dx		= 4;
+			var dy		= 2;
+			var material	= new THREE.MeshLambertMaterial( { color: 0xFF8800 } );
+			var mesh	= new THREE.Mesh( geometry, material );
+			mesh.position.set(0,dy,0);
+			mesh.rotation.x	= +1*Math.PI/2;
+			mesh.rotation.y	= -1*Math.PI/2;
+			scene.add( mesh );
+			meshes['sphere1']	= mesh;
+
+			var material	= new THREE.MeshLambertMaterial( { color: 0x88CC44 } );
+			var mesh	= new THREE.Mesh( geometry, material );
+			mesh.position.set(-dx,-dy,0);
+			scene.add( mesh );
+			meshes['sphere2']	= mesh;
+
+			var material	= new THREE.MeshLambertMaterial( { color: 0x88CC44 } );
+			var mesh	= new THREE.Mesh( geometry, material );
+			mesh.position.set(dx,-dy,0);
+			mesh.rotation.y	= Math.PI;
+			scene.add( mesh );
+			meshes['sphere3']	= mesh;
+
+			return meshes;	
+		}
+
+		// animation loop
+		function animate() {
+			
+			// upate tween
+			TWEEN.update();
+
+			// loop on request animation loop
+			// - it has to be at the begining of the function
+			// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+			requestAnimationFrame( animate );
+
+			// do the render
+			render();
+
+			// update stats
+			stats.update();
+		}
+
+		// render the scene
+		function render() {
+
+			// update camera controls
+			//cameraControls.update();
+			
+			// actually render the scene
+			renderer.render( scene, camera );
+		}
+	</script>
+</body>
+</html>

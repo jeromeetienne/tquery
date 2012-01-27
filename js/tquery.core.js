@@ -40,8 +40,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "1.0.0";
-
+tQuery.VERSION	= "0.0.1";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -64,6 +63,15 @@ tQuery.each	= function(arr, callback){
 	return true;
 };
 
+
+tQuery.inherit	= function(childClass, parentClass){
+	var tempFn		= function() {};
+	tempFn.prototype	= parentClass.prototype;
+	childClass.prototype	= new tempFn();
+	
+	childClass.prototype.parent	= parentClass.prototype;
+	childClass.prototype.constructor= childClass;	
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
