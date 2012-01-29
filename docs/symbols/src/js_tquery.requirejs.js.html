@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * export tQuery as requirejs module
+<span class='line'>  3</span> */</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">scriptUrl</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.scripts</span><span class="PUNC">[</span><span class="NAME">document.scripts.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">src</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">baseUrl</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">scriptUrl.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scriptUrl.lastIndexOf</span><span class="PUNC">(</span><span class="STRN">'/'</span><span class="PUNC">)</span><span class="PUNC">+</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="WHIT">	
+<span class='line'>  8</span> 	</span><span class="COMM">// FIXME the above tech to get the current file position</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">	</span><span class="COMM">// fails with  &lt;script data-main="tquery.requirejs.js" src="scripts/require.js">&lt;/script></span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">	</span><span class="COMM">// likely becasuse requirejs doesnt use script to get script</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">	
+<span class='line'> 12</span> 	</span><span class="NAME">define</span><span class="PUNC">(</span><span class="STRN">'tquery'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.core.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.node.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">		
+<span class='line'> 16</span> 		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.object3d.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.geometry.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.material.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">	
+<span class='line'> 20</span> 		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.scene.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.loop.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.core.create.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">	</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tQuery</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> 
+<span class='line'> 27</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
