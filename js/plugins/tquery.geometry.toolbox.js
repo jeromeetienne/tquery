@@ -2,9 +2,7 @@
  * @fileOverview Plugins for tQuery.Geometry: tool box to play with geometry
 */
 
-require([
-	"../js/tquery.geometry.js",
-], function(){
+(function(){
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Size functions							//
@@ -167,4 +165,4 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
 });
 
 
-});	// require.js end
+})();	// closure function end

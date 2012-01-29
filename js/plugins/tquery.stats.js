@@ -2,8 +2,7 @@
  * @fileOverview Plugins for tQuery and Stats.js
 */
 
-
-define('tquery.stats', ["tquery"], function(){
+(function(){
 
 /**
  * 
@@ -35,4 +34,4 @@ myStats.prototype._onRender	= function(){
 tQuery.register('Stats', myStats);
 tQuery.register('createStats', function(loop){ return new tQuery.Stats(loop); });
 
-});	// require.js end
+})();	// closure function end

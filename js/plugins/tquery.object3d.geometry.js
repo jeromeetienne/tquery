@@ -2,9 +2,7 @@
  * @fileOverview Plugins for tQuery.Object3D to play with .position/.rotation/.scale
 */
 
-require([
-	"../js/tquery.object3d.js",
-], function(){
+(function(){
 
 //////////////////////////////////////////////////////////////////////////////////
 //		set function							//
@@ -127,4 +125,4 @@ tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0
 tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
 
 
-});	// require.js end
+})();	// closure function end

@@ -4,25 +4,26 @@
 var scene;
 
 require([
-	"../vendor/three.js/Three.js",
-	"../vendor/three.js/Detector.js",
-	"../js/tquery.core.js",
-
-	"../js/tquery.object3d.js",
-	"../js/tquery.geometry.js",
-	"../js/tquery.material.js",
-
-	"../js/tquery.scene.js",
-	"../js/tquery.loop.js",
-	"../js/plugins/tquery.geometry.toolbox.js",
-	"../js/plugins/tquery.object3d.geometry.js",
-	"../js/plugins/tquery.create.js",
+	"../build/tquery.js"
+	//"../vendor/three.js/Three.js",
+	//"../vendor/three.js/Detector.js",
+	//"../js/tquery.core.js",
+	//
+	//"../js/tquery.object3d.js",
+	//"../js/tquery.geometry.js",
+	//"../js/tquery.material.js",
+	//
+	//"../js/tquery.scene.js",
+	//"../js/tquery.loop.js",
+	//"../js/plugins/tquery.geometry.toolbox.js",
+	//"../js/plugins/tquery.object3d.geometry.js",
+	//"../js/plugins/tquery.create.js",
 ], function() {
-	var scene	= tQuery.scene().fullpage();
-	var mesh	= tQuery.torus().addTo(scene);
-	var loop	= tQuery.loop(scene).start();
+	var scene	= tQuery.createScene().fullpage();
+	var mesh	= tQuery.createTorus().addTo(scene);
+	var loop	= tQuery.createLoop(scene).start();
 	
-	tQuery.torus().addTo(scene);
+	//tQuery.torus().addTo(scene);
 	
 
 	// 

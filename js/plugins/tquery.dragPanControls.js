@@ -2,10 +2,7 @@
  * @fileOverview Plugins for tQuery and Stats.js
 */
 
-
-require([
-	"../js/tquery.core.js",
-], function(){
+(function(){	// closure function
 
 /**
  * 
@@ -32,4 +29,4 @@ DragPanControls.prototype._onRender	= function(){
 tQuery.register('DragPanControls', DragPanControls);
 tQuery.register('createDragPanControls', function(loop){ return new tQuery.DragPanControls(loop); });
 
-});	// require.js end
+})();	// closure function end

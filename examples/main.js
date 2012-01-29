@@ -1,18 +1,19 @@
 require([
-	"../js/tquery.core.js", 
-	"../js/tquery.node.js",
-	
-	"../js/tquery.object3d.js",
-	"../js/tquery.geometry.js",
-	"../js/tquery.material.js",
-
-	"../js/tquery.scene.js",
-	"../js/tquery.loop.js",
-	"../js/tquery.core.create.js",
-	"../js/plugins/tquery.geometry.toolbox.js",
-	"../js/plugins/tquery.object3d.geometry.js",
-	"../js/plugins/tquery.stats.js",
-	"../js/plugins/tquery.dragPanControls.js"
+	"../build/tquery.js"
+	//"../js/tquery.core.js", 
+	//"../js/tquery.node.js",
+	//
+	//"../js/tquery.object3d.js",
+	//"../js/tquery.geometry.js",
+	//"../js/tquery.material.js",
+	//
+	//"../js/tquery.scene.js",
+	//"../js/tquery.loop.js",
+	//"../js/tquery.core.create.js",
+	//"../js/plugins/tquery.geometry.toolbox.js",
+	//"../js/plugins/tquery.object3d.geometry.js",
+	//"../js/plugins/tquery.stats.js",
+	//"../js/plugins/tquery.dragPanControls.js"
 
 ], function() {
 	var container	= document.getElementById('container');
