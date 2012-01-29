@@ -68,7 +68,7 @@ tQuery.inherit	= function(childClass, parentClass){
 	var tempFn		= function() {};
 	tempFn.prototype	= parentClass.prototype;
 	childClass.prototype	= new tempFn();
-	
+
 	childClass.prototype.parent	= parentClass.prototype;
 	childClass.prototype.constructor= childClass;	
 };

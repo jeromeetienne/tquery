@@ -27,7 +27,7 @@ tQuery.register('createLoop', function(scene){
 tQuery.register('createCube', function(){
 	var material	= new THREE.MeshNormalMaterial();
 	var geometry	= new THREE.CubeGeometry(1,1,1);
-	geometry.dynamic	= true;
+	geometry.dynamic= true;
 	var mesh	= new THREE.Mesh(geometry, material)
 	return tQuery(mesh);
 });
@@ -35,7 +35,7 @@ tQuery.register('createCube', function(){
 tQuery.register('createTorus', function(){
 	var material	= new THREE.MeshNormalMaterial();
 	var geometry	= new THREE.TorusGeometry( 0.5-0.15, 0.15 );
-	geometry.dynamic	= true;
+	geometry.dynamic= true;
 	var mesh	= new THREE.Mesh(geometry, material)
 	return tQuery(mesh);
 });
@@ -43,7 +43,7 @@ tQuery.register('createTorus', function(){
 tQuery.register('createSphere', function(){
 	var material	= new THREE.MeshNormalMaterial();
 	var geometry	= new THREE.SphereGeometry( 0.5, 0.5 );
-	geometry.dynamic	= true;
+	geometry.dynamic= true;
 	var mesh	= new THREE.Mesh(geometry, material)
 	return tQuery(mesh);
 });

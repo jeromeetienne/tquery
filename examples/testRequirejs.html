@@ -1,0 +1,12 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../vendor/require.js"></script>
+<script src="../vendor/three.js/Three.js"></script>
+<script src="../vendor/three.js/Detector.js"></script>
+<script src="../js/tquery.requirejs.js"></script>
+<script>
+	require(['tquery'], function(){
+		var scene	= tQuery.createScene().fullpage();
+		var mesh	= tQuery.createCube().addTo(scene);
+		var loop	= tQuery.createLoop(scene).start();		
+	});
+</script>

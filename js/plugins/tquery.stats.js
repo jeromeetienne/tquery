@@ -3,7 +3,7 @@
 */
 
 
-require(["../js/tquery.core.js"], function(){
+define('tquery.stats', ["tquery"], function(){
 
 /**
  * 
