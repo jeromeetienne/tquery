@@ -47,9 +47,9 @@ tQuery.VERSION	= "0.0.1";
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * loop over a Array
+ * loop over a Array.
  * 
- * @param {Array} arr the array to traverse
+ * @param {Array} arr the array to traverse.
  * @param {Function} callback the function to notify. function(element){ }.
  * 			loop interrupted if it returns false
  * 
@@ -63,7 +63,12 @@ tQuery.each	= function(arr, callback){
 	return true;
 };
 
-
+/**
+ * Make a child Class inherit from the parent class.
+ *
+ * @param {Object} childClass the child class which gonna inherit
+ * @param {Object} parentClass the class which gonna be inherited
+*/
 tQuery.inherit	= function(childClass, parentClass){
 	var tempFn		= function() {};
 	tempFn.prototype	= parentClass.prototype;

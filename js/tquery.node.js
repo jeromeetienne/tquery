@@ -1,7 +1,7 @@
 /**
  * implementation of the tQuery.Node
  *
- * @class include THREE.Node
+ * @class base class for tQuery objects
  *
  * @param {Object} object an instance or an array of instance
 */

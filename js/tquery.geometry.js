@@ -1,7 +1,11 @@
 /**
- * Handle geometry
+ * Handle geometry. It inherit from tQuery.Node
  *
- * @class include THREE.Geometry
+ * @class handle THREE.Geometry. It inherit from {@link tQuery.Node}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
  *
  * @param {THREE.Geometry} object an instance or an array of instance
 */
@@ -14,9 +18,12 @@ tQuery.Geometry	= function(object)
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Geometry); });
 };
 
-// inherit form tQuery.Node
+/**
+ * inherit from tQuery.Node
+*/
 tQuery.inherit(tQuery.Geometry, tQuery.Node);
 
-
-// Make it pluginable
+/**
+ * Make it pluginable
+*/
 tQuery.pluginsMixin(tQuery.Geometry);
