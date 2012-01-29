@@ -1,5 +1,5 @@
 require([
-	"../js/tquery.core.js",
+	"../js/tquery.core.js", 
 	"../js/tquery.node.js",
 	
 	"../js/tquery.object3d.js",
