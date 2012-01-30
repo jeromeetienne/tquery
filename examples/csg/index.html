@@ -1,0 +1,50 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+
+<script src="csg.js"></script>
+<script src="ThreeCSG.js"></script>
+<script src="tquery.geometry.csg.js"></script>
+<script src="tquery.object3d.csg.js"></script>
+<body>
+	<script>
+		var scene	= tQuery.createScene().fullpage();
+		var loop	= tQuery.createLoop(scene).start();
+
+		// create object1
+		var cube	= tQuery.createCube();
+		cube.geometry().translate(0.6,0,0);
+
+		// create object2
+		var sphere	= tQuery.createSphere();
+
+		// create object3
+		var sphere2	= tQuery.createSphere();
+		sphere2.geometry().translate(1,0,0);
+		//sphere2.addTo(scene);
+		
+		scene.add(sphere2.union(cube).id('prout'));
+
+		
+		// NOTE: the api is no good
+		// * sphere.subtract(cube) -> tQuery.Object3D ? which material ?
+		// * would be better API tho
+		//   * in another plugins on top
+		// * what about inplace replacement of sphere geometry ?
+		
+		// perform the operation
+		var tqGeometry	= sphere.geometry().csg('intersect', cube.geometry());
+
+		// build an object with the resulting geometry
+		var resultGeo	= tqGeometry.get(0);
+		var material	= new THREE.MeshNormalMaterial();
+		var mesh	= new THREE.Mesh( resultGeo, material );
+		scene.add(mesh);
+
+		// animate the object
+		loop.hookPreRender(function(){
+			mesh.rotation.x	+= 0.01;
+			mesh.rotation.y	+= 0.01;
+			mesh.rotation.z	+= 0.01;
+		});
+	</script>
+</body>
