@@ -1,33 +1,15 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../vendor/require.js"></script>
-<script>
-var scene;
-
-require([
-	"../build/tquery.js"
-	//"../vendor/three.js/Three.js",
-	//"../vendor/three.js/Detector.js",
-	//"../js/tquery.core.js",
-	//
-	//"../js/tquery.object3d.js",
-	//"../js/tquery.geometry.js",
-	//"../js/tquery.material.js",
-	//
-	//"../js/tquery.scene.js",
-	//"../js/tquery.loop.js",
-	//"../js/plugins/tquery.geometry.toolbox.js",
-	//"../js/plugins/tquery.object3d.geometry.js",
-	//"../js/plugins/tquery.create.js",
-], function() {
-	var scene	= tQuery.createScene().fullpage();
-	var mesh	= tQuery.createTorus().addTo(scene);
-	var loop	= tQuery.createLoop(scene).start();
+<script src="../build/tquery-bundle.js"></script>
+<body>
+	<script>
+		var scene	= tQuery.createScene().fullpage();
+		var mesh	= tQuery.createTorus().addTo(scene);
+		var loop	= tQuery.createLoop(scene).start();
+		
+		//tQuery.torus().addTo(scene);
+		
 	
-	//tQuery.torus().addTo(scene);
-	
-
-	// 
-	//tQuery.loop(tQuery.scene().fullpage().add(tQuery.cube())).start();
-});
-
-</script>
+		// 
+		//tQuery.loop(tQuery.scene().fullpage().add(tQuery.cube())).start();
+	</script>
+</body>

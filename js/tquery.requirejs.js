@@ -10,6 +10,9 @@
 	// likely becasuse requirejs doesnt use script to get script
 	
 	define('tquery', [
+		baseUrl+"../vendor/three.js/Three.js",
+		baseUrl+"../vendor/three.js/Detector.js",
+
 		baseUrl+"tquery.core.js",
 		baseUrl+"tquery.node.js",
 		

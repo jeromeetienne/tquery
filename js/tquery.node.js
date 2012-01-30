@@ -44,9 +44,9 @@ tQuery.Node.prototype.get	= function(idx)
 */
 tQuery.Node.prototype.each	= function(callback)
 {
-	for(var i = 0; i < this._lists.length; i++){
-		var element	= this._lists[i];
-		var keepLooping	= callback(element);
+	for(var idx = 0; idx < this._lists.length; idx++){
+		var element	= this._lists[idx];
+		var keepLooping	= callback(element, idx, this._lists);
 		if( keepLooping === false )	return false;
 	}
 	return true;

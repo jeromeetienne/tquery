@@ -8,6 +8,12 @@
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * zoom a geometry
+ *
+ * @name zoom
+ * @methodOf tQuery.Geometry
+*/
 tQuery.Geometry.register('zoom', function(vector3){
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 1 ){
@@ -131,7 +137,6 @@ tQuery.Geometry.register('rotate', function(angles, order){
 	// compute transformation matrix
 	var matrix	= new THREE.Matrix4();
 	matrix.setRotationFromEuler(angles, order);
-
 
 	// change all geometry.vertices
 	this.each(function(geometry){

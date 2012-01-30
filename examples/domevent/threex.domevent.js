@@ -72,7 +72,6 @@ THREEx.DomEvent	= function(domElement)
 {
 	this._domElement= domElement || document;
 	this._projector	= new THREE.Projector();
-	
 	this._selected	= null;
 
 	// Bind dom event for mouse and touch

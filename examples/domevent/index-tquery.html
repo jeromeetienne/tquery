@@ -8,8 +8,10 @@
 		var tqscene	= tQuery.createScene().fullpage();
 		var loop	= tQuery.createLoop(tqscene).start();
 
+		// workaround a bug
 		scene	= tqscene.scene();
 		camera	= tqscene.camera();
+		
 
 		// create object1
 		var cube	= tQuery.createCube().addTo(tqscene);

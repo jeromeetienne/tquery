@@ -8,55 +8,27 @@
  * @returns {tQuery.*} the tQuery object created
 */
 tQuery.Object3D	= function(object, root){
+	// handle the case of selector
 	if( typeof object === "string"){
 		object	= tQuery.Object3D._select(object, root);
 	}
-	this._lists	= object instanceof Array ? object : [object];
-	this.length	= this._lists.length;
+	
+	// call parent
+	this.parent.constructor.call(this, object)
+
+	// sanity check - all items MUST be THREE.Object3D
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Object3D); });
 };
 
+/**
+ * inherit from tQuery.Node
+*/
+tQuery.inherit(tQuery.Object3D, tQuery.Node);
 
-// Make tQuery.Object3D pluginable
+/**
+ * Make it pluginable
+*/
 tQuery.pluginsMixin(tQuery.Object3D);
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Retrieve the elements matched by the jQuery object
- * 
- * @param {Function} callback the function to notify. function(element){ }.
- * 			loop interrupted if it returns false
- * 
- * @returns {Boolean} return true if completed, false if interrupted
-*/
-tQuery.Object3D.prototype.get	= function(idx){
-	if( idx === undefined )	return this._lists;
-
-	// sanity check - it MUST be defined
-	console.assert(this._lists[idx], "element not defined");
-	return this._lists[idx];
-};
-
-
-/**
- * loop over element
- * 
- * @param {Function} callback the function to notify. function(element){ }.
- * 			loop interrupted if it returns false
- * 
- * @returns {Boolean} return true if completed, false if interrupted
-*/
-tQuery.Object3D.prototype.each	= function(callback){
-	for(var i = 0; i < this._lists.length; i++){
-		var object3d	= this._lists[i];
-		var keepLooping	= callback(object3d)
-		if( keepLooping === false )	return false;
-	}
-	return true;
-};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -89,7 +61,7 @@ tQuery.Object3D.prototype.material	= function(){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//			handling selection					//
+//			add/remove tQuery.Scene					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**

@@ -7,12 +7,6 @@
  *
  * @class root class
  * 
- * - do something for crawling the three
- *   - like python.walk ?
- * - docs with jsdoc
- *   - http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/
- *
- * 
  * @param {} object
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
@@ -21,16 +15,12 @@ var tQuery	= function(object, root)
 {
 	if( object instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
-
 	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
-
 	}else if( object instanceof THREE.Material && tQuery.Material){
 		return new tQuery.Material(object);
-
 	}else if( typeof object === "string" && tQuery.Object3D){
 		return new tQuery.Object3D(object, root);
-
 	}else{
 		console.assert(false, "unsupported type")
 	}
