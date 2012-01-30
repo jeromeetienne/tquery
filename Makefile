@@ -35,7 +35,7 @@ build:
 	cat js/tquery.loop.js				>> build/tquery.js
 	cat js/plugins/*.js				>> build/tquery.js
 
-minify:
+minify: build
 	curl --data-urlencode "js_code@build/tquery.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
@@ -45,11 +45,9 @@ minify:
 buildBundle: build
 	echo 				>  build/tquery-bundle.js
 	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
-	cat vendor/three.js/Detector.js	>> build/tquery-bundle.js
-	cat vendor/three.js/Stats.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js
 
-minifyBundle:
+minifyBundle: buildBundle
 	curl --data-urlencode "js_code@build/tquery-bundle.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
