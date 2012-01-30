@@ -4,10 +4,10 @@
 //   * handle drag/drop
 //   * notify events not object3D - like DOM
 //     * so single object with property
-//   * implement bubling/capturing
-//   * implement event.stopPropagation()
-//   * implement event.type = "click" and co
-//   * implement event.target
+//   * DONE bubling implement bubling/capturing
+//   * DONE implement event.stopPropagation()
+//   * DONE implement event.type = "click" and co
+//   * DONE implement event.target
 //
 // # Lets get started
 //
@@ -272,7 +272,6 @@ THREEx.DomEvent.prototype._notify	= function(eventName, object3d)
 		object3d.parent && this._notify(eventName, object3d.parent);
 		return;
 	}
-	
 	
 	// notify all handlers
 	var handlers	= objectCtx[eventName+'Handlers'];

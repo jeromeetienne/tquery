@@ -1,0 +1,19 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+
+<script src="threex.domevent.js"></script>
+<script src="tquery.object3d.domevent.js"></script>
+<body>
+	<script>
+		var tqscene	= tQuery.createScene().fullpage();
+		var loop	= tQuery.createLoop(tqscene).start();
+
+		scene	= tqscene.scene();
+		camera	= tqscene.camera();
+
+		// create object1
+		var cube	= tQuery.createCube().addTo(tqscene);
+		
+		tQuery('cube').on('click', function(){ alert("jjj")})
+	</script>
+</body>
