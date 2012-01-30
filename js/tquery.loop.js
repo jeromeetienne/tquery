@@ -100,6 +100,12 @@ tQuery.Loop.prototype.POST_RENDER	= 80;
 */
 tQuery.Loop.prototype.hook	= function(priority, callback)
 {
+	// handle parameters
+	if( typeof priority === 'function' ){
+		callback	= priority;
+		priority	= this.PRE_RENDER;
+	}
+
 	this._hooks[priority]	= this._hooks[priority] || [];
 	console.assert(this._hooks[priority].indexOf(callback) === -1)
 	this._hooks[priority].push(callback);
