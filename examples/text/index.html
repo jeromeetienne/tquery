@@ -1,13 +1,32 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../build/tquery-bundle.js"></script>
-<script src="helvetiker_regular.typeface.js"></script>
+
+<script src="fonts/gentilis_bold.typeface.js"></script>
+<script src="fonts/gentilis_regular.typeface.js"></script>
+<script src="fonts/optimer_bold.typeface.js"></script>
+<script src="fonts/optimer_regular.typeface.js"></script>
+<script src="fonts/helvetiker_bold.typeface.js"></script>
+<script src="fonts/helvetiker_regular.typeface.js"></script>
+<script src="fonts/droid/droid_sans_regular.typeface.js"></script>
+<script src="fonts/droid/droid_sans_bold.typeface.js"></script>
+<script src="fonts/droid/droid_serif_regular.typeface.js"></script>
+<script src="fonts/droid/droid_serif_bold.typeface.js"></script>
+
 <script src="tquery.text.js"></script>
 <body>
 	<script>
 		var scene	= tQuery.createScene().fullpage();
 		var loop	= tQuery.createLoop(scene).start();
-		tQuery.createText("THREE.JS", {
-			height	: 2
-		}).addTo(scene);
+		tQuery.createText("tQuery is Fun!", {
+			weight		: "bold",
+			//font		: "droid sans",
+			font		: "droid serif",
+			//font		: "optimer",
+		}).translateZ(-4).addTo(scene);
+		
+		var object3d	= tQuery('text');
+		loop.hook(function(){
+			//object3d.rotateX(0.01).rotateY(0.05)
+		})
 	</script>
 </body>
