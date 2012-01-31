@@ -70,7 +70,8 @@ tQuery.inherit	= function(childClass, parentClass){
 };
 
 /**
- * extend function - jme: im not sure at all it is the proper one.
+ * extend function. mainly aimed at handling default values - jme: im not sure at all it is the proper one.
+ * http://jsapi.info/_/extend
  * similar to jquery one but much smaller
 */
 tQuery.extend = function(obj, base){
