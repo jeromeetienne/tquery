@@ -1,0 +1,13 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+<script src="helvetiker_regular.typeface.js"></script>
+<script src="tquery.text.js"></script>
+<body>
+	<script>
+		var scene	= tQuery.createScene().fullpage();
+		var loop	= tQuery.createLoop(scene).start();
+		tQuery.createText("THREE.JS", {
+			height	: 2
+		}).addTo(scene);
+	</script>
+</body>

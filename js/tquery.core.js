@@ -60,12 +60,28 @@ tQuery.each	= function(arr, callback){
  * @param {Object} parentClass the class which gonna be inherited
 */
 tQuery.inherit	= function(childClass, parentClass){
+	// trick to avoid calling parentClass constructor
 	var tempFn		= function() {};
 	tempFn.prototype	= parentClass.prototype;
 	childClass.prototype	= new tempFn();
 
 	childClass.prototype.parent	= parentClass.prototype;
 	childClass.prototype.constructor= childClass;	
+};
+
+/**
+ * extend function - jme: im not sure at all it is the proper one.
+ * similar to jquery one but much smaller
+*/
+tQuery.extend = function(obj, base){
+	var result	= {};
+	base && Object.keys(base).forEach(function(key){
+		result[key]	= base[key];
+	})
+	obj && Object.keys(obj).forEach(function(key){
+		result[key]	= obj[key];
+	})
+	return result;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
