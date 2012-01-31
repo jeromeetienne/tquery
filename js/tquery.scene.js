@@ -45,6 +45,9 @@ tQuery.pluginsMixin(tQuery.Scene);
 
 tQuery.Scene.prototype.destroy	= function()
 {
+	// remove renderer element
+	var parent	= this._renderer.domElement.parentElement;
+	parent	&& parent.removeChild(this._renderer.domElement);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
