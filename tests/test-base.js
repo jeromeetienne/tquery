@@ -2,18 +2,18 @@ describe('tQuery', function(){
 	describe('minimal page', function(){
 
 		it('should support webgl', function(){
-			var scene	= tQuery.createScene();
-			console.assert(scene._hasWebGL === true);
-			scene.destroy();
+			var world	= tQuery.createWorld();
+			console.assert(world._hasWebGL === true);
+			world.destroy();
 		});
 
 		it('should not crash on creation', function(done){
 			var container	= document.getElementById('container');
-			var scene	= tQuery.createScene().appendTo(container);
-			var mesh	= tQuery.createTorus().addTo(scene);
-			var loop	= tQuery.createLoop(scene).start();
+			var world	= tQuery.createWorld().appendTo(container);
+			var mesh	= tQuery.createTorus().addTo(world);
+			var loop	= tQuery.createLoop(world).start();
 			setTimeout(function(){
-				scene.destroy();
+				world.destroy();
 				loop.destroy();
 				done();
 			}, 1000);

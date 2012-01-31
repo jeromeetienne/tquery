@@ -11,7 +11,7 @@ var DragPanControls	= function(loop)
 {
 	this._loop	= loop	|| tQuery.loop;
 
-	this._controls	= new THREEx.DragPanControls(tQuery.scene.camera());
+	this._controls	= new THREEx.DragPanControls(tQuery.world.camera());
 	this._$onRender	= this._onRender.bind(this);
 	this._loop.hookPreRender(this._$onRender);
 };

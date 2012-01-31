@@ -3,20 +3,20 @@
 */
 
 /**
- * Create tQuery.Scene
+ * Create tQuery.World
 */
-tQuery.register('createScene', function(){
-	return new tQuery.Scene();
+tQuery.register('createWorld', function(){
+	return new tQuery.World();
 });
 
 /**
  * Create tQuery.loop
  * 
- * @param {THREE.Scene} scene the scene to display (optional)
+ * @param {tQuery.World} world the world to display (optional)
  * @function
 */
-tQuery.register('createLoop', function(scene){
-	return new tQuery.Loop(scene);
+tQuery.register('createLoop', function(world){
+	return new tQuery.Loop(world);
 });
 
 /**

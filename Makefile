@@ -23,7 +23,9 @@ docs:
 #		build and minify						#
 #################################################################################
 
-build:
+build:	minifyPlain minifyBundle
+
+buildPlain:
 	echo 						>  build/tquery.js
 	cat js/tquery.core.js				>> build/tquery.js
 	cat js/tquery.core.create.js			>> build/tquery.js
@@ -31,11 +33,11 @@ build:
 	cat js/tquery.object3d.js			>> build/tquery.js
 	cat js/tquery.geometry.js			>> build/tquery.js
 	cat js/tquery.material.js			>> build/tquery.js
-	cat js/tquery.scene.js				>> build/tquery.js
+	cat js/tquery.world.js				>> build/tquery.js
 	cat js/tquery.loop.js				>> build/tquery.js
 	cat js/plugins/*.js				>> build/tquery.js
 
-minify: build
+minifyPlain: buildPlain
 	curl --data-urlencode "js_code@build/tquery.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
@@ -54,4 +56,4 @@ minifyBundle: buildBundle
 		> build/tquery-bundle.min.js
 	echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
 
-.PHONY: docs build buildBundle minify minifyBundle
+.PHONY: docs buildPlain buildBundle minifyPlain minifyBundle

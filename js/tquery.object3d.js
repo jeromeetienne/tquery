@@ -61,35 +61,35 @@ tQuery.Object3D.prototype.material	= function(){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//			add/remove tQuery.Scene					//
+//			add/remove tQuery.World					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * add all matched elements to a scene
+ * add all matched elements to a world
  * 
- * @param {tQuery.Scene} scene to which add it
+ * @param {tQuery.World} world to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.addTo	= function(scene)
+tQuery.Object3D.prototype.addTo	= function(world)
 {
-	console.assert( scene instanceof tQuery.Scene )
+	console.assert( world instanceof tQuery.World )
 	this.each(function(object3d){
-		scene.add(object3d)
+		world.add(object3d)
 	}.bind(this));
 	return this;
 }
 
 /**
- * remove all matched elements from a scene
+ * remove all matched elements from a world
  * 
- * @param {tQuery.Scene} scene from which remove it
+ * @param {tQuery.World} world from which remove it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.removeFrom	= function(scene)
+tQuery.Object3D.prototype.removeFrom	= function(world)
 {
-	console.assert( scene instanceof tQuery.Scene )
+	console.assert( world instanceof tQuery.World )
 	this.each(function(object3d){
-		scene.remove(object3d)
+		world.remove(object3d)
 	}.bind(this));
 	return this;
 }
@@ -179,7 +179,7 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| tQuery.scene.scene();	// FIXME scene is global
+	root		= root	|| tQuery.world.scene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 	var lists	= this._crawls(root, selectItems)
 	return lists;

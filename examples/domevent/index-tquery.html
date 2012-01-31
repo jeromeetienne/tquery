@@ -5,16 +5,16 @@
 <script src="tquery.object3d.domevent.js"></script>
 <body>
 	<script>
-		var tqscene	= tQuery.createScene().fullpage();
-		var loop	= tQuery.createLoop(tqscene).start();
+		var tqworld	= tQuery.createWorld().fullpage();
+		var loop	= tQuery.createLoop(tqworld).start();
 
 		// workaround a bug
-		scene	= tqscene.scene();
-		camera	= tqscene.camera();
+		scene	= tqworld.scene();
+		camera	= tqworld.camera();
 		
 
 		// create object1
-		var cube	= tQuery.createCube().addTo(tqscene);
+		var cube	= tQuery.createCube().addTo(tqworld);
 		
 		tQuery('cube').on('click', function(){ alert("jjj")})
 	</script>

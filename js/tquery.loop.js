@@ -7,21 +7,21 @@
  *
  * @class This class handle the rendering loop
  *
- * @param {THREE.Scene} scene the scene to display (optional)
+ * @param {THREE.World} world the world to display (optional)
 */
-tQuery.Loop	= function(scene)
+tQuery.Loop	= function(world)
 {
-	// update default scene.
+	// update default world.
 	// - TODO no sanity check ?
 	tQuery.loop	= this;
 	
-	// internally if scene present do that
-	this._scene	= scene;
+	// internally if world present do that
+	this._world	= world;
 	this._hooks	= [];
 
-	// if scene is available, hook it ON_RENDER
-	this._scene && this.hookOnRender(function(){
-		this._scene.render();
+	// if world is available, hook it ON_RENDER
+	this._world && this.hookOnRender(function(){
+		this._world.render();
 	}.bind(this));
 };
 

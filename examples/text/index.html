@@ -15,13 +15,13 @@
 <script src="tquery.text.js"></script>
 <body>
 	<script>
-		var scene	= tQuery.createScene().fullpage();
-		var loop	= tQuery.createLoop(scene).start();
+		var world	= tQuery.createWorld().fullpage();
+		var loop	= tQuery.createLoop(world).start();
 		tQuery.createText("tQuery is Fun!", {
 			weight		: "bold",
 			//font		: "droid sans",
 			font		: "droid serif",
 			//font		: "optimer",
-		}).translateZ(-4).addTo(scene);
+		}).translateZ(-4).addTo(world);
 	</script>
 </body>

@@ -7,7 +7,7 @@ require([
 	"../js/tquery.geometry.js",
 	"../js/tquery.material.js",
 	
-	"../js/tquery.scene.js",
+	"../js/tquery.world.js",
 	"../js/tquery.loop.js",
 	"../js/tquery.core.create.js",
 	"../js/plugins/tquery.geometry.toolbox.js",
@@ -17,7 +17,7 @@ require([
 
 ], function() {
 	var container	= document.getElementById('container');
-	var scene	= tQuery.createScene().appendTo(container);
+	var scene	= tQuery.createWorld().appendTo(container);
 
 	tQuery.createCube().addTo(scene)
 		.geometry().zoom(2).back()

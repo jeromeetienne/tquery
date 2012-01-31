@@ -5,9 +5,9 @@
 <script src="tquery.keyboard.js"></script>
 <body>
 	<script>
-		var scene	= tQuery.createScene().fullpage();
-		var loop	= tQuery.createLoop(scene).start();
-		var object3d	= tQuery.createTorus().addTo(scene);
+		var world	= tQuery.createWorld().fullpage();
+		var loop	= tQuery.createLoop(world).start();
+		var object3d	= tQuery.createTorus().addTo(world);
 		
 		tQuery.loop.hook(function(){
 			if( tQuery.keyboard().pressed('a') ){

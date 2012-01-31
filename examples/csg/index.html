@@ -7,8 +7,8 @@
 <script src="tquery.object3d.csg.js"></script>
 <body>
 	<script>
-		var scene	= tQuery.createScene().fullpage();
-		var loop	= tQuery.createLoop(scene).start();
+		var world	= tQuery.createWorld().fullpage();
+		var loop	= tQuery.createLoop(world).start();
 
 		// create object1
 		var cube	= tQuery.createCube();
@@ -20,9 +20,9 @@
 		// create object3
 		var sphere2	= tQuery.createSphere();
 		sphere2.geometry().translate(1,0,0);
-		//sphere2.addTo(scene);
+		//sphere2.addTo(world);
 		
-		scene.add(sphere2.union(cube).id('prout'));
+		world.add(cube.subtract(sphere2).id('prout'));
 
 		
 		// NOTE: the api is no good
@@ -38,10 +38,13 @@
 		var resultGeo	= tqGeometry.get(0);
 		var material	= new THREE.MeshNormalMaterial();
 		var mesh	= new THREE.Mesh( resultGeo, material );
-		scene.add(mesh);
+		tQuery(mesh).translate(-1, 0, 0);
+		world.add(mesh);
 
 		// animate the object
 		loop.hookPreRender(function(){
+			tQuery('#prout').rotate(0, -0.01, 0)
+			
 			mesh.rotation.x	+= 0.01;
 			mesh.rotation.y	+= 0.01;
 			mesh.rotation.z	+= 0.01;

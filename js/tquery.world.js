@@ -3,17 +3,17 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Handle scene
+ * Handle world (aka scene+camera+renderer)
  *
- * @class include THREE.Material
- *
+ * @class youpla
+ * 
  * @param {THREE.Material} object an instance or an array of instance
 */
-tQuery.Scene	= function()
+tQuery.World	= function()
 {
-	// update default scene.
+	// update default world.
 	// - TODO no sanity check ?
-	tQuery.scene	= this;
+	tQuery.world	= this;
 	
 	// create a scene
 	this._scene	= new THREE.Scene();
@@ -40,10 +40,10 @@ tQuery.Scene	= function()
 };
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery.Scene);
+tQuery.pluginsMixin(tQuery.World);
 
 
-tQuery.Scene.prototype.destroy	= function()
+tQuery.World.prototype.destroy	= function()
 {
 	// remove renderer element
 	var parent	= this._renderer.domElement.parentElement;
@@ -57,7 +57,7 @@ tQuery.Scene.prototype.destroy	= function()
 /**
  * true if webgl is available, false otherwise
 */
-tQuery.Scene.prototype._hasWebGL	= (function(){
+tQuery.World.prototype._hasWebGL	= (function(){
 	// test from Detector.js
 	try{
 		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
@@ -68,7 +68,7 @@ tQuery.Scene.prototype._hasWebGL	= (function(){
 
 /**
 */
-tQuery.Scene.prototype._addGetWebGLMessage	= function(parent)
+tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 {
 	parent	= parent || document.body;
 	
@@ -102,7 +102,7 @@ tQuery.Scene.prototype._addGetWebGLMessage	= function(parent)
  * 
  * @param {tQuery.Object3D} object3D to add to the scene (THREE.Object3D is accepted)
 */
-tQuery.Scene.prototype.add	= function(object3d)
+tQuery.World.prototype.add	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
@@ -120,7 +120,7 @@ tQuery.Scene.prototype.add	= function(object3d)
  * 
  * @param {tQuery.Object3D} object3D to add to the scene (THREE.Object3D is accepted)
 */
-tQuery.Scene.prototype.remove	= function(object3d)
+tQuery.World.prototype.remove	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
@@ -133,7 +133,7 @@ tQuery.Scene.prototype.remove	= function(object3d)
 	return this;
 }
 
-tQuery.Scene.prototype.fullpage	= function()
+tQuery.World.prototype.fullpage	= function()
 {
 	// FIXME i dont like this function. way too cooked for tquery core stuff
 	// put it elsewhere ? in a plugin ?
@@ -147,7 +147,7 @@ tQuery.Scene.prototype.fullpage	= function()
 }
 
 
-tQuery.Scene.prototype.appendTo	= function(domElement)
+tQuery.World.prototype.appendTo	= function(domElement)
 {
 	domElement.appendChild(this._renderer.domElement)
 	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
@@ -155,16 +155,16 @@ tQuery.Scene.prototype.appendTo	= function(domElement)
 	return this;
 }
 
-tQuery.Scene.prototype.renderer	= function(){ return this._renderer;	}
-tQuery.Scene.prototype.camera	= function(){ return this._camera;	}
-tQuery.Scene.prototype.scene	= function(){ return this._scene;	}
-tQuery.Scene.prototype.get	= function(){ return this._scene;	}
+tQuery.World.prototype.renderer	= function(){ return this._renderer;	}
+tQuery.World.prototype.camera	= function(){ return this._camera;	}
+tQuery.World.prototype.scene	= function(){ return this._scene;	}
+tQuery.World.prototype.get	= function(){ return this._scene;	}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Scene.prototype.render	= function()
+tQuery.World.prototype.render	= function()
 {
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );

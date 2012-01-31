@@ -1,12 +1,14 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../build/tquery.js"></script>
-<script>
-	var scene	= tQuery.scene().appendTo(document.body);
-	var mesh	= tQuery.cube().addTo(scene);
-	var loop	= tQuery.loop(scene).start();
-	//
-	// you can almost read it
-	//
-	// or the one liner :)
-	// tQuery.loop(tQuery.scene().appendTo(document.body).add(tQuery.cube())).start();
-</script>
+<script src="../build/tquery-bundle.js"></script>
+<body>
+	<script>
+		var world	= tQuery.createWorld().appendTo(document.body);
+		var mesh	= tQuery.createCube().addTo(world);
+		var loop	= tQuery.createLoop(world).start();
+		//
+		// you can almost read it
+		//
+		// or the one liner :)
+		// tQuery.loop(tQuery.scene().appendTo(document.body).add(tQuery.cube())).start();
+	</script>
+</body>

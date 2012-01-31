@@ -20,7 +20,7 @@
 		baseUrl+"tquery.geometry.js",
 		baseUrl+"tquery.material.js",
 	
-		baseUrl+"tquery.scene.js",
+		baseUrl+"tquery.world.js",
 		baseUrl+"tquery.loop.js",
 		baseUrl+"tquery.core.create.js",
 	], function(){

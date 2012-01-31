@@ -2,11 +2,11 @@
 <script src="../build/tquery-bundle.js"></script>
 <body>
 	<script>
-		var scene	= tQuery.createScene().fullpage();
-		var mesh	= tQuery.createTorus().addTo(scene);
-		var loop	= tQuery.createLoop(scene).start();
+		var world	= tQuery.createWorld().fullpage();
+		var mesh	= tQuery.createTorus().addTo(world);
+		var loop	= tQuery.createLoop(world).start();
 		
-		//tQuery.torus().addTo(scene);
+		//tQuery.torus().addTo(world);
 		
 	
 		// 

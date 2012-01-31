@@ -3,7 +3,7 @@
 <script src="../js/tquery.requirejs.js"></script>
 <script>
 	require(['tquery'], function(){
-		var scene	= tQuery.createScene().fullpage();
+		var scene	= tQuery.createWorld().fullpage();
 		var mesh	= tQuery.createCube().addTo(scene);
 		var loop	= tQuery.createLoop(scene).start();		
 	});
