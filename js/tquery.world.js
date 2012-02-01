@@ -37,6 +37,9 @@ tQuery.World	= function()
 	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
 	this._camera.position.set(0, 0, 5);
 	this._scene.add(this._camera);
+	
+	// create the loop
+	this._loop	= new tQuery.Loop(this)
 };
 
 // make it pluginable
@@ -45,9 +48,13 @@ tQuery.pluginsMixin(tQuery.World);
 
 tQuery.World.prototype.destroy	= function()
 {
+	this._loop.destroy();
 	// remove renderer element
 	var parent	= this._renderer.domElement.parentElement;
 	parent	&& parent.removeChild(this._renderer.domElement);
+	
+	if( tQuery.world === this )	tQuery.world = null;
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -133,6 +140,29 @@ tQuery.World.prototype.remove	= function(object3d)
 	return this;
 }
 
+tQuery.World.prototype.appendTo	= function(domElement)
+{
+	domElement.appendChild(this._renderer.domElement)
+	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
+	// for chained API
+	return this;
+}
+
+/**
+ * Start the loop
+*/
+tQuery.World.prototype.start	= function(){
+	this._loop.start();
+	return this;	// for chained API
+}
+/**
+ * Stop the loop
+*/
+tQuery.World.prototype.stop	= function(){
+	this._loop.stop();
+	return this;	// for chained API
+}
+
 tQuery.World.prototype.fullpage	= function()
 {
 	// FIXME i dont like this function. way too cooked for tquery core stuff
@@ -146,15 +176,7 @@ tQuery.World.prototype.fullpage	= function()
 	return this.appendTo(domElement);
 }
 
-
-tQuery.World.prototype.appendTo	= function(domElement)
-{
-	domElement.appendChild(this._renderer.domElement)
-	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
-	// for chained API
-	return this;
-}
-
+tQuery.World.prototype.loop	= function(){ return this._loop;	}
 tQuery.World.prototype.renderer	= function(){ return this._renderer;	}
 tQuery.World.prototype.camera	= function(){ return this._camera;	}
 tQuery.World.prototype.scene	= function(){ return this._scene;	}

@@ -13,6 +13,7 @@ tQuery.Loop	= function(world)
 {
 	// update default world.
 	// - TODO no sanity check ?
+	console.assert( !tQuery.loop, "loop already defined" );
 	tQuery.loop	= this;
 	
 	// internally if world present do that
@@ -35,6 +36,7 @@ tQuery.pluginsMixin(tQuery.Loop);
 tQuery.Loop.prototype.destroy	= function()
 {
 	this.stop();
+	if( tQuery.loop === this )	tQuery.loop = null;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
