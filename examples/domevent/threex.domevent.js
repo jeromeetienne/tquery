@@ -68,11 +68,13 @@
 var THREEx		= THREEx 		|| {};
 
 // # Constructor
-THREEx.DomEvent	= function(domElement)
+THREEx.DomEvent	= function(camera, domElement)
 {
+	this._camera	= camera || null;
 	this._domElement= domElement || document;
 	this._projector	= new THREE.Projector();
 	this._selected	= null;
+	this._boundObjs	= [];
 
 	// Bind dom event for mouse and touch
 	var _this	= this;
@@ -140,6 +142,15 @@ THREEx.DomEvent.prototype._objectCtxGet	= function(object3d){
 /*										*/
 /********************************************************************************/
 
+/**
+ * Getter/Setter for camera
+*/
+THREEx.DomEvent.prototype.camera	= function(value)
+{
+	if( value )	this._camera	= value;
+	return this._camera;
+}
+
 THREEx.DomEvent.prototype.bind	= function(object3d, eventName, callback, useCapture)
 {
 	console.assert( THREEx.DomEvent.eventNames.indexOf(eventName) !== -1, "not available events:"+eventName );
@@ -152,13 +163,9 @@ THREEx.DomEvent.prototype.bind	= function(object3d, eventName, callback, useCapt
 		callback	: callback,
 		useCapture	: useCapture
 	});
-}
-
-THREEx.DomEvent.prototype._bound	= function(eventName, object3d)
-{
-	var objectCtx	= this._objectCtxGet(object3d);
-	if( !objectCtx )	return false;
-	return objectCtx[eventName+'Handlers'] ? true : false;
+	
+	// add this object in this._boundObjs
+	this._boundObjs.push(object3d);
 }
 
 THREEx.DomEvent.prototype.unbind	= function(object3d, eventName, callback)
@@ -178,6 +185,17 @@ THREEx.DomEvent.prototype.unbind	= function(object3d, eventName, callback)
 		handlers.splice(i, 1)
 		break;
 	}
+	// from this object from this._boundObjs
+	var index	= this._boundObjs.indexOf(object3d);
+	console.assert( index !== -1 );
+	this._boundObjs.splice(index, 1);
+}
+
+THREEx.DomEvent.prototype._bound	= function(eventName, object3d)
+{
+	var objectCtx	= this._objectCtxGet(object3d);
+	if( !objectCtx )	return false;
+	return objectCtx[eventName+'Handlers'] ? true : false;
 }
 
 /********************************************************************************/
@@ -189,10 +207,10 @@ THREEx.DomEvent.prototype.unbind	= function(object3d, eventName, callback)
 THREEx.DomEvent.prototype._onMove	= function(mouseX, mouseY)
 {
 	var vector	= new THREE.Vector3( mouseX, mouseY, 1 );
-	this._projector.unprojectVector( vector, camera );
+	this._projector.unprojectVector( vector, this._camera );
 
-	var ray		= new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
-	var intersects = ray.intersectScene( scene );
+	var ray		= new THREE.Ray( this._camera.position, vector.subSelf( this._camera.position ).normalize() );
+	var intersects = ray.intersectObjects( this._boundObjs );
 	
 	var oldSelected	= this._selected;
 
@@ -240,13 +258,11 @@ THREEx.DomEvent.prototype._onMove	= function(mouseX, mouseY)
 THREEx.DomEvent.prototype._onEvent	= function(eventName, mouseX, mouseY)
 {
 	var vector	= new THREE.Vector3( mouseX, mouseY, 1 );
-	this._projector.unprojectVector( vector, camera );
+	this._projector.unprojectVector( vector, this._camera );
 
-	var ray		= new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
-	var intersects	= ray.intersectScene( scene );
-	// FIXME to test only the bound objects is likely faster to run
-	// - handle the list
-	// var intersects = ray.intersectObjects( [mesh] );
+	vector.subSelf( this._camera.position ).normalize()
+	var ray		= new THREE.Ray( this._camera.position, vector );
+	var intersects	= ray.intersectObjects( this._boundObjs );
 
 	// if there are no intersections, return now
 	if( intersects.length === 0 )	return;
