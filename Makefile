@@ -23,10 +23,11 @@ docs:
 #		build and minify						#
 #################################################################################
 
+BANNER="// tquery.js - https://github.com/jeromeetienne/tquery - MIT License"
 build:	minifyPlain minifyBundle
 
 buildPlain:
-	echo 						>  build/tquery.js
+	echo $(BANNER)					>  build/tquery.js
 	cat js/tquery.core.js				>> build/tquery.js
 	cat js/tquery.core.create.js			>> build/tquery.js
 	cat js/tquery.node.js				>> build/tquery.js
@@ -38,22 +39,24 @@ buildPlain:
 	cat js/plugins/*.js				>> build/tquery.js
 
 minifyPlain: buildPlain
+	echo $(BANNER)	>  build/tquery.min.js
 	curl --data-urlencode "js_code@build/tquery.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
-		> build/tquery.min.js
+		>> build/tquery.min.js
 	echo size minified + gzip is `gzip -c build/tquery.min.js | wc -c` byte
 
 buildBundle: build
-	echo 				>  build/tquery-bundle.js
+	echo $(BANNER)			>  build/tquery-bundle.js
 	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js
 
 minifyBundle: buildBundle
+	echo $(BANNER)	>  build/tquery-bundle.min.js
 	curl --data-urlencode "js_code@build/tquery-bundle.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
-		> build/tquery-bundle.min.js
+		>> build/tquery-bundle.min.js
 	echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
 
 .PHONY: docs buildPlain buildBundle minifyPlain minifyBundle
