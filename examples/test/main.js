@@ -17,19 +17,19 @@ require([
 
 ], function() {
 	var container	= document.getElementById('container');
-	var scene	= tQuery.createWorld().appendTo(container);
+	var world	= tQuery.createWorld().appendTo(container);
 
-	tQuery.createCube().addTo(scene)
+	tQuery.createCube().addTo(world)
 		.geometry().zoom(2).back()
 		.addClass("myClass1").addClass("myClass2").id('cubeId');
-	tQuery.createCube().addTo(scene)
+	tQuery.createCube().addTo(world)
 		.translate(2,0,0)
 		.addClass("myClass1").id('torusId');
-	tQuery.createCube().addTo(scene)
+	tQuery.createCube().addTo(world)
 		.translate(-2,0,0)
 		.addClass("myClass1").id('torusId');
 
-	var loop	= tQuery.createLoop(scene).start();
+	var loop	= tQuery.createLoop(world).start();
 
 
 	loop.hook(function(delta, present){
