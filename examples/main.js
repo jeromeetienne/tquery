@@ -31,6 +31,10 @@ require([
 
 	var loop	= tQuery.createLoop(scene).start();
 
+
+	loop.hook(function(delta, present){
+		console.log("delta", delta, present);	
+	});
 	//tQuery.ui.stats(loop) ??
 	//tQuery.controls.createDragPan();
 	

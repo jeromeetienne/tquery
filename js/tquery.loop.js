@@ -18,6 +18,7 @@ tQuery.Loop	= function(world)
 	// internally if world present do that
 	this._world	= world;
 	this._hooks	= [];
+	this._lastTime	= null;
 
 	// if world is available, hook it ON_RENDER
 	this._world && this.hookOnRender(function(){
@@ -73,12 +74,18 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
+	// update time values
+	var currentTime	= time/1000;
+	if( !this._lastTime )	this._lastTime = currentTime - 1/60;
+	var deltaTime	= currentTime - this._lastTime;
+	this._lastTime	= currentTime;
+
 	// run all the hooks - from lower priority to higher - in order of registration
 	for(var priority = 0; priority <= this._hooks.length; priority++){
 		if( this._hooks[priority] === undefined )	continue;
 		var callbacks	= this._hooks[priority].slice(0)
 		for(var i = 0; i < callbacks.length; i++){
-			callbacks[i](time);
+			callbacks[i](deltaTime, currentTime);
 		}
 	}
 }
