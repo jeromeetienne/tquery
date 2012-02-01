@@ -1,4 +1,4 @@
-
+// tquery.js - https://github.com/jeromeetienne/tquery - MIT License
 /**
  * @fileOverview This file is the core of tQuery library. 
 */
@@ -8,12 +8,6 @@
  *
  * @class root class
  * 
- * - do something for crawling the three
- *   - like python.walk ?
- * - docs with jsdoc
- *   - http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/
- *
- * 
  * @param {} object
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
@@ -22,16 +16,12 @@ var tQuery	= function(object, root)
 {
 	if( object instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
-
 	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
-
 	}else if( object instanceof THREE.Material && tQuery.Material){
 		return new tQuery.Material(object);
-
 	}else if( typeof object === "string" && tQuery.Object3D){
 		return new tQuery.Object3D(object, root);
-
 	}else{
 		console.assert(false, "unsupported type")
 	}
@@ -71,12 +61,29 @@ tQuery.each	= function(arr, callback){
  * @param {Object} parentClass the class which gonna be inherited
 */
 tQuery.inherit	= function(childClass, parentClass){
+	// trick to avoid calling parentClass constructor
 	var tempFn		= function() {};
 	tempFn.prototype	= parentClass.prototype;
 	childClass.prototype	= new tempFn();
 
 	childClass.prototype.parent	= parentClass.prototype;
 	childClass.prototype.constructor= childClass;	
+};
+
+/**
+ * extend function. mainly aimed at handling default values - jme: im not sure at all it is the proper one.
+ * http://jsapi.info/_/extend
+ * similar to jquery one but much smaller
+*/
+tQuery.extend = function(obj, base){
+	var result	= {};
+	base && Object.keys(base).forEach(function(key){
+		result[key]	= base[key];
+	})
+	obj && Object.keys(obj).forEach(function(key){
+		result[key]	= obj[key];
+	})
+	return result;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -118,20 +125,20 @@ tQuery.pluginsMixin(tQuery, tQuery);
 */
 
 /**
- * Create tQuery.Scene
+ * Create tQuery.World
 */
-tQuery.register('createScene', function(){
-	return new tQuery.Scene();
+tQuery.register('createWorld', function(){
+	return new tQuery.World();
 });
 
 /**
  * Create tQuery.loop
  * 
- * @param {THREE.Scene} scene the scene to display (optional)
+ * @param {tQuery.World} world the world to display (optional)
  * @function
 */
-tQuery.register('createLoop', function(scene){
-	return new tQuery.Loop(scene);
+tQuery.register('createLoop', function(world){
+	return new tQuery.Loop(world);
 });
 
 /**
@@ -214,9 +221,9 @@ tQuery.Node.prototype.get	= function(idx)
 */
 tQuery.Node.prototype.each	= function(callback)
 {
-	for(var i = 0; i < this._lists.length; i++){
-		var element	= this._lists[i];
-		var keepLooping	= callback(element);
+	for(var idx = 0; idx < this._lists.length; idx++){
+		var element	= this._lists[idx];
+		var keepLooping	= callback(element, idx, this._lists);
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -246,55 +253,27 @@ tQuery.Node.prototype.back	= function(value)
  * @returns {tQuery.*} the tQuery object created
 */
 tQuery.Object3D	= function(object, root){
+	// handle the case of selector
 	if( typeof object === "string"){
 		object	= tQuery.Object3D._select(object, root);
 	}
-	this._lists	= object instanceof Array ? object : [object];
-	this.length	= this._lists.length;
+	
+	// call parent
+	this.parent.constructor.call(this, object)
+
+	// sanity check - all items MUST be THREE.Object3D
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Object3D); });
 };
 
+/**
+ * inherit from tQuery.Node
+*/
+tQuery.inherit(tQuery.Object3D, tQuery.Node);
 
-// Make tQuery.Object3D pluginable
+/**
+ * Make it pluginable
+*/
 tQuery.pluginsMixin(tQuery.Object3D);
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Retrieve the elements matched by the jQuery object
- * 
- * @param {Function} callback the function to notify. function(element){ }.
- * 			loop interrupted if it returns false
- * 
- * @returns {Boolean} return true if completed, false if interrupted
-*/
-tQuery.Object3D.prototype.get	= function(idx){
-	if( idx === undefined )	return this._lists;
-
-	// sanity check - it MUST be defined
-	console.assert(this._lists[idx], "element not defined");
-	return this._lists[idx];
-};
-
-
-/**
- * loop over element
- * 
- * @param {Function} callback the function to notify. function(element){ }.
- * 			loop interrupted if it returns false
- * 
- * @returns {Boolean} return true if completed, false if interrupted
-*/
-tQuery.Object3D.prototype.each	= function(callback){
-	for(var i = 0; i < this._lists.length; i++){
-		var object3d	= this._lists[i];
-		var keepLooping	= callback(object3d)
-		if( keepLooping === false )	return false;
-	}
-	return true;
-};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -327,35 +306,35 @@ tQuery.Object3D.prototype.material	= function(){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//			handling selection					//
+//			add/remove tQuery.World					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * add all matched elements to a scene
+ * add all matched elements to a world
  * 
- * @param {tQuery.Scene} scene to which add it
+ * @param {tQuery.World} world to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.addTo	= function(scene)
+tQuery.Object3D.prototype.addTo	= function(world)
 {
-	console.assert( scene instanceof tQuery.Scene )
+	console.assert( world instanceof tQuery.World )
 	this.each(function(object3d){
-		scene.add(object3d)
+		world.add(object3d)
 	}.bind(this));
 	return this;
 }
 
 /**
- * remove all matched elements from a scene
+ * remove all matched elements from a world
  * 
- * @param {tQuery.Scene} scene from which remove it
+ * @param {tQuery.World} world from which remove it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.removeFrom	= function(scene)
+tQuery.Object3D.prototype.removeFrom	= function(world)
 {
-	console.assert( scene instanceof tQuery.Scene )
+	console.assert( world instanceof tQuery.World )
 	this.each(function(object3d){
-		scene.remove(object3d)
+		world.remove(object3d)
 	}.bind(this));
 	return this;
 }
@@ -445,7 +424,7 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| tQuery.scene.scene();	// FIXME scene is global
+	root		= root	|| tQuery.world.scene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 	var lists	= this._crawls(root, selectItems)
 	return lists;
@@ -567,34 +546,31 @@ tQuery.pluginsMixin(tQuery.Material);///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Handle scene
+ * Handle world (aka scene+camera+renderer)
  *
- * @class include THREE.Material
- *
+ * @class youpla
+ * 
  * @param {THREE.Material} object an instance or an array of instance
 */
-tQuery.Scene	= function()
+tQuery.World	= function()
 {
-	// update default scene.
+	// update default world.
 	// - TODO no sanity check ?
-	tQuery.scene	= this;
+	tQuery.world	= this;
 	
 	// create a scene
 	this._scene	= new THREE.Scene();
 
 	// create a renderer
-	if( Detector.webgl ){
+	if( this._hasWebGL ){
 		this._renderer = new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
 		this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-	// uncomment if webgl is required
-	//}else{
-	//	Detector.addGetWebGLMessage();
-	//	return true;
 	}else{
-		this._renderer	= new THREE.CanvasRenderer();
+		this._addGetWebGLMessage();
+		throw new Error("WebGL required and not available")
 	}
 	// FIXME this window dimension is crap
 	this._renderer.setSize( window.innerWidth, window.innerHeight );
@@ -604,22 +580,76 @@ tQuery.Scene	= function()
 	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
 	this._camera.position.set(0, 0, 5);
 	this._scene.add(this._camera);
+	
+	// create the loop
+	this._loop	= new tQuery.Loop(this)
 };
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery.Scene);
+tQuery.pluginsMixin(tQuery.World);
 
 
-tQuery.Scene.prototype.destroy	= function()
+tQuery.World.prototype.destroy	= function()
 {
-	
+	this._loop.destroy();
+	// remove renderer element
+	var parent	= this._renderer.domElement.parentElement;
+	parent	&& parent.removeChild(this._renderer.domElement);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		WebGL Support							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Scene.prototype.add	= function(object3d)
+/**
+ * true if webgl is available, false otherwise
+*/
+tQuery.World.prototype._hasWebGL	= (function(){
+	// test from Detector.js
+	try{
+		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
+	} catch( e ){
+		return false;
+	}
+})();
+
+/**
+*/
+tQuery.World.prototype._addGetWebGLMessage	= function(parent)
+{
+	parent	= parent || document.body;
+	
+	// message directly taken from Detector.js
+	var domElement = document.createElement( 'div' );
+	domElement.style.fontFamily = 'monospace';
+	domElement.style.fontSize = '13px';
+	domElement.style.textAlign = 'center';
+	domElement.style.background = '#eee';
+	domElement.style.color = '#000';
+	domElement.style.padding = '1em';
+	domElement.style.width = '475px';
+	domElement.style.margin = '5em auto 0';
+	domElement.innerHTML = window.WebGLRenderingContext ? [
+		'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>.<br />',
+		'Find out how to get it <a href="http://get.webgl.org/">here</a>.'
+	].join( '\n' ) : [
+		'Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>.<br/>',
+		'Find out how to get it <a href="http://get.webgl.org/">here</a>.'
+	].join( '\n' );
+
+	parent.appendChild(domElement);
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		add/remove object3D						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * add an object to the scene
+ * 
+ * @param {tQuery.Object3D} object3D to add to the scene (THREE.Object3D is accepted)
+*/
+tQuery.World.prototype.add	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
@@ -627,20 +657,57 @@ tQuery.Scene.prototype.add	= function(object3d)
 		}.bind(this));
 	}else if( object3d instanceof THREE.Object3D ){
 		this._scene.add(object3d)		
-	}else	console.assert(false);
-	// for chained API
-	return this;
-}
-tQuery.Scene.prototype.remove	= function(object3d)
-{
-	console.assert(object3d instanceof THREE.Object3D)
-	this._scene.remove(object3d)
+	}else	console.assert(false, "invalid type");
 	// for chained API
 	return this;
 }
 
-tQuery.Scene.prototype.fullpage	= function()
+/**
+ * remove an object to the scene
+ * 
+ * @param {tQuery.Object3D} object3D to add to the scene (THREE.Object3D is accepted)
+*/
+tQuery.World.prototype.remove	= function(object3d)
 {
+	if( object3d instanceof tQuery.Object3D ){
+		object3d.each(function(object3d){
+			this._scene.remove(object3d)
+		}.bind(this));
+	}else if( object3d instanceof THREE.Object3D ){
+		this._scene.remove(object3d)
+	}else	console.assert(false, "invalid type");
+	// for chained API
+	return this;
+}
+
+tQuery.World.prototype.appendTo	= function(domElement)
+{
+	domElement.appendChild(this._renderer.domElement)
+	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
+	// for chained API
+	return this;
+}
+
+/**
+ * Start the loop
+*/
+tQuery.World.prototype.start	= function(){
+	this._loop.start();
+	return this;	// for chained API
+}
+/**
+ * Stop the loop
+*/
+tQuery.World.prototype.stop	= function(){
+	this._loop.stop();
+	return this;	// for chained API
+}
+
+tQuery.World.prototype.fullpage	= function()
+{
+	// FIXME i dont like this function. way too cooked for tquery core stuff
+	// put it elsewhere ? in a plugin ?
+	
 	// Should that be in pluging
 	var domElement	= document.body;
 	domElement.style.margin		= "0";
@@ -649,24 +716,17 @@ tQuery.Scene.prototype.fullpage	= function()
 	return this.appendTo(domElement);
 }
 
-tQuery.Scene.prototype.appendTo	= function(domElement)
-{
-	domElement.appendChild(this._renderer.domElement)
-	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
-	// for chained API
-	return this;
-}
-
-tQuery.Scene.prototype.renderer	= function(){ return this._renderer;	}
-tQuery.Scene.prototype.camera	= function(){ return this._camera;	}
-tQuery.Scene.prototype.scene	= function(){ return this._scene;	}
-tQuery.Scene.prototype.get	= function(){ return this._scene;	}
+tQuery.World.prototype.loop	= function(){ return this._loop;	}
+tQuery.World.prototype.renderer	= function(){ return this._renderer;	}
+tQuery.World.prototype.camera	= function(){ return this._camera;	}
+tQuery.World.prototype.scene	= function(){ return this._scene;	}
+tQuery.World.prototype.get	= function(){ return this._scene;	}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Scene.prototype.render	= function()
+tQuery.World.prototype.render	= function()
 {
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );
@@ -680,21 +740,23 @@ tQuery.Scene.prototype.render	= function()
  *
  * @class This class handle the rendering loop
  *
- * @param {THREE.Scene} scene the scene to display (optional)
+ * @param {THREE.World} world the world to display (optional)
 */
-tQuery.Loop	= function(scene)
+tQuery.Loop	= function(world)
 {
-	// update default scene.
+	// update default world.
 	// - TODO no sanity check ?
+	console.assert( !tQuery.loop );
 	tQuery.loop	= this;
 	
-	// internally if scene present do that
-	this._scene	= scene;
+	// internally if world present do that
+	this._world	= world;
 	this._hooks	= [];
+	this._lastTime	= null;
 
-	// if scene is available, hook it ON_RENDER
-	this._scene && this.hookOnRender(function(){
-		this._scene.render();
+	// if world is available, hook it ON_RENDER
+	this._world && this.hookOnRender(function(){
+		this._world.render();
 	}.bind(this));
 };
 
@@ -746,12 +808,18 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
+	// update time values
+	var currentTime	= time/1000;
+	if( !this._lastTime )	this._lastTime = currentTime - 1/60;
+	var deltaTime	= currentTime - this._lastTime;
+	this._lastTime	= currentTime;
+
 	// run all the hooks - from lower priority to higher - in order of registration
 	for(var priority = 0; priority <= this._hooks.length; priority++){
 		if( this._hooks[priority] === undefined )	continue;
 		var callbacks	= this._hooks[priority].slice(0)
 		for(var i = 0; i < callbacks.length; i++){
-			callbacks[i](time);
+			callbacks[i](deltaTime, currentTime);
 		}
 	}
 }
@@ -773,6 +841,12 @@ tQuery.Loop.prototype.POST_RENDER	= 80;
 */
 tQuery.Loop.prototype.hook	= function(priority, callback)
 {
+	// handle parameters
+	if( typeof priority === 'function' ){
+		callback	= priority;
+		priority	= this.PRE_RENDER;
+	}
+
 	this._hooks[priority]	= this._hooks[priority] || [];
 	console.assert(this._hooks[priority].indexOf(callback) === -1)
 	this._hooks[priority].push(callback);
@@ -820,7 +894,7 @@ var DragPanControls	= function(loop)
 {
 	this._loop	= loop	|| tQuery.loop;
 
-	this._controls	= new THREEx.DragPanControls(tQuery.scene.camera());
+	this._controls	= new THREEx.DragPanControls(tQuery.world.camera());
 	this._$onRender	= this._onRender.bind(this);
 	this._loop.hookPreRender(this._$onRender);
 };
@@ -849,6 +923,12 @@ tQuery.register('createDragPanControls', function(loop){ return new tQuery.DragP
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * zoom a geometry
+ *
+ * @name zoom
+ * @methodOf tQuery.Geometry
+*/
 tQuery.Geometry.register('zoom', function(vector3){
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 1 ){
@@ -972,7 +1052,6 @@ tQuery.Geometry.register('rotate', function(angles, order){
 	// compute transformation matrix
 	var matrix	= new THREE.Matrix4();
 	matrix.setRotationFromEuler(angles, order);
-
 
 	// change all geometry.vertices
 	this.each(function(geometry){
