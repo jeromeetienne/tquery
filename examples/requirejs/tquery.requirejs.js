@@ -2,6 +2,11 @@
  * export tQuery as requirejs module
 */
 (function(){
+	define && define('tquery', ["../../build/tquery-bundle.js"], function(){ return tQuery; });
+	return;
+
+
+	// get the url from the <script src=""> loading this file
 	var scriptUrl	= document.scripts[document.scripts.length-1].src;
 	var baseUrl	= scriptUrl.substr(0, scriptUrl.lastIndexOf('/')+1);
 	
@@ -9,6 +14,8 @@
 	// fails with  <script data-main="tquery.requirejs.js" src="scripts/require.js"></script>
 	// likely becasuse requirejs doesnt use script to get script
 	
+	baseUrl	= "../../js/";
+
 	define('tquery', [
 		baseUrl+"../vendor/three.js/Three.js",
 		baseUrl+"../vendor/three.js/Detector.js",
@@ -25,6 +32,5 @@
 		baseUrl+"tquery.core.create.js",
 	], function(){
 		return tQuery;
-	});
-
+	});		
 })();

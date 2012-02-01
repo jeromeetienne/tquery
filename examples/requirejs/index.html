@@ -1,0 +1,20 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../vendor/require.js"></script>
+<script src="./tquery.requirejs.js"></script>
+<body>
+	<script>
+		require(['tquery', 'tquery.keyboard'], function(){
+			var world	= tQuery.createWorld().fullpage();
+			var loop	= tQuery.createLoop(world).start();
+			var object3d	= tQuery.createTorus().addTo(world);
+			
+			tQuery.loop.hook(function(){
+				if( tQuery.keyboard().pressed('a') ){
+					object3d.scale(2);
+				}else{
+					object3d.scale(1);
+				}
+			});
+		});
+	</script>
+</body>
