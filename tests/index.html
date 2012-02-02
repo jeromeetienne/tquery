@@ -8,13 +8,15 @@
 	<script>mocha.setup('bdd')</script>
 	<script>
 		console.assert	= function(expr, msg) {
-			if (!expr) throw new Error(msg || 'failed');
+			if( expr )	return;
+			throw new Error(msg || 'failed');
 		}
 	</script>
 	<script src="../build/tquery-bundle.js"></script>
 
 	<!-- list all the tests here -->
-	<script src="test-base.js"></script>
+	<script src="tQuery.world-test.js"></script>
+	<script src="tQuery.node-test.js"></script>
 
 	<script>
 		$(function () {

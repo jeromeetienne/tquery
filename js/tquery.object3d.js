@@ -151,7 +151,7 @@ tQuery.Object3D.prototype.removeClass	= function(className){
 
 /**
  * return true if any of the matched elements has this class
- * 
+ *
  * @param {string} className the name of the class
  * @returns {tQuery.Object3D} true if any of the matched elements has this class, false overwise
 */

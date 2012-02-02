@@ -37,6 +37,54 @@ tQuery.VERSION	= "0.0.1";
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * generic getter/setter
+ * 
+ * @param {Object} object the object in which store the data
+ * @param {String} key the key/name of the data to get/set
+ * @param {*} value the value to set (optional)
+ * 
+ * @returns {*} return the value stored in this object for this key
+*/
+tQuery.data	= function(object, key, value)
+{
+	// sanity check
+	console.assert( object, 'invalid parameters' );
+	console.assert( typeof key === 'string', 'invalid parameters');
+
+	// init _tqData
+	object['_tqData']	= object['_tqData']	|| {};
+	// set the value if any
+	if( value ){
+		object['_tqData'][key]	= value;
+	}
+	// return the value
+	return object['_tqData'][key];
+};
+
+/**
+ * Same as jQuery.removeData()
+*/
+tQuery.removeData	= function(object, key)
+{
+	// handle the 'key as Array' case
+	if( key instanceof Array ){
+		key.forEach(function(key){
+			tQuery.removeData(object, key);
+		})
+		return;
+	}
+	// sanity check
+	console.assert( typeof key === "string");
+	// do delete the key
+	delete object['_tqData'][key];
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
  * loop over a Array.
  * 
  * @param {Array} arr the array to traverse.

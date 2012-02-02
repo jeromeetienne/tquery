@@ -42,7 +42,7 @@ tQuery.register('createTorus', function(){
 
 tQuery.register('createSphere', function(){
 	var material	= new THREE.MeshNormalMaterial();
-	var geometry	= new THREE.SphereGeometry( 0.5, 0.5 );
+	var geometry	= new THREE.SphereGeometry( 0.5, 32, 16 );
 	geometry.dynamic= true;
 	var mesh	= new THREE.Mesh(geometry, material)
 	return tQuery(mesh);

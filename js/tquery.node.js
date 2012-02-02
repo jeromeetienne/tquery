@@ -44,12 +44,7 @@ tQuery.Node.prototype.get	= function(idx)
 */
 tQuery.Node.prototype.each	= function(callback)
 {
-	for(var idx = 0; idx < this._lists.length; idx++){
-		var element	= this._lists[idx];
-		var keepLooping	= callback(element, idx, this._lists);
-		if( keepLooping === false )	return false;
-	}
-	return true;
+	return tQuery.each(this._lists, callback)
 };
 
 /**
@@ -64,5 +59,37 @@ tQuery.Node.prototype.back	= function(value)
 	return this;
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * same as .data() in jquery
+*/
+tQuery.Node.prototype.data	= function(key, value)
+{
+	// handle the setter case
+	if( value ){
+		this.each(function(element){
+			tQuery.data(element, key, value);
+		});
+		return this;	// for chained API
+	}
+	// return the value of the first element
+	if( this.length > 0 )	return tQuery.data(this.get(0), key)
+	// return undegined if the list is empty
+	console.assert(this.length === 0);
+	return undefined
+}
 
 
+/**
+ * same as .data() in jquery
+*/
+tQuery.Node.prototype.removeData	= function(key)
+{
+	this.each(function(element){
+		tQuery.removeData(element, key);
+	});
+	return this;	// for chained API
+}
