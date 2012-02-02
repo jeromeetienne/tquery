@@ -15,7 +15,7 @@ THREEx.GeometryWobble.init	= function(geometry)
 	}
 	geometry.dynamic	= true;
 	
-	this.cpuAxis(geometry, 'y')
+	this.cpuAxis(geometry, 'y');
 }
 
 THREEx.GeometryWobble.cpuAxis	= function(geometry, type, factor)
@@ -49,6 +49,5 @@ THREEx.GeometryWobble.Animate	= function(geometry, phase, magnitude)
 		vertex.position.y = vertex.originalPosition.y + vertexPhase * vertex.dirVector.y * magnitude.y;
 		vertex.position.z = vertex.originalPosition.z + vertexPhase * vertex.dirVector.z * magnitude.z;
 	}
-	
 	geometry.__dirtyVertices = true;
 }

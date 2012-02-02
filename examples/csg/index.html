@@ -7,8 +7,7 @@
 <script src="tquery.object3d.csg.js"></script>
 <body>
 	<script>
-		var world	= tQuery.createWorld().fullpage();
-		var loop	= tQuery.createLoop(world).start();
+		var world	= tQuery.createWorld().fullpage().start();
 
 		// create object1
 		var cube	= tQuery.createCube();
@@ -42,7 +41,7 @@
 		world.add(mesh);
 
 		// animate the object
-		loop.hookPreRender(function(){
+		world.loop().hookPreRender(function(){
 			tQuery('#prout').rotate(0, -0.01, 0)
 			
 			mesh.rotation.x	+= 0.01;

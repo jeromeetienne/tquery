@@ -48,7 +48,7 @@
 				
 					<li><a href="../symbols/tQuery.Object3D.html">tQuery<span class='break'> </span>.<span class='break'> </span>Object3D</a></li>
 				
-					<li><a href="../symbols/tQuery.Scene.html">tQuery<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+					<li><a href="../symbols/tQuery.World.html">tQuery<span class='break'> </span>.<span class='break'> </span>World</a></li>
 				
 			</ul>
 		</nav>
@@ -59,7 +59,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-0-29' pubdate>2012-0-29 19:43</time>
+			<time datetime='2012-1-2' pubdate>2012-1-2 10:48</time>
 		</footer>
 	</div>
 </div>
@@ -78,11 +78,6 @@
 				<div class="intro">
 					<p class="description summary">
 						root class
-
-- do something for crawling the three
-  - like python.walk ?
-- docs with jsdoc
-  - http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/
 					</p>
 						
 					
@@ -147,6 +142,16 @@
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
 													<div class="fixedFont">
+													tQuery.<b><a href="../symbols/tQuery.html#.defaultObject3DMaterial">defaultObject3DMaterial</a></b>
+													</div>
+													<div class="description">contains the default material to use when create tQuery.Object3D</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
 													tQuery.<b><a href="../symbols/tQuery.html#.VERSION">VERSION</a></b>
 													</div>
 													<div class="description">The version of tQuery</div>
@@ -190,6 +195,17 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
+													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.data">data</a></b>(object, key, value)
+													</div>
+													<div class="description">generic getter/setter</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item1'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
 													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.each">each</a></b>(arr, callback)
 													</div>
 													<div class="description">loop over a Array.</div>
@@ -197,7 +213,18 @@
 											</tr>
 										
 											<tr
-												 class='item1'
+												 class='item2'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.extend">extend</a></b>(obj, base)
+													</div>
+													<div class="description">extend function.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
@@ -208,13 +235,24 @@
 											</tr>
 										
 											<tr
-												 class='item2'
+												 class='item4'
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
 													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.pluginsMixin">pluginsMixin</a></b>(object, dest)
 													</div>
 													<div class="description">Make an object pluginable</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item5'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.removeData">removeData</a></b>(object, key)
+													</div>
+													<div class="description">Same as jQuery.removeData()</div>
 												</td>
 											</tr>
 										
@@ -309,6 +347,31 @@
 							</h2>
 							
 							
+								<div class="fixedFont heading" id=".defaultObject3DMaterial">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tQuery.</span><b>defaultObject3DMaterial</b>							
+								</div>
+								
+								<div class="description">
+									contains the default material to use when create tQuery.Object3D
+									
+										<br />
+										<i>Defined in: </i> <a href="../symbols/src/js_tquery.core.create.js.html">tquery.core.create.js</a>.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
 								<div class="fixedFont heading" id=".VERSION">
 									<span class='lighter'>
 									&lt;static&gt; 
@@ -351,6 +414,79 @@
 								
 									<li 
 										 class='item0'
+									>
+										<div class="fixedFont heading" id=".data">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											<span class="light">{*}</span>
+											
+											<span class="light">tQuery.</span><b>data</b>(object, key, value)
+										</div>
+										
+										<div class="description">
+											generic getter/setter
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>object</b>
+														
+													</dt>
+													<dd>the object in which store the data</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>key</b>
+														
+													</dt>
+													<dd>the key/name of the data to get/set</dd>
+												
+													<dt>
+														<span class="light fixedFont">{*}</span> <b>value</b>
+														
+													</dt>
+													<dd>the value to set (optional)</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{*}</span> return the value stored in this object for this key</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item1'
 									>
 										<div class="fixedFont heading" id=".each">
 											<span class='lighter'>
@@ -418,7 +554,55 @@
 									</li>
 								
 									<li 
-										 class='item1'
+										 class='item2'
+									>
+										<div class="fixedFont heading" id=".extend">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">tQuery.</span><b>extend</b>(obj, base)
+										</div>
+										
+										<div class="description">
+											extend function. mainly aimed at handling default values - jme: im not sure at all it is the proper one.
+http://jsapi.info/_/extend
+similar to jquery one but much smaller
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>obj</b>
+														
+													</dt>
+													<dd></dd>
+												
+													<dt>
+														<b>base</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
 									>
 										<div class="fixedFont heading" id=".inherit">
 											<span class='lighter'>
@@ -464,7 +648,7 @@
 									</li>
 								
 									<li 
-										 class='item2'
+										 class='item4'
 									>
 										<div class="fixedFont heading" id=".pluginsMixin">
 											<span class='lighter'>
@@ -501,6 +685,52 @@
 														
 													</dt>
 													<dd>the object in which to register the plugin</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item5'
+									>
+										<div class="fixedFont heading" id=".removeData">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">tQuery.</span><b>removeData</b>(object, key)
+										</div>
+										
+										<div class="description">
+											Same as jQuery.removeData()
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>object</b>
+														
+													</dt>
+													<dd></dd>
+												
+													<dt>
+														<b>key</b>
+														
+													</dt>
+													<dd></dd>
 												
 											</dl>
 										

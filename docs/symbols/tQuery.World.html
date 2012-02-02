@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>tQuery.Node | tQuery library</title>
+		<title>tQuery.World | tQuery library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -72,12 +72,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Class <span>tQuery.Node</span>
+					Class <span>tQuery.World</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						base class for tQuery objects
+						youpla
 					</p>
 						
 					
@@ -85,7 +85,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a></li>
+								<li>Defined in: <a href="../symbols/src/js_tquery.world.js.html">tquery.world.js</a></li>
 							
 							
 						</ul>
@@ -96,7 +96,7 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.Node.">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.World.">
 							<caption class="sectionTitle">Class Summary</caption>
 							<thead>
 								<tr>
@@ -109,9 +109,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/tQuery.Node.html#constructor">tQuery.Node</a></b>(object)
+											<b><a href="../symbols/tQuery.World.html#constructor">tQuery.World</a></b>(object)
 										</div>
-										<div class="description">implementation of the tQuery.Node</div>
+										<div class="description">Handle world (aka scene+camera+renderer)</div>
 									</td>
 								</tr>
 							</tbody>
@@ -133,7 +133,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tQuery.Node.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tQuery.World.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -149,9 +149,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Node.html#back">back</a></b>(back)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.World.html#add">add</a></b>(object3D)
 													</div>
-													<div class="description">getter/setter of the back pointer</div>
+													<div class="description">add an object to the scene</div>
 												</td>
 											</tr>
 										
@@ -160,9 +160,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Node.html#data">data</a></b>(key, value)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.World.html#remove">remove</a></b>(object3D)
 													</div>
-													<div class="description">same as .data() in jquery</div>
+													<div class="description">remove an object to the scene</div>
 												</td>
 											</tr>
 										
@@ -171,9 +171,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Node.html#each">each</a></b>(callback)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.World.html#start">start</a></b>()
 													</div>
-													<div class="description">loop over element</div>
+													<div class="description">Start the loop</div>
 												</td>
 											</tr>
 										
@@ -182,20 +182,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Node.html#get">get</a></b>(callback)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.World.html#stop">stop</a></b>()
 													</div>
-													<div class="description">Retrieve the elements matched by the tQuery object</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item4'
-											>
-												<td class="attributes">&nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Node.html#removeData">removeData</a></b>(key)
-													</div>
-													<div class="description">same as .data() in jquery</div>
+													<div class="description">Stop the loop</div>
 												</td>
 											</tr>
 										
@@ -225,11 +214,11 @@
 							</h2>
 							
 							<div class="fixedFont">
-								<b>tQuery.Node</b>(object)
+								<b>tQuery.World</b>(object)
 							</div>
 							
 							<div class="description">
-								implementation of the tQuery.Node
+								Handle world (aka scene+camera+renderer)
 								
 							</div>
 							
@@ -240,7 +229,7 @@
 									<dt class="heading">Parameters:</dt>
 									
 										<dt>
-											<span class="light fixedFont">{Object}</span>  <b>object</b>
+											<span class="light fixedFont">{THREE.Material}</span>  <b>object</b>
 											
 										</dt>
 										<dd>an instance or an array of instance</dd>
@@ -274,18 +263,18 @@
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id="back">
+										<div class="fixedFont heading" id="add">
 											<span class='lighter'>
 											
 											</span>
 											
 											
 											
-											<b>back</b>(back)
+											<b>add</b>(object3D)
 										</div>
 										
 										<div class="description">
-											getter/setter of the back pointer
+											add an object to the scene
 											
 											
 											
@@ -299,10 +288,10 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Object}</span> <b>back</b>
+														<span class="light fixedFont">{<a href="../symbols/tQuery.Object3D.html">tQuery.Object3D</a>}</span> <b>object3D</b>
 														
 													</dt>
-													<dd>the value to return when .back() is called. optional</dd>
+													<dd>to add to the scene (THREE.Object3D is accepted)</dd>
 												
 											</dl>
 										
@@ -314,18 +303,18 @@
 									<li 
 										 class='item1'
 									>
-										<div class="fixedFont heading" id="data">
+										<div class="fixedFont heading" id="remove">
 											<span class='lighter'>
 											
 											</span>
 											
 											
 											
-											<b>data</b>(key, value)
+											<b>remove</b>(object3D)
 										</div>
 										
 										<div class="description">
-											same as .data() in jquery
+											remove an object to the scene
 											
 											
 											
@@ -339,16 +328,10 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<b>key</b>
+														<span class="light fixedFont">{<a href="../symbols/tQuery.Object3D.html">tQuery.Object3D</a>}</span> <b>object3D</b>
 														
 													</dt>
-													<dd></dd>
-												
-													<dt>
-														<b>value</b>
-														
-													</dt>
-													<dd></dd>
+													<dd>to add to the scene (THREE.Object3D is accepted)</dd>
 												
 											</dl>
 										
@@ -360,18 +343,18 @@
 									<li 
 										 class='item2'
 									>
-										<div class="fixedFont heading" id="each">
+										<div class="fixedFont heading" id="start">
 											<span class='lighter'>
 											
 											</span>
 											
-											<span class="light">{Boolean}</span>
 											
-											<b>each</b>(callback)
+											
+											<b>start</b>()
 										</div>
 										
 										<div class="description">
-											loop over element
+											Start the loop
 											
 											
 											
@@ -381,40 +364,7 @@
 										
 										
 										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
-												
-													<dt>
-														<span class="light fixedFont">{Function}</span> <b>callback</b>
-														
-													</dt>
-													<dd>the function to notify. function(element){ }.
-			loop interrupted if it returns false</dd>
-												
-											</dl>
 										
-										
-										
-											<dl class="detailList nomargin">
-											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{Boolean}</span> return true if completed, false if interrupted</dd>
-													
-												
-												
-												
-												
-												
-											
-											</dl>
 										
 										<div class="hr"></div>
 									</li>
@@ -422,80 +372,18 @@
 									<li 
 										 class='item3'
 									>
-										<div class="fixedFont heading" id="get">
-											<span class='lighter'>
-											
-											</span>
-											
-											<span class="light">{Boolean}</span>
-											
-											<b>get</b>(callback)
-										</div>
-										
-										<div class="description">
-											Retrieve the elements matched by the tQuery object
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
-												
-													<dt>
-														<span class="light fixedFont">{Function}</span> <b>callback</b>
-														
-													</dt>
-													<dd>the function to notify. function(element){ }.
-			loop interrupted if it returns false</dd>
-												
-											</dl>
-										
-										
-										
-											<dl class="detailList nomargin">
-											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{Boolean}</span> return true if completed, false if interrupted</dd>
-													
-												
-												
-												
-												
-												
-											
-											</dl>
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item4'
-									>
-										<div class="fixedFont heading" id="removeData">
+										<div class="fixedFont heading" id="stop">
 											<span class='lighter'>
 											
 											</span>
 											
 											
 											
-											<b>removeData</b>(key)
+											<b>stop</b>()
 										</div>
 										
 										<div class="description">
-											same as .data() in jquery
+											Stop the loop
 											
 											
 											
@@ -504,17 +392,6 @@
 										
 										
 										
-										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
-												
-													<dt>
-														<b>key</b>
-														
-													</dt>
-													<dd></dd>
-												
-											</dl>
 										
 										
 										

@@ -9,38 +9,37 @@
 <span class='line'>  2</span>  * @fileOverview Plugins for tQuery and Stats.js
 <span class='line'>  3</span> */</span><span class="WHIT">
 <span class='line'>  4</span> 
-<span class='line'>  5</span> 
-<span class='line'>  6</span> </span><span class="NAME">define</span><span class="PUNC">(</span><span class="STRN">'tquery.stats'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"tquery"</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  7</span> 
-<span class='line'>  8</span> </span><span class="COMM">/**
-<span class='line'>  9</span>  * 
-<span class='line'> 10</span> */</span><span class="WHIT">
-<span class='line'> 11</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">myStats</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">loop</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 13</span> </span><span class="WHIT">	</span><span class="COMM">// add Stats.js - https://github.com/mrdoob/stats.js</span><span class="WHIT">
-<span class='line'> 14</span> </span><span class="WHIT">	</span><span class="NAME">this._stats</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Stats</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 15</span> </span><span class="WHIT">	</span><span class="NAME">this._stats.domElement.style.position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'absolute'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="WHIT">	</span><span class="NAME">this._stats.domElement.style.bottom</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'0px'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 17</span> </span><span class="WHIT">	</span><span class="NAME">document.body.appendChild</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._stats.domElement</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 18</span> 
-<span class='line'> 19</span> </span><span class="WHIT">	</span><span class="NAME">this._loop</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">loop</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">tQuery.loop</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 20</span> 
-<span class='line'> 21</span> </span><span class="WHIT">	</span><span class="NAME">this._$onRender</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._onRender.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 22</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.hookPostRender</span><span class="PUNC">(</span><span class="NAME">this._$onRender</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 23</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 24</span> 
-<span class='line'> 25</span> </span><span class="NAME">myStats.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 26</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.unhookPostRender</span><span class="PUNC">(</span><span class="NAME">this._$onRender</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	
-<span class='line'> 27</span> 	</span><span class="NAME">document.body.removeChild</span><span class="PUNC">(</span><span class="NAME">this._stats.domElement</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 28</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 29</span> 
-<span class='line'> 30</span> </span><span class="NAME">myStats.prototype._onRender</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 31</span> </span><span class="WHIT">	</span><span class="NAME">this._stats.update</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 32</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 33</span> 
-<span class='line'> 34</span> </span><span class="COMM">// register the plugins</span><span class="WHIT">
-<span class='line'> 35</span> </span><span class="NAME">tQuery.register</span><span class="PUNC">(</span><span class="STRN">'Stats'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">myStats</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 36</span> </span><span class="NAME">tQuery.register</span><span class="PUNC">(</span><span class="STRN">'createStats'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">loop</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.Stats</span><span class="PUNC">(</span><span class="NAME">loop</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 37</span> 
-<span class='line'> 38</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// require.js end</span><span class="WHIT">
-<span class='line'> 39</span> </span></pre></body></html>
+<span class='line'>  5</span> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  6</span> 
+<span class='line'>  7</span> </span><span class="COMM">/**
+<span class='line'>  8</span>  * 
+<span class='line'>  9</span> */</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">myStats</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">loop</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">	</span><span class="COMM">// add Stats.js - https://github.com/mrdoob/stats.js</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="WHIT">	</span><span class="NAME">this._stats</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Stats</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">	</span><span class="NAME">this._stats.domElement.style.position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'absolute'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">	</span><span class="NAME">this._stats.domElement.style.bottom</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'0px'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="WHIT">	</span><span class="NAME">document.body.appendChild</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._stats.domElement</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="WHIT">	</span><span class="NAME">this._loop</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">loop</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">tQuery.loop</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span> 
+<span class='line'> 20</span> </span><span class="WHIT">	</span><span class="NAME">this._$onRender</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._onRender.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.hookPostRender</span><span class="PUNC">(</span><span class="NAME">this._$onRender</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 23</span> 
+<span class='line'> 24</span> </span><span class="NAME">myStats.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.unhookPostRender</span><span class="PUNC">(</span><span class="NAME">this._$onRender</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	
+<span class='line'> 26</span> 	</span><span class="NAME">document.body.removeChild</span><span class="PUNC">(</span><span class="NAME">this._stats.domElement</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span> </span><span class="NAME">myStats.prototype._onRender</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="NAME">this._stats.update</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span> </span><span class="COMM">// register the plugins</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="NAME">tQuery.register</span><span class="PUNC">(</span><span class="STRN">'Stats'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">myStats</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="NAME">tQuery.register</span><span class="PUNC">(</span><span class="STRN">'createStats'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">loop</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.Stats</span><span class="PUNC">(</span><span class="NAME">loop</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> 
+<span class='line'> 37</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// closure function end</span><span class="WHIT">
+<span class='line'> 38</span> </span></pre></body></html>

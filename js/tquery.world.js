@@ -35,7 +35,7 @@ tQuery.World	= function()
 	// create a camera in the scene
 	// FIXME this window dimension is crap
 	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	this._camera.position.set(0, 0, 5);
+	this._camera.position.set(0, 0, 3);
 	this._scene.add(this._camera);
 	
 	// create the loop

@@ -17,18 +17,21 @@
 <span class='line'> 10</span> </span><span class="WHIT">	</span><span class="COMM">// likely becasuse requirejs doesnt use script to get script</span><span class="WHIT">
 <span class='line'> 11</span> </span><span class="WHIT">	
 <span class='line'> 12</span> 	</span><span class="NAME">define</span><span class="PUNC">(</span><span class="STRN">'tquery'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
-<span class='line'> 13</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.core.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 14</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.node.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 15</span> </span><span class="WHIT">		
-<span class='line'> 16</span> 		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.object3d.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 17</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.geometry.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 18</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.material.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 19</span> </span><span class="WHIT">	
-<span class='line'> 20</span> 		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.scene.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 21</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.loop.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 22</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.core.create.js"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 23</span> </span><span class="WHIT">	</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 24</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tQuery</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 25</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 26</span> 
-<span class='line'> 27</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'> 13</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"../vendor/three.js/Three.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"../vendor/three.js/Detector.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 15</span> 
+<span class='line'> 16</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.core.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.node.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">		
+<span class='line'> 19</span> 		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.object3d.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.geometry.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.material.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">	
+<span class='line'> 23</span> 		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.world.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.loop.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">		</span><span class="NAME">baseUrl</span><span class="PUNC">+</span><span class="STRN">"tquery.core.create.js"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">	</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tQuery</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 29</span> 
+<span class='line'> 30</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

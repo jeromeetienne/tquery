@@ -38,6 +38,54 @@ tQuery.VERSION	= "0.0.1";
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * generic getter/setter
+ * 
+ * @param {Object} object the object in which store the data
+ * @param {String} key the key/name of the data to get/set
+ * @param {*} value the value to set (optional)
+ * 
+ * @returns {*} return the value stored in this object for this key
+*/
+tQuery.data	= function(object, key, value)
+{
+	// sanity check
+	console.assert( object, 'invalid parameters' );
+	console.assert( typeof key === 'string', 'invalid parameters');
+
+	// init _tqData
+	object['_tqData']	= object['_tqData']	|| {};
+	// set the value if any
+	if( value ){
+		object['_tqData'][key]	= value;
+	}
+	// return the value
+	return object['_tqData'][key];
+};
+
+/**
+ * Same as jQuery.removeData()
+*/
+tQuery.removeData	= function(object, key)
+{
+	// handle the 'key as Array' case
+	if( key instanceof Array ){
+		key.forEach(function(key){
+			tQuery.removeData(object, key);
+		})
+		return;
+	}
+	// sanity check
+	console.assert( typeof key === "string");
+	// do delete the key
+	delete object['_tqData'][key];
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
  * loop over a Array.
  * 
  * @param {Array} arr the array to traverse.
@@ -142,31 +190,59 @@ tQuery.register('createLoop', function(world){
 });
 
 /**
+ * contains the default material to use when create tQuery.Object3D
+ * 
+ * @fieldOf tQuery
+ * @name defaultObject3DMaterial
+*/
+tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
+
+/**
  * Create a cube
  * 
  * @returns {tQuery.Object3D} a tQuery.Object3D containing it
 */
 tQuery.register('createCube', function(){
-	var material	= new THREE.MeshNormalMaterial();
-	var geometry	= new THREE.CubeGeometry(1,1,1);
-	geometry.dynamic= true;
-	var mesh	= new THREE.Mesh(geometry, material)
-	return tQuery(mesh);
+	var ctor	= THREE.CubeGeometry;
+	var defaults	= [1, 1, 1, tQuery.defaultObject3DMaterial];
+	return this._createObj(ctor, defaults, arguments)
 });
 
 tQuery.register('createTorus', function(){
-	var material	= new THREE.MeshNormalMaterial();
-	var geometry	= new THREE.TorusGeometry( 0.5-0.15, 0.15 );
-	geometry.dynamic= true;
-	var mesh	= new THREE.Mesh(geometry, material)
-	return tQuery(mesh);
+	var ctor	= THREE.TorusGeometry;
+	var defaults	= [0.5-0.15, 0.15, tQuery.defaultObject3DMaterial];
+	return this._createObj(ctor, defaults, arguments)
 });
 
 tQuery.register('createSphere', function(){
-	var material	= new THREE.MeshNormalMaterial();
-	var geometry	= new THREE.SphereGeometry( 0.5, 0.5 );
+	var ctor	= THREE.SphereGeometry;
+	var defaults	= [0.5, 32, 16, tQuery.defaultObject3DMaterial];
+	return this._createObj(ctor, defaults, arguments)
+});
+
+tQuery.register('_createObj', function(ctor, defaults, origArguments){
+	var args	= Array.prototype.slice.call( origArguments.length ? origArguments : defaults);
+
+	// init the material
+	var material	= tQuery.defaultObject3DMaterial;
+	// if the last arguments is a material, use it
+	if( args.length && args[args.length-1] instanceof THREE.Material ){
+		material	= args.pop();
+	}
+	
+	// ugly trick to get .apply() to work 
+	var createFn	= function(ctor, a0, a1, a2, a3, a4, a5, a6, a7){
+		console.assert(arguments.length <= 9);
+		return new ctor(a0,a1,a2,a3,a4,a5,a6,a7);
+	}
+	args.unshift(ctor);
+	var geometry	= createFn.apply(this, args);
+
+	// set the geometry.dynamic by default
 	geometry.dynamic= true;
+	// create the THREE.Mesh
 	var mesh	= new THREE.Mesh(geometry, material)
+	// return it
 	return tQuery(mesh);
 });
 
@@ -221,12 +297,7 @@ tQuery.Node.prototype.get	= function(idx)
 */
 tQuery.Node.prototype.each	= function(callback)
 {
-	for(var idx = 0; idx < this._lists.length; idx++){
-		var element	= this._lists[idx];
-		var keepLooping	= callback(element, idx, this._lists);
-		if( keepLooping === false )	return false;
-	}
-	return true;
+	return tQuery.each(this._lists, callback)
 };
 
 /**
@@ -241,9 +312,40 @@ tQuery.Node.prototype.back	= function(value)
 	return this;
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * same as .data() in jquery
+*/
+tQuery.Node.prototype.data	= function(key, value)
+{
+	// handle the setter case
+	if( value ){
+		this.each(function(element){
+			tQuery.data(element, key, value);
+		});
+		return this;	// for chained API
+	}
+	// return the value of the first element
+	if( this.length > 0 )	return tQuery.data(this.get(0), key)
+	// return undegined if the list is empty
+	console.assert(this.length === 0);
+	return undefined
+}
 
 
 /**
+ * same as .data() in jquery
+*/
+tQuery.Node.prototype.removeData	= function(key)
+{
+	this.each(function(element){
+		tQuery.removeData(element, key);
+	});
+	return this;	// for chained API
+}/**
  * Handle object3D
  *
  * @class include THREE.Object3D
@@ -396,7 +498,7 @@ tQuery.Object3D.prototype.removeClass	= function(className){
 
 /**
  * return true if any of the matched elements has this class
- * 
+ *
  * @param {string} className the name of the class
  * @returns {tQuery.Object3D} true if any of the matched elements has this class, false overwise
 */
@@ -578,7 +680,7 @@ tQuery.World	= function()
 	// create a camera in the scene
 	// FIXME this window dimension is crap
 	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	this._camera.position.set(0, 0, 5);
+	this._camera.position.set(0, 0, 3);
 	this._scene.add(this._camera);
 	
 	// create the loop
@@ -595,6 +697,9 @@ tQuery.World.prototype.destroy	= function()
 	// remove renderer element
 	var parent	= this._renderer.domElement.parentElement;
 	parent	&& parent.removeChild(this._renderer.domElement);
+	
+	if( tQuery.world === this )	tQuery.world = null;
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -746,7 +851,7 @@ tQuery.Loop	= function(world)
 {
 	// update default world.
 	// - TODO no sanity check ?
-	console.assert( !tQuery.loop );
+	console.assert( !tQuery.loop, "loop already defined" );
 	tQuery.loop	= this;
 	
 	// internally if world present do that
@@ -769,6 +874,7 @@ tQuery.pluginsMixin(tQuery.Loop);
 tQuery.Loop.prototype.destroy	= function()
 {
 	this.stop();
+	if( tQuery.loop === this )	tQuery.loop = null;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

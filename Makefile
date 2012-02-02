@@ -46,7 +46,7 @@ minifyPlain: buildPlain
 		>> build/tquery.min.js
 	echo size minified + gzip is `gzip -c build/tquery.min.js | wc -c` byte
 
-buildBundle: build
+buildBundle: buildPlain
 	echo $(BANNER)			>  build/tquery-bundle.js
 	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js

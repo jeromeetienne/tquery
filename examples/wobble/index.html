@@ -15,10 +15,9 @@
 
 	object3d.geometry().zoom(2).wobble().back();
 
-
 	world.loop().hook(function(delta){
-		var piSecond	= delta * Math.PI;
-		object3d.rotateY(45*piSecond/180);
-		object3d.rotateZ(45*piSecond/180);
+		var degSecond	= delta * Math.PI / 180;
+		object3d.rotateY(45*degSecond);
+		object3d.rotateZ(45*degSecond);
 	});
 </script></body>
