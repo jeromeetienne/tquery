@@ -4,8 +4,7 @@
 <body>
 	<script>
 		require(['tquery', 'tquery.keyboard'], function(){
-			var world	= tQuery.createWorld().fullpage();
-			var loop	= tQuery.createLoop(world).start();
+			var world	= tQuery.createWorld().fullpage().start();
 			var object3d	= tQuery.createTorus().addTo(world);
 			
 			tQuery.loop.hook(function(){

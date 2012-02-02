@@ -1,7 +1,3 @@
-/**
- * Create tQuery.Scene
-*/
-
 (function(){
 	var instance	= null;
 	tQuery.register('keyboard', function(){

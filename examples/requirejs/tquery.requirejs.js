@@ -2,7 +2,13 @@
  * export tQuery as requirejs module
 */
 (function(){
-	define && define('tquery', ["../../build/tquery-bundle.js"], function(){ return tQuery; });
+	
+	define('tquery', ["../../build/tquery-bundle.js"], function(){
+		//tQuery.register('define', define);
+		//tQuery.register('require', require);
+		return tQuery;
+	});
+
 	return;
 
 
