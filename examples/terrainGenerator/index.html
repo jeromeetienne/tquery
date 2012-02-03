@@ -1,0 +1,31 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+<script src="../../vendor/three.js/ImprovedNoise.js"></script>
+<script src="./tquery.terrainGenerator.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	var object	= tQuery.createTorus().addTo(world);
+	var geometry	= tQuery.generateTerrainGeometry();
+	
+	geometry.rotateX(-70*Math.PI/180);
+	
+	var light	= new THREE.AmbientLight(0x880088)
+	world.scene().add(light);
+	
+	var light	= new THREE.DirectionalLight(0xFF8888, 3);
+	light.position.set(1,0.5,-1);
+	world.scene().add(light);
+	
+
+	var tMaterial	= new THREE.MeshLambertMaterial({
+		ambient	: 0x444444,
+		color	: 0xFFffff,
+		shading	: THREE.SmoothShading
+	});
+	//var material	= new THREE.MeshNormalMaterial();
+
+	mesh	= new THREE.Mesh(geometry.get(0), tMaterial);
+	world.add(mesh);
+
+</script></body>
