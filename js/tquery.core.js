@@ -143,7 +143,7 @@ tQuery.extend = function(obj, base){
  * @param {Object} object the object on which you mixin function
  * @param {Object} dest the object in which to register the plugin
 */
-tQuery.pluginsMixin	= function(object, dest){
+tQuery.pluginsOn	= function(object, dest){
 	dest	= dest	|| object.prototype || object;
 	object.register	= function(name, funct) {
 		if( dest[name] ){
@@ -162,8 +162,11 @@ tQuery.pluginsMixin	= function(object, dest){
 	}
 };
 
+tQuery.pluginsInstanceOn= function(klass){ return tQuery.pluginsOn(klass);		};
+tQuery.pluginsStaticOn	= function(klass){ return tQuery.pluginsOn(klass. klass);	};
+
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery, tQuery);
+tQuery.pluginsOn(tQuery, tQuery);
 
 

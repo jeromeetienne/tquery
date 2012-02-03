@@ -43,7 +43,7 @@ tQuery.World	= function()
 };
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery.World);
+tQuery.pluginsInstanceOn(tQuery.World);
 
 
 tQuery.World.prototype.destroy	= function()

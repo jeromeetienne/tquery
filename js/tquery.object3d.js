@@ -28,7 +28,7 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsMixin(tQuery.Object3D);
+tQuery.pluginsInstanceOn(tQuery.Object3D);
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -214,7 +214,9 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 
 	// all the geometries keywords
 	// - Object.keys(THREE).filter(function(value){return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();});
-	var geometries	= ["buffer", "cube", "cylinder", "extrude", "icosahedron", "lathe", "octahedron", "plane", "sphere", "text", "torus", "torusknot"];	
+	var geometries	= ["buffer", "cube", "cylinder", "extrude", "icosahedron", "lathe", "octahedron", "plane", "sphere", "text", "torus", "torusknot"];
+
+// TODO add light here
 
 	// parse selectItem into subItems
 	var subItems	= selectItem.match(new RegExp("([^.#]+|\.[^.#]+|\#[^.#]+)", "g"));;

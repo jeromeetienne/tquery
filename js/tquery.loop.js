@@ -28,7 +28,7 @@ tQuery.Loop	= function(world)
 };
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery.Loop);
+tQuery.pluginsInstanceOn(tQuery.Loop);
 
 /**
  * destructor

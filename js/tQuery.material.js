@@ -26,4 +26,4 @@ tQuery.inherit(tQuery.Material, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsMixin(tQuery.Material);
+tQuery.pluginsInstanceOn(tQuery.Material);
