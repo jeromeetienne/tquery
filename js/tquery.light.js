@@ -9,11 +9,12 @@
  *
  * @param {THREE.Light} object an instance or array of instance
 */
-tQuery.Light	= function(object)
+tQuery.Light	= function(elements)
 {
-	if( this instanceof tQuery.Light === false )	return new tQuery.Light(element);
+	// make a new if the ctor is used directly
+	if( this instanceof tQuery.Light === false )	return new tQuery.Light(elements);
 	// call parent
-	this.parent.constructor.call(this, object)
+	this.parent.constructor.call(this, elements)
 
 	// sanity check - all items MUST be THREE.Light
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Light); });

@@ -54,7 +54,7 @@ tQuery.Node.prototype.each	= function(callback)
 */
 tQuery.Node.prototype.back	= function(value)
 {
-	if( value === undefined )	return this._back;
+	if( value  === undefined )	return this._back;
 	this._back	= value;
 	return this;
 };
