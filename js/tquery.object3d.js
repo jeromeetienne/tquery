@@ -244,10 +244,17 @@ tQuery.Object3D._crawls	= function(root, selectItems)
 	return result;
 }
 
-tQuery.Object3D._selectGeometries	= Object.keys(THREE).filter(function(value){
+// all the geometries keywords
+tQuery.Object3D._selectableGeometries	= Object.keys(THREE).filter(function(value){
 	return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();
 });
 
+// all the light keywords
+tQuery.Object3D._selectableLights	= Object.keys(THREE).filter(function(value){
+	return value.match(/.+Light$/);}).map(function(value){ return value.replace(/Light$/,'').toLowerCase();
+});
+
+tQuery.Object3D._selectableClasses	= ['mesh', 'light'];
 
 tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 {
@@ -255,15 +262,9 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 	console.assert( object3d instanceof THREE.Object3D );
 	console.assert( typeof selectItem === 'string' );
 
-	// all the geometries keywords
-	// -
-	Object.keys(THREE).filter(function(value){return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();});
-	var geometries	= ["buffer", "cube", "cylinder", "extrude", "icosahedron", "lathe", "octahedron", "plane", "sphere", "text", "torus", "torusknot"];
-
-// TODO add light here
-
 	// parse selectItem into subItems
 	var subItems	= selectItem.match(new RegExp("([^.#]+|\.[^.#]+|\#[^.#]+)", "g"));;
+
 	// go thru each subItem
 	var completed	= tQuery.each(subItems, function(subItem){
 		var meta	= subItem.charAt(0);
@@ -274,10 +275,18 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 			return hasClass ? true : false;
 		}else if( meta === "#" ){
 			return object3d._tqId === suffix ? true : false;
-		}else if( geometries.indexOf(subItem) !== -1 ){	// Handle geometries
+		}else if( subItem === "*" ){
+			return true;
+		}else if( this._selectableGeometries.indexOf(subItem) !== -1 ){	// Handle geometries
 			var geometry	= object3d.geometry;
 			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1) + "Geometry";
 			return geometry instanceof THREE[className];
+		}else if( this._selectableLights.indexOf(subItem) !== -1 ){	// Handle light
+			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1) + "Light";
+			return object3d instanceof THREE[className];
+		}else if( this._selectableClasses.indexOf(subItem) !== -1 ){	// Handle light
+			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1);
+			return object3d instanceof THREE[className];
 		}
 		// this point should never be reached
 		console.assert(false, "invalid selector: "+subItem);
