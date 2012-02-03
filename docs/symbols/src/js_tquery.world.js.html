@@ -42,7 +42,7 @@
 <span class='line'> 35</span> </span><span class="WHIT">	</span><span class="COMM">// create a camera in the scene</span><span class="WHIT">
 <span class='line'> 36</span> </span><span class="WHIT">	</span><span class="COMM">// FIXME this window dimension is crap</span><span class="WHIT">
 <span class='line'> 37</span> </span><span class="WHIT">	</span><span class="NAME">this._camera</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.PerspectiveCamera</span><span class="PUNC">(</span><span class="NUMB">35</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">window.innerWidth</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">window.innerHeight</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10000</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="NAME">this._camera.position.set</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="NAME">this._camera.position.set</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 39</span> </span><span class="WHIT">	</span><span class="NAME">this._scene.add</span><span class="PUNC">(</span><span class="NAME">this._camera</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 40</span> </span><span class="WHIT">	
 <span class='line'> 41</span> 	</span><span class="COMM">// create the loop</span><span class="WHIT">
@@ -50,7 +50,7 @@
 <span class='line'> 43</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 44</span> 
 <span class='line'> 45</span> </span><span class="COMM">// make it pluginable</span><span class="WHIT">
-<span class='line'> 46</span> </span><span class="NAME">tQuery.pluginsMixin</span><span class="PUNC">(</span><span class="NAME">tQuery.World</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="NAME">tQuery.pluginsInstanceOn</span><span class="PUNC">(</span><span class="NAME">tQuery.World</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 47</span> 
 <span class='line'> 48</span> 
 <span class='line'> 49</span> </span><span class="NAME">tQuery.World.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">

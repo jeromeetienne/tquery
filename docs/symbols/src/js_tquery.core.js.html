@@ -150,7 +150,7 @@
 <span class='line'>143</span>  * @param {Object} object the object on which you mixin function
 <span class='line'>144</span>  * @param {Object} dest the object in which to register the plugin
 <span class='line'>145</span> */</span><span class="WHIT">
-<span class='line'>146</span> </span><span class="NAME">tQuery.pluginsMixin</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dest</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="NAME">tQuery.pluginsOn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dest</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>147</span> </span><span class="WHIT">	</span><span class="NAME">dest</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">dest</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">object.prototype</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>148</span> </span><span class="WHIT">	</span><span class="NAME">object.register</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">funct</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>149</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">dest</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
@@ -169,9 +169,12 @@
 <span class='line'>162</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>163</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>164</span> 
-<span class='line'>165</span> 
-<span class='line'>166</span> </span><span class="COMM">// make it pluginable</span><span class="WHIT">
-<span class='line'>167</span> </span><span class="NAME">tQuery.pluginsMixin</span><span class="PUNC">(</span><span class="NAME">tQuery</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="NAME">tQuery.pluginsInstanceOn</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">klass</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tQuery.pluginsOn</span><span class="PUNC">(</span><span class="NAME">klass</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="NAME">tQuery.pluginsStaticOn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">klass</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tQuery.pluginsOn</span><span class="PUNC">(</span><span class="NAME">klass.</span><span class="WHIT"> </span><span class="NAME">klass</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>167</span> 
 <span class='line'>168</span> 
-<span class='line'>169</span> 
-<span class='line'>170</span> </span></pre></body></html>
+<span class='line'>169</span> </span><span class="COMM">// make it pluginable</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="NAME">tQuery.pluginsOn</span><span class="PUNC">(</span><span class="NAME">tQuery</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tQuery</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>171</span> 
+<span class='line'>172</span> 
+<span class='line'>173</span> </span></pre></body></html>

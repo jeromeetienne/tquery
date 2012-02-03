@@ -915,7 +915,7 @@ tQuery.extend = function(obj, base){
  * @param {Object} object the object on which you mixin function
  * @param {Object} dest the object in which to register the plugin
 */
-tQuery.pluginsMixin	= function(object, dest){
+tQuery.pluginsOn	= function(object, dest){
 	dest	= dest	|| object.prototype || object;
 	object.register	= function(name, funct) {
 		if( dest[name] ){
@@ -934,9 +934,12 @@ tQuery.pluginsMixin	= function(object, dest){
 	}
 };
 
+tQuery.pluginsInstanceOn= function(klass){ return tQuery.pluginsOn(klass);		};
+tQuery.pluginsStaticOn	= function(klass){ return tQuery.pluginsOn(klass. klass);	};
+
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery, tQuery);
+tQuery.pluginsOn(tQuery, tQuery);
 
 
 /**
@@ -1146,7 +1149,7 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsMixin(tQuery.Object3D);
+tQuery.pluginsInstanceOn(tQuery.Object3D);
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -1179,20 +1182,20 @@ tQuery.Object3D.prototype.material	= function(){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//			add/remove tQuery.World					//
+//			addTo/removeFrom tQuery.World/tQuery.Object3d		//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
  * add all matched elements to a world
  * 
- * @param {tQuery.World} world to which add it
+ * @param {tQuery.World or tQuery.Object3D} target object to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.addTo	= function(world)
+tQuery.Object3D.prototype.addTo	= function(target)
 {
-	console.assert( world instanceof tQuery.World )
+	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D )
 	this.each(function(object3d){
-		world.add(object3d)
+		target.add(object3d)
 	}.bind(this));
 	return this;
 }
@@ -1200,14 +1203,52 @@ tQuery.Object3D.prototype.addTo	= function(world)
 /**
  * remove all matched elements from a world
  * 
- * @param {tQuery.World} world from which remove it
+ * @param {tQuery.World or tQuery.Object3D} target object to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.removeFrom	= function(world)
+tQuery.Object3D.prototype.removeFrom	= function(target)
 {
-	console.assert( world instanceof tQuery.World )
+	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D )
 	this.each(function(object3d){
-		world.remove(object3d)
+		target.remove(object3d)
+	}.bind(this));
+	return this;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//			addTo/removeFrom tQuery.World/tQuery.Object3d		//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * add all matched elements to a world
+ * 
+ * @param {tQuery.Object3D} target object to which add it
+ * @returns {tQuery.Object3D} chained API
+*/
+tQuery.Object3D.prototype.add	= function(tqObject3d)
+{
+	console.assert( tqObject3d instanceof tQuery.Object3D )
+	this.each(function(object1){
+		tqObject3d.each(function(object2){
+			object1.add(object2);
+		})
+	}.bind(this));
+	return this;
+}
+
+/**
+ * remove all matched elements from a world
+ * 
+ * @param {tQuery.Object3D} object3d the object to add in this object
+ * @returns {tQuery.Object3D} chained API
+*/
+tQuery.Object3D.prototype.remove	= function(tqObject3d)
+{
+	console.assert( tqObject3d instanceof tQuery.Object3D )
+	this.each(function(object1){
+		tqObject3d.each(function(object2){
+			object1.remove(object2);
+		})
 	}.bind(this));
 	return this;
 }
@@ -1324,6 +1365,11 @@ tQuery.Object3D._crawls	= function(root, selectItems)
 	return result;
 }
 
+tQuery.Object3D._selectGeometries	= Object.keys(THREE).filter(function(value){
+	return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();
+});
+
+
 tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 {
 	// sanity check
@@ -1331,8 +1377,11 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 	console.assert( typeof selectItem === 'string' );
 
 	// all the geometries keywords
-	// - Object.keys(THREE).filter(function(value){return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();});
-	var geometries	= ["buffer", "cube", "cylinder", "extrude", "icosahedron", "lathe", "octahedron", "plane", "sphere", "text", "torus", "torusknot"];	
+	// -
+	Object.keys(THREE).filter(function(value){return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();});
+	var geometries	= ["buffer", "cube", "cylinder", "extrude", "icosahedron", "lathe", "octahedron", "plane", "sphere", "text", "torus", "torusknot"];
+
+// TODO add light here
 
 	// parse selectItem into subItems
 	var subItems	= selectItem.match(new RegExp("([^.#]+|\.[^.#]+|\#[^.#]+)", "g"));;
@@ -1386,7 +1435,7 @@ tQuery.inherit(tQuery.Geometry, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsMixin(tQuery.Geometry);/**
+tQuery.pluginsInstanceOn(tQuery.Geometry);/**
  * Handle material
  *
  * @class include THREE.Material. It inherit from {@link tQuery.Node}
@@ -1414,7 +1463,7 @@ tQuery.inherit(tQuery.Material, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsMixin(tQuery.Material);//////////////////////////////////////////////////////////////////////////////////
+tQuery.pluginsInstanceOn(tQuery.Material);//////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -1459,7 +1508,7 @@ tQuery.World	= function()
 };
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery.World);
+tQuery.pluginsInstanceOn(tQuery.World);
 
 
 tQuery.World.prototype.destroy	= function()
@@ -1637,7 +1686,7 @@ tQuery.Loop	= function(world)
 };
 
 // make it pluginable
-tQuery.pluginsMixin(tQuery.Loop);
+tQuery.pluginsInstanceOn(tQuery.Loop);
 
 /**
  * destructor

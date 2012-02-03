@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>tQuery.Loop | tQuery library</title>
+		<title>tQuery.Light | tQuery library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -74,12 +74,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Class <span>tQuery.Loop</span>
+					Class <span>tQuery.Light</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						This class handle the rendering loop
+						include THREE.Light. It inherit from <a href="../symbols/tQuery.Node.html">tQuery.Node</a>
 					</p>
 						
 					
@@ -87,7 +87,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/js_tquery.loop.js.html">tquery.loop.js</a></li>
+								<li>Defined in: <a href="../symbols/src/js_tquery.light.js.html">tquery.light.js</a></li>
 							
 							
 						</ul>
@@ -98,7 +98,7 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.Loop.">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.Light.">
 							<caption class="sectionTitle">Class Summary</caption>
 							<thead>
 								<tr>
@@ -111,9 +111,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/tQuery.Loop.html#constructor">tQuery.Loop</a></b>(world)
+											<b><a href="../symbols/tQuery.Light.html#constructor">tQuery.Light</a></b>(object)
 										</div>
-										<div class="description">Handle the rendering loop</div>
+										<div class="description">Handle light</div>
 									</td>
 								</tr>
 							</tbody>
@@ -135,7 +135,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tQuery.Loop.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tQuery.Light.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -151,9 +151,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Loop.html#destroy">destroy</a></b>()
+													<div class="fixedFont"><b><a href="../symbols/tQuery.Light.html#back">back</a></b>(back)
 													</div>
-													<div class="description">destructor</div>
+													<div class="description">getter/setter of the back pointer</div>
 												</td>
 											</tr>
 										
@@ -162,9 +162,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Loop.html#hook">hook</a></b>(priority, callback)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.Light.html#each">each</a></b>(callback)
 													</div>
-													<div class="description">hook a callback at a given priority</div>
+													<div class="description">loop over element</div>
 												</td>
 											</tr>
 										
@@ -173,31 +173,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Loop.html#start">start</a></b>()
+													<div class="fixedFont"><b><a href="../symbols/tQuery.Light.html#get">get</a></b>(callback)
 													</div>
-													<div class="description">start looping</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item3'
-											>
-												<td class="attributes">&nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Loop.html#stop">stop</a></b>()
-													</div>
-													<div class="description">stop looping</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item4'
-											>
-												<td class="attributes">&nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Loop.html#unhook">unhook</a></b>(priority, callback)
-													</div>
-													<div class="description">unhook a callback at a given priority</div>
+													<div class="description">Retrieve the elements matched by the tQuery object</div>
 												</td>
 											</tr>
 										
@@ -227,11 +205,11 @@
 							</h2>
 							
 							<div class="fixedFont">
-								<b>tQuery.Loop</b>(world)
+								<b>tQuery.Light</b>(object)
 							</div>
 							
 							<div class="description">
-								Handle the rendering loop
+								Handle light
 								
 							</div>
 							
@@ -242,10 +220,10 @@
 									<dt class="heading">Parameters:</dt>
 									
 										<dt>
-											<span class="light fixedFont">{THREE.World}</span>  <b>world</b>
+											<span class="light fixedFont">{THREE.Light}</span>  <b>object</b>
 											
 										</dt>
-										<dd>the world to display (optional)</dd>
+										<dd>an instance or array of instance</dd>
 									
 								</dl>
 							
@@ -276,48 +254,22 @@
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id="destroy">
+										<div class="fixedFont heading" id="back">
 											<span class='lighter'>
 											
 											</span>
 											
 											
 											
-											<b>destroy</b>()
+											<b>back</b>(back)
 										</div>
 										
 										<div class="description">
-											destructor
+											getter/setter of the back pointer
 											
 											
-											
-											
-										</div>
-										
-										
-										
-										
-										
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item1'
-									>
-										<div class="fixedFont heading" id="hook">
-											<span class='lighter'>
-											
-											</span>
-											
-											<span class="light">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span>
-											
-											<b>hook</b>(priority, callback)
-										</div>
-										
-										<div class="description">
-											hook a callback at a given priority
-											
+												<br />
+												<i>Defined in: </i> <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a>.
 											
 											
 											
@@ -330,16 +282,54 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Number}</span> <b>priority</b>
+														<span class="light fixedFont">{Object}</span> <b>back</b>
 														
 													</dt>
-													<dd>for this callback</dd>
+													<dd>the value to return when .back() is called. optional</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item1'
+									>
+										<div class="fixedFont heading" id="each">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{Boolean}</span>
+											
+											<b>each</b>(callback)
+										</div>
+										
+										<div class="description">
+											loop over element
+											
+											
+												<br />
+												<i>Defined in: </i> <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a>.
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
 												
 													<dt>
 														<span class="light fixedFont">{Function}</span> <b>callback</b>
 														
 													</dt>
-													<dd>the function which will be called function(time){}</dd>
+													<dd>the function to notify. function(element){ }.
+			loop interrupted if it returns false</dd>
 												
 											</dl>
 										
@@ -356,7 +346,7 @@
 												
 													<dt class="heading">Returns:</dt>
 													
-														<dd><span class="light fixedFont">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span> chained API</dd>
+														<dd><span class="light fixedFont">{Boolean}</span> return true if completed, false if interrupted</dd>
 													
 												
 												
@@ -372,119 +362,22 @@
 									<li 
 										 class='item2'
 									>
-										<div class="fixedFont heading" id="start">
+										<div class="fixedFont heading" id="get">
 											<span class='lighter'>
 											
 											</span>
 											
-											<span class="light">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span>
+											<span class="light">{Boolean}</span>
 											
-											<b>start</b>()
+											<b>get</b>(callback)
 										</div>
 										
 										<div class="description">
-											start looping
+											Retrieve the elements matched by the tQuery object
 											
 											
-											
-											
-										</div>
-										
-										
-										
-										
-										
-										
-											<dl class="detailList nomargin">
-											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span> chained API</dd>
-													
-												
-												
-												
-												
-												
-											
-											</dl>
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item3'
-									>
-										<div class="fixedFont heading" id="stop">
-											<span class='lighter'>
-											
-											</span>
-											
-											<span class="light">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span>
-											
-											<b>stop</b>()
-										</div>
-										
-										<div class="description">
-											stop looping
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-										
-										
-											<dl class="detailList nomargin">
-											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span> chained API</dd>
-													
-												
-												
-												
-												
-												
-											
-											</dl>
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item4'
-									>
-										<div class="fixedFont heading" id="unhook">
-											<span class='lighter'>
-											
-											</span>
-											
-											<span class="light">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span>
-											
-											<b>unhook</b>(priority, callback)
-										</div>
-										
-										<div class="description">
-											unhook a callback at a given priority
-											
+												<br />
+												<i>Defined in: </i> <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a>.
 											
 											
 											
@@ -497,16 +390,11 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Number}</span> <b>priority</b>
-														
-													</dt>
-													<dd>for this callback</dd>
-												
-													<dt>
 														<span class="light fixedFont">{Function}</span> <b>callback</b>
 														
 													</dt>
-													<dd>the function which will be called function(time){}</dd>
+													<dd>the function to notify. function(element){ }.
+			loop interrupted if it returns false</dd>
 												
 											</dl>
 										
@@ -523,7 +411,7 @@
 												
 													<dt class="heading">Returns:</dt>
 													
-														<dd><span class="light fixedFont">{<a href="../symbols/tQuery.Loop.html">tQuery.Loop</a>}</span> chained API</dd>
+														<dd><span class="light fixedFont">{Boolean}</span> return true if completed, false if interrupted</dd>
 													
 												
 												
