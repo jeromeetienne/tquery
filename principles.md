@@ -12,3 +12,11 @@
   * dependancy between plugins handled by require.js
 * tquery.js core depends only on the three.js
 * the only global defined is tQuery
+
+
+## Name Convetions
+* suppose you want to create a material plugin about fireball
+* file tquery.fireballmaterial.js
+* classname tQuery.FileballMaterial
+* ctor: tQuery.FileballMaterial and new tQuery.FileballMaterial()
+* naming convention is more readable
