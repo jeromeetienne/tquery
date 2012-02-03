@@ -169,5 +169,13 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
 	return this;
 });
 
+// some shortcuts
+tQuery.Geometry.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Geometry.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+
 
 })();	// closure function end
