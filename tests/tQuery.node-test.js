@@ -9,6 +9,10 @@ describe('tQuery.node', function(){
 		tQuery.createTorus().addTo(world);
 		tQuery.createTorus().addTo(world);
 	});
+	after(function(){
+		world.destroy();
+		world	= null;
+	});
 
 	it('.length', function(){
 		console.assert( tQuery('text').length === 0 );
@@ -56,8 +60,4 @@ describe('tQuery.node', function(){
 		console.assert(result === false);
 	});
 
-	after(function(){
-		world.destroy();
-		world	= null;
-	});
 });

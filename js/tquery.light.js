@@ -11,6 +11,7 @@
 */
 tQuery.Light	= function(object)
 {
+	if( this instanceof tQuery.Light === false )	return new tQuery.Light(element);
 	// call parent
 	this.parent.constructor.call(this, object)
 
@@ -21,9 +22,9 @@ tQuery.Light	= function(object)
 /**
  * inherit from tQuery.Node
 */
-tQuery.inherit(tQuery.Light, tQuery.Node);
+tQuery.inherit(tQuery.Light, tQuery.Object3D);
 
 /**
  * Make it pluginable
 */
-tQuery.pluginsMixin(tQuery.Light);
+tQuery.pluginsInstanceOn(tQuery.Light);
