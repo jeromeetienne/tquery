@@ -12,9 +12,13 @@
   * dependancy between plugins handled by require.js
 * tquery.js core depends only on the three.js
 * the only global defined is tQuery
+* not to disrupt devs habits is important for a lib
 
+* provide .create*() functions to avoid new everywhere
+  * see in Object.Create()
+  * seen in domElement.createElement()
 
-## Name Convetions
+## Name Conventions
 * suppose you want to create a material plugin about fireball
 * file tquery.fireballmaterial.js
 * classname tQuery.FileballMaterial
