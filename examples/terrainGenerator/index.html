@@ -5,25 +5,40 @@
 
 <body><script>
 	var world	= tQuery.createWorld().fullpage().start();
-	var object	= tQuery.createTorus().addTo(world);
-	var geometry	= tQuery.generateTerrainGeometry();
+
+	var terrain	= tQuery.generateTerrainGeometry({
+		width	: 5,
+		height	: 5
+	});
+	var texture	= terrain.texture;	
 	
-	geometry.rotateX(-70*Math.PI/180);
+	var geometry	= terrain.geometry;
+
+	geometry.rotateX(-55*Math.PI/180);
+	//geometry.zoom(2);
 	
-	var light	= new THREE.AmbientLight(0x880088)
+	world.renderer().setClearColorHex( 0x82CAFA, 1 );
+	
+	var light	= new THREE.AmbientLight(0x444444);
 	world.scene().add(light);
 	
-	var light	= new THREE.DirectionalLight(0xFF8888, 3);
-	light.position.set(1,0.5,-1);
+	var light	= new THREE.DirectionalLight(0xFFFFFF, 3);
+	light.position.set(0, 0.6, -1).normalize();
 	world.scene().add(light);
 	
 
-	var tMaterial	= new THREE.MeshLambertMaterial({
+
+	var tMaterial	= new THREE.MeshPhongMaterial({
 		ambient	: 0x444444,
-		color	: 0xFFffff,
-		shading	: THREE.SmoothShading
+		color	: 0xEE9A4D,
+		color	: 0x888888,
+		specular: 0xF86040,
+		shininess: 400,
+		color	: 0x3EA99F,
+		shading	: THREE.SmoothShading,
 	});
 	//var material	= new THREE.MeshNormalMaterial();
+	var tMaterial	= new THREE.MeshBasicMaterial({ map : texture });
 
 	mesh	= new THREE.Mesh(geometry.get(0), tMaterial);
 	world.add(mesh);
