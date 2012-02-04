@@ -176,6 +176,9 @@ tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 0, 0);	});
+tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0);	});
+tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
 
 
 })();	// closure function end

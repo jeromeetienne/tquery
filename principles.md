@@ -14,9 +14,6 @@
 * the only global defined is tQuery
 * not to disrupt devs habits is important for a lib
 
-* provide .create*() functions to avoid new everywhere
-  * see in Object.Create()
-  * seen in domElement.createElement()
 
 ## Name Conventions
 * suppose you want to create a material plugin about fireball
@@ -24,3 +21,11 @@
 * classname tQuery.FileballMaterial
 * ctor: tQuery.FileballMaterial and new tQuery.FileballMaterial()
 * naming convention is more readable
+
+* provide .create*() functions to avoid new everywhere
+  * see in Object.Create()
+  * seen in domElement.createElement()
+
+* geometry varname represents tQuery.Geometry instance
+  * tGeometry varname represents THREE.Geometry
+  * and so on in the principles
