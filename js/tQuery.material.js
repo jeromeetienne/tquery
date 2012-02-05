@@ -12,7 +12,7 @@
 tQuery.Material	= function(object)
 {
 	// call parent
-	this.parent.constructor.call(this, object)
+	tQuery.Material.parent.constructor.call(this, object)
 
 	// sanity check - all items MUST be THREE.Material
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Material); });

@@ -12,7 +12,7 @@
 tQuery.Geometry	= function(object)
 {
 	// call parent
-	this.parent.constructor.call(this, object)
+	tQuery.Geometry.parent.constructor.call(this, object)
 
 	// sanity check - all items MUST be THREE.Geometry
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Geometry); });

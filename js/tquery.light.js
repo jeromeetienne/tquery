@@ -11,8 +11,8 @@
 */
 tQuery.Light	= function(elements)
 {
-	// call parent
-	this.parent.constructor.call(this, elements)
+	// call parent ctor
+	tQuery.Light.parent.constructor.call(this, elements)
 
 	// sanity check - all items MUST be THREE.Light
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Light); });
@@ -22,7 +22,7 @@ tQuery.Light	= function(elements)
  * inherit from tQuery.Node
  * - TODO this should inherit from tQuery.Object3D but but in inheritance
 */
-tQuery.inherit(tQuery.Light, tQuery.Node);
+tQuery.inherit(tQuery.Light, tQuery.Object3D);
 
 /**
  * Make it pluginable

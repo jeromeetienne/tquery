@@ -14,8 +14,8 @@ tQuery.Object3D	= function(object, root){
 		object	= tQuery.Object3D._select(object, root);
 	}
 
-	// call parent
-	this.parent.constructor.call(this, object)
+	// call parent ctor
+	tQuery.Object3D.parent.constructor.call(this, object)
 
 	// sanity check - all items MUST be THREE.Object3D
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Object3D); });
