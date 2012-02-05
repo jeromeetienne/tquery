@@ -37,6 +37,8 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 
 /**
  * get geometry.
+ *
+ * TODO this should be move in tQuery.Mesh
  * 
  * @returns {tQuery.Geometry} return the geometries from the tQuery.Object3D
 */
@@ -50,6 +52,8 @@ tQuery.Object3D.prototype.geometry	= function(value){
 
 /**
  * get material.
+ * 
+ * TODO this should be move in tQuery.Mesh
  * 
  * @returns {tQuery.Material} return the materials from the tQuery.Object3D
 */
@@ -166,13 +170,13 @@ tQuery.Object3D.prototype.id	= function(value)
  * @returns {tQuery.Object3D} chained API
 */
 tQuery.Object3D.prototype.addClass	= function(className){
-	this.each(function(object3d){
+	this.each(function(tObject3d){
 		// init ._tqClasses if needed
-		object3d._tqClasses	= object3d._tqClasses	|| '';
+		tObject3d._tqClasses	= tObject3d._tqClasses	|| '';
 
-		if( tQuery.Object3D._hasClassOne(object3d, className) )	return;
+		if( tQuery.Object3D._hasClassOne(tObject3d, className) )	return;
 		
-		object3d._tqClasses	+= ' '+className;
+		tObject3d._tqClasses	+= ' '+className;
 	}.bind(this));
 	return this;
 };
@@ -184,8 +188,10 @@ tQuery.Object3D.prototype.addClass	= function(className){
  * @returns {tQuery.Object3D} chained API
 */
 tQuery.Object3D.prototype.removeClass	= function(className){
-	console.assert(false, "not yet implemented")
-	return this;
+	this.each(function(tObject3d){
+		tQuery.Object3D._removeClassOne(tObject3d, className);
+	}.bind(this));
+	return this;	// for chained api
 };
 
 /**
@@ -212,6 +218,11 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 	return classes.match(re) ? true : false;
 };
 
+tQuery.Object3D._removeClassOne	= function(object3d, className){
+	if( object3d._tqClasses === undefined )	return;
+	var re		= new RegExp('(^| |\t)('+className+')($| |\t)');
+	object3d._tqClasses	= object3d._tqClasses.replace(re, ' ');
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //			handling selection					//
