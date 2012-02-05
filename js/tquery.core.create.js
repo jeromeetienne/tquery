@@ -2,6 +2,11 @@
  * @fileOverview plugins for tQuery.core to help creation of object
 */
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Create tQuery.World
 */
@@ -20,6 +25,22 @@ tQuery.register('createLoop', function(world){
 });
 
 
+tQuery.register('createDirectionalLight', function(){
+	var tLight	= new THREE.DirectionalLight(0xFFFFFF * Math.random());
+	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	return tQuery(tLight);
+});
+
+tQuery.register('createAmbientLight', function(){
+	var tLight	= new THREE.AmbientLight(0xFFFFFF);
+	return tQuery(tLight);
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
 /**
  * contains the default material to use when create tQuery.Object3D
  * 
@@ -36,22 +57,28 @@ tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
 tQuery.register('createCube', function(){
 	var ctor	= THREE.CubeGeometry;
 	var defaults	= [1, 1, 1, tQuery.defaultObject3DMaterial];
-	return this._createObj(ctor, defaults, arguments)
+	return this._createMesh(ctor, defaults, arguments)
 });
 
 tQuery.register('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var defaults	= [0.5-0.15, 0.15, tQuery.defaultObject3DMaterial];
-	return this._createObj(ctor, defaults, arguments)
+	return this._createMesh(ctor, defaults, arguments)
 });
 
 tQuery.register('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
 	var defaults	= [0.5, 32, 16, tQuery.defaultObject3DMaterial];
-	return this._createObj(ctor, defaults, arguments)
+	return this._createMesh(ctor, defaults, arguments)
 });
 
-tQuery.register('_createObj', function(ctor, defaults, origArguments){
+tQuery.register('createPlane', function(){
+	var ctor	= THREE.PlaneGeometry;
+	var defaults	= [1, 1, 16, 16, Query.defaultObject3DMaterial];
+	return this._createMesh(ctor, defaults, arguments)
+});
+
+tQuery.register('_createMesh', function(ctor, defaults, origArguments){
 	var args	= Array.prototype.slice.call( origArguments.length ? origArguments : defaults);
 
 	// init the material
@@ -76,6 +103,10 @@ tQuery.register('_createObj', function(ctor, defaults, origArguments){
 	// return it
 	return tQuery(mesh);
 });
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 tQuery.register('createAxis', function(){
 	var axis	= new THREE.AxisHelper();

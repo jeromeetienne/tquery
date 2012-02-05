@@ -13,7 +13,8 @@
 * tquery.js core depends only on the three.js
 * the only global defined is tQuery
 * not to disrupt devs habits is important for a lib
-
+* put sanity check when possible
+  * any misuse should be detected as soon as possible
 
 ## Name Conventions
 * suppose you want to create a material plugin about fireball

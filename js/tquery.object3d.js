@@ -7,10 +7,10 @@
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
 */
-tQuery.Object3D	= function(object, root){
-
+tQuery.Object3D	= function(object, root)
+{
 	// handle the case of selector
-	if( typeof object === "string"){
+	if( typeof object === "string" ){
 		object	= tQuery.Object3D._select(object, root);
 	}
 
@@ -40,7 +40,7 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
  * 
  * @returns {tQuery.Geometry} return the geometries from the tQuery.Object3D
 */
-tQuery.Object3D.prototype.geometry	= function(){
+tQuery.Object3D.prototype.geometry	= function(value){
 	var geometries	= [];
 	this.each(function(object3d){
 		geometries.push(object3d.geometry)

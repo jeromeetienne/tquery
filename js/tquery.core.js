@@ -13,7 +13,23 @@
 */
 var tQuery	= function(object, root)
 {
-	if( object instanceof THREE.Object3D  && tQuery.Object3D){
+// TODO make tthat cleaner
+// - there is a list of functions registered by each plugins
+//   - handle() object instanceof THREE.Mesh
+//   - create() return new tQuery(object)
+// - this list is processed in order here
+
+	if( object instanceof THREE.Mesh  && tQuery.Mesh){
+		return new tQuery.Mesh(object);
+
+	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
+		return new tQuery.DirectionalLight(object);
+	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
+		return new tQuery.AmbientLight(object);
+	}else if( object instanceof THREE.Light && tQuery.Light){
+		return new tQuery.Light(object);
+
+	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
 	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
@@ -174,8 +190,7 @@ tQuery.pluginsOn(tQuery, tQuery);
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.mixinAttr	= function(dstObject, properties){
-console.log("kkkkkkkk")
+tQuery.mixinAttributes	= function(dstObject, properties){
 	dstObject.prototype.attr	= function(name, value){
 		// handle setter
 		if( value !== undefined ){

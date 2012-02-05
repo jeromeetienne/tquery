@@ -30,8 +30,10 @@ tQuery.inherit(tQuery.Light, tQuery.Object3D);
 tQuery.pluginsInstanceOn(tQuery.Light);
 
 /**
- * define all acceptable attribute
+ * define all acceptable attributes for this class
 */
-tQuery.mixinAttr(tQuery.Light, {
+tQuery.mixinAttributes(tQuery.Light, {
 	color	: true
-})
+});
+
+
