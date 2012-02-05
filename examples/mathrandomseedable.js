@@ -203,8 +203,6 @@ MersenneTwister.prototype.genrand_res53 = function() {
 //////////////////////////////////////////////////////////////////////////////////
 
 	// from https://gist.github.com/300494
-	var seed;
-	var instance	= new MersenneTwister(seed);
 	Math.random	= function(){ return instance.random();		}
 	Math.seed	= function(value){
 		if( value !== undefined ){
@@ -214,5 +212,6 @@ MersenneTwister.prototype.genrand_res53 = function() {
 		}
 		return seed;
 	};
-	Math.seed(Date.now())
+	var instance	= new MersenneTwister();
+	var seed	= Math.seed(Date.now())
 })();
