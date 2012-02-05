@@ -2,11 +2,17 @@
 <script src="../../build/tquery-bundle.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().fullpage().start();
-	var object	= tQuery.createTorus().addTo(world);
+	var mesh	= tQuery.createSphere().addTo(world);
 
-	light	= new tQuery.DirectionalLight(new THREE.DirectionalLight());
-	light.color(123);
-	
-console.log("light", light.attr('color'))
-console.dir(light)
+	mesh.material(new THREE.MeshLambertMaterial({
+		ambient	: 0x888888,
+		color	: 0x888888,
+	}));
+	mesh.zoom(2);
+
+	tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0x444444));
+	tQuery.createDirectionalLight().addTo(world)
+		.get(0).position.set(-1,1,1);
+	tQuery.createDirectionalLight().addTo(world)
+		.get(0).position.set(1,1,1);
 </script></body>

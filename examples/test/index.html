@@ -7,38 +7,13 @@
 <body><script>
 	var world	= tQuery.createWorld().fullpage().start();
 	
-	//tQuery.createAmbientLight(0x880088).addTo(world);
-	//tQuery.createDirectionalLight(0x880088).position(1,2,3).addTo(world);
-
-	//var light	= new THREE.AmbientLight(0x880088)
-	//world.scene().add(light);
-
+	tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0x444444));
+	tQuery.createDirectionalLight().addTo(world);
+	tQuery.createDirectionalLight().addTo(world);
+	tQuery.createDirectionalLight().addTo(world);
 	
-	var light	= tQuery.createDirectionalLight().addTo(world);
-
-	//console.dir(light)
-	//var light	= tQuery.createDirectionalLight().addTo(world);
-	//console.dir(light)
-	//var light	= tQuery.createDirectionalLight().addTo(world);
-	//console.dir(light)
-	//var light	= tQuery.createDirectionalLight().addTo(world);
-	//console.dir(light)
-	
-	//var light	= new THREE.DirectionalLight(0x88FF88, 1);
-	//light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	//world.scene().add(light);
-	//
-	//var light	= new THREE.DirectionalLight(0x88FF88, 1);
-	//light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	//world.scene().add(light);
-	//
-	//var light	= new THREE.DirectionalLight(0x88FF88, 1);
-	//light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	//world.scene().add(light);
-	
-
 	var material	= new THREE.MeshPhongMaterial({
-		ambient	: 0xFFFFFF,
+		ambient	: 0x444444,
 		color	: 0xFF5588,
 		specular: 0xffffff,
 		specular: 0xCC88ff,
