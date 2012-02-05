@@ -1,0 +1,11 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+<body><script>
+	//var world	= tQuery.createWorld().fullpage().start();
+	//var object	= tQuery.createTorus().addTo(world);
+
+	var light	= new tQuery.Light(new THREE.AmbientLight(0x999999));
+	light.color(123);
+console.log("light", light.attr('color'))
+console.dir(light)
+</script></body>

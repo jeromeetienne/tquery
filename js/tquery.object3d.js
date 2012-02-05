@@ -8,11 +8,12 @@
  * @returns {tQuery.*} the tQuery object created
 */
 tQuery.Object3D	= function(object, root){
+
 	// handle the case of selector
 	if( typeof object === "string"){
 		object	= tQuery.Object3D._select(object, root);
 	}
-	
+
 	// call parent
 	this.parent.constructor.call(this, object)
 

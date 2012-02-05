@@ -11,8 +11,6 @@
 */
 tQuery.Light	= function(elements)
 {
-	// make a new if the ctor is used directly
-	if( this instanceof tQuery.Light === false )	return new tQuery.Light(elements);
 	// call parent
 	this.parent.constructor.call(this, elements)
 
@@ -22,10 +20,18 @@ tQuery.Light	= function(elements)
 
 /**
  * inherit from tQuery.Node
+ * - TODO this should inherit from tQuery.Object3D but but in inheritance
 */
-tQuery.inherit(tQuery.Light, tQuery.Object3D);
+tQuery.inherit(tQuery.Light, tQuery.Node);
 
 /**
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Light);
+
+/**
+ * define all acceptable attribute
+*/
+tQuery.mixinAttr(tQuery.Light, {
+	color	: true
+})

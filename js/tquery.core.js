@@ -77,6 +77,7 @@ tQuery.removeData	= function(object, key)
 	console.assert( typeof key === "string");
 	// do delete the key
 	delete object['_tqData'][key];
+	// TOTO remove object[_tqData] if empty now
 }
 
 
@@ -169,4 +170,31 @@ tQuery.pluginsStaticOn	= function(klass){ return tQuery.pluginsOn(klass. klass);
 // make it pluginable
 tQuery.pluginsOn(tQuery, tQuery);
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
+tQuery.mixinAttr	= function(dstObject, properties){
+console.log("kkkkkkkk")
+	dstObject.prototype.attr	= function(name, value){
+		// handle setter
+		if( value !== undefined ){
+			console.log("name", name, value);
+			this.each(function(element){
+				element[name]	= value;
+			})
+			return this;			
+		}
+		// handle getter
+		if( this.length === 0 )	return undefined
+		var element	= this.get(0);
+		return element[name];
+	}
+
+	// add shortcuts
+	Object.keys(properties).forEach(function(name){
+		dstObject.prototype[name]	= function(value){
+			return this.attr(name, value);
+		};
+	});
+};

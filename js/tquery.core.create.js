@@ -19,6 +19,7 @@ tQuery.register('createLoop', function(world){
 	return new tQuery.Loop(world);
 });
 
+
 /**
  * contains the default material to use when create tQuery.Object3D
  * 
