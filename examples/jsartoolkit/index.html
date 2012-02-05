@@ -40,41 +40,122 @@
 <script src="../../build/tquery-bundle.js"></script>
 
 <script>
-	var displayed	= false;
 	function updateCanvas(ctx, video) {
 		ctx.drawImage(video, 0,0,320,240);
 	}
+
+	var displayed	= false;
+
+	var updateMeshFromARMat	= function(mat){
+		var mesh	= tQuery('#obj').get(0);
+		mesh.matrixWorldNeedsUpdate = true;
+	
+		//var mtrans	= new THREE.Matrix4().setRotationX(Date.now()/1000);
+		//mesh.matrix.copy(mtrans);
+		//return;
+		
+		mesh.matrix.n11	=  mat.m00;
+		mesh.matrix.n12	= -mat.m10;
+		mesh.matrix.n13	=  mat.m20;
+		mesh.matrix.n14	=  0;
+		
+		mesh.matrix.n21	=  mat.m01;
+		mesh.matrix.n22	= -mat.m11;
+		mesh.matrix.n23	=  mat.m21;
+		mesh.matrix.n24	=  0;
+		
+		mesh.matrix.n31	= -mat.m02;
+		mesh.matrix.n32	=  mat.m12;
+		mesh.matrix.n33	= -mat.m22;
+		mesh.matrix.n34	= -200;
+		
+		mesh.matrix.n41	=  mat.m03;
+		mesh.matrix.n42	= -mat.m13;
+		mesh.matrix.n43	=  mat.m23;
+		mesh.matrix.n44	=  1;
+
+
+		var m	= new THREE.Matrix4().setScale(1, 1, 1);
+		mesh.matrix.multiplySelf(m);
+	
+		if( !displayed ){
+			console.dir(mesh.matrix.decompose());
+			displayed	= true;
+		}
+	};
+
+	var updateMeshFromGLMat	= function(mat){
+		var mesh	= tQuery('#obj').get(0);
+		mesh.matrixWorldNeedsUpdate = true;
+	
+		//var mtrans	= new THREE.Matrix4().setRotationX(Date.now()/1000);
+		//mesh.matrix.copy(mtrans);
+		//return;
+		
+		mesh.matrix.n11	= mat[0];
+		mesh.matrix.n12	= mat[1];
+		mesh.matrix.n13	= mat[2];
+		mesh.matrix.n14	= mat[3];
+		
+		mesh.matrix.n21	= mat[4];
+		mesh.matrix.n22	= mat[5];
+		mesh.matrix.n23	= mat[6];
+		mesh.matrix.n24	= mat[7];
+		
+		mesh.matrix.n31	= mat[8];
+		mesh.matrix.n32	= mat[9];
+		mesh.matrix.n33	= mat[10];
+		mesh.matrix.n34	= mat[11];
+		
+		mesh.matrix.n41	= mat[12];
+		mesh.matrix.n42	= mat[13];
+		mesh.matrix.n43	= mat[14];
+		mesh.matrix.n44	= mat[15];
+	
+		if( !displayed ){
+			console.dir(mesh.matrix.decompose());
+			displayed	= true;
+		}
+	};
 
 	window.onload = function() {
 		
 
 		var container	= document.createElement('div');
-		container.style.width	= 160*2;
-		container.style.height	= 120*2;
+		container.style.width	= 160;
+		container.style.height	= 120;
 		container.id		= "container";
 		document.body.appendChild(container);
 
 		var world	= tQuery.createWorld().appendTo(container).start();
 		
 		world.renderer().setSize( container.offsetWidth, container.offsetHeight );
+world.camera().fov	= 70;
 		world.camera().aspect	= container.offsetWidth / container.offsetHeight;
 		world.camera().updateProjectionMatrix();
-		world.camera().position.z	= 2;
+		world.camera().position.z	= 100;
 
-		tQuery.createCube().id('obj').addTo(world);
+		tQuery.createCube()
+			.id('obj')
+			.addTo(world)
+			.geometry()
+				//.rotateX(Math.PI/2)
+				.zoom(50)
+				.back();
 		tQuery('#obj').get(0).matrixAutoUpdate = false;
 
 
-//tQuery.world.loop().hook(function(){
-//	tQuery('#obj').rotateY(0.01);
-//	tQuery('#obj').get(0).updateMatrix();
-//});
 
-(function(){
-	var mesh	= tQuery('#obj').get(0);
-	var mtrans	= new THREE.Matrix4().setTranslation(0,0,0);
-	mesh.matrix.copy(mtrans);
-})();
+		//tQuery.world.loop().hook(function(){
+		//	tQuery('#obj').rotateY(0.01);
+		//	tQuery('#obj').get(0).updateMatrix();
+		//});
+		
+		//(function(){
+		//	var mesh	= tQuery('#obj').get(0);
+		//	var mtrans	= new THREE.Matrix4().setTranslation(0,0,0);
+		//	mesh.matrix.copy(mtrans);
+		//})();
 
 		
 		var video	= document.createElement('video');
@@ -138,40 +219,8 @@
 				detector.getTransformMatrix(idx, resultMat);
 				var mat = resultMat;
 
-(function(){
-	var mesh	= tQuery('#obj').get(0);
-	mesh.matrixWorldNeedsUpdate = true;
+				updateMeshFromARMat(mat);
 
-	//var mtrans	= new THREE.Matrix4().setRotationX(Date.now());
-	//mesh.matrix.copy(mtrans);
-	//return;
-	
-	mesh.matrix.n11	=  mat.m00;
-	mesh.matrix.n12	= -mat.m10;
-	mesh.matrix.n13	=  mat.m20;
-	mesh.matrix.n14	=  0;
-	
-	mesh.matrix.n21	=  mat.m01;
-	mesh.matrix.n22	= -mat.m11;
-	mesh.matrix.n23	=  mat.m21;
-	mesh.matrix.n24	=  0;
-	
-	mesh.matrix.n31	= -mat.m02;
-	mesh.matrix.n32	=  mat.m12;
-	mesh.matrix.n33	= -mat.m22;
-	mesh.matrix.n34	= -2;
-	
-	mesh.matrix.n41	=  mat.m03;
-	mesh.matrix.n42	= -mat.m13;
-	mesh.matrix.n43	=  mat.m23;
-	mesh.matrix.n44	=  1;
-	
-	console.log("matrix", mat.m10)
-if( !displayed ){
-	console.dir(mesh.matrix.decompose());
-	displayed	= true;
-}
-})();
 				var cm = mat4.create();
 				cm[0] 	=  mat.m00;
 				cm[1] 	= -mat.m10;
@@ -189,7 +238,10 @@ if( !displayed ){
 				cm[13]	= -mat.m13;
 				cm[14]	=  mat.m23;
 				cm[15]	=  1;
+				//updateMeshFromGLMat(cm);
 				mat4.multiply(pmat, cm, cm);
+
+				//updateMeshFromGLMat(cm);
 				
 				pastResults[currId].transform = cm;
 
@@ -218,7 +270,7 @@ if( !displayed ){
 				ctx.beginPath();
 				verts.forEach(function(v,i) {
 					mat4.multiplyVec4(mat, v);
-					v[0] = v[0]*w2/v[3] + w2;
+					v[0] =  v[0]*w2/v[3] + w2;
 					v[1] = -v[1]*h2/v[3] + h2;
 					if (i) {
 						ctx.lineTo(v[0], v[1]);

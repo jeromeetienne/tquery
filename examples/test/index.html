@@ -10,20 +10,31 @@
 	//tQuery.createAmbientLight(0x880088).addTo(world);
 	//tQuery.createDirectionalLight(0x880088).position(1,2,3).addTo(world);
 
-	var light	= new THREE.AmbientLight(0x880088)
-	world.scene().add(light);
+	//var light	= new THREE.AmbientLight(0x880088)
+	//world.scene().add(light);
+
 	
-	var light	= new THREE.DirectionalLight(0x88FF88, 1);
-	light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	world.scene().add(light);
+	var light	= tQuery.createDirectionalLight().addTo(world);
+
+	//console.dir(light)
+	//var light	= tQuery.createDirectionalLight().addTo(world);
+	//console.dir(light)
+	//var light	= tQuery.createDirectionalLight().addTo(world);
+	//console.dir(light)
+	//var light	= tQuery.createDirectionalLight().addTo(world);
+	//console.dir(light)
 	
-	var light	= new THREE.DirectionalLight(0x88FF88, 1);
-	light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	world.scene().add(light);
-	
-	var light	= new THREE.DirectionalLight(0x88FF88, 1);
-	light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	world.scene().add(light);
+	//var light	= new THREE.DirectionalLight(0x88FF88, 1);
+	//light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	//world.scene().add(light);
+	//
+	//var light	= new THREE.DirectionalLight(0x88FF88, 1);
+	//light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	//world.scene().add(light);
+	//
+	//var light	= new THREE.DirectionalLight(0x88FF88, 1);
+	//light.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	//world.scene().add(light);
 	
 
 	var material	= new THREE.MeshPhongMaterial({

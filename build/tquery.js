@@ -14,7 +14,23 @@
 */
 var tQuery	= function(object, root)
 {
-	if( object instanceof THREE.Object3D  && tQuery.Object3D){
+// TODO make tthat cleaner
+// - there is a list of functions registered by each plugins
+//   - handle() object instanceof THREE.Mesh
+//   - create() return new tQuery(object)
+// - this list is processed in order here
+
+	if( object instanceof THREE.Mesh  && tQuery.Mesh){
+		return new tQuery.Mesh(object);
+
+	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
+		return new tQuery.DirectionalLight(object);
+	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
+		return new tQuery.AmbientLight(object);
+	}else if( object instanceof THREE.Light && tQuery.Light){
+		return new tQuery.Light(object);
+
+	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
 	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
@@ -78,6 +94,7 @@ tQuery.removeData	= function(object, key)
 	console.assert( typeof key === "string");
 	// do delete the key
 	delete object['_tqData'][key];
+	// TOTO remove object[_tqData] if empty now
 }
 
 
@@ -114,7 +131,7 @@ tQuery.inherit	= function(childClass, parentClass){
 	tempFn.prototype	= parentClass.prototype;
 	childClass.prototype	= new tempFn();
 
-	childClass.prototype.parent	= parentClass.prototype;
+	childClass.parent	= parentClass.prototype;
 	childClass.prototype.constructor= childClass;	
 };
 
@@ -170,10 +187,40 @@ tQuery.pluginsStaticOn	= function(klass){ return tQuery.pluginsOn(klass. klass);
 // make it pluginable
 tQuery.pluginsOn(tQuery, tQuery);
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
-/**
+tQuery.mixinAttributes	= function(dstObject, properties){
+	dstObject.prototype.attr	= function(name, value){
+		// handle setter
+		if( value !== undefined ){
+			console.log("name", name, value);
+			this.each(function(element){
+				element[name]	= value;
+			})
+			return this;			
+		}
+		// handle getter
+		if( this.length === 0 )	return undefined
+		var element	= this.get(0);
+		return element[name];
+	}
+
+	// add shortcuts
+	Object.keys(properties).forEach(function(name){
+		dstObject.prototype[name]	= function(value){
+			return this.attr(name, value);
+		};
+	});
+};/**
  * @fileOverview plugins for tQuery.core to help creation of object
 */
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Create tQuery.World
@@ -192,6 +239,23 @@ tQuery.register('createLoop', function(world){
 	return new tQuery.Loop(world);
 });
 
+
+tQuery.register('createDirectionalLight', function(){
+	var tLight	= new THREE.DirectionalLight(0xFFFFFF * Math.random());
+	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	return tQuery(tLight);
+});
+
+tQuery.register('createAmbientLight', function(){
+	var tLight	= new THREE.AmbientLight(0xFFFFFF);
+	return tQuery(tLight);
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
 /**
  * contains the default material to use when create tQuery.Object3D
  * 
@@ -208,22 +272,28 @@ tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
 tQuery.register('createCube', function(){
 	var ctor	= THREE.CubeGeometry;
 	var defaults	= [1, 1, 1, tQuery.defaultObject3DMaterial];
-	return this._createObj(ctor, defaults, arguments)
+	return this._createMesh(ctor, defaults, arguments)
 });
 
 tQuery.register('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var defaults	= [0.5-0.15, 0.15, tQuery.defaultObject3DMaterial];
-	return this._createObj(ctor, defaults, arguments)
+	return this._createMesh(ctor, defaults, arguments)
 });
 
 tQuery.register('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
 	var defaults	= [0.5, 32, 16, tQuery.defaultObject3DMaterial];
-	return this._createObj(ctor, defaults, arguments)
+	return this._createMesh(ctor, defaults, arguments)
 });
 
-tQuery.register('_createObj', function(ctor, defaults, origArguments){
+tQuery.register('createPlane', function(){
+	var ctor	= THREE.PlaneGeometry;
+	var defaults	= [1, 1, 16, 16, Query.defaultObject3DMaterial];
+	return this._createMesh(ctor, defaults, arguments)
+});
+
+tQuery.register('_createMesh', function(ctor, defaults, origArguments){
 	var args	= Array.prototype.slice.call( origArguments.length ? origArguments : defaults);
 
 	// init the material
@@ -248,6 +318,10 @@ tQuery.register('_createObj', function(ctor, defaults, origArguments){
 	// return it
 	return tQuery(mesh);
 });
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 tQuery.register('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
@@ -310,7 +384,7 @@ tQuery.Node.prototype.each	= function(callback)
 */
 tQuery.Node.prototype.back	= function(value)
 {
-	if( value === undefined )	return this._back;
+	if( value  === undefined )	return this._back;
 	this._back	= value;
 	return this;
 };
@@ -357,14 +431,15 @@ tQuery.Node.prototype.removeData	= function(key)
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
 */
-tQuery.Object3D	= function(object, root){
+tQuery.Object3D	= function(object, root)
+{
 	// handle the case of selector
-	if( typeof object === "string"){
+	if( typeof object === "string" ){
 		object	= tQuery.Object3D._select(object, root);
 	}
-	
-	// call parent
-	this.parent.constructor.call(this, object)
+
+	// call parent ctor
+	tQuery.Object3D.parent.constructor.call(this, object)
 
 	// sanity check - all items MUST be THREE.Object3D
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Object3D); });
@@ -386,10 +461,12 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 
 /**
  * get geometry.
+ *
+ * TODO this should be move in tQuery.Mesh
  * 
  * @returns {tQuery.Geometry} return the geometries from the tQuery.Object3D
 */
-tQuery.Object3D.prototype.geometry	= function(){
+tQuery.Object3D.prototype.geometry	= function(value){
 	var geometries	= [];
 	this.each(function(object3d){
 		geometries.push(object3d.geometry)
@@ -399,6 +476,8 @@ tQuery.Object3D.prototype.geometry	= function(){
 
 /**
  * get material.
+ * 
+ * TODO this should be move in tQuery.Mesh
  * 
  * @returns {tQuery.Material} return the materials from the tQuery.Object3D
 */
@@ -515,13 +594,13 @@ tQuery.Object3D.prototype.id	= function(value)
  * @returns {tQuery.Object3D} chained API
 */
 tQuery.Object3D.prototype.addClass	= function(className){
-	this.each(function(object3d){
+	this.each(function(tObject3d){
 		// init ._tqClasses if needed
-		object3d._tqClasses	= object3d._tqClasses	|| '';
+		tObject3d._tqClasses	= tObject3d._tqClasses	|| '';
 
-		if( tQuery.Object3D._hasClassOne(object3d, className) )	return;
+		if( tQuery.Object3D._hasClassOne(tObject3d, className) )	return;
 		
-		object3d._tqClasses	+= ' '+className;
+		tObject3d._tqClasses	+= ' '+className;
 	}.bind(this));
 	return this;
 };
@@ -533,8 +612,10 @@ tQuery.Object3D.prototype.addClass	= function(className){
  * @returns {tQuery.Object3D} chained API
 */
 tQuery.Object3D.prototype.removeClass	= function(className){
-	console.assert(false, "not yet implemented")
-	return this;
+	this.each(function(tObject3d){
+		tQuery.Object3D._removeClassOne(tObject3d, className);
+	}.bind(this));
+	return this;	// for chained api
 };
 
 /**
@@ -561,6 +642,11 @@ tQuery.Object3D._hasClassOne	= function(object3d, className){
 	return classes.match(re) ? true : false;
 };
 
+tQuery.Object3D._removeClassOne	= function(object3d, className){
+	if( object3d._tqClasses === undefined )	return;
+	var re		= new RegExp('(^| |\t)('+className+')($| |\t)');
+	object3d._tqClasses	= object3d._tqClasses.replace(re, ' ');
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //			handling selection					//
@@ -594,10 +680,17 @@ tQuery.Object3D._crawls	= function(root, selectItems)
 	return result;
 }
 
-tQuery.Object3D._selectGeometries	= Object.keys(THREE).filter(function(value){
+// all the geometries keywords
+tQuery.Object3D._selectableGeometries	= Object.keys(THREE).filter(function(value){
 	return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();
 });
 
+// all the light keywords
+tQuery.Object3D._selectableLights	= Object.keys(THREE).filter(function(value){
+	return value.match(/.+Light$/);}).map(function(value){ return value.replace(/Light$/,'').toLowerCase();
+});
+
+tQuery.Object3D._selectableClasses	= ['mesh', 'light'];
 
 tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 {
@@ -605,15 +698,9 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 	console.assert( object3d instanceof THREE.Object3D );
 	console.assert( typeof selectItem === 'string' );
 
-	// all the geometries keywords
-	// -
-	Object.keys(THREE).filter(function(value){return value.match(/.+Geometry$/);}).map(function(value){ return value.replace(/Geometry$/,'').toLowerCase();});
-	var geometries	= ["buffer", "cube", "cylinder", "extrude", "icosahedron", "lathe", "octahedron", "plane", "sphere", "text", "torus", "torusknot"];
-
-// TODO add light here
-
 	// parse selectItem into subItems
 	var subItems	= selectItem.match(new RegExp("([^.#]+|\.[^.#]+|\#[^.#]+)", "g"));;
+
 	// go thru each subItem
 	var completed	= tQuery.each(subItems, function(subItem){
 		var meta	= subItem.charAt(0);
@@ -624,10 +711,18 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 			return hasClass ? true : false;
 		}else if( meta === "#" ){
 			return object3d._tqId === suffix ? true : false;
-		}else if( geometries.indexOf(subItem) !== -1 ){	// Handle geometries
+		}else if( subItem === "*" ){
+			return true;
+		}else if( this._selectableGeometries.indexOf(subItem) !== -1 ){	// Handle geometries
 			var geometry	= object3d.geometry;
 			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1) + "Geometry";
 			return geometry instanceof THREE[className];
+		}else if( this._selectableLights.indexOf(subItem) !== -1 ){	// Handle light
+			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1) + "Light";
+			return object3d instanceof THREE[className];
+		}else if( this._selectableClasses.indexOf(subItem) !== -1 ){	// Handle light
+			var className	= subItem.charAt(0).toUpperCase() + subItem.slice(1);
+			return object3d instanceof THREE[className];
 		}
 		// this point should never be reached
 		console.assert(false, "invalid selector: "+subItem);
@@ -650,7 +745,7 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 tQuery.Geometry	= function(object)
 {
 	// call parent
-	this.parent.constructor.call(this, object)
+	tQuery.Geometry.parent.constructor.call(this, object)
 
 	// sanity check - all items MUST be THREE.Geometry
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Geometry); });
@@ -678,7 +773,7 @@ tQuery.pluginsInstanceOn(tQuery.Geometry);/**
 tQuery.Material	= function(object)
 {
 	// call parent
-	this.parent.constructor.call(this, object)
+	tQuery.Material.parent.constructor.call(this, object)
 
 	// sanity check - all items MUST be THREE.Material
 	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Material); });
@@ -692,7 +787,92 @@ tQuery.inherit(tQuery.Material, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsInstanceOn(tQuery.Material);//////////////////////////////////////////////////////////////////////////////////
+tQuery.pluginsInstanceOn(tQuery.Material);/**
+ * Handle light
+ *
+ * @class include THREE.Light. It inherit from {@link tQuery.Node}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.Light} object an instance or array of instance
+*/
+tQuery.Light	= function(elements)
+{
+	// call parent ctor
+	tQuery.Light.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Light
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Light); });
+};
+
+/**
+ * inherit from tQuery.Node
+ * - TODO this should inherit from tQuery.Object3D but but in inheritance
+*/
+tQuery.inherit(tQuery.Light, tQuery.Object3D);
+
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Light);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Light, {
+	color	: true
+});
+
+
+/**
+ * Handle mesh
+ *
+ * @class include THREE.Mesh. It inherit from {@link tQuery.Node}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.Mesh} object an instance or array of instance
+*/
+tQuery.Mesh	= function(elements)
+{
+	// call parent ctor
+	var parent	= tQuery.Mesh.parent;
+	parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Mesh
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Mesh); });
+};
+
+/**
+ * inherit from tQuery.Node
+ * - TODO this should inherit from tQuery.Object3D but but in inheritance
+*/
+tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
+
+
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Mesh);
+
+
+tQuery.Mesh.prototype.material	= function(value){
+	var parent	= tQuery.Mesh.parent;
+	// handle the getter case
+	if( value == undefined )	return parent.material.call(this);
+	// handle the setter case
+	this.each(function(tMesh){
+		tMesh.material	= value;
+	});
+	return this;	// for the chained API
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -1037,6 +1217,76 @@ tQuery.Loop.prototype.unhookPreRender	= function(callback){ return this.unhook(t
 tQuery.Loop.prototype.unhookOnRender	= function(callback){ return this.unhook(this.ON_RENDER, callback);	};
 tQuery.Loop.prototype.unhookPostRender	= function(callback){ return this.unhook(this.POST_RENDER, callback);	};
 /**
+ * Handle ambient light
+ *
+ * @class include THREE.AmbientLight. It inherit from {@link tQuery.Light}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.AmbientLight} element an instance or array of instance
+*/
+tQuery.AmbientLight	= function(elements)
+{
+	// call parent ctor
+	tQuery.AmbientLight.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Light
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.AmbientLight); });
+};
+
+/**
+ * inherit from tQuery.Node
+ * - TODO this should inherit from tQuery.Object3D but but in inheritance
+*/
+tQuery.inherit(tQuery.AmbientLight, tQuery.Light);
+
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.AmbientLight);
+/**
+ * Handle directional light
+ *
+ * @class include THREE.DirectionalLight. It inherit from {@link tQuery.Light}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.DirectionalLight} element an instance or array of instance
+*/
+tQuery.DirectionalLight	= function(elements)
+{
+	// call parent ctor
+	tQuery.DirectionalLight.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Light
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.DirectionalLight); });
+};
+
+/**
+ * inherit from tQuery.Node
+ * - TODO this should inherit from tQuery.Object3D but but in inheritance
+*/
+tQuery.inherit(tQuery.DirectionalLight, tQuery.Light);
+
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.DirectionalLight);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.DirectionalLight, {
+	intensity	: true,
+	distance	: true
+});
+
+
+/**
  * @fileOverview Plugins for tQuery and Stats.js
 */
 
@@ -1238,6 +1488,17 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
 	// return this, to get chained API	
 	return this;
 });
+
+// some shortcuts
+tQuery.Geometry.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Geometry.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 0, 0);	});
+tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0);	});
+tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
 
 
 })();	// closure function end

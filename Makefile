@@ -27,16 +27,18 @@ BANNER="// tquery.js - https://github.com/jeromeetienne/tquery - MIT License"
 build:	minifyPlain minifyBundle
 
 buildPlain:
-	echo $(BANNER)					>  build/tquery.js
-	cat js/tquery.core.js				>> build/tquery.js
-	cat js/tquery.core.create.js			>> build/tquery.js
-	cat js/tquery.node.js				>> build/tquery.js
-	cat js/tquery.object3d.js			>> build/tquery.js
-	cat js/tquery.geometry.js			>> build/tquery.js
-	cat js/tquery.material.js			>> build/tquery.js
-	cat js/tquery.world.js				>> build/tquery.js
-	cat js/tquery.loop.js				>> build/tquery.js
-	cat js/plugins/*.js				>> build/tquery.js
+	echo $(BANNER)			>  build/tquery.js
+	cat js/tquery.core.js		>> build/tquery.js
+	cat js/tquery.core.create.js	>> build/tquery.js
+	cat js/tquery.node.js		>> build/tquery.js
+	cat js/tquery.object3d.js	>> build/tquery.js
+	cat js/tquery.geometry.js	>> build/tquery.js
+	cat js/tquery.material.js	>> build/tquery.js
+	cat js/tquery.light.js		>> build/tquery.js
+	cat js/tquery.mesh.js		>> build/tquery.js
+	cat js/tquery.world.js		>> build/tquery.js
+	cat js/tquery.loop.js		>> build/tquery.js
+	cat js/plugins/*.js		>> build/tquery.js
 
 minifyPlain: buildPlain
 	echo $(BANNER)	>  build/tquery.min.js
