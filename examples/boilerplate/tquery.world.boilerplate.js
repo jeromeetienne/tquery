@@ -1,20 +1,50 @@
-tQuery.World.register('boilerplate', function(){
+tQuery.World.register('addBoilerplate', function(){
+	// sanity check - no boilerplate is already installed
+	console.assert( this.hasBoilerplate() === true );
+
+	// create the context
+	var ctx		= this._extBoilerplate	= {};
+
+	// get some variables
 	var camera	= this.camera();
 	var renderer	= this.renderer();
 
 	// create a camera contol
-	var cameraControls	= new THREEx.DragPanControls(camera)
-	tQuery.loop.hook(function(){
-		cameraControls.update();
-	})
+	ctx.cameraControls	= new THREEx.DragPanControls(camera)
+	ctx.loopCameraControls	= function(){
+		ctx.cameraControls.update();
+	};
+	this.loop().hook(ctx.loopCameraControls);
+
 	// transparently support window resize
-	var windowResize	= THREEx.WindowResize.bind(renderer, camera);
+	ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);
 	// allow 'p' to make screenshot
-	var screenShot		= THREEx.Screenshot.bindKey(renderer);
+	ctx.screenShot		= THREEx.Screenshot.bindKey(renderer);
 	// allow 'f' to go fullscreen where this feature is supported
 	if( THREEx.FullScreen.available() ){
-		var fullscreen	= THREEx.FullScreen.bindKey();		
+		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
 	}
-	
-	return this;	// for chained API
+	// for chained API
+	return this;
+});
+
+tQuery.World.register('hasBoilerplate', function(){
+	return this._extBoilerplate === undefined ? true : false;
+});
+
+tQuery.World.register('removeBoilerplate', function(){
+	// if not present, return now
+	if( this._extBoilerplate === undefined )	return	this;
+	// remove the context from this
+	var ctx		= this._extBoilerplate;
+	delete this._extBoilerplate;
+
+	// remove camera
+	this.loop().unhook(ctx.loopCameraControls)
+	// stop windowResize
+	ctx.windowResize.stop();
+	// unbind screenShot
+	ctx.screenShot.unbind();
+	// unbind fullscreen
+	ctx.fullscreen && ctx.fullscreen.unbind();
 });

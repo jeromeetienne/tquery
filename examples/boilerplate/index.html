@@ -6,14 +6,11 @@
 <script src="../../vendor/threex/THREEx.FullScreen.js"></script>
 <script src="../../vendor/threex.dragpancontrols.js"></script>
 <script src="tquery.world.boilerplate.js"></script>
-<body>
-	<script>
-		//var world	= tQuery.createWorld().fullpage();
-		//var loop	= tQuery.createLoop(world).start();
-		//var object3d	= tQuery.createTorus().addTo(world);
-		//
-		//world.boilerplate();
-		
-		tQuery.createWorld().boilerplate().fullpage().start().add(tQuery.createTorus());
-	</script>
-</body>
+<body><script>
+	var world	= tQuery.createWorld().addBoilerplate().fullpage().start();
+	var object3d	= tQuery.createTorus().addTo(world);
+	
+	setTimeout(function(){
+		tQuery.world.removeBoilerplate();
+	}, 1000);
+</script></body>
