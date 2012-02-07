@@ -1969,6 +1969,12 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
+	// handle parameters
+	if( typeof priority === 'function' ){
+		callback	= priority;
+		priority	= this.PRE_RENDER;
+	}
+
 	var index	= this._hooks[priority].indexOf(callback);
 	console.assert(index !== -1);
 	this._hooks[priority].splice(index, 1);
@@ -2009,7 +2015,6 @@ tQuery.AmbientLight	= function(elements)
 
 /**
  * inherit from tQuery.Node
- * - TODO this should inherit from tQuery.Object3D but but in inheritance
 */
 tQuery.inherit(tQuery.AmbientLight, tQuery.Light);
 
@@ -2038,8 +2043,7 @@ tQuery.DirectionalLight	= function(elements)
 };
 
 /**
- * inherit from tQuery.Node
- * - TODO this should inherit from tQuery.Object3D but but in inheritance
+ * inherit from tQuery.Light
 */
 tQuery.inherit(tQuery.DirectionalLight, tQuery.Light);
 
