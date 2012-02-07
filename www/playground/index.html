@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+	<link href="../vendor/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+	<link href="../vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+	<link href="../vendor/bootstrap/docs/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+
+	<!-- include all what is needed for CodeMirror2 -->
+		<script src="../vendor/CodeMirror2/lib/codemirror.js"></script>
+		<script src="../vendor/CodeMirror2//mode/xml/xml.js"></script>
+		<script src="../vendor/CodeMirror2/mode/javascript/javascript.js"></script>
+		<script src="../vendor/CodeMirror2/mode/css/css.js"></script>
+		<script src="../vendor/CodeMirror2/mode/htmlmixed/htmlmixed.js"></script>
+		<link rel="stylesheet" href="../vendor/CodeMirror2/lib/codemirror.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/cobalt.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/night.css">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Example row of columns -->
+	<div class="page-header">
+		<center><h1>Playground</h1></center>
+	</div>
+	
+	<div class="row">
+		<div class="span6">
+			<textarea id=code name=code>
+<!doctype html>
+<title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body>
+	<script>
+		var world	= tQuery.createWorld().fullpage().start();
+		var object	= tQuery.createTorus().addTo(world);
+	</script>
+</body>
+			</textarea>
+
+		</div>
+		<div class="span6">
+			<iframe id='preview' style="width: 100%; height: 300px"></iframe>
+	       </div>
+	</div>
+
+    </div> <!-- /container -->
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="../vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.js"></script>
+	<script>jQuery(function(){ prettyPrint(); });</script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-transition.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-alert.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-modal.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-dropdown.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-scrollspy.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-tab.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-tooltip.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-popover.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-button.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
+	<script>
+		var delay, latency = 300;
+		// Initialize CodeMirror editor with a nice html5 canvas demo.
+		var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+			mode		: 'text/html',
+			tabMode		: 'indent',
+			//theme	: 'cobalt',
+			//theme	: 'night',
+			indentWithTabs	: true,
+			tabSize		: 4,
+			indentUnit	: 4,
+			onChange	: function() {
+				clearTimeout(delay);
+				delay = setTimeout(updatePreview, latency);
+			}
+		});
+		
+		function updatePreview() {
+			var previewFrame = document.getElementById('preview');
+			var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+			preview.open();
+			preview.write(editor.getValue());
+			preview.close();
+		}
+		setTimeout(updatePreview, latency);
+	</script>
+
+  </body>
+</html>

@@ -12,7 +12,8 @@
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+	<link href="vendor/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+	<link href="vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -73,12 +74,12 @@
 		<div class="span4">
 		        <h2>Power of Three.js</h2>
 			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac
-				cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo
-				sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed
-				odio dui.
+				Three.js is actively delvelop by a team of skilled developpers.
+				It got various rendering backend, importer for most 3D models format.
+				It efficiently abstract webgl complexity
+				and provide a wide varieties of 3D objects.
+				It got numberous examples 120+.
 			</p>
-			<p><a class="btn" href="#">View details &raquo;</a></p>
 		</div>
 		<div class="span4">
 		        <h2>jQuery API Usability</h2>
@@ -88,7 +89,6 @@
 				sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed
 				odio dui.
 			</p>
-			<p><a class="btn" href="#">View details &raquo;</a></p>
 	       </div>
 		<div class="span4">
 			<h2>Crazy simple to Learn</h2>
@@ -98,30 +98,131 @@
 				sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed
 				odio dui.
 			</p>
-			<p><a class="btn" href="#">View details &raquo;</a></p>
 		</div>
 	</div>
 
       <!-- Example row of columns -->
 	<div class="page-header">
-		<h1>Examples <small>early stuff</small></h1>
+		<h1>Minimal page <small>To give you an idea</small></h1>
 	</div>
 	<div class="row">
-		<ul>
-			<li>
-				<a href="../examples/minimal">minimal page</a>
+		<div class="span6">
+			<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;tquery-bundle.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().fullpage().start();
+    var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+		</div>
+		<div class="span6">
+			<iframe style="width: 100%; height: 120px" src="../examples/minimal">
+			</iframe>
+		</div>
+	</div>
+
+      <!-- Example row of columns -->
+	<div class="page-header">
+		<h1>Examples <small>very early</small></h1>
+	</div>
+	<div class="row span12">
+		<p>
+			Those are a bunch of examples in early stages. Look at the index.html
+		</p>
+		<ul class="thumbnails">
+			<li class="span3">
+				<a href="../examples/minimal" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Minimal pages</h5>
+						<p>
+							It represents the minimal page. A simple one.
+						</p>
+					</div>
+				</a>
 			</li>
-			<li>
-				<a href="../examples/boilerplate">boilerplate</a>
+			<li class="span3">
+				<a href="../examples/boilerplate" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Boilerplate</h5>
+						<p>
+							Implement the feature which present
+							in a boilerplate for three.js.
+						</p>
+					</div>
+				</a>
 			</li>
-			<li>
-				<a href="../examples/text">text</a>
+			<li class="span3">
+				<a href="../examples/text" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Text</h5>
+						<p>
+							Insert a text in 3D.
+						</p>
+					</div>
+				</a>
 			</li>
-			<li>
-				<a href="../examples/csg">csg</a>
+			<li class="span3">
+				<a href="../examples/csg" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>csg</h5>
+						<p>
+							Constructive Solid Geometry.
+						</p>
+					</div>
+				</a>
 			</li>
-			<li>
-				<a href="../examples/wobble">wobble</a>
+		</ul>
+	</div>
+	<div class="row span12">
+		<ul class="thumbnails">
+			<li class="span3">
+				<a href="../examples/wobble" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Wobble</h5>
+						<p>
+							Funny animation
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../examples/terrainGenerator" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Terrain generation</h5>
+						<p>
+							terrain generation. phong for lighting. light map. perlin for terrain
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../examples/planets" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Planets</h5>
+						<p>
+							Trivial generation moon or earth
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../examples/domevent" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Dom Events</h5>
+						<p>
+							Simulate the dom events you know in html page, inside three.js
+						</p>
+					</div>
+				</a>
 			</li>
 		</ul>
 	</div>
@@ -131,19 +232,21 @@
 	<!-- Le javascript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="bootstrap/docs/assets/js/jquery.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-transition.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-alert.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-modal.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-dropdown.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-scrollspy.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-tab.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-tooltip.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-popover.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-button.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
-	<script src="bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.js"></script>
+	<script>jQuery(function(){ prettyPrint(); });</script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-transition.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-alert.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-modal.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-dropdown.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-scrollspy.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-tab.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-tooltip.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-popover.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-button.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
 
   </body>
 </html>
