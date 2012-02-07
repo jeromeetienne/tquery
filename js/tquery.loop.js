@@ -131,6 +131,12 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
+	// handle parameters
+	if( typeof priority === 'function' ){
+		callback	= priority;
+		priority	= this.PRE_RENDER;
+	}
+
 	var index	= this._hooks[priority].indexOf(callback);
 	console.assert(index !== -1);
 	this._hooks[priority].splice(index, 1);

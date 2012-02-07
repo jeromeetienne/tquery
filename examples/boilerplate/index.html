@@ -9,8 +9,7 @@
 <body><script>
 	var world	= tQuery.createWorld().addBoilerplate().fullpage().start();
 	var object3d	= tQuery.createTorus().addTo(world);
-	
-	setTimeout(function(){
-		tQuery.world.removeBoilerplate();
-	}, 1000);
+
+	// remove boilerplate in 1-sec as a test
+	//setTimeout(function(){ tQuery.world.removeBoilerplate(); }, 1000);
 </script></body>

@@ -19,8 +19,7 @@ tQuery.DirectionalLight	= function(elements)
 };
 
 /**
- * inherit from tQuery.Node
- * - TODO this should inherit from tQuery.Object3D but but in inheritance
+ * inherit from tQuery.Light
 */
 tQuery.inherit(tQuery.DirectionalLight, tQuery.Light);
 

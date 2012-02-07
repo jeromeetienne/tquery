@@ -20,7 +20,6 @@ tQuery.AmbientLight	= function(elements)
 
 /**
  * inherit from tQuery.Node
- * - TODO this should inherit from tQuery.Object3D but but in inheritance
 */
 tQuery.inherit(tQuery.AmbientLight, tQuery.Light);
 

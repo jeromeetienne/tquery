@@ -4,15 +4,13 @@
 (function(){
 	
 	define('tquery', ["../../build/tquery-bundle.js"], function(){
-		//tQuery.register('define', define);
-		//tQuery.register('require', require);
 		return tQuery;
 	});
 
-	define(['module'], function(module){
-		console.log(module.id);
-		console.log(module.uri);
-	});
+	//define(['module'], function(module){
+	//	console.log(module.id);
+	//	console.log(module.uri);
+	//});
 	return;
 
 
