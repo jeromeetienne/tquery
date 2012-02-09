@@ -47,7 +47,7 @@ object.material().textureScrolling({
 
 var playerZ	= 0;
 world.loop().hook(function(deltaTime, time){
-	playerZ	+= deltaTime * 1;
+	playerZ	+= deltaTime * 2;
 
 	if( tQuery.keyboard().pressed('up') )	playerZ	+= 1.5 * deltaTime;
 	if( tQuery.keyboard().pressed('down'))	playerZ	-= 0.3 * deltaTime;
@@ -57,8 +57,8 @@ world.loop().hook(function(deltaTime, time){
 var vertexTransform	= function(o, v, time){
 	var z		= (playerZ + v.z);
 	var angle	= z * 0.8;
-	v.x	= o.x + Math.cos(angle/2)*0.4;
-	v.y	= o.y + Math.cos(angle/3)*0.6;
+	v.x	= o.x + Math.cos(angle/2)*0.1;
+	v.y	= o.y + Math.cos(angle/3)*0.2;
 };
 
 var vertexTransform0	= function(o, v, time){
@@ -75,18 +75,31 @@ true && object.geometry().vertexAnimation({
 true && world.loop().hook(function(deltaTime, time){
 	var origin	= {
 		x	:  0,
-		y	: -0.3,
+		y	: -0.1,
 		z	:  0
 	};
 	vertexTransform(origin, world.camera().position, time)
 	world.camera().position.z	= 5;
 });
 
+// move the camera 
+true && world.loop().hook(function(deltaTime, time){
+	var origin	= {
+		x	:  0,
+		y	: -0.45,
+		z	:  0
+	};
+	var object	= tQuery('#player');
+	if( object.length === 0 )	return;
+	vertexTransform(origin, object.get(0).position, time)
+	object.get(0).position.z	= 3.5;
+});
+
 // TODO make all this happen at the geometry level
 
 world.renderer().setClearColorHex( 0x000000, 1 );
 
-world.scene().fog	= new THREE.FogExp2( world.renderer().getClearColor(), 0.15 );
+world.scene().fog	= new THREE.FogExp2( world.renderer().getClearColor(), 0.1 );
 
 world.camera().position.set(0,0,5);
 
@@ -96,25 +109,38 @@ var tMesh	= object.get(0);
 tMesh.flipSided	= true;
 
 
-var playSoundtrack= function(){
-	var url	= 'virt-lorem-ipsum.mp3';
-	//var url	= 'eatpill.mp3';
+new THREE.JSONLoader().load( 'teapot.js', function ( geometryTeapot ){
+	tQuery(geometryTeapot).computeAll().normalize();
+	
+	var geometry	= new THREE.Geometry();
 
-	var audio	= document.createElement('audio');
-	audio.setAttribute('src', url);
-	audio.load();
+	var material	= new THREE.MeshNormalMaterial();
+	var mesh	= new THREE.Mesh(geometryTeapot, material);
+	mesh.position.x	= -0.35;
+	mesh.rotation.y	= Math.PI;
+	THREE.GeometryUtils.merge(geometry, mesh)
 
-	audio.addEventListener('canplaythrough', function(e) {
-		console.log("canplaythrough")
-		audio.play();
-        }, false);
-	audio.addEventListener('ended', function(e) {
-		console.log("ended")
-		setTimeout(function(){
-			playSoundtrack();	
-		}, 1000);		
-        }, false);
-}
-setTimeout(function(){
-	playSoundtrack();	
-}, 2000);
+	var material	= new THREE.MeshNormalMaterial();
+	var mesh	= new THREE.Mesh(geometryTeapot, material);
+	mesh.position.x	=  0.35;
+	THREE.GeometryUtils.merge(geometry, mesh)
+	
+	geometry.computeBoundingBox();
+	tQuery(geometry).computeAll();
+	var material	= new THREE.MeshNormalMaterial();
+
+	var mesh	= new THREE.Mesh(geometry, material);
+	tQuery(mesh)
+		.id('player')
+		.geometry()
+			.computeAll()
+			.normalize()
+			.zoom(0.5)
+			.back()
+		.translateZ(4)
+		.translateY(-0.1);
+
+	world.add(mesh);
+});
+
+
