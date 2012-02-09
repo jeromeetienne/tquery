@@ -289,7 +289,13 @@ tQuery.register('createSphere', function(){
 
 tQuery.register('createPlane', function(){
 	var ctor	= THREE.PlaneGeometry;
-	var defaults	= [1, 1, 16, 16, Query.defaultObject3DMaterial];
+	var defaults	= [1, 1, 16, 16, tQuery.defaultObject3DMaterial];
+	return this._createMesh(ctor, defaults, arguments)
+});
+
+tQuery.register('createCylinder', function(){
+	var ctor	= THREE.CylinderGeometry;
+	var defaults	= [0.5, 0.5, 1, 16, 4, tQuery.defaultObject3DMaterial];
 	return this._createMesh(ctor, defaults, arguments)
 });
 
@@ -908,7 +914,7 @@ tQuery.World	= function()
 
 	// create a camera in the scene
 	// FIXME this window dimension is crap
-	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
+	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.01, 10000 );
 	this._camera.position.set(0, 0, 3);
 	this._scene.add(this._camera);
 	
@@ -1500,9 +1506,9 @@ tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
-tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 0, 0);	});
-tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0);	});
-tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
+tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
+tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
+tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
 
 
 })();	// closure function end
@@ -1628,9 +1634,9 @@ tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
-tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 0, 0);	});
-tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0);	});
-tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
+tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
+tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
+tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
 
 
 })();	// closure function end

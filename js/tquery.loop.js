@@ -87,6 +87,8 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 		if( this._hooks[priority] === undefined )	continue;
 		var callbacks	= this._hooks[priority].slice(0)
 		for(var i = 0; i < callbacks.length; i++){
+			// TODO ? change that to {delta, current} ?
+			// thus function(time){ time.current }
 			callbacks[i](deltaTime, currentTime);
 		}
 	}

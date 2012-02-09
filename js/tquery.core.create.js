@@ -74,7 +74,13 @@ tQuery.register('createSphere', function(){
 
 tQuery.register('createPlane', function(){
 	var ctor	= THREE.PlaneGeometry;
-	var defaults	= [1, 1, 16, 16, Query.defaultObject3DMaterial];
+	var defaults	= [1, 1, 16, 16, tQuery.defaultObject3DMaterial];
+	return this._createMesh(ctor, defaults, arguments)
+});
+
+tQuery.register('createCylinder', function(){
+	var ctor	= THREE.CylinderGeometry;
+	var defaults	= [0.5, 0.5, 1, 16, 4, tQuery.defaultObject3DMaterial];
 	return this._createMesh(ctor, defaults, arguments)
 });
 

@@ -10,7 +10,7 @@ light.get(0).color.setRGB(1,0.3,0.7);
 light.get(0).intensity	= 2;
 
 var light	= tQuery.createDirectionalLight().position(0,-1,0).addTo(world)
-light.get(0).color.setRGB(1,1,1);
+light.get(0).color.setRGB(0.8,0.4,0.4);
 light.get(0).intensity	= 3;
 
 var material	= new THREE.MeshLambertMaterial({
@@ -18,8 +18,8 @@ var material	= new THREE.MeshLambertMaterial({
 	color	: 0xFFAA88,
 	specular: 0xCC88ff,
 	shininess: 400,
-	//map	: THREE.ImageUtils.loadTexture( "../test/water.jpg" )
-	map	: THREE.ImageUtils.loadTexture('ash_uvgrid01.jpg')
+	//map	: THREE.ImageUtils.loadTexture( "../test/water.jpg" ),
+	map	: THREE.ImageUtils.loadTexture('ash_uvgrid01.jpg'),
 });
 //material	= new THREE.MeshNormalMaterial();
 
@@ -40,19 +40,25 @@ object.material().textureScrolling({
 		if( tQuery.keyboard().pressed('left') )	deltaX = -1;
 		if( tQuery.keyboard().pressed('right')) deltaX =  1;
 	
-		var deltaY	= 0;
-		if( tQuery.keyboard().pressed('up') )	deltaY =  1;
-		if( tQuery.keyboard().pressed('down'))	deltaY = -1;
-
-		tTexture.offset.x	+= 0.003 * deltaX;
-		tTexture.offset.y	+= 0.01  * (1+0.8*deltaY);
+		tTexture.offset.x	+= 0.01 * deltaX;
+		tTexture.offset.y	= playerZ / 10;
 	}
 });
 
+var playerZ	= 0;
+world.loop().hook(function(deltaTime, time){
+	playerZ	+= deltaTime * 1;
+
+	if( tQuery.keyboard().pressed('up') )	playerZ	+= 1.5 * deltaTime;
+	if( tQuery.keyboard().pressed('down'))	playerZ	-= 0.3 * deltaTime;
+});
+
+
 var vertexTransform	= function(o, v, time){
-	var a	= time*3 + v.z * 0.8;
-	v.x	= o.x + Math.cos(a/2)*0.4;
-	v.y	= o.y + Math.cos(a/3)*0.6;
+	var z		= (playerZ + v.z);
+	var angle	= z * 0.8;
+	v.x	= o.x + Math.cos(angle/2)*0.4;
+	v.y	= o.y + Math.cos(angle/3)*0.6;
 };
 
 var vertexTransform0	= function(o, v, time){
@@ -69,7 +75,7 @@ true && object.geometry().vertexAnimation({
 true && world.loop().hook(function(deltaTime, time){
 	var origin	= {
 		x	:  0,
-		y	: -0.4,
+		y	: -0.3,
 		z	:  0
 	};
 	vertexTransform(origin, world.camera().position, time)

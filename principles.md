@@ -16,6 +16,12 @@
 * put sanity check when possible
   * any misuse should be detected as soon as possible
 
+## directions
+* "For those who know to know webgl, good news! you already know it, just replace j by t!"
+  * make this statement true
+* "webgl should not be harder than playing with lego."
+
+
 ## Name Conventions
 * suppose you want to create a material plugin about fireball
 * file tquery.fireballmaterial.js

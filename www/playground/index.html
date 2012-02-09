@@ -29,7 +29,7 @@
 			}
 			#editor {
 				float	: left;
-				width	: 45%;
+				width	: 50%;
 
 				/*border: 2px solid black;*/
 				border	: 0px;
@@ -42,11 +42,11 @@
 				box-shadow: 0 0 5px 5px #888;
 			}
 			.CodeMirror {
-				font-size	: 14px;
 			}
 			.CodeMirror-scroll {
 				height		: 400px;
-				font-size	: 18px;
+				font-size	: 16px;
+				line-height	: 1.3;
 			}
 			#previewContainer {
 				width: 45%;
@@ -116,13 +116,13 @@
 	</div>
 	<div id="editor">
 		<textarea id=code name=code>
-<!doctype html><title>tQuery Playground</title>
+<!doctype html><title>tQuery minimal page</title>
 <script src="../../../../build/tquery-bundle.js"></script>
 <body><script>
 
-	var world	= tQuery.createWorld().fullpage().start();
-	var object	= tQuery.createTorus().addTo(world);
-
+	var world = tQuery.createWorld().fullpage().start();
+	var object = tQuery.createTorus().addTo(world);
+	
 </script></body></textarea>
 	</div>
 	<div id="previewContainer">
@@ -162,12 +162,19 @@
 			// update ui
 			jQuery('#syncStatus .state').hide().filter('.uptodate').show();
 
-			// seem to create trouble 
-			var previewFrame = document.getElementById('preview');
-			var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
-			preview.open();
-			preview.write(editor.getValue());
-			preview.close();
+			
+			
+			jQuery('#previewContainer').empty();
+			jQuery('<iframe>').attr('id', 'preview').appendTo('#previewContainer');
+			
+			setTimeout(function(){
+				var content	= editor.getValue();
+				var previewFrame= document.getElementById('preview');
+				var preview	=  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+				preview.open();
+				preview.write(content);
+				preview.close();
+			}, 300)
 		}
 		updatePreview();
 	</script>

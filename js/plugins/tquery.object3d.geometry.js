@@ -120,9 +120,9 @@ tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
-tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 0, 0);	});
-tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(0, ratio, 0);	});
-tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(0, 0, ratio);	});
+tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
+tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
+tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
 
 
 })();	// closure function end
