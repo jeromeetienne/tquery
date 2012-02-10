@@ -8,6 +8,19 @@
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.Geometry.register('computeAll', function(){
+	this.each(function(tGeometry){
+		tGeometry.computeBoundingBox();
+		tGeometry.computeCentroids();
+		tGeometry.computeFaceNormals();
+		tGeometry.computeVertexNormals();
+		//tGeometry.computeTangents();
+	});
+
+	// return this, to get chained API	
+	return this;
+});
+
 /**
  * zoom a geometry
  *
@@ -64,11 +77,11 @@ tQuery.Geometry.register('normalize', function(){
 		var node	= tQuery(geometry);
 		var size	= node.size();
 		if( size.x >= size.y && size.x >= size.z ){
-			node.scale(1/size.x);
+			node.zoom(1/size.x);
 		}else if( size.y >= size.x && size.y >= size.z ){
-			node.scale(1/size.y);
+			node.zoom(1/size.y);
 		}else{
-			node.scale(1/size.z);
+			node.zoom(1/size.z);
 		}
 	});
 	// return this, to get chained API	
