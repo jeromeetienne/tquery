@@ -86,7 +86,7 @@ true && world.loop().hook(function(deltaTime, time){
 true && world.loop().hook(function(deltaTime, time){
 	var origin	= {
 		x	:  0,
-		y	: -0.45,
+		y	: -0.3,
 		z	:  0
 	};
 	var object	= tQuery('#player');
@@ -109,38 +109,9 @@ var tMesh	= object.get(0);
 tMesh.flipSided	= true;
 
 
-new THREE.JSONLoader().load( 'teapot.js', function ( geometryTeapot ){
-	tQuery(geometryTeapot).computeAll().normalize();
-	
-	var geometry	= new THREE.Geometry();
-
-	var material	= new THREE.MeshNormalMaterial();
-	var mesh	= new THREE.Mesh(geometryTeapot, material);
-	mesh.position.x	= -0.35;
-	mesh.rotation.y	= Math.PI;
-	THREE.GeometryUtils.merge(geometry, mesh)
-
-	var material	= new THREE.MeshNormalMaterial();
-	var mesh	= new THREE.Mesh(geometryTeapot, material);
-	mesh.position.x	=  0.35;
-	THREE.GeometryUtils.merge(geometry, mesh)
-	
-	geometry.computeBoundingBox();
-	tQuery(geometry).computeAll();
-	var material	= new THREE.MeshNormalMaterial();
-
-	var mesh	= new THREE.Mesh(geometry, material);
-	tQuery(mesh)
-		.id('player')
-		.geometry()
-			.computeAll()
-			.normalize()
-			.zoom(0.5)
-			.back()
-		.translateZ(4)
-		.translateY(-0.1);
-
-	world.add(mesh);
-});
-
+tQuery.createCylinder().id('player').addTo(world)
+	.geometry()
+		.rotateZ(Math.PI/2)
+		.zoom(0.1)
+		.back()
 
