@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+<head>
+	<title>tQuery: three.js + jQuery ?</title>
+	<base target=”_blank” />
+	<meta charset='utf-8'>
+	<script src='slides.js'></script>
+</head>
+  
+<body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      
+	<article>
+		<h1>
+			<span style="font-size: 120%; color: orange;">tQuery</span>
+			<br/>
+			<br/>
+		</h1>
+		<h3 style="font-size: 120%">
+			<center>
+				<span style="color: orange">t</span>hree.js
+				power
+				+
+				j<span style="color: orange">Query</span>
+				API Usability
+			</center>
+			<br>
+		</h3>
+		<p>
+			Jerome Etienne
+		</p>
+	</article>
+	<article>
+		<h2>
+			Hue ? webgl + dom ? no Way!
+		</h2>
+	</article>
+	<article>
+		<h3>
+			What is tQuery
+		</h3>
+		<ul>
+			<li>
+				Experimental</strong>
+			</li>
+			<li>
+				Extension system for three.js
+			</li>
+			<li>
+				Goal: three.js power + jQuery API usability
+			</li>
+		</ul>
+	</article>
+	<article>
+		<h2>
+			Wait! Show, Dont tell.
+		</h2>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			Here is a <span style="color: orange">Minimal</span> Page
+		</h3>
+		<p>
+			demo is <a target="_blank" href="http://jeromeetienne.github.com/tquery/examples/minimal/">here</a>
+		</p>
+		<section>
+		<pre>
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;../../build/tquery-bundle.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world	= tQuery.createWorld().fullpage().start();
+    var object	= tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+		</section>
+		<iframe src='http://jeromeetienne.github.com/tquery/examples/minimal/' style="height: 200px;"
+			allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+	</article>
+	<article>
+		<h2>
+			OK, go on now.
+		</h2>
+	</article>
+	<article>
+		<h3>
+			tQuery is <span style="color: orange">Experimental</span>
+		</h3>
+		<ul>
+			<li>
+				Started 2 weeks ago
+			</li>
+			<li>
+				Show promises but only time will tell
+			</li>
+			<li>
+				Code is advancing at fast past tho
+			</li>
+			<li>
+				(and this is super fun to write :)
+			</li>
+		</ul>
+	</article>
+
+	<article>
+		<h3>
+			tQuery is an <span style="color: orange">Extension System</span>
+		</h3>
+		<ul>
+			<li>
+				<strong>Must</strong> make three.js easier to extend
+			</li>
+		</ul>
+		<h4>Thus people can</h4>
+		<ol>
+			<li>
+				do plugins for three.js (like they do in jQuery)
+			</li>
+			<li>
+				They share their work
+			</li>
+			<li>
+				They build on top of each other
+			</li>
+			<li>
+				Open Source spirit
+			</li>
+		</ol>
+		<h4>
+			All good in my book
+		</h4>
+	</article>
+	<article>
+		<h3>
+			tQuery Goal : <span style="color: orange">three.js power</span> + <span style="color: orange">jQuery API usability</span>
+		</h3>
+		<h4>three.js power:</h4>
+		<ul>
+			<li>
+				actively developped by a team of skilled dev
+			</li>
+			<li>
+				significant community around three.js
+			</li>
+		</ul>
+		<h4>jQuery API usability</h4>
+		<ul>
+			<li>
+				widely recognized (85% market share)
+			</li>
+			<li>
+				successful plugin ecosystem
+			</li>
+		</ul>
+	</article>
+
+	<article>
+		<h2>
+			What is your deal with jQuery ?
+		</h2>
+	</article>
+
+	<article>
+		<h3>
+			Why jQuery ?
+		</h3>
+		
+		<h4>Always admired their plugins ecosystem</h4>
+			<ul>
+				<li>
+					varied, lively
+				</li>
+				<li>
+					some impressive specimens
+				</li>
+			</ul>
+		<h4>jQuery is popular</h4>
+			<ul>
+				<li>
+					85% of marketshare
+				</li>
+			</ul>
+		<h4>Match my goal: "<strong style="color: orange">Bring 3D to non-specialists</strong>"</h4>
+			<ul>
+				<li>
+					people who know jQuery will learn tQuery in no time
+				</li>
+			</ul>
+
+	</article>
+	<article>
+		<h2>
+			All is said ?
+		</h2>
+	</article>
+	<article>
+		<h3>Conclusion</h3>
+		<br>
+		<h4>tQuery seems promising but early</h4>
+		<h4>People seems to like it</h4>
+		<h4>and i like to write it :)</h4>
+		<br/>
+		<h4>More news on it soon</h4>
+	</article>
+	<article>
+		<h1>
+			That's all folks.
+		</h1>
+		<h3>
+			Question ?
+		</h3>
+		<p>
+			Jerome Etienne
+		</p>
+	</article>
+</body>
+</html>
