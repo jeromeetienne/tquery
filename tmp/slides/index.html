@@ -68,7 +68,7 @@
 	</article>
 	<article>
 		<h2>
-			Wait! Show, Dont tell.
+			Wait! Show, dont tell.
 		</h2>
 	</article>
 	<article class='nobackground'>
@@ -204,7 +204,8 @@
 	</article>
 	<article>
 		<h2>
-			Bla bla... All talk.. Show something!
+			Bla bla bla ... all talk.
+			Show something!
 		</h2>
 	</article>
 	<article class='nobackground'>
@@ -219,17 +220,127 @@
 	</article>
 	<article>
 		<h2>
-			All is said ?
+			Ok not bad, what about the code?
+		</h2>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			Build the tube's <span style="color: orange">walls</span>
+		</h3>
+		<section>
+		<pre>
+// HINT: a tunnel is a cylinder seen from inside.
+// Once you realized that, most of the work is done.
+
+// create the object
+var tube = tQuery.createCylinder();
+
+// now lets turn it inside out - flip the geometry
+tube.geometry().flip();
+</pre>
+		</section>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			<span style="color: orange">Advancing</span> into the tube
+		</h3>
+		<section>
+		<pre>
+tubeTexture.material().textureScrolling({
+    // transform the texture on render
+    transform	: function(tTexture){
+        // to go forward
+        tTexture.offset.y	+= 0.2;
+        // make it loop
+        tTexture.offset.y	%= 1;
+    }
+});
+</pre>
+		</section>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			Making the tube <span style="color: orange">wavy</span>
+		</h3>
+		<section>
+		<pre>
+tube.geometry().vertexAnimation({
+    // transform vertices on render
+    transform	: function(origin, vector, present){
+        // compute displacement
+        var deltaX = Math.cos(present*0.4);
+        var deltaY = Math.sin(present*0.4);
+	// apply displacement
+        vector.x = origin.x + deltaX;
+        vector.y = origin.y + deltaY;
+    }
+});
+</pre>
+		</section>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			Move the <span style="color: orange">player</span>
+		</h3>
+		<pre>
+// Move player left/right
+var playerAngle	= 0;
+var keyboard	= tQuery.keyboard();
+// hook the rendering loop
+world.loop().hook(function(){
+	// check the keyboard
+	if( keyboard.pressed('right') )	playerAngle += 0.01;
+	if( keyboard.pressed('left') )	playerAngle -= 0.01;
+});
+</pre>
+
+	</article>
+	<article class='nobackground'>
+		<h3>
+			About the <span style="color: orange">music</span>
+		</h3>
+		<section>
+		<pre>
+// play a sound track
+tQuery.playSoundtrack('virt-lorem-ipsum.mp3');
+</pre>
+		</section>
+		<ul>
+			<li>
+				Available <a href="http://www.biglionmusic.com/content/virt_-_lorem_ipsum.mp3">here</a>
+				- made by <a href="http://www.biglionmusic.com/">virt / Jake kaufman</a>
+			</li>
+			<li>
+				Singing <a href="http://www.biglionmusic.com/music/lorem-ipsum/">lorem ipsum</a> -
+				Check the <a href="http://www.biglionmusic.com/content/lorem.txt">lyrics</a> :)
+			</li>
+			<li>
+			</li>
+			<li>
+				All that thru a vocoder - like <a href='http://www.youtube.com/watch?v=DTXO7KGHtjI'>hatsune miku</a>
+			</li>
+		</ul>
+<!--		<iframe style="height: 400px" width="560" height="315px" src="http://www.youtube.com/embed/DTXO7KGHtjI" frameborder="0" allowfullscreen></iframe>
+-->	</article>
+	<article>
+		<h2>
+			Anything else ?
 		</h2>
 	</article>
 	<article>
 		<h3>Conclusion</h3>
 		<br>
-		<h4>tQuery seems promising but early</h4>
-		<h4>People seems to like it</h4>
-		<h4>and i like to write it :)</h4>
-		<br/>
-		<h4>More news on it soon</h4>
+		<ul>
+			<li>three.js power + jQuery API Usability" ?</li>
+			<li>I like the idea a <span style="color:orange">lot</span></li>
+			<li>Early results seem promising, only time will tell</li>
+		</ul>
+		<h4>What's next ?</h4>
+		<ul>
+			<li>more of tQuery hopefully :)</li>
+			<li>Complete tunnel game on <a href="http://learningthreejs.com" target="_blank">learningthreejs blog</a></li>
+			<li>Maybe a step by step tutorial "how to make <a href="http://jeromeetienne.github.com/demo.sundial/" target="_blank">sundial</a>"</li>
+		</ul>
 	</article>
 	<article>
 		<h1>
