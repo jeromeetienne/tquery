@@ -143,6 +143,9 @@ var object	= tQuery(new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 16), new TH
 	map	: waterTexture
 })));
 
+
+//tQuery.playSoundtrack('virt-lorem-ipsum.mp3');
+
 object.id('player').addTo(world).geometry()
 		.rotateZ(Math.PI/2)
 		.zoom(0.2)
