@@ -15,6 +15,8 @@
 * not to disrupt devs habits is important for a lib
 * put sanity check when possible
   * any misuse should be detected as soon as possible
+* instrumentability
+  * stuff must be usable by computers
 
 ## directions
 * "For those who know to know webgl, good news! you already know it, just replace j by t!"
