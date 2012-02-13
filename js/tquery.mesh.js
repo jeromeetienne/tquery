@@ -43,4 +43,3 @@ tQuery.Mesh.prototype.material	= function(value){
 	return this;	// for the chained API
 }
 
-

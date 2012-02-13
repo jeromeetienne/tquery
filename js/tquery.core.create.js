@@ -49,6 +49,20 @@ tQuery.register('createAmbientLight', function(){
 */
 tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
 
+tQuery.Geometry.prototype.toMesh	= function(material){
+	var meshes	= [];
+	this.each(function(tGeometry){
+		// handle paramters
+		material	= material || tQuery.defaultObject3DMaterial;
+		// create the THREE.Mesh
+		var mesh	= new THREE.Mesh(tGeometry, material)
+		// return it
+		meshes.push(mesh);
+	});
+	return new tQuery.Mesh(meshes);
+};
+
+
 /**
  * Create a cube
  * 
