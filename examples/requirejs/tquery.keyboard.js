@@ -1,7 +1,6 @@
 /**
  * tquery.js plugin to handle keyboard
 */
-
 tQuery.define('tquery.keyboard', ['tquery', '../../vendor/threex/THREEx.KeyboardState.js'], function(){
 	var instance	= null;
 	tQuery.register('keyboard', function(){

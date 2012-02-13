@@ -2,47 +2,48 @@
  * export tQuery as requirejs module
 */
 (function(){
-
-	var getScriptUrl	= function(filename){
+	// trick to get the baseurl of the <script> loading moduleName.js
+	var scriptBaseUrl	= function(moduleName){
+		console.assert(moduleName !== undefined, "moduleName MUST be defined");
+		var filename	= moduleName+".js";
 		var scriptUrl	= document.querySelector('script[src$="'+filename+'"]').src;
 		var baseUrl	= scriptUrl.substr(0, scriptUrl.lastIndexOf('/')+1);
-		//console.log("baseurl", baseUrl);
 		return baseUrl;
 	};
-	
+
+	// wrapper on top of requirejs define (to better handle locality)
+	// NOTE: im not sure it is the best solution
+	// - if the dependancy starts with "./" or "../", make the path relative to <script> src location
+	// - This is a common problem, it would be surprising not to have a clean answer
 	var tQueryDefine	= function(moduleName, dependancies, callback){
-		var baseUrl	= getScriptUrl(moduleName+".js");
+		// get baseUrl for this module name 
+		var baseUrl	= scriptBaseUrl(moduleName);
+		// prepend baseUrl to any dependancy starting with './' or '../' 
 		dependancies	= dependancies.map(function(item){
-			//console.log("item", item, baseUrl, item.match(/^\./))
-			var result;
-			if( item.match(/^\./) )	result	= baseUrl + item;
-			else			result	= item;
-			//console.log("item result", result)
+			var toPrefix	= item.match(/^\.\//) || item.match(/^\.\.\//);
+			var result	= toPrefix ? baseUrl+item : item;
 			return result;
 		})
-		// TODO pass baseUrl to the callback
-		// first param, all the rest are the one passed by requirejs
-		
-		//console.log("DDDbaseUrl", moduleName, baseUrl, dependancies)
+		// actually call requirejs define
 		define(moduleName, dependancies, callback);
 	};
-
+	// do a fake tQuery.define() before tQuery is actually loaded
 	window.tQuery	= { define: tQueryDefine };
 
+	// define tquery module 
 	define('tquery', ["../../build/tquery-bundle.js"], function(){
+
+		/**
+		 * define a module for tQuery (using requirejs)
+		*/
+		tQuery.register('define', tQueryDefine);
+
+		/**
+		 * @return the base url of the <script> loading moduleName.js
+		*/
+		tQuery.register('scriptBaseUrl', scriptBaseUrl);
 		
-		tQuery.define	= tQueryDefine;
+		// return the object itself
 		return tQuery;
 	});
-
-	//define(['module'], function(module){
-	//	console.log(module.id);
-	//	console.log(module.uri);
-	//});
-	return;
-
-
-	// get the url from the <script src=""> loading this file
-	var scriptUrl	= document.scripts[document.scripts.length-1].src;
-	var baseUrl	= scriptUrl.substr(0, scriptUrl.lastIndexOf('/')+1);
 })();
