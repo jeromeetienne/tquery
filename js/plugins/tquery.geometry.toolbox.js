@@ -169,14 +169,15 @@ tQuery.Geometry.register('rotate', function(angles, order){
 */
 tQuery.Geometry.register('center', function(noX, noY, noZ){
 	// change all geometry.vertices
-	this.each(function(geometry){
+	this.each(function(tGeometry){
+		var geometry	= tQuery(tGeometry);
 		// compute delta
-		var delta	= this.middlePoint().negate();
+		var delta 	= geometry.middlePoint().negate();
 		if( noX )	delta.x	= 0;
 		if( noY )	delta.y	= 0;
 		if( noZ )	delta.z	= 0;
 
-		return this.translate(delta)
+		return geometry.translate(delta)
 	});
 	// return this, to get chained API	
 	return this;
