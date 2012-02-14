@@ -22,7 +22,6 @@
 		//sphere2.addTo(world);
 		
 		world.add(cube.subtract(sphere2).id('prout'));
-
 		
 		// NOTE: the api is no good
 		// * sphere.subtract(cube) -> tQuery.Object3D ? which material ?
@@ -31,20 +30,14 @@
 		// * what about inplace replacement of sphere geometry ?
 		
 		// perform the operation
-		var tqGeometry	= sphere.geometry().csg('intersect', cube.geometry());
-
-		// build an object with the resulting geometry
-		var resultGeo	= tqGeometry.get(0);
-		var material	= new THREE.MeshNormalMaterial();
-		var mesh	= new THREE.Mesh( resultGeo, material );
-		tQuery(mesh).translateX(-1);
-		world.add(mesh);
+		var geometry	= sphere.geometry().csg('intersect', cube.geometry());
+		geometry.toMesh().id('obj2').translateX(-1).addTo(world);
 
 		// animate the object
 		world.loop().hook(function(){
 			tQuery('#prout').rotate(0, -0.01, 0)
 			
-			
+			var mesh	= tQuery('#obj2').get(0);
 			mesh.rotation.x	+= 0.01;
 			mesh.rotation.y	+= 0.01;
 			mesh.rotation.z	+= 0.01;

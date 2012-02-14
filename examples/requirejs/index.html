@@ -1,16 +1,18 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script data-main='./tquery.requirejs.js' src="../../vendor/require.js"></script>
 <body><script>
-	define(['./tquery.keyboard.js'], function(){
-		var world	= tQuery.createWorld().fullpage().start();
-		var object3d	= tQuery.createTorus().addTo(world);
-		
-		tQuery.loop.hook(function(){
-			if( tQuery.keyboard().pressed('a') ){
-				object3d.scale(2);
-			}else{
-				object3d.scale(1);
-			}
-		});
+
+define(['./tquery.keyboard.js'], function(){
+	var world	= tQuery.createWorld().fullpage().start();
+	var object3d	= tQuery.createTorus().addTo(world);
+
+	tQuery.loop.hook(function(){
+		if( tQuery.keyboard().pressed('a') ){
+			object3d.scale(2);
+		}else{
+			object3d.scale(1);
+		}
 	});
+});
+
 </script></body>

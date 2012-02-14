@@ -2,14 +2,15 @@
  * Create tQuery.Scene
 */
 tQuery.register('createText', function(text, options){
-
-	// create the geometry
-	var geometry	= new THREE.TextGeometry(text, tQuery.extend(options, {
+	// handle parameters
+	options	= tQuery.extend(options, {
 		size		: 1,
 		height		: 0.4,
 		curveSegments	: 4,
 		font		: "helvetiker"
-	}));	
+	});
+	// create the geometry
+	var geometry	= new THREE.TextGeometry(text, options);
 
 	// center the geometry
 	// - THREE.TextGeometry isnt centered for unknown reasons. all other geometries are centered
