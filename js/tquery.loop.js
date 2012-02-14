@@ -10,12 +10,7 @@
  * @param {THREE.World} world the world to display (optional)
 */
 tQuery.Loop	= function(world)
-{
-	// update default world.
-	// - TODO no sanity check ?
-	console.assert( !tQuery.loop, "loop already defined" );
-	tQuery.loop	= this;
-	
+{	
 	// internally if world present do that
 	this._world	= world;
 	this._hooks	= [];
