@@ -15,7 +15,7 @@ var myStats	= function(loop)
 	this._stats.domElement.style.bottom	= '0px';
 	document.body.appendChild( this._stats.domElement );
 
-	this._loop	= loop	|| tQuery.loop;
+	this._loop	= loop	|| tQuery.world.loop();
 
 	this._$onRender	= this._onRender.bind(this);
 	this._loop.hookPostRender(this._$onRender);

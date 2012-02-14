@@ -27,6 +27,8 @@
 		// actually call requirejs define
 		define(moduleName, dependancies, callback);
 	};
+	
+	console.assert( window.tQuery === undefined );
 	// do a fake tQuery.define() before tQuery is actually loaded
 	window.tQuery	= { define: tQueryDefine };
 

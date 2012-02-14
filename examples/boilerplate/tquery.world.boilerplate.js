@@ -1,9 +1,14 @@
 tQuery.World.register('addBoilerplate', function(){
 	// sanity check - no boilerplate is already installed
-	console.assert( this.hasBoilerplate() === true );
+	console.assert( this.hasBoilerplate() !== true );
 
 	// create the context
-	var ctx		= this._extBoilerplate	= {};
+	tQuery.data(this, '_boilerplateCtx', {});
+	// get the context
+	var ctx	= tQuery.data(this, "_boilerplateCtx");
+
+	ctx.stats	= tQuery.createStats();
+
 
 	// get some variables
 	var camera	= this.camera();
@@ -29,16 +34,21 @@ tQuery.World.register('addBoilerplate', function(){
 });
 
 tQuery.World.register('hasBoilerplate', function(){
-	return this._extBoilerplate === undefined ? true : false;
+	// get the context
+	var ctx	= tQuery.data(this, "_boilerplateCtx")
+	// return true if ctx if defined, false otherwise
+	return ctx === undefined ? false : true;
 });
 
 tQuery.World.register('removeBoilerplate', function(){
+	// get context
+	var ctx	= tQuery.data(this, '_boilerplateCtx');
 	// if not present, return now
-	if( this._extBoilerplate === undefined )	return	this;
+	if( ctx === undefined )	return	this;
 	// remove the context from this
-	var ctx		= this._extBoilerplate;
-	delete this._extBoilerplate;
+	tQuery.removeData(this, '_boilerplateCtx');
 
+	ctx.stats.destroy();
 	// remove camera
 	this.loop().unhook(ctx.loopCameraControls)
 	// stop windowResize

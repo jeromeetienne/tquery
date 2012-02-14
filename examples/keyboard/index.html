@@ -3,17 +3,15 @@
 
 <script src="../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="tquery.keyboard.js"></script>
-<body>
-	<script>
-		var world	= tQuery.createWorld().fullpage().start();
-		var object3d	= tQuery.createTorus().addTo(world);
-		
-		tQuery.loop.hook(function(){
-			if( tQuery.keyboard().pressed('a') ){
-				object3d.scale(2);
-			}else{
-				object3d.scale(1);
-			}
-		})
-	</script>
-</body>
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	var object3d	= tQuery.createTorus().addTo(world);
+	
+	tQuery.loop.hook(function(){
+		if( tQuery.keyboard().pressed('a') ){
+			object3d.scale(2);
+		}else{
+			object3d.scale(1);
+		}
+	})
+</script></body>

@@ -11,14 +11,14 @@
 
 		// create object1
 		var cube	= tQuery.createCube();
-		cube.geometry().translate(0.6,0,0);
+		cube.geometry().translateX(0.6);
 
 		// create object2
 		var sphere	= tQuery.createSphere();
 
 		// create object3
 		var sphere2	= tQuery.createSphere();
-		sphere2.geometry().translate(1,0,0);
+		sphere2.geometry().translateX(1);
 		//sphere2.addTo(world);
 		
 		world.add(cube.subtract(sphere2).id('prout'));
@@ -37,12 +37,13 @@
 		var resultGeo	= tqGeometry.get(0);
 		var material	= new THREE.MeshNormalMaterial();
 		var mesh	= new THREE.Mesh( resultGeo, material );
-		tQuery(mesh).translate(-1, 0, 0);
+		tQuery(mesh).translateX(-1);
 		world.add(mesh);
 
 		// animate the object
-		world.loop().hookPreRender(function(){
+		world.loop().hook(function(){
 			tQuery('#prout').rotate(0, -0.01, 0)
+			
 			
 			mesh.rotation.x	+= 0.01;
 			mesh.rotation.y	+= 0.01;
