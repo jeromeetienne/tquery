@@ -17,5 +17,5 @@ tQuery.register('playSoundtrack', function(url){
 	}
 	setTimeout(function(){
 		playSoundtrack();	
-	}, 2000);
+	}, 1000);
 });

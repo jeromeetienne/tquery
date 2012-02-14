@@ -75,6 +75,20 @@ tQuery.register('createFishShape', function(radius){
 	return shape;
 });
 
+tQuery.register('createWheelShape', function(){
+	var arcShape	= new THREE.Shape();
+	arcShape.moveTo( 0, 0 );
+	arcShape.arc( 10, 10, 30, 0, Math.PI*2, false );
+	
+	var holePath	= new THREE.Path();
+	holePath.moveTo( 0, 0 );
+	holePath.arc( 10, 10, 10, 0, Math.PI*2, true );
+
+	arcShape.holes.push( holePath );
+
+	return new tQuery.Shape(arcShape);
+});
+
 tQuery.register('createSmileyShape', function(radius){
 	var smileyShape	= new THREE.Shape();
 	smileyShape.moveTo( 0, 0 );

@@ -9,7 +9,6 @@ tQuery.register('createPlanet', function(opts){
 		color	: 0x888888,
 		map	: THREE.ImageUtils.loadTexture('images/moon_1024.jpg')
 	}));
-console.log("slota")
-console.dir(object);
+
 	return object;
 });

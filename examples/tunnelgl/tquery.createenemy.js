@@ -16,7 +16,7 @@ tQuery.register('createEnemy', function(opts){
 	var material	= new THREE.MeshLambertMaterial({
 		ambient	: 0x444444,
 		color	: 0x88AAFF,
-		map	: waterTexture,
+		map	: waterTexture
 	});
 	var geometry	= new THREE.SphereGeometry(0.5, 32, 16)
 	var object	= tQuery(new THREE.Mesh(geometry, material));
@@ -49,13 +49,10 @@ tQuery.register('createEnemy', function(opts){
 	});
 	
 
-
-
 	function onDeath(){
 		speedZ	= opts.getSpeedZ();
 		
-		var angle	= Math.random() * Math.PI * 2;
-		
+		var angle	= Math.random() * Math.PI * 2;	
 		var positionX	= Math.cos(angle) * radius;
 		var positionY	= Math.sin(angle) * radius;
 		var positionZ	= -8;

@@ -6,9 +6,8 @@
 <body><script>
 	var world	= tQuery.createWorld().fullpage().start();
 
-	var texture	= tQuery.createWebcamTexture();
-
-	console.log("texture", texture)
+	//var texture	= tQuery.createWebcamTexture();
+	var texture	= tQuery.createVideoTexture('sintel.ogv');
 
 	var material	= new THREE.MeshBasicMaterial({
 		ambient	: 0x444444,
@@ -17,13 +16,7 @@
 		map	: texture
 	});
 
-
-	var mesh	= new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), material);
-	//var mesh	= new THREE.Mesh(new THREE.TorusGeometry(1, 0.5), material);
-	var object	= tQuery(mesh).addTo(world);
-	// FIXME this one should work
-	//var object	= tQuery.createSphere(material).addTo(world);
-
-	object.rotateY(-90*Math.PI/180);
+	tQuery.createSphere(material).addTo(world)
+		.rotateY(-90*Math.PI/180);
 
 </script></body>
