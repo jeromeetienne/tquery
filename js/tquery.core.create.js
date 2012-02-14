@@ -70,37 +70,40 @@ tQuery.Geometry.prototype.toMesh	= function(material){
 */
 tQuery.register('createCube', function(){
 	var ctor	= THREE.CubeGeometry;
-	var defaults	= [1, 1, 1, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
+	var dflGeometry	= [1, 1, 1];
+	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
 tQuery.register('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
-	var defaults	= [0.5-0.15, 0.15, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
+	var dflGeometry	= [0.5-0.15, 0.15];
+	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
 tQuery.register('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
-	var defaults	= [0.5, 32, 16, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
+	var dflGeometry	= [0.5, 32, 16];
+	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
 tQuery.register('createPlane', function(){
 	var ctor	= THREE.PlaneGeometry;
-	var defaults	= [1, 1, 16, 16, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
+	var dflGeometry	= [1, 1, 16, 16];
+	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
 tQuery.register('createCylinder', function(){
 	var ctor	= THREE.CylinderGeometry;
-	var defaults	= [0.5, 0.5, 1, 16, 4, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
+	var dflGeometry	= [0.5, 0.5, 1, 16, 4];
+	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('_createMesh', function(ctor, defaults, origArguments){
-	var args	= Array.prototype.slice.call( origArguments.length ? origArguments : defaults);
-
+tQuery.register('_createMesh', function(ctor, dflGeometry, args)
+{
+	// convert args to array if it is instanceof Arguments
+	// FIXME if( args instanceof Arguments )
+	args	= Array.prototype.slice.call( args );
+	
 	// init the material
 	var material	= tQuery.defaultObject3DMaterial;
 	// if the last arguments is a material, use it
@@ -111,8 +114,10 @@ tQuery.register('_createMesh', function(ctor, defaults, origArguments){
 	// ugly trick to get .apply() to work 
 	var createFn	= function(ctor, a0, a1, a2, a3, a4, a5, a6, a7){
 		console.assert(arguments.length <= 9);
+		//console.log("createFn", arguments)
 		return new ctor(a0,a1,a2,a3,a4,a5,a6,a7);
 	}
+	if( args.length === 0 )	args	= dflGeometry.slice();
 	args.unshift(ctor);
 	var geometry	= createFn.apply(this, args);
 
