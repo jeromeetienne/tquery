@@ -27,7 +27,7 @@ tQuery.Geometry.register('computeAll', function(){
  * @name zoom
  * @methodOf tQuery.Geometry
 */
-tQuery.Geometry.register('zoom', function(vector3){
+tQuery.Geometry.register('scaleBy', function(vector3){
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 1 ){
 		vector3	= new THREE.Vector3(vector3, vector3, vector3);
@@ -190,6 +190,12 @@ tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Geometry.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Geometry.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Geometry.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+
+// backward compatibility
+tQuery.Geometry.register('zoom'		, function(value){return this.scaleBy(value);		});
 tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
 tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
 tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});

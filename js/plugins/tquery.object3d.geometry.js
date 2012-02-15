@@ -95,7 +95,7 @@ tQuery.Object3D.register('rotate', function(angles){
 	return this;
 });
 
-tQuery.Object3D.register('zoom', function(ratio){
+tQuery.Object3D.register('scaleBy', function(ratio){
 	// handle parameters
 	if( typeof ratio === "number" && arguments.length === 1 ){
 		ratio	= new THREE.Vector3(ratio, ratio, ratio);
@@ -120,9 +120,14 @@ tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Object3D.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Object3D.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Object3D.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+
+// backward compatibility
+tQuery.Object3D.register('zoom'		, function(value){ return this.scaleBy(value);		});
 tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
 tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
 tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
-
 
 })();	// closure function end
