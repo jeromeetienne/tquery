@@ -136,12 +136,19 @@ window.addEventListener('resize', updateEditorHeight, false);
 
 window.addEventListener('keydown', function(event){
 	// "cmd-enter" is shortcut for update preview
-	if( event.keyCode === "\r".charCodeAt(0) && event.metaKey === true ){
+	var toUpdate	= false;
+	toUpdate	|= event.keyCode === "\r".charCodeAt(0) && event.metaKey === true;
+	toUpdate	|= event.keyCode === "\r".charCodeAt(0) && event.altKey === true;
+	if( toUpdate ){
 		optionsSave();
 		updatePreview();
 	}
+
 	// "cmd-backspace" is shortcut for toggle preview
-	if( event.which === "\b".charCodeAt(0) && event.metaKey === true ){
-		jQuery("#editor").toggle();		
+	var toggleEditor= false;
+	toggleEditor	|= event.which === "\b".charCodeAt(0) && event.metaKey === true;
+	toggleEditor	|= event.which === "\b".charCodeAt(0) && event.altKey === true;
+	if( toggleEditor ){
+		jQuery("#editor").toggle();
 	}
 }, false);
