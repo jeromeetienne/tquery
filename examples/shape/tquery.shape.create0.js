@@ -10,6 +10,36 @@ tQuery.register('createShape', function(tShape){
 	return new tQuery.Shape(tShape);
 });
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.register('createFish', function(material){
+	return tQuery.createFishShape().extrude()
+		.computeAll().center()
+		.normalize().rotateY(-Math.PI)
+		.toMesh(material);	
+});
+
+tQuery.register('createHeart', function(material){
+	return tQuery.createHeartShape().extrude()
+		.computeAll().center()
+		.normalize().rotateZ(Math.PI)
+		.toMesh(material);	
+});
+
+tQuery.register('createSmiley', function(material){
+	return tQuery.createSmileyShape().extrude()
+		.computeAll().center()
+		.normalize().rotateZ(Math.PI)
+		.toMesh(material);	
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.register('createHeartShape', function(){
 	var x	= 0, y	= 0;
 	// TODO put it upsidedown and normalize it
