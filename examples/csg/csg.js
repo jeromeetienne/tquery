@@ -48,7 +48,7 @@
 // Holds a binary space partition tree representing a 3D solid. Two solids can
 // be combined using the `union()`, `subtract()`, and `intersect()` methods.
 
-CSG = function() {
+var CSG = function() {
   this.root = new CSG.Node();
 };
 

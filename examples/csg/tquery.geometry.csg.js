@@ -2,6 +2,7 @@ tQuery.Geometry.register('csg', function(operation, geometry){
 	// sanity check - check parameters
 	var operations	= ['subtract', 'union', 'intersect'];
 	console.assert( operations.indexOf(operation) !== -1 );
+
 	console.assert( geometry instanceof tQuery.Geometry );
 	console.assert( geometry.length <= 1 );
 	
