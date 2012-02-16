@@ -7,7 +7,9 @@ tQuery.register('createText', function(text, options){
 		size		: 1,
 		height		: 0.4,
 		curveSegments	: 4,
-		font		: "helvetiker"
+
+		weight		: "bold",
+		font		: "droid serif"
 	});
 	// create the geometry
 	var geometry	= new THREE.TextGeometry(text, options);
