@@ -214,127 +214,6 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		};
 	});
 };/**
- * @fileOverview plugins for tQuery.core to help creation of object
-*/
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Create tQuery.World
-*/
-tQuery.register('createWorld', function(){
-	return new tQuery.World();
-});
-
-/**
- * Create tQuery.loop
- * 
- * @param {tQuery.World} world the world to display (optional)
- * @function
-*/
-tQuery.register('createLoop', function(world){
-	return new tQuery.Loop(world);
-});
-
-
-tQuery.register('createDirectionalLight', function(){
-	var tLight	= new THREE.DirectionalLight(0xFFFFFF * Math.random());
-	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-	return tQuery(tLight);
-});
-
-tQuery.register('createAmbientLight', function(){
-	var tLight	= new THREE.AmbientLight(0xFFFFFF);
-	return tQuery(tLight);
-});
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * contains the default material to use when create tQuery.Object3D
- * 
- * @fieldOf tQuery
- * @name defaultObject3DMaterial
-*/
-tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
-
-/**
- * Create a cube
- * 
- * @returns {tQuery.Object3D} a tQuery.Object3D containing it
-*/
-tQuery.register('createCube', function(){
-	var ctor	= THREE.CubeGeometry;
-	var defaults	= [1, 1, 1, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
-});
-
-tQuery.register('createTorus', function(){
-	var ctor	= THREE.TorusGeometry;
-	var defaults	= [0.5-0.15, 0.15, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
-});
-
-tQuery.register('createSphere', function(){
-	var ctor	= THREE.SphereGeometry;
-	var defaults	= [0.5, 32, 16, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
-});
-
-tQuery.register('createPlane', function(){
-	var ctor	= THREE.PlaneGeometry;
-	var defaults	= [1, 1, 16, 16, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
-});
-
-tQuery.register('createCylinder', function(){
-	var ctor	= THREE.CylinderGeometry;
-	var defaults	= [0.5, 0.5, 1, 16, 4, tQuery.defaultObject3DMaterial];
-	return this._createMesh(ctor, defaults, arguments)
-});
-
-tQuery.register('_createMesh', function(ctor, defaults, origArguments){
-	var args	= Array.prototype.slice.call( origArguments.length ? origArguments : defaults);
-
-	// init the material
-	var material	= tQuery.defaultObject3DMaterial;
-	// if the last arguments is a material, use it
-	if( args.length && args[args.length-1] instanceof THREE.Material ){
-		material	= args.pop();
-	}
-	
-	// ugly trick to get .apply() to work 
-	var createFn	= function(ctor, a0, a1, a2, a3, a4, a5, a6, a7){
-		console.assert(arguments.length <= 9);
-		return new ctor(a0,a1,a2,a3,a4,a5,a6,a7);
-	}
-	args.unshift(ctor);
-	var geometry	= createFn.apply(this, args);
-
-	// set the geometry.dynamic by default
-	geometry.dynamic= true;
-	// create the THREE.Mesh
-	var mesh	= new THREE.Mesh(geometry, material)
-	// return it
-	return tQuery(mesh);
-});
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-tQuery.register('createAxis', function(){
-	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/40);
-	return tQuery(axis);
-});
-/**
  * implementation of the tQuery.Node
  *
  * @class base class for tQuery objects
@@ -877,7 +756,6 @@ tQuery.Mesh.prototype.material	= function(value){
 	return this;	// for the chained API
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -1083,12 +961,7 @@ tQuery.World.prototype.render	= function()
  * @param {THREE.World} world the world to display (optional)
 */
 tQuery.Loop	= function(world)
-{
-	// update default world.
-	// - TODO no sanity check ?
-	console.assert( !tQuery.loop, "loop already defined" );
-	tQuery.loop	= this;
-	
+{	
 	// internally if world present do that
 	this._world	= world;
 	this._hooks	= [];
@@ -1231,6 +1104,146 @@ tQuery.Loop.prototype.unhookPreRender	= function(callback){ return this.unhook(t
 tQuery.Loop.prototype.unhookOnRender	= function(callback){ return this.unhook(this.ON_RENDER, callback);	};
 tQuery.Loop.prototype.unhookPostRender	= function(callback){ return this.unhook(this.POST_RENDER, callback);	};
 /**
+ * @fileOverview plugins for tQuery.core to help creation of object
+*/
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Create tQuery.World
+*/
+tQuery.register('createWorld', function(){
+	return new tQuery.World();
+});
+
+/**
+ * Create tQuery.loop
+ * 
+ * @param {tQuery.World} world the world to display (optional)
+ * @function
+*/
+tQuery.register('createLoop', function(world){
+	return new tQuery.Loop(world);
+});
+
+
+tQuery.register('createDirectionalLight', function(){
+	var tLight	= new THREE.DirectionalLight(0xFFFFFF * Math.random());
+	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	return tQuery(tLight);
+});
+
+tQuery.register('createAmbientLight', function(){
+	var tLight	= new THREE.AmbientLight(0xFFFFFF);
+	return tQuery(tLight);
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * contains the default material to use when create tQuery.Object3D
+ * 
+ * @fieldOf tQuery
+ * @name defaultObject3DMaterial
+*/
+tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
+
+tQuery.Geometry.prototype.toMesh	= function(material){
+	var meshes	= [];
+	this.each(function(tGeometry){
+		// handle paramters
+		material	= material || tQuery.defaultObject3DMaterial;
+		// create the THREE.Mesh
+		var mesh	= new THREE.Mesh(tGeometry, material)
+		// return it
+		meshes.push(mesh);
+	});
+	return new tQuery.Mesh(meshes);
+};
+
+
+/**
+ * Create a cube
+ * 
+ * @returns {tQuery.Object3D} a tQuery.Object3D containing it
+*/
+tQuery.register('createCube', function(){
+	var ctor	= THREE.CubeGeometry;
+	var dflGeometry	= [1, 1, 1];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.register('createTorus', function(){
+	var ctor	= THREE.TorusGeometry;
+	var dflGeometry	= [0.5-0.15, 0.15];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.register('createSphere', function(){
+	var ctor	= THREE.SphereGeometry;
+	var dflGeometry	= [0.5, 32, 16];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.register('createPlane', function(){
+	var ctor	= THREE.PlaneGeometry;
+	var dflGeometry	= [1, 1, 16, 16];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.register('createCylinder', function(){
+	var ctor	= THREE.CylinderGeometry;
+	var dflGeometry	= [0.5, 0.5, 1, 16, 4];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.register('_createMesh', function(ctor, dflGeometry, args)
+{
+	// convert args to array if it is instanceof Arguments
+	// FIXME if( args instanceof Arguments )
+	args	= Array.prototype.slice.call( args );
+	
+	// init the material
+	var material	= tQuery.defaultObject3DMaterial;
+	// if the last arguments is a material, use it
+	if( args.length && args[args.length-1] instanceof THREE.Material ){
+		material	= args.pop();
+	}
+	
+	// ugly trick to get .apply() to work 
+	var createFn	= function(ctor, a0, a1, a2, a3, a4, a5, a6, a7){
+		console.assert(arguments.length <= 9);
+		//console.log("createFn", arguments)
+		return new ctor(a0,a1,a2,a3,a4,a5,a6,a7);
+	}
+	if( args.length === 0 )	args	= dflGeometry.slice();
+	args.unshift(ctor);
+	var geometry	= createFn.apply(this, args);
+
+	// set the geometry.dynamic by default
+	geometry.dynamic= true;
+	// create the THREE.Mesh
+	var mesh	= new THREE.Mesh(geometry, material)
+	// return it
+	return tQuery(mesh);
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.register('createAxis', function(){
+	var axis	= new THREE.AxisHelper();
+	axis.scale.multiplyScalar(1/40);
+	return tQuery(axis);
+});
+/**
  * Handle ambient light
  *
  * @class include THREE.AmbientLight. It inherit from {@link tQuery.Light}
@@ -1359,7 +1372,7 @@ tQuery.Geometry.register('computeAll', function(){
  * @name zoom
  * @methodOf tQuery.Geometry
 */
-tQuery.Geometry.register('zoom', function(vector3){
+tQuery.Geometry.register('scaleBy', function(vector3){
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 1 ){
 		vector3	= new THREE.Vector3(vector3, vector3, vector3);
@@ -1501,14 +1514,15 @@ tQuery.Geometry.register('rotate', function(angles, order){
 */
 tQuery.Geometry.register('center', function(noX, noY, noZ){
 	// change all geometry.vertices
-	this.each(function(geometry){
+	this.each(function(tGeometry){
+		var geometry	= tQuery(tGeometry);
 		// compute delta
-		var delta	= this.middlePoint().negate();
+		var delta 	= geometry.middlePoint().negate();
 		if( noX )	delta.x	= 0;
 		if( noY )	delta.y	= 0;
 		if( noZ )	delta.z	= 0;
 
-		return this.translate(delta)
+		return geometry.translate(delta)
 	});
 	// return this, to get chained API	
 	return this;
@@ -1521,6 +1535,12 @@ tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Geometry.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Geometry.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Geometry.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+
+// backward compatibility
+tQuery.Geometry.register('zoom'		, function(value){return this.scaleBy(value);		});
 tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
 tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
 tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
@@ -1624,7 +1644,7 @@ tQuery.Object3D.register('rotate', function(angles){
 	return this;
 });
 
-tQuery.Object3D.register('zoom', function(ratio){
+tQuery.Object3D.register('scaleBy', function(ratio){
 	// handle parameters
 	if( typeof ratio === "number" && arguments.length === 1 ){
 		ratio	= new THREE.Vector3(ratio, ratio, ratio);
@@ -1649,10 +1669,15 @@ tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0
 tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
 tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
 tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Object3D.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Object3D.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Object3D.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+
+// backward compatibility
+tQuery.Object3D.register('zoom'		, function(value){ return this.scaleBy(value);		});
 tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
 tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
 tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
-
 
 })();	// closure function end
 /**
@@ -1672,7 +1697,7 @@ var myStats	= function(loop)
 	this._stats.domElement.style.bottom	= '0px';
 	document.body.appendChild( this._stats.domElement );
 
-	this._loop	= loop	|| tQuery.loop;
+	this._loop	= loop	|| tQuery.world.loop();
 
 	this._$onRender	= this._onRender.bind(this);
 	this._loop.hookPostRender(this._$onRender);
