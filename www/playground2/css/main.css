@@ -86,6 +86,9 @@ body {
 	background-color: #AAA;
 	color		: #444;
 
+	-moz-box-shadow	: 0 0 3px 3px #888;
+	-webkit-box-shadow: 0 0 3px 3px#888;
+	box-shadow	: 0 0 3px 3px #888;
 }
 
 .button:hover {

@@ -6,6 +6,9 @@
 }
 
 .CodeMirror-scroll {
+	-moz-box-shadow	: 0 0 5px 5px #888;
+	-webkit-box-shadow: 0 0 5px 5px#888;
+	box-shadow	: 0 0 5px 5px #888;
 	border-radius	: 15px;
 	width		: 100%;
 
@@ -17,5 +20,5 @@
 	background	: rgba(0,34,64, 0.7)
 }
 .cm-s-night {
-	background	: rgba(45,45,45, 0.9)
+	background	: rgba(45,45,45, 0.5)
 }
