@@ -10,10 +10,8 @@
 	}));
 	mesh.zoom(2);
 
-	tQuery.createAmbientLight().addTo(world)
-		.color(new THREE.Color(0x444444));
-	tQuery.createDirectionalLight().addTo(world)
-		.position(-1,1,1);
-	tQuery.createDirectionalLight().addTo(world)
-		.position( 1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).intensity(5);
+	tQuery.createDirectionalLight().addTo(world).position( 1,1,1);
 </script></body>
