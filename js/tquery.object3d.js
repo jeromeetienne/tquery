@@ -231,7 +231,13 @@ tQuery.Object3D._removeClassOne	= function(object3d, className){
 tQuery.Object3D._select	= function(selector, root){
 	root		= root	|| tQuery.world.scene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
-	var lists	= this._crawls(root, selectItems)
+
+	var lists	= [];	
+	root.children.forEach(function(child){
+		var nodes	= this._crawls(child, selectItems);
+		// FIXME reallocate the array without need
+		lists		= lists.concat(nodes);
+	}.bind(this));	
 	return lists;
 }
 
