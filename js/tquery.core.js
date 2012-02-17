@@ -192,9 +192,19 @@ tQuery.pluginsOn(tQuery, tQuery);
 
 tQuery.mixinAttributes	= function(dstObject, properties){
 	dstObject.prototype.attr	= function(name, value){
+		// handle parameters
+		if( name instanceof Object && value === undefined ){
+			Object.keys(name).forEach(function(key){
+				this.attr(key, name[key]);
+			}.bind(this));
+		}else if( typeof(name) === 'string' ){
+			console.assert( Object.keys(properties).indexOf(name) !== -1, 'invalid property name:'+name);
+		}else	console.assert(false, 'invalid parameter');
+
 		// handle setter
 		if( value !== undefined ){
-			console.log("name", name, value);
+			var convertFn	= properties[name];
+			value		= convertFn(value);
 			this.each(function(element){
 				element[name]	= value;
 			})
@@ -204,12 +214,12 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		if( this.length === 0 )	return undefined
 		var element	= this.get(0);
 		return element[name];
-	}
+	};
 
 	// add shortcuts
 	Object.keys(properties).forEach(function(name){
 		dstObject.prototype[name]	= function(value){
 			return this.attr(name, value);
 		};
-	});
+	}.bind(this));
 };

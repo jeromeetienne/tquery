@@ -33,7 +33,7 @@ tQuery.pluginsInstanceOn(tQuery.Light);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Light, {
-	color	: true
+	color	: tQuery.convert.toThreeColor
 });
 
 

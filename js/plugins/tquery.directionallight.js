@@ -32,8 +32,8 @@ tQuery.pluginsInstanceOn(tQuery.DirectionalLight);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.DirectionalLight, {
-	intensity	: true,
-	distance	: true
+	intensity	: tQuery.convert.toNumber,
+	distance	: tQuery.convert.toNumber
 });
 
 
