@@ -1,0 +1,8 @@
+.*
+nano.*
+examples/
+plugins/
+vendor/
+docs/*.php
+tests/*.air
+tests/*.html
