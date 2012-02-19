@@ -45,16 +45,21 @@ tQuery.World	= function()
 // make it pluginable
 tQuery.pluginsInstanceOn(tQuery.World);
 
+// make it eventable
+tQuery.MicroeventMixin(tQuery.World.prototype)
 
-tQuery.World.prototype.destroy	= function()
-{
+
+tQuery.World.prototype.destroy	= function(){
+	// microevent.js notification
+	this.trigger('destroy');
+	// destroy the loop
 	this._loop.destroy();
 	// remove renderer element
 	var parent	= this._renderer.domElement.parentElement;
 	parent	&& parent.removeChild(this._renderer.domElement);
 	
+	// clear the global if needed
 	if( tQuery.world === this )	tQuery.world = null;
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////
