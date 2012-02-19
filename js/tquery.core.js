@@ -223,3 +223,58 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		};
 	}.bind(this));
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//		put some helpers						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Flow control - from https://github.com/jeromeetienne/gowiththeflow.js
+*/
+tQuery.Flow	= function(){
+	var self, stack = [], timerId = setTimeout(function(){ timerId = null; self._next(); }, 0);
+	return self = {
+		destroy	: function(){ timerId && clearTimeout(timerId);	},
+		par	: function(callback, isSeq){
+			if(isSeq || !(stack[stack.length-1] instanceof Array)) stack.push([]);
+			stack[stack.length-1].push(callback);
+			return self;
+		},seq	: function(callback){ return self.par(callback, true);	},
+		_next	: function(err, result){
+			var errors = [], results = [], callbacks = stack.shift() || [], nbReturn = callbacks.length, isSeq = nbReturn == 1;
+			callbacks && callbacks.forEach(function(fct, index){
+				fct(function(error, result){
+					errors[index]	= error;
+					results[index]	= result;		
+					if(--nbReturn == 0)	self._next(isSeq?errors[0]:errors, isSeq?results[0]:results)
+				}, err, result)
+			})
+		}
+	}
+};
+
+/**
+ * microevents.js - https://github.com/jeromeetienne/microevent.js
+*/
+tQuery.MicroeventMixin	= function(destObj){
+	destObj.bind	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		this._events[event] = this._events[event]	|| [];
+		this._events[event].push(fct);
+		return fct;
+	};
+	destObj.unbind	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		if( event in this._events === false  )	return;
+		this._events[event].splice(this._events[event].indexOf(fct), 1);
+	};
+	destObj.trigger	= function(event /* , args... */){
+		if(this._events === undefined) 	this._events	= {};
+		if( this._events[event] === undefined )	return;
+		var tmpArray	= this._events[event].slice(); 
+		for(var i = 0; i < tmpArray.length; i++){
+			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+		}
+	}
+};
+
