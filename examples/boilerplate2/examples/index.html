@@ -1,0 +1,12 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script data-main='../tquery.requirejs.js' src="../../../vendor/require.js"></script>
+<body><script>
+
+define(['./tquery.world.boilerplate'], function(){
+	var world	= tQuery.createWorld().fullpage().start();
+	var object3d	= tQuery.createTorus().addTo(world);
+	
+	world.addBoilerplate();
+});
+
+</script></body>
