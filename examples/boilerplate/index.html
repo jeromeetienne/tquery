@@ -6,11 +6,14 @@
 <script src="../../vendor/threex/THREEx.FullScreen.js"></script>
 <script src="../../vendor/threex.dragpancontrols.js"></script>
 <script src="../../vendor/three.js/Stats.js"></script>
+
 <script src="tquery.world.boilerplate.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().addBoilerplate().fullpage().start();
 	var object3d	= tQuery.createTorus().addTo(world);
 	
 	// remove boilerplate in 1-sec as a test
-	//setTimeout(function(){ tQuery.world.removeBoilerplate(); }, 1000);
+	//setTimeout(function(){ tQuery.world.destroy(); }, 1500);
+	setTimeout(function(){ tQuery.world.removeBoilerplate(); }, 1500);
 </script></body>

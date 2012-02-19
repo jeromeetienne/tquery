@@ -1,4 +1,5 @@
 tQuery.World.register('addBoilerplate', function(){
+	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
 
@@ -7,8 +8,11 @@ tQuery.World.register('addBoilerplate', function(){
 	// get the context
 	var ctx	= tQuery.data(this, "_boilerplateCtx");
 
-	ctx.stats	= tQuery.createStats();
-
+	// add Stats.js - https://github.com/mrdoob/stats.js
+	ctx.stats	= new Stats();
+	ctx.stats.domElement.style.position	= 'absolute';
+	ctx.stats.domElement.style.bottom	= '0px';
+	document.body.appendChild( ctx.stats.domElement );
 
 	// get some variables
 	var camera	= this.camera();
@@ -29,6 +33,13 @@ tQuery.World.register('addBoilerplate', function(){
 	if( THREEx.FullScreen.available() ){
 		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
 	}
+
+	// bind 'destroy' event on tQuery.world
+	ctx._$onDestroy	= this.bind('destroy', function(){
+		if( this.hasBoilerplate() === false )	return;
+		this.removeBoilerplate();	
+	});
+	
 	// for chained API
 	return this;
 });
@@ -48,7 +59,11 @@ tQuery.World.register('removeBoilerplate', function(){
 	// remove the context from this
 	tQuery.removeData(this, '_boilerplateCtx');
 
-	ctx.stats.destroy();
+	// unbind 'destroy' for tQuery.World
+	this.unbind('destroy', this._$onDestroy);
+
+	// remove stats.js
+	document.body.removeChild(ctx.stats.domElement );
 	// remove camera
 	this.loop().unhook(ctx.loopCameraControls)
 	// stop windowResize
