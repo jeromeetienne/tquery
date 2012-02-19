@@ -2,7 +2,7 @@
  * @fileOverview Plugins for tQuery.Object3D to play with .position/.rotation/.scale
 */
 
-(function(){
+(function(){	// TODO why is there a closure here ?
 
 //////////////////////////////////////////////////////////////////////////////////
 //		set function							//

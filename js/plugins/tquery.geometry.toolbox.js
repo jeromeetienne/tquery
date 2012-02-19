@@ -2,7 +2,7 @@
  * @fileOverview Plugins for tQuery.Geometry: tool box to play with geometry
 */
 
-(function(){
+(function(){	// TODO why is there a closure here ?
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Size functions							//

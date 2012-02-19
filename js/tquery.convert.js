@@ -29,3 +29,11 @@ tQuery.convert.identity	= function(value){
 	return value;
 };
 
+tQuery.convert.toBool	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'boolean'){
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};

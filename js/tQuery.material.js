@@ -27,3 +27,11 @@ tQuery.inherit(tQuery.Material, tQuery.Node);
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Material);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Material, {
+	opacity		: tQuery.convert.toNumber,
+	transparent	: tQuery.convert.toBool
+});
