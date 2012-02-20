@@ -2,25 +2,51 @@
  * export tQuery as requirejs module
 */
 (function(){
+	// trick to get the baseurl of the <script> loading moduleName.js
+	var scriptBaseUrl	= function(moduleName){
+
+		console.assert(moduleName !== undefined, "moduleName MUST be defined");
+		var filename	= moduleName+".js";
+		var element	= document.querySelector('script[src$="'+filename+'"]');
+console.log("elemeent", element, moduleName)
+		if( !element )	return './';
+		var scriptUrl	= element.src;
+		var baseUrl	= scriptUrl.substr(0, scriptUrl.lastIndexOf('/')+1);
+		return baseUrl;
+	};
+
+	// wrapper on top of requirejs define (to better handle locality)
+	// NOTE: im not sure it is the best solution
+	// - if the dependancy starts with "./" or "../", make the path relative to <script> src location
+	// - This is a common problem, it would be surprising not to have a clean answer
+	var tQueryDefine	= function(moduleName, dependancies, callback){
+		console.log("tQuery.define", moduleName, dependancies)
+		// get baseUrl for this module name 
+		var baseUrl	= scriptBaseUrl(moduleName);
+		// prepend baseUrl to any dependancy starting with './' or '../' 
+		dependancies	= dependancies.map(function(item){
+			var toPrefix	= item.match(/^\.\//) || item.match(/^\.\.\//);
+			var result	= toPrefix ? baseUrl+item : item;
+			return result;
+		})
+		// actually call requirejs define
+		define(moduleName, dependancies, callback);
+	};
+	// do a fake tQuery.define() before tQuery is actually loaded
+	window.tQuery	= { define: tQueryDefine };
+
 	// define tquery module 
-	define('tquery', ["../../build/tquery-bundle"], function(){
+	define('tquery', ["../../../build/tquery-bundle.js"], function(){
 
 		/**
-		 * Get the script base url from inside the script itself
-		 * https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#wiki-module
-		 *
-		 * @param {Object} module is the magic module from requirejs
-		 * @returns {string} the base url
+		 * define a module for tQuery (using requirejs)
 		*/
-		tQuery.register('scriptBaseUrl', function(module){
-			console.assert( Object.keys(module).length === 3 );
-			console.assert( module.id !== undefined );
-			console.assert( module.uri !== undefined );
-			var baseUrl	= location.protocol + "//" + location.host + location.pathname;
-			baseUrl		= baseUrl.substr(0, baseUrl.lastIndexOf('/')+1)+module.uri;
-			baseUrl		= baseUrl.substr(0, baseUrl.lastIndexOf('/')+1);
-			return baseUrl;
-		});
+		tQuery.register('define', tQueryDefine);
+
+		/**
+		 * @return the base url of the <script> loading moduleName.js
+		*/
+		tQuery.register('scriptBaseUrl', scriptBaseUrl);
 		
 		// return the object itself
 		return tQuery;

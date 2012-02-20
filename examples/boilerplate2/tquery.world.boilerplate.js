@@ -1,10 +1,10 @@
-define(['module', 'tquery',
-	'../../../vendor/threex/THREEx.WindowResize',
-	'../../../vendor/threex/THREEx.screenshot',
-	'../../../vendor/threex/THREEx.FullScreen',
-	'../../../vendor/threex.dragpancontrols.js',
-	'../../../vendor/three.js/Stats.js'
-	], function(module){
+tQuery.define('tquery.world.boilerplate', ['tquery',
+	'../../vendor/threex/THREEx.WindowResize',
+	'../../vendor/threex/THREEx.screenshot',
+	'../../vendor/threex/THREEx.FullScreen',
+	'../../vendor/threex.dragpancontrols',
+	'../../vendor/three.js/Stats'
+	], function(){
 
 	tQuery.World.register('addBoilerplate', function(){
 		// sanity check - no boilerplate is already installed
@@ -14,8 +14,6 @@ define(['module', 'tquery',
 		tQuery.data(this, '_boilerplateCtx', {});
 		// get the context
 		var ctx	= tQuery.data(this, "_boilerplateCtx");
-	
-		ctx.stats	= tQuery.createStats();
 	
 	
 		// get some variables
@@ -56,7 +54,6 @@ define(['module', 'tquery',
 		// remove the context from this
 		tQuery.removeData(this, '_boilerplateCtx');
 	
-		ctx.stats.destroy();
 		// remove camera
 		this.loop().unhook(ctx.loopCameraControls)
 		// stop windowResize
