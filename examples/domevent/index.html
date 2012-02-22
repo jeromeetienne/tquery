@@ -7,6 +7,10 @@
 	<script>
 		var world	= tQuery.createWorld().fullpage().start();
 		var cube	= tQuery.createCube().addTo(world);
+
+		tQuery('cube').on('mouseover', function(event){
+			console.log(event.type, "on cube", event)
+		});
 		
 		tQuery('cube').on('click', function(event){
 			console.log("click on cube", event)
