@@ -1,9 +1,16 @@
 <!doctype html><title>Minimal tQuery Page</title>
+<script>
+var require = {
+    baseUrl	: "../..",
+    urlArgs	: "bust=" +  (new Date()).getTime()
+};
+</script>
 <script src='../../vendor/require.js'></script>
 <script src='./tquery.requirejs.js'></script>
 <body><script>
 
-define('main', ['./tquery.keyboard'], function(){
+define('main', ['/examples/requirejs0/tquery.keyboard.js'], function(){
+console.log("inside main define")
 	var world	= tQuery.createWorld().fullpage().start();
 	var object3d	= tQuery.createTorus().addTo(world);
 

@@ -3,8 +3,7 @@
 */
 (function(){
 	// define tquery module 
-	define('tquery', ["../../build/tquery-bundle"], function(){
-
+	define('tquery', ["/build/tquery-bundle.js"], function(){
 		/**
 		 * Get the script base url from inside the script itself
 		 * https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#wiki-module
