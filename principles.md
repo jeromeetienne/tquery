@@ -19,7 +19,7 @@
   * stuff must be usable by computers
 
 ## directions
-* "For those who know to know webgl, good news! you already know it, just replace j by t!"
+* "For those who want to know webgl, good news! you already know it, just replace j by t!"
   * make this statement true
 * "webgl should not be harder than playing with lego."
 
