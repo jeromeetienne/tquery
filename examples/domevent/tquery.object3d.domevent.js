@@ -1,6 +1,5 @@
 (function(){
 	var domEvent	= new THREEx.DomEvent();
-
 	tQuery.Object3D.register('on', function(eventType, callback){
 
 		// yuk!!!! workaround a bug

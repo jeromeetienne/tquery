@@ -29,6 +29,7 @@ build:	minifyPlain minifyBundle
 buildPlain:
 	echo $(BANNER)			>  build/tquery.js
 	cat js/tquery.core.js		>> build/tquery.js
+	cat js/tquery.convert.js	>> build/tquery.js
 	cat js/tquery.node.js		>> build/tquery.js
 	cat js/tquery.object3d.js	>> build/tquery.js
 	cat js/tquery.geometry.js	>> build/tquery.js
@@ -38,7 +39,14 @@ buildPlain:
 	cat js/tquery.world.js		>> build/tquery.js
 	cat js/tquery.loop.js		>> build/tquery.js
 	cat js/tquery.core.create.js	>> build/tquery.js
+	cat js/plugins/lights/*.js	>> build/tquery.js
 	cat js/plugins/*.js		>> build/tquery.js
+	#cat examples/domevent/threex*.js	>> build/tquery.js
+	#cat examples/domevent/tquery*.js	>> build/tquery.js
+	#cat examples/linkify/*.js	>> build/tquery.js
+	cat examples/text/fonts/droid/*.js	>> build/tquery.js
+	cat examples/text/fonts/*.js		>> build/tquery.js
+	cat examples/text/*.js			>> build/tquery.js
 
 minifyPlain: buildPlain
 	echo $(BANNER)	>  build/tquery.min.js

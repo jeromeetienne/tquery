@@ -75,9 +75,9 @@ THREEx.DomEvent	= function(camera, domElement)
 	this._projector	= new THREE.Projector();
 	this._selected	= null;
 	this._boundObjs	= [];
-
 	// Bind dom event for mouse and touch
 	var _this	= this;
+
 	this._$onClick		= function(){ _this._onClick.apply(_this, arguments);		};
 	this._$onDblClick	= function(){ _this._onDblClick.apply(_this, arguments);	};
 	this._$onMouseMove	= function(){ _this._onMouseMove.apply(_this, arguments);	};

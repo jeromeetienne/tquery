@@ -16,22 +16,32 @@
 <span class='line'>  9</span>  *
 <span class='line'> 10</span>  * @param {THREE.Light} object an instance or array of instance
 <span class='line'> 11</span> */</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="NAME">tQuery.Light</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="NAME">tQuery.Light</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">elements</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'> 13</span> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 14</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.Light</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 15</span> </span><span class="WHIT">	</span><span class="COMM">// call parent</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="WHIT">	</span><span class="NAME">this.parent.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 17</span> 
-<span class='line'> 18</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check - all items MUST be THREE.Light</span><span class="WHIT">
-<span class='line'> 19</span> </span><span class="WHIT">	</span><span class="NAME">this._lists.forEach</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">item</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Light</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 20</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 21</span> 
-<span class='line'> 22</span> </span><span class="COMM">/**
-<span class='line'> 23</span>  * inherit from tQuery.Node
+<span class='line'> 14</span> </span><span class="WHIT">	</span><span class="COMM">// call parent ctor</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">	</span><span class="NAME">tQuery.Light.parent.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check - all items MUST be THREE.Light</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">	</span><span class="NAME">this._lists.forEach</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">item</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Light</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 20</span> 
+<span class='line'> 21</span> </span><span class="COMM">/**
+<span class='line'> 22</span>  * inherit from tQuery.Node
+<span class='line'> 23</span>  * - TODO this should inherit from tQuery.Object3D but but in inheritance
 <span class='line'> 24</span> */</span><span class="WHIT">
 <span class='line'> 25</span> </span><span class="NAME">tQuery.inherit</span><span class="PUNC">(</span><span class="NAME">tQuery.Light</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tQuery.Object3D</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 26</span> 
 <span class='line'> 27</span> </span><span class="COMM">/**
 <span class='line'> 28</span>  * Make it pluginable
 <span class='line'> 29</span> */</span><span class="WHIT">
-<span class='line'> 30</span> </span><span class="NAME">tQuery.pluginsInstanceOn</span><span class="PUNC">(</span><span class="NAME">tQuery.Light</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'> 30</span> </span><span class="NAME">tQuery.pluginsInstanceOn</span><span class="PUNC">(</span><span class="NAME">tQuery.Light</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> 
+<span class='line'> 32</span> </span><span class="COMM">/**
+<span class='line'> 33</span>  * define all acceptable attributes for this class
+<span class='line'> 34</span> */</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="NAME">tQuery.mixinAttributes</span><span class="PUNC">(</span><span class="NAME">tQuery.Light</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">	</span><span class="NAME">color</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.convert.toThreeColor</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 38</span> 
+<span class='line'> 39</span> 
+<span class='line'> 40</span> </span></pre></body></html>
