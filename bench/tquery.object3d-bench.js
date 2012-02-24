@@ -1,72 +1,39 @@
-// create a context
-var world	= tQuery.createWorld();
-var object	= tQuery.createTorus().id('myId').addClass('myClass').addTo(world);
-
-var suite	= new Benchmark.Suite('Various Selectors');
-suite.add('geometry selector', function() {
+var suite	= new Benchmark.Suite('Various Selectors')
+.add('geometry selector', function() {
 	tQuery('torus');
-});
-
-suite.add('id selector', function() {
+}).add('id selector', function() {
 	tQuery('#myId');
-});
-
-suite.add('class selector', function() {
+}).add('class selector', function() {
 	tQuery('#myClass');
 });
 
-suite.on('cycle', function(event, bench) {
-	console.log(String(bench));
-})
+// for debug only - to be removed
+//suite.on('cycle', function(event, bench) {
+//	console.log(String(bench));
+//}).on('complete', function(){
+//	console.log('Fastest is ' + this.filter('fastest').pluck('name'));
+//	displaySuite(this);
+//});
+
+var world;
+suite.on('start', function(){
+	world	= tQuery.createWorld();
+	var object	= tQuery.createTorus().id('myId').addClass('myClass').addTo(world);
+	console.log("onStart");
+});
 
 suite.on('complete', function(){
-	console.log('Fastest is ' + this.filter('fastest').pluck('name'));
-	displaySuite(this);
+	world.destroy();
+	world	= null;
+	console.log("onComplete");
 });
+
+
+// hook the ui
+ui.hook(suite, '#benchOutput')
 
 suite.run({ 'async': true });
 
 console.dir(suite);
-
-
-
-suite.on('cycle', function(event, bench){
-	displaySuite(this);
-}).on('complete', function(event, bench){
-	displaySuite(this);
-});
-
-
-var displaySuite	= function(suite){
-	jQuery('#benchOutput').empty();
-
-	var templateStr	= jQuery('#suiteHead').text().trim();
-	var result	= _.template(templateStr, {
-		name	: suite.name,
-		running	: suite.running
-	});
-	jQuery(result).appendTo('#benchOutput')	
-
-
-	// compute hzMax
-	var hzMax	= 0;
-	suite.forEach(function(bench, idx){
-		hzMax	= Math.max(hzMax, bench.hz)
-	});
-
-	suite.forEach(function(bench, idx){
-		//console.log("kkk", bench.hz, 'kkk');
-		var context	= {
-			name	: bench.name,
-			hz	: bench.hz,
-			ratio	: (bench.hz > 0 && hzMax > 0) ? bench.hz / hzMax : null
-		};
-		var templateStr	= jQuery('#benchItem').text().trim();
-		var result	= _.template(templateStr, context);
-		jQuery(result).appendTo('#benchOutput')	
-	});	
-}
-
-displaySuite(suite);
 
 

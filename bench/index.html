@@ -38,14 +38,14 @@
 		}
 	</style>
 
-	<script id="benchItem" type="text/template">
+	<script id="tmplBenchItem" type="text/template">
 		<div class='span4'>
 			<%= name %> :
 			<%= (hz === 0 ? '' :  Math.floor(hz)+' ops/sec') %> 
 			<%= (ratio === null ? '' : Math.floor(ratio*10000)/100+' %') %> 
 		</div>
 	</script>
-	<script id="suiteHead" type="text/template">
+	<script id="tmplSuiteHead" type="text/template">
 		<div class='span4'>
 			<h3><%= name %> <small><%= running ? 'running' : '' %> </small></h3>
 		</div>
@@ -84,9 +84,13 @@
 
 
 	<script src="benchmark.js/benchmark.js"></script>
+	<script src="ui.twbootstrap.js"></script>
+
 	<script src="../build/tquery-bundle.js"></script>
 	<script src="../www/vendor/underscore.js/underscore.js"></script>
-	<script src="tquery.object3d-bench.js"></script>
 
+<!--	<script src="tquery.object3d-bench.js"></script>
+-->
+	<script src="theorical-bench.js"></script>
 </body>
 </html>
