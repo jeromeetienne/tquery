@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><body>
+
+	<script id="tmplSuiteHead" type="text/template">
+		<div class="head">
+			<h3><%= suite0.name %> <small><%= suite0.running ? 'running' : '' %> </small></h3>
+		</div>
+	</script>
+	<script id="tmplBenchItem" type="text/template">
+		<div class='bench'>
+			<%= bench.name %> :
+			<%= (bench.hz === 0 ? '' :  Math.floor(bench.hz)+' ops/sec') %> 
+			<%= (ratio === null ? '' : Math.floor(ratio*10000)/100+' %') %>
+			<span class='viewsource'>(view source)</span>
+			<pre class="source" style="display: none;"><code><%- bench.fn.toString() %></code></pre>
+		</div>
+	</script>
+
+	<div id="runner">
+		<div class='suite' id="benchOutput"></div>
+	</div>
+
+	<link href='main.css' rel='stylesheet'>
+	<script src="../../www/vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<script src="../../www/vendor/underscore.js/underscore.js"></script>
+	<script src="../benchmark.js/benchmark.js"></script>
+	<script src="benchmark-runner.js"></script>
+	<script>
+		jQuery(function(){
+			jQuery('#runner .bench').live('click', function(event){
+				jQuery('.source', event.currentTarget).slideToggle();
+			});
+		});
+	</script>
+
+	<script src="../../build/tquery-bundle.js"></script>
+	<script src="../tquery.selector-bench.js"></script>
+	<script>jQuery(function(){ runner.run(); });	</script>
+
+</body></html>

@@ -1,13 +1,16 @@
-suite('Various Selectors', function(){
+benchsuite('Various Selectors', function(){
 	var world;
+
 	before(function(){
 		world	= tQuery.createWorld();
 		tQuery.createTorus().id('myId').addClass('myClass').addTo(world);
 	});	
+
 	after(function(){
 		world.destroy();
 		world	= null;
 	});
+
 	bench('geometry selector', function() {
 		tQuery('torus');
 	});

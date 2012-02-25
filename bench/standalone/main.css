@@ -1,0 +1,8 @@
+.bench .viewsource {
+	display	: none;
+	color	: grey;
+}
+
+.bench:hover .viewsource {
+	display : inline;
+}
