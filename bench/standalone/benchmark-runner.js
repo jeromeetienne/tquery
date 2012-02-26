@@ -126,9 +126,12 @@ Runner.prototype.run	= function(idx){
 };
 
 Runner.prototype.abort	= function(){
+	var suite	= this._curSuite;
+	this._runningAll	= false;
 	if( !this._curSuite )	return;
 	this._curSuite.abort();
 	this._curSuite	= null;
+	this._displaySuite(suite, suite._runnerSelector);		
 };
 
 Runner.prototype.runAll	= function(){
@@ -185,6 +188,13 @@ Runner.prototype._runNext	= function(){
 		});
 		jQuery('#runner .stats .nSuites').text(nSuites);
 		jQuery('#runner .stats .nBenchmarks').text(nBenchmarks);
-	})
+	});
+
+	jQuery(function(){
+		if( location.hash === '#runall' ){
+			runner.runAll();
+		}
+	});
+
 })();
 
