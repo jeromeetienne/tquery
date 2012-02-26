@@ -3,21 +3,29 @@
 
 	<script id="tmplSuiteHead" type="text/template">
 		<div class="head">
-			<h3><%= suite0.name %> <small><%= suite0.running ? 'running' : '' %> </small></h3>
+			<h1><%= suite0.name %> <span class="run">(run)</span> <small><%= suite0.running ? 'running' : '' %> </small></h1>
 		</div>
 	</script>
 	<script id="tmplBenchItem" type="text/template">
 		<div class='bench'>
-			<%= bench.name %> :
+			<span class='name'><%= bench.name %></span> :
 			<%= (bench.hz === 0 ? '' :  Math.floor(bench.hz)+' ops/sec') %> 
 			<%= (ratio === null ? '' : Math.floor(ratio*10000)/100+' %') %>
 			<span class='viewsource'>(view source)</span>
-			<pre class="source" style="display: none;"><code><%- bench.fn.toString() %></code></pre>
+			<div>
+				<pre class="source" style="display: none;"><code><%- fnStr %></code></pre>
+			</div>
 		</div>
 	</script>
 
-	<div id="runner">
-		<div class='suite' id="benchOutput"></div>
+	<div id="runner">		
+		<ul class="stats">
+			<li class="runall">run all</li>
+			<li>suites: <span class='nSuites'></span></li>
+			<li>benchmarks: <span class='nBenchmarks'></span></li>
+		</ul>
+		<!-- lots of suite container go here -->
+		<div class="suites"></div>
 	</div>
 
 	<link href='main.css' rel='stylesheet'>
@@ -34,7 +42,8 @@
 	</script>
 
 	<script src="../../build/tquery-bundle.js"></script>
+
 	<script src="../tquery.selector-bench.js"></script>
-	<script>jQuery(function(){ runner.run(); });	</script>
+	<script src="../dummy-bench.js"></script>
 
 </body></html>

@@ -1,8 +1,104 @@
-.bench .viewsource {
+body {
+	font	: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding	: 40px 50px;
+}
+
+/********************************************************************************/
+/*										*/
+/********************************************************************************/
+
+#runner h1 {
+	font-size	: 1em;
+	font-weight	: 200;
+}
+
+/********************************************************************************/
+/*										*/
+/********************************************************************************/
+
+#runner .stats {
+	position	: fixed;
+	top		: 30px;
+	right		: 30px;
+	font-size	: 12px;
+	color		: #888;
+}
+
+#runner .stats li {
+	list-style-type	: none;
+}
+
+#runner .stats .runall {
+	font-size		: 16px;
+	text-align		: center;
+	border			: 1px solid #888;
+	-webkit-border-radius	: 5px;	
+}
+
+#runner .stats .runall:hover {
+	background-color	: #666;
+	border-color		: #aaa;
+	color			: #ccc;
+	cursor			: pointer;
+}
+/********************************************************************************/
+/*										*/
+/********************************************************************************/
+
+.suite .head {
+	font-size	: 1.3em;
+}
+
+.suite .head small {
+	font-size	: 0.7em;
+	color		: grey;
+}
+
+
+.suite .head .run {
+	visibility	: hidden;
+	padding-left	: 4px;
+	padding-right	: 4px;
+
+	color		: #AAA;
+
+	font-size	: 16px;
+	text-align	: center;
+}
+
+.suites .head:hover .run {
+	visibility	: visible;
+}
+
+/********************************************************************************/
+/*										*/
+/********************************************************************************/
+
+.suite .bench {
+	font-size	: 1em;
+	padding-left	: 1em;
+}
+
+.suite .bench .viewsource {
 	display	: none;
 	color	: grey;
 }
 
-.bench:hover .viewsource {
+.suite .bench:hover .viewsource {
 	display : inline;
+}
+
+.suite .bench:hover {
+	cursor	: pointer;
+}
+
+.suite .bench .source {
+	display			: inline-block;
+	font			: 12px/1.5 monaco, monospace;
+	margin			: 5px;
+	padding			: 15px;
+	border			: 1px solid #eee;
+	border-bottom-color	: #ddd;
+	-webkit-border-radius	: 3px;
+	-webkit-box-shadow: 0 1px 3px #eee;
 }
