@@ -41,12 +41,6 @@ buildPlain:
 	cat js/tquery.core.create.js	>> build/tquery.js
 	cat js/plugins/lights/*.js	>> build/tquery.js
 	cat js/plugins/*.js		>> build/tquery.js
-	#cat examples/domevent/threex*.js	>> build/tquery.js
-	#cat examples/domevent/tquery*.js	>> build/tquery.js
-	#cat examples/linkify/*.js	>> build/tquery.js
-	cat examples/text/fonts/droid/*.js	>> build/tquery.js
-	cat examples/text/fonts/*.js		>> build/tquery.js
-	cat examples/text/*.js			>> build/tquery.js
 
 minifyPlain: buildPlain
 	echo $(BANNER)	>  build/tquery.min.js

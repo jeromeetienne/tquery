@@ -1,3 +1,3 @@
-nice looking page for jsdoc
 
-http://vesq.github.com/cbNetwork-node/doc/symbols/HTTP.html
+* (slides)[http://jeromeetienne.github.com/tquery/tmp/slides/] presented
+at html5 game jam paris. 
