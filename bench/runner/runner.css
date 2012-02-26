@@ -54,15 +54,6 @@ body {
 	color		: grey;
 }
 
-.suite .head.init::before {
-	content		: "?";
-	float		: left;
-	margin-left	: -0.8em;
-	margin-top	: 0.2em;
-	font-size	: 0.8em;
-	color		: silver;
-}
-
 .suite .head.running::before {
 	content		: "\267B";
 	float		: left;
@@ -70,13 +61,6 @@ body {
 	margin-top	: 0.4em;
 	font-size	: 0.6em;
 	color		: indianred;
-}
-
-.suite .head.done::before {
-	content		: "\2713";
-	float		: left;
-	margin-left	: -0.8em;
-	color		: limeGreen;
 }
 
 .suite .head .run {

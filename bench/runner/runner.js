@@ -70,7 +70,6 @@ Runner.prototype._displaySuite	= function(suite, containerSel){
 			fnStr	: _this._function2Str(bench.fn),
 			state	: bench.running ? 'running' : (bench.hz > 0 ? 'done' : 'init')
 		});
-console.log("bench", bench.running, bench, result)
 		jQuery(result).appendTo(containerSel);	
 	});
 };

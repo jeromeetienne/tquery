@@ -28,11 +28,11 @@
 		<div class="suites"></div>
 	</div>
 
-	<link href='main.css' rel='stylesheet'>
 	<script src="../../www/vendor/bootstrap/docs/assets/js/jquery.js"></script>
 	<script src="../../www/vendor/underscore.js/underscore.js"></script>
-	<script src="../benchmark.js/benchmark.js"></script>
-	<script src="benchmark-runner.js"></script>
+	<script src="benchmark.js/benchmark.js"></script>
+	<link  href="runner/runner.css" rel='stylesheet'>
+	<script src="runner/runner.js"></script>
 	<script>
 		jQuery(function(){
 			jQuery('#runner .bench').live('click', function(event){
@@ -41,9 +41,9 @@
 		});
 	</script>
 
-	<script src="../../build/tquery-bundle.js"></script>
+	<script src="../build/tquery-bundle.js"></script>
 
-	<script src="../tquery.selector-bench.js"></script>
-	<script src="../dummy-bench.js"></script>
+	<script src="bench-tquery.selector.js"></script>
+	<script src="bench-example.js"></script>
 
 </body></html>
