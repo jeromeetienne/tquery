@@ -33,30 +33,44 @@ Runner.prototype._function2Str	= function(fn){
 
 Runner.prototype._displaySuite	= function(suite, containerSel){
 	var _this	= this;
+	// display to debug
+	console.log("displaySuite"); console.dir(suite)
+
+	// compute hzMax among all bench
+	var hzMax	= 0;
+	suite.forEach(function(bench){
+		hzMax	= Math.max(hzMax, bench.hz)
+	});
+
+	// compute hzMax among all bench
+	var nBenchDone	= 0;
+	if( suite.running === false ){
+		suite.forEach(function(bench){
+			if( bench.hz > 0 )	nBenchDone++;
+		});
+	}	
+
 	// empty the container
 	jQuery(containerSel).empty();
 
 	// add the header
 	var templateStr	= jQuery('#tmplSuiteHead').text().trim();
 	var result	= _.template(templateStr, {
-		suite0	: suite
+		suite	: suite,
+		state	: suite.running ? 'running' : (nBenchDone === suite.length ? 'done' : 'init')
 	});
 	jQuery(result).appendTo(containerSel);	
-
-	// compute hzMax among all bench
-	var hzMax	= 0;
-	suite.forEach(function(bench, idx){
-		hzMax	= Math.max(hzMax, bench.hz)
-	});
 
 	// for each bench, render the template
 	suite.forEach(function(bench, idx){
 		var templateStr	= jQuery('#tmplBenchItem').text().trim();
 		var result	= _.template(templateStr, {
 			bench	: bench,
-			ratio	: (bench.hz > 0 && hzMax > 0) ? bench.hz / hzMax : null,
-			fnStr	: _this._function2Str(bench.fn)
+			ratio	: bench.hz > 0 ? bench.hz / hzMax : null,
+			fnStr	: _this._function2Str(bench.fn),
+			state	: bench.running ? 'running' : (bench.hz > 0 ? 'done' : 'init')
 		});
+console.log("bench", bench.running, bench, result)
 		jQuery(result).appendTo(containerSel);	
 	});
 };
@@ -99,7 +113,7 @@ Runner.prototype.addSuite	= function(name, declarationFn){
 		_this._runNext();
 	});
 	
-	// queue
+	// queue this suite
 	this._suites.push(suite);
 
 	// create the container	
@@ -129,6 +143,7 @@ Runner.prototype.abort	= function(){
 	var suite	= this._curSuite;
 	this._runningAll	= false;
 	if( !this._curSuite )	return;
+
 	this._curSuite.abort();
 	this._curSuite	= null;
 	this._displaySuite(suite, suite._runnerSelector);		

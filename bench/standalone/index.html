@@ -2,13 +2,13 @@
 <html><body>
 
 	<script id="tmplSuiteHead" type="text/template">
-		<div class="head">
-			<h1><%= suite0.name %> <span class="run">(run)</span> <small><%= suite0.running ? 'running' : '' %> </small></h1>
+		<div class="head <%- state %>">
+			<h1><%= suite.name %> <span class="run">(run)</span></h1>
 		</div>
 	</script>
 	<script id="tmplBenchItem" type="text/template">
-		<div class='bench'>
-			<span class='name'><%= bench.name %></span> :
+		<div class="bench <%- state %>">
+			<span class='name'> <%- bench.name %> </span> :
 			<%= (bench.hz === 0 ? '' :  Math.floor(bench.hz)+' ops/sec') %> 
 			<%= (ratio === null ? '' : Math.floor(ratio*10000)/100+' %') %>
 			<span class='viewsource'>(view source)</span>

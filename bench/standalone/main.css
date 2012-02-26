@@ -54,6 +54,30 @@ body {
 	color		: grey;
 }
 
+.suite .head.init::before {
+	content		: "?";
+	float		: left;
+	margin-left	: -0.8em;
+	margin-top	: 0.2em;
+	font-size	: 0.8em;
+	color		: silver;
+}
+
+.suite .head.running::before {
+	content		: "\267B";
+	float		: left;
+	margin-left	: -1.2em;
+	margin-top	: 0.4em;
+	font-size	: 0.6em;
+	color		: indianred;
+}
+
+.suite .head.done::before {
+	content		: "\2713";
+	float		: left;
+	margin-left	: -0.8em;
+	color		: limeGreen;
+}
 
 .suite .head .run {
 	visibility	: hidden;
@@ -77,6 +101,31 @@ body {
 .suite .bench {
 	font-size	: 1em;
 	padding-left	: 1em;
+}
+
+.suite .bench.init::before {
+	content		: "?";
+	float		: left;
+	margin-left	: -0.8em;
+	margin-top	: 0.3em;
+	font-size	: 0.7em;
+	color		: silver;
+}
+
+.suite .bench.running::before {
+	content		: "\267B";
+	float		: left;
+	margin-left	: -1.2em;
+	margin-top	: 0.4em;
+	font-size	: 0.6em;
+	color		: indianred;
+}
+
+.suite .bench.done::before {
+	content		: "\2713";
+	float		: left;
+	margin-left	: -0.8em;
+	color		: limeGreen;
 }
 
 .suite .bench .viewsource {
