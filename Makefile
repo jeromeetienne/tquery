@@ -1,4 +1,4 @@
-# makefile to automatize simple operations
+# makefile to automatize simple operations 
 
 server:
 	python -m SimpleHTTPServer
@@ -41,6 +41,12 @@ buildPlain:
 	cat js/tquery.core.create.js	>> build/tquery.js
 	cat js/plugins/lights/*.js	>> build/tquery.js
 	cat js/plugins/*.js		>> build/tquery.js
+	#cat examples/domevent/threex.domevent.js		>> build/tquery.js
+	#cat examples/domevent/tquery.object3d.domevent.js	>> build/tquery.js
+	#cat examples/text/fonts/*.js		>> build/tquery.js
+	#cat examples/text/fonts/droid/*.js	>> build/tquery.js
+	#cat examples/text/*.js			>> build/tquery.js
+	#cat examples/linkify/*.js		>> build/tquery.js
 
 minifyPlain: buildPlain
 	echo $(BANNER)	>  build/tquery.min.js
