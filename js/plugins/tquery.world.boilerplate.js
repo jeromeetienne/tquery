@@ -1,18 +1,41 @@
+// backward compatibility only
+tQuery.World.register('fullpage', function(){	return this.boilerplate();	});
+
+tQuery.World.register('boilerplate', function(){
+	// put renderer fullpage
+	var domElement	= document.body;
+	domElement.style.margin		= "0";
+	domElement.style.padding	= "0";
+	domElement.style.overflow	= 'hidden';
+	this.appendTo(domElement);
+
+	// add the boilerplate
+	this.addBoilerplate();
+	
+	// for chained API
+	return this;
+});
+
 tQuery.World.register('addBoilerplate', function(){
 	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
 
-	// create the context
-	tQuery.data(this, '_boilerplateCtx', {});
 	// get the context
-	var ctx	= tQuery.data(this, "_boilerplateCtx");
+	var ctx	= {};
+
+	// create the context
+	tQuery.data(this, '_boilerplateCtx', ctx);
 
 	// add Stats.js - https://github.com/mrdoob/stats.js
 	ctx.stats	= new Stats();
 	ctx.stats.domElement.style.position	= 'absolute';
 	ctx.stats.domElement.style.bottom	= '0px';
 	document.body.appendChild( ctx.stats.domElement );
+	ctx.loopStats	= function(){
+		ctx.stats.update();
+	};
+	this.loop().hook(ctx.loopStats);
 
 	// get some variables
 	var camera	= this.camera();
@@ -64,6 +87,7 @@ tQuery.World.register('removeBoilerplate', function(){
 
 	// remove stats.js
 	document.body.removeChild(ctx.stats.domElement );
+	this.loop().unhook(ctx.loopStats);
 	// remove camera
 	this.loop().unhook(ctx.loopCameraControls)
 	// stop windowResize

@@ -168,19 +168,6 @@ tQuery.World.prototype.stop	= function(){
 	return this;	// for chained API
 }
 
-tQuery.World.prototype.fullpage	= function()
-{
-	// FIXME i dont like this function. way too cooked for tquery core stuff
-	// put it elsewhere ? in a plugin ?
-	
-	// Should that be in pluging
-	var domElement	= document.body;
-	domElement.style.margin		= "0";
-	domElement.style.padding	= "0";
-	domElement.style.overflow	= 'hidden';
-	return this.appendTo(domElement);
-}
-
 tQuery.World.prototype.loop	= function(){ return this._loop;	}
 tQuery.World.prototype.renderer	= function(){ return this._renderer;	}
 tQuery.World.prototype.camera	= function(){ return this._camera;	}

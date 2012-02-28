@@ -41,12 +41,12 @@ buildPlain:
 	cat js/tquery.core.create.js	>> build/tquery.js
 	cat js/plugins/lights/*.js	>> build/tquery.js
 	cat js/plugins/*.js		>> build/tquery.js
-	#cat examples/domevent/threex.domevent.js		>> build/tquery.js
-	#cat examples/domevent/tquery.object3d.domevent.js	>> build/tquery.js
-	#cat examples/text/fonts/*.js		>> build/tquery.js
-	#cat examples/text/fonts/droid/*.js	>> build/tquery.js
-	#cat examples/text/*.js			>> build/tquery.js
-	#cat examples/linkify/*.js		>> build/tquery.js
+	# include boilerplate - FIXME this is kludgy
+	cat vendor/threex/THREEx.WindowResize.js	>> build/tquery.js
+	cat vendor/threex/THREEx.screenshot.js		>> build/tquery.js
+	cat vendor/threex/THREEx.FullScreen.js		>> build/tquery.js
+	cat vendor/threex.dragpancontrols.js		>> build/tquery.js
+	cat vendor/three.js/Stats.js			>> build/tquery.js
 
 minifyPlain: buildPlain
 	echo $(BANNER)	>  build/tquery.min.js
