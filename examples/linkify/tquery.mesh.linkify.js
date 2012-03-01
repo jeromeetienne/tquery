@@ -1,3 +1,5 @@
+define(function() {
+	
 tQuery.Mesh.register('linkify', function(url){
 	var mesh	= tQuery(this.get(0));
 	// measure mesh size
@@ -27,4 +29,6 @@ tQuery.Mesh.register('linkify', function(url){
 		underline.get(0).visible	= false;		
 		document.body.style.cursor	= 'default';
 	});
+});
+
 });

@@ -1,6 +1,28 @@
-<!doctype html><title>Minimal tQuery Page</title>
+<!doctype html>
+<head>
+<title>Minimal tQuery Page</title>
+
+<script src="../../vendor/require.js"></script>
+<script>
+	// Configure require.js
+	require.config({
+
+	    paths: {
+	    	// This is abs path to examples folder so that dependencies
+		    // in examples are solved correctly when referred 
+		    // using examples/some-module syntax
+	        examples : "../../examples",
+	        fonts : "fonts"
+	    },
+	    // Shorter than default timeout for loading JS
+	    // ... detects errors faster
+	    waitSeconds: 5
+	  });
+</script>
+
 <script src="../../build/tquery-bundle.js"></script>
 
+<!--
 <script src="fonts/gentilis_bold.typeface.js"></script>
 <script src="fonts/gentilis_regular.typeface.js"></script>
 <script src="fonts/optimer_bold.typeface.js"></script>
@@ -11,17 +33,37 @@
 <script src="fonts/droid/droid_sans_bold.typeface.js"></script>
 <script src="fonts/droid/droid_serif_regular.typeface.js"></script>
 <script src="fonts/droid/droid_serif_bold.typeface.js"></script>
+-->
 
-<script src="tquery.text.js"></script>
+
+</head>
 <body>
+
 	<script>
-		var world	= tQuery.createWorld().fullpage().start();
-		tQuery.createText("tQuery is Fun!", {
-			weight		: "bold",
-			//font		: "droid sans",
-			font		: "droid serif",
-			//font		: "optimer",
-		}).translateZ(1.8)
-		.geometry().normalize().back().addTo(world);
+		// Don't execute this snippet until the plug is loaded
+		require(["tquery.text.js",
+
+		// Gimme fonts... moar fonts!	
+		"fonts/gentilis_bold.typeface",
+		"fonts/gentilis_regular.typeface",
+		"fonts/optimer_bold.typeface",
+		"fonts/optimer_regular.typeface",
+		"fonts/helvetiker_bold.typeface",
+		"fonts/helvetiker_regular.typeface",
+		"fonts/droid/droid_sans_regular.typeface",
+		"fonts/droid/droid_sans_bold.typeface",
+		"fonts/droid/droid_serif_regular.typeface",
+		"fonts/droid/droid_serif_bold.typeface"
+
+		], function() {
+			var world	= tQuery.createWorld().fullpage().start();
+			tQuery.createText("tQuery is Fun!", {
+				weight		: "bold",
+				//font		: "droid sans",
+				font		: "droid serif",
+				//font		: "optimer",
+			}).translateZ(1.8)
+			.geometry().normalize().back().addTo(world);
+		});
 	</script>
 </body>

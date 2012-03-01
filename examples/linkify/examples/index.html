@@ -1,27 +1,54 @@
 <!doctype html><title>Minimal tQuery Page</title>
+
+<script src="../../../vendor/require.js"></script>
 <script src="../../../build/tquery-bundle.js"></script>
-<script src="../../requirejs/tquery.norequirejs.js"></script>
+<script>
+	// Configure require.js
+	require.config({
 
-<script src="../../domevent/threex.domevent.js"></script>
-<script src="../../domevent/tquery.object3d.domevent.js"></script>
-<script src="../tquery.mesh.linkify.js"></script>
+	    paths: {
+	    	// This is abs path to examples folder so that dependencies
+		    // in examples are solved correctly when referred 
+		    // using examples/some-module syntax
+	        examples : "../../../examples",
+	        fonts : "../../../examples/text/fonts"
+	    },
+	    // Shorter than default timeout for loading JS
+	    // ... detects errors faster
+	    waitSeconds: 5
+	  });
+</script>
 
-<script src="../../text/fonts/gentilis_bold.typeface.js"></script>
-<script src="../../text/fonts/gentilis_regular.typeface.js"></script>
-<script src="../../text/fonts/optimer_bold.typeface.js"></script>
-<script src="../../text/fonts/optimer_regular.typeface.js"></script>
-<script src="../../text/fonts/helvetiker_bold.typeface.js"></script>
-<script src="../../text/fonts/helvetiker_regular.typeface.js"></script>
-<script src="../../text/fonts/droid/droid_sans_regular.typeface.js"></script>
-<script src="../../text/fonts/droid/droid_sans_bold.typeface.js"></script>
-<script src="../../text/fonts/droid/droid_serif_regular.typeface.js"></script>
-<script src="../../text/fonts/droid/droid_serif_bold.typeface.js"></script>
+<body>
+<script>
 
-<script src="../../text/tquery.text.js"></script>
+	require([
+		// Plug-ins
+		"examples/domevent/tquery.object3d.domevent",
+		"examples/text/tquery.text",
 
-<body><script>
-	var world	= tQuery.createWorld().fullpage().start();
-	tQuery.createText("THREE.JS").addTo(world)
-		.scaleBy(1/3)
-		.linkify('https://github.com/mrdoob/three.js/');
-</script></body>
+		// Gimme fonts... moar fonts!	
+		"fonts/gentilis_bold.typeface",
+		"fonts/gentilis_regular.typeface",
+		"fonts/optimer_bold.typeface",
+		"fonts/optimer_regular.typeface",
+		"fonts/helvetiker_bold.typeface",
+		"fonts/helvetiker_regular.typeface",
+		"fonts/droid/droid_sans_regular.typeface",
+		"fonts/droid/droid_sans_bold.typeface",
+		"fonts/droid/droid_serif_regular.typeface",
+		"fonts/droid/droid_serif_bold.typeface",		
+
+		// Linkify
+		"../tquery.mesh.linkify.js"
+	], function() {
+		// Main code goes here after all async loads (plug-ins)
+		// have been loaded
+	 	var world	= tQuery.createWorld().fullpage().start();
+		tQuery.createText("THREE.JS").addTo(world)
+			.scaleBy(1/3)
+			.linkify('https://github.com/mrdoob/three.js/');
+		}
+	);
+</script>
+</body>

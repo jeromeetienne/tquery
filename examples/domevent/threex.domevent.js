@@ -64,8 +64,10 @@
 
 //
 
+define(function() {
+	
 /** @namespace */
-var THREEx		= THREEx 		|| {};
+var THREEx		= window.THREEx 		|| {};
 
 // # Constructor
 THREEx.DomEvent	= function(camera, domElement)
@@ -364,3 +366,6 @@ THREEx.DomEvent.prototype._onTouchEvent	= function(eventName, domEvent)
 	return this._onEvent(eventName, mouseX, mouseY, domEvent);	
 }
 
+return THREEx.DomEvent;
+
+});
