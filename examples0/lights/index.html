@@ -1,0 +1,18 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	var mesh	= tQuery.createSphere().addTo(world);
+
+	mesh.material(new THREE.MeshLambertMaterial({
+		ambient	: 0x888888,
+		color	: 0x888888,
+	}));
+	mesh.zoom(2);
+
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).intensity(5);
+	tQuery.createDirectionalLight().addTo(world).position( 1,1,1);
+</script></body>
+

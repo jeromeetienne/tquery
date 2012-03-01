@@ -1,3 +1,5 @@
+;(function(){
+
 /**
  * Generate a light map
  * TODO make it more tunable
@@ -141,3 +143,5 @@ tQuery.register('generateTerrainGeometry', function(opts){
 		texture		: texture
 	};
 });	
+
+})();

@@ -5,13 +5,9 @@
 	var world	= tQuery.createWorld().fullpage().start();
 	var planet	= tQuery.createPlanet().id('obj').addTo(world);
 
-	tQuery.createDirectionalLight().addTo(world)
-		.get(0).position.set(1,1,1);
-
-	tQuery.createDirectionalLight().addTo(world)
-		.get(0).position.set(-1,1,1);
-
-	tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0xFFFFFF));
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	
 	world.loop().hook(function(delta){
 		var delta180Seconds	= delta * Math.PI / 180;

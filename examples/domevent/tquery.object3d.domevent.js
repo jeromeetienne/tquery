@@ -1,4 +1,7 @@
-;(function(){
+/**
+ * plugin to handle deviceOrientation API
+*/
+define(['/examples/domevent/threex.domevent.js'], function(){
 	var domEvent;
 	var getInstance	= function(){
 		if( !domEvent ){
@@ -31,6 +34,6 @@
 		});
 		return this;	// for chained API
 	});
-})();
+});
 
 
