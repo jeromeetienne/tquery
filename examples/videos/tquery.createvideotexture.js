@@ -15,7 +15,6 @@ tQuery.register('createVideoTexture', function(opts){
 	var video	= document.createElement('video');
 	video.width	= 320;
 	video.height	= 240;
-	video.volume	= 0;
 	video.autoplay	= true;
 	video.loop	= true;
 	video.src	= opts.url;

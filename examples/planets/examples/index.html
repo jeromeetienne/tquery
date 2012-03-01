@@ -1,0 +1,18 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../tquery.createplanet.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	var planet	= tQuery.createPlanet().id('obj').addTo(world);
+
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+	
+	world.loop().hook(function(delta){
+		var delta180Seconds	= delta * Math.PI / 180;
+		planet.rotateY(10 * delta180Seconds);
+	});
+</script></body>

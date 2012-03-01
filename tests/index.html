@@ -19,11 +19,14 @@
 	<script src="tquery.object3d-test.js"></script>
 	<script src="tquery.node-test.js"></script>
 
+	<script src="../examples/dollar3d/tquery.dollar3d.js"></script>
+	<script src="../examples/dollar3d/tests/tquery.dollar3d.test.js"></script>
+
 	<script>
-		$(function () {
+		jQuery(function () {
 			mocha.run()
 				.globals(['foo', 'bar']) // acceptable globals
-		})
+		});
 	</script>
 </head>
 <body>

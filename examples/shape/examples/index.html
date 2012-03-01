@@ -1,0 +1,31 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../tquery.shape.js"></script>
+<script src="../tquery.shape.create.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	//var object	= tQuery.createTorus().addTo(world);
+	
+	shape	= tQuery.createHeartShape();
+	//shape	= tQuery.createTriangleShape();
+	//shape	= tQuery.createSquareShape();
+	//shape	= tQuery.createCircleShape();
+	//shape	= tQuery.createFishShape();
+	//shape	= tQuery.createSmileyShape();
+	//shape	= tQuery.createWheelShape();
+
+	//shape	= tQuery.createTriangleShape();
+	shape.extrude().toMesh().id('obj').addTo(world);
+	
+
+	tQuery('#obj')
+		.geometry().computeAll().normalize().center().rotateZ(Math.PI).back();
+	
+	tQuery.world.loop().hook(function(deltaTime){
+		tQuery('#obj').rotateY(90 * deltaTime * Math.PI / 180);
+	});
+	
+	
+</script></body>
