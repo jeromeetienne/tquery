@@ -10,6 +10,8 @@ define([
 	'tquery.wobble',
 	'tquery.text',
 	'tquery.linkify',
+	'tquery.geometry.csg',
+	'tquery.object3d.csg'
 	], function(){
 	
 	// not doing much

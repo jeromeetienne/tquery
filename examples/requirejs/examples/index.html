@@ -54,9 +54,18 @@ require(['tquery.all'], function(){
 	if( false ){
 		tQuery.createCube().addTo(world).useFileballMaterial(2);
 	}
+	
+	// tquery.csg
+	if( true ){
+		var cube	= tQuery.createCube().geometry().translateX(0.6).back();
+		var sphere	= tQuery.createSphere().geometry().translateX(1).back();	
+		cube.subtract(sphere).geometry().center().rotateY(-Math.PI/2).back().addTo(world).on('click', function(event){
+			event.target.rotation.x	+= Math.PI/8;
+		});;
+	}
 
 	// tquery.domevent
-	if( true ){
+	if( false ){
 		tQuery.createCube().addTo(world).on('click', function(event){
 			event.target.rotation.x	+= Math.PI/8;
 		});		

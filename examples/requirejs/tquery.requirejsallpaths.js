@@ -15,6 +15,8 @@ var require = {
 		'tquery.wobble'			: '/examples/wobble/tquery.geometry.wobble',
 		'tquery.text'			: '/examples/text/tquery.text',
 		'tquery.linkify'		: '/examples/linkify/tquery.mesh.linkify',
-		'tquery.all'			: '/examples/requirejs/tquery.all',
+		'tquery.geometry.csg'		: '/examples/csg/tquery.geometry.csg',
+		'tquery.object3d.csg'		: '/examples/csg/tquery.object3d.csg',
+		'tquery.all'			: '/examples/requirejs/tquery.all'
 	}
 };

@@ -15,4 +15,3 @@ tQuery.Object3D.register('csg', function(operation, tqObject){
 tQuery.Object3D.register('union'	, function(tqObject){ return this.csg('union'	 , tqObject);	});
 tQuery.Object3D.register('subtract'	, function(tqObject){ return this.csg('subtract' , tqObject);	});
 tQuery.Object3D.register('intersect'	, function(tqObject){ return this.csg('intersect', tqObject);	});
-	

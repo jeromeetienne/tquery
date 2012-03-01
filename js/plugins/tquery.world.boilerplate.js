@@ -1,5 +1,8 @@
 // backward compatibility only
-tQuery.World.register('fullpage', function(){	return this.boilerplate();	});
+tQuery.World.register('fullpage', function(){
+	console.log("world.fullpage() is obsolete. use world.boilerplate() instead.");
+	return this.boilerplate();
+});
 
 tQuery.World.register('boilerplate', function(){
 	// put renderer fullpage

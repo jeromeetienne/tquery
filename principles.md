@@ -17,12 +17,13 @@
   * any misuse should be detected as soon as possible
 * instrumentability
   * stuff must be usable by computers
+* between 2 alternatives, one cooked, one raw, pick the raw one
+  * especially in case of doubt
 
 ## directions
-* "For those who want to know webgl, good news! you already know it, just replace j by t!"
+* "For those who want to know webgl, good news! You already know it, just replace j by t!"
   * make this statement true
 * "webgl should not be harder than playing with lego."
-
 
 ## Name Conventions
 * suppose you want to create a material plugin about fireball
