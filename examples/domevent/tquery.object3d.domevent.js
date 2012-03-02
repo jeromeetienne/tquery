@@ -1,7 +1,7 @@
 /**
  * plugin to handle deviceOrientation API
 */
-define(['/examples/domevent/threex.domevent.js'], function(){
+define(['examples/domevent/threex.domevent'], function(){
 	var domEvent;
 	var getInstance	= function(){
 		if( !domEvent ){

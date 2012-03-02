@@ -1,4 +1,4 @@
-define(['/examples/csg/csg.js', '/examples/csg/ThreeCSG.js'], function(){
+define(['examples/csg/csg', 'examples/csg/ThreeCSG'], function(){
 	tQuery.Geometry.register('csg', function(operation, geometry){
 		// sanity check - check parameters
 		var operations	= ['subtract', 'union', 'intersect'];

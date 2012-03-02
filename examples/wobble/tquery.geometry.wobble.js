@@ -1,7 +1,7 @@
 /**
  * tquery.js plugin to handle keyboard
 */
-define(['/vendor/threex/THREEx.GeometryWobble.js'], function(){	
+define(['threex/THREEx.GeometryWobble'], function(){	
 	tQuery.Geometry.register('wobble', function(){
 		this.each(function(geometry){
 			THREEx.GeometryWobble.init(geometry);

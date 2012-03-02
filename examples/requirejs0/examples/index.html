@@ -1,0 +1,85 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src='../tquery.requirejsallpaths.js'></script>
+<script src='../../../vendor/require.js'></script>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src='../tquery.requirejs.js'></script>
+
+<body><script>
+require(['tquery.all'], function(){
+	var world	= tQuery.createWorld().fullpage().start();
+
+	// setup lighting
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+
+	// tquery.deviceOrientation
+	if( false ){
+		world.loop().hook(function(){
+			var orientation	= tQuery.deviceOrientation();
+			console.log("deviceorientation: x="+orientation.angleY()
+				    +" y="+orientation.angleY()
+				    +" z="+orientation.angleZ());
+		});		
+	}
+	
+	// tquery.wobble
+	if( false ){
+		tQuery.createSphere().addTo(world).geometry().wobble().back();
+	}
+
+	
+	// tquery.createplanet
+	if( false ){
+		tQuery.createPlanet().addTo(world);
+	}
+
+	// tquery.video
+	if( false  ){
+		var texture	= tQuery.createWebcamTexture();
+		//var texture	= tQuery.createVideoTexture('../videos/sintel.ogv');
+
+		var material	= new THREE.MeshBasicMaterial({
+			ambient	: 0x444444,
+			color	: 0xFFAA88,
+			//map	: THREE.ImageUtils.loadTexture('../tunnelgl/ash_uvgrid01.jpg'),
+			map	: texture
+		});
+
+		tQuery.createSphere(material).addTo(world)
+			.rotateY(-90*Math.PI/180)
+	}
+
+	// tquery.fireballMaterial
+	if( false ){
+		tQuery.createCube().addTo(world).useFileballMaterial(2);
+	}
+	
+	// tquery.csg
+	if( true ){
+		var cube	= tQuery.createCube().geometry().translateX(0.6).back();
+		var sphere	= tQuery.createSphere().geometry().translateX(1).back();	
+		cube.subtract(sphere).geometry().center().rotateY(-Math.PI/2).back().addTo(world).on('click', function(event){
+			event.target.rotation.x	+= Math.PI/8;
+		});;
+	}
+
+	// tquery.domevent
+	if( false ){
+		tQuery.createCube().addTo(world).on('click', function(event){
+			event.target.rotation.x	+= Math.PI/8;
+		});		
+	}
+
+	// tquery.shape
+	tQuery.createHeart().translateX(1).addTo(world);
+	
+	// tquery.keyboard
+	var object	= tQuery.createTorus().translateX(-1).addTo(world);;
+	world.loop().hook(function(){
+		var scale	= tQuery.keyboard().pressed('a') ? 2 : 1;
+		object.scale( scale );
+	});
+});
+
+</script></body>

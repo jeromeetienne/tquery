@@ -1,0 +1,34 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script>
+var require = {
+	paths	: {
+		// here list all the plugins
+		'tquery.keyboard'	: '/examples/requirejs2/tquery.keyboard',
+		'tquery.shape'		: '/examples/shape/tquery.shape',
+		'tquery.shape.create'	: '/examples/shape/tquery.shape.create'
+	}
+};
+</script>
+<script src='../../vendor/require.js'></script>
+<script src="../../build/tquery-bundle.js"></script>
+<script src='./tquery.requirejs.js'></script>
+<body><script>
+
+/**
+ * - should i make a a norequirejs ?
+ *   - like require/define just calling the callback function
+ *   - thus requirejs is no more a requirement, only an helper
+*/
+require(['tquery.keyboard', 'tquery.shape', 'tquery.shape.create'], function(){
+	var world	= tQuery.createWorld().fullpage().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	tQuery.createHeart().addTo(world);;
+
+	world.loop().hook(function(){
+		var scale	= tQuery.keyboard().pressed('a') ? 2 : 1;
+		object.scale( scale );
+	});
+});
+
+</script></body>

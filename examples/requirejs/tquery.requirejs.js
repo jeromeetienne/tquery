@@ -10,7 +10,7 @@ tQuery.register('scriptBaseUrl', function(module){
 	console.assert( Object.keys(module).length === 3 );
 	console.assert( module.id !== undefined && module.uri !== undefined );
 	// determine the baseUrl
-	var baseUrl	= location.protocol + "//" + location.host + module.uri;
+	var baseUrl	= location.protocol + "//" + location.host + location.pathname + module.uri;
 	baseUrl		= baseUrl.substr(0, baseUrl.lastIndexOf('/')+1);
 	return baseUrl;
 });

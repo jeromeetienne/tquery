@@ -1,0 +1,10 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../tquery.dollar3d.js"></script>
+<body><script>
+	var world	= $3d.createWorld().fullpage().start();
+	var object	= $3d.createTorus().addTo(world);
+	console.assert( $3d('torus').get(0) === object.get(0) );
+</script></body>

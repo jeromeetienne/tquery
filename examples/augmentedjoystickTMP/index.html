@@ -1,0 +1,27 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+<script src='vendor/pixastic/pixastic.all.min.js'></script>
+<script src="tquery.createaugmentedjoystick.js"></script>
+
+
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	world.camera().position.z	= 3;
+
+	var texture	= tQuery.createAugmentedJoystick();
+
+	console.log("texture", texture)
+
+	var material	= new THREE.MeshBasicMaterial({
+		color	: 0xFFAA88,
+		map	: texture
+	});
+
+
+	var mesh	= new THREE.Mesh(new THREE.PlaneGeometry(2, 1), material);
+	mesh.scale.multiplyScalar(2);
+	var object	= tQuery(mesh).addTo(world);
+	// FIXME this one should work
+	//var object	= tQuery.createSphere(material).addTo(world);
+
+</script></body>
