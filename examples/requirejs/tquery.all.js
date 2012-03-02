@@ -3,7 +3,7 @@ define([
 	'examples/shape/tquery.shape',
 	'examples/shape/tquery.shape.create',
 	'examples/dollar3d/tquery.dollar3d',
-	'examples/deviceOrientation/tquery.deviceorientation',
+	'examples/deviceorientation/tquery.deviceorientation',
 	'examples/domevent/tquery.object3d.domevent',
 	'examples/fireball/tquery.fireballmaterial',
 	'examples/planets/tquery.createplanet',
@@ -12,6 +12,7 @@ define([
 
 	'examples/wobble/tquery.geometry.wobble',
 
+	'examples/text/tquery.text.defaultfont',
 	'examples/text/tquery.text',
 	'examples/linkify/tquery.mesh.linkify',
 	
