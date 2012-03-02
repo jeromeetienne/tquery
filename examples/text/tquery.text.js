@@ -1,16 +1,16 @@
 /**
- * Create tQuery.Scene
+ * tQuery.createText('foobar')
 */
-define(["/examples/text/fonts/gentilis_bold.typeface.js",
-	"/examples/text/fonts/gentilis_regular.typeface.js",
-	"/examples/text/fonts/optimer_bold.typeface.js",
-	"/examples/text/fonts/optimer_regular.typeface.js",
-	"/examples/text/fonts/helvetiker_bold.typeface.js",
-	"/examples/text/fonts/helvetiker_regular.typeface.js",
-	"/examples/text/fonts/droid/droid_sans_regular.typeface.js",
-	"/examples/text/fonts/droid/droid_sans_bold.typeface.js",
-	"/examples/text/fonts/droid/droid_serif_regular.typeface.js",
-	"/examples/text/fonts/droid/droid_serif_bold.typeface.js"
+define(["examples/text/fonts/gentilis_bold.typeface",
+	"examples/text/fonts/gentilis_regular.typeface",
+	"examples/text/fonts/optimer_bold.typeface",
+	"examples/text/fonts/optimer_regular.typeface",
+	"examples/text/fonts/helvetiker_bold.typeface",
+	"examples/text/fonts/helvetiker_regular.typeface",
+	"examples/text/fonts/droid/droid_sans_regular.typeface",
+	"examples/text/fonts/droid/droid_sans_bold.typeface",
+	"examples/text/fonts/droid/droid_serif_regular.typeface",
+	"examples/text/fonts/droid/droid_serif_bold.typeface"
 	], function(){
 	tQuery.register('createText', function(text, options){
 		// handle parameters

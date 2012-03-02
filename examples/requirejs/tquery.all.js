@@ -9,10 +9,11 @@ define([
 	'examples/planets/tquery.createplanet',
 
 	'examples/videos/tquery.createvideotexture', 'examples/videos/tquery.createwebcamtexture',
+
 	'examples/wobble/tquery.geometry.wobble',
-	//'tquery.text',
+
+	'examples/text/tquery.text',
 	'examples/linkify/tquery.mesh.linkify',
-	
 	
 	'examples/csg/tquery.geometry.csg', 'examples/csg/tquery.object3d.csg'
 	], function(){

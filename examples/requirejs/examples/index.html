@@ -36,9 +36,9 @@ require(['examples/requirejs/tquery.all'], function(){
 	}
 
 	// tquery.video
-	if( false ){
-		//var texture	= tQuery.createWebcamTexture();
-		var texture	= tQuery.createVideoTexture('../../videos/examples/sintel.ogv');
+	if( true ){
+		var texture	= tQuery.createWebcamTexture();
+		//var texture	= tQuery.createVideoTexture('../../videos/examples/sintel.ogv');
 
 		var material	= new THREE.MeshBasicMaterial({
 			ambient	: 0x444444,
@@ -78,8 +78,14 @@ require(['examples/requirejs/tquery.all'], function(){
 	}
 
 	// tquery.linkify
-	if( true ){
-		tQuery.createSphere().addTo(world).linkify('http://github.com/jeromeetienne/tquery');		
+	if( false ){
+		//tQuery.createSphere().addTo(world).linkify('http://github.com/jeromeetienne/tquery');		
+		tQuery.createText('tQuery').addTo(world).scaleBy(1/4).linkify('http://github.com/jeromeetienne/tquery');		
+	}
+
+	// tquery.text
+	if( false ){
+		tQuery.createText('tQuery').addTo(world);
 	}
 
 	// tquery.shape

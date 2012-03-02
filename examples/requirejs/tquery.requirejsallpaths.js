@@ -1,6 +1,6 @@
 var require = {
 	paths	: {
 		'examples'	: "../../../examples",
-		'threex'	: "../../../vendor/threex",
+		'threex'	: "../../../vendor/threex"
 	}
 };
