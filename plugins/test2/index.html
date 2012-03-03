@@ -1,0 +1,97 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-all.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// setup lighting
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+
+	// tquery.deviceOrientation
+	if( false ){
+		world.loop().hook(function(){
+			var orientation	= tQuery.deviceOrientation();
+			console.log("deviceorientation: x="+orientation.angleY()
+				    +" y="+orientation.angleY()
+				    +" z="+orientation.angleZ());
+		});		
+	}
+
+	// tquery.wobble
+	if( false ){
+		tQuery.createSphere().addTo(world).geometry().wobble().back();
+	}
+
+	// tquery.terrainGenerator
+	if( false ){
+		var terrain	= tQuery.generateTerrainGeometry({width: 5,height: 5});
+		var texture	= terrain.texture;
+		var geometry	= terrain.geometry;
+		geometry.rotateX(-55*Math.PI/180);
+		var tMaterial	= new THREE.MeshBasicMaterial({ map : texture });
+		mesh	= new THREE.Mesh(geometry.get(0), tMaterial);
+		world.add(mesh);		
+	}
+
+	// tquery.video
+	if( true ){
+		//var texture	= tQuery.createWebcamTexture();
+		var texture	= tQuery.createVideoTexture('../videos/examples/sintel.ogv');
+
+		var material	= new THREE.MeshBasicMaterial({
+			ambient	: 0x444444,
+			color	: 0xFFAA88,
+			//map	: THREE.ImageUtils.loadTexture('../tunnelgl/ash_uvgrid01.jpg'),
+			map	: texture
+		});
+
+		tQuery.createSphere(material).addTo(world)
+			.rotateY(-90*Math.PI/180)
+	}
+
+	// tquery.linkify
+	if( false ){
+		tQuery.createText("tQuery is Fun!").addTo(world).linkify('http://google.com');		
+	}
+
+	// tquery.text
+	if( true ){
+		tQuery.createText("tQuery is Fun!").addTo(world);
+	}
+
+	// tquery.fireballMaterial
+	if( false ){
+		tQuery.createCube().addTo(world).useFileballMaterial(2);
+	}
+
+	// tquery.csg
+	if( false ){
+		var cube	= tQuery.createCube().geometry().translateX(0.6).back();
+		var sphere	= tQuery.createSphere().geometry().translateX(1).back();	
+		cube.subtract(sphere).geometry().center().rotateY(-Math.PI/2).back().addTo(world).on('click', function(event){
+			event.target.rotation.x	+= Math.PI/8;
+		});;
+	}
+
+	// tquery.domevent
+	if( false ){
+		tQuery.createCube().addTo(world).on('click', function(event){
+			event.target.rotation.x	+= Math.PI/8;
+		});		
+	}
+
+	// tquery.shape
+	if( false ){
+		tQuery.createHeart().translateX(1).addTo(world);
+	}
+
+	// tquery.keyboard
+	if( false ){
+		var object	= tQuery.createTorus().translateX(-1).addTo(world);;
+		world.loop().hook(function(){
+			var scale	= tQuery.keyboard().pressed('a') ? 2 : 1;
+			object.scale( scale );
+		});
+	}
+</script></body>

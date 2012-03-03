@@ -1,0 +1,18 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../../../vendor/threex/THREEx.DeviceOrientationState.js"></script>
+<script src="../tquery.deviceorientation.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	var orientation	= tQuery.deviceOrientation();
+	world.loop().hook(function(){
+		object.get(0).rotation.x	= -orientation.angleY();
+		object.get(0).rotation.y	= orientation.angleX();
+		object.get(0).rotation.z	= orientation.angleZ();
+	})
+</script></body>

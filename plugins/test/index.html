@@ -1,0 +1,37 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../build/tquery-bundle.js"></script>
+
+<script src="../../vendor/threex/THREEx.GeometryWobble.js"></script>
+<script src="../wobble/tquery.geometry.wobble.js"></script>
+
+<script src="../js/mathrandomseedable.js"></script>
+
+<body><script>
+	//Math.seed(1328475429280);
+	
+	var world	= tQuery.createWorld().fullpage().start();
+	
+	tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0x444444));
+	tQuery.createDirectionalLight().addTo(world);
+	tQuery.createDirectionalLight().addTo(world);
+	tQuery.createDirectionalLight().addTo(world);
+	
+	var material	= new THREE.MeshPhongMaterial({
+		ambient	: 0x444444,
+		color	: 0xFF5588,
+		specular: 0xffffff,
+		specular: 0xCC88ff,
+		shininess: 400,
+		map	: THREE.ImageUtils.loadTexture( "water.jpg" )
+	});
+
+	var object3d	= tQuery.createSphere(0.5, 32, 16, material).addTo(world);
+	object3d.geometry().zoom(2).wobble().back();
+
+	world.loop().hook(function(delta){
+		var piSecond	= delta * Math.PI;
+		//object3d.rotateY(45*piSecond/180);
+		object3d.rotateZ(45*piSecond/180);
+	});
+
+</script></body>

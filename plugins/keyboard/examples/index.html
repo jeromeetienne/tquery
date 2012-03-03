@@ -1,0 +1,18 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../tquery.keyboard.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().fullpage().start();
+	var object3d	= tQuery.createTorus().addTo(world);
+	
+	world.loop().hook(function(){
+		if( tQuery.keyboard().pressed('a') ){
+			object3d.scale(2);
+		}else{
+			object3d.scale(1);
+		}
+	})
+</script></body>

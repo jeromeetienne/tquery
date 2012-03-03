@@ -1,0 +1,24 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+
+<script src="../tquery.createVideoTexture.js"></script>
+<script src="../tquery.createWebcamTexture.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	//var texture	= tQuery.createWebcamTexture();
+	var texture	= tQuery.createVideoTexture('sintel.ogv');
+
+	var material	= new THREE.MeshBasicMaterial({
+		ambient	: 0x444444,
+		color	: 0xFFAA88,
+		map	: texture
+	});
+
+	tQuery.createSphere(material).addTo(world)
+		.rotateY(-90*Math.PI/180);
+
+</script></body>

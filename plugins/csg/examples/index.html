@@ -1,0 +1,40 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../csg.js"></script>
+<script src="../ThreeCSG.js"></script>
+<script src="../tquery.geometry.csg.js"></script>
+<script src="../tquery.object3d.csg.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// create cube
+	var cube	= tQuery.createCube().geometry().translateX(0.6).back();
+
+	// create sphere
+	var sphere	= tQuery.createSphere().geometry().translateX(1).back();
+	
+	world.add(cube.subtract(sphere).id('prout').geometry().center().back());
+
+	// NOTE: the api is no good
+	// * sphere.subtract(cube) -> tQuery.Object3D ? which material ?
+	// * would be better API tho
+	//   * in another plugins on top
+	// * what about inplace replacement of sphere geometry ?
+
+	// perform the operation
+	var geometry	= tQuery.createSphere().geometry().csg('intersect', cube.geometry());
+	geometry.toMesh().id('obj2').translateX(-1).addTo(world);
+
+	// animate the object
+	world.loop().hook(function(deltaTime){
+		var deltaAngle	= 90 * deltaTime * Math.PI/180;
+
+		tQuery('#prout').rotateY(-deltaAngle)
+
+		var mesh	= tQuery('#obj2').get(0);
+		mesh.rotation.x	+= deltaAngle;
+		mesh.rotation.y	+= deltaAngle;
+	});
+</script></body>
