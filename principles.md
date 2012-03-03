@@ -19,6 +19,9 @@
   * stuff must be usable by computers
 * between 2 alternatives, one cooked, one raw, pick the raw one
   * especially in case of doubt
+* a screencast should be simple, informative and apropos
+  * simple: to easily understandable by the audience
+  * informative: well to be usefull
 
 ## directions
 * "For those who want to know webgl, good news! You already know it, just replace j by t!"

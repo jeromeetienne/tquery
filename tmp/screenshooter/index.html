@@ -1,0 +1,44 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../www/vendor/bootstrap/docs/assets/js/jquery.js"></script>
+<body><script>
+	var urls	= [
+		//'http://localhost:8000/examples/minimal/',
+		'../../examples/csg/examples/index.html'
+	];
+	
+	var url		= urls[0];
+
+	// create the iframe element
+	var iframeEl	= document.createElement('iframe');
+	iframeEl.setAttribute('src', url);
+	iframeEl.setAttribute('width', '640px');
+	iframeEl.setAttribute('height', '480px');
+	document.body.appendChild(iframeEl)
+	
+	/**
+	 * take a screenshot of a iframe element
+	 * @param {element} the iframe element to screenshot
+	 * @returns {string} the data url of the screenshot
+	*/
+	var shootIframe	= function(iframeEl){
+		console.assert(iframeEl.contentWindow.document.querySelectorAll('canvas').length > 0);
+		// get the canvas element in the iframe
+		var document	= iframeEl.contentWindow.document;
+		var canvasEl	= document.querySelectorAll('canvas')[0];
+		// check it is possible to screenshot
+		var gl		= canvasEl.getContext("experimental-webgl");
+		var shootAble	= gl.getContextAttributes().preserveDrawingBuffer ? true : false;
+		console.assert( shootAble, "iframe canvas gl context doesnt have preserverDrawingBuffer");
+		// get the dataURL		
+		var dataUrl	= canvasEl.toDataURL();
+		// return the dataUrl
+		return dataUrl;
+	};
+	
+	iframeEl.addEventListener('load', function(){
+		setTimeout(function(){
+			window.open(shootIframe(iframeEl));
+		}, 1.2*1000);
+	});
+
+</script></body>
