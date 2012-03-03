@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html><body>
+	<!-- include the style -->
+	<link  href="runner/runner.css" rel='stylesheet'>
+	<!-- include jquery for dom handling -->
+	<script src="../www/vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<!-- include jquery for template -->
+	<script src="../www/vendor/underscore.js/underscore.js"></script>
+	<!-- include benchmark.js for benchmarking -->
+	<script src="benchmark.js/benchmark.js"></script>
+	<!-- include runner.js for running the benchmark suites -->
+	<script src="runner/runner.js"></script>
+	<!-- bind buttons -->
+	<script>
+		jQuery(function(){
+			jQuery('#runner .bench').live('click', function(event){
+				jQuery('.source', event.currentTarget).slideToggle();
+			});
+		});
+	</script>
 
+	<!-- template for suite header -->
 	<script id="tmplSuiteHead" type="text/template">
 		<div class="head <%- state %>">
 			<h1><%= suite.name %> <span class="run">(run)</span></h1>
 		</div>
 	</script>
+	<!-- template for each benchmark item in a suite -->
 	<script id="tmplBenchItem" type="text/template">
 		<div class="bench <%- state %>">
 			<span class='name'> <%- bench.name %> </span> :
@@ -17,7 +37,7 @@
 			</div>
 		</div>
 	</script>
-
+	<!-- the runner container -->
 	<div id="runner">		
 		<ul class="stats">
 			<li class="runall">run all</li>
@@ -28,21 +48,9 @@
 		<div class="suites"></div>
 	</div>
 
-	<script src="../www/vendor/bootstrap/docs/assets/js/jquery.js"></script>
-	<script src="../www/vendor/underscore.js/underscore.js"></script>
-	<script src="benchmark.js/benchmark.js"></script>
-	<link  href="runner/runner.css" rel='stylesheet'>
-	<script src="runner/runner.js"></script>
-	<script>
-		jQuery(function(){
-			jQuery('#runner .bench').live('click', function(event){
-				jQuery('.source', event.currentTarget).slideToggle();
-			});
-		});
-	</script>
-
+	<!-- include specific to tquery -->
 	<script src="../build/tquery-bundle.js"></script>
-
+	<!-- include all your suites here -->
 	<script src="bench-tquery.selector.js"></script>
 
 </body></html>
