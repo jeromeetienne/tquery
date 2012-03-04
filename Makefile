@@ -19,6 +19,10 @@ docs:
 			-d=docs/					\
 			js/ js/plugins
 
+boilerplate:
+	rm -f ~/Downloads/tqueryboilerplate.zip
+	cd .. && zip -r ~/Downloads/tqueryboilerplate tqueryboilerplate  -x *.git*
+	
 #################################################################################
 #		build and minify						#
 #################################################################################
