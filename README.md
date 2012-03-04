@@ -14,7 +14,8 @@ make server
 ```
 
 Then you open a browser on [http://127.0.0.1:8000/](http://127.0.0.1:8000/) to
-see it running. Up to you to modify index.html until it fits your needs. 
+see it running. Up to you to modify ```index.html``` until it fits your needs. ```index.html```
+looks like the code below... Quite short.
 
 ```html
 <!doctype html><title>Minimal tQuery Page</title>
