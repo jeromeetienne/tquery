@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>tQuery - extensions for three.js</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -40,13 +40,15 @@
           <a class="brand" href="#">tQuery</a>
           <div class="nav-collapse">
             <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#getStarted">Get Started</a></li>
+            <li><a href="#examples">Examples</a></li>
             <li><a href="../docs" target='_blank'>Docs</a></li>
             <li><a href="../tests" target='_blank'>Tests</a></li>
             <li><a href="https://github.com/jeromeetienne/tquery" target='_blank'>Code</a></li>
             <li><a href="playground" target='_blank'>Playground</a></li>
             <li><a href="../bench/#runall" target='_blank'>Benchmarks</a></li>
-            <li><a href="https://github.com/jeromeetienne/tqueryboilerplate" target='_blank'>Boilerplate</a></li>
+            <li><a href="http://jeromeetienne.github.com/tqueryboilerplate/" target='_blank'>Boilerplate</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -67,8 +69,6 @@
 		It mimics jquery api, well know for its usuability.
 		tQuery aims for "it is should not be harder than playing with lego bricks."
 		</p>
-		<p><a href="https://github.com/jeromeetienne/tquery" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-
 	</div>
 
       <!-- Example row of columns -->
@@ -108,14 +108,14 @@
 	</div>
 
       <!-- Example row of columns -->
-	<div class="page-header">
-		<h1>Minimal page <small>To give you an idea</small></h1>
+	<div class="page-header" id="getStarted">
+		<h1>How to Get Started <small>use the boilerplate</small></h1>
 	</div>
 	<div class="row">
 		<div class="span7">
 			<pre class="prettyprint linenums">
 &lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
-&lt;script src=&quot;tquery-bundle.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
 &lt;body&gt;&lt;script&gt;
     var world = tQuery.createWorld().boilerplate().start();
     var object = tQuery.createTorus().addTo(world);
@@ -127,9 +127,29 @@
 			</iframe>
 		</div>
 	</div>
+	<div class="row">
+		<div class="span12">
+			<p>
+			You get index.html on the left, and the output on the right.
+			To get that running on your local computer, First you get boilerplate's files
+			<a href="https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip">here</a>,
+			then you launch the http server to serve them. Here is a little shell script which does it all.
+			</p>
+			<pre class="prettyprint lang-bsh linenums">
+curl -OL https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip
+unzip tqueryboilerplate.zip
+cd tqueryboilerplate
+make server
+</pre>
+			<p>
+			Then open a browser on <a href="http://127.0.0.1:8000/" target='_blank'>http://127.0.0.1:8000/</a> to
+see it running. Up to you to modify index.html until it fits your needs. See its code below... Quite short.
+			</p>
+		</div>
+	</div>
 
       <!-- Example row of columns -->
-	<div class="page-header">
+	<div class="page-header" id="examples">
 		<h1>Examples <small>very early</small></h1>
 	</div>
 	<div class="row span12">
