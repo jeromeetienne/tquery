@@ -11,6 +11,9 @@ deploy:
 
 JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 
+release:
+	(git symbolic-ref HEAD | grep ^refs/heads/master$$ >/dev/null) && git merge dev || echo "you MUST on on master"
+
 docs:
 	java -jar ${JSDOC_ROOT}/jsrun.jar ${JSDOC_ROOT}/app/run.js	\
 			-D="noGlobal:true"				\
