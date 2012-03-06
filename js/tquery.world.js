@@ -54,6 +54,8 @@ tQuery.World.prototype.destroy	= function(){
 	this.trigger('destroy');
 	// destroy the loop
 	this._loop.destroy();
+	// remove this._cameraControls if needed
+	this.removeCameraControls();
 	// remove renderer element
 	var parent	= this._renderer.domElement.parentElement;
 	parent	&& parent.removeChild(this._renderer.domElement);
@@ -104,6 +106,30 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 
 	parent.appendChild(domElement);
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//		add/remove object3D						//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.World.prototype.setCameraControls	= function(control){
+	if( this.hasCameraControls() )	this.removeCameraControls();
+	this._cameraControls	= control;
+	return this;	// for chained API
+};
+
+tQuery.World.prototype.removeCameraControls	= function(){
+	if( this.hasCameraControls() === false )	return this;
+	this._cameraControls	= undefined;
+	return this;	// for chained API
+};
+
+tQuery.World.prototype.getCameraControls	= function(){
+	return this._cameraControls;
+};
+
+tQuery.World.prototype.hasCameraControls	= function(){
+	return this._cameraControls !== undefined ? true : false;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		add/remove object3D						//
@@ -180,6 +206,8 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 
 tQuery.World.prototype.render	= function()
 {
+	// update the cameraControl
+	if( this.hasCameraControls() )	this._cameraControls.update();
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );
 }

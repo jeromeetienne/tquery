@@ -46,10 +46,7 @@ tQuery.World.register('addBoilerplate', function(){
 
 	// create a camera contol
 	ctx.cameraControls	= new THREEx.DragPanControls(camera)
-	ctx.loopCameraControls	= function(){
-		ctx.cameraControls.update();
-	};
-	this.loop().hook(ctx.loopCameraControls);
+	this.setCameraControls(ctx.cameraControls);
 
 	// transparently support window resize
 	ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);
@@ -92,7 +89,7 @@ tQuery.World.register('removeBoilerplate', function(){
 	document.body.removeChild(ctx.stats.domElement );
 	this.loop().unhook(ctx.loopStats);
 	// remove camera
-	this.loop().unhook(ctx.loopCameraControls)
+	this.removeCameraControls()
 	// stop windowResize
 	ctx.windowResize.stop();
 	// unbind screenShot
