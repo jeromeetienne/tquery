@@ -1,7 +1,8 @@
 <html><head>
-	<script src="JSARToolKit.js"></script>
-	<script src="Three.js"></script>
-	<script src="requestanimationframe.js"></script>
+	<script src="vendor/JSARToolKit.js"></script>
+	<script src="vendor/Three.js"></script>
+	<script src="vendor/requestanimationframe.js"></script>
+	<link  href='main.css' rel="stylesheet" />
 <script>
 	// TODO setFromArray is like setFromGLMatrix
 	// - FIXME dont modify
@@ -33,16 +34,18 @@
 		cm[15] = 1;
 	}
 
-	threshold = 128;
-	DEBUG = true;
+	var threshold	= 128;
+	// to enable/disable debug output in jsartoolkit
+	DEBUG		= true;
 	
-	var video = document.createElement('video');
-	video.width = 352;
-	video.height = 288;
-	video.loop = true;
-	video.volume = 0;
-	video.autoplay = true;
-	video.controls = true;
+	// create the video element for the webcam
+	var video	= document.createElement('video');
+	video.width	= 320;
+	video.height	= 240;
+	video.loop	= true;
+	video.volume	= 0;
+	video.autoplay	= true;
+	video.controls	= true;
 
 	var getUserMedia = function(t, onsuccess, onerror) {
 		if (navigator.getUserMedia) {
@@ -64,64 +67,58 @@
 		throw new Error("URL.createObjectURL not found.");
 	}
 
-	getUserMedia('video',
-		function(stream) {
-			var url = createObjectURL(stream);
-			video.src = url;
-		},
-		function(error) {
-			alert("Couldn't access webcam.");
-		}
-	);
+	getUserMedia('video', function(stream) {
+		var url = createObjectURL(stream);
+		video.src = url;
+	}, function(error) {
+		alert("Couldn't access webcam.");
+	});
 	
 	var onload	= function() {
 		document.getElementById('loading').style.display = 'none';
 		document.body.appendChild(video);
 	      
 		var canvas = document.createElement('canvas');
-		canvas.width = 320;
-		canvas.height = 240;
+		canvas.width	= 320;
+		canvas.height	= 240;
 		document.body.appendChild(canvas);
 	      
-		var debugCanvas = document.createElement('canvas');
-		debugCanvas.id = 'debugCanvas';
-		debugCanvas.width = 320;
-		debugCanvas.height = 240;
+		// apparently debug canvas is directly updated by jsartoolkit
+		// - usefull to get debug info for tunning
+		// - FIXME the way it is exported is dirty tho
+		var debugCanvas		= document.createElement('canvas');
+		debugCanvas.id		= 'debugCanvas';
+		debugCanvas.width	= 320;
+		debugCanvas.height	= 240;
 		document.body.appendChild(debugCanvas);
 	      
-		var videoCanvas = document.createElement('canvas');
-		videoCanvas.width = video.width;
-		videoCanvas.height = video.width*3/4;
+		var videoCanvas		= document.createElement('canvas');
+		videoCanvas.width	= video.width;
+		videoCanvas.height	= video.width*3/4;
 	      
-		var ctx = canvas.getContext('2d');
-		ctx.font = "24px URW Gothic L, Arial, Sans-serif";
+		var ctx		= canvas.getContext('2d');
 	      
+		var arRaster	= new NyARRgbRaster_Canvas2D(canvas);
+		var param	= new FLARParam(320,240);
 	      
-	      
-		var raster = new NyARRgbRaster_Canvas2D(canvas);
-		var param = new FLARParam(320,240);
-	      
-		var resultMat = new NyARTransMatResult();
-	      
-		var detector = new FLARMultiIdMarkerDetector(param, 120);
-		detector.setContinueMode(true);
+		var arDetector	= new FLARMultiIdMarkerDetector(param, 120);
+		arDetector.setContinueMode(true);
 	      
 	      
-		var tmp = new Float32Array(16);
+		var tmp		= new Float32Array(16);
 	      
-		var renderer = new THREE.WebGLRenderer();
+		var renderer	= new THREE.WebGLRenderer();
 		renderer.setSize(960/2, 720/2);
 	      
-		var glCanvas = renderer.domElement;
-		var s = glCanvas.style;
+		var glCanvas	= renderer.domElement;
 		//document.body.appendChild(glCanvas);
 		document.body.insertBefore(glCanvas, document.body.firstChild);
 
-		var scene = new THREE.Scene();
-		var light = new THREE.PointLight(0xffffff);
+		var scene	= new THREE.Scene();
+		var light	= new THREE.PointLight(0xffffff);
 		light.position.set(400, 500, 100);
 		scene.add(light);
-		var light = new THREE.PointLight(0xffffff);
+		var light	= new THREE.PointLight(0xffffff);
 		light.position.set(-400, -500, -100);
 		scene.add(light);
 	      
@@ -153,68 +150,75 @@
 		
 
 		var onRender	= function(){
+			
 			if (video.ended) video.play();
 			if (video.paused) return;
 			if (window.paused) return;
 			if (video.currentTime == video.duration) {
-			  video.currentTime = 0;
+				video.currentTime = 0;
 			}
 			if (video.currentTime == lastTime) return;
 			lastTime = video.currentTime;
+			
 			videoCanvas.getContext('2d').drawImage(video,0,0);
 			ctx.drawImage(videoCanvas, 0,0,320,240);
-			var dt = new Date().getTime();
 		      
 			canvas.changed = true;
 			videoTex.needsUpdate = true;
-		      
-			var t = new Date();
-			var detected = detector.detectMarkerLite(raster, threshold);
-			for (var idx = 0; idx<detected; idx++) {
-				var id = detector.getIdMarkerData(idx);
-				var currId;
+			
+			// detect markers
+			var nDetected	= arDetector.detectMarkerLite(arRaster, threshold);
+			var tmpArMat	= new NyARTransMatResult();
+			for (var idx = 0; idx < nDetected; idx++) {
+				var markerId;
+				// extract the markerId
+				var id	= arDetector.getIdMarkerData(idx);
 				if (id.packetLength > 4) {
-					currId = -1;
+					markerId = -1;
 				}else{
-					currId=0;
+					markerId = 0;
 					for (var i = 0; i < id.packetLength; i++ ) {
-						currId = (currId << 8) | id.getPacketData(i);
+						markerId = (markerId << 8) | id.getPacketData(i);
 					}
 				}
-				if (!markers[currId]) {
-					markers[currId] = {};
-				}
-				detector.getTransformMatrix(idx, resultMat);
-				markers[currId].age = 0;
-				markers[currId].transform = Object.asCopy(resultMat);
+				// define the marker if needed
+				markers[markerId] = markers[markerId] || {};
+				
+				markers[markerId].age = 0;
+				// FIXME Object.asCopy is a dirty kludge - jsartoolkit is declaring this on global space 
+				arDetector.getTransformMatrix(idx, tmpArMat);
+				markers[markerId].transform = Object.asCopy(tmpArMat);
 			}
 			// handle markers age
-			for (var i in markers) {
-				var r = markers[i];
-				if( r.age > 1) {
-					delete markers[i];
-					scene.remove(r.model);
+			Object.keys(markers).forEach(function(markerId){
+				var marker = markers[markerId];
+				if( marker.age > 1) {
+					delete markers[markerId];
+					scene.remove(marker.object3d);
 				}
-				r.age++;
-			}
-			for (var i in markers) {
-				var m = markers[i];
-				if (!m.model) {
-					m.model = new THREE.Object3D();
+				marker.age++;
+			});
+			// create and update object3d associated to markers
+			Object.keys(markers).forEach(function(markerId){
+				var marker = markers[markerId];
+				if (!marker.object3d) {
+					marker.object3d = new THREE.Object3D();
 					var cube = new THREE.Mesh(
 						new THREE.CubeGeometry(100,100,100),
 						new THREE.MeshLambertMaterial({color: 0|(0xffffff*Math.random())})
 					);
 					cube.position.z = -50;
 					cube.doubleSided = true;
-					m.model.matrixAutoUpdate = false;
-					m.model.add(cube);
-					scene.add(m.model);
+					marker.object3d.matrixAutoUpdate = false;
+					marker.object3d.add(cube);
+					scene.add(marker.object3d);
 				}
-				copyMatrix(m.transform, tmp);
-				m.model.matrix.setFromArray(tmp);
-				m.model.matrixWorldNeedsUpdate = true;
-			}
+				copyMatrix(marker.transform, tmp);
+				marker.object3d.matrix.setFromArray(tmp);
+				marker.object3d.matrixWorldNeedsUpdate = true;				
+			});
+			
+			// trigger the rendering
 			renderer.autoClear = false;
 			renderer.clear();
 			renderer.render(videoScene, videoCam);
@@ -229,7 +233,6 @@
 	window.onload	= onload;
 
 </script>
-	<link href='main.css' type="text/css" />
 </head>
 <body>
 	<div id="loading">loading...</div>
