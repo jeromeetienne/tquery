@@ -84,8 +84,6 @@
 		var arDetector	= new FLARMultiIdMarkerDetector(arParam, 120);
 		arDetector.setContinueMode(true);
 	      
-		var tmpGlMat	= new Float32Array(16);
-
 		// setup three.js renderer
 		var renderer	= new THREE.WebGLRenderer();
 		renderer.setSize(960/2, 720/2);
@@ -108,8 +106,9 @@
 		scene.add(camera);
 		
 		// Next we need to make the Three.js camera use the FLARParam matrix.
-		arParam.copyCameraMatrix(tmpGlMat, 10, 10000);
-		copyMatrixGl2Threejs(tmpGlMat, camera.projectionMatrix);
+		var tmpGlMatCam	= new Float32Array(16);
+		arParam.copyCameraMatrix(tmpGlMatCam, 10, 10000);
+		copyMatrixGl2Threejs(tmpGlMatCam, camera.projectionMatrix);
 
 		var videoTex = new THREE.Texture(videoCanvas);
 	      
@@ -166,6 +165,7 @@
 				marker.age++;
 			});
 			// create and update object3d associated to markers
+			var tmpGlMat	= new Float32Array(16);
 			Object.keys(markers).forEach(function(markerId){
 				var marker = markers[markerId];
 				if (!marker.object3d) {
