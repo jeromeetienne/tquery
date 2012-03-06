@@ -932,6 +932,8 @@ tQuery.World.prototype.destroy	= function(){
 	this.trigger('destroy');
 	// destroy the loop
 	this._loop.destroy();
+	// remove this._cameraControls if needed
+	this.removeCameraControls();
 	// remove renderer element
 	var parent	= this._renderer.domElement.parentElement;
 	parent	&& parent.removeChild(this._renderer.domElement);
@@ -982,6 +984,30 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 
 	parent.appendChild(domElement);
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//		add/remove object3D						//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.World.prototype.setCameraControls	= function(control){
+	if( this.hasCameraControls() )	this.removeCameraControls();
+	this._cameraControls	= control;
+	return this;	// for chained API
+};
+
+tQuery.World.prototype.removeCameraControls	= function(){
+	if( this.hasCameraControls() === false )	return this;
+	this._cameraControls	= undefined;
+	return this;	// for chained API
+};
+
+tQuery.World.prototype.getCameraControls	= function(){
+	return this._cameraControls;
+};
+
+tQuery.World.prototype.hasCameraControls	= function(){
+	return this._cameraControls !== undefined ? true : false;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		add/remove object3D						//
@@ -1058,6 +1084,8 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 
 tQuery.World.prototype.render	= function()
 {
+	// update the cameraControl
+	if( this.hasCameraControls() )	this._cameraControls.update();
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );
 }
@@ -1879,10 +1907,7 @@ tQuery.World.register('addBoilerplate', function(){
 
 	// create a camera contol
 	ctx.cameraControls	= new THREEx.DragPanControls(camera)
-	ctx.loopCameraControls	= function(){
-		ctx.cameraControls.update();
-	};
-	this.loop().hook(ctx.loopCameraControls);
+	this.setCameraControls(ctx.cameraControls);
 
 	// transparently support window resize
 	ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);
@@ -1925,7 +1950,7 @@ tQuery.World.register('removeBoilerplate', function(){
 	document.body.removeChild(ctx.stats.domElement );
 	this.loop().unhook(ctx.loopStats);
 	// remove camera
-	this.loop().unhook(ctx.loopCameraControls)
+	this.removeCameraControls()
 	// stop windowResize
 	ctx.windowResize.stop();
 	// unbind screenShot
