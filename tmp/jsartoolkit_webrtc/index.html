@@ -1,7 +1,10 @@
 <html><head>
-<script src="JSARToolKit.js"></script>
-<script src="Three.js"></script>
+	<script src="JSARToolKit.js"></script>
+	<script src="Three.js"></script>
+	<script src="requestanimationframe.js"></script>
 <script>
+	// TODO setFromArray is like setFromGLMatrix
+	// - FIXME dont modify
 	THREE.Matrix4.prototype.setFromArray = function(m) {
 		return this.set(
 			m[0], m[4], m[8], m[12],
@@ -10,6 +13,25 @@
 			m[3], m[7], m[11], m[15]
 		);
 	};
+	// rename this function
+	function copyMatrix(mat, cm) {
+		cm[0] = mat.m00;
+		cm[1] = -mat.m10;
+		cm[2] = mat.m20;
+		cm[3] = 0;
+		cm[4] = mat.m01;
+		cm[5] = -mat.m11;
+		cm[6] = mat.m21;
+		cm[7] = 0;
+		cm[8] = -mat.m02;
+		cm[9] = mat.m12;
+		cm[10] = -mat.m22;
+		cm[11] = 0;
+		cm[12] = mat.m03;
+		cm[13] = -mat.m13;
+		cm[14] = mat.m23;
+		cm[15] = 1;
+	}
 
 	threshold = 128;
 	DEBUG = true;
@@ -51,7 +73,6 @@
 			alert("Couldn't access webcam.");
 		}
 	);
-	
 	
 	var onload	= function() {
 		document.getElementById('loading').style.display = 'none';
@@ -129,130 +150,88 @@
 		var times = [];
 		var markers = {};
 		var lastTime = 0;
+		
 
-		setInterval(function(){
-		  if (video.ended) video.play();
-		  if (video.paused) return;
-		  if (window.paused) return;
-		  if (video.currentTime == video.duration) {
-		    video.currentTime = 0;
-		  }
-		  if (video.currentTime == lastTime) return;
-		  lastTime = video.currentTime;
-		  videoCanvas.getContext('2d').drawImage(video,0,0);
-		  ctx.drawImage(videoCanvas, 0,0,320,240);
-		  var dt = new Date().getTime();
-		
-		  canvas.changed = true;
-		  videoTex.needsUpdate = true;
-		
-		  var t = new Date();
-		  var detected = detector.detectMarkerLite(raster, threshold);
-		  for (var idx = 0; idx<detected; idx++) {
-		    var id = detector.getIdMarkerData(idx);
-		    var currId;
-		    if (id.packetLength > 4) {
-		      currId = -1;
-		    }else{
-		      currId=0;
-		      for (var i = 0; i < id.packetLength; i++ ) {
-			currId = (currId << 8) | id.getPacketData(i);
-		      }
-		    }
-		    if (!markers[currId]) {
-		      markers[currId] = {};
-		    }
-		    detector.getTransformMatrix(idx, resultMat);
-		    markers[currId].age = 0;
-		    markers[currId].transform = Object.asCopy(resultMat);
-		  }
-		  for (var i in markers) {
-		    var r = markers[i];
-		    if (r.age > 1) {
-		      delete markers[i];
-		      scene.remove(r.model);
-		    }
-		    r.age++;
-		  }
-		  for (var i in markers) {
-		    var m = markers[i];
-		    if (!m.model) {
-		      m.model = new THREE.Object3D();
-		      var cube = new THREE.Mesh(
-			new THREE.CubeGeometry(100,100,100),
-			new THREE.MeshLambertMaterial({color: 0|(0xffffff*Math.random())})
-		      );
-		      cube.position.z = -50;
-		      cube.doubleSided = true;
-		      m.model.matrixAutoUpdate = false;
-		      m.model.add(cube);
-		      scene.add(m.model);
-		    }
-		    copyMatrix(m.transform, tmp);
-		    m.model.matrix.setFromArray(tmp);
-		    m.model.matrixWorldNeedsUpdate = true;
-		  }
-		  renderer.autoClear = false;
-		  renderer.clear();
-		  renderer.render(videoScene, videoCam);
-		  renderer.render(scene, camera);
-		}, 15);
+		var onRender	= function(){
+			if (video.ended) video.play();
+			if (video.paused) return;
+			if (window.paused) return;
+			if (video.currentTime == video.duration) {
+			  video.currentTime = 0;
+			}
+			if (video.currentTime == lastTime) return;
+			lastTime = video.currentTime;
+			videoCanvas.getContext('2d').drawImage(video,0,0);
+			ctx.drawImage(videoCanvas, 0,0,320,240);
+			var dt = new Date().getTime();
+		      
+			canvas.changed = true;
+			videoTex.needsUpdate = true;
+		      
+			var t = new Date();
+			var detected = detector.detectMarkerLite(raster, threshold);
+			for (var idx = 0; idx<detected; idx++) {
+				var id = detector.getIdMarkerData(idx);
+				var currId;
+				if (id.packetLength > 4) {
+					currId = -1;
+				}else{
+					currId=0;
+					for (var i = 0; i < id.packetLength; i++ ) {
+						currId = (currId << 8) | id.getPacketData(i);
+					}
+				}
+				if (!markers[currId]) {
+					markers[currId] = {};
+				}
+				detector.getTransformMatrix(idx, resultMat);
+				markers[currId].age = 0;
+				markers[currId].transform = Object.asCopy(resultMat);
+			}
+			// handle markers age
+			for (var i in markers) {
+				var r = markers[i];
+				if( r.age > 1) {
+					delete markers[i];
+					scene.remove(r.model);
+				}
+				r.age++;
+			}
+			for (var i in markers) {
+				var m = markers[i];
+				if (!m.model) {
+					m.model = new THREE.Object3D();
+					var cube = new THREE.Mesh(
+						new THREE.CubeGeometry(100,100,100),
+						new THREE.MeshLambertMaterial({color: 0|(0xffffff*Math.random())})
+					);
+					cube.position.z = -50;
+					cube.doubleSided = true;
+					m.model.matrixAutoUpdate = false;
+					m.model.add(cube);
+					scene.add(m.model);
+				}
+				copyMatrix(m.transform, tmp);
+				m.model.matrix.setFromArray(tmp);
+				m.model.matrixWorldNeedsUpdate = true;
+			}
+			renderer.autoClear = false;
+			renderer.clear();
+			renderer.render(videoScene, videoCam);
+			renderer.render(scene, camera);
+		};
+
+		requestAnimationFrame(function(){
+			requestAnimationFrame(arguments.callee)
+			onRender()
+		})
 	}
 	window.onload	= onload;
 
-  function copyMatrix(mat, cm) {
-    cm[0] = mat.m00;
-    cm[1] = -mat.m10;
-    cm[2] = mat.m20;
-    cm[3] = 0;
-    cm[4] = mat.m01;
-    cm[5] = -mat.m11;
-    cm[6] = mat.m21;
-    cm[7] = 0;
-    cm[8] = -mat.m02;
-    cm[9] = mat.m12;
-    cm[10] = -mat.m22;
-    cm[11] = 0;
-    cm[12] = mat.m03;
-    cm[13] = -mat.m13;
-    cm[14] = mat.m23;
-    cm[15] = 1;
-  }
-// -->
 </script>
-<style>
-  html {
-    background: white;
-    color: black;
-  }
-  body {
-    margin: 0;
-    padding: 0;
-    margin-top: 20px;
-    text-align: center;
-  }
-  #loading {
-    font-size: 80px;
-    font-weight: bold;
-    font-family: Times;
-  }
-</style>
-
+	<link href='main.css' type="text/css" />
 </head>
 <body>
-<div id="loading">loading...</div>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-1485935-6']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+	<div id="loading">loading...</div>
 </body>
 </html>
