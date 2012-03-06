@@ -27,6 +27,12 @@
 * "For those who want to know webgl, good news! You already know it, just replace j by t!"
   * make this statement true
 * "webgl should not be harder than playing with lego."
+* for api, copy jquery whenever possible
+  * helpers may be provided, but jquery is the auhority
+* must provide Access to three.js
+  * ideally in a easier fashion
+  * should cover it all, must cover most common/cool features
+
 
 ## Name Conventions
 * suppose you want to create a material plugin about fireball
