@@ -2,20 +2,18 @@
 	<script src="vendor/JSARToolKit.js"></script>
 	<script src="vendor/Three.js"></script>
 	<script src="vendor/requestanimationframe.js"></script>
+	<script src="shimUserMedia.js"></script>
 	<link  href='main.css' rel="stylesheet" />
 <script>
-	// TODO setFromArray is like setFromGLMatrix
-	// - FIXME dont modify
-	THREE.Matrix4.prototype.setFromArray = function(m) {
-		return this.set(
+	function copyMatrixGl2Threejs(m, tMat) {
+		return tMat.set(
 			m[0], m[4], m[8], m[12],
 			m[1], m[5], m[9], m[13],
 			m[2], m[6], m[10], m[14],
 			m[3], m[7], m[11], m[15]
 		);
 	};
-	// rename this function
-	function copyMatrix(mat, cm) {
+	function copyMatrixAr2Gl(mat, cm) {
 		cm[0] = mat.m00;
 		cm[1] = -mat.m10;
 		cm[2] = mat.m20;
@@ -40,36 +38,16 @@
 	
 	// create the video element for the webcam
 	var video	= document.createElement('video');
-	video.width	= 320;
-	video.height	= 240;
+	video.width	= 352;
+	video.height	= 288;
 	video.loop	= true;
 	video.volume	= 0;
 	video.autoplay	= true;
 	video.controls	= true;
 
-	var getUserMedia = function(t, onsuccess, onerror) {
-		if (navigator.getUserMedia) {
-			return navigator.getUserMedia(t, onsuccess, onerror);
-		} else if (navigator.webkitGetUserMedia) {
-			return navigator.webkitGetUserMedia(t, onsuccess, onerror);
-		} else if (navigator.mozGetUserMedia) {
-			return navigator.mozGetUserMedia(t, onsuccess, onerror);
-		} else if (navigator.msGetUserMedia) {
-			return navigator.msGetUserMedia(t, onsuccess, onerror);
-		} else {
-			onerror(new Error("No getUserMedia implementation found."));
-		}
-	};
-	
-	var URL = window.URL || window.webkitURL;
-	var createObjectURL = URL.createObjectURL || webkitURL.createObjectURL;
-	if (!createObjectURL){
-		throw new Error("URL.createObjectURL not found.");
-	}
-
-	getUserMedia('video', function(stream) {
-		var url = createObjectURL(stream);
-		video.src = url;
+	navigator.getUserMedia('video', function(stream) {
+		var url		= window.URL.createObjectURL(stream);
+		video.src	= url;
 	}, function(error) {
 		alert("Couldn't access webcam.");
 	});
@@ -80,10 +58,10 @@
 		document.getElementById('loading').style.display = 'none';
 		document.body.appendChild(video);
 	      
-		var canvas	= document.createElement('canvas');
-		canvas.width	= 320;
-		canvas.height	= 240;
-		document.body.appendChild(canvas);
+		var canvasRaster	= document.createElement('canvas');
+		canvasRaster.width	= 320;
+		canvasRaster.height	= 240;
+		document.body.appendChild(canvasRaster);
 
 		// apparently debug canvas is directly updated by jsartoolkit
 		// - usefull to get debug info for tunning
@@ -98,11 +76,11 @@
 		videoCanvas.width	= video.width;
 		videoCanvas.height	= video.width*3/4;	// ASK: so jsartoolkit work only with 3/4 aspect ?
 								// truncate: the output.. no cool
-		
-		var ctx		= canvas.getContext('2d');
+								
+		var ctxRaster	= canvasRaster.getContext('2d');
 	      
-		var arRaster	= new NyARRgbRaster_Canvas2D(canvas);
-		var arParam	= new FLARParam(320,240);
+		var arRaster	= new NyARRgbRaster_Canvas2D(canvasRaster);
+		var arParam	= new FLARParam(canvasRaster.width,canvasRaster.height);
 		var arDetector	= new FLARMultiIdMarkerDetector(arParam, 120);
 		arDetector.setContinueMode(true);
 	      
@@ -114,7 +92,10 @@
 		//document.body.appendChild(renderer.domElement);
 		document.body.insertBefore(renderer.domElement, document.body.firstChild);
 
+		// create the scene
 		var scene	= new THREE.Scene();
+		
+		// setup lights
 		var light	= new THREE.PointLight(0xffffff);
 		light.position.set(400, 500, 100);
 		scene.add(light);
@@ -128,7 +109,7 @@
 		
 		// Next we need to make the Three.js camera use the FLARParam matrix.
 		arParam.copyCameraMatrix(tmpGlMat, 10, 10000);
-		camera.projectionMatrix.setFromArray(tmpGlMat);
+		copyMatrixGl2Threejs(tmpGlMat, camera.projectionMatrix);
 
 		var videoTex = new THREE.Texture(videoCanvas);
 	      
@@ -141,25 +122,15 @@
 		videoScene.add(plane);
 		videoScene.add(videoCam);
 	      
-		var times	= [];
 		var markers	= {};
-		var lastTime	= 0;
-
-		var onRender	= function(){
-			
-			if (video.ended) video.play();
-			if (video.paused) return;
-			if (window.paused) return;
-			if (video.currentTime == video.duration) {
-				video.currentTime = 0;
-			}
-			if (video.currentTime == lastTime) return;
-			lastTime = video.currentTime;
-			
+		
+		animate();
+		
+		function processAr(){
 			videoCanvas.getContext('2d').drawImage(video,0,0);
-			ctx.drawImage(videoCanvas, 0,0, 320, 240);
+			ctxRaster.drawImage(videoCanvas, 0,0, 320, 240);
 		      
-			canvas.changed		= true;
+			canvasRaster.changed	= true;
 			videoTex.needsUpdate	= true;
 			
 			// detect markers
@@ -188,7 +159,7 @@
 			// handle markers age
 			Object.keys(markers).forEach(function(markerId){
 				var marker = markers[markerId];
-				if( marker.age > 1) {
+				if( marker.age > 3) {
 					delete markers[markerId];
 					scene.remove(marker.object3d);
 				}
@@ -209,10 +180,18 @@
 					marker.object3d.add(cube);
 					scene.add(marker.object3d);
 				}
-				copyMatrix(marker.transform, tmpGlMat);
-				marker.object3d.matrix.setFromArray(tmpGlMat);
+				copyMatrixAr2Gl(marker.transform, tmpGlMat);
+				copyMatrixGl2Threejs(tmpGlMat, marker.object3d.matrix);
+
 				marker.object3d.matrixWorldNeedsUpdate = true;				
 			});
+		}
+
+		function render(){
+			
+			if( video.readyState === video.HAVE_ENOUGH_DATA ){
+				processAr();
+			}
 			
 			// trigger the rendering
 			renderer.autoClear = false;
@@ -220,11 +199,12 @@
 			renderer.render(videoScene, videoCam);
 			renderer.render(scene, camera);
 		};
-
-		requestAnimationFrame(function(){
-			requestAnimationFrame(arguments.callee)
-			onRender()
-		})
+		function animate(){
+			
+			requestAnimationFrame(animate);
+			
+			render();
+		};
 	}
 	window.onload	= onload;
 
