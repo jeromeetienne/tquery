@@ -4,9 +4,12 @@ or how to get the boilerplate :)
 boilerplate for tquery is a template to get you started. You download it and
 modify it until it fits your needs. It is a fast way to start a
 clean project with tquery.
+The running boilerplate looks [like that](http://jeromeetienne.github.com/tqueryboilerplate/).
+
+Want to run it on your computer ?
 First you get boilerplate's files
-[here](https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip)
-then you launch the http server to serve them. Here is a little shell script which does it all.
+[here](https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip).
+Then you launch the http server to serve them. Here is a little shell script which does it all.
 
 ```bash
 curl -OL https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip
