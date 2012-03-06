@@ -19,6 +19,10 @@ docs:
 			-d=docs/					\
 			js/ js/plugins
 
+# after that you need to push it
+# git checkout master
+# git merge dev
+# git push 
 release:
 	@(git symbolic-ref HEAD | grep ^refs/heads/master$$ >/dev/null) && git merge dev || echo "you MUST on on master"
 
