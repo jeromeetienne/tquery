@@ -191,6 +191,10 @@ tQuery.pluginsOn(tQuery, tQuery);
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.mixinAttributes	= function(dstObject, properties){
+	// mixin the new property
+	// FIXME the inheritance should work now... not sure
+	dstObject.prototype._attrProps	= tQuery.extend(dstObject.prototype._attrProps, properties);
+
 	dstObject.prototype.attr	= function(name, value){
 		// handle parameters
 		if( name instanceof Object && value === undefined ){
@@ -198,12 +202,12 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 				this.attr(key, name[key]);
 			}.bind(this));
 		}else if( typeof(name) === 'string' ){
-			console.assert( Object.keys(properties).indexOf(name) !== -1, 'invalid property name:'+name);
+			console.assert( Object.keys(this._attrProps).indexOf(name) !== -1, 'invalid property name:'+name);
 		}else	console.assert(false, 'invalid parameter');
 
 		// handle setter
 		if( value !== undefined ){
-			var convertFn	= properties[name];
+			var convertFn	= this._attrProps[name];
 			value		= convertFn(value);
 			this.each(function(element){
 				element[name]	= value;
