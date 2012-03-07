@@ -1,4 +1,6 @@
-var world	= tQuery.createWorld().fullpage().start();
+var world	= tQuery.createWorld().boilerplate().start();
+// remove the cameraControls
+world.removeCameraControls();
 
 // define lights
 tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0x888888));
