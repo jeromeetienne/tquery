@@ -18,18 +18,20 @@ function exportToggle(){
 	var login	= "jeromeetienne";
 	var apiKey	= "R_9176fb8fcaf3a6c0fe4459cb699f6c1d";
 	jQuery.getJSON(	"http://api.bitly.com/v3/shorten?callback=?", { 
-			"format": "json",
-			"apiKey": apiKey,
-			"login": login,
-			"longUrl": longUrl
-		},
-		function(response){
-			var value	= response.data.url;
-			//console.log("bitly", response)
-			jQuery(selector+' input').val(value);
-			jQuery(selector+' input').select();
+		"format"	: "json",
+		"apiKey"	: apiKey,
+		"login"		: login,
+		"longUrl"	: longUrl
+	}).success(function(response){
+		if( response.status_code !== 200 ){
+			console.log("error bitly: status_code", response.status_code, "status_txt", response.status_txt );
+			return;
 		}
-	);
+		console.assert( response.status_code === 200 );
+		var value	= response.data.url;
+		jQuery(selector+' input').val(value);
+		jQuery(selector+' input').select();
+	});
 }
 
 // Initialize CodeMirror editor with a nice html5 canvas demo.
