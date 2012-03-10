@@ -8,9 +8,14 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 
+	var axis	= new THREE.AxisHelper();
+	var scale	= 100;
+	axis.scale.set(1/scale, 1/scale, 1/scale);
+	object.get(0).add(axis);
+	//world.add(axis);
 
 	// fix camera and moving object around camera
-	if( true ){
+	if( false ){
 		// disable usuable camera control	
 		world.removeCameraControls();
 		world.camera().position.set(0, 0, 0);
@@ -24,15 +29,16 @@
 	}
 	
 	// fix camera and moving object rotation
-	if( false ){
+	if( true ){
 		// disable usuable camera control	
 		world.removeCameraControls();
 		// make the camera turn around the object
 		world.loop().hook(function(deltaTime, present){
-			var angle	= 0.1 * present * Math.PI * 2;
+			var angle	= 0.2 * present * Math.PI * 2;
 			var object	= tQuery('torus').get(0);
-			object.rotation.set(0, angle, 0);
-		});	
+			//object.rotation.set(angle*1, angle*3, angle*1);
+			object.rotation.set(angle, 0, 0);
+		});
 	}
 
 	// moving camera and fix object

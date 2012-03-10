@@ -114,9 +114,9 @@ THREEx.WebAudio.Sound	= function(webaudio){
 	this._pannerNode.connect( this._webaudio._entryNode() );
 
 
-//this._pannerNode.coneInnerAngle	= 90;
-//this._pannerNode.coneOuterAngle	= 45;
-//this._pannerNode.coneOuterGain	= 0.2;
+this._pannerNode.coneInnerAngle	= 180;
+this._pannerNode.coneOuterAngle	= 45;
+this._pannerNode.coneOuterGain	= 0.2;
 
 // TODO this hardcoded source MUST NOT stay obviously
 this._source.loop	= true;
@@ -164,16 +164,22 @@ THREEx.WebAudio.Sound.prototype.updateWithObject3d	= function(object3d, deltaTim
 
 	object3d.updateMatrixWorld();
 
+	////////////////////////////////////////////////////////////////////////
+	// set position
 	var position	= object3d.matrixWorld.getPosition();
 	this._pannerNode.setPosition(position.x, position.y, position.z);
 
-if( false ){
-	var rotation	= new THREE.Vector3();
-	rotation.setRotationFromMatrix( object3d.matrixWorld );
-	this._pannerNode.setOrientation(rotation.x, rotation.y, rotation.z);
-	console.log("rotation", rotation.x/Math.PI*180, rotation.y/Math.PI*180, rotation.z/Math.PI*180);
-}
-
+	////////////////////////////////////////////////////////////////////////
+	// set orientation
+	var vOrientation= new THREE.Vector3(0,0,1);
+	var mOrientation= object3d.matrixWorld.clone();
+	// zero the translation
+	mOrientation.setPosition({x : 0, y: 0, z: 0});
+	// Multiply the 0,0,1 vector by the world matrix and normalize the result.
+	mOrientation.multiplyVector3(vOrientation);
+	vOrientation.normalize();
+	// Set panner orientation
+	this._pannerNode.setOrientation(vOrientation.x, vOrientation.y, vOrientation.z);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
