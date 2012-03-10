@@ -114,13 +114,10 @@ THREEx.WebAudio.Sound	= function(webaudio){
 	this._pannerNode.connect( this._webaudio._entryNode() );
 
 
-this._pannerNode.coneInnerAngle	= 180;
-this._pannerNode.coneOuterAngle	= 45;
-this._pannerNode.coneOuterGain	= 0.2;
 
 // TODO this hardcoded source MUST NOT stay obviously
+//this.pannerCone(Math.PI, 0, 0);
 this._source.loop	= true;
-
 	this._loadAndDecodeSound('sounds/techno.mp3', function(buffer){
 		this._source.buffer	= buffer;
 		this.play();
@@ -152,10 +149,25 @@ THREEx.WebAudio.Sound.prototype.stop		= function(){
  * getter/setter on the volume
 */
 THREEx.WebAudio.Sound.prototype.volume	= function(value){
-	if( value !== undefined )	return this._gainNode.gain.valueue;
+	if( value !== undefined )	return this._gainNode.gain.value;
 	this._gainNode.gain.value	= value;
 	return this;
 };
+
+/**
+ * Set parameter for the pannerCone
+ *
+ * @param {Number} innerAngle the inner cone hangle in radian
+ * @param {Number} outerAngle the outer cone hangle in radian
+ * @param {Number} outerGain the gain to apply when in the outerCone
+*/
+THREEx.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, outerGain)
+{
+	this._pannerNode.coneInnerAngle	= innerAngle * 180 / Math.PI;
+	this._pannerNode.coneOuterAngle	= outerAngle * 180 / Math.PI;
+	this._pannerNode.coneOuterGain	= outerGain;
+};
+
 
 THREEx.WebAudio.Sound.prototype.updateWithObject3d	= function(object3d, deltaTime){
 	console.assert( object3d instanceof THREE.Object3D );
