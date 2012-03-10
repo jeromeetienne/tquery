@@ -10,8 +10,14 @@ var THREEx	= THREEx	|| {};
 THREEx.WebAudio	= function(){
 	// create the context
 	this._ctx	= new webkitAudioContext();
-	this._camera	= null;
 	this._sounds	= [];
+
+	// setup the end of the node chain
+	// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ 
+	this._gainNode	= this._ctx.createGainNode();
+	this._compressor= this._ctx.createDynamicsCompressor();
+	this._gainNode.connect( this._compressor );
+	this._compressor.connect( this._ctx.destination );
 };
 
 THREEx.WebAudio.prototype.destroy	= function(){
@@ -31,20 +37,31 @@ THREEx.WebAudio.prototype.context	= function(){
 };
 
 THREEx.WebAudio.prototype._entryNode	= function(){
-	return this._ctx.destination;
+	//return this._ctx.destination;
+	return this._gainNode;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
+THREEx.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
+	console.assert( object3d instanceof THREE.Object3D );
+// TODO handle orientation and velocity too
+// - same issue as in THREEx.WebAudio.Sound
 
-THREEx.WebAudio.prototype.bindCamera	= function(camera){
-	console.assert( camera instanceof THREE.Camera );
-	this._camera	= camera;
-};
+	object3d.updateMatrixWorld();
 
-THREEx.WebAudio.prototype.unbindCamera	= function(){
-	this._camera	= null;
+	var position	= object3d.matrixWorld.getPosition();
+	
+	var context	= this._ctx;
+	
+	context.listener.setPosition(position.x, position.y, position.z);
+}
+
+/**
+ * getter/setter on the volume
+*/
+THREEx.WebAudio.prototype.volume	= function(value){
+	if( value === undefined )	return this._gainNode.gain.valueue;
+	this._gainNode.gain.value	= value;
+	return this;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -72,34 +89,6 @@ THREEx.WebAudio.prototype.removeSound	= function(sound){
 
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Load and decode a sound
- *
- * @param {String} url the url where to get the sound
- * @param {Function} onLoad the function called when the sound is loaded and decoded (optional)
- * @param {Function} onError the function called when an error occured (optional)
-*/
-THREEx.WebAudio.prototype._loadAndDecodeSound	= function(url, onLoad, onError){
-	var cxt		= this._ctx;
-	var request	= new XMLHttpRequest();
-	request.open('GET', url, true);
-	request.responseType	= 'arraybuffer';
-	// Decode asynchronously
-	request.onload	= function() {
-		ctx.decodeAudioData(request.response, function(buffer) {
-			onLoad && onLoad(buffer);
-		}, function(){
-			onError && onError();
-		});
-	};
-	// actually start the request
-	request.send();
-}
-
-//////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +113,12 @@ THREEx.WebAudio.Sound	= function(webaudio){
 	this._gainNode.connect( this._pannerNode );
 	this._pannerNode.connect( this._webaudio._entryNode() );
 
+
+//this._pannerNode.coneInnerAngle	= 90;
+//this._pannerNode.coneOuterAngle	= 45;
+//this._pannerNode.coneOuterGain	= 0.2;
+
+// TODO this hardcoded source MUST NOT stay obviously
 this._source.loop	= true;
 
 	this._loadAndDecodeSound('sounds/techno.mp3', function(buffer){
@@ -156,13 +151,30 @@ THREEx.WebAudio.Sound.prototype.stop		= function(){
 /**
  * getter/setter on the volume
 */
-THREEx.WebAudio.Sound.prototype.volume	= function(val){
-	if( val !== undefined ){
-		this._gainNode.gain.value	= val;
-	}
-	return this._gainNode.gain.value;
+THREEx.WebAudio.Sound.prototype.volume	= function(value){
+	if( value !== undefined )	return this._gainNode.gain.valueue;
+	this._gainNode.gain.value	= value;
+	return this;
 };
 
+THREEx.WebAudio.Sound.prototype.updateWithObject3d	= function(object3d, deltaTime){
+	console.assert( object3d instanceof THREE.Object3D );
+// TODO handle orientation and velocity too
+// - same issue as in THREEx.WebAudio.Sound
+
+	object3d.updateMatrixWorld();
+
+	var position	= object3d.matrixWorld.getPosition();
+	this._pannerNode.setPosition(position.x, position.y, position.z);
+
+if( false ){
+	var rotation	= new THREE.Vector3();
+	rotation.setRotationFromMatrix( object3d.matrixWorld );
+	this._pannerNode.setOrientation(rotation.x, rotation.y, rotation.z);
+	console.log("rotation", rotation.x/Math.PI*180, rotation.y/Math.PI*180, rotation.z/Math.PI*180);
+}
+
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//

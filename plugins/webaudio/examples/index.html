@@ -7,23 +7,84 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
+
+
+	// fix camera and moving object around camera
+	if( true ){
+		// disable usuable camera control	
+		world.removeCameraControls();
+		world.camera().position.set(0, 0, 0);
+		// make the camera turn around the object
+		world.loop().hook(function(deltaTime, present){
+			var angle	= 0.5 * present * Math.PI * 2;
+			var object	= tQuery('torus').get(0);
+			var radius	= 1;
+			object.position.set(Math.cos(angle)*radius, 0, Math.sin(angle)*radius);
+		});	
+	}
 	
+	// fix camera and moving object rotation
+	if( false ){
+		// disable usuable camera control	
+		world.removeCameraControls();
+		// make the camera turn around the object
+		world.loop().hook(function(deltaTime, present){
+			var angle	= 0.1 * present * Math.PI * 2;
+			var object	= tQuery('torus').get(0);
+			object.rotation.set(0, angle, 0);
+		});	
+	}
+
+	// moving camera and fix object
+	if( false ){
+		// disable usuable camera control	
+		world.removeCameraControls();
+		// make the camera turn around the object
+		world.loop().hook(function(deltaTime, present){
+			var angle	= 0.05 * present * Math.PI * 2;
+			var object	= world.camera();
+			var radius	= 3;
+			object.position.set(Math.cos(angle)*radius, Math.sin(angle*3)*radius, Math.sin(angle)*radius);
+		});
+	}
+
 	var webaudio	= world.webaudio();
-
+	webaudio.volume(0.5);
 console.log("object", object.get(0));
-
-	webaudio.bindCamera( world.camera() );
 	
 	var sound	= new THREEx.WebAudio.Sound(webaudio);
-	
+	//sound.volume(0.5);
 	webaudio.addSound( sound );
 
+	world.loop().hook(function(deltaTime){
+		webaudio.updateListener(world.camera(), deltaTime)
+		sound.updateWithObject3d(object.get(0), deltaTime)
+	});
+
+
 	world.loop().hook(function(deltaTime, present){
+		return;
 		var context	= webaudio.context();
 
 		//aObject3d.volume(Math.sin(present)*0.5);
-		var cameraPos	= world.camera().position;
-		context.listener.setPosition( cameraPos.x,  cameraPos.y,  cameraPos.z );
+		//var cameraPos	= world.camera().position;
+		//context.listener.setPosition( cameraPos.x,  cameraPos.y,  cameraPos.z );
+		
+		var camera	= world.camera();
+		camera.updateMatrixWorld();
+		var matrix	= camera.matrixWorld;
+
+		var position	= new THREE.Vector3();
+		position.setPositionFromMatrix( matrix );
+
+		var rotation	= new THREE.Vector3();
+		rotation.setRotationFromMatrix( matrix );
+		
+		console.log("position", position.x, position.y, position.z);
+		//console.log("rotation", rotation.x/Math.PI*180, rotation.y/Math.PI*180, rotation.z/Math.PI*180);
+		
+		context.listener.setPosition( position.x,  position.y,  position.z );
+		//context.listener.setOrientation( rotation.x,  rotation.y,  rotation.z, 0, 1, 0 );
 	});
 	
 </script></body>
