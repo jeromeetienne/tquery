@@ -113,16 +113,6 @@ tQuery.Object3D.register('scaleBy', function(ratio){
 	return this;
 });
 
-// some shortcuts
-tQuery.Object3D.register('positionX'	, function(delta){ return this.position(delta, 0, 0);	});
-tQuery.Object3D.register('positionY'	, function(delta){ return this.position(0, delta, 0);	});
-tQuery.Object3D.register('positionZ'	, function(delta){ return this.position(0, 0, delta);	});
-tQuery.Object3D.register('scaleX'	, function(delta){ return this.scale(delta, 0, 0);	});
-tQuery.Object3D.register('scaleY'	, function(delta){ return this.scale(0, delta, 0);	});
-tQuery.Object3D.register('scaleZ'	, function(delta){ return this.scale(0, 0, delta);	});
-tQuery.Object3D.register('rotationX'	, function(delta){ return this.rotation(delta, 0, 0);	});
-tQuery.Object3D.register('rotationY'	, function(delta){ return this.rotation(0, delta, 0);	});
-tQuery.Object3D.register('rotationZ'	, function(delta){ return this.rotation(0, 0, delta);	});
 
 // some shortcuts
 tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
