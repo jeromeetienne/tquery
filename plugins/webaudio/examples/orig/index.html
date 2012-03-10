@@ -1,0 +1,66 @@
+<body>
+<input type="range" min="0" max="100" value="100" onchange="changeVolume(this.value/100);">
+<script>
+var context	= new webkitAudioContext();
+
+function loadSound(url, callback) {
+	var request	= new XMLHttpRequest();
+	request.open('GET', url, true);
+	request.responseType	= 'arraybuffer';
+	
+	// Decode asynchronously
+	request.onload	= function() {
+		context.decodeAudioData(request.response, function(buffer) {
+			callback(buffer);
+		}, function(){
+			console.log("error", arguments)
+		});
+	}
+	request.send();
+}
+
+function playSound(buffer, time) {
+	var source	= context.createBufferSource();
+	source.buffer	= buffer;
+	source.loop	= true;
+	source.connect(context.destination);
+	source.noteOn(time);
+	return source;
+}
+
+//loadSound('kick.wav', function(buffer){
+//	console.log("buffer", buffer)
+//	//playSound(buffer, 0);
+//	
+//	var startTime	= context.currentTime + 0.100;
+//	var tempo	= 240; // BPM (beats per minute)
+//	var eighthNoteTime = (60 / tempo) / 2;
+//	for( var bar = 0; bar < 10; bar++ ){
+//		var time = startTime + bar * 8 * eighthNoteTime;
+//		// Play the bass (kick) drum on beats 1, 5
+//		playSound(buffer, time);
+//		playSound(buffer, time + 4 * eighthNoteTime);
+//	}
+//})
+
+console.log("kkk")
+var source, gainNode;
+loadSound('techno.mp3', function(buffer){
+	source		= context.createBufferSource();
+	source.buffer	= buffer;
+	//source.loop	= true;
+	
+	gainNode	= context.createGainNode();
+	source.connect(gainNode);
+	gainNode.connect(context.destination);
+	source.noteOn(0);
+	
+	console.log("source", source)
+});
+
+var changeVolume	= function(val){
+	console.log("val", val)
+	gainNode.gain.value = val;
+}
+
+</script></body>

@@ -1,0 +1,29 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../threex.webaudio.js"></script>
+<script src="../tquery.world.webaudio.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	var webaudio	= world.webaudio();
+
+console.log("object", object.get(0));
+
+	webaudio.bindCamera( world.camera() );
+	
+	var sound	= new THREEx.WebAudio.Sound(webaudio);
+	
+	webaudio.addSound( sound );
+
+	world.loop().hook(function(deltaTime, present){
+		var context	= webaudio.context();
+
+		//aObject3d.volume(Math.sin(present)*0.5);
+		var cameraPos	= world.camera().position;
+		context.listener.setPosition( cameraPos.x,  cameraPos.y,  cameraPos.z );
+	});
+	
+</script></body>
