@@ -8,7 +8,9 @@ function exportToggle(){
 		jQuery(selector).hide();
 		return;
 	}
-
+	// be sure to save the option in the url before
+	optionsSave();
+	
 	jQuery(selector).show();
 
 	var longUrl	= location.href;
