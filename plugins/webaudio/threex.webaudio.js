@@ -1,3 +1,12 @@
+/**
+ * Tutorials:
+ * http://www.html5rocks.com/en/tutorials/webaudio/games/
+ * http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/ <- +1 as it is three.js
+ * http://www.html5rocks.com/en/tutorials/webaudio/intro/
+ *
+ * Spec:
+ * https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+*/
 
 /**
  * @namespace
@@ -10,7 +19,6 @@ var THREEx	= THREEx	|| {};
 THREEx.WebAudio	= function(){
 	// create the context
 	this._ctx	= new webkitAudioContext();
-	this._sounds	= [];
 
 	// setup the end of the node chain
 	// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ 
@@ -36,23 +44,12 @@ THREEx.WebAudio.prototype.context	= function(){
 	return this._ctx;
 };
 
+/**
+ * return the entry node in the master node chains
+*/
 THREEx.WebAudio.prototype._entryNode	= function(){
 	//return this._ctx.destination;
 	return this._gainNode;
-}
-
-THREEx.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
-	console.assert( object3d instanceof THREE.Object3D );
-// TODO handle orientation and velocity too
-// - same issue as in THREEx.WebAudio.Sound
-
-	object3d.updateMatrixWorld();
-
-	var position	= object3d.matrixWorld.getPosition();
-	
-	var context	= this._ctx;
-	
-	context.listener.setPosition(position.x, position.y, position.z);
 }
 
 /**
@@ -64,27 +61,47 @@ THREEx.WebAudio.prototype.volume	= function(value){
 	return this;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
 
-/**
- * Add an sound (it MUST NOT be present)
-*/
-THREEx.WebAudio.prototype.addSound	= function(sound){
-	console.assert( sound instanceof THREEx.WebAudio.Sound );
-	console.assert(this._sounds.indexOf(sound) === -1)
-	this._sounds.push( sound );
-}
+THREEx.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
+	var context	= this._ctx;
+	// sanity check on parameters
+	console.assert( object3d instanceof THREE.Object3D );
+	console.assert( typeof(deltaTime) === 'number' );
 
-/**
- * Remove an sound (it MUST be present)
-*/
-THREEx.WebAudio.prototype.removeSound	= function(sound){
-	console.assert( sound instanceof THREEx.WebAudio.Sound );
-	var index	= this._sounds.indexOf(sound);
-	console.assert(index !== -1)
-	this._sounds.splice(indexaColors.indexOf('tag'), 1);
+	// ensure object3d.matrixWorld is up to date
+	object3d.updateMatrixWorld();
+	
+	////////////////////////////////////////////////////////////////////////
+	// set position
+	var position	= object3d.matrixWorld.getPosition();
+	context.listener.setPosition(position.x, position.y, position.z);
+
+	////////////////////////////////////////////////////////////////////////
+	// set orientation
+	var mOrientation= object3d.matrixWorld.clone();
+	// zero the translation
+	mOrientation.setPosition({x : 0, y: 0, z: 0});
+	// Compute Front vector: Multiply the 0,0,1 vector by the world matrix and normalize the result.
+	var vFront= new THREE.Vector3(0,0,1);
+	mOrientation.multiplyVector3(vFront);
+	vFront.normalize();
+	// Compute UP vector: Multiply the 0,-1,0 vector by the world matrix and normalize the result.
+	var vUp= new THREE.Vector3(0,-1, 0);
+	mOrientation.multiplyVector3(vUp);
+	vUp.normalize();
+	// Set panner orientation
+	context.listener.setOrientation(vFront.x, vFront.y, vFront.z, vUp.x, vUp.y, vUp.z);
+
+	////////////////////////////////////////////////////////////////////////
+	// set velocity
+	if( this._prevPos === undefined ){
+		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+	}else{
+		var position	= object3d.matrixWorld.getPosition();
+		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
+		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
+	}
 }
 
 
@@ -113,13 +130,10 @@ THREEx.WebAudio.Sound	= function(webaudio){
 	this._gainNode.connect( this._pannerNode );
 	this._pannerNode.connect( this._webaudio._entryNode() );
 
-
-
-// TODO this hardcoded source MUST NOT stay obviously
-//this.pannerCone(Math.PI, 0, 0);
-this._source.loop	= true;
+	// TODO this hardcoded source MUST NOT stay obviously
 	this._loadAndDecodeSound('sounds/techno.mp3', function(buffer){
 		this._source.buffer	= buffer;
+		this._source.loop	= true;
 		this.play();
 		console.log(this._context.listener);
 	}.bind(this));
@@ -137,12 +151,14 @@ THREEx.WebAudio.Sound.prototype.isPlayable	= function(){
 	return this._source.buffer ? true : false;
 };
 
-THREEx.WebAudio.Sound.prototype.play		= function(){
-	this._source.noteOn(0);
+THREEx.WebAudio.Sound.prototype.play		= function(time){
+	if( time ===  undefined )	time	= 0;
+	this._source.noteOn(time);
 };
 
-THREEx.WebAudio.Sound.prototype.stop		= function(){
-	this._source.noteOff(0);
+ THREEx.WebAudio.Sound.prototype.stop		= function(time){
+	if( time ===  undefined )	time	= 0;
+	this._source.noteOff(time);
 };
 
 /**
@@ -169,11 +185,18 @@ THREEx.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, ou
 };
 
 
+/**
+ * Update the source with object3d. usefull for positional sounds
+ * 
+ * @param {THREE.Object3D} object3d the object which originate the source
+ * @param {Number} deltaTime the number of seconds since last update
+*/
 THREEx.WebAudio.Sound.prototype.updateWithObject3d	= function(object3d, deltaTime){
+	// sanity check on parameters
 	console.assert( object3d instanceof THREE.Object3D );
-// TODO handle orientation and velocity too
-// - same issue as in THREEx.WebAudio.Sound
+	console.assert( typeof(deltaTime) === 'number' );
 
+	// ensure object3d.matrixWorld is up to date
 	object3d.updateMatrixWorld();
 
 	////////////////////////////////////////////////////////////////////////
@@ -192,6 +215,17 @@ THREEx.WebAudio.Sound.prototype.updateWithObject3d	= function(object3d, deltaTim
 	vOrientation.normalize();
 	// Set panner orientation
 	this._pannerNode.setOrientation(vOrientation.x, vOrientation.y, vOrientation.z);
+	
+	////////////////////////////////////////////////////////////////////////
+	// set velocity
+	if( this._prevPos === undefined ){
+		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+	}else{
+		var position	= object3d.matrixWorld.getPosition();
+		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
+		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		this._pannerNode.setVelocity(velocity.x, velocity.y, velocity.z);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
