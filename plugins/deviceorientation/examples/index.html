@@ -9,10 +9,11 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 	
-	var orientation	= tQuery.deviceOrientation();
+	world.removeCameraControls();
+	
 	world.loop().hook(function(){
-		object.get(0).rotation.x	= -orientation.angleY();
-		object.get(0).rotation.y	= orientation.angleX();
-		object.get(0).rotation.z	= orientation.angleZ();
+		var orientation	= tQuery.deviceOrientation();
+		// TODO this is a angleY on X ??? bug in threex ?
+		object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
 	})
 </script></body>
