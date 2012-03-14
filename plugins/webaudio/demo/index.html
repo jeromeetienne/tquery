@@ -1,0 +1,34 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	//var object	= tQuery.createTorus().addTo(world);
+
+	// do a sphere
+	tQuery.createCube(0.1,1.2,0.1).addTo(world);
+	tQuery.createSphere(0.5, 32, 16).translateY(1).addTo(world);
+	
+	
+	
+	
+	// do the checkerboard
+	var squareW	= 11;
+	var squareH	= 11;
+	var geometry	= new THREE.PlaneGeometry( 100, 100, squareW, squareH );
+	geometry.materials	= [
+		new THREE.MeshBasicMaterial({ color: 0x00aaff }),
+		new THREE.MeshBasicMaterial({ color: 0xffaa00 })
+	];
+	geometry.faces.forEach(function(face, idx){
+		var y		= Math.floor(idx / squareW);
+		var x		= idx - (y*squareW);
+		face.materialIndex	= (y % 2 + x%2 ) %2;
+	});
+	var material	= new THREE.MeshFaceMaterial();
+	var mesh	= new THREE.Mesh(geometry, material);
+	mesh.position.y	= -2;
+	mesh.rotation.x	= -Math.PI/2;
+	world.add(mesh);
+
+</script></body>

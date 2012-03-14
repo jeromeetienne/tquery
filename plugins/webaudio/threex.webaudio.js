@@ -123,20 +123,34 @@ THREEx.WebAudio.Sound	= function(webaudio){
 	this._webaudio	= webaudio;
 	this._context	= webaudio.context();
 
+if( false ){
 	this._source	= this._context.createBufferSource();
+}else{
+	this._source	= this._context.createJavaScriptNode(1024*16, 1, 1);
+	var x	= 0
+	this._source.onaudioprocess = function(event){
+		var data	= event.outputBuffer.getChannelData(0);
+		console.dir("data", data)
+		for( var i = 0; i < data.length; i++ ){
+			data[i] = Math.sin(x++);
+		}
+	};	
+}
+
 	this._gainNode	= this._context.createGainNode();
 	this._pannerNode= this._context.createPanner();
 	this._source.connect( this._gainNode );
 	this._gainNode.connect( this._pannerNode );
 	this._pannerNode.connect( this._webaudio._entryNode() );
 
-	// TODO this hardcoded source MUST NOT stay obviously
-	this._loadAndDecodeSound('sounds/techno.mp3', function(buffer){
-		this._source.buffer	= buffer;
-		this._source.loop	= true;
-		this.play();
-		console.log(this._context.listener);
-	}.bind(this));
+
+	//// TODO this hardcoded source MUST NOT stay obviously
+	//this._loadAndDecodeSound('sounds/techno.mp3', function(buffer){
+	//	this._source.buffer	= buffer;
+	//	this._source.loop	= true;
+	//	this.play();
+	//	console.log(this._context.listener);
+	//}.bind(this));
 };
 
 THREEx.WebAudio.Sound.prototype.destroy	= function(){
