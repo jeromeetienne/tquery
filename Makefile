@@ -19,6 +19,23 @@ docs:
 			-d=docs/					\
 			js/ js/plugins
 
+help:
+	@echo "Inline help for Makefile"
+	@echo ""
+	@echo "make server		<- launch a minimal webserver"
+	@echo "make docs		<- generate jsdocs"
+	@echo "make buildPlain		<- generate tquery.js"
+	@echo "make minifyPlain	<- generate tquery.min.js"
+	@echo "make buildBundle	<- generate tquery-bundle.js"
+	@echo "make minifyBundle	<- generate tquery-bundle.min.js"
+	@echo "make buildAll		<- generate tquery-all.js"
+	@echo "make minifyAll		<- generate tquery-all.min.js"
+	@echo ""
+	@echo "*** internal target ***"
+	@echo "make deploy		<- deploy tquery to his gh-pages"
+	@echo "make release		<- copy -dev branch to -master branch"
+	@echo "make boilerplateBuild	<- generate a boilerplate in ~/Downloads"
+
 #################################################################################
 #		misc to sort							#
 #################################################################################
@@ -76,6 +93,14 @@ buildBundle: buildPlain
 	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js
 
+minifyBundle: buildBundle
+	echo $(BANNER)	>  build/tquery-bundle.min.js
+	curl --data-urlencode "js_code@build/tquery-bundle.js" 	\
+		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
+		http://closure-compiler.appspot.com/compile	\
+		>> build/tquery-bundle.min.js
+	echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
+
 buildAll: buildBundle
 	echo $(BANNER)					>  build/tquery-all.js
 	cat build/tquery-bundle.js			>> build/tquery-all.js
@@ -123,13 +148,5 @@ minifyAll: buildAll
 		http://closure-compiler.appspot.com/compile	\
 		>> build/tquery-all.min.js
 	echo size minified + gzip is `gzip -c build/tquery-all.min.js | wc -c` byte
-
-minifyBundle: buildBundle
-	echo $(BANNER)	>  build/tquery-bundle.min.js
-	curl --data-urlencode "js_code@build/tquery-bundle.js" 	\
-		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile	\
-		>> build/tquery-bundle.min.js
-	echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
 
 .PHONY: docs buildPlain buildBundle minifyPlain minifyBundle
