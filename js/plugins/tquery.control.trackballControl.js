@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
 * @fileOverview Plugins for tQuery and Stats.js
 */
 
@@ -12,7 +12,7 @@ tQuery.TrackballControl = function (elements) {
 }
 
 /**
-* inherit from tQuery.Control
+* inherit from tQuery.Control - implements update
 */
 tQuery.inherit(tQuery.TrackballControl, tQuery.Control);
 
@@ -25,22 +25,54 @@ tQuery.pluginsInstanceOn(tQuery.TrackballControl);
 * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.TrackballControl, {
-    maxDistance : tQuery.convert.toNumber
+    
+    target                  : tQuery.convert.toVector3,
+    rotateSpeed             : tQuery.convert.toNumber,
+    zoomSpeed               : tQuery.convert.toNumber,
+    minDistance             : tQuery.convert.toNumber,
+    maxDistance             : tQuery.convert.toNumber,
+    noZoom                  : tQuery.convert.toBool,
+    noPan                   : tQuery.convert.toBool,
+    staticMoving            : tQuery.convert.toBool,
+    dynamicDampingFactor    : tQuery.convert.toNumber,
+    keys                    : tQuery.convert.identity
+
 });
 
-tQuery.register('createTrackballControls', function () {
-    var controls = new THREE.TrackballControls(_this.camera());
+//Put these here for now as they relate to the above, don't want the functions registered if the above code isn't included in the build.
+
+//Create a control with a no camera, when this control is set to a world it will wrap that worlds current camera.
+tQuery.register('createTrackballControl', function (settings) {
+    
+    var defaultSettings = { 
+        rotateSpeed : 1.0,
+        zoomSpeed : 1.2,
+        minDistance : 40,
+        maxDistance : 14000,
+        noZoom : false,
+        noPan : false,
+        staticMoving : false,
+        dynamicDampingFactor : 0.15,
+        keys : [65, 83, 68]
+    };
+
+    //Apply default settings
+    settings = tQuery.extend(settings, defaultSettings);
+
+    //Create new controls wrapping current camera
+    var controls = new THREE.TrackballControls(null);
 
     controls.target.set(0, 0, 0)
-    controls.rotateSpeed = 1.0;
-    controls.zoomSpeed = 1.2;
-    controls.minDistance = 40;
-    controls.maxDistance = 14000;
-    controls.noZoom = false;
-    controls.noPan = true;
-    controls.staticMoving = false;
-    controls.dynamicDampingFactor = 0.15;
-    controls.keys = [65, 83, 68];
+    controls.rotateSpeed = settings.rotateSpeed;
+    controls.zoomSpeed = settings.zoomSpeed;
+    controls.minDistance = settings.minDistance;
+    controls.maxDistance = settings.maxDistance;
+    controls.noZoom = settings.noZoom;
+    controls.noPan = settings.noPan;
+    controls.staticMoving = settings.staticMoving;
+    controls.dynamicDampingFactor = settings.dynamicDampingFactor;
+    controls.keys = settings.keys;
 
+    //Return the controls
     return tQuery(controls);
 });

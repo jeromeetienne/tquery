@@ -12,36 +12,40 @@
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
 */
-var tQuery	= function(object, root)
-{
-// TODO make tthat cleaner
-// - there is a list of functions registered by each plugins
-//   - handle() object instanceof THREE.Mesh
-//   - create() return new tQuery(object)
-// - this list is processed in order here
+var tQuery = function (object, root) {
+    // TODO make that cleaner
+    // - there is a list of functions registered by each plugins
+    //   - handle() object instanceof THREE.Mesh
+    //   - create() return new tQuery(object)
+    // - this list is processed in order here
 
-	if( object instanceof THREE.Mesh  && tQuery.Mesh){
-		return new tQuery.Mesh(object);
+    if (object instanceof THREE.Mesh && tQuery.Mesh) {
+        return new tQuery.Mesh(object);
 
-	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
-		return new tQuery.DirectionalLight(object);
-	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
-		return new tQuery.AmbientLight(object);
-	}else if( object instanceof THREE.Light && tQuery.Light){
-		return new tQuery.Light(object);
+    } else if (object instanceof THREE.DirectionalLight && tQuery.DirectionalLight) {
+        return new tQuery.DirectionalLight(object);
+    } else if (object instanceof THREE.AmbientLight && tQuery.AmbientLight) {
+        return new tQuery.AmbientLight(object);
+    } else if (object instanceof THREE.Light && tQuery.Light) {
+        return new tQuery.Light(object);
 
-	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
-		return new tQuery.Object3D(object);
-	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
-		return new tQuery.Geometry(object);
-	}else if( object instanceof THREE.Material && tQuery.Material){
-		return new tQuery.Material(object);
-	}else if( typeof object === "string" && tQuery.Object3D){
-		return new tQuery.Object3D(object, root);
-	}else{
-		console.assert(false, "unsupported type")
-	}
-	return undefined;
+    } else if (object instanceof THREE.Object3D && tQuery.Object3D) {
+        return new tQuery.Object3D(object);
+    } else if (object instanceof THREE.Geometry && tQuery.Geometry) {
+        return new tQuery.Geometry(object);
+    } else if (object instanceof THREE.Material && tQuery.Material) {
+        return new tQuery.Material(object);
+    } else if (typeof object === "string" && tQuery.Object3D) {
+        return new tQuery.Object3D(object, root);
+
+        //Controls
+    } else if (object instanceof THREE.Trackballs && tQuery.TrackballControls) {
+        return new tQuery.TrackballControls(object);
+
+    } else {
+        console.assert(false, "unsupported type")
+    }
+    return undefined;
 };
 
 /**
@@ -192,6 +196,10 @@ tQuery.pluginsOn(tQuery, tQuery);
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.mixinAttributes	= function(dstObject, properties){
+	// mixin the new property
+	// FIXME the inheritance should work now... not sure
+	dstObject.prototype._attrProps	= tQuery.extend(dstObject.prototype._attrProps, properties);
+
 	dstObject.prototype.attr	= function(name, value){
 		// handle parameters
 		if( name instanceof Object && value === undefined ){
@@ -199,12 +207,12 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 				this.attr(key, name[key]);
 			}.bind(this));
 		}else if( typeof(name) === 'string' ){
-			console.assert( Object.keys(properties).indexOf(name) !== -1, 'invalid property name:'+name);
+			console.assert( Object.keys(this._attrProps).indexOf(name) !== -1, 'invalid property name:'+name);
 		}else	console.assert(false, 'invalid parameter');
 
 		// handle setter
 		if( value !== undefined ){
-			var convertFn	= properties[name];
+			var convertFn	= this._attrProps[name];
 			value		= convertFn(value);
 			this.each(function(element){
 				element[name]	= value;
@@ -295,6 +303,24 @@ tQuery.convert.toThreeColor	= function(value){
 		console.assert(false, "invalid parameter");
 	}
 	return undefined;	// never reached - just to workaround linter complaint
+};
+
+/**
+* Convert the value into a THREE.Vector3 object
+* 
+* @return {THREE.Vector3} the resulting vector3
+*/
+tQuery.convert.toThreeVector = function (value) {
+    if (arguments.length === 1 && typeof (value) === 'number') {
+        return new THREE.Vector3(value, value, value);
+    } else if (arguments.length === 3 && typeof (value) === 'number') {
+        return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+    } else if (arguments.length === 1 && value instanceof THREE.Vector3) {
+        return value;
+    } else {
+        console.assert(false, "invalid parameter");
+    }
+    return undefined; // never reached - just to workaround linter complaint
 };
 
 tQuery.convert.toNumber	= function(value){
@@ -412,7 +438,42 @@ tQuery.Node.prototype.removeData	= function(key)
 		tQuery.removeData(element, key);
 	});
 	return this;	// for chained API
-}/**
+}﻿/**
+* @Base tquery object for a control
+*/
+
+tQuery.Control = function (elements) {
+    // call parent ctor
+    tQuery.Control.parent.constructor.call(this, elements);
+}
+
+/**
+* inherit from tQuery.Node
+*/
+tQuery.inherit(tQuery.Control, tQuery.Node);
+
+/**
+* All controls should implement update to be called in the render loop
+*/
+tQuery.Control.prototype.update = function () {
+    this._lists.forEach(function (item) { item.update(); });
+}
+
+/**
+* All controls needs to be set to a world, at which point the controls internal camera object is set
+* and the worlds camera control is also set.
+*/
+tQuery.Control.prototype.setOn = function (world) {
+    this._lists.forEach(function (item) {
+        item.object = world.camera();
+        world.setCameraControls(item);
+    });
+}
+
+/**
+* Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Control);/**
  * Handle object3D
  *
  * @class include THREE.Object3D
@@ -1490,39 +1551,84 @@ tQuery.mixinAttributes(tQuery.PointLight, {
 });
 
 
-/**
- * @fileOverview Plugins for tQuery and Stats.js
+﻿﻿/**
+* @fileOverview Plugins for tQuery and Stats.js
 */
 
-(function(){	// closure function
+tQuery.TrackballControl = function (elements) {
+
+    // call parent ctor
+    tQuery.TrackballControl.parent.constructor.call(this, elements)
+
+    // sanity check - all items MUST be THREE.TrackballControls
+    this._lists.forEach(function (item) { console.assert(item instanceof THREE.TrackballControls); });
+}
 
 /**
- * 
+* inherit from tQuery.Control - implements update
 */
-var DragPanControls	= function(loop)
-{
-	this._loop	= loop	|| tQuery.world.loop();
+tQuery.inherit(tQuery.TrackballControl, tQuery.Control);
 
-	this._controls	= new THREEx.DragPanControls(tQuery.world.camera());
-	this._$onRender	= this._onRender.bind(this);
-	this._loop.hookPreRender(this._$onRender);
-};
-
-DragPanControls.prototype.destroy	= function(){
-	this._loop.unhookPreRender(this._$onRender);	
-};
-
-DragPanControls.prototype._onRender	= function(){
-	this._controls.update();
-};
-
-
-// register the plugins
-tQuery.register('DragPanControls', DragPanControls);
-tQuery.register('createDragPanControls', function(loop){ return new tQuery.DragPanControls(loop); });
-
-})();	// closure function end
 /**
+* Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.TrackballControl);
+
+/**
+* define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.TrackballControl, {
+    
+    target                  : tQuery.convert.toVector3,
+    rotateSpeed             : tQuery.convert.toNumber,
+    zoomSpeed               : tQuery.convert.toNumber,
+    minDistance             : tQuery.convert.toNumber,
+    maxDistance             : tQuery.convert.toNumber,
+    noZoom                  : tQuery.convert.toBool,
+    noPan                   : tQuery.convert.toBool,
+    staticMoving            : tQuery.convert.toBool,
+    dynamicDampingFactor    : tQuery.convert.toNumber,
+    keys                    : tQuery.convert.identity
+
+});
+
+//Put these here for now as they relate to the above, don't want the functions registered if the above code isn't included in the build.
+
+//Create a control with a no camera, when this control is set to a world it will wrap that worlds current camera.
+tQuery.register('createTrackballControl', function (settings) {
+    
+    var defaultSettings = { 
+        rotateSpeed : 1.0,
+        zoomSpeed : 1.2,
+        minDistance : 40,
+        maxDistance : 14000,
+        noZoom : false,
+        noPan : false,
+        staticMoving : false,
+        dynamicDampingFactor : 0.15,
+        keys : [65, 83, 68]
+    };
+
+    //Apply default settings
+    settings = tQuery.extend(settings, defaultSettings);
+
+    //Create new controls wrapping current camera
+    var controls = new THREE.TrackballControls(null);
+
+    controls.target.set(0, 0, 0)
+    controls.rotateSpeed = settings.rotateSpeed;
+    controls.zoomSpeed = settings.zoomSpeed;
+    controls.minDistance = settings.minDistance;
+    controls.maxDistance = settings.maxDistance;
+    controls.noZoom = settings.noZoom;
+    controls.noPan = settings.noPan;
+    controls.staticMoving = settings.staticMoving;
+    controls.dynamicDampingFactor = settings.dynamicDampingFactor;
+    controls.keys = settings.keys;
+
+    //Return the controls
+    return tQuery(controls);
+});/**
  * @fileOverview Plugins for tQuery.Geometry: tool box to play with geometry
 */
 
@@ -1841,6 +1947,7 @@ tQuery.Object3D.register('scaleBy', function(ratio){
 	return this;
 });
 
+
 // some shortcuts
 tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
@@ -1865,7 +1972,7 @@ tQuery.World.register('fullpage', function(){
 	return this.boilerplate();
 });
 
-tQuery.World.register('boilerplate', function(){
+tQuery.World.register('boilerplate', function(opts){
 	// put renderer fullpage
 	var domElement	= document.body;
 	domElement.style.margin		= "0";
@@ -1874,17 +1981,24 @@ tQuery.World.register('boilerplate', function(){
 	this.appendTo(domElement);
 
 	// add the boilerplate
-	this.addBoilerplate();
+	this.addBoilerplate(opts);
 	
 	// for chained API
 	return this;
 });
 
-tQuery.World.register('addBoilerplate', function(){
+tQuery.World.register('addBoilerplate', function(opts){
 	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
-
+	// handle parameters	
+	opts	= tQuery.extend(opts, {
+		stats		: true,
+		cameraControls	: true,
+		windowResize	: true,
+		screenshot	: true,
+		fullscreen	: true
+	});
 	// get the context
 	var ctx	= {};
 
@@ -1892,29 +2006,37 @@ tQuery.World.register('addBoilerplate', function(){
 	tQuery.data(this, '_boilerplateCtx', ctx);
 
 	// add Stats.js - https://github.com/mrdoob/stats.js
-	ctx.stats	= new Stats();
-	ctx.stats.domElement.style.position	= 'absolute';
-	ctx.stats.domElement.style.bottom	= '0px';
-	document.body.appendChild( ctx.stats.domElement );
-	ctx.loopStats	= function(){
-		ctx.stats.update();
-	};
-	this.loop().hook(ctx.loopStats);
+	if( opts.stats ){
+		ctx.stats	= new Stats();
+		ctx.stats.domElement.style.position	= 'absolute';
+		ctx.stats.domElement.style.bottom	= '0px';
+		document.body.appendChild( ctx.stats.domElement );
+		ctx.loopStats	= function(){
+			ctx.stats.update();
+		};
+		this.loop().hook(ctx.loopStats);		
+	}
 
 	// get some variables
 	var camera	= this.camera();
 	var renderer	= this.renderer();
 
 	// create a camera contol
-	ctx.cameraControls	= new THREEx.DragPanControls(camera)
-	this.setCameraControls(ctx.cameraControls);
+	if( opts.cameraControls ){
+		ctx.cameraControls	= new THREEx.DragPanControls(camera);
+		this.setCameraControls(ctx.cameraControls);		
+	}
 
 	// transparently support window resize
-	ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);
+	if( opts.windowResize ){
+		ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);		
+	}
 	// allow 'p' to make screenshot
-	ctx.screenShot		= THREEx.Screenshot.bindKey(renderer);
+	if( opts.screenshot ){		
+		ctx.screenshot		= THREEx.Screenshot.bindKey(renderer);
+	}
 	// allow 'f' to go fullscreen where this feature is supported
-	if( THREEx.FullScreen.available() ){
+	if( opts.fullscreen && THREEx.FullScreen.available() ){
 		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
 	}
 
@@ -1947,16 +2069,16 @@ tQuery.World.register('removeBoilerplate', function(){
 	this.unbind('destroy', this._$onDestroy);
 
 	// remove stats.js
-	document.body.removeChild(ctx.stats.domElement );
-	this.loop().unhook(ctx.loopStats);
+	ctx.stats		&& document.body.removeChild(ctx.stats.domElement );
+	ctx.stats		&& this.loop().unhook(ctx.loopStats);
 	// remove camera
-	this.removeCameraControls()
+	ctx.cameraControls	&& this.removeCameraControls()
 	// stop windowResize
-	ctx.windowResize.stop();
-	// unbind screenShot
-	ctx.screenShot.unbind();
+	ctx.windowResize	&& ctx.windowResize.stop();
+	// unbind screenshot
+	ctx.screenshot		&& ctx.screenshot.unbind();
 	// unbind fullscreen
-	ctx.fullscreen && ctx.fullscreen.unbind();
+	ctx.fullscreen		&& ctx.fullscreen.unbind();
 });// This THREEx helper makes it easy to handle window resize.
 // It will update renderer and camera when window is resized.
 //

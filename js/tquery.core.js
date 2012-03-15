@@ -38,8 +38,8 @@ var tQuery = function (object, root) {
         return new tQuery.Object3D(object, root);
 
         //Controls
-    } else if (object instanceof THREE.Trackballs && tQuery.TrackballControls) {
-        return new tQuery.TrackballControls(object);
+    } else if (object instanceof THREE.TrackballControls && tQuery.TrackballControl) {
+        return new tQuery.TrackballControl(object);
 
     } else {
         console.assert(false, "unsupported type")
