@@ -811,8 +811,8 @@ var tQuery = function (object, root) {
         return new tQuery.Object3D(object, root);
 
         //Controls
-    } else if (object instanceof THREE.Trackballs && tQuery.TrackballControls) {
-        return new tQuery.TrackballControls(object);
+    } else if (object instanceof THREE.TrackballControls && tQuery.TrackballControl) {
+        return new tQuery.TrackballControl(object);
 
     } else {
         console.assert(false, "unsupported type")
@@ -1075,24 +1075,6 @@ tQuery.convert.toThreeColor	= function(value){
 		console.assert(false, "invalid parameter");
 	}
 	return undefined;	// never reached - just to workaround linter complaint
-};
-
-/**
-* Convert the value into a THREE.Vector3 object
-* 
-* @return {THREE.Vector3} the resulting vector3
-*/
-tQuery.convert.toThreeVector = function (value) {
-    if (arguments.length === 1 && typeof (value) === 'number') {
-        return new THREE.Vector3(value, value, value);
-    } else if (arguments.length === 3 && typeof (value) === 'number') {
-        return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-    } else if (arguments.length === 1 && value instanceof THREE.Vector3) {
-        return value;
-    } else {
-        console.assert(false, "invalid parameter");
-    }
-    return undefined; // never reached - just to workaround linter complaint
 };
 
 tQuery.convert.toNumber	= function(value){
@@ -2351,7 +2333,6 @@ tQuery.pluginsInstanceOn(tQuery.TrackballControl);
 */
 tQuery.mixinAttributes(tQuery.TrackballControl, {
     
-    target                  : tQuery.convert.toVector3,
     rotateSpeed             : tQuery.convert.toNumber,
     zoomSpeed               : tQuery.convert.toNumber,
     minDistance             : tQuery.convert.toNumber,
@@ -2365,6 +2346,23 @@ tQuery.mixinAttributes(tQuery.TrackballControl, {
 });
 
 //Put these here for now as they relate to the above, don't want the functions registered if the above code isn't included in the build.
+
+//Set the target of the trackball control, as its not an property that is written to, but a function call, then can't use mixin attributes (is this correct?)
+tQuery.TrackballControl.register('target', function(vector3){
+	// handle parameters
+	if( typeof vector3 === "number" && arguments.length === 3 ){
+		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}
+	console.assert(vector3 instanceof THREE.Vector3, "TrackballControl.target parameter error");
+
+	// do the operation on each node
+	this.each(function(trackballControl){
+		trackballControl.target.copy(vector3);
+	})
+
+	// return this, to get chained API	
+	return this;
+});
 
 //Create a control with a no camera, when this control is set to a world it will wrap that worlds current camera.
 tQuery.register('createTrackballControl', function (settings) {
@@ -2384,7 +2382,7 @@ tQuery.register('createTrackballControl', function (settings) {
     //Apply default settings
     settings = tQuery.extend(settings, defaultSettings);
 
-    //Create new controls wrapping current camera
+    //Create new controls, wrapping no camera to start off with
     var controls = new THREE.TrackballControls(null);
 
     controls.target.set(0, 0, 0)
