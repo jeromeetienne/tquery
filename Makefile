@@ -46,6 +46,8 @@ buildPlain:
 	cat js/tquery.core.js		>> build/tquery.js
 	cat js/tquery.convert.js	>> build/tquery.js
 	cat js/tquery.node.js		>> build/tquery.js
+	# add control
+	cat js/tquery.control.js	>> build/tquery.js
 	cat js/tquery.object3d.js	>> build/tquery.js
 	cat js/tquery.geometry.js	>> build/tquery.js
 	cat js/tquery.material.js	>> build/tquery.js
