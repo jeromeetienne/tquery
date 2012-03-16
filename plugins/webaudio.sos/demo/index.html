@@ -2,7 +2,7 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
-<script src="../tquery.webaudio.js"></script>
+<script src="../threex.webaudio.js"></script>
 
 <script src='soundCone.js'></script>
 <script src='soundSphere.js'></script>
@@ -10,7 +10,7 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	var webaudio	= new tQuery.WebAudio();
+	var webaudio	= new THREEx.WebAudio();
 	world.loop().hook(function(deltaTime){
 		webaudio.updateListener(world.camera(), deltaTime)
 	});

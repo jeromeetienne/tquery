@@ -21,7 +21,7 @@ var SoundSphere	= function(webaudio, soundUrl){
 	
 	
 	// create the webaudio sound
-	var sound	= new tQuery.WebAudio.Sound(webaudio);
+	var sound	= new THREEx.WebAudio.Sound(webaudio);
 	sound.load(soundUrl, function(sound){
 		sound._source.loop	= true;
 		//sound.volume(0.5);

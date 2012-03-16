@@ -33,7 +33,7 @@ var SoundCone	= function(webaudio, soundUrl, opts){
 	}.bind(this));
 
 	// create the webaudio sound
-	var sound	= new tQuery.WebAudio.Sound(webaudio);
+	var sound	= new THREEx.WebAudio.Sound(webaudio);
 	sound.load(soundUrl, function(sound){
 		sound._source.loop	= true;
 		sound.play();

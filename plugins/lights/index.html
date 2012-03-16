@@ -2,7 +2,7 @@
 <script src="../../build/tquery-bundle.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var mesh	= tQuery.createSphere().addTo(world);
+	var mesh	= tQuery.createTorus().addTo(world);
 
 	mesh.material(new THREE.MeshLambertMaterial({
 		ambient	: 0x888888,

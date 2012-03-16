@@ -9,12 +9,14 @@
 	var tweenvars	= {
 		scale	: 1
 	};
+
 	// setup a forward tween
 	var tweenFwd	= new TWEEN.Tween(tweenvars).to({
 		scale	: 4
 	}, 800).easing(TWEEN.Easing.Elastic.EaseInOut).onUpdate(function(){
 		object.scale(this.scale);
 	});
+
 	// setup a backward tween
 	var tweenBack	= new TWEEN.Tween(tweenvars).to({
 		scale	: 1
@@ -22,9 +24,11 @@
 	.onUpdate(function(){
 		object.scale(this.scale);
 	});
+
 	// chain them to make them loop
 	tweenFwd.chain(tweenBack);
 	tweenBack.chain(tweenFwd);
+
 	// start the tweenFwd
 	tweenFwd.start();
 	
