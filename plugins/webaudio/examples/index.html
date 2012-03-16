@@ -3,84 +3,26 @@
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
 <script src="../threex.webaudio.js"></script>
-<script src="../tquery.world.webaudio.js"></script>
+
+<script src="../tquery.webaudio.js"></script>
+<script src="../tquery.sound.js"></script>
 <body><script>
 
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
-
-	var axis	= new THREE.AxisHelper();
-	var scale	= 1/100;
-	axis.scale.set(scale, scale, scale);
-	object.get(0).add(axis);
-	//world.add(axis);
-
-	// fixed camera and moving object around camera
-	if( false ){
-		// disable usuable camera control	
-		world.removeCameraControls();
-		world.camera().position.set(0, 0, 0);
-		// make the camera turn around the object
-		world.loop().hook(function(deltaTime, present){
-			var angle	= 0.3 * present * Math.PI * 2;
-			var object	= tQuery('torus').get(0);
-			var radiusX	= 1;
-			var radiusZ	= 10;
-			object.position.set(Math.cos(angle)*radiusX, 0, Math.sin(angle)*radiusZ - radiusZ*0);
-		});	
-	}
 	
-	// fixed camera and rotating object
-	if( false ){
-		// disable usuable camera control	
-		world.removeCameraControls();
-		// make the camera turn around the object
-		world.loop().hook(function(deltaTime, present){
-			var angle	= 0.2 * present * Math.PI * 2;
-			var object	= tQuery('torus');
-			object.rotation(angle, 0, 0);
-		});
-	}
-
-	// fixed object and rotating camera
-	if( false ){
-		// disable usuable camera control	
-		world.removeCameraControls();
-		// make the camera turn around the object
-		world.loop().hook(function(deltaTime, present){
-			var angle	= 0.2 * present * Math.PI * 2;
-			var object	= world.camera();
-			var angleX	= angle*0;
-			var angleY	= angle*1;
-			object.rotation.set(angleX, angleY, 0);
-		});
-	}
-
-	// fixed object and moving camera around object
-	if( false ){
-		// disable usuable camera control	
-		world.removeCameraControls();
-		// make the camera turn around the object
-		world.loop().hook(function(deltaTime, present){
-			var angle	= 0.3 * present * Math.PI * 2;
-			var object	= world.camera();
-			var radiusX	= 1;
-			var radiusZ	= 10;
-			object.position.set(Math.cos(angle)*radiusX, 0, Math.sin(angle)*radiusZ + radiusZ*0);
-		});
-	}
-
+	// just for debug
+	tQuery.createAxis().addTo(object);
+	
 	var webaudio	= world.webaudio();
-	//webaudio.volume(0.5);
-console.log("object", object.get(0));
+	//
+	var sound	= new tQuery.Sound();
+	sound.load('sounds/techno.mp3', function(){
+		console.log("loaded", sound.nodes().bufferSource.loop	= true)
+		sound.nodes().bufferSource.loop	= true
+		sound.play();
+	})
 	
-	var sound	= new THREEx.WebAudio.Sound(webaudio);
-	//sound.volume(0.5);
-	//sound.pannerCone(Math.PI, 0, 0.2);
 
-	world.loop().hook(function(deltaTime){
-		webaudio.updateListener(world.camera(), deltaTime)
-		sound.updateWithObject3d(object.get(0), deltaTime)
-	});
 	
 </script></body>
