@@ -1,4 +1,5 @@
-﻿/**
+
+/**
 * @Base tquery object for a control
 */
 
@@ -23,11 +24,20 @@ tQuery.Control.prototype.update = function () {
 * All controls needs to be set to a world, at which point the controls internal camera object is set
 * and the worlds camera control is also set.
 */
+/**
+* All controls needs to be set to a world, at which point the controls internal camera object is set
+* and the worlds camera control is also set.
+*/
 tQuery.Control.prototype.setOn = function (world) {
-    this._lists.forEach(function (item) {
-        item.object = world.camera();
-        world.setCameraControls(item);
-    });
+
+    console.assert(world instanceof tQuery.World, "Control.setOn world parameter error");
+
+    this._lists[0].object = world.camera();
+
+    world.setCameraControls(this);
+
+    //chain
+    return this;
 }
 
 /**

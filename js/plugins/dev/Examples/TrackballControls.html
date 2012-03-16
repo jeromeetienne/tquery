@@ -1,0 +1,28 @@
+<!doctype html>
+<title>Minimal tQuery Page</title>
+<script src="../../../../build/tquery-all.js"></script>
+<script src="../tquery.control.js"></script>
+<body>
+<script>
+    var world = tQuery.createWorld().boilerplate().start();
+    //Hook tween update to the render loop
+    tQuery.hookTweenUpdate();
+
+    //Create some test spheres and hook the double click to the pan to function
+    tQuery.createSphere().addTo(world).on('dblclick', panTo);
+    tQuery.createSphere().position(10, 0, -10).addTo(world).on('dblclick', panTo);
+    tQuery.createSphere().position(0, 10, -10).addTo(world).on('dblclick', panTo);
+    tQuery.createSphere().position(0, -10, 0).addTo(world).on('dblclick', panTo);
+
+    //Setup the trackball camera controls
+    tQuery.createTrackballControl().setOn(world).maxDistance(100).minDistance(1).target(0, 0, 0);
+    //Pull the camera back a bit so we can see all the spheres
+    world.camera().position.set(0, 0, 40);
+
+    //panTo function to event target
+    function panTo(event) {
+        world.getCameraControls().panCameraTo(event.target.position, 250);
+    }
+
+    
+</script></body>
