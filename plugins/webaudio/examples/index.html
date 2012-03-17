@@ -2,7 +2,7 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
-<script src="dat.gui.js"></script>
+<script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
 <script src="../tquery.webaudio.js"></script>
 <script src="../tquery.world.webaudio.js"></script>
 <body><script>
@@ -103,8 +103,8 @@ console.log("object", object.get(0));
 		sound.updateWithObject3d(object.get(0), deltaTime)
 	});
 
-	var soundUrl	= 'sounds/techno.mp3';
-	//soundUrl	= 'sounds/kick.wav';
+	var soundUrl	= '../../assets/sounds/techno.mp3';
+	var soundUrl	= '../../assets/sounds/kick.wav';
 	sound.load(soundUrl, function(sound){
 		sound.nodes().bufferSource.loop	= true;
 		sound.play();
