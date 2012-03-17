@@ -25,6 +25,27 @@ tQuery.convert.toNumber	= function(value){
 	return undefined;	// never reached - just to workaround linter complaint
 };
 
+tQuery.convert.toNumberZeroToOne	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'number'){
+		value	= Math.min(value, 1.0);
+		value	= Math.max(value, 0);
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+
+tQuery.convert.toInteger	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'number'){
+		value	= Math.floor(value);
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+
 tQuery.convert.identity	= function(value){
 	return value;
 };

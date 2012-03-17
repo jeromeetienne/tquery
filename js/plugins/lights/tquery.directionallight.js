@@ -33,7 +33,18 @@ tQuery.pluginsInstanceOn(tQuery.DirectionalLight);
 */
 tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	intensity	: tQuery.convert.toNumber,
-	distance	: tQuery.convert.toNumber
+	distance	: tQuery.convert.toNumber,
+
+	castShadow	: tQuery.convert.toBool,
+
+	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
+	shadowMapWidth		: tQuery.convert.toInteger,
+	shadowMapHeight		: tQuery.convert.toInteger,
+	shadowCameraRight	: tQuery.convert.toNumber,
+	shadowCameraLeft	: tQuery.convert.toNumber,
+	shadowCameraTop		: tQuery.convert.toNumber,
+	shadowCameraBottom	: tQuery.convert.toNumber,
 });
+
 
 
