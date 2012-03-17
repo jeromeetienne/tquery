@@ -1,0 +1,14 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+
+<script src='../tquery.checkerboard.js'></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createCheckerboard({
+		segmentsW	: 10,
+		segmentsH	: 10
+	}).addTo(world).scaleBy(10);
+</script></body>
