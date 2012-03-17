@@ -6,6 +6,10 @@
  *
  * Spec:
  * https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+ *
+ * Chromium Demo:
+ * http://chromium.googlecode.com/svn/trunk/samples/audio/index.html  <- running page
+ * http://code.google.com/p/chromium/source/browse/trunk/samples/audio/ <- source
 */
 
 /**
@@ -13,8 +17,19 @@
 */
 var THREEx	= THREEx	|| {};
 
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		THREEx.WebAudio							//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+
 /**
  * Constructor
+ *
+ * TODO make the clip detector from http://www.html5rocks.com/en/tutorials/webaudio/games/
 */
 THREEx.WebAudio	= function(){
 	// create the context
@@ -56,7 +71,7 @@ THREEx.WebAudio.prototype._entryNode	= function(){
  * getter/setter on the volume
 */
 THREEx.WebAudio.prototype.volume	= function(value){
-	if( value === undefined )	return this._gainNode.gain.valueue;
+	if( value === undefined )	return this._gainNode.gain.value;
 	this._gainNode.gain.value	= value;
 	return this;
 };
@@ -105,83 +120,90 @@ THREEx.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
 }
 
 
+
+
+
+
+
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//////////////////////////////////////////////////////////////////////////////////
+//		THREEx.WebAudio.Sound						//
+//////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
 
-/**
- * FIXME - arch error
- * - you create a sound which is attached to webaudio
- * - this sound may be bound to the position of a object3D
-*/
-
-THREEx.WebAudio.Sound	= function(webaudio){
+THREEx.WebAudio.Sound	= function(webaudio, nodeChain){
 	console.assert( webaudio instanceof THREEx.WebAudio );
 	this._webaudio	= webaudio;
 	this._context	= webaudio.context();
+	
+	// create a default NodeChain if needed
+	if( nodeChain === undefined ){
+		nodeChain	= new THREEx.WebAudio.NodeChain(webaudio.context())
+					.bufferSource().analyser().panner();
+	}
+	// setup this._chain
+	console.assert( nodeChain instanceof THREEx.WebAudio.NodeChain );
+	this._chain	= nodeChain;
 
-if( false ){
-	this._source	= this._context.createBufferSource();
-}else{
-	this._source	= this._context.createJavaScriptNode(1024*16, 1, 1);
-	var x	= 0
-	this._source.onaudioprocess = function(event){
-		var data	= event.outputBuffer.getChannelData(0);
-		console.dir("data", data)
-		for( var i = 0; i < data.length; i++ ){
-			data[i] = Math.sin(x++);
-		}
-	};	
-}
-
-	this._gainNode	= this._context.createGainNode();
-	this._pannerNode= this._context.createPanner();
-	this._source.connect( this._gainNode );
-	this._gainNode.connect( this._pannerNode );
-	this._pannerNode.connect( this._webaudio._entryNode() );
-
-
-	//// TODO this hardcoded source MUST NOT stay obviously
-	//this._loadAndDecodeSound('sounds/techno.mp3', function(buffer){
-	//	this._source.buffer	= buffer;
-	//	this._source.loop	= true;
-	//	this.play();
-	//	console.log(this._context.listener);
-	//}.bind(this));
+	// connect this._chain.last() node to this._webaudio._entryNode()
+	this._chain.last().connect( this._webaudio._entryNode() );
+	
+	// create some alias
+	this._source	= this._chain.nodes().bufferSource;
+	this._analyser	= this._chain.nodes().analyser;
+	this._panner	= this._chain.nodes().panner;
+	
+	// sanity check
+	console.assert(this._source	, "no bufferSource: not yet supported")
+	console.assert(this._analyser	, "no analyser: not yet supported")
+	console.assert(this._panner	, "no panner: not yet supported")
 };
 
 THREEx.WebAudio.Sound.prototype.destroy	= function(){
-	// TODO disconnect the source
+	// disconnect from this._webaudio
+	this._chain.last().disconnect();
+	// destroy this._chain
+	this._chain.destroy();
+	this._chain	= null;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+THREEx.WebAudio.Sound.prototype.chain	= function(){
+	return this._chain;
+};
+
 THREEx.WebAudio.Sound.prototype.isPlayable	= function(){
 	return this._source.buffer ? true : false;
+	return this;	// for chained API
 };
 
 THREEx.WebAudio.Sound.prototype.play		= function(time){
 	if( time ===  undefined )	time	= 0;
 	this._source.noteOn(time);
+	return this;	// for chained API
 };
 
  THREEx.WebAudio.Sound.prototype.stop		= function(time){
 	if( time ===  undefined )	time	= 0;
 	this._source.noteOff(time);
+	return this;	// for chained API
 };
 
 /**
  * getter/setter on the volume
 */
 THREEx.WebAudio.Sound.prototype.volume	= function(value){
-	if( value !== undefined )	return this._gainNode.gain.value;
-	this._gainNode.gain.value	= value;
-	return this;
+	if( value === undefined )	return this._source.gain.value;
+	this._source.gain.value	= value;
+	return this;	// for chained API
 };
 
 /**
@@ -193,11 +215,11 @@ THREEx.WebAudio.Sound.prototype.volume	= function(value){
 */
 THREEx.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, outerGain)
 {
-	this._pannerNode.coneInnerAngle	= innerAngle * 180 / Math.PI;
-	this._pannerNode.coneOuterAngle	= outerAngle * 180 / Math.PI;
-	this._pannerNode.coneOuterGain	= outerGain;
+	this._panner.coneInnerAngle	= innerAngle * 180 / Math.PI;
+	this._panner.coneOuterAngle	= outerAngle * 180 / Math.PI;
+	this._panner.coneOuterGain	= outerGain;
+	return this;	// for chained API
 };
-
 
 /**
  * Update the source with object3d. usefull for positional sounds
@@ -212,39 +234,71 @@ THREEx.WebAudio.Sound.prototype.updateWithObject3d	= function(object3d, deltaTim
 
 	// ensure object3d.matrixWorld is up to date
 	object3d.updateMatrixWorld();
+	
+	this.updateWithMatrix4(object3d.matrixWorld, deltaTime);
+	
+	return this;	// for chained API
+}
+
+/**
+ * Update the source with a matrixWorld. usefull for positional sounds
+ * 
+ * @param {THREE.Matrix4} matrixWorld the matrixWorld describing the position of the sound
+ * @param {Number} deltaTime the number of seconds since last update
+*/
+THREEx.WebAudio.Sound.prototype.updateWithMatrix4	= function(matrixWorld, deltaTime){
+	// sanity check on parameters
+	console.assert( matrixWorld instanceof THREE.Matrix4 );
+	console.assert( typeof(deltaTime) === 'number' );
 
 	////////////////////////////////////////////////////////////////////////
 	// set position
-	var position	= object3d.matrixWorld.getPosition();
-	this._pannerNode.setPosition(position.x, position.y, position.z);
+	var position	= matrixWorld.getPosition();
+	this._panner.setPosition(position.x, position.y, position.z);
 
 	////////////////////////////////////////////////////////////////////////
 	// set orientation
 	var vOrientation= new THREE.Vector3(0,0,1);
-	var mOrientation= object3d.matrixWorld.clone();
+	var mOrientation= matrixWorld.clone();
 	// zero the translation
 	mOrientation.setPosition({x : 0, y: 0, z: 0});
 	// Multiply the 0,0,1 vector by the world matrix and normalize the result.
 	mOrientation.multiplyVector3(vOrientation);
 	vOrientation.normalize();
 	// Set panner orientation
-	this._pannerNode.setOrientation(vOrientation.x, vOrientation.y, vOrientation.z);
+	this._panner.setOrientation(vOrientation.x, vOrientation.y, vOrientation.z);
 	
 	////////////////////////////////////////////////////////////////////////
 	// set velocity
 	if( this._prevPos === undefined ){
-		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		this._prevPos	= matrixWorld.getPosition().clone();
 	}else{
-		var position	= object3d.matrixWorld.getPosition();
+		var position	= matrixWorld.getPosition();
 		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= object3d.matrixWorld.getPosition().clone();
-		this._pannerNode.setVelocity(velocity.x, velocity.y, velocity.z);
+		this._prevPos	= matrixWorld.getPosition().clone();
+		this._panner.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Load a sound
+ *
+ * @param {String} url the url of the sound to load
+ * @param {Function} callback function to notify once the url is loaded (optional)
+*/
+THREEx.WebAudio.Sound.prototype.load = function(url, callback){
+	this._loadAndDecodeSound(url, function(buffer){
+		this._source.buffer	= buffer;
+		callback && callback(this);
+	}.bind(this), function(){
+		console.warn("unable to load sound "+url);
+	});
+	return this;	// for chained API
+};
 
 /**
  * Load and decode a sound
@@ -270,3 +324,73 @@ THREEx.WebAudio.Sound.prototype._loadAndDecodeSound	= function(url, onLoad, onEr
 	request.send();
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		THREEx.WebAudio.NodeChain					//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+THREEx.WebAudio.NodeChain	= function(audioContext){
+	console.assert( audioContext instanceof webkitAudioContext );
+	this._context	= audioContext;
+	this._firstNode	= null;
+	this._lastNode	= null;
+	this._nodes	= {};
+};
+
+THREEx.WebAudio.NodeChain.prototype.destroy	= function(){
+};
+
+
+
+THREEx.WebAudio.NodeChain.prototype.nodes	= function(){
+	return this._nodes;
+}
+
+THREEx.WebAudio.NodeChain.prototype.first	= function(){
+	return this._firstNode;
+}
+
+THREEx.WebAudio.NodeChain.prototype.last	= function(){
+	return this._lastNode;
+}
+
+THREEx.WebAudio.NodeChain.prototype._addNode	= function(node, properties)
+{
+	// connect this._lastNode to node if suitable
+	if( this._lastNode !== null )	this._lastNode.connect(node);
+	
+	// update this._firstNode && this._lastNode
+	if( this._firstNode === null )	this._firstNode	= node;
+	this._lastNode	= node;
+	
+	// apply properties to the node
+	for( var property in properties ){
+		node[property]	= properties[property];
+	}
+
+	// for chained API
+	return this;
+};
+
+THREEx.WebAudio.NodeChain.prototype.bufferSource	= function(properties){
+	var node		= this._context.createBufferSource()
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+THREEx.WebAudio.NodeChain.prototype.panner	= function(properties){
+	var node		= this._context.createPanner()
+	this._nodes.panner	= node;
+	return this._addNode(node, properties)
+};
+
+THREEx.WebAudio.NodeChain.prototype.analyser	= function(properties){
+	var node		= this._context.createAnalyser()
+	this._nodes.analyser	= node;
+	return this._addNode(node, properties)
+};

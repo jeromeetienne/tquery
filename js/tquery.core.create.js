@@ -15,6 +15,15 @@ tQuery.register('createWorld', function(){
 });
 
 /**
+ * Create tQuery.World
+*/
+tQuery.register('createObject3D', function(){
+	var object3d	= new THREE.Object3D();
+	return tQuery(object3d);
+});
+
+
+/**
  * Create tQuery.loop
  * 
  * @param {tQuery.World} world the world to display (optional)
@@ -135,6 +144,6 @@ tQuery.register('_createMesh', function(ctor, dflGeometry, args)
 
 tQuery.register('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/40);
+	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
 });

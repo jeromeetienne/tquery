@@ -2,7 +2,7 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
-<script src="../tquery.webaudio.js"></script>
+<script src="../threex.webaudio.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
@@ -65,11 +65,11 @@
 		});
 	}
 
-	var webaudio	= new tQuery.WebAudio();
+	var webaudio	= new THREEx.WebAudio();
 	//webaudio.volume(0.5);
 console.log("object", object.get(0));
 
-	var sound	= new tQuery.WebAudio.Sound(webaudio);
+	var sound	= new THREEx.WebAudio.Sound(webaudio);
 
 	var soundUrl	= 'sounds/techno.mp3';
 	//soundUrl	= 'sounds/kick.wav';
@@ -81,7 +81,7 @@ console.log("object", object.get(0));
 	});
 
 	//sound.volume(0.5);
-	sound.pannerCone(Math.PI, 0, 0.2);
+	//sound.pannerCone(Math.PI, 0, 0.2);
 
 	var analyser	= sound._analyser;
 	var freqByte	= new Uint8Array(analyser.frequencyBinCount);

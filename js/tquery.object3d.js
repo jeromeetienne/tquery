@@ -77,7 +77,7 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.addTo	= function(target)
 {
-	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D )
+	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D || target instanceof THREE.Object3D )
 	this.each(function(object3d){
 		target.add(object3d)
 	}.bind(this));
@@ -109,14 +109,19 @@ tQuery.Object3D.prototype.removeFrom	= function(target)
  * @param {tQuery.Object3D} target object to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.add	= function(tqObject3d)
+tQuery.Object3D.prototype.add	= function(object3d)
 {
-	console.assert( tqObject3d instanceof tQuery.Object3D )
-	this.each(function(object1){
-		tqObject3d.each(function(object2){
-			object1.add(object2);
-		})
-	}.bind(this));
+	if( object3d instanceof tQuery.Object3D ){
+		this.each(function(object1){
+			object3d.each(function(object2){
+				object1.add(object2);
+			})
+		}.bind(this));
+	}else if( object3d instanceof THREE.Object3D ){
+		this.each(function(object1){
+			object1.add(object3d);
+		});
+	}else	console.assert(false, "invalid parameter");
 	return this;
 }
 
