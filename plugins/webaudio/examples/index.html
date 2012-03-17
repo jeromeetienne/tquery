@@ -2,9 +2,29 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
+<script src="dat.gui.js"></script>
 <script src="../tquery.webaudio.js"></script>
+<script src="../tquery.world.webaudio.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+
+
+	var options	= new function(){
+		this.volume			= 1;
+		this.mouvement			= 'fixedCamMovingObj';
+
+		this.pannerConeInnerAngle	= 1;
+		this.pannerConeOuterAngle	= 1;
+		this.pannerConeOuterGain	= 1;
+
+		this.soundUrl			= 'sounds/techno.mp3';
+		this.soundLoop			= true;
+
+		this.pulseEnable		= true;
+		this.pulseOffset		= 1;
+		this.pulseRange			= 1.5;
+	};
+
 	var object	= tQuery.createTorus().addTo(world);
 
 	// just for debug
@@ -12,21 +32,22 @@
 
 	// fixed camera and moving object around camera
 	if( false ){
-		// disable usuable camera control	
+		// disable usuable camera control
 		world.removeCameraControls();
-		world.camera().position.set(0, 0, 0);
 		// make the camera turn around the object
 		world.loop().hook(function(deltaTime, present){
 			var angle	= 0.3 * present * Math.PI * 2;
 			var object	= tQuery('torus').get(0);
 			var radiusX	= 1;
 			var radiusZ	= 10;
-			object.position.set(Math.cos(angle)*radiusX, 0, Math.sin(angle)*radiusZ - radiusZ*0);
+			object.position.x	= Math.cos(angle)*radiusX;
+			object.position.y	= 0;
+			object.position.z	= Math.sin(angle)*radiusZ - radiusZ;
 		});	
 	}
 	
 	// fixed camera and rotating object
-	if( true ){
+	if( false ){
 		// disable usuable camera control	
 		world.removeCameraControls();
 		// make the camera turn around the object
@@ -66,40 +87,89 @@
 	}
 
 	var webaudio	= new tQuery.WebAudio();
-	//webaudio.volume(0.5);
+	//webaudio.volume(0);
 console.log("object", object.get(0));
 
+// TODO do a getter/setter .world() in tQuery.Webaudio
+// first parameter for ctor too
+	world.loop().hook(function(deltaTime){
+		webaudio.updateListener(world.camera(), deltaTime)
+	});
+
+
+
 	var sound	= new tQuery.WebAudio.Sound(webaudio);
+	world.loop().hook(function(deltaTime){
+		sound.updateWithObject3d(object.get(0), deltaTime)
+	});
 
 	var soundUrl	= 'sounds/techno.mp3';
 	//soundUrl	= 'sounds/kick.wav';
 	sound.load(soundUrl, function(sound){
-		// TODO this ._source is horrible... this is the same issue
-		// as the node list api
-		sound._source.loop	= true;
+		sound.nodes().bufferSource.loop	= true;
 		sound.play();
 	});
 
-	//sound.volume(0.5);
-	sound.pannerCone(Math.PI, 0, 0.2);
 
-	var analyser	= sound._analyser;
-	var freqByte	= new Uint8Array(analyser.frequencyBinCount);
-	analyser.smoothingTimeConstant = 0.6;
+
+	sound.volume(0.5);
+	//sound.pannerCone(Math.PI, 0, 0.2);
+
+	// bind amplitude to object.scale
 	world.loop().hook(function(){
-		analyser.getByteFrequencyData(freqByte);
-		var nb		= 2;
-		var total	= 0;
-		for(var i = 0; i < nb; i++){
-			total	+= freqByte[i];
-		}
-		var scale	= total / (nb*256-1);
-		object.scale(scale*1.5+0.5);
-	})
-
-	world.loop().hook(function(deltaTime){
-		webaudio.updateListener(world.camera(), deltaTime)
-		sound.updateWithObject3d(object.get(0), deltaTime)
+		if( options.pulseEnable === false )	return;
+		var amplitude	= sound.amplitude();
+		var scale	= amplitude * options.pulseRange + options.pulseOffset;
+		object.scale(scale);
 	});
+
+(function(){
+	var gui		= new dat.GUI();
+	gui.add(options, 'volume', 0, 1).onChange(function(value){
+		sound.volume(value);
+	});
+	gui.add(options, 'mouvement', {
+		'moving object'		: 'fixedCamMovingObj',
+		'rotating object'	: 'fixedCamRotatinggObj',
+		'moving camera'		: 'fixedObjMovingCam',
+		'rotating camera'	: 'fixedObjRotatingCam'
+	});
+// Panner folder
+	var folder	= gui.addFolder('Panner');
+	folder.open();
+	folder.add(options, 'pannerConeInnerAngle', 0, 180).onChange(function(value){
+		var angle	= value * Math.PI/180;
+		// TODO issue here, i cant write disctint value.. so create shortcuts in WebAudio.Sound ?
+		sound.pannerCone(Math.PI, 0, 0.2);
+	});
+	folder.add(options, 'pannerConeOuterAngle', 0, 180).onChange(function(value){
+		var angle	= value * Math.PI/180;
+		// TODO issue here, i cant write disctint value.. so create shortcuts in WebAudio.Sound ?
+	});
+	folder.add(options, 'pannerConeOuterGain', 0, 1).onChange(function(value){
+		// TODO issue here, i cant write disctint value.. so create shortcuts in WebAudio.Sound ?
+	});
+// Sound folder
+	var folder	= gui.addFolder('Sound');
+	folder.open();
+	folder.add(options, 'soundUrl', [
+		'sounds/techno.mp3',
+		'sounds/kick.wav'
+	]).onChange(function(value){
+		sound.load(value, function(){
+			sound.play();
+		})
+	});
+	folder.add(options, 'soundLoop').onChange(function(value){
+		sound.nodes().bufferSource.loop	= value;
+	});
+// Pulse folder
+	var folder	= gui.addFolder('Pulse');
+	folder.open();
+	folder.add(options, 'pulseEnable')
+	folder.add(options, 'pulseOffset', 0, 2)
+	folder.add(options, 'pulseRange', 0, 2)
+})();
+	    
 	
 </script></body>

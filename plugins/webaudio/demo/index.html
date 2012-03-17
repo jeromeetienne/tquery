@@ -7,6 +7,8 @@
 <script src='soundCone.js'></script>
 <script src='soundSphere.js'></script>
 <script src='tquery.checkerboard.js'></script>
+<script src='tquery.world.createfog.js'></script>
+<script src='tquery.directionallight.shortcuts.js'></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
@@ -17,33 +19,27 @@
 
 	world.renderer().shadowMapEnabled	= true;
 	world.renderer().shadowMapSoft		= true;
-	world.camera().position.z		= 2;
-	
-	world.scene().fog	= new THREE.FogExp2( world.renderer().getClearColor().getHex(), 0.03 );
 
+	world.camera().position.z		= 2;
 	world.getCameraControls().target.set(0, 1, 0);
 	world.loop().hook(function(){
 		var position	= world.camera().position;
 		position.y	= Math.max(position.y, 1);
 	})
+	
+	world.addFog({ far : 20 });
+
 
 	var light	= tQuery.createDirectionalLight().addTo(world)
 				.color(0xaaaaaa)
-				.position(-0.3,1,-1).intensity(2);
-// TODO port all those properties in light itself
-	light.get(0).castShadow 	= true;	// boolean
-	light.get(0).shadowDarkness	= 0.8;	// 0 to 1
-	light.get(0).shadowCameraRight	=  10;	// make a shortcut alias
-	light.get(0).shadowCameraLeft	= -10;
-	light.get(0).shadowCameraTop	=  10;
-	light.get(0).shadowCameraBottom	= -10;
-	light.get(0).shadowMapWidth	= 512*2;	// TODO is it forced to be a power of two? NO
-	light.get(0).shadowMapHeight	= 512*2;
+				.position(-0.3, 1,-1).intensity(2);
+	light.castShadow(true).shadowDarkness(0.8)
+		.shadowMap(512*2,512*2).shadowCamera(10, -10, 10, -10);
 
 	var soundUrl	= 'sounds/techno.mp3';
 	var cone	= new SoundCone(webaudio, soundUrl);
 	cone.object3D().addTo(world);
-	cone.object3D().translateX(4);
+	//cone.object3D().translateX(4);
 	
 	//var soundUrl	= 'sounds/kick.wav';
 	//var sphere	= new SoundSphere(webaudio, soundUrl);

@@ -19,7 +19,6 @@ var SoundSphere	= function(webaudio, soundUrl){
 	post.get(0).castShadow	= true;
 	sphere.get(0).castShadow= true;
 	
-	
 	// create the webaudio sound
 	var sound	= new tQuery.WebAudio.Sound(webaudio);
 	sound.load(soundUrl, function(sound){

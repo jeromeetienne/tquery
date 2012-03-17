@@ -1,3 +1,6 @@
+/**
+ * Create a checkerboard tQuery.Mesh
+*/
 tQuery.register('createCheckerboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {

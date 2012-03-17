@@ -26,7 +26,13 @@
  *
  * TODO make the clip detector from http://www.html5rocks.com/en/tutorials/webaudio/games/
 */
-tQuery.WebAudio	= function(){
+tQuery.WebAudio	= function(world){
+	// sanity check - the api MUST be available
+	console.assert(tQuery.WebAudio.isAvailable === true, 'webkitAudioContext isnt available on your browser');
+	
+	// handle parameter
+	this._world	= world ? world : null;	
+	
 	// create the context
 	this._ctx	= new webkitAudioContext();
 
@@ -35,11 +41,16 @@ tQuery.WebAudio	= function(){
 	this._gainNode	= this._ctx.createGainNode();
 	this._compressor= this._ctx.createDynamicsCompressor();
 	this._gainNode.connect( this._compressor );
-	this._compressor.connect( this._ctx.destination );
+	this._compressor.connect( this._ctx.destination );	
 };
 
 tQuery.WebAudio.prototype.destroy	= function(){
 };
+
+/**
+ * @return {Boolean} true if it is available or not
+*/
+tQuery.WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -65,12 +76,20 @@ tQuery.WebAudio.prototype._entryNode	= function(){
 /**
  * getter/setter on the volume
 */
+tQuery.WebAudio.prototype.world		= function(value){
+	if( value === undefined )	return this._world;
+	this._world	= value;
+	return this;
+};
+
+/**
+ * getter/setter on the volume
+*/
 tQuery.WebAudio.prototype.volume	= function(value){
 	if( value === undefined )	return this._gainNode.gain.value;
 	this._gainNode.gain.value	= value;
 	return this;
 };
-
 
 tQuery.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
 	var context	= this._ctx;
@@ -116,6 +135,77 @@ tQuery.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
 
 
 
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		tQuery.WebAudio.NodeChain					//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.WebAudio.NodeChain	= function(audioContext){
+	console.assert( audioContext instanceof webkitAudioContext );
+	this._context	= audioContext;
+	this._firstNode	= null;
+	this._lastNode	= null;
+	this._nodes	= {};
+};
+
+tQuery.WebAudio.NodeChain.prototype.destroy	= function(){
+};
+
+
+tQuery.WebAudio.NodeChain.prototype.nodes	= function(){
+	return this._nodes;
+}
+
+tQuery.WebAudio.NodeChain.prototype.first	= function(){
+	return this._firstNode;
+}
+
+tQuery.WebAudio.NodeChain.prototype.last	= function(){
+	return this._lastNode;
+}
+
+tQuery.WebAudio.NodeChain.prototype._addNode	= function(node, properties)
+{
+	// connect this._lastNode to node if suitable
+	if( this._lastNode !== null )	this._lastNode.connect(node);
+	
+	// update this._firstNode && this._lastNode
+	if( this._firstNode === null )	this._firstNode	= node;
+	this._lastNode	= node;
+	
+	// apply properties to the node
+	for( var property in properties ){
+		node[property]	= properties[property];
+	}
+
+	// for chained API
+	return this;
+};
+
+tQuery.WebAudio.NodeChain.prototype.bufferSource	= function(properties){
+	var node		= this._context.createBufferSource()
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+tQuery.WebAudio.NodeChain.prototype.panner	= function(properties){
+	var node		= this._context.createPanner()
+	this._nodes.panner	= node;
+	return this._addNode(node, properties)
+};
+
+tQuery.WebAudio.NodeChain.prototype.analyser	= function(properties){
+	var node		= this._context.createAnalyser()
+	this._nodes.analyser	= node;
+	return this._addNode(node, properties)
+};
 
 
 
@@ -171,8 +261,8 @@ tQuery.WebAudio.Sound.prototype.destroy	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.WebAudio.Sound.prototype.chain	= function(){
-	return this._chain;
+tQuery.WebAudio.Sound.prototype.nodes	= function(){
+	return this._chain.nodes();
 };
 
 tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
@@ -215,6 +305,25 @@ tQuery.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, ou
 	this._panner.coneOuterGain	= outerGain;
 	return this;	// for chained API
 };
+
+
+tQuery.WebAudio.Sound.prototype.amplitude	= function()
+{
+	var analyser	= this._analyser;
+	var freqByte	= new Uint8Array(analyser.frequencyBinCount);
+	analyser.smoothingTimeConstant = 0.6;
+	// TODO put that in tQuery.WebAudio.Sound.getAmplitude()
+	analyser.getByteFrequencyData(freqByte);
+
+	var nb		= 2;
+	var total	= 0;
+	for(var i = 0; i < nb; i++){
+		total	+= freqByte[i];
+	}
+	var amplitude	= total / (nb*256-1);
+	
+	return amplitude;
+}
 
 /**
  * Update the source with object3d. usefull for positional sounds
@@ -318,74 +427,3 @@ tQuery.WebAudio.Sound.prototype._loadAndDecodeSound	= function(url, onLoad, onEr
 	// actually start the request
 	request.send();
 }
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//		tQuery.WebAudio.NodeChain					//
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-
-tQuery.WebAudio.NodeChain	= function(audioContext){
-	console.assert( audioContext instanceof webkitAudioContext );
-	this._context	= audioContext;
-	this._firstNode	= null;
-	this._lastNode	= null;
-	this._nodes	= {};
-};
-
-tQuery.WebAudio.NodeChain.prototype.destroy	= function(){
-};
-
-
-
-tQuery.WebAudio.NodeChain.prototype.nodes	= function(){
-	return this._nodes;
-}
-
-tQuery.WebAudio.NodeChain.prototype.first	= function(){
-	return this._firstNode;
-}
-
-tQuery.WebAudio.NodeChain.prototype.last	= function(){
-	return this._lastNode;
-}
-
-tQuery.WebAudio.NodeChain.prototype._addNode	= function(node, properties)
-{
-	// connect this._lastNode to node if suitable
-	if( this._lastNode !== null )	this._lastNode.connect(node);
-	
-	// update this._firstNode && this._lastNode
-	if( this._firstNode === null )	this._firstNode	= node;
-	this._lastNode	= node;
-	
-	// apply properties to the node
-	for( var property in properties ){
-		node[property]	= properties[property];
-	}
-
-	// for chained API
-	return this;
-};
-
-tQuery.WebAudio.NodeChain.prototype.bufferSource	= function(properties){
-	var node		= this._context.createBufferSource()
-	this._nodes.bufferSource= node;
-	return this._addNode(node, properties)
-};
-
-tQuery.WebAudio.NodeChain.prototype.panner	= function(properties){
-	var node		= this._context.createPanner()
-	this._nodes.panner	= node;
-	return this._addNode(node, properties)
-};
-
-tQuery.WebAudio.NodeChain.prototype.analyser	= function(properties){
-	var node		= this._context.createAnalyser()
-	this._nodes.analyser	= node;
-	return this._addNode(node, properties)
-};
