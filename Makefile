@@ -42,22 +42,23 @@ BANNER="// tquery.js - https://github.com/jeromeetienne/tquery - MIT License"
 build:	minifyPlain minifyBundle
 
 buildPlain:
-	echo $(BANNER)			>  build/tquery.js
-	cat js/tquery.core.js		>> build/tquery.js
-	cat js/tquery.convert.js	>> build/tquery.js
-	cat js/tquery.node.js		>> build/tquery.js
-	cat js/tquery.object3d.js	>> build/tquery.js
-	cat js/tquery.geometry.js	>> build/tquery.js
-	cat js/tquery.material.js	>> build/tquery.js
-	cat js/tquery.light.js		>> build/tquery.js
-	cat js/tquery.mesh.js		>> build/tquery.js
-	cat js/tquery.world.js		>> build/tquery.js
-	cat js/tquery.loop.js		>> build/tquery.js
-	cat js/tquery.core.create.js	>> build/tquery.js
-	cat js/plugins/lights/*.js	>> build/tquery.js
-	cat js/plugins/*.js		>> build/tquery.js
-	# add plugins dev
-	cat js/plugins/dev/*.js		>> build/tquery.js
+	echo $(BANNER)					>  build/tquery.js
+	cat js/tquery.core.js				>> build/tquery.js
+	cat js/tquery.convert.js			>> build/tquery.js
+	cat js/tquery.node.js				>> build/tquery.js
+	cat js/tquery.object3d.js			>> build/tquery.js
+	cat js/tquery.geometry.js			>> build/tquery.js
+	cat js/tquery.material.js			>> build/tquery.js
+	cat js/tquery.light.js				>> build/tquery.js
+	cat js/tquery.mesh.js				>> build/tquery.js
+	cat js/tquery.world.js				>> build/tquery.js
+	cat js/tquery.loop.js				>> build/tquery.js
+	cat js/tquery.core.create.js			>> build/tquery.js
+	cat js/plugins/lights/*.js			>> build/tquery.js
+	cat js/plugins/*.js				>> build/tquery.js
+	# add new plugins
+	cat js/plugins/trackballcontrol/*.js		>> build/tquery.js
+	cat js/plugins/tween/*.js			>> build/tquery.js
 	# include boilerplate - FIXME this is kludgy
 	cat vendor/threex/THREEx.WindowResize.js	>> build/tquery.js
 	cat vendor/threex/THREEx.screenshot.js		>> build/tquery.js

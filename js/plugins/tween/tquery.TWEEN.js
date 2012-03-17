@@ -35,6 +35,7 @@ TWEEN.Easing.Bounce.EaseInOut = function (a) { if (a < 0.5) return TWEEN.Easing.
         this._loop = loop || tQuery.world.loop();
 
         this._loop.hookPreRender(tweenUpdate);
+        tQuery.world.tweenActive = true;
 
     });
 
@@ -43,6 +44,7 @@ TWEEN.Easing.Bounce.EaseInOut = function (a) { if (a < 0.5) return TWEEN.Easing.
         this._loop = loop || tQuery.world.loop();
 
         this._loop.unhookPreRender(tweenUpdate);
+        tQuery.world.tweenActive = false;
 
     });
 
