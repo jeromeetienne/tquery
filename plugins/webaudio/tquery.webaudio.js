@@ -12,6 +12,53 @@
  * http://code.google.com/p/chromium/source/browse/trunk/samples/audio/ <- source
 */
 
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		tQuery.World.* WebAudio						//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+
+
+tQuery.World.register('enableWebAudio', function(){
+	// sanity check
+	console.assert( this.hasWebAudio() === false, "there is already a webaudio" );
+	// intenciate a tQuery.World.WebAudio
+	var webaudio	= new tQuery.WebAudio(this);
+	// store webaudio in the world
+	tQuery.data(this, "webaudio", webaudio);
+	// for chained API
+	return this;
+});
+
+tQuery.World.register('disabledWebAudio', function(){
+	if( this.hasWebAudio() === false )	return this;
+	var webaudio	= tQuery.data(this, "webaudio");
+	webaudio.destroy();
+	tQuery.removeData(this, "webaudio");
+	return this;	// for chained API
+});
+
+tQuery.World.register('getWebAudio', function(){
+	var webaudio	= tQuery.data(this, "webaudio");
+	return webaudio;
+});
+
+tQuery.World.register('hasWebAudio', function(){
+	var webaudio	= tQuery.data(this, "webaudio");
+	return webaudio ? true : false;
+});
+
+tQuery.World.register('supportWebAudio', function(){
+	return tQuery.WebAudio.isAvailable;
+});
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +78,14 @@ tQuery.WebAudio	= function(world){
 	console.assert(tQuery.WebAudio.isAvailable === true, 'webkitAudioContext isnt available on your browser');
 	
 	// handle parameter
-	this._world	= world ? world : null;	
+	this._world	= world ? world : tQuery.world;
+
+	// hook this._updateCb to this.world.loop()
+	this._updateCb	= function(deltaTime){
+		this.updateListener(this._world.camera(), deltaTime)
+	}.bind(this);
+	this._world.loop().hook(this._updateCb);
+
 	
 	// create the context
 	this._ctx	= new webkitAudioContext();
@@ -45,6 +99,9 @@ tQuery.WebAudio	= function(world){
 };
 
 tQuery.WebAudio.prototype.destroy	= function(){
+	// unhook this._updateCb from this.world.loop()
+	this._world.loop().unhook(this._updateCb);
+	this._updateCb	= null;
 };
 
 /**
@@ -135,10 +192,6 @@ tQuery.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
 
 
 
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -224,24 +277,23 @@ tQuery.WebAudio.NodeChain.prototype.analyser	= function(properties){
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createSound', function(world){
-	world	= world ? world	: tQuery.world;
-	var webaudio	= world.getWebAudio();	
-	console.assert(webaudio, "webaudio isnt init");
-	return new tQuery.WebAudio.Sound(webaudio);
+tQuery.register('createSound', function(world, nodeChain){
+	return new tQuery.WebAudio.Sound(world, nodeChain);
 });
 
 /**
  * sound instance
 */
-tQuery.WebAudio.Sound	= function(webaudio, nodeChain){
-	console.assert( webaudio instanceof tQuery.WebAudio );
-	this._webaudio	= webaudio;
-	this._context	= webaudio.context();
+tQuery.WebAudio.Sound	= function(world, nodeChain){
+	this._world	= world ? world	: tQuery.world;
+	this._webaudio	= this._world.getWebAudio();
+	this._context	= this._webaudio.context();
+
+	console.assert( this._world instanceof tQuery.World );
 	
 	// create a default NodeChain if needed
 	if( nodeChain === undefined ){
-		nodeChain	= new tQuery.WebAudio.NodeChain(webaudio.context())
+		nodeChain	= new tQuery.WebAudio.NodeChain(this._webaudio.context())
 					.bufferSource().analyser().panner();
 	}
 	// setup this._chain
@@ -276,6 +328,11 @@ tQuery.WebAudio.Sound.prototype.destroy	= function(){
 
 tQuery.WebAudio.Sound.prototype.follow	= function(object3d){
 	console.assert( this.isFollowing() === false );
+	// handle parameter
+	if( object3d instanceof tQuery.Object3D ){
+		console.assert(object3d.length === 1)
+		object3d	= object3d.get(0);
+	}
 	// sanity check on parameters
 	console.assert( object3d instanceof THREE.Object3D );
 
@@ -284,15 +341,21 @@ tQuery.WebAudio.Sound.prototype.follow	= function(object3d){
 		this.updateWithObject3d(object3d, deltaTime);
 	}.bind(this);
 	this._world.loop().hook(this._followCb);
+	// for chained API
+	return this;
 }
 
 tQuery.WebAudio.Sound.prototype.unfollow	= function(){
 	this._world.loop().unhook(this._followCb);
 	this._followCb		= null;
+	// for chained API
+	return this;
 }
 
 tQuery.WebAudio.Sound.prototype.isFollowing	= function(){
 	return this._followCb ? true : false;
+	// for chained API
+	return this;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -341,6 +404,39 @@ tQuery.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, ou
 	this._panner.coneInnerAngle	= innerAngle * 180 / Math.PI;
 	this._panner.coneOuterAngle	= outerAngle * 180 / Math.PI;
 	this._panner.coneOuterGain	= outerGain;
+	return this;	// for chained API
+};
+
+/**
+ * getter/setter on the pannerConeInnerAngle
+ * 
+ * @param {Number} value the angle in radian
+*/
+tQuery.WebAudio.Sound.prototype.pannerConeInnerAngle	= function(value){
+	if( value === undefined )	return this._panner.coneInnerAngle / 180 * Math.PI;
+	this._panner.coneInnerAngle	= value * 180 / Math.PI;
+	return this;	// for chained API
+};
+
+/**
+ * getter/setter on the pannerConeOuterAngle
+ *
+ * @param {Number} value the angle in radian
+*/
+tQuery.WebAudio.Sound.prototype.pannerConeOuterAngle	= function(value){
+	if( value === undefined )	return this._panner.coneOuterAngle / 180 * Math.PI;
+	this._panner.coneOuterAngle	= value * 180 / Math.PI;
+	return this;	// for chained API
+};
+
+/**
+ * getter/setter on the pannerConeOuterGain
+ * 
+ * @param {Number} value the value
+*/
+tQuery.WebAudio.Sound.prototype.pannerConeOuterGain	= function(value){
+	if( value === undefined )	return this._panner.coneOuterGain;
+	this._panner.coneOuterGain	= value;
 	return this;	// for chained API
 };
 
