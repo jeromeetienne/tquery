@@ -11,36 +11,40 @@
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
 */
-var tQuery	= function(object, root)
-{
-// TODO make tthat cleaner
-// - there is a list of functions registered by each plugins
-//   - handle() object instanceof THREE.Mesh
-//   - create() return new tQuery(object)
-// - this list is processed in order here
+var tQuery = function (object, root) {
+    // TODO make that cleaner
+    // - there is a list of functions registered by each plugins
+    //   - handle() object instanceof THREE.Mesh
+    //   - create() return new tQuery(object)
+    // - this list is processed in order here
 
-	if( object instanceof THREE.Mesh  && tQuery.Mesh){
-		return new tQuery.Mesh(object);
+    if (object instanceof THREE.Mesh && tQuery.Mesh) {
+        return new tQuery.Mesh(object);
 
-	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
-		return new tQuery.DirectionalLight(object);
-	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
-		return new tQuery.AmbientLight(object);
-	}else if( object instanceof THREE.Light && tQuery.Light){
-		return new tQuery.Light(object);
+    } else if (object instanceof THREE.DirectionalLight && tQuery.DirectionalLight) {
+        return new tQuery.DirectionalLight(object);
+    } else if (object instanceof THREE.AmbientLight && tQuery.AmbientLight) {
+        return new tQuery.AmbientLight(object);
+    } else if (object instanceof THREE.Light && tQuery.Light) {
+        return new tQuery.Light(object);
 
-	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
-		return new tQuery.Object3D(object);
-	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
-		return new tQuery.Geometry(object);
-	}else if( object instanceof THREE.Material && tQuery.Material){
-		return new tQuery.Material(object);
-	}else if( typeof object === "string" && tQuery.Object3D){
-		return new tQuery.Object3D(object, root);
-	}else{
-		console.assert(false, "unsupported type")
-	}
-	return undefined;
+    } else if (object instanceof THREE.Object3D && tQuery.Object3D) {
+        return new tQuery.Object3D(object);
+    } else if (object instanceof THREE.Geometry && tQuery.Geometry) {
+        return new tQuery.Geometry(object);
+    } else if (object instanceof THREE.Material && tQuery.Material) {
+        return new tQuery.Material(object);
+    } else if (typeof object === "string" && tQuery.Object3D) {
+        return new tQuery.Object3D(object, root);
+
+        //Controls
+    } else if (object instanceof THREE.TrackballControls && tQuery.TrackballControl) {
+        return new tQuery.TrackballControl(object);
+
+    } else {
+        console.assert(false, "unsupported type")
+    }
+    return undefined;
 };
 
 /**

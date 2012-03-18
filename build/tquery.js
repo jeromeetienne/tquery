@@ -12,36 +12,40 @@
  * @param {THREE.Object3D} rootnode
  * @returns {tQuery.*} the tQuery object created
 */
-var tQuery	= function(object, root)
-{
-// TODO make tthat cleaner
-// - there is a list of functions registered by each plugins
-//   - handle() object instanceof THREE.Mesh
-//   - create() return new tQuery(object)
-// - this list is processed in order here
+var tQuery = function (object, root) {
+    // TODO make that cleaner
+    // - there is a list of functions registered by each plugins
+    //   - handle() object instanceof THREE.Mesh
+    //   - create() return new tQuery(object)
+    // - this list is processed in order here
 
-	if( object instanceof THREE.Mesh  && tQuery.Mesh){
-		return new tQuery.Mesh(object);
+    if (object instanceof THREE.Mesh && tQuery.Mesh) {
+        return new tQuery.Mesh(object);
 
-	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
-		return new tQuery.DirectionalLight(object);
-	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
-		return new tQuery.AmbientLight(object);
-	}else if( object instanceof THREE.Light && tQuery.Light){
-		return new tQuery.Light(object);
+    } else if (object instanceof THREE.DirectionalLight && tQuery.DirectionalLight) {
+        return new tQuery.DirectionalLight(object);
+    } else if (object instanceof THREE.AmbientLight && tQuery.AmbientLight) {
+        return new tQuery.AmbientLight(object);
+    } else if (object instanceof THREE.Light && tQuery.Light) {
+        return new tQuery.Light(object);
 
-	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
-		return new tQuery.Object3D(object);
-	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
-		return new tQuery.Geometry(object);
-	}else if( object instanceof THREE.Material && tQuery.Material){
-		return new tQuery.Material(object);
-	}else if( typeof object === "string" && tQuery.Object3D){
-		return new tQuery.Object3D(object, root);
-	}else{
-		console.assert(false, "unsupported type")
-	}
-	return undefined;
+    } else if (object instanceof THREE.Object3D && tQuery.Object3D) {
+        return new tQuery.Object3D(object);
+    } else if (object instanceof THREE.Geometry && tQuery.Geometry) {
+        return new tQuery.Geometry(object);
+    } else if (object instanceof THREE.Material && tQuery.Material) {
+        return new tQuery.Material(object);
+    } else if (typeof object === "string" && tQuery.Object3D) {
+        return new tQuery.Object3D(object, root);
+
+        //Controls
+    } else if (object instanceof THREE.TrackballControls && tQuery.TrackballControl) {
+        return new tQuery.TrackballControl(object);
+
+    } else {
+        console.assert(false, "unsupported type")
+    }
+    return undefined;
 };
 
 /**
@@ -192,6 +196,10 @@ tQuery.pluginsOn(tQuery, tQuery);
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.mixinAttributes	= function(dstObject, properties){
+	// mixin the new property
+	// FIXME the inheritance should work now... not sure
+	dstObject.prototype._attrProps	= tQuery.extend(dstObject.prototype._attrProps, properties);
+
 	dstObject.prototype.attr	= function(name, value){
 		// handle parameters
 		if( name instanceof Object && value === undefined ){
@@ -199,12 +207,12 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 				this.attr(key, name[key]);
 			}.bind(this));
 		}else if( typeof(name) === 'string' ){
-			console.assert( Object.keys(properties).indexOf(name) !== -1, 'invalid property name:'+name);
+			console.assert( Object.keys(this._attrProps).indexOf(name) !== -1, 'invalid property name:'+name);
 		}else	console.assert(false, 'invalid parameter');
 
 		// handle setter
 		if( value !== undefined ){
-			var convertFn	= properties[name];
+			var convertFn	= this._attrProps[name];
 			value		= convertFn(value);
 			this.each(function(element){
 				element[name]	= value;
@@ -299,6 +307,27 @@ tQuery.convert.toThreeColor	= function(value){
 
 tQuery.convert.toNumber	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'number'){
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+
+tQuery.convert.toNumberZeroToOne	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'number'){
+		value	= Math.min(value, 1.0);
+		value	= Math.max(value, 0);
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+
+tQuery.convert.toInteger	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'number'){
+		value	= Math.floor(value);
 		return value;
 	}else{
 		console.assert(false, "invalid parameter");
@@ -491,7 +520,7 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.addTo	= function(target)
 {
-	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D )
+	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D || target instanceof THREE.Object3D )
 	this.each(function(object3d){
 		target.add(object3d)
 	}.bind(this));
@@ -523,14 +552,19 @@ tQuery.Object3D.prototype.removeFrom	= function(target)
  * @param {tQuery.Object3D} target object to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.add	= function(tqObject3d)
+tQuery.Object3D.prototype.add	= function(object3d)
 {
-	console.assert( tqObject3d instanceof tQuery.Object3D )
-	this.each(function(object1){
-		tqObject3d.each(function(object2){
-			object1.add(object2);
-		})
-	}.bind(this));
+	if( object3d instanceof tQuery.Object3D ){
+		this.each(function(object1){
+			object3d.each(function(object2){
+				object1.add(object2);
+			})
+		}.bind(this));
+	}else if( object3d instanceof THREE.Object3D ){
+		this.each(function(object1){
+			object1.add(object3d);
+		});
+	}else	console.assert(false, "invalid parameter");
 	return this;
 }
 
@@ -1260,6 +1294,15 @@ tQuery.register('createWorld', function(){
 });
 
 /**
+ * Create tQuery.World
+*/
+tQuery.register('createObject3D', function(){
+	var object3d	= new THREE.Object3D();
+	return tQuery(object3d);
+});
+
+
+/**
  * Create tQuery.loop
  * 
  * @param {tQuery.World} world the world to display (optional)
@@ -1380,7 +1423,7 @@ tQuery.register('_createMesh', function(ctor, dflGeometry, args)
 
 tQuery.register('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/40);
+	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
 });
 /**
@@ -1447,8 +1490,19 @@ tQuery.pluginsInstanceOn(tQuery.DirectionalLight);
 */
 tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	intensity	: tQuery.convert.toNumber,
-	distance	: tQuery.convert.toNumber
+	distance	: tQuery.convert.toNumber,
+
+	castShadow	: tQuery.convert.toBool,
+
+	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
+	shadowMapWidth		: tQuery.convert.toInteger,
+	shadowMapHeight		: tQuery.convert.toInteger,
+	shadowCameraRight	: tQuery.convert.toNumber,
+	shadowCameraLeft	: tQuery.convert.toNumber,
+	shadowCameraTop		: tQuery.convert.toNumber,
+	shadowCameraBottom	: tQuery.convert.toNumber,
 });
+
 
 
 /**
@@ -1490,38 +1544,6 @@ tQuery.mixinAttributes(tQuery.PointLight, {
 });
 
 
-/**
- * @fileOverview Plugins for tQuery and Stats.js
-*/
-
-(function(){	// closure function
-
-/**
- * 
-*/
-var DragPanControls	= function(loop)
-{
-	this._loop	= loop	|| tQuery.world.loop();
-
-	this._controls	= new THREEx.DragPanControls(tQuery.world.camera());
-	this._$onRender	= this._onRender.bind(this);
-	this._loop.hookPreRender(this._$onRender);
-};
-
-DragPanControls.prototype.destroy	= function(){
-	this._loop.unhookPreRender(this._$onRender);	
-};
-
-DragPanControls.prototype._onRender	= function(){
-	this._controls.update();
-};
-
-
-// register the plugins
-tQuery.register('DragPanControls', DragPanControls);
-tQuery.register('createDragPanControls', function(loop){ return new tQuery.DragPanControls(loop); });
-
-})();	// closure function end
 /**
  * @fileOverview Plugins for tQuery.Geometry: tool box to play with geometry
 */
@@ -1841,6 +1863,7 @@ tQuery.Object3D.register('scaleBy', function(ratio){
 	return this;
 });
 
+
 // some shortcuts
 tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
@@ -1865,7 +1888,7 @@ tQuery.World.register('fullpage', function(){
 	return this.boilerplate();
 });
 
-tQuery.World.register('boilerplate', function(){
+tQuery.World.register('boilerplate', function(opts){
 	// put renderer fullpage
 	var domElement	= document.body;
 	domElement.style.margin		= "0";
@@ -1874,17 +1897,24 @@ tQuery.World.register('boilerplate', function(){
 	this.appendTo(domElement);
 
 	// add the boilerplate
-	this.addBoilerplate();
+	this.addBoilerplate(opts);
 	
 	// for chained API
 	return this;
 });
 
-tQuery.World.register('addBoilerplate', function(){
+tQuery.World.register('addBoilerplate', function(opts){
 	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
-
+	// handle parameters	
+	opts	= tQuery.extend(opts, {
+		stats		: true,
+		cameraControls	: true,
+		windowResize	: true,
+		screenshot	: true,
+		fullscreen	: true
+	});
 	// get the context
 	var ctx	= {};
 
@@ -1892,29 +1922,37 @@ tQuery.World.register('addBoilerplate', function(){
 	tQuery.data(this, '_boilerplateCtx', ctx);
 
 	// add Stats.js - https://github.com/mrdoob/stats.js
-	ctx.stats	= new Stats();
-	ctx.stats.domElement.style.position	= 'absolute';
-	ctx.stats.domElement.style.bottom	= '0px';
-	document.body.appendChild( ctx.stats.domElement );
-	ctx.loopStats	= function(){
-		ctx.stats.update();
-	};
-	this.loop().hook(ctx.loopStats);
+	if( opts.stats ){
+		ctx.stats	= new Stats();
+		ctx.stats.domElement.style.position	= 'absolute';
+		ctx.stats.domElement.style.bottom	= '0px';
+		document.body.appendChild( ctx.stats.domElement );
+		ctx.loopStats	= function(){
+			ctx.stats.update();
+		};
+		this.loop().hook(ctx.loopStats);		
+	}
 
 	// get some variables
 	var camera	= this.camera();
 	var renderer	= this.renderer();
 
 	// create a camera contol
-	ctx.cameraControls	= new THREEx.DragPanControls(camera)
-	this.setCameraControls(ctx.cameraControls);
+	if( opts.cameraControls ){
+		ctx.cameraControls	= new THREEx.DragPanControls(camera);
+		this.setCameraControls(ctx.cameraControls);		
+	}
 
 	// transparently support window resize
-	ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);
+	if( opts.windowResize ){
+		ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);		
+	}
 	// allow 'p' to make screenshot
-	ctx.screenShot		= THREEx.Screenshot.bindKey(renderer);
+	if( opts.screenshot ){		
+		ctx.screenshot		= THREEx.Screenshot.bindKey(renderer);
+	}
 	// allow 'f' to go fullscreen where this feature is supported
-	if( THREEx.FullScreen.available() ){
+	if( opts.fullscreen && THREEx.FullScreen.available() ){
 		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
 	}
 
@@ -1947,16 +1985,270 @@ tQuery.World.register('removeBoilerplate', function(){
 	this.unbind('destroy', this._$onDestroy);
 
 	// remove stats.js
-	document.body.removeChild(ctx.stats.domElement );
-	this.loop().unhook(ctx.loopStats);
+	ctx.stats		&& document.body.removeChild(ctx.stats.domElement );
+	ctx.stats		&& this.loop().unhook(ctx.loopStats);
 	// remove camera
-	this.removeCameraControls()
+	ctx.cameraControls	&& this.removeCameraControls()
 	// stop windowResize
-	ctx.windowResize.stop();
-	// unbind screenShot
-	ctx.screenShot.unbind();
+	ctx.windowResize	&& ctx.windowResize.stop();
+	// unbind screenshot
+	ctx.screenshot		&& ctx.screenshot.unbind();
 	// unbind fullscreen
-	ctx.fullscreen && ctx.fullscreen.unbind();
+	ctx.fullscreen		&& ctx.fullscreen.unbind();
+});
+/**
+* @Base tquery object for a control
+*/
+
+tQuery.Control = function (elements) {
+    // call parent ctor
+    tQuery.Control.parent.constructor.call(this, elements);
+}
+
+/**
+* inherit from tQuery.Node
+*/
+tQuery.inherit(tQuery.Control, tQuery.Node);
+
+/**
+* All controls should implement update to be called in the render loop
+*/
+tQuery.Control.prototype.update = function () {
+    this._lists.forEach(function (item) { item.update(); });
+}
+
+/**
+* All controls needs to be set to a world, at which point the controls internal camera object is set
+* and the worlds camera control is also set.
+*/
+/**
+* All controls needs to be set to a world, at which point the controls internal camera object is set
+* and the worlds camera control is also set.
+*/
+tQuery.Control.prototype.setOn = function (world) {
+
+    console.assert(world instanceof tQuery.World, "Control.setOn world parameter error");
+
+    this._lists[0].object = world.camera();
+
+    world.setCameraControls(this);
+
+    //chain
+    return this;
+}
+
+/**
+* Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Control);
+/**
+* @fileOverview tQuery.TrackballControl : Wraps THREE.TrackballControls
+*/
+tQuery.TrackballControl = function (elements) {
+
+    // call parent ctor
+    tQuery.TrackballControl.parent.constructor.call(this, elements)
+
+    // sanity check - all items MUST be THREE.TrackballControls
+    this._lists.forEach(function (item) { console.assert(item instanceof THREE.TrackballControls); });
+}
+
+/**
+* inherit from tQuery.Control - implements update
+*/
+tQuery.inherit(tQuery.TrackballControl, tQuery.Control);
+
+/**
+* Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.TrackballControl);
+
+/**
+* define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.TrackballControl, {
+    
+    rotateSpeed             : tQuery.convert.toNumber,
+    zoomSpeed               : tQuery.convert.toNumber,
+    minDistance             : tQuery.convert.toNumber,
+    maxDistance             : tQuery.convert.toNumber,
+    noZoom                  : tQuery.convert.toBool,
+    noPan                   : tQuery.convert.toBool,
+    staticMoving            : tQuery.convert.toBool,
+    dynamicDampingFactor    : tQuery.convert.toNumber,
+    keys                    : tQuery.convert.identity
+
+});
+
+//Put these here for now as they relate to the above, don't want the functions registered if the above code isn't included in the build.
+
+//Set the target of the trackball control, as its not an property that is written to, but a function call, then can't use mixin attributes (is this correct?)
+tQuery.TrackballControl.register('target', function (vector3) {
+
+    // handle get situation
+    if (typeof vector3 === "undefined")
+        return this._lists[0].target;
+
+    // handle parameters
+    if (typeof vector3 === "number" && arguments.length === 3) {
+        vector3 = new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+    }
+    console.assert(vector3 instanceof THREE.Vector3, "TrackballControl.target parameter error");
+
+    this._lists[0].target.copy(vector3);
+
+    // return this, to get chained API	
+    return this;
+});
+
+//Create a control with a no camera, when this control is set to a world it will wrap that worlds current camera.
+tQuery.register('createTrackballControl', function (settings) {
+    
+    var defaultSettings = { 
+        rotateSpeed : 1.0,
+        zoomSpeed : 1.2,
+        minDistance : 1,
+        maxDistance : 1000,
+        noZoom : false,
+        noPan : false,
+        staticMoving : false,
+        dynamicDampingFactor : 0.15,
+        keys : [65, 83, 68]
+    };
+
+    //Apply default settings
+    settings = tQuery.extend(settings, defaultSettings);
+
+    //Create new controls, wrapping no camera to start off with
+    var controls = new THREE.TrackballControls(null);
+
+    controls.target.set(0, 0, 0)
+    controls.rotateSpeed = settings.rotateSpeed;
+    controls.zoomSpeed = settings.zoomSpeed;
+    controls.minDistance = settings.minDistance;
+    controls.maxDistance = settings.maxDistance;
+    controls.noZoom = settings.noZoom;
+    controls.noPan = settings.noPan;
+    controls.staticMoving = settings.staticMoving;
+    controls.dynamicDampingFactor = settings.dynamicDampingFactor;
+    controls.keys = settings.keys;
+
+    //Return the controls
+    return tQuery(controls);
+});
+// tween.js r5 - http://github.com/sole/tween.js
+var TWEEN = TWEEN || function () {
+    var a, e, c = 60, b = false, h = [], i; return { setFPS: function (f) { c = f || 60 }, start: function (f) { arguments.length != 0 && this.setFPS(f); e = setInterval(this.update, 1E3 / c) }, stop: function () { clearInterval(e) }, setAutostart: function (f) { (b = f) && !e && this.start() }, add: function (f) { h.push(f); b && !e && this.start() }, getAll: function () { return h }, removeAll: function () { h = [] }, remove: function (f) { a = h.indexOf(f); a !== -1 && h.splice(a, 1) }, update: function (f) {
+        a = 0; i = h.length; for (f = f || Date.now(); a < i; ) if (h[a].update(f)) a++;
+        else { h.splice(a, 1); i-- } i == 0 && b == true && this.stop()
+    }
+    }
+} ();
+TWEEN.Tween = function (a) {
+    var e = {}, c = {}, b = {}, h = 1E3, i = 0, f = null, n = TWEEN.Easing.Linear.EaseNone, k = null, l = null, m = null; this.to = function (d, g) { if (g !== null) h = g; for (var j in d) if (a[j] !== null) b[j] = d[j]; return this }; this.start = function (d) { TWEEN.add(this); f = d ? d + i : Date.now() + i; for (var g in b) if (a[g] !== null) { e[g] = a[g]; c[g] = b[g] - a[g] } return this }; this.stop = function () { TWEEN.remove(this); return this }; this.delay = function (d) { i = d; return this }; this.easing = function (d) { n = d; return this }; this.chain = function (d) { k = d }; this.onUpdate =
+function (d) { l = d; return this }; this.onComplete = function (d) { m = d; return this }; this.update = function (d) { var g, j; if (d < f) return true; d = (d - f) / h; d = d > 1 ? 1 : d; j = n(d); for (g in c) a[g] = e[g] + c[g] * j; l !== null && l.call(a, j); if (d == 1) { m !== null && m.call(a); k !== null && k.start(); return false } return true }
+}; TWEEN.Easing = { Linear: {}, Quadratic: {}, Cubic: {}, Quartic: {}, Quintic: {}, Sinusoidal: {}, Exponential: {}, Circular: {}, Elastic: {}, Back: {}, Bounce: {} }; TWEEN.Easing.Linear.EaseNone = function (a) { return a };
+TWEEN.Easing.Quadratic.EaseIn = function (a) { return a * a }; TWEEN.Easing.Quadratic.EaseOut = function (a) { return -a * (a - 2) }; TWEEN.Easing.Quadratic.EaseInOut = function (a) { if ((a *= 2) < 1) return 0.5 * a * a; return -0.5 * (--a * (a - 2) - 1) }; TWEEN.Easing.Cubic.EaseIn = function (a) { return a * a * a }; TWEEN.Easing.Cubic.EaseOut = function (a) { return --a * a * a + 1 }; TWEEN.Easing.Cubic.EaseInOut = function (a) { if ((a *= 2) < 1) return 0.5 * a * a * a; return 0.5 * ((a -= 2) * a * a + 2) }; TWEEN.Easing.Quartic.EaseIn = function (a) { return a * a * a * a };
+TWEEN.Easing.Quartic.EaseOut = function (a) { return -(--a * a * a * a - 1) }; TWEEN.Easing.Quartic.EaseInOut = function (a) { if ((a *= 2) < 1) return 0.5 * a * a * a * a; return -0.5 * ((a -= 2) * a * a * a - 2) }; TWEEN.Easing.Quintic.EaseIn = function (a) { return a * a * a * a * a }; TWEEN.Easing.Quintic.EaseOut = function (a) { return (a -= 1) * a * a * a * a + 1 }; TWEEN.Easing.Quintic.EaseInOut = function (a) { if ((a *= 2) < 1) return 0.5 * a * a * a * a * a; return 0.5 * ((a -= 2) * a * a * a * a + 2) }; TWEEN.Easing.Sinusoidal.EaseIn = function (a) { return -Math.cos(a * Math.PI / 2) + 1 };
+TWEEN.Easing.Sinusoidal.EaseOut = function (a) { return Math.sin(a * Math.PI / 2) }; TWEEN.Easing.Sinusoidal.EaseInOut = function (a) { return -0.5 * (Math.cos(Math.PI * a) - 1) }; TWEEN.Easing.Exponential.EaseIn = function (a) { return a == 0 ? 0 : Math.pow(2, 10 * (a - 1)) }; TWEEN.Easing.Exponential.EaseOut = function (a) { return a == 1 ? 1 : -Math.pow(2, -10 * a) + 1 }; TWEEN.Easing.Exponential.EaseInOut = function (a) { if (a == 0) return 0; if (a == 1) return 1; if ((a *= 2) < 1) return 0.5 * Math.pow(2, 10 * (a - 1)); return 0.5 * (-Math.pow(2, -10 * (a - 1)) + 2) };
+TWEEN.Easing.Circular.EaseIn = function (a) { return -(Math.sqrt(1 - a * a) - 1) }; TWEEN.Easing.Circular.EaseOut = function (a) { return Math.sqrt(1 - --a * a) }; TWEEN.Easing.Circular.EaseInOut = function (a) { if ((a /= 0.5) < 1) return -0.5 * (Math.sqrt(1 - a * a) - 1); return 0.5 * (Math.sqrt(1 - (a -= 2) * a) + 1) }; TWEEN.Easing.Elastic.EaseIn = function (a) { var e, c = 0.1, b = 0.4; if (a == 0) return 0; if (a == 1) return 1; b || (b = 0.3); if (!c || c < 1) { c = 1; e = b / 4 } else e = b / (2 * Math.PI) * Math.asin(1 / c); return -(c * Math.pow(2, 10 * (a -= 1)) * Math.sin((a - e) * 2 * Math.PI / b)) };
+TWEEN.Easing.Elastic.EaseOut = function (a) { var e, c = 0.1, b = 0.4; if (a == 0) return 0; if (a == 1) return 1; b || (b = 0.3); if (!c || c < 1) { c = 1; e = b / 4 } else e = b / (2 * Math.PI) * Math.asin(1 / c); return c * Math.pow(2, -10 * a) * Math.sin((a - e) * 2 * Math.PI / b) + 1 };
+TWEEN.Easing.Elastic.EaseInOut = function (a) { var e, c = 0.1, b = 0.4; if (a == 0) return 0; if (a == 1) return 1; b || (b = 0.3); if (!c || c < 1) { c = 1; e = b / 4 } else e = b / (2 * Math.PI) * Math.asin(1 / c); if ((a *= 2) < 1) return -0.5 * c * Math.pow(2, 10 * (a -= 1)) * Math.sin((a - e) * 2 * Math.PI / b); return c * Math.pow(2, -10 * (a -= 1)) * Math.sin((a - e) * 2 * Math.PI / b) * 0.5 + 1 }; TWEEN.Easing.Back.EaseIn = function (a) { return a * a * (2.70158 * a - 1.70158) }; TWEEN.Easing.Back.EaseOut = function (a) { return (a -= 1) * a * (2.70158 * a + 1.70158) + 1 };
+TWEEN.Easing.Back.EaseInOut = function (a) { if ((a *= 2) < 1) return 0.5 * a * a * (3.5949095 * a - 2.5949095); return 0.5 * ((a -= 2) * a * (3.5949095 * a + 2.5949095) + 2) }; TWEEN.Easing.Bounce.EaseIn = function (a) { return 1 - TWEEN.Easing.Bounce.EaseOut(1 - a) }; TWEEN.Easing.Bounce.EaseOut = function (a) { return (a /= 1) < 1 / 2.75 ? 7.5625 * a * a : a < 2 / 2.75 ? 7.5625 * (a -= 1.5 / 2.75) * a + 0.75 : a < 2.5 / 2.75 ? 7.5625 * (a -= 2.25 / 2.75) * a + 0.9375 : 7.5625 * (a -= 2.625 / 2.75) * a + 0.984375 };
+TWEEN.Easing.Bounce.EaseInOut = function (a) { if (a < 0.5) return TWEEN.Easing.Bounce.EaseIn(a * 2) * 0.5; return TWEEN.Easing.Bounce.EaseOut(a * 2 - 1) * 0.5 + 0.5 };
+
+/**
+* @Tween object attached to a tQuery world and hooked into its render cycle for updates
+*/
+
+(function () {	// closure function
+
+    var tweenUpdate = function(){
+        TWEEN.update();
+    }
+
+    tQuery.register('hookTweenUpdate', function (loop) {
+
+        this._loop = loop || tQuery.world.loop();
+
+        this._loop.hookPreRender(tweenUpdate);
+        tQuery.world.tweenActive = true;
+
+    });
+
+    tQuery.register('unhookTweenUpdate', function (loop) {
+
+        this._loop = loop || tQuery.world.loop();
+
+        this._loop.unhookPreRender(tweenUpdate);
+        tQuery.world.tweenActive = false;
+
+    });
+
+})(); // closure function end
+
+
+
+//These rely on TWEEN.js being hooked to handle the animation
+
+//Animate movement to new position
+tQuery.TrackballControl.register('moveCameraTo', function (target, time) {
+    // handle parameters
+    console.assert(target instanceof THREE.Vector3, "TrackballControl.moveCameraTo target parameter error");
+    console.assert((typeof time === "number"), "TrackballControl.moveCameraTo time parameter error");
+    console.assert(tQuery.world.tweenActive === true, "TrackballControl.moveCameraTo requires Tween to animate, please hook Tween");
+
+    var camera = this._lists[0].object;
+
+    var start = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+    var end = { x: target.x, y: target.y, z: target.z };
+
+    var moveTween = new TWEEN.Tween(start).to(end, time).start();
+    moveTween.onUpdate(function () {
+        camera.position.set(start.x, start.y, start.z);
+    });
+});
+
+//Animate movement to new target
+tQuery.TrackballControl.register('moveCameraTargetTo', function (target, time) {
+    // handle parameters
+    console.assert(target instanceof THREE.Vector3, "TrackballControl.moveCameraTo target parameter error");
+    console.assert((typeof time === "number"), "TrackballControl.moveCameraTo time parameter error");
+    console.assert(tQuery.world.tweenActive === true, "TrackballControl.moveCameraTargetTo requires Tween to animate, please hook Tween");
+
+    var self = this;
+
+    var currentTarget = self.target();
+
+    var start = { x: currentTarget.x, y: currentTarget.y, z: currentTarget.z };
+    var end = { x: target.x, y: target.y, z: target.z };
+
+    var moveTween = new TWEEN.Tween(start).to(end, time).start();
+    moveTween.onUpdate(function () {
+        self.target(start.x, start.y, start.z);
+    });
+});
+
+//Combine position and target movement to create pan effect
+tQuery.TrackballControl.register('panCameraTo', function (target, time) {
+
+    // handle parameters
+    console.assert(target instanceof THREE.Vector3, "TrackballControl.moveCameraTo target parameter error");
+    console.assert((typeof time === "number"), "TrackballControl.moveCameraTo time parameter error");
+    console.assert(tQuery.world.tweenActive === true, "TrackballControl.panCameraTo requires Tween to animate, please hook Tween");
+
+    //Calculate camera position
+    var currentTarget = tQuery.world.getCameraControls().target();
+    var cameraPos = tQuery.world.camera().position;
+
+    var moveTo = new THREE.Vector3();
+    moveTo.copy(target);
+    moveTo = moveTo.add(moveTo, cameraPos);
+    moveTo = moveTo.sub(moveTo, currentTarget);
+
+    //Call movement functions
+    this.moveCameraTo(moveTo, time);
+    this.moveCameraTargetTo(target, time);
 });// This THREEx helper makes it easy to handle window resize.
 // It will update renderer and camera when window is resized.
 //
