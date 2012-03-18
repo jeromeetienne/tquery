@@ -147,6 +147,10 @@ tQuery.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * nodes builder
+ * TODO find a better name
+*/
 tQuery.WebAudio.NodeChain	= function(audioContext){
 	console.assert( audioContext instanceof webkitAudioContext );
 	this._context	= audioContext;
@@ -220,7 +224,16 @@ tQuery.WebAudio.NodeChain.prototype.analyser	= function(properties){
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.register('createSound', function(world){
+	world	= world ? world	: tQuery.world;
+	var webaudio	= world.getWebAudio();	
+	console.assert(webaudio, "webaudio isnt init");
+	return new tQuery.WebAudio.Sound(webaudio);
+});
 
+/**
+ * sound instance
+*/
 tQuery.WebAudio.Sound	= function(webaudio, nodeChain){
 	console.assert( webaudio instanceof tQuery.WebAudio );
 	this._webaudio	= webaudio;
@@ -256,6 +269,31 @@ tQuery.WebAudio.Sound.prototype.destroy	= function(){
 	this._chain.destroy();
 	this._chain	= null;
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.WebAudio.Sound.prototype.follow	= function(object3d){
+	console.assert( this.isFollowing() === false );
+	// sanity check on parameters
+	console.assert( object3d instanceof THREE.Object3D );
+
+	// hook the world loop
+	this._followCb		= function(deltaTime){
+		this.updateWithObject3d(object3d, deltaTime);
+	}.bind(this);
+	this._world.loop().hook(this._followCb);
+}
+
+tQuery.WebAudio.Sound.prototype.unfollow	= function(){
+	this._world.loop().unhook(this._followCb);
+	this._followCb		= null;
+}
+
+tQuery.WebAudio.Sound.prototype.isFollowing	= function(){
+	return this._followCb ? true : false;
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -306,24 +344,35 @@ tQuery.WebAudio.Sound.prototype.pannerCone	= function(innerAngle, outerAngle, ou
 	return this;	// for chained API
 };
 
-
-tQuery.WebAudio.Sound.prototype.amplitude	= function()
+/**
+ * compute the amplitude of the sound (not sure at all it is the proper term)
+ *
+ * @param {Number} the number of frequencyBin to take into account
+ * @returns {Number} return the amplitude of the sound
+*/
+tQuery.WebAudio.Sound.prototype.amplitude	= function(width)
 {
+	// handle paramerter
+	width		= width !== undefined ? width : 2;
+	// inint variable
 	var analyser	= this._analyser;
 	var freqByte	= new Uint8Array(analyser.frequencyBinCount);
-	analyser.smoothingTimeConstant = 0.6;
-	// TODO put that in tQuery.WebAudio.Sound.getAmplitude()
+	// get the frequency data
 	analyser.getByteFrequencyData(freqByte);
-
-	var nb		= 2;
-	var total	= 0;
-	for(var i = 0; i < nb; i++){
-		total	+= freqByte[i];
+	// compute the sum
+	var sum	= 0;
+	for(var i = 0; i < width; i++){
+		sum	+= freqByte[i];
 	}
-	var amplitude	= total / (nb*256-1);
-	
+	// complute the amplitude
+	var amplitude	= sum / (width*256-1);
+	// return ampliture
 	return amplitude;
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Update the source with object3d. usefull for positional sounds
