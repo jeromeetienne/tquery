@@ -1,0 +1,150 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src='tquery.checkerboard.js'></script>
+<script src='tquery.world.createfog.js'></script>
+<script src='tquery.directionallight.shortcuts.js'></script>
+
+<script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
+<script src="../tquery.webaudio.js"></script>
+
+<script src="anim.js"></script>
+<script src="anim.fixedcammovingobj.js"></script>
+<script src="anim.fixedcamrotatingobj.js"></script>
+<script src="anim.fixedobjmovingcam.js"></script>
+<script src="anim.fixedobjrotatingcam.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().enableWebAudio().start();
+	var object	= tQuery.createTorus(0.5-0.15, 0.15, 8*2, 6*4).addTo(world)
+				.translateY(1.3);
+
+	world.addFog({ far : 20 });
+
+	tQuery.createAxis().addTo(object);
+
+	object.get(0).castShadow	= true;
+
+	world.renderer().shadowMapEnabled	= true;
+	world.renderer().shadowMapSoft		= true;
+
+	tQuery.createDirectionalLight().addTo(world).color(0xaaaaaa)
+		.position(-0.3, 1,-1).intensity(2)
+		.castShadow(true).shadowDarkness(0.8)
+		.shadowMap(512*2,512*2).shadowCamera(10, -10, 10, -10);
+
+
+	// tune camera
+	world.camera().position.z	= 2;
+	world.getCameraControls().target.set(0, 1, 0);
+	world.loop().hook(function(){
+		var position	= world.camera().position;
+		position.y	= Math.max(position.y, 1);
+	});
+
+
+
+
+	var options	= new function(){
+		this.volume			= 1;
+		this.mouvement			= 'fixedCamMovingObj';
+
+		this.pannerConeInnerAngle	= 1;
+		this.pannerConeOuterAngle	= 1;
+		this.pannerConeOuterGain	= 1;
+
+		this.soundUrl			= 'sounds/techno.mp3';
+		this.soundLoop			= true;
+
+		this.pulseEnable		= true;
+		this.pulseOffset		= 1;
+		this.pulseRange			= 1.5;
+	};
+
+
+	tAnim.changeTo(options.mouvement);
+
+	var sound	= tQuery.createSound().follow(object).pannerCone(Math.PI, 0, 0.2);
+	sound.load('../../assets/sounds/techno.mp3', function(sound){
+		sound.nodes().analyser.smoothingTimeConstant	= 0.6;
+		sound.nodes().bufferSource.loop			= true;
+		sound.play();
+	});
+
+	// bind amplitude to object.scale
+	world.loop().hook(function(){
+		if( options.pulseEnable === false )	return;
+		var amplitude	= sound.amplitude();
+		var scale	= amplitude * options.pulseRange + options.pulseOffset;
+		object.scale(scale);
+	});
+
+(function(){
+	var gui		= new dat.GUI();
+	gui.add(options, 'volume', 0, 1).onChange(function(value){
+		sound.volume(value);
+	});
+	gui.add(options, 'mouvement', Object.keys(tAnim.plugins)).onChange(function(value){
+		tAnim.changeTo(value);
+	});
+// Panner folder
+	var folder	= gui.addFolder('Panner');
+	folder.open();
+	folder.add(options, 'pannerConeInnerAngle', 0, 180).onChange(function(value){
+		sound.pannerConeInnerAngle(value * Math.PI/180);
+	});
+	folder.add(options, 'pannerConeOuterAngle', 0, 180).onChange(function(value){
+		sound.pannerConeOuterAngle(value * Math.PI/180);
+	});
+	folder.add(options, 'pannerConeOuterGain', 0, 1).onChange(function(value){
+		sound.pannerConeOuterGain(value);
+	});
+// Sound folder
+	var folder	= gui.addFolder('Sound');
+	folder.open();
+	folder.add(options, 'soundUrl', {
+		'techno.mp3'	: '../../assets/sounds/techno.mp3',
+		'kick.wav'	: '../../assets/sounds/kick.wav'
+	}).onChange(function(value){
+		sound.load(value, function(){
+			sound.play();
+		})
+	});
+	folder.add(options, 'soundLoop').onChange(function(value){
+		sound.nodes().bufferSource.loop	= value;
+	});
+// Pulse folder
+	var folder	= gui.addFolder('Pulse');
+	folder.open();
+	folder.add(options, 'pulseEnable')
+	folder.add(options, 'pulseOffset', 0, 2)
+	folder.add(options, 'pulseRange', 0, 2)
+})();
+
+	//////////////////////////////////////////////////////////////////////////
+	//		checkerboard						//
+	//////////////////////////////////////////////////////////////////////////
+	    
+	var board	= tQuery.createCheckerboard({
+		segmentsW	: 50,
+		segmentsH	: 50,
+		materialEven	: new THREE.MeshLambertMaterial({
+			ambient	: 0x444444,
+			color	: 0xFF5588,
+			specular: 0xCC88ff,
+			shininess: 400,
+			color	: 0xcccccc
+		}),
+		materialOdd	: new THREE.MeshLambertMaterial({
+			ambient	: 0x444444,
+			color	: 0xFF5588,
+			specular: 0xCC88ff,
+			shininess: 400,
+			color	: 0x444444
+		})
+	}).addTo(world);
+	board.rotateX(-Math.PI/2).scale(100);
+	board.get(0).receiveShadow	= true;
+	
+</script></body>

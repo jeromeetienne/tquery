@@ -69,9 +69,13 @@ tQuery.World.register('supportWebAudio', function(){
 
 
 /**
- * Constructor
- *
+ * Main class to handle webkit audio
+ * 
  * TODO make the clip detector from http://www.html5rocks.com/en/tutorials/webaudio/games/
+ *
+ * @class Handle webkit audio API
+ *
+ * @param {tQuery.World} [world] the world on which to run 
 */
 tQuery.WebAudio	= function(world){
 	// sanity check - the api MUST be available
@@ -86,7 +90,6 @@ tQuery.WebAudio	= function(world){
 	}.bind(this);
 	this._world.loop().hook(this._updateCb);
 
-	
 	// create the context
 	this._ctx	= new webkitAudioContext();
 
@@ -105,6 +108,8 @@ tQuery.WebAudio.prototype.destroy	= function(){
 };
 
 /**
+ * 
+ *
  * @return {Boolean} true if it is available or not
 */
 tQuery.WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
@@ -115,7 +120,7 @@ tQuery.WebAudio.isAvailable	= window.webkitAudioContext ? true : false;
 
 /**
  * get the audio context
- * 
+ *
  * @returns {AudioContext} the audio context
 */
 tQuery.WebAudio.prototype.context	= function(){
@@ -132,6 +137,7 @@ tQuery.WebAudio.prototype._entryNode	= function(){
 
 /**
  * getter/setter on the volume
+ * 
 */
 tQuery.WebAudio.prototype.world		= function(value){
 	if( value === undefined )	return this._world;
@@ -195,16 +201,18 @@ tQuery.WebAudio.prototype.updateListener	= function(object3d, deltaTime){
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-//		tQuery.WebAudio.NodeChain					//
+//		tQuery.WebAudio.NodeChainBuilder				//
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * nodes builder
- * TODO find a better name
+ * Constructor
+ *
+ * @class builder to generate nodes chains. Used in tQuery.WebAudio.Sound
+ * @param {webkitAudioContext} audioContext the audio context
 */
-tQuery.WebAudio.NodeChain	= function(audioContext){
+tQuery.WebAudio.NodeChainBuilder	= function(audioContext){
 	console.assert( audioContext instanceof webkitAudioContext );
 	this._context	= audioContext;
 	this._firstNode	= null;
@@ -212,23 +220,34 @@ tQuery.WebAudio.NodeChain	= function(audioContext){
 	this._nodes	= {};
 };
 
-tQuery.WebAudio.NodeChain.prototype.destroy	= function(){
+/**
+ * destructor
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.destroy	= function(){
 };
 
-
-tQuery.WebAudio.NodeChain.prototype.nodes	= function(){
+/**
+ * getter for the nodes
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.nodes	= function(){
 	return this._nodes;
 }
 
-tQuery.WebAudio.NodeChain.prototype.first	= function(){
+/**
+ * @returns the first node of the chain
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.first	= function(){
 	return this._firstNode;
 }
 
-tQuery.WebAudio.NodeChain.prototype.last	= function(){
+/**
+ * @returns the last node of the chain
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.last	= function(){
 	return this._lastNode;
 }
 
-tQuery.WebAudio.NodeChain.prototype._addNode	= function(node, properties)
+tQuery.WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 {
 	// connect this._lastNode to node if suitable
 	if( this._lastNode !== null )	this._lastNode.connect(node);
@@ -246,19 +265,34 @@ tQuery.WebAudio.NodeChain.prototype._addNode	= function(node, properties)
 	return this;
 };
 
-tQuery.WebAudio.NodeChain.prototype.bufferSource	= function(properties){
+/**
+ * add a bufferSource
+ *
+ * @param {Object} [properties] properties to set in the created node
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 	var node		= this._context.createBufferSource()
 	this._nodes.bufferSource= node;
 	return this._addNode(node, properties)
 };
 
-tQuery.WebAudio.NodeChain.prototype.panner	= function(properties){
+/**
+ * add a panner
+ * 
+ * @param {Object} [properties] properties to set in the created node
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.panner	= function(properties){
 	var node		= this._context.createPanner()
 	this._nodes.panner	= node;
 	return this._addNode(node, properties)
 };
 
-tQuery.WebAudio.NodeChain.prototype.analyser	= function(properties){
+/**
+ * add a analyser
+ *
+ * @param {Object} [properties] properties to set in the created node
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
 	var node		= this._context.createAnalyser()
 	this._nodes.analyser	= node;
 	return this._addNode(node, properties)
@@ -283,6 +317,11 @@ tQuery.register('createSound', function(world, nodeChain){
 
 /**
  * sound instance
+ *
+ * @class Handle one sound for tQuery.WebAudio
+ *
+ * @param {tQuery.World} [world] the world on which to run
+ * @param {tQuery.WebAudio.NodeChainBuilder} [nodeChain] the nodeChain to use
 */
 tQuery.WebAudio.Sound	= function(world, nodeChain){
 	this._world	= world ? world	: tQuery.world;
@@ -291,13 +330,13 @@ tQuery.WebAudio.Sound	= function(world, nodeChain){
 
 	console.assert( this._world instanceof tQuery.World );
 	
-	// create a default NodeChain if needed
+	// create a default NodeChainBuilder if needed
 	if( nodeChain === undefined ){
-		nodeChain	= new tQuery.WebAudio.NodeChain(this._webaudio.context())
+		nodeChain	= new tQuery.WebAudio.NodeChainBuilder(this._webaudio.context())
 					.bufferSource().analyser().panner();
 	}
 	// setup this._chain
-	console.assert( nodeChain instanceof tQuery.WebAudio.NodeChain );
+	console.assert( nodeChain instanceof tQuery.WebAudio.NodeChainBuilder );
 	this._chain	= nodeChain;
 
 	// connect this._chain.last() node to this._webaudio._entryNode()
@@ -314,6 +353,9 @@ tQuery.WebAudio.Sound	= function(world, nodeChain){
 	console.assert(this._panner	, "no panner: not yet supported")
 };
 
+/**
+ * destructor
+*/
 tQuery.WebAudio.Sound.prototype.destroy	= function(){
 	// disconnect from this._webaudio
 	this._chain.last().disconnect();
@@ -326,6 +368,9 @@ tQuery.WebAudio.Sound.prototype.destroy	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * follow a object3D
+*/
 tQuery.WebAudio.Sound.prototype.follow	= function(object3d){
 	console.assert( this.isFollowing() === false );
 	// handle parameter
@@ -345,6 +390,9 @@ tQuery.WebAudio.Sound.prototype.follow	= function(object3d){
 	return this;
 }
 
+/**
+ * unfollow the object3D if any
+*/
 tQuery.WebAudio.Sound.prototype.unfollow	= function(){
 	this._world.loop().unhook(this._followCb);
 	this._followCb		= null;
@@ -352,6 +400,9 @@ tQuery.WebAudio.Sound.prototype.unfollow	= function(){
 	return this;
 }
 
+/**
+ * @returns {Boolean} true if this sound is following a object3d, false overwise
+*/
 tQuery.WebAudio.Sound.prototype.isFollowing	= function(){
 	return this._followCb ? true : false;
 	// for chained API
@@ -362,22 +413,38 @@ tQuery.WebAudio.Sound.prototype.isFollowing	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * getter of the chain nodes
+*/
 tQuery.WebAudio.Sound.prototype.nodes	= function(){
 	return this._chain.nodes();
 };
 
+/**
+ * @returns {Boolean} true if the sound is playable, false otherwise
+*/
 tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
 	return this._source.buffer ? true : false;
 	return this;	// for chained API
 };
 
+/**
+ * play the sound
+ *
+ * @param {Number} [time] time when to play the sound
+*/
 tQuery.WebAudio.Sound.prototype.play		= function(time){
 	if( time ===  undefined )	time	= 0;
 	this._source.noteOn(time);
 	return this;	// for chained API
 };
 
- tQuery.WebAudio.Sound.prototype.stop		= function(time){
+/**
+ * stop the sound
+ *
+ * @param {Number} [time] time when to stop the sound
+*/
+tQuery.WebAudio.Sound.prototype.stop		= function(time){
 	if( time ===  undefined )	time	= 0;
 	this._source.noteOff(time);
 	return this;	// for chained API
@@ -385,6 +452,8 @@ tQuery.WebAudio.Sound.prototype.play		= function(time){
 
 /**
  * getter/setter on the volume
+ *
+ * @param {Number} [value] the value to set, if not provided, get current value
 */
 tQuery.WebAudio.Sound.prototype.volume	= function(value){
 	if( value === undefined )	return this._source.gain.value;
@@ -443,7 +512,7 @@ tQuery.WebAudio.Sound.prototype.pannerConeOuterGain	= function(value){
 /**
  * compute the amplitude of the sound (not sure at all it is the proper term)
  *
- * @param {Number} the number of frequencyBin to take into account
+ * @param {Number} width the number of frequencyBin to take into account
  * @returns {Number} return the amplitude of the sound
 */
 tQuery.WebAudio.Sound.prototype.amplitude	= function(width)
