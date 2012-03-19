@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+	<head>
+		<title>tQuery playground</title>
+		<meta charset=utf-8>
+		<script src="../vendor/bootstrap/docs/assets/js/jquery.js"></script>
+
+			
+		<script src="../vendor/CodeMirror2/lib/codemirror.js"></script>
+		<script src="../vendor/CodeMirror2//mode/xml/xml.js"></script>
+		<script src="../vendor/CodeMirror2/mode/javascript/javascript.js"></script>
+		<script src="../vendor/CodeMirror2/mode/css/css.js"></script>
+		<script src="../vendor/CodeMirror2/mode/htmlmixed/htmlmixed.js"></script>
+		<link rel="stylesheet" href="../vendor/CodeMirror2/lib/codemirror.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/cobalt.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/night.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/neat.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/elegant.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/night.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/monokai.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/cobalt.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/eclipse.css">
+		<link rel="stylesheet" href="../vendor/CodeMirror2/theme/rubyblue.css">
+
+
+		<style type=text/css>
+			body {
+				background-color	: #CCC;
+			}
+			#editor {
+				float	: left;
+				width	: 50%;
+
+				/*border: 2px solid black;*/
+				border	: 0px;
+				margin-right	: 25px;
+				
+				height	: 400px;
+
+				-moz-box-shadow: 0 0 5px 5px #888;
+				-webkit-box-shadow: 0 0 5px 5px#888;
+				box-shadow: 0 0 5px 5px #888;
+			}
+			.CodeMirror {
+			}
+			.CodeMirror-scroll {
+				height		: 400px;
+				font-size	: 16px;
+				line-height	: 1.3;
+			}
+			#previewContainer {
+				width: 45%;
+				float: left;
+				height	: 400px;
+			}
+			iframe {
+				width	: 100%;
+				height	: 100%;
+
+				/*border: 2px solid black;*/
+				border	: 0px;
+				margin-left	: 25px;
+
+				-moz-box-shadow	: 0 0 5px 5px #888;
+				-webkit-box-shadow: 0 0 5px 5px#888;
+				box-shadow	: 0 0 5px 5px #888;
+			}
+			h1 {
+				text-align	: center;
+				font-size	: 300%;
+				font-family	: Georgia,serif;
+				color		: #4E443C;
+				font-variant	: small-caps;
+				font-weight	: 100;
+			}
+			h1 .tee {
+				font-variant	: normal;
+			}
+			#toolbar {
+				text-align	: center;
+				font-weight	: 200%;
+				font-size	: 200%;	
+			}
+			#syncStatus .state {
+				font-size	: 80%;
+				font-family	: Georgia,serif;
+				color		: #4E443C;
+				font-variant	: small-caps;
+			}
+			#syncStatus .state.uptodate {
+				color		: grey;
+			}
+			#syncStatus .state.outofdate {
+			}
+			#compileButton {
+				padding-right	: 10px;
+				padding-left	: 10px;
+			}
+			#compileButton:hover {
+				background-color	: #999;
+				
+				border-radius: 8px;
+			}
+		</style>
+	</head>
+<body>
+	<h1><span class="tee">t</span>Query Playground</h1>
+	<br/>
+	
+	<div id="toolbar">
+		<span id="compileButton" title="Update preview - shortcut: cmd-enter">&rarr;</span>
+		<span id="syncStatus">
+			<span class="state uptodate">updated</span>
+			<span class="state outofdate">to update</span>
+		</span>
+	</div>
+	<div id="editor">
+		<textarea id=code name=code>
+<!doctype html><title>tQuery minimal page</title>
+<script src="../../build/tquery-all.js"></script>
+<body><script>
+
+	var world = tQuery.createWorld().boilerplate().start();
+	var object = tQuery.createTorus().addTo(world);
+	
+</script></body></textarea>
+	</div>
+	<div id="previewContainer">
+		<iframe id="preview"  allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+	</div>
+
+	<script>
+		var updatePeriod	= 0.3*1000;
+		updatePeriod	= 0;
+		var delay;
+		jQuery("#compileButton").click(function(){
+			updatePreview();
+		});
+		// Initialize CodeMirror editor with a nice html5 canvas demo.
+		var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+			mode		: 'text/html',
+			tabMode		: 'indent',
+			theme		: 'night',
+			indentWithTabs	: true,
+			tabSize		: 4,
+			indentUnit	: 4,
+			lineNumbers	: true,
+			extraKeys	: {
+				"Cmd-Enter": function(cm){
+					updatePreview();
+				}
+			},
+			onChange: function() {
+				clearTimeout(delay);
+				if( updatePeriod ) delay = setTimeout(updatePreview, updatePeriod);
+				// update ui
+				jQuery('#syncStatus .state').hide().filter('.outofdate').show();
+			}
+		});
+		
+		function updatePreview() {
+			// update ui
+			jQuery('#syncStatus .state').hide().filter('.uptodate').show();
+
+			
+			
+			jQuery('#previewContainer').empty();
+			jQuery('<iframe>').attr('id', 'preview').appendTo('#previewContainer');
+			
+			setTimeout(function(){
+				var content	= editor.getValue();
+				var previewFrame= document.getElementById('preview');
+				var preview	=  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+				preview.open();
+				preview.write(content);
+				preview.close();
+			}, 300)
+		}
+		updatePreview();
+	</script>
+</body>
+</html>
