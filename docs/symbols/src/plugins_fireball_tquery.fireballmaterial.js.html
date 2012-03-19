@@ -1,0 +1,230 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * Fireball material
+<span class='line'>  3</span>  * 
+<span class='line'>  4</span>  * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
+<span class='line'>  5</span>  * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
+<span class='line'>  6</span> */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="NAME">tQuery.Object3D.register</span><span class="PUNC">(</span><span class="STRN">'useFileballMaterial'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scale</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="WHIT">	</span><span class="NAME">scale</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">scale</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">scale</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  9</span> 
+<span class='line'> 10</span> </span><span class="WHIT">	</span><span class="NAME">this.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uniforms</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">			</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"f"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1.0</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="WHIT">			</span><span class="NAME">scale</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"f"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">scale</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">		
+<span class='line'> 16</span> 		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">material</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.ShaderMaterial</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="WHIT">			</span><span class="NAME">uniforms</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">uniforms</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">			</span><span class="NAME">vertexShader</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">			</span><span class="NAME">fragmentShader</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">		
+<span class='line'> 22</span> 		</span><span class="NAME">object3d.material</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">material</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">		
+<span class='line'> 24</span> 		</span><span class="NAME">tQuery.world.loop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">hook</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">present</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">			</span><span class="NAME">uniforms.time.value</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0.275</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	
+<span class='line'> 31</span> 
+<span class='line'> 32</span> </span><span class="COMM">// converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="NAME">tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="STRN">'		uniform float time;'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="STRN">'		uniform float scale;'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="STRN">'		varying vec3 vTexCoord3D;'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="STRN">'		varying vec3 vNormal;'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="STRN">'		varying vec3 vViewPosition;'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="STRN">'		void main( void ) {'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="STRN">'			vec4 mPosition = objectMatrix * vec4( position, 1.0 );'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="STRN">'			vNormal = normalize( normalMatrix * normal );'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="STRN">'			vViewPosition = cameraPosition - mPosition.xyz;'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="STRN">'			vTexCoord3D = scale * ( position.xyz + vec3( 0.0, 0.0, -time ) );'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="STRN">'			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="STRN">'		}'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="STRN">'	'</span><span class="WHIT">	
+<span class='line'> 53</span> </span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">'\n'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> 
+<span class='line'> 55</span> </span><span class="COMM">// converted by document.getElementById( 'fragmentShader' ).textContent.split('\n').map(function(line){ return "\""+line+"\","; }).join('\n');</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="NAME">tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="STRN">"		//"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="STRN">"		// Description : Array and textureless GLSL 3D simplex noise function."</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="STRN">"		//      Author : Ian McEwan, Ashima Arts."</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="STRN">"		//  Maintainer : ijm"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="STRN">"		//     Lastmod : 20110409 (stegu)"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="STRN">"		//     License : Copyright (C) 2011 Ashima Arts. All rights reserved."</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="STRN">"		//               Distributed under the MIT License. See LICENSE file."</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="STRN">"		//"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="STRN">"		uniform float time;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="STRN">"		varying vec3 vTexCoord3D;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="STRN">"		varying vec3 vNormal;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="STRN">"		varying vec3 vViewPosition;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="STRN">"		vec4 permute( vec4 x ) {"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="STRN">"			return mod( ( ( x * 34.0 ) + 1.0 ) * x, 289.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="STRN">"		}"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="STRN">"		vec4 taylorInvSqrt( vec4 r ) {"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="STRN">"			return 1.79284291400159 - 0.85373472095314 * r;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="STRN">"		}"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="STRN">"		float snoise( vec3 v ) {"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="STRN">"			const vec2 C = vec2( 1.0 / 6.0, 1.0 / 3.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="STRN">"			const vec4 D = vec4( 0.0, 0.5, 1.0, 2.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="STRN">"			// First corner"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="STRN">"			vec3 i  = floor( v + dot( v, C.yyy ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="STRN">"			vec3 x0 = v - i + dot( i, C.xxx );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="STRN">"			// Other corners"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="STRN">"			vec3 g = step( x0.yzx, x0.xyz );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="STRN">"			vec3 l = 1.0 - g;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="STRN">"			vec3 i1 = min( g.xyz, l.zxy );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="STRN">"			vec3 i2 = max( g.xyz, l.zxy );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="STRN">"			//  x0 = x0 - 0. + 0.0 * C"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="STRN">"			vec3 x1 = x0 - i1 + 1.0 * C.xxx;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="STRN">"			vec3 x2 = x0 - i2 + 2.0 * C.xxx;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="STRN">"			vec3 x3 = x0 - 1. + 3.0 * C.xxx;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="STRN">"			// Permutations"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="STRN">"			i = mod( i, 289.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="STRN">"			vec4 p = permute( permute( permute("</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="STRN">"					 i.z + vec4( 0.0, i1.z, i2.z, 1.0 ) )"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="STRN">"				   + i.y + vec4( 0.0, i1.y, i2.y, 1.0 ) )"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="STRN">"				   + i.x + vec4( 0.0, i1.x, i2.x, 1.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="STRN">"			// Gradients"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="STRN">"			// ( N*N points uniformly over a square, mapped onto an octahedron.)"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="STRN">"			float n_ = 1.0 / 7.0; // N=7"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="STRN">"			vec3 ns = n_ * D.wyz - D.xzx;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="STRN">"			vec4 j = p - 49.0 * floor( p * ns.z *ns.z );  //  mod(p,N*N)"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="STRN">"			vec4 x_ = floor( j * ns.z );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="STRN">"			vec4 y_ = floor( j - 7.0 * x_ );    // mod(j,N)"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="STRN">"			vec4 x = x_ *ns.x + ns.yyyy;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="STRN">"			vec4 y = y_ *ns.x + ns.yyyy;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="STRN">"			vec4 h = 1.0 - abs( x ) - abs( y );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="STRN">"			vec4 b0 = vec4( x.xy, y.xy );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="STRN">"			vec4 b1 = vec4( x.zw, y.zw );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="STRN">"			vec4 s0 = floor( b0 ) * 2.0 + 1.0;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="STRN">"			vec4 s1 = floor( b1 ) * 2.0 + 1.0;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="STRN">"			vec4 sh = -step( h, vec4( 0.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="STRN">"			vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="STRN">"			vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="STRN">"			vec3 p0 = vec3( a0.xy, h.x );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="STRN">"			vec3 p1 = vec3( a0.zw, h.y );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="STRN">"			vec3 p2 = vec3( a1.xy, h.z );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="STRN">"			vec3 p3 = vec3( a1.zw, h.w );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="STRN">"			// Normalise gradients"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="STRN">"			vec4 norm = taylorInvSqrt( vec4( dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3) ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="STRN">"			p0 *= norm.x;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="STRN">"			p1 *= norm.y;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="STRN">"			p2 *= norm.z;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="STRN">"			p3 *= norm.w;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="STRN">"			// Mix final noise value"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="STRN">"			vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3) ), 0.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="STRN">"			m = m * m;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="STRN">"			return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="STRN">"										dot(p2,x2), dot(p3,x3) ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="STRN">"		}"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="STRN">"		float heightMap( vec3 coord ) {"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="STRN">"			float n = abs( snoise( coord ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="STRN">"			n += 0.25   * abs( snoise( coord * 2.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="STRN">"			n += 0.25   * abs( snoise( coord * 4.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="STRN">"			n += 0.125  * abs( snoise( coord * 8.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="STRN">"			n += 0.0625 * abs( snoise( coord * 16.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="STRN">"			return n;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="STRN">"		}"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="STRN">"		void main( void ) {"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="STRN">"			// height"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="STRN">"			float n = heightMap( vTexCoord3D );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="STRN">"			// color"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="STRN">"			gl_FragColor = vec4( vec3( 1.5 - n, 1.0 - n, 0.5 - n ), 1.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="STRN">"			// normal"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="STRN">"			const float e = 0.001;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="STRN">"			float nx = heightMap( vTexCoord3D + vec3( e, 0.0, 0.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="STRN">"			float ny = heightMap( vTexCoord3D + vec3( 0.0, e, 0.0 ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="STRN">"			float nz = heightMap( vTexCoord3D + vec3( 0.0, 0.0, e ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="STRN">"			vec3 normal = normalize( vNormal + 0.05 * vec3( n - nx, n - ny, n - nz ) / e );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="STRN">"			// diffuse light"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="STRN">"			vec3 vLightWeighting = vec3( 0.1 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="STRN">"			vec4 lDirection = viewMatrix * vec4( normalize( vec3( 1.0, 0.0, 0.5 ) ), 0.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="STRN">"			float directionalLightWeighting = dot( normal, normalize( lDirection.xyz ) ) * 0.25 + 0.75;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="STRN">"			vLightWeighting += vec3( 1.0 ) * directionalLightWeighting;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="STRN">"			// specular light"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="STRN">"			vec3 dirHalfVector = normalize( lDirection.xyz + normalize( vViewPosition ) );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="STRN">"			float dirDotNormalHalf = dot( normal, dirHalfVector );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="STRN">"			float dirSpecularWeight = 0.0;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="STRN">"			if ( dirDotNormalHalf >= 0.0 )"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="STRN">"				dirSpecularWeight = ( 1.0 - n ) * pow( dirDotNormalHalf, 5.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="STRN">"			vLightWeighting += vec3( 1.0, 0.5, 0.0 ) * dirSpecularWeight * n * 2.0;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="STRN">"			gl_FragColor *= vec4( vLightWeighting, 1.0 );"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="STRN">"		}"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="STRN">"	"</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">'\n'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> </span></pre></body></html>

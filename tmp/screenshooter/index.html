@@ -3,9 +3,9 @@
 <body><script>
 	var urls	= [
 		//'http://localhost:8000/examples/minimal/',
-		'../../examples/csg/examples/index.html'
+		'../../plugins/csg/examples/index.html'
 	];
-	
+
 	var url		= urls[0];
 
 	// create the iframe element
@@ -34,10 +34,12 @@
 		// return the dataUrl
 		return dataUrl;
 	};
-	
+
 	iframeEl.addEventListener('load', function(){
 		setTimeout(function(){
-			window.open(shootIframe(iframeEl));
+			var url	= shootIframe(iframeEl);
+			console.log("url", url.length)
+			window.open(url);
 		}, 1.2*1000);
 	});
 

@@ -1,0 +1,404 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * Tutorials:
+<span class='line'>  3</span>  * http://www.html5rocks.com/en/tutorials/webaudio/games/
+<span class='line'>  4</span>  * http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/ &lt;- +1 as it is three.js
+<span class='line'>  5</span>  * http://www.html5rocks.com/en/tutorials/webaudio/intro/
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  * Spec:
+<span class='line'>  8</span>  * https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+<span class='line'>  9</span>  *
+<span class='line'> 10</span>  * Chromium Demo:
+<span class='line'> 11</span>  * http://chromium.googlecode.com/svn/trunk/samples/audio/index.html  &lt;- running page
+<span class='line'> 12</span>  * http://code.google.com/p/chromium/source/browse/trunk/samples/audio/ &lt;- source
+<span class='line'> 13</span> */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**
+<span class='line'> 16</span>  * @namespace
+<span class='line'> 17</span> */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">THREEx</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">THREEx</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span> 
+<span class='line'> 20</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="COMM">//		THREEx.WebAudio							//</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 27</span> 
+<span class='line'> 28</span> 
+<span class='line'> 29</span> </span><span class="COMM">/**
+<span class='line'> 30</span>  * Constructor
+<span class='line'> 31</span>  *
+<span class='line'> 32</span>  * TODO make the clip detector from http://www.html5rocks.com/en/tutorials/webaudio/games/
+<span class='line'> 33</span> */</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="NAME">THREEx.WebAudio</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">	</span><span class="COMM">// create the context</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">	</span><span class="NAME">this._ctx</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">webkitAudioContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> 
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="COMM">// setup the end of the node chain</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">	</span><span class="COMM">// TODO later code the clipping detection from http://www.html5rocks.com/en/tutorials/webaudio/games/ </span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ctx.createGainNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">	</span><span class="NAME">this._compressor</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ctx.createDynamicsCompressor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode.connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._compressor</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">	</span><span class="NAME">this._compressor.connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._ctx.destination</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> 
+<span class='line'> 46</span> </span><span class="NAME">THREEx.WebAudio.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 52</span> 
+<span class='line'> 53</span> </span><span class="COMM">/**
+<span class='line'> 54</span>  * get the audio context
+<span class='line'> 55</span>  * 
+<span class='line'> 56</span>  * @returns {AudioContext} the audio context
+<span class='line'> 57</span> */</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="NAME">THREEx.WebAudio.prototype.context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._ctx</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span> 
+<span class='line'> 62</span> </span><span class="COMM">/**
+<span class='line'> 63</span>  * return the entry node in the master node chains
+<span class='line'> 64</span> */</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="NAME">THREEx.WebAudio.prototype._entryNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">	</span><span class="COMM">//return this._ctx.destination;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._gainNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 69</span> 
+<span class='line'> 70</span> </span><span class="COMM">/**
+<span class='line'> 71</span>  * getter/setter on the volume
+<span class='line'> 72</span> */</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="NAME">THREEx.WebAudio.prototype.volume</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._gainNode.gain.value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode.gain.value</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> 
+<span class='line'> 79</span> 
+<span class='line'> 80</span> </span><span class="NAME">THREEx.WebAudio.prototype.updateListener</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ctx</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> 
+<span class='line'> 86</span> </span><span class="WHIT">	</span><span class="COMM">// ensure object3d.matrixWorld is up to date</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">	</span><span class="NAME">object3d.updateMatrixWorld</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">	
+<span class='line'> 89</span> 	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">	</span><span class="COMM">// set position</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">	</span><span class="NAME">context.listener.setPosition</span><span class="PUNC">(</span><span class="NAME">position.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> 
+<span class='line'> 94</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">	</span><span class="COMM">// set orientation</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.matrixWorld.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">	</span><span class="COMM">// zero the translation</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.setPosition</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">z</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">	</span><span class="COMM">// Compute Front vector: Multiply the 0,0,1 vector by the world matrix and normalize the result.</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vFront</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.Vector3</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.multiplyVector3</span><span class="PUNC">(</span><span class="NAME">vFront</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">	</span><span class="NAME">vFront.normalize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">	</span><span class="COMM">// Compute UP vector: Multiply the 0,-1,0 vector by the world matrix and normalize the result.</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vUp</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.Vector3</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.multiplyVector3</span><span class="PUNC">(</span><span class="NAME">vUp</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">	</span><span class="NAME">vUp.normalize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">	</span><span class="COMM">// Set panner orientation</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">	</span><span class="NAME">context.listener.setOrientation</span><span class="PUNC">(</span><span class="NAME">vFront.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vFront.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vFront.z</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vUp.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vUp.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vUp.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> 
+<span class='line'>110</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">	</span><span class="COMM">// set velocity</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._prevPos</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">velocity</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">subSelf</span><span class="PUNC">(</span><span class="NAME">this._prevPos</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">divideScalar</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">		</span><span class="NAME">context.listener.setVelocity</span><span class="PUNC">(</span><span class="NAME">velocity.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>121</span> 
+<span class='line'>122</span> 
+<span class='line'>123</span> 
+<span class='line'>124</span> 
+<span class='line'>125</span> 
+<span class='line'>126</span> 
+<span class='line'>127</span> 
+<span class='line'>128</span> 
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="COMM">//		THREEx.WebAudio.Sound						//</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>137</span> 
+<span class='line'>138</span> 
+<span class='line'>139</span> </span><span class="NAME">THREEx.WebAudio.Sound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">webaudio</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">webaudio</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREEx.WebAudio</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">	</span><span class="NAME">this._webaudio</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">webaudio</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">	</span><span class="NAME">this._context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">webaudio.context</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">	
+<span class='line'>144</span> 	</span><span class="COMM">// create a default NodeChain if needed</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">		</span><span class="NAME">nodeChain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREEx.WebAudio.NodeChain</span><span class="PUNC">(</span><span class="NAME">webaudio.context</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">					</span><span class="PUNC">.</span><span class="NAME">bufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">analyser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">panner</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">	</span><span class="COMM">// setup this._chain</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREEx.WebAudio.NodeChain</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">	</span><span class="NAME">this._chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>152</span> 
+<span class='line'>153</span> </span><span class="WHIT">	</span><span class="COMM">// connect this._chain.last() node to this._webaudio._entryNode()</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.last</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._webaudio._entryNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">	
+<span class='line'>156</span> 	</span><span class="COMM">// create some alias</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">	</span><span class="NAME">this._source</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">bufferSource</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">	</span><span class="NAME">this._analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">analyser</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">	</span><span class="NAME">this._panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">panner</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">	
+<span class='line'>161</span> 	</span><span class="COMM">// sanity check</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._source</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no bufferSource: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._analyser</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no analyser: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._panner</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no panner: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> 
+<span class='line'>167</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="WHIT">	</span><span class="COMM">// disconnect from this._webaudio</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.last</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">disconnect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">	</span><span class="COMM">// destroy this._chain</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">	</span><span class="NAME">this._chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span> 
+<span class='line'>175</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>178</span> 
+<span class='line'>179</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._chain</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> 
+<span class='line'>183</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.isPlayable</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._source.buffer</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>187</span> 
+<span class='line'>188</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.play</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT">  </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">	</span><span class="NAME">this._source.noteOn</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span> 
+<span class='line'>194</span> </span><span class="WHIT"> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.stop</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT">  </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">	</span><span class="NAME">this._source.noteOff</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span> 
+<span class='line'>200</span> </span><span class="COMM">/**
+<span class='line'>201</span>  * getter/setter on the volume
+<span class='line'>202</span> */</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.volume</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._source.gain.value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">	</span><span class="NAME">this._source.gain.value</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>208</span> 
+<span class='line'>209</span> </span><span class="COMM">/**
+<span class='line'>210</span>  * Set parameter for the pannerCone
+<span class='line'>211</span>  *
+<span class='line'>212</span>  * @param {Number} innerAngle the inner cone hangle in radian
+<span class='line'>213</span>  * @param {Number} outerAngle the outer cone hangle in radian
+<span class='line'>214</span>  * @param {Number} outerGain the gain to apply when in the outerCone
+<span class='line'>215</span> */</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.pannerCone</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">innerAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outerAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outerGain</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">innerAngle</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">outerAngle</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">outerGain</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="COMM">/**
+<span class='line'>225</span>  * Update the source with object3d. usefull for positional sounds
+<span class='line'>226</span>  * 
+<span class='line'>227</span>  * @param {THREE.Object3D} object3d the object which originate the source
+<span class='line'>228</span>  * @param {Number} deltaTime the number of seconds since last update
+<span class='line'>229</span> */</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.updateWithObject3d</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>234</span> 
+<span class='line'>235</span> </span><span class="WHIT">	</span><span class="COMM">// ensure object3d.matrixWorld is up to date</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">	</span><span class="NAME">object3d.updateMatrixWorld</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="WHIT">	
+<span class='line'>238</span> 	</span><span class="NAME">this.updateWithMatrix4</span><span class="PUNC">(</span><span class="NAME">object3d.matrixWorld</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">	
+<span class='line'>240</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>242</span> 
+<span class='line'>243</span> </span><span class="COMM">/**
+<span class='line'>244</span>  * Update the source with a matrixWorld. usefull for positional sounds
+<span class='line'>245</span>  * 
+<span class='line'>246</span>  * @param {THREE.Matrix4} matrixWorld the matrixWorld describing the position of the sound
+<span class='line'>247</span>  * @param {Number} deltaTime the number of seconds since last update
+<span class='line'>248</span> */</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.updateWithMatrix4</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">matrixWorld</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">matrixWorld</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Matrix4</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span> 
+<span class='line'>254</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">	</span><span class="COMM">// set position</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.setPosition</span><span class="PUNC">(</span><span class="NAME">position.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>258</span> 
+<span class='line'>259</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">	</span><span class="COMM">// set orientation</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.Vector3</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">	</span><span class="COMM">// zero the translation</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.setPosition</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">z</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">	</span><span class="COMM">// Multiply the 0,0,1 vector by the world matrix and normalize the result.</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.multiplyVector3</span><span class="PUNC">(</span><span class="NAME">vOrientation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">	</span><span class="NAME">vOrientation.normalize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="WHIT">	</span><span class="COMM">// Set panner orientation</span><span class="WHIT">
+<span class='line'>269</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.setOrientation</span><span class="PUNC">(</span><span class="NAME">vOrientation.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vOrientation.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vOrientation.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">	
+<span class='line'>271</span> 	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>272</span> </span><span class="WHIT">	</span><span class="COMM">// set velocity</span><span class="WHIT">
+<span class='line'>273</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._prevPos</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">velocity</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">subSelf</span><span class="PUNC">(</span><span class="NAME">this._prevPos</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">divideScalar</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span> </span><span class="WHIT">		</span><span class="NAME">this._panner.setVelocity</span><span class="PUNC">(</span><span class="NAME">velocity.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>280</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>282</span> 
+<span class='line'>283</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>286</span> 
+<span class='line'>287</span> </span><span class="COMM">/**
+<span class='line'>288</span>  * Load a sound
+<span class='line'>289</span>  *
+<span class='line'>290</span>  * @param {String} url the url of the sound to load
+<span class='line'>291</span>  * @param {Function} callback function to notify once the url is loaded (optional)
+<span class='line'>292</span> */</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">	</span><span class="NAME">this._loadAndDecodeSound</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">		</span><span class="NAME">this._source.buffer</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">		</span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">		</span><span class="NAME">console.warn</span><span class="PUNC">(</span><span class="STRN">"unable to load sound "</span><span class="PUNC">+</span><span class="NAME">url</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span> 
+<span class='line'>303</span> </span><span class="COMM">/**
+<span class='line'>304</span>  * Load and decode a sound
+<span class='line'>305</span>  *
+<span class='line'>306</span>  * @param {String} url the url where to get the sound
+<span class='line'>307</span>  * @param {Function} onLoad the function called when the sound is loaded and decoded (optional)
+<span class='line'>308</span>  * @param {Function} onError the function called when an error occured (optional)
+<span class='line'>309</span> */</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="NAME">THREEx.WebAudio.Sound.prototype._loadAndDecodeSound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onLoad</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">request</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">XMLHttpRequest</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">	</span><span class="NAME">request.open</span><span class="PUNC">(</span><span class="STRN">'GET'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">	</span><span class="NAME">request.responseType</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'arraybuffer'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">	</span><span class="COMM">// Decode asynchronously</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">	</span><span class="NAME">request.onload</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>317</span> </span><span class="WHIT">		</span><span class="NAME">context.decodeAudioData</span><span class="PUNC">(</span><span class="NAME">request.response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">			</span><span class="NAME">onLoad</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">onLoad</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>320</span> </span><span class="WHIT">			</span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>322</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="WHIT">	</span><span class="COMM">// actually start the request</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="WHIT">	</span><span class="NAME">request.send</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>326</span> 
+<span class='line'>327</span> 
+<span class='line'>328</span> 
+<span class='line'>329</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="COMM">//		THREEx.WebAudio.NodeChain					//</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>336</span> 
+<span class='line'>337</span> </span><span class="NAME">THREEx.WebAudio.NodeChain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">audioContext</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">audioContext</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">webkitAudioContext</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">	</span><span class="NAME">this._context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">audioContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">	</span><span class="NAME">this._firstNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">	</span><span class="NAME">this._lastNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>344</span> 
+<span class='line'>345</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>347</span> 
+<span class='line'>348</span> 
+<span class='line'>349</span> 
+<span class='line'>350</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.nodes</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._nodes</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>353</span> 
+<span class='line'>354</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.first</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._firstNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>357</span> 
+<span class='line'>358</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.last</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._lastNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>361</span> 
+<span class='line'>362</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype._addNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="WHIT">	</span><span class="COMM">// connect this._lastNode to node if suitable</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._lastNode</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._lastNode.connect</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="WHIT">	
+<span class='line'>367</span> 	</span><span class="COMM">// update this._firstNode && this._lastNode</span><span class="WHIT">
+<span class='line'>368</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._firstNode</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._firstNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>369</span> </span><span class="WHIT">	</span><span class="NAME">this._lastNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="WHIT">	
+<span class='line'>371</span> 	</span><span class="COMM">// apply properties to the node</span><span class="WHIT">
+<span class='line'>372</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">property</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">		</span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>375</span> 
+<span class='line'>376</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> 
+<span class='line'>380</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.bufferSource</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createBufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.bufferSource</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> 
+<span class='line'>386</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createPanner</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> 
+<span class='line'>392</span> </span><span class="NAME">THREEx.WebAudio.NodeChain.prototype.analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createAnalyser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>396</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>397</span> </span></pre></body></html>

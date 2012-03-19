@@ -25,7 +25,7 @@
 * to show the possibilities of a plugin, one can do a "playground"
   * aka a simple display of the plugin features,
   * and a dat.gui with the paramers to play with
-  
+
 
 ## directions
 * "For those who want to know webgl, good news! You already know it, just replace j by t!"

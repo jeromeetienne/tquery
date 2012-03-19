@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * Handle directional light
+<span class='line'>  3</span>  *
+<span class='line'>  4</span>  * @class include THREE.LambertMaterial. It inherit from {@link tQuery.Material}
+<span class='line'>  5</span>  * 
+<span class='line'>  6</span>  * @borrows tQuery.Node#get as this.get
+<span class='line'>  7</span>  * @borrows tQuery.Node#each as this.each
+<span class='line'>  8</span>  * @borrows tQuery.Node#back as this.back
+<span class='line'>  9</span>  *
+<span class='line'> 10</span>  * @param {THREE.LambertMaterial} element an instance or array of instance
+<span class='line'> 11</span> */</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="NAME">tQuery.LambertMaterial</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">elements</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">	</span><span class="COMM">// call parent ctor</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">	</span><span class="NAME">tQuery.LambertMaterial.parent.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check - all items MUST be THREE.Material</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">	</span><span class="NAME">this._lists.forEach</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">item</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.LambertMaterial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 20</span> 
+<span class='line'> 21</span> </span><span class="COMM">/**
+<span class='line'> 22</span>  * inherit from tQuery.Material
+<span class='line'> 23</span> */</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="NAME">tQuery.inherit</span><span class="PUNC">(</span><span class="NAME">tQuery.LambertMaterial</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tQuery.Material</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> 
+<span class='line'> 26</span> </span><span class="COMM">/**
+<span class='line'> 27</span>  * define all acceptable attributes for this class
+<span class='line'> 28</span> */</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="NAME">tQuery.mixinAttributes</span><span class="PUNC">(</span><span class="NAME">tQuery.LambertMaterial</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="NAME">color</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.convert.toThreeColor</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">	</span><span class="NAME">ambient</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.convert.toThreeColor</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> 
+<span class='line'> 34</span> 
+<span class='line'> 35</span> </span></pre></body></html>

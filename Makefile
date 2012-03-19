@@ -17,7 +17,15 @@ docs:
 			-D="title:tQuery library"			\
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/					\
-			js/ js/plugins
+			js/ js/plugins plugins/webaudio/demo
+
+docs_webaudio:
+	java -jar ${JSDOC_ROOT}/jsrun.jar ${JSDOC_ROOT}/app/run.js	\
+			-D="noGlobal:true"				\
+			-D="title:tQuery library"			\
+			-t=${JSDOC_ROOT}/templates/Codeview/		\
+			-d=docs/					\
+			js/ js/plugins plugins/webaudio
 
 help:
 	@echo "Inline help for Makefile"

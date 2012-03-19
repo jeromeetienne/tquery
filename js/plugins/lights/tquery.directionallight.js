@@ -44,6 +44,7 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	shadowCameraLeft	: tQuery.convert.toNumber,
 	shadowCameraTop		: tQuery.convert.toNumber,
 	shadowCameraBottom	: tQuery.convert.toNumber,
+	shadowCameraVisible	: tQuery.convert.toBool,
 });
 
 

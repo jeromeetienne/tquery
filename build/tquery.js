@@ -192,6 +192,10 @@ tQuery.pluginsOn(tQuery, tQuery);
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.mixinAttributes	= function(dstObject, properties){
+	// mixin the new property
+	// FIXME the inheritance should work now... not sure
+	dstObject.prototype._attrProps	= tQuery.extend(dstObject.prototype._attrProps, properties);
+
 	dstObject.prototype.attr	= function(name, value){
 		// handle parameters
 		if( name instanceof Object && value === undefined ){
@@ -199,12 +203,12 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 				this.attr(key, name[key]);
 			}.bind(this));
 		}else if( typeof(name) === 'string' ){
-			console.assert( Object.keys(properties).indexOf(name) !== -1, 'invalid property name:'+name);
+			console.assert( Object.keys(this._attrProps).indexOf(name) !== -1, 'invalid property name:'+name);
 		}else	console.assert(false, 'invalid parameter');
 
 		// handle setter
 		if( value !== undefined ){
-			var convertFn	= properties[name];
+			var convertFn	= this._attrProps[name];
 			value		= convertFn(value);
 			this.each(function(element){
 				element[name]	= value;
@@ -299,6 +303,27 @@ tQuery.convert.toThreeColor	= function(value){
 
 tQuery.convert.toNumber	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'number'){
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+
+tQuery.convert.toNumberZeroToOne	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'number'){
+		value	= Math.min(value, 1.0);
+		value	= Math.max(value, 0);
+		return value;
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+
+tQuery.convert.toInteger	= function(value){
+	if( arguments.length === 1 && typeof(value) === 'number'){
+		value	= Math.floor(value);
 		return value;
 	}else{
 		console.assert(false, "invalid parameter");
@@ -491,7 +516,7 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.addTo	= function(target)
 {
-	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D )
+	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D || target instanceof THREE.Object3D )
 	this.each(function(object3d){
 		target.add(object3d)
 	}.bind(this));
@@ -523,14 +548,19 @@ tQuery.Object3D.prototype.removeFrom	= function(target)
  * @param {tQuery.Object3D} target object to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.add	= function(tqObject3d)
+tQuery.Object3D.prototype.add	= function(object3d)
 {
-	console.assert( tqObject3d instanceof tQuery.Object3D )
-	this.each(function(object1){
-		tqObject3d.each(function(object2){
-			object1.add(object2);
-		})
-	}.bind(this));
+	if( object3d instanceof tQuery.Object3D ){
+		this.each(function(object1){
+			object3d.each(function(object2){
+				object1.add(object2);
+			})
+		}.bind(this));
+	}else if( object3d instanceof THREE.Object3D ){
+		this.each(function(object1){
+			object1.add(object3d);
+		});
+	}else	console.assert(false, "invalid parameter");
 	return this;
 }
 
@@ -1260,6 +1290,15 @@ tQuery.register('createWorld', function(){
 });
 
 /**
+ * Create tQuery.World
+*/
+tQuery.register('createObject3D', function(){
+	var object3d	= new THREE.Object3D();
+	return tQuery(object3d);
+});
+
+
+/**
  * Create tQuery.loop
  * 
  * @param {tQuery.World} world the world to display (optional)
@@ -1380,7 +1419,7 @@ tQuery.register('_createMesh', function(ctor, dflGeometry, args)
 
 tQuery.register('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/40);
+	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
 });
 /**
@@ -1447,8 +1486,20 @@ tQuery.pluginsInstanceOn(tQuery.DirectionalLight);
 */
 tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	intensity	: tQuery.convert.toNumber,
-	distance	: tQuery.convert.toNumber
+	distance	: tQuery.convert.toNumber,
+
+	castShadow	: tQuery.convert.toBool,
+
+	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
+	shadowMapWidth		: tQuery.convert.toInteger,
+	shadowMapHeight		: tQuery.convert.toInteger,
+	shadowCameraRight	: tQuery.convert.toNumber,
+	shadowCameraLeft	: tQuery.convert.toNumber,
+	shadowCameraTop		: tQuery.convert.toNumber,
+	shadowCameraBottom	: tQuery.convert.toNumber,
+	shadowCameraVisible	: tQuery.convert.toBool,
 });
+
 
 
 /**
@@ -1490,38 +1541,6 @@ tQuery.mixinAttributes(tQuery.PointLight, {
 });
 
 
-/**
- * @fileOverview Plugins for tQuery and Stats.js
-*/
-
-(function(){	// closure function
-
-/**
- * 
-*/
-var DragPanControls	= function(loop)
-{
-	this._loop	= loop	|| tQuery.world.loop();
-
-	this._controls	= new THREEx.DragPanControls(tQuery.world.camera());
-	this._$onRender	= this._onRender.bind(this);
-	this._loop.hookPreRender(this._$onRender);
-};
-
-DragPanControls.prototype.destroy	= function(){
-	this._loop.unhookPreRender(this._$onRender);	
-};
-
-DragPanControls.prototype._onRender	= function(){
-	this._controls.update();
-};
-
-
-// register the plugins
-tQuery.register('DragPanControls', DragPanControls);
-tQuery.register('createDragPanControls', function(loop){ return new tQuery.DragPanControls(loop); });
-
-})();	// closure function end
 /**
  * @fileOverview Plugins for tQuery.Geometry: tool box to play with geometry
 */
@@ -1841,6 +1860,7 @@ tQuery.Object3D.register('scaleBy', function(ratio){
 	return this;
 });
 
+
 // some shortcuts
 tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
@@ -1865,7 +1885,7 @@ tQuery.World.register('fullpage', function(){
 	return this.boilerplate();
 });
 
-tQuery.World.register('boilerplate', function(){
+tQuery.World.register('boilerplate', function(opts){
 	// put renderer fullpage
 	var domElement	= document.body;
 	domElement.style.margin		= "0";
@@ -1874,17 +1894,24 @@ tQuery.World.register('boilerplate', function(){
 	this.appendTo(domElement);
 
 	// add the boilerplate
-	this.addBoilerplate();
+	this.addBoilerplate(opts);
 	
 	// for chained API
 	return this;
 });
 
-tQuery.World.register('addBoilerplate', function(){
+tQuery.World.register('addBoilerplate', function(opts){
 	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
-
+	// handle parameters	
+	opts	= tQuery.extend(opts, {
+		stats		: true,
+		cameraControls	: true,
+		windowResize	: true,
+		screenshot	: true,
+		fullscreen	: true
+	});
 	// get the context
 	var ctx	= {};
 
@@ -1892,29 +1919,37 @@ tQuery.World.register('addBoilerplate', function(){
 	tQuery.data(this, '_boilerplateCtx', ctx);
 
 	// add Stats.js - https://github.com/mrdoob/stats.js
-	ctx.stats	= new Stats();
-	ctx.stats.domElement.style.position	= 'absolute';
-	ctx.stats.domElement.style.bottom	= '0px';
-	document.body.appendChild( ctx.stats.domElement );
-	ctx.loopStats	= function(){
-		ctx.stats.update();
-	};
-	this.loop().hook(ctx.loopStats);
+	if( opts.stats ){
+		ctx.stats	= new Stats();
+		ctx.stats.domElement.style.position	= 'absolute';
+		ctx.stats.domElement.style.bottom	= '0px';
+		document.body.appendChild( ctx.stats.domElement );
+		ctx.loopStats	= function(){
+			ctx.stats.update();
+		};
+		this.loop().hook(ctx.loopStats);		
+	}
 
 	// get some variables
 	var camera	= this.camera();
 	var renderer	= this.renderer();
 
 	// create a camera contol
-	ctx.cameraControls	= new THREEx.DragPanControls(camera)
-	this.setCameraControls(ctx.cameraControls);
+	if( opts.cameraControls ){
+		ctx.cameraControls	= new THREEx.DragPanControls(camera);
+		this.setCameraControls(ctx.cameraControls);		
+	}
 
 	// transparently support window resize
-	ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);
+	if( opts.windowResize ){
+		ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);		
+	}
 	// allow 'p' to make screenshot
-	ctx.screenShot		= THREEx.Screenshot.bindKey(renderer);
+	if( opts.screenshot ){		
+		ctx.screenshot		= THREEx.Screenshot.bindKey(renderer);
+	}
 	// allow 'f' to go fullscreen where this feature is supported
-	if( THREEx.FullScreen.available() ){
+	if( opts.fullscreen && THREEx.FullScreen.available() ){
 		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
 	}
 
@@ -1947,16 +1982,16 @@ tQuery.World.register('removeBoilerplate', function(){
 	this.unbind('destroy', this._$onDestroy);
 
 	// remove stats.js
-	document.body.removeChild(ctx.stats.domElement );
-	this.loop().unhook(ctx.loopStats);
+	ctx.stats		&& document.body.removeChild(ctx.stats.domElement );
+	ctx.stats		&& this.loop().unhook(ctx.loopStats);
 	// remove camera
-	this.removeCameraControls()
+	ctx.cameraControls	&& this.removeCameraControls()
 	// stop windowResize
-	ctx.windowResize.stop();
-	// unbind screenShot
-	ctx.screenShot.unbind();
+	ctx.windowResize	&& ctx.windowResize.stop();
+	// unbind screenshot
+	ctx.screenshot		&& ctx.screenshot.unbind();
 	// unbind fullscreen
-	ctx.fullscreen && ctx.fullscreen.unbind();
+	ctx.fullscreen		&& ctx.fullscreen.unbind();
 });// This THREEx helper makes it easy to handle window resize.
 // It will update renderer and camera when window is resized.
 //

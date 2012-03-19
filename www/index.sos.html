@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tQuery - extensions for three.js</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+	<link href="vendor/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+	<link href="vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">tQuery</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="#getStarted">Get Started</a></li>
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="https://github.com/jeromeetienne/tquery" target='_blank'>Github</a></li>
+            <li><a href="../docs" target='_blank'>API</a></li>
+            <li><a href="../tests" target='_blank'>Tests</a></li>
+            <li><a href="../bench/#runall" target='_blank'>Benchmarks</a></li>
+            <li><a href="http://jeromeetienne.github.com/tqueryboilerplate/" target='_blank'>Boilerplate</a></li>
+            <li><a href="playground" target='_blank'>Playground</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+	<!-- Main hero unit for a primary marketing message or call to action -->
+	<div class="hero-unit">
+		<h1><span style="color:darkorange">tQuery</span> : <span style="color:darkorange">t</span>hree.js
+		+
+		j<span style="color:darkorange">Query</span></h1>
+		<h2>Three.js Power + jQuery API Usability</h2>
+		<p>tQuery is a thin library on top of three.js
+		It is an extension system for people to write plugins.
+		To help them share their code and build on top of each other.
+		It mimics jquery api, well know for its usuability.
+		tQuery aims for "it is should not be harder than playing with lego bricks."
+		</p>
+		<p>
+			<a href='https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip' class="btn btn-large">
+				Download Boilerplate
+			</a>
+			<a target='_blank' href='playground/' class="btn btn-primary btn-large">
+				Try it Online
+			</a>
+		</p>
+	</div>
+
+      <!-- Example row of columns -->
+	<div class="row">
+		<div class="span4">
+		        <h2>Power of Three.js</h2>
+			<p>
+				Three.js is actively delveloped by a team of skilled developpers.
+				It got various rendering backends, importers for most 3D models format.
+				It efficiently abstracts webgl complexity
+				and provides a wide varieties of 3D objects.
+				It got numberous examples 120+.
+			</p>
+		</div>
+		<div class="span4">
+		        <h2>jQuery API Usability</h2>
+			<p>
+				jQuery API is widely recognized for its usability. It is chained,
+				instinctive and short. 
+				jQuery popularity is around 85% of market share.  
+				It shows its API is appealing to most developers.
+				It plugins ecosystem is varied and lively, and contains
+				impressive speciment.
+			</p>
+	       </div>
+		<div class="span4">
+			<h2>Crazy simple to Learn</h2>
+			<p>
+				tQuery aims to reproduce the success of jQuery plugin ecosytem
+				by mimicing its API.
+				Thus people who know jQuery will learn tQuery in no time.
+				Thru three.js, they will be be able to reach webgl technology
+				faster than before. Hopefully they will get exited and develop
+				extensions for three.js :)
+			</p>
+		</div>
+	</div>
+
+      <!-- Example row of columns -->
+	<div class="page-header" id="getStarted">
+		<h1>How to Get Started <small>Use the boilerplate to run your first tQuery project in less than 1min!</small></h1>
+	</div>
+	<div class="row">
+		<div class="span7">
+			<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+		</div>
+		<div class="span5">
+			<iframe style="width: 100%; height: 120px" src="../plugins/minimal/examples" allowfullscreen webkitallowfullscreen mozallowfullscreen>
+			</iframe>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<p>
+			You get index.html on the left, and the output on the right.
+			You can <a target='_blank' href='playground/'>try it online</a> with the playground.
+			To get that running on your local computer,
+			First you get boilerplate's files 
+			<a href="https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip">here</a>,
+			then you launch the http server to serve them. Here is a little shell script which does it all.
+			</p>
+			<pre class="prettyprint lang-bsh linenums">
+curl -OL https://github.com/downloads/jeromeetienne/tquery/tqueryboilerplate.zip
+unzip tqueryboilerplate.zip
+cd tqueryboilerplate
+make server
+</pre>
+			<p>
+			Then open a browser on <a href="http://127.0.0.1:8000/" target='_blank'>http://127.0.0.1:8000/</a> to
+see it running. Up to you to modify index.html until it fits your needs. See its code below... Quite short.
+			</p>
+		</div>
+	</div>
+
+      <!-- Example row of columns -->
+	<div class="page-header" id="examples">
+		<h1>Examples <small>very early</small></h1>
+	</div>
+	<div class="row span12">
+		<p>
+			Those are a bunch of examples in early stages. Look at the index.html
+		</p>
+		<ul class="thumbnails">
+			<li class="span3">
+				<a href="../plugins/minimal/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Minimal pages</h5>
+						<p>
+							It represents the minimal page. A simple one.
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../plugins/linkify/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Linkify</h5>
+						<p>
+							Make all 3D objects a link.
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../plugins/text/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Text</h5>
+						<p>
+							Insert a text in 3D.
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../plugins/csg/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>csg</h5>
+						<p>
+							Constructive Solid Geometry.
+						</p>
+					</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="row span12">
+		<ul class="thumbnails">
+			<li class="span3">
+				<a href="../plugins/wobble/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Wobble</h5>
+						<p>
+							Funny animation
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../plugins/terraingenerator/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Terrain generation</h5>
+						<p>
+							terrain generation. phong for lighting. light map. perlin for terrain
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../plugins/planets/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Planets</h5>
+						<p>
+							Trivial generation moon or earth
+						</p>
+					</div>
+				</a>
+			</li>
+			<li class="span3">
+				<a href="../plugins/domevent/examples" class="thumbnail">
+					<img src="http://placehold.it/260x180" alt="">
+					<div class="caption">
+						<h5>Dom Events</h5>
+						<p>
+							Simulate the dom events you know in html page, inside three.js
+						</p>
+					</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+    </div> <!-- /container -->
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.js"></script>
+	<script>jQuery(function(){ prettyPrint(); });</script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-transition.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-alert.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-modal.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-dropdown.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-scrollspy.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-tab.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-tooltip.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-popover.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-button.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
+	<script src="vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
