@@ -1,26 +1,33 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
-<script src="../../requirejs/tquery.norequirejs.js"></script>
+<script src="../../../../build/tquery-bundle.js"></script>
+<script src="../../../requirejs/tquery.norequirejs.js"></script>
 
 <script src='tquery.checkerboard.js'></script>
 <script src='tquery.world.createfog.js'></script>
 <script src='tquery.directionallight.shortcuts.js'></script>
 
-<script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
-<script src="../tquery.webaudio.js"></script>
+<script src="../../../assets/vendor/dat.gui/dat.gui.js"></script>
+<script src="../../tquery.webaudio.js"></script>
 
 <script src="anim.js"></script>
 <script src="anim.fixedcammovingobj.js"></script>
 <script src="anim.fixedcamrotatingobj.js"></script>
 <script src="anim.fixedobjmovingcam.js"></script>
 <script src="anim.fixedobjrotatingcam.js"></script>
+<script src="anim.fixedcamfixedobj.js"></script>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().enableWebAudio().start();
-	var object	= tQuery.createTorus(0.5-0.15, 0.15, 8*2, 6*4).addTo(world)
+
+	var material	= new THREE.MeshPhongMaterial({
+		ambient	: 0x441122,
+		color	: 0xFF5588,
+		specular: 0xffffff,
+	});
+	var object	= tQuery.createTorus(0.5-0.15, 0.15, 8*2, 6*4, material).addTo(world)
 				.translateY(1.3);
 
-	world.addFog({ far : 20 });
+	world.addFog({ near: 10, far : 30 });
 
 	tQuery.createAxis().addTo(object);
 
@@ -29,10 +36,14 @@
 	world.renderer().shadowMapEnabled	= true;
 	world.renderer().shadowMapSoft		= true;
 
+	tQuery.createAmbientLight().addTo(world).color(0x888888);
 	tQuery.createDirectionalLight().addTo(world).color(0xaaaaaa)
-		.position(-0.3, 1,-1).intensity(2)
+		.position(new THREE.Vector3(-0.3, 1, 1).normalize().multiplyScalar(2))
+		.intensity(2)
 		.castShadow(true).shadowDarkness(0.8)
-		.shadowMap(512*2,512*2).shadowCamera(10, -10, 10, -10);
+		.shadowMap(512*2,512*2)
+		//.shadowCameraVisible(true)
+		.shadowCamera(10, -10, 10, -10);
 
 
 	// tune camera
@@ -43,19 +54,15 @@
 		position.y	= Math.max(position.y, 1);
 	});
 
-
-
-
-	var options	= new function(){
+	var opts	= new function(){
 		this.volume			= 1;
 		this.mouvement			= 'fixedCamMovingObj';
 
-		this.pannerConeInnerAngle	= 1;
-		this.pannerConeOuterAngle	= 1;
-		this.pannerConeOuterGain	= 1;
+		this.pannerConeInnerAngle	= 180;
+		this.pannerConeOuterAngle	= 0;
+		this.pannerConeOuterGain	= 0.2;
 
-		this.soundUrl			= 'sounds/techno.mp3';
-		this.soundLoop			= true;
+		this.soundUrl			= '../../../assets/sounds/techno.mp3';
 
 		this.pulseEnable		= true;
 		this.pulseOffset		= 1;
@@ -63,63 +70,64 @@
 	};
 
 
-	tAnim.changeTo(options.mouvement);
+	tAnim.changeTo(opts.mouvement);
 
-	var sound	= tQuery.createSound().follow(object).pannerCone(Math.PI, 0, 0.2);
-	sound.load('../../assets/sounds/techno.mp3', function(sound){
-		sound.nodes().analyser.smoothingTimeConstant	= 0.6;
-		sound.nodes().bufferSource.loop			= true;
+	var sound	= tQuery.createSound().follow(object)
+				.pannerConeInnerAngle(opts.pannerConeInnerAngle / 180 * Math.PI)
+				.pannerConeOuterAngle(opts.pannerConeOuterAngle / 180 * Math.PI)
+				.pannerConeOuterGain(opts.pannerConeOuterGain);
+	sound.nodes().analyser.smoothingTimeConstant	= 0.6;
+	sound.load('../../../assets/sounds/techno.mp3', function(sound){
+		sound.nodes().bufferSource.loop	= true;
 		sound.play();
 	});
 
 	// bind amplitude to object.scale
 	world.loop().hook(function(){
-		if( options.pulseEnable === false )	return;
+		if( opts.pulseEnable === false )	return;
 		var amplitude	= sound.amplitude();
-		var scale	= amplitude * options.pulseRange + options.pulseOffset;
+		var scale	= amplitude * opts.pulseRange + opts.pulseOffset;
 		object.scale(scale);
 	});
 
 (function(){
 	var gui		= new dat.GUI();
-	gui.add(options, 'volume', 0, 1).onChange(function(value){
+	gui.add(opts, 'volume', 0, 1).onChange(function(value){
 		sound.volume(value);
 	});
-	gui.add(options, 'mouvement', Object.keys(tAnim.plugins)).onChange(function(value){
+	gui.add(opts, 'mouvement', Object.keys(tAnim.plugins)).onChange(function(value){
 		tAnim.changeTo(value);
 	});
 // Panner folder
 	var folder	= gui.addFolder('Panner');
 	folder.open();
-	folder.add(options, 'pannerConeInnerAngle', 0, 180).onChange(function(value){
+	folder.add(opts, 'pannerConeInnerAngle', 0, 180).onChange(function(value){
 		sound.pannerConeInnerAngle(value * Math.PI/180);
 	});
-	folder.add(options, 'pannerConeOuterAngle', 0, 180).onChange(function(value){
+	folder.add(opts, 'pannerConeOuterAngle', 0, 180).onChange(function(value){
 		sound.pannerConeOuterAngle(value * Math.PI/180);
 	});
-	folder.add(options, 'pannerConeOuterGain', 0, 1).onChange(function(value){
+	folder.add(opts, 'pannerConeOuterGain', 0, 1).onChange(function(value){
 		sound.pannerConeOuterGain(value);
 	});
 // Sound folder
 	var folder	= gui.addFolder('Sound');
 	folder.open();
-	folder.add(options, 'soundUrl', {
-		'techno.mp3'	: '../../assets/sounds/techno.mp3',
-		'kick.wav'	: '../../assets/sounds/kick.wav'
+	folder.add(opts, 'soundUrl', {
+		'techno.mp3'	: '../../../assets/sounds/techno.mp3',
+		'kick.wav'	: '../../../assets/sounds/kick.wav'
 	}).onChange(function(value){
 		sound.load(value, function(){
+			sound.nodes().bufferSource.loop	= true;
 			sound.play();
 		})
-	});
-	folder.add(options, 'soundLoop').onChange(function(value){
-		sound.nodes().bufferSource.loop	= value;
 	});
 // Pulse folder
 	var folder	= gui.addFolder('Pulse');
 	folder.open();
-	folder.add(options, 'pulseEnable')
-	folder.add(options, 'pulseOffset', 0, 2)
-	folder.add(options, 'pulseRange', 0, 2)
+	folder.add(opts, 'pulseEnable')
+	folder.add(opts, 'pulseOffset', 0, 2)
+	folder.add(opts, 'pulseRange', 0, 2)
 })();
 
 	//////////////////////////////////////////////////////////////////////////
