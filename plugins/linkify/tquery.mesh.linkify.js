@@ -1,5 +1,7 @@
 /**
  * plugin to handle deviceOrientation API
+ *
+ * ??? why do i need tquery.object3d.csg on linkify
 */
 define(['plugins/csg/tquery.object3d.csg'], function(){
 	tQuery.Mesh.register('linkify', function(url){
