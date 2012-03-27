@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="../tquery.world.createfog.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// add the fog
+	world.addFogExp2({density: 0.1});
+
+	// create lots of objects to show the fog
+	var material	= new THREE.MeshBasicMaterial({
+		color	: 0xFFaa44
+	});
+	for(var i = 0; i < 20; i++ ){
+		// TODO this doesnt reuse the geometry... not too efficient
+		var object	= tQuery.createTorus(material).addTo(world);
+		object.translateZ(-i);
+		object.translateX(i % 2 ? -1 : 1);
+	}
+	
+</script></body>
