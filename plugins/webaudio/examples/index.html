@@ -6,6 +6,7 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
+	world.removeCameraControls();
 	world.enableWebAudio();
 	
 	tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){

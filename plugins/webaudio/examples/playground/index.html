@@ -2,8 +2,8 @@
 <script src="../../../../build/tquery-bundle.js"></script>
 <script src="../../../requirejs/tquery.norequirejs.js"></script>
 
-<script src='tquery.checkerboard.js'></script>
-<script src='tquery.world.createfog.js'></script>
+<script src='../../../checkerboard/tquery.checkerboard.js'></script>
+<script src='../../../fog/tquery.world.createfog.js'></script>
 <script src='tquery.directionallight.shortcuts.js'></script>
 
 <script src="../../../assets/vendor/dat.gui/dat.gui.js"></script>
@@ -45,7 +45,6 @@
 		//.shadowCameraVisible(true)
 		.shadowCamera(10, -10, 10, -10);
 
-
 	// tune camera
 	world.camera().position.z	= 2;
 	world.getCameraControls().target.set(0, 1, 0);
@@ -68,7 +67,6 @@
 		this.pulseOffset		= 1;
 		this.pulseRange			= 1.5;
 	};
-
 
 	tAnim.changeTo(opts.mouvement);
 
@@ -125,15 +123,15 @@
 // Pulse folder
 	var folder	= gui.addFolder('Pulse');
 	folder.open();
-	folder.add(opts, 'pulseEnable')
-	folder.add(opts, 'pulseOffset', 0, 2)
-	folder.add(opts, 'pulseRange', 0, 2)
+	folder.add(opts, 'pulseEnable');
+	folder.add(opts, 'pulseOffset', 0, 2);
+	folder.add(opts, 'pulseRange', 0, 2);
 })();
 
 	//////////////////////////////////////////////////////////////////////////
 	//		checkerboard						//
 	//////////////////////////////////////////////////////////////////////////
-	    
+
 	var board	= tQuery.createCheckerboard({
 		segmentsW	: 50,
 		segmentsH	: 50,
@@ -152,7 +150,7 @@
 			color	: 0x444444
 		})
 	}).addTo(world);
-	board.rotateX(-Math.PI/2).scale(100);
+	board.scale(100);
 	board.get(0).receiveShadow	= true;
-	
+
 </script></body>
