@@ -1,0 +1,102 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+<script src="tquery.md2character.js"></script>
+
+<script src='../../checkerboard/tquery.checkerboard.js'></script>
+
+
+<body><script>
+
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	// add a fog
+	world.scene().fog	= new THREE.FogExp2( 0xbbbbbb, 0.05 );
+
+	world.removeCameraControls();
+
+	// add a checkboard, 1 tile per 1 units
+	tQuery.createCheckerboard({
+		segmentsW	: 100,
+		segmentsH	: 100
+	}).addTo(world).rotation(-Math.PI/2,0,0).scaleBy(100);
+
+	// Add lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);	
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(3);
+
+	// CHARACTER
+	character	= new THREE.MD2Character();
+	character.scale		= 0.03;
+	character.onLoadComplete = function() {
+		console.log("list animmation", Object.keys(character.meshBody.geometry.animations))
+		//character.setPlaybackRate(6);
+		//character.setSkin(2)
+		//character.setWeapon(9)
+	}
+	character.loadParts({
+		baseUrl	: "ratamahatta/",
+		body	: "ratamahatta.js",
+		skins	: [ "ratamahatta.png"],
+		//skins	: [ "ratamahatta.png", "ctf_b.png", "ctf_r.png", "dead.png", "gearwhore.png" ],
+		weapons	: [
+			//[ "weapon.js", "weapon.png" ],
+			//[ "w_bfg.js", "w_bfg.png" ],
+			//[ "w_blaster.js", "w_blaster.png" ],
+			//[ "w_chaingun.js", "w_chaingun.png" ],
+			//[ "w_glauncher.js", "w_glauncher.png" ],
+			//[ "w_hyperblaster.js", "w_hyperblaster.png" ],
+			//[ "w_machinegun.js", "w_machinegun.png" ],
+			//[ "w_railgun.js", "w_railgun.png" ],
+			//[ "w_rlauncher.js", "w_rlauncher.png" ],
+			//[ "w_shotgun.js", "w_shotgun.png" ],
+			//[ "w_sshotgun.js", "w_sshotgun.png" ]
+		]
+	});
+	world.add( character.root );
+	
+	
+	// handle the animation
+	world.loop().hook(function(deltaTime){
+		character.update( deltaTime );
+	});
+
+	// handle keyboard and move
+	world.loop().hook(function(deltaTime, present){
+		var keyboard	= tQuery.keyboard();
+		if( !character.root )	return;
+
+		if( keyboard.pressed("left") ){
+			character.root.rotation.y	+= 0.1;					
+		}
+		if( keyboard.pressed("right") ){
+			character.root.rotation.y	-= 0.1;					
+		}
+		if( keyboard.pressed("up") ){
+			var a	= -1 * character.root.rotation.y;
+			var p	= character.root.position;
+			var sX	= 0.1;
+			var sZ	= 0.1;
+			p.x += - sX * Math.sin(a);
+			p.z +=   sZ * Math.cos(a);
+		}
+		// handle the animation
+		if( keyboard.pressed("up") ){
+			if( character.activeAnimation !== 'run' ) character.setAnimation('run')
+		}else if( character.activeAnimation === 'run' ){
+			if( character.activeAnimation !== 'stand' ) character.setAnimation('stand')
+		}
+		// camera position
+		var camera	= world.camera();
+		camera.position.copy(character.root.position);
+		camera.position.addSelf(new THREE.Vector3(5,2,5).normalize().multiplyScalar(5));
+		camera.lookAt(character.root.position.clone().addSelf(new THREE.Vector3(0, 0, 0)));
+	});
+
+</script></body>
