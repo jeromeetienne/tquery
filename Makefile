@@ -17,14 +17,6 @@ docs:
 			-D="title:tQuery library"			\
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/					\
-			js/ js/plugins plugins/webaudio/demo
-
-docs_webaudio:
-	java -jar ${JSDOC_ROOT}/jsrun.jar ${JSDOC_ROOT}/app/run.js	\
-			-D="noGlobal:true"				\
-			-D="title:tQuery library"			\
-			-t=${JSDOC_ROOT}/templates/Codeview/		\
-			-d=docs/					\
 			js/ js/plugins plugins/webaudio
 
 help:
@@ -64,7 +56,7 @@ boilerplateBuild:
 #################################################################################
 
 BANNER="// tquery.js - https://github.com/jeromeetienne/tquery - MIT License"
-build:	minifyPlain minifyBundle
+build:	minifyPlain minifyBundle minifyAll
 
 buildPlain:
 	echo $(BANNER)			>  build/tquery.js
@@ -94,7 +86,7 @@ minifyPlain: buildPlain
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
 		>> build/tquery.min.js
-	echo size minified + gzip is `gzip -c build/tquery.min.js | wc -c` byte
+	@echo size minified + gzip is `gzip -c build/tquery.min.js | wc -c` byte
 
 buildBundle: buildPlain
 	echo $(BANNER)			>  build/tquery-bundle.js
@@ -107,7 +99,7 @@ minifyBundle: buildBundle
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
 		>> build/tquery-bundle.min.js
-	echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
+	@echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
 
 buildAll: buildBundle
 	echo $(BANNER)					>  build/tquery-all.js
@@ -147,7 +139,9 @@ buildAll: buildBundle
 	cat plugins/text/fonts/droid/droid_serif_bold.typeface.js	>> build/tquery-all.js
 	cat plugins/text/tquery.text.js					>> build/tquery-all.js
 	# plugins/linkify
-	cat plugins/linkify/tquery.mesh.linkify.js			>> build/tquery-all.js
+	cat plugins/linkify/tquery.mesh.linkify.js		>> build/tquery-all.js
+	# plugins/webaudio
+	cat plugins/webaudio/tquery.webaudio.js			>> build/tquery-all.js
 
 minifyAll: buildAll
 	echo $(BANNER)	>  build/tquery-all.min.js
@@ -155,6 +149,6 @@ minifyAll: buildAll
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
 		>> build/tquery-all.min.js
-	echo size minified + gzip is `gzip -c build/tquery-all.min.js | wc -c` byte
+	@echo size minified + gzip is `gzip -c build/tquery-all.min.js | wc -c` byte
 
 .PHONY: docs buildPlain buildBundle minifyPlain minifyBundle
