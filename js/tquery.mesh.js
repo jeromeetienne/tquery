@@ -20,8 +20,7 @@ tQuery.Mesh	= function(elements)
 };
 
 /**
- * inherit from tQuery.Node
- * - TODO this should inherit from tQuery.Object3D but but in inheritance
+ * inherit from tQuery.Object3D
 */
 tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 
