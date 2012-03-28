@@ -16,7 +16,7 @@ tQuery.Object3D.register('useFileballMaterial', function(scale){
 		var material	= new THREE.ShaderMaterial({
 			uniforms	: uniforms,
 			vertexShader	: tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText,
-			fragmentShader	: tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText,
+			fragmentShader	: tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText
 		});
 		
 		object3d.material	= material;
