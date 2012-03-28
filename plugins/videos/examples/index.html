@@ -5,20 +5,20 @@
 
 <script src="../tquery.createVideoTexture.js"></script>
 <script src="../tquery.createWebcamTexture.js"></script>
+<script src="../tquery.createTVSnowTexture.js"></script>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
 	//var texture	= tQuery.createWebcamTexture();
-	var texture	= tQuery.createVideoTexture('sintel.ogv');
+	var texture	= tQuery.createTVSnowTexture();
+	//var texture	= tQuery.createVideoTexture('sintel.ogv');
 
 	var material	= new THREE.MeshBasicMaterial({
-		ambient	: 0x444444,
-		color	: 0xFFAA88,
 		map	: texture
 	});
 
 	tQuery.createSphere(material).addTo(world)
-		.rotateY(-90*Math.PI/180);
+		.rotateY(-Math.PI/2);
 
 </script></body>
