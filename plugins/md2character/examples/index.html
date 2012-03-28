@@ -9,15 +9,18 @@
 <script src="tquery.md2character.js"></script>
 
 <script src='../../checkerboard/tquery.checkerboard.js'></script>
-
+<script src='../../fog/tquery.world.createfog.js'></script>
 
 <body><script>
 
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 
+	// change renderer clear color
+	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
+
 	// add a fog
-	world.scene().fog	= new THREE.FogExp2( 0xbbbbbb, 0.05 );
+	world.addFogExp2({density : 0.05});
 
 	world.removeCameraControls();
 
@@ -25,21 +28,22 @@
 	tQuery.createCheckerboard({
 		segmentsW	: 100,
 		segmentsH	: 100
-	}).addTo(world).rotation(-Math.PI/2,0,0).scaleBy(100);
+	}).addTo(world).scaleBy(100);
 
 	// Add lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);	
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(3);
 
 	// CHARACTER
-	character	= new THREE.MD2Character();
-	character.scale		= 0.03;
-	character.onLoadComplete = function() {
+	character	= new tQuery.MD2Character();
+	character.scale	= 0.03;
+	character.bind("loaded", function(){
 		console.log("list animmation", Object.keys(character.meshBody.geometry.animations))
 		//character.setPlaybackRate(6);
 		//character.setSkin(2)
 		//character.setWeapon(9)
-	}
+		//character.setWireframe(true);
+	});
 	character.loadParts({
 		baseUrl	: "ratamahatta/",
 		body	: "ratamahatta.js",
@@ -59,7 +63,7 @@
 			//[ "w_sshotgun.js", "w_sshotgun.png" ]
 		]
 	});
-	world.add( character.root );
+	world.add( character.container() );
 	
 	
 	// handle the animation
@@ -69,22 +73,24 @@
 
 	// handle keyboard and move
 	world.loop().hook(function(deltaTime, present){
+		if( character.isLoaded() === false )	return;
+
 		var keyboard	= tQuery.keyboard();
-		if( !character.root )	return;
+		var container	= character.container();
 
 		if( keyboard.pressed("left") ){
-			character.root.rotation.y	+= 0.1;					
+			container.rotation.y	+= 0.1;					
 		}
 		if( keyboard.pressed("right") ){
-			character.root.rotation.y	-= 0.1;					
+			container.rotation.y	-= 0.1;					
 		}
 		if( keyboard.pressed("up") ){
-			var a	= -1 * character.root.rotation.y;
-			var p	= character.root.position;
+			var a	= -1 * container.rotation.y;
+			var p	= container.position;
 			var sX	= 0.1;
 			var sZ	= 0.1;
-			p.x += - sX * Math.sin(a);
-			p.z +=   sZ * Math.cos(a);
+			p.x	+= - sX * Math.sin(a);
+			p.z	+=   sZ * Math.cos(a);
 		}
 		// handle the animation
 		if( keyboard.pressed("up") ){
@@ -92,11 +98,16 @@
 		}else if( character.activeAnimation === 'run' ){
 			if( character.activeAnimation !== 'stand' ) character.setAnimation('stand')
 		}
-		// camera position
-		var camera	= world.camera();
-		camera.position.copy(character.root.position);
-		camera.position.addSelf(new THREE.Vector3(5,2,5).normalize().multiplyScalar(5));
-		camera.lookAt(character.root.position.clone().addSelf(new THREE.Vector3(0, 0, 0)));
 	});
 
+	// handle keyboard and move
+	world.loop().hook(function(deltaTime, present){
+		if( character.isLoaded() === false )	return;
+		var container	= character.container();
+		// camera position
+		var camera	= world.camera();
+		camera.position.copy(container.position);
+		camera.position.addSelf(new THREE.Vector3(5,2,5).normalize().multiplyScalar(5));
+		camera.lookAt(container.position.clone().addSelf(new THREE.Vector3(0, 0, 0)));
+	});
 </script></body>

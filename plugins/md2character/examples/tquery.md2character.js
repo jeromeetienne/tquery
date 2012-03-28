@@ -1,12 +1,20 @@
 /**
+ * @fileoverview
+ * 
+ * TODO add _ prefix to private properties
+ * TODO much cleanup needed
+ * TODO no change of property from outside. use getter/setter
+ * TODO only chained API
+*/
+
+/**
  * widely inspired from MD2Character.js from alteredq / http://alteredqualia.com/
 */
-THREE.MD2Character = function()
-{
+tQuery.register('MD2Character', function(){
 	this.scale		= 1;
 	this.animationFPS	= 6;
 
-	this.root		= new THREE.Object3D();
+	this._root		= new THREE.Object3D();
 	this.meshBody		= null;
 	this.meshWeapon		= null;
 
@@ -16,23 +24,53 @@ THREE.MD2Character = function()
 	this.weapons		= [];
 
 	this.activeAnimation	= null;
-	this.onLoadComplete	= function () {};
-	this._loadCounter	= 0;
-};
+	this._nLoadInProgress	= 0;
+});
 
+// make it eventable
+tQuery.MicroeventMixin(tQuery.MD2Character.prototype);
 
-THREE.MD2Character.prototype.setWireframe = function ( wireframeEnabled )
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.MD2Character.prototype.update	= function( delta )
 {
-	if( wireframeEnabled ){
-		if ( this.meshBody ) this.meshBody.material = this.meshBody.materialWireframe;
-		if ( this.meshWeapon ) this.meshWeapon.material = this.meshWeapon.materialWireframe;
-	} else {
-		if ( this.meshBody ) this.meshBody.material = this.meshBody.materialTexture;
-		if ( this.meshWeapon ) this.meshWeapon.material = this.meshWeapon.materialTexture;
+	if ( this.meshBody ) {
+		this.meshBody.updateAnimation( 1000 * delta );
 	}
+	if ( this.meshWeapon ) {
+		this.meshWeapon.updateAnimation( 1000 * delta );
+	}
+	return this;	// for chained API
 };
 
-THREE.MD2Character.prototype.setWeapon = function ( index )
+tQuery.MD2Character.prototype.container	= function(){
+	return this._root;
+}
+
+tQuery.MD2Character.prototype.isLoaded	= function(){
+	return this._nLoadInProgress === 0 ? true : false;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Setter								//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.MD2Character.prototype.setWireframe = function ( enable )
+{
+	// TODO remove the added property on THREE.Mesh
+	if( enable ){
+		if ( this.meshBody )	this.meshBody.material	= this.meshBody.materialWireframe;
+		if ( this.meshWeapon )	this.meshWeapon.material= this.meshWeapon.materialWireframe;
+	} else {
+		if ( this.meshBody )	this.meshBody.material	= this.meshBody.materialTexture;
+		if ( this.meshWeapon )	this.meshWeapon.material= this.meshWeapon.materialTexture;
+	}
+	return this;	// for chained API
+};
+
+tQuery.MD2Character.prototype.setWeapon = function ( index )
 {
 	// make all weapons invisible
 	for ( var i = 0; i < this.weapons.length; i ++ ){
@@ -52,9 +90,10 @@ THREE.MD2Character.prototype.setWeapon = function ( index )
 		this.meshWeapon.time		= this.meshBody.time;
 		this.meshWeapon.duration	= this.meshBody.duration;
 	}
+	return this;	// for chained API
 };
 
-THREE.MD2Character.prototype.setAnimation = function( animationName )
+tQuery.MD2Character.prototype.setAnimation = function( animationName )
 {
 	if ( this.meshBody ) {
 		this.meshBody.playAnimation( animationName, this.animationFPS );
@@ -66,9 +105,10 @@ THREE.MD2Character.prototype.setAnimation = function( animationName )
 		this.meshWeapon.time		= this.meshBody.time;
 	}
 	this.activeAnimation = animationName;
+	return this;	// for chained API
 };
 
-THREE.MD2Character.prototype.setPlaybackRate	= function( rate )
+tQuery.MD2Character.prototype.setPlaybackRate	= function( rate )
 {
 	if ( this.meshBody ){
 		this.meshBody.duration = this.meshBody.baseDuration / rate;
@@ -76,30 +116,24 @@ THREE.MD2Character.prototype.setPlaybackRate	= function( rate )
 	if ( this.meshWeapon ){
 		this.meshWeapon.duration = this.meshWeapon.baseDuration / rate;
 	}
+	return this;	// for chained API
 };
 
-THREE.MD2Character.prototype.setSkin	= function( index )
+tQuery.MD2Character.prototype.setSkin	= function( index )
 {
 	if ( this.meshBody && this.meshBody.material.wireframe === false ) {
 		this.meshBody.material.map	= this.skinsBody[ index ];
 	}
+	return this;	// for chained API
 };
 
-THREE.MD2Character.prototype.update	= function( delta )
+//////////////////////////////////////////////////////////////////////////////////
+//		Loader								//
+//////////////////////////////////////////////////////////////////////////////////
+tQuery.MD2Character.prototype.loadParts		= function ( config )
 {
-	if ( this.meshBody ) {
-		this.meshBody.updateAnimation( 1000 * delta );
-	}
-	if ( this.meshWeapon ) {
-		this.meshWeapon.updateAnimation( 1000 * delta );
-	}
-};
-
-
-THREE.MD2Character.prototype.loadParts		= function ( config )
-{
-	var scope		= this;
-	this._loadCounter	= config.weapons.length * 2 + config.skins.length + 1;
+	var _this		= this;
+	this._nLoadInProgress	= config.weapons.length * 2 + config.skins.length + 1;
 
 	var weaponsTextures = []
 	for ( var i = 0; i < config.weapons.length; i ++ ){
@@ -117,39 +151,36 @@ THREE.MD2Character.prototype.loadParts		= function ( config )
 
 	loader.load( config.baseUrl + config.body, function( geometry ) {
 		geometry.computeBoundingBox();
-		scope.root.position.y	= - scope.scale * geometry.boundingBox.min.y;
+		_this._root.position.y	= - _this.scale * geometry.boundingBox.min.y;
 
-		var mesh	= createPart( geometry, scope.skinsBody[ 0 ] );
-		mesh.scale.set( scope.scale, scope.scale, scope.scale );
+		var mesh	= createPart( geometry, _this.skinsBody[ 0 ] );
+		mesh.scale.set( _this.scale, _this.scale, _this.scale );
 
-		scope.root.add( mesh );
+		_this._root.add( mesh );
 
-		scope.meshBody		= mesh;
-		scope.activeAnimation	= geometry.firstAnimation;
+		_this.meshBody		= mesh;
+		_this.activeAnimation	= geometry.firstAnimation;
 
-		scope._checkLoadingComplete();
+		_this._checkLoadingComplete();
 	} );
 
 	// WEAPONS
 
-	var generateCallback = function ( index, name ) {
-
+	var generateCallback = function( index, name ){
 		return function( geometry ) {
-
-			var mesh	= createPart( geometry, scope.skinsWeapon[ index ] );
-			mesh.scale.set( scope.scale, scope.scale, scope.scale );
+			var mesh	= createPart( geometry, _this.skinsWeapon[ index ] );
+			mesh.scale.set( _this.scale, _this.scale, _this.scale );
 			mesh.visible	= false;
 
 			mesh.name	= name;
 
-			scope.root.add( mesh );
+			_this._root.add( mesh );
 
-			scope.weapons[ index ] = mesh;
-			scope.meshWeapon = mesh;
+			_this.weapons[ index ] = mesh;
+			_this.meshWeapon = mesh;
 
-			scope._checkLoadingComplete();
+			_this._checkLoadingComplete();
 		}.bind(this);
-
 	}.bind(this);
 
 	for ( var i = 0; i < config.weapons.length; i ++ ) {
@@ -206,25 +237,26 @@ THREE.MD2Character.prototype.loadParts		= function ( config )
 
 		mesh.parseAnimations();
 
-		mesh.playAnimation( geometry.firstAnimation, scope.animationFPS );
+		mesh.playAnimation( geometry.firstAnimation, _this.animationFPS );
 		mesh.baseDuration	= mesh.duration;
 
 		return mesh;
 	};
+	return this;	// for chained API
 };
 
-THREE.MD2Character.prototype._checkLoadingComplete	= function()
+tQuery.MD2Character.prototype._checkLoadingComplete	= function()
 {
-	this._loadCounter--;
-	if( this._loadCounter === 0 ){
-		this.onLoadComplete();
+	this._nLoadInProgress--;
+	if( this._nLoadInProgress === 0 ){
+		this.trigger('loaded');
 	}
 }
 
 /**
  * Load a texture and return it
 */
-THREE.MD2Character.prototype._loadTextures	= function( baseUrl, textureUrls )
+tQuery.MD2Character.prototype._loadTextures	= function( baseUrl, textureUrls )
 {
 	var mapping	= new THREE.UVMapping();
 	var textures	= [];
@@ -232,7 +264,7 @@ THREE.MD2Character.prototype._loadTextures	= function( baseUrl, textureUrls )
 		this._checkLoadingComplete()
 	}.bind(this);
 	// load all textureUrls
-	for ( var i = 0; i < textureUrls.length; i ++ ) {
+	for( var i = 0; i < textureUrls.length; i ++ ){
 		var url			= baseUrl + textureUrls[ i ];
 		var texture		= THREE.ImageUtils.loadTexture( url, mapping, callback);
 		textures[ i ]		= texture;
