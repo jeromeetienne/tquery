@@ -1,27 +1,23 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../../build/tquery-bundle.js"></script>
-<script src='vendor/pixastic/pixastic.all.min.js'></script>
-<script src="tquery.createaugmentedjoystick.js"></script>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="imagedata.js"></script>
+<script src="../tquery.createaugmentedjoystick.js"></script>
 
 
 <body><script>
-	var world	= tQuery.createWorld().fullpage().start();
+	var world	= tQuery.createWorld().boilerplate().start();
 	world.camera().position.z	= 3;
+	world.removeCameraControls();
 
 	var texture	= tQuery.createAugmentedJoystick();
 
-	console.log("texture", texture)
+	//console.log("texture", texture)
 
 	var material	= new THREE.MeshBasicMaterial({
-		color	: 0xFFAA88,
+		//color	: 0xFFAA88,
 		map	: texture
 	});
-
-
-	var mesh	= new THREE.Mesh(new THREE.PlaneGeometry(2, 1), material);
-	mesh.scale.multiplyScalar(2);
-	var object	= tQuery(mesh).addTo(world);
-	// FIXME this one should work
-	//var object	= tQuery.createSphere(material).addTo(world);
+	var object	= tQuery.createPlane(2, 1, material).scaleBy(2).addTo(world);
 
 </script></body>
