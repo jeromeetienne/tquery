@@ -33,7 +33,7 @@
 		segmentsW	: 100,
 		segmentsH	: 100
 	}).addTo(world).scaleBy(100);
-
+	
 	// Add lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);	
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(3);
@@ -57,8 +57,6 @@
 	
 	// handle keyboard and move
 	character.hookKeyboard();
-
 	// set the cameraControls	
-	var cameraControls	= new tQuery.MD2Character.CameraControls(character);
-	world.setCameraControls(cameraControls)
+	world.setCameraControls(new tQuery.MD2Character.CameraControls(character))
 </script></body>

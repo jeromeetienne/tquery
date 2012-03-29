@@ -27,8 +27,8 @@ tQuery.register('createAugmentedJoystick', function(opts){
 	}
 
 	var canvas	= document.createElement('canvas');
-	canvas.width	= video.width	/1;
-	canvas.height	= video.height	/1;
+	canvas.width	= video.width	/4;
+	canvas.height	= video.height	/4;
 	var ctx		= canvas.getContext("2d");
 	//var texture	= new THREE.Texture( video );
 	var texture	= new THREE.Texture( canvas );
@@ -53,7 +53,7 @@ window.imageData= ctx.getImageData(0,0, canvas.width, canvas.height);
 
 			var imageData	= ctx.getImageData(0,0, canvas.width, canvas.height);
 
-			ImageData.fliph(imageData);
+			//ImageData.fliph(imageData);
 			//ImageData.luminance(imageData);
 
 			//var greenData	= ImageData.duplicate(imageData, ctx);
