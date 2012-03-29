@@ -6,13 +6,17 @@
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
 
-<script src="tquery.md2character.js"></script>
-
 <script src='../../checkerboard/tquery.checkerboard.js'></script>
 <script src='../../fog/tquery.world.createfog.js'></script>
 
-<body><script>
 
+<script src="../tquery.md2character.js"></script>
+<script src="../tquery.md2character.cameracontrols.js"></script>
+
+<script src="../tquery.md2character.ratamahatta.js"></script>
+<script src="../tquery.md2character.ratamahatta.keyboard.js"></script>
+
+<body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 
@@ -35,79 +39,26 @@
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(3);
 
 	// CHARACTER
-	character	= new tQuery.MD2Character();
-	character.scale	= 0.03;
+	character	= new tQuery.RatamahattaMD2Character();
 	character.bind("loaded", function(){
-		console.log("list animmation", Object.keys(character.meshBody.geometry.animations))
+		console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
 		//character.setPlaybackRate(6);
-		//character.setSkin(2)
-		//character.setWeapon(9)
+		//character.setSkin(2);
+		//character.setWeapon(0);
 		//character.setWireframe(true);
 	});
-	character.loadParts({
-		baseUrl	: "ratamahatta/",
-		body	: "ratamahatta.js",
-		skins	: [ "ratamahatta.png"],
-		//skins	: [ "ratamahatta.png", "ctf_b.png", "ctf_r.png", "dead.png", "gearwhore.png" ],
-		weapons	: [
-			//[ "weapon.js", "weapon.png" ],
-			//[ "w_bfg.js", "w_bfg.png" ],
-			//[ "w_blaster.js", "w_blaster.png" ],
-			//[ "w_chaingun.js", "w_chaingun.png" ],
-			//[ "w_glauncher.js", "w_glauncher.png" ],
-			//[ "w_hyperblaster.js", "w_hyperblaster.png" ],
-			//[ "w_machinegun.js", "w_machinegun.png" ],
-			//[ "w_railgun.js", "w_railgun.png" ],
-			//[ "w_rlauncher.js", "w_rlauncher.png" ],
-			//[ "w_shotgun.js", "w_shotgun.png" ],
-			//[ "w_sshotgun.js", "w_sshotgun.png" ]
-		]
-	});
 	world.add( character.container() );
-	
-	
+
 	// handle the animation
+	// TODO pass world in MD2Character ctor. and provide a .destroy
 	world.loop().hook(function(deltaTime){
 		character.update( deltaTime );
 	});
-
+	
 	// handle keyboard and move
-	world.loop().hook(function(deltaTime, present){
-		if( character.isLoaded() === false )	return;
+	character.hookKeyboard();
 
-		var keyboard	= tQuery.keyboard();
-		var container	= character.container();
-
-		if( keyboard.pressed("left") ){
-			container.rotation.y	+= 0.1;					
-		}
-		if( keyboard.pressed("right") ){
-			container.rotation.y	-= 0.1;					
-		}
-		if( keyboard.pressed("up") ){
-			var a	= -1 * container.rotation.y;
-			var p	= container.position;
-			var sX	= 0.1;
-			var sZ	= 0.1;
-			p.x	+= - sX * Math.sin(a);
-			p.z	+=   sZ * Math.cos(a);
-		}
-		// handle the animation
-		if( keyboard.pressed("up") ){
-			if( character.activeAnimation !== 'run' ) character.setAnimation('run')
-		}else if( character.activeAnimation === 'run' ){
-			if( character.activeAnimation !== 'stand' ) character.setAnimation('stand')
-		}
-	});
-
-	// handle keyboard and move
-	world.loop().hook(function(deltaTime, present){
-		if( character.isLoaded() === false )	return;
-		var container	= character.container();
-		// camera position
-		var camera	= world.camera();
-		camera.position.copy(container.position);
-		camera.position.addSelf(new THREE.Vector3(5,2,5).normalize().multiplyScalar(5));
-		camera.lookAt(container.position.clone().addSelf(new THREE.Vector3(0, 0, 0)));
-	});
+	// set the cameraControls	
+	var cameraControls	= new tQuery.MD2Character.CameraControls(character);
+	world.setCameraControls(cameraControls)
 </script></body>
