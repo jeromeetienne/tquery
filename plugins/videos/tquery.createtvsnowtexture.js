@@ -1,5 +1,8 @@
 /**
- * Create tQuery.Scene
+ * Create tQuery.Scene.
+ *
+ * TODO to optim with a sprite sheet. currently it push a change the canvas
+ * at every frame. a spritesheet will allow to only change the UV
 */
 tQuery.register('createTVSnowTexture', function(opts){
 	// handle parameters
