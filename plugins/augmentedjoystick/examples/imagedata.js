@@ -135,40 +135,6 @@ ImageData.vline	= function(imageData, x, r, g, b, a)
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-ImageData.greenish	= function(imageData, threshold)
-{
-	var p	= imageData.data;
-	var w	= imageData.width;
-	var h	= imageData.height;
-	console.assert(threshold, "invalid parameter")
-	for(var i = 0, y = 0; y < h; y++){
-		for(var x = 0; x < w; x++, i += 4){
-			var maxSum	= p[i+0]+p[i+2];
-			if( p[i+1] >= threshold.minCol && maxSum <= threshold.maxSum  )	continue;
-			p[i+0]	= p[i+1] = p[i+2] = p[i+3] = 0;
-		}
-	}
-}
-
-ImageData.blueish	= function(imageData, threshold)
-{
-	var p	= imageData.data;
-	var w	= imageData.width;
-	var h	= imageData.height;
-	console.assert(threshold, "invalid parameter")
-	for(var i = 0, y = 0; y < h; y++){
-		for(var x = 0; x < w; x++, i += 4){
-			var maxSum	= p[i+0]+p[i+1];
-			if( p[i+1] >= threshold.minCol && maxSum <= threshold.maxSum  )	continue;
-			p[i+0]	= p[i+1] = p[i+2] = p[i+3] = 0;
-		}
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
 ImageData.smoothHistogram	= function(hist, factor)
 {
 	var value	= 0;
@@ -188,7 +154,6 @@ ImageData.getMaxHistogram	= function(hist, imageData)
 			idx	= i;
 		}
 	}
-
 	return {max: max, idx: idx}
 }
 
