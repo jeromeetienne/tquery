@@ -48,54 +48,54 @@ tQuery.register('createAugmentedJoystick', function(opts){
 		ImageData.fliph(imageData);
 		//ImageData.luminance(imageData);
 
-// Green
-		var greenData	= ImageData.duplicate(imageData, ctx);
-		ImageData.threshold(greenData, guiOpts.green.threshold.r, guiOpts.green.threshold.g, guiOpts.green.threshold.b);
-		if( guiOpts.green.disp.enable )	imageData	= greenData;
+// Left
+		var leftData	= ImageData.duplicate(imageData, ctx);
+		ImageData.threshold(leftData, guiOpts.left.threshold.r, guiOpts.left.threshold.g, guiOpts.left.threshold.b);
+		if( guiOpts.left.disp.enable )	imageData	= leftData;
 		// horizontal coord Y discovery
-		var hist	= ImageData.computeHorizontalHistogram(greenData, function(p, i){
+		var hist	= ImageData.computeHorizontalHistogram(leftData, function(p, i){
 			return p[i+1] !== 0 ? true : false;
 		});
-		ImageData.smoothHistogram(hist, guiOpts.green.smooth.hFactor);
-		var maxHGreen	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.green.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
+		ImageData.smoothHistogram(hist, guiOpts.left.smooth.hFactor);
+		var maxHLeft	= ImageData.getMaxHistogram(hist);
+		if( guiOpts.left.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
 		
 		// horizontal coord X discovery
-		var hist	= ImageData.computeVerticalHistogram(greenData, function(p, i){
+		var hist	= ImageData.computeVerticalHistogram(leftData, function(p, i){
 			return p[i+1] !== 0 ? true : false;
 		});
-		ImageData.smoothHistogram(hist, guiOpts.green.smooth.vFactor);
-		var maxVGreen	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.green.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
+		ImageData.smoothHistogram(hist, guiOpts.left.smooth.vFactor);
+		var maxVLeft	= ImageData.getMaxHistogram(hist);
+		if( guiOpts.left.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
 
 
-// Blue
+// Right
 		var blueData	= ImageData.duplicate(imageData, ctx);
-		ImageData.threshold(blueData, guiOpts.blue.threshold.r, guiOpts.blue.threshold.g, guiOpts.blue.threshold.b);
-		if( guiOpts.blue.disp.enable )	imageData	= blueData;
+		ImageData.threshold(blueData, guiOpts.right.threshold.r, guiOpts.right.threshold.g, guiOpts.right.threshold.b);
+		if( guiOpts.right.disp.enable )	imageData	= blueData;
 		// horizontal coord Y discovery
 		var hist	= ImageData.computeHorizontalHistogram(blueData, function(p, i){
 			return p[i+1] !== 0 ? true : false;
 		});
-		ImageData.smoothHistogram(hist, guiOpts.blue.smooth.hFactor);
-		var maxHBlue	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.blue.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
+		ImageData.smoothHistogram(hist, guiOpts.right.smooth.hFactor);
+		var maxHRight	= ImageData.getMaxHistogram(hist);
+		if( guiOpts.right.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
 		
 		// horizontal coord X discovery
 		var hist	= ImageData.computeVerticalHistogram(blueData, function(p, i){
 			return p[i+1] !== 0 ? true : false;
 		});
-		ImageData.smoothHistogram(hist, guiOpts.blue.smooth.vFactor);
-		var maxVBlue	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.blue.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
+		ImageData.smoothHistogram(hist, guiOpts.right.smooth.vFactor);
+		var maxVRight	= ImageData.getMaxHistogram(hist);
+		if( guiOpts.right.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
 
 // Display Crosses
-		// green
-		if( guiOpts.green.disp.HLine )	ImageData.hline(imageData, maxHGreen.idx, 0, 255, 0);
-		if( guiOpts.green.disp.VLine )	ImageData.vline(imageData, maxVGreen.idx, 0, 255, 0);
+		// left
+		if( guiOpts.left.disp.HLine )	ImageData.hline(imageData, maxHLeft.idx, 0, 255, 0);
+		if( guiOpts.left.disp.VLine )	ImageData.vline(imageData, maxVLeft.idx, 0, 255, 0);
 		// blue
-		if( guiOpts.blue.disp.HLine )	ImageData.hline(imageData, maxHBlue.idx, 0, 0, 255);
-		if( guiOpts.blue.disp.VLine )	ImageData.vline(imageData, maxVBlue.idx, 0, 0, 255);
+		if( guiOpts.right.disp.HLine )	ImageData.hline(imageData, maxHRight.idx, 0, 0, 255);
+		if( guiOpts.right.disp.VLine )	ImageData.vline(imageData, maxVRight.idx, 0, 0, 255);
 
 		// update the canvas
 		ctx.putImageData(imageData, 0, 0);
