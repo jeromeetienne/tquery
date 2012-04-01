@@ -11,6 +11,8 @@ tQuery.RatamahattaMD2Character.register('hookKeyboard', function(opts){
 	tQuery.data(this, 'hookKeyboardLoopCb', loopCb, true);
 	// hook the callback
 	opts.loop.hook(loopCb);
+	// for chained API
+	return this;
 });
 
 tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
@@ -24,6 +26,8 @@ tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
 	tQuery.removeData(this, 'hookKeyboardLoopCb');
 	// unhook the callback
 	opts.loop.unhook(loopCb);
+	// for chained API
+	return this;
 });
 
 tQuery.RatamahattaMD2Character.register('hookKeyboardLoopCb', function(deltaTime, present){

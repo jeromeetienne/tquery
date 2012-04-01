@@ -39,24 +39,16 @@
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(3);
 
 	// CHARACTER
-	character	= new tQuery.RatamahattaMD2Character();
+	character	= new tQuery.RatamahattaMD2Character().attach(world).hookKeyboard();
+
 	character.bind("loaded", function(){
 		console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
 		//character.setPlaybackRate(6);
-		character.setSkin(2);
-		character.setWeapon(0);
+		//character.setSkin(2);
+		//character.setWeapon(0);
 		//character.setWireframe(true);
 	});
-	world.add( character.container() );
-
-	// handle the animation
-	// TODO pass world in MD2Character ctor. and provide a .destroy
-	world.loop().hook(function(deltaTime){
-		character.update( deltaTime );
-	});
 	
-	// handle keyboard and move
-	character.hookKeyboard();
 	// set the cameraControls	
 	world.setCameraControls(new tQuery.MD2Character.CameraControls(character))
 </script></body>

@@ -37,7 +37,8 @@ tQuery.pluginsStaticOn(tQuery.MD2Character);
  * Destructor
 */
 tQuery.MD2Character.prototype.destroy	= function()
-{	
+{
+	console.log("tQuery.MD2Character destoy")
 }
 
 //////////////////////////////////////////////////////////////////////////////////
