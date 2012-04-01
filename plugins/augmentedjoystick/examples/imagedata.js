@@ -144,6 +144,36 @@ ImageData.smoothHistogram	= function(hist, factor)
 	}
 }
 
+ImageData.windowedAverageHistogram	= function(hist, width)
+{
+	var halfW	= Math.floor(width/2);
+	var winSum	= 0;
+	var winLen	= 0;
+	var origHist	= new Array(hist.length);
+	for(var i = 0; i < hist.length; i++)	origHist[i]	= hist[i];
+
+	// init window
+	for(var i = 0; i < halfW; i++){
+		winSum	+= hist[i];
+		winLen	++;
+	}
+
+	for(var i = 0; i < hist.length; i++){
+		// update window forward
+		if( i + halfW <= hist.length ){	
+			winSum	+= origHist[i+halfW];
+			winLen	++;
+		}
+		// update window backward
+		if( i-halfW >= 0 ){	
+			winSum	-= origHist[i-halfW];
+			winLen	--;
+		}
+		// 
+		hist[i]	= winSum/winLen;
+	}
+}
+
 ImageData.getMaxHistogram	= function(hist, imageData)
 {
 	var max	= -Number.MAX_VALUE;
