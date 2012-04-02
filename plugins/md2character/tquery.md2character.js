@@ -60,7 +60,7 @@ tQuery.MD2Character.prototype.update	= function( deltaSeconds )
 		// ugly kludge to get an event 'animationCompleted'
 		var timeAfter	= this._meshBody.time;
 		if( (direction === 1 && timeBefore > timeAfter) || (direction === -1 && timeAfter < timeBefore) ){
-			this.trigger("animationCompleted", this._curAnimation)
+			this.trigger("animationCompleted", this, this._curAnimation)
 			//console.log("endofanim", this._curAnimation)
 		}
 	}
@@ -157,7 +157,8 @@ tQuery.MD2Character.prototype.animation = function( animationName )
 	if( animationName === this._curAnimation ){
 		return this;	// for chained API
 	}
-	
+	// sanity check
+	console.assert( Object.keys(this._meshBody.geometry.animations).indexOf(animationName) !== -1 );
 	// setter on this._meshBody
 	if ( this._meshBody ) {
 		this._meshBody.playAnimation( animationName, this.animationFPS );

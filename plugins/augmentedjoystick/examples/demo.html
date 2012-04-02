@@ -22,6 +22,8 @@
 <script src="../../md2character/tquery.md2character.ratamahatta.js"></script>
 <script src="../../md2character/tquery.md2character.ratamahatta.keyboard.js"></script>
 
+<script src="../../webaudio/tquery.webaudio.js"></script>
+
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -32,7 +34,9 @@
 	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
 
 	// add a fog
-	world.addFogExp2({density : 0.05});
+	world.addFogExp2({density : 0.15});
+
+	world.enableWebAudio();
 
 	// add a checkboard, 1 tile per 1 units
 	tQuery.createCheckerboard({
@@ -64,20 +68,50 @@
 		baseUrl	: '../../md2character/examples/ratamahatta/'
 	}).attach(world);
 	//character.hookKeyboard();
+	character.bind('animationCompleted', function(character, animationName){
+		console.log("anim completed", animationName);
+		this.animation('stand');
+	});
+	character.bind('loaded', function(){
+		console.log("Character loaded");
+		console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
+	});
 
 	// set the cameraControls	
-	world.setCameraControls(new tQuery.MD2Character.CameraControls(character))
+	world.setCameraControls(new tQuery.MD2Character.CameraControls({
+		character	: character,
+		deltaPosition	: new THREE.Vector3(0,2,5).normalize().multiplyScalar(3),
+	}))
 
+	// gesture recognition based on augmentedJoystick pointers
 	var gestureR	= new tQuery.GestureRecognition();
 	var gestureL	= new tQuery.GestureRecognition();
 	aJoystick.bind('update', function(pointerR, pointerL){
 		var canvas	= aJoystick.texture().image;
+		// parse the pointer coordinate and convert into events
 		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
 		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
-
+		// log the event
 		if( eventR )	console.log("gestureR event", eventR)
 		if( eventL )	console.log("gestureL event", eventL)
+		// action based on the event
+		if( eventR === 'left' ){
+			character.animation('crdeath');
+			//tQuery.createSound().load('../../assets/sounds/cardiod-true-stereo-15-8.wav', function(sound){
+			tQuery.createSound().load('../../assets/sounds/eatghost.mp3', function(sound){
+				sound.play();
+			});
+		}
+		if( eventL === 'right' ){
+			character.animation('crpain');
+			tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
+				sound.play();
+			});
+		}
 	});
+	
+	
+	//tQuery.createSound().load('../../assets/sounds/kick.wav', function(sound){ sound.play(); });
 </script>
 
 </body>
