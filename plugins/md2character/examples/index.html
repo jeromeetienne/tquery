@@ -26,7 +26,7 @@
 	// add a fog
 	world.addFogExp2({density : 0.05});
 
-	world.removeCameraControls();
+	//world.removeCameraControls();
 
 	// add a checkboard, 1 tile per 1 units
 	tQuery.createCheckerboard({
@@ -35,8 +35,8 @@
 	}).addTo(world).scaleBy(100);
 	
 	// Add lights
-	tQuery.createAmbientLight().addTo(world).color(0x444444);	
-	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(3);
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(1);
 
 	// CHARACTER
 	character	= new tQuery.RatamahattaMD2Character().attach(world).hookKeyboard();
@@ -44,8 +44,8 @@
 	character.bind("loaded", function(){
 		console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
 		//character.setPlaybackRate(6);
-		//character.setSkin(2);
-		//character.setWeapon(0);
+		character.setSkin(2);
+		character.setWeapon(0);
 		//character.setWireframe(true);
 	});
 	
