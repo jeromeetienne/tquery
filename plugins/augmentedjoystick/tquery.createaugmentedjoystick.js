@@ -1,8 +1,3 @@
-tQuery.register('createAugmentedJoystick', function(opts){
-	return new tQuery.AugmentedJoystick(opts);
-});
-
-
 /**
  * Create tQuery.Scene
 */
@@ -12,134 +7,57 @@ tQuery.register('AugmentedJoystick', function(opts){
 		loop	: tQuery.world.loop()
 	});
 
+	// init usermedia webcam
 	if( !tQuery.AugmentedJoystick.hasUserMedia )	alert('Panic: no UserMedia')
 	console.assert( tQuery.AugmentedJoystick.hasUserMedia, "no usermedia available");
+	this._video	= this._videoCtor();
 
-	var video	= this._videoCtor();
+	this._frameCount= 0;
 
+	var canvas	= document.createElement('canvas');
+	this._canvas	= canvas;
+	canvas.width	= this._video.width	/4;
+	canvas.height	= this._video.height	/4;
+	this._texture	= new THREE.Texture( canvas );
+	
 	// gesture recognition
-	var gestureR	= new tQuery.GestureRecognition();
-	var pointerR	= {
-		x	: canvas.width/2,
-		y	: canvas.height/2
-	};
-	var gestureL	= new tQuery.GestureRecognition();
-	var pointerL	= {
-		x	: canvas.width/2,
-		y	: canvas.height/2
-	};
-	
-	var frameCounter	= 0;
-	var frameRate		= 1;
+	this._pointerR	= { x : canvas.width/2, y : canvas.height/2	};
+	this._pointerL	= { x : canvas.width/2,	y : canvas.height/2	};
+
+	// init render loop
 	this._$loopCb		= this._loopCb.bind(this);
-	opts.loop.hook(function(){
-		// rate limiter
-		frameCounter++;
-		if( frameCounter % frameRate !== 0 )	return;
-		// if no data is ready, do nothing
-		if( video.readyState !== video.HAVE_ENOUGH_DATA )	return;
-		
-		// update canvas size if needed
-		if( canvas.width != guiOpts.general.video.w )	canvas.width	= guiOpts.general.video.w;
-		if( canvas.height != guiOpts.general.video.h )	canvas.height	= guiOpts.general.video.h;
-		
-		// draw video into a canvas2D
-		ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-		var imageData	= ctx.getImageData(0,0, canvas.width, canvas.height);
-
-		ImageData.fliph(imageData);
-		//ImageData.luminance(imageData);
-
-// Right
-		var rightData	= ImageData.duplicate(imageData, ctx);
-		ImageData.threshold(rightData, guiOpts.right.threshold.r, guiOpts.right.threshold.g, guiOpts.right.threshold.b);
-		if( guiOpts.right.disp.enable )	imageData	= rightData;
-		// horizontal coord X discovery
-		var hist	= ImageData.computeVerticalHistogram(rightData, function(p, i){
-			return p[i+1] !== 0 ? true : false;
-		});
-		ImageData.windowedAverageHistogram(hist, guiOpts.right.smooth.vWidth);
-		var maxVRight	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.right.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
-		// horizontal coord Y discovery
-		var hist	= ImageData.computeHorizontalHistogram(rightData, function(p, i){
-			return p[i+1] !== 0 ? true : false;
-		});
-		ImageData.windowedAverageHistogram(hist, guiOpts.right.smooth.hWidth);
-		var maxHRight	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.right.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
-		
-
-// Left
-		var leftData	= ImageData.duplicate(imageData, ctx);
-		ImageData.threshold(leftData, guiOpts.left.threshold.r, guiOpts.left.threshold.g, guiOpts.left.threshold.b);
-		if( guiOpts.left.disp.enable )	imageData	= leftData;
-		// horizontal coord X discovery
-		var hist	= ImageData.computeVerticalHistogram(leftData, function(p, i){
-			return p[i+1] !== 0 ? true : false;
-		});
-		ImageData.windowedAverageHistogram(hist, guiOpts.left.smooth.vWidth);
-		var maxVLeft	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.left.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
-		// horizontal coord Y discovery
-		var hist	= ImageData.computeHorizontalHistogram(leftData, function(p, i){
-			return p[i+1] !== 0 ? true : false;
-		});
-		ImageData.windowedAverageHistogram(hist, guiOpts.left.smooth.hWidth);
-		var maxHLeft	= ImageData.getMaxHistogram(hist);
-		if( guiOpts.left.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
-		
-
-// Display Crosses
-		// right
-		if( guiOpts.right.disp.VLine )	ImageData.vline(imageData, maxVRight.idx, 0, 0, 255);
-		if( guiOpts.right.disp.HLine )	ImageData.hline(imageData, maxHRight.idx, 0, 0, 255);
-		// left
-		if( guiOpts.left.disp.VLine )	ImageData.vline(imageData, maxVLeft.idx, 0, 255, 0);
-		if( guiOpts.left.disp.HLine )	ImageData.hline(imageData, maxHLeft.idx, 0, 255, 0);
-
-
-// pointer Right
-		pointerR.x	+= (maxVRight.idx - pointerR.x) * guiOpts.right.pointer.coordSmoothV;
-		pointerR.y	+= (maxHRight.idx - pointerR.y) * guiOpts.right.pointer.coordSmoothH;
-		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
-		if( eventR )	console.log("gestureR event", eventR)
-		if( guiOpts.right.pointer.display ){
-			ImageData.vline(imageData, Math.floor(pointerR.x), 255, 0, 255);
-			ImageData.hline(imageData, Math.floor(pointerR.y), 255, 0, 255);
-		}
-// pointer Left
-		pointerL.x	+= (maxVLeft.idx - pointerL.x) * guiOpts.left.pointer.coordSmoothV;
-		pointerL.y	+= (maxHLeft.idx - pointerL.y) * guiOpts.left.pointer.coordSmoothH;
-		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
-		if( eventL )	console.log("gestureL event", eventL)
-		if( guiOpts.left.pointer.display ){
-			ImageData.vline(imageData, Math.floor(pointerL.x), 255, 0, 0);
-			ImageData.hline(imageData, Math.floor(pointerL.y), 255, 0, 0);
-		}
-
-		// update the canvas
-		ctx.putImageData(imageData, 0, 0);
-		// mark the texture as needsUpdate
-		texture.needsUpdate	= true;
-	});
-	
-	return texture;
+	opts.loop.hook(this._$loopCb);
 });
+
+// make it eventable
+tQuery.MicroeventMixin(tQuery.AugmentedJoystick.prototype);
+
+tQuery.AugmentedJoystick.destroy	= function(){
+	opts.loop.unhook( this._$loopCb );
+}
 
 /**
  * equal to hasUserMedia
 */
 tQuery.AugmentedJoystick.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
 
+tQuery.AugmentedJoystick.prototype.texture	= function(){
+	return this._texture;
+}
 
-tQuery.AugmentedJoystick._videoCtor	= function(){
+tQuery.AugmentedJoystick.prototype.pointerR	= function(){
+	return this._pointerR;
+}
+
+tQuery.AugmentedJoystick.prototype.pointerL	= function(){
+	return this._pointerL;
+}
+
+tQuery.AugmentedJoystick.prototype._videoCtor	= function(){
 	var video	= document.createElement('video');
 	video.width	= 320;
 	video.height	= 240;
 	video.autoplay	= true;
-
 	navigator.webkitGetUserMedia('video', function(stream){
 		video.src	= webkitURL.createObjectURL(stream);
 		//console.log("pseudo object URL", video.src);
@@ -149,4 +67,100 @@ tQuery.AugmentedJoystick._videoCtor	= function(){
 	return video;
 }
 
+tQuery.AugmentedJoystick.prototype._loopCb	= function()
+{
+	var canvas	= this._canvas;
+	var ctx		= canvas.getContext("2d");
+	// rate limiter
+	this._frameCount++;
+	if( this._frameCount % guiOpts.general.video.frameRate !== 0 )	return;
+
+	// if no data is ready, do nothing
+	if( this._video.readyState !== this._video.HAVE_ENOUGH_DATA )	return;
+	
+	// update canvas size if needed
+	if( canvas.width != guiOpts.general.video.w )	canvas.width	= guiOpts.general.video.w;
+	if( canvas.height != guiOpts.general.video.h )	canvas.height	= guiOpts.general.video.h;
+	
+	// draw video into a canvas2D
+	ctx.drawImage(this._video, 0, 0, canvas.width, canvas.height);
+
+	var imageData	= ctx.getImageData(0,0, canvas.width, canvas.height);
+
+	// flip horizontal 
+	ImageData.fliph(imageData);
+	//ImageData.luminance(imageData);
+
+// Right
+	var rightData	= ImageData.duplicate(imageData, ctx);
+	ImageData.threshold(rightData, guiOpts.right.threshold.r, guiOpts.right.threshold.g, guiOpts.right.threshold.b);
+	if( guiOpts.right.disp.enable )	imageData	= rightData;
+	// horizontal coord X discovery
+	var hist	= ImageData.computeVerticalHistogram(rightData, function(p, i){
+		return p[i+1] !== 0 ? true : false;
+	});
+	ImageData.windowedAverageHistogram(hist, guiOpts.right.smooth.vWidth);
+	var maxVRight	= ImageData.getMaxHistogram(hist);
+	if( guiOpts.right.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
+	// horizontal coord Y discovery
+	var hist	= ImageData.computeHorizontalHistogram(rightData, function(p, i){
+		return p[i+1] !== 0 ? true : false;
+	});
+	ImageData.windowedAverageHistogram(hist, guiOpts.right.smooth.hWidth);
+	var maxHRight	= ImageData.getMaxHistogram(hist);
+	if( guiOpts.right.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
+	
+// Left
+	var leftData	= ImageData.duplicate(imageData, ctx);
+	ImageData.threshold(leftData, guiOpts.left.threshold.r, guiOpts.left.threshold.g, guiOpts.left.threshold.b);
+	if( guiOpts.left.disp.enable )	imageData	= leftData;
+	// horizontal coord X discovery
+	var hist	= ImageData.computeVerticalHistogram(leftData, function(p, i){
+		return p[i+1] !== 0 ? true : false;
+	});
+	ImageData.windowedAverageHistogram(hist, guiOpts.left.smooth.vWidth);
+	var maxVLeft	= ImageData.getMaxHistogram(hist);
+	if( guiOpts.left.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
+	// horizontal coord Y discovery
+	var hist	= ImageData.computeHorizontalHistogram(leftData, function(p, i){
+		return p[i+1] !== 0 ? true : false;
+	});
+	ImageData.windowedAverageHistogram(hist, guiOpts.left.smooth.hWidth);
+	var maxHLeft	= ImageData.getMaxHistogram(hist);
+	if( guiOpts.left.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
+	
+// Display Crosses
+	// right
+	if( guiOpts.right.disp.VLine )	ImageData.vline(imageData, maxVRight.idx, 0, 0, 255);
+	if( guiOpts.right.disp.HLine )	ImageData.hline(imageData, maxHRight.idx, 0, 0, 255);
+	// left
+	if( guiOpts.left.disp.VLine )	ImageData.vline(imageData, maxVLeft.idx, 0, 255, 0);
+	if( guiOpts.left.disp.HLine )	ImageData.hline(imageData, maxHLeft.idx, 0, 255, 0);
+
+
+// pointer Right
+	var pointerR	= this._pointerR;
+	pointerR.x	+= (maxVRight.idx - pointerR.x) * guiOpts.right.pointer.coordSmoothV;
+	pointerR.y	+= (maxHRight.idx - pointerR.y) * guiOpts.right.pointer.coordSmoothH;
+	if( guiOpts.right.pointer.display ){
+		ImageData.vline(imageData, Math.floor(pointerR.x), 255, 0, 255);
+		ImageData.hline(imageData, Math.floor(pointerR.y), 255, 0, 255);
+	}
+// pointer Left
+	var pointerL	= this._pointerL;
+	pointerL.x	+= (maxVLeft.idx - pointerL.x) * guiOpts.left.pointer.coordSmoothV;
+	pointerL.y	+= (maxHLeft.idx - pointerL.y) * guiOpts.left.pointer.coordSmoothH;
+	if( guiOpts.left.pointer.display ){
+		ImageData.vline(imageData, Math.floor(pointerL.x), 255, 0, 0);
+		ImageData.hline(imageData, Math.floor(pointerL.y), 255, 0, 0);
+	}
+
+
+	// update the canvas
+	ctx.putImageData(imageData, 0, 0);
+	// mark the texture as needsUpdate
+	this._texture.needsUpdate	= true;
+	// notify the event
+	this.trigger('update', pointerR, pointerL);
+}
 

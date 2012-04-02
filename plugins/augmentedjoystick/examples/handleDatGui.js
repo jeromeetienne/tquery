@@ -1,8 +1,9 @@
 var DatGuiOpts	= function(){
 	this.general	= {
 		video	: {
-			w	: 320/4,
-			h	: 240/4
+			w		: 320/4,
+			h		: 240/4,
+			frameRate	: 1
 		}
 	};
 	this.right	= {
@@ -79,7 +80,8 @@ window.addEventListener('load', function(){
 	var folder	= gui.addFolder('General');
 	//folder.open();
 	folder.add(guiOpts.general.video, 'w', 0, 320).step(40).name('videoW');
-	folder.add(guiOpts.general.video, 'h', 0, 240).step(40).name('videoH');
+	folder.add(guiOpts.general.video, 'h', 0, 240).step(30).name('videoH');
+	folder.add(guiOpts.general.video, 'frameRate', 1, 30).step(1);
 
 // Right pointer folder
 	var folder	= gui.addFolder('Right Pointer');

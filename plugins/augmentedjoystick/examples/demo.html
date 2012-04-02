@@ -1,0 +1,83 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="imagedata.js"></script>
+<script src="../tquery.createaugmentedjoystick.js"></script>
+<script src="../tquery.gesturerecognition.js"></script>
+
+<script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
+<script src="./handleDatGui.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+
+<script src='../../checkerboard/tquery.checkerboard.js'></script>
+<script src='../../fog/tquery.world.createfog.js'></script>
+
+<script src="../../md2character/tquery.md2character.js"></script>
+<script src="../../md2character/tquery.md2character.cameracontrols.js"></script>
+
+<script src="../../md2character/tquery.md2character.ratamahatta.js"></script>
+<script src="../../md2character/tquery.md2character.ratamahatta.keyboard.js"></script>
+
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.camera().position.z	= 3;
+	world.removeCameraControls();
+
+	// change renderer clear color
+	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
+
+	// add a fog
+	world.addFogExp2({density : 0.05});
+
+	// add a checkboard, 1 tile per 1 units
+	tQuery.createCheckerboard({
+		segmentsW	: 100,
+		segmentsH	: 100
+	}).addTo(world).scaleBy(100);
+
+	var aJoystick	= new tQuery.AugmentedJoystick();
+	var texture	= aJoystick.texture();
+
+	// put the debug texture on top
+	var domElement	= texture.image;
+	document.body.appendChild(texture.image);
+	domElement.style.position	= 'absolute';
+	domElement.style.top		= '0px';
+	domElement.style.left		= '0px';
+	domElement.style.width		= "320px";
+	domElement.style.height		= "240px";
+	if( false ){
+		domElement.style.width	= "100%";
+		domElement.style.height	= "100%";		
+	}
+
+	// Add lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(1);
+
+	var character	= new tQuery.RatamahattaMD2Character({
+		baseUrl	: '../../md2character/examples/ratamahatta/'
+	}).attach(world);
+	//character.hookKeyboard();
+
+	// set the cameraControls	
+	world.setCameraControls(new tQuery.MD2Character.CameraControls(character))
+
+	var gestureR	= new tQuery.GestureRecognition();
+	var gestureL	= new tQuery.GestureRecognition();
+	aJoystick.bind('update', function(pointerR, pointerL){
+		var canvas	= aJoystick.texture().image;
+		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
+		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
+
+		if( eventR )	console.log("gestureR event", eventR)
+		if( eventL )	console.log("gestureL event", eventL)
+	});
+</script>
+
+</body>

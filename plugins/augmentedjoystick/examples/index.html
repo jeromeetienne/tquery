@@ -8,20 +8,45 @@
 <script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
 <script src="./handleDatGui.js"></script>
 
-<body><script>
+<body>
+	<div id="augmentedJoystick"></div>
+<script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	world.camera().position.z	= 3;
 	world.removeCameraControls();
 
-	var texture	= tQuery.createAugmentedJoystick();
+	var aJoystick	= new tQuery.AugmentedJoystick();
+	var texture	= aJoystick.texture();
+	
+	// put the debug texture on top
+	var domElement	= texture.image;
+	document.body.appendChild(texture.image);
+	domElement.style.position	= 'absolute';
+	domElement.style.bottom		= '0px';
+	domElement.style.right		= '0px';
+	domElement.style.width		= "320px";
+	domElement.style.width		= "240px";
+	
+	// TODO put the gesture out
+	var gestureR	= new tQuery.GestureRecognition();
+	var gestureL	= new tQuery.GestureRecognition();
+	aJoystick.bind('update', function(pointerR, pointerL){
+		var canvas	= aJoystick.texture().image;
+		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
+		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
+		//if( eventR )	console.log("gestureR event", eventR)
+		//if( eventL )	console.log("gestureL event", eventL)
+	});
+
 
 	//console.log("texture", texture)
 
 	var material	= new THREE.MeshBasicMaterial({
-		//color	: 0xFFAA88,
+		//color	: 0x4488FF,
 		map	: texture
 	});
 	var object	= tQuery.createPlane(2, 1, material).scaleBy(2).addTo(world);
+
 
 </script>
 
