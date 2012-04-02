@@ -53,7 +53,16 @@ tQuery.MD2Character.prototype.destroy	= function()
 tQuery.MD2Character.prototype.update	= function( deltaSeconds )
 {
 	if ( this._meshBody ) {
+		var direction	= this._meshBody.direction;
+		var timeBefore	= this._meshBody.time;
+		// update the animation
 		this._meshBody.updateAnimation( 1000 * deltaSeconds );
+		// ugly kludge to get an event 'animationCompleted'
+		var timeAfter	= this._meshBody.time;
+		if( (direction === 1 && timeBefore > timeAfter) || (direction === -1 && timeAfter < timeBefore) ){
+			this.trigger("animationCompleted", this._curAnimation)
+			//console.log("endofanim", this._curAnimation)
+		}
 	}
 	if ( this._meshWeapon ) {
 		this._meshWeapon.updateAnimation( 1000 * deltaSeconds );
