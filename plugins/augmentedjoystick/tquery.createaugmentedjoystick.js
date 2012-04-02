@@ -12,28 +12,10 @@ tQuery.register('AugmentedJoystick', function(opts){
 		loop	: tQuery.world.loop()
 	});
 
-	var video	= document.createElement('video');
-	video.width	= 320;
-	video.height	= 240;
-	video.autoplay	= true;
-
-	var hasUserMedia = navigator.webkitGetUserMedia ? true : false;
-	//console.log("UserMedia is detected", hasUserMedia);
-
 	if( !tQuery.AugmentedJoystick.hasUserMedia )	alert('Panic: no UserMedia')
 	console.assert( tQuery.AugmentedJoystick.hasUserMedia, "no usermedia available");
 
-	navigator.webkitGetUserMedia('video', function(stream){
-		video.src	= webkitURL.createObjectURL(stream);
-		//console.log("pseudo object URL", video.src);
-	}, function(error){
-		alert('you got no WebRTC webcam');
-	});
-	var canvas	= document.createElement('canvas');
-	canvas.width	= guiOpts.general.video.w;
-	canvas.height	= guiOpts.general.video.h;
-	var ctx		= canvas.getContext("2d");
-	var texture	= new THREE.Texture( canvas );
+	var video	= this._videoCtor();
 
 	// gesture recognition
 	var gestureR	= new tQuery.GestureRecognition();
@@ -49,6 +31,7 @@ tQuery.register('AugmentedJoystick', function(opts){
 	
 	var frameCounter	= 0;
 	var frameRate		= 1;
+	this._$loopCb		= this._loopCb.bind(this);
 	opts.loop.hook(function(){
 		// rate limiter
 		frameCounter++;
@@ -149,3 +132,21 @@ tQuery.register('AugmentedJoystick', function(opts){
  * equal to hasUserMedia
 */
 tQuery.AugmentedJoystick.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
+
+
+tQuery.AugmentedJoystick._videoCtor	= function(){
+	var video	= document.createElement('video');
+	video.width	= 320;
+	video.height	= 240;
+	video.autoplay	= true;
+
+	navigator.webkitGetUserMedia('video', function(stream){
+		video.src	= webkitURL.createObjectURL(stream);
+		//console.log("pseudo object URL", video.src);
+	}, function(error){
+		alert('you got no WebRTC webcam');
+	});
+	return video;
+}
+
+
