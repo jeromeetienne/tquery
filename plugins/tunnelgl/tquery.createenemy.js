@@ -38,12 +38,12 @@ tQuery.register('createEnemy', function(opts){
 		var tMesh	= object.get(0)
 
 		tMesh.position.z	+= speedZ;		
-		if( tMesh.position.z > 4 )	onDeath();
+		if( tMesh.position.z > 11 )	onDeath();
 
 		var origin	= {
 			x	: Math.cos(angle) * radius,
 			y	: Math.sin(angle) * radius,
-			z	:  0
+			z	: 0
 		};
 		vertexTransform(origin, object.get(0).position, present)
 	});
@@ -55,7 +55,7 @@ tQuery.register('createEnemy', function(opts){
 		var angle	= Math.random() * Math.PI * 2;	
 		var positionX	= Math.cos(angle) * radius;
 		var positionY	= Math.sin(angle) * radius;
-		var positionZ	= -8;
+		var positionZ	= 0;
 		object.position(positionX, positionY, positionZ)		
 	}
 });

@@ -15,7 +15,7 @@ tQuery.createDirectionalLight().position(0,-1,0).addTo(world)
 	.intensity(4);
 
 
-var waterTexture	= THREE.ImageUtils.loadTexture( "../test/water.jpg" );
+var waterTexture	= THREE.ImageUtils.loadTexture( "images/water.jpg" );
 
 for(var i = 0; i < 10; i++ ){
 	tQuery.createEnemy({
@@ -24,11 +24,11 @@ for(var i = 0; i < 10; i++ ){
 }
 
 var material	= new THREE.MeshLambertMaterial({
-	ambient	: 0x444444,
-	color	: 0xFFAA88,
-	specular: 0xCC88ff,
-	shininess: 400,
-	map	: THREE.ImageUtils.loadTexture( "../test/water.jpg" ),
+	ambient		: 0x444444,
+	color		: 0xFFAA88,
+	specular	: 0xCC88ff,
+	shininess	: 400,
+	map		: THREE.ImageUtils.loadTexture( "images/water.jpg" )
 	//map	: THREE.ImageUtils.loadTexture('ash_uvgrid01.jpg'),
 });
 //material	= new THREE.MeshNormalMaterial();
@@ -51,6 +51,10 @@ tunnel.material().textureScrolling({
 		tTexture.offset.y	= playerZ / 10;
 	}
 });
+// TODO this would be better to flip the geometry. put it in tquery.geometry.toolbox.js
+tunnel.get(0).flipSided	= true;
+
+
 
 var playerZ		= 0;
 var playerAz		= 0;
@@ -109,7 +113,7 @@ true && world.loop().hook(function(deltaTime, time){
 	};
 	vertexTransform(origin, world.camera().position, time)
 	
-	world.camera().position.z	= 5;
+	world.camera().position.z	= tunnelH;
 	world.camera().rotation.z	= playerAz+Math.PI/2;
 });
 
@@ -124,29 +128,23 @@ true && world.loop().hook(function(deltaTime, time){
 	var object	= tQuery('#player');
 	if( object.length === 0 )	return;
 	vertexTransform(origin, object.get(0).position, time)
-	object.get(0).position.z	= 3.5;
+	object.get(0).position.z	= tunnelH-2.5;
 });
 
 // TODO make all this happen at the geometry level
 
+// set clearColor
 world.renderer().setClearColorHex( 0x000000, 1 );
 
-world.scene().fog	= new THREE.FogExp2( world.renderer().getClearColor(), 0.15 );
+// add a fog
+world.addFogExp2({ density : 0.15 });
 
-world.camera().position.set(0,0,10);
-
-// TODO this would be better to flip the geometry. put it in tquery.geometry.toolbox.js
-tunnel.get(0).flipSided	= true;
-
-
+// create the player object
 var object	= tQuery.createSphere(0.5, 32, 16, new THREE.MeshLambertMaterial({
 	ambient	: 0x444444,
 	color	: 0x44FF44,
 	map	: waterTexture
 }));
-
-
-//tQuery.playSoundtrack('virt-lorem-ipsum.mp3');
 
 object.id('player').addTo(world)
 	.geometry()
