@@ -4,7 +4,7 @@ tQuery.register('createEnemy', function(opts){
 		id		: undefined,
 		loop		: tQuery.world.loop(),
 		getSpeedZ	: function(){
-			return Math.random()*0.05+0.1
+			return Math.random()*0.005+0.1
 		}
 	});
 	console.assert(opts.id, "invalid parameter");
