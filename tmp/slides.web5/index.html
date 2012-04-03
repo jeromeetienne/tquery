@@ -1,50 +1,52 @@
 <!DOCTYPE html>
 
 <!--
-- What is tquery
-- show me the code
-- pick slide from html5game jam
-
 * list all the similarity with tquery
   * from the blog
+
+* TODO relation three.js
+  * three.js is actively maintained
+  * it is quite popular
+  * push a bunch of principles
+
 * show power ofextension
   * demo of extensions
   * catalogue
   * short description
   * show a sample code
   * show it in the action in /pluging/*/examples
-* code plus iframe same screen
+  * code plus iframe same screen
+
 * big demo
   * tunnelgl
   * demo augmented joystick
 
 45m
 -->
-<!--
-  Google HTML5 slide template
-
-  Authors: Luke Mahé (code)
-           Marcin Wichary (code and design)
-           
-           Dominic Mazzoni (browser compatibility)
-           Charles Chen (ChromeVox support)
-
-  URL: http://code.google.com/p/html5slides/
--->
 
 <html>
 <head>
 	<title>tQuery: three.js + jQuery ?</title>
 	<base target=”_blank” />
-	<meta charset='utf-8'>
+	<meta charset='utf-8'/>
 	<script src='slides.js'></script>
 </head>
-  
-<body style='display: none'>
 
-    <section class='slides layout-regular template-default'>
-      
-      
+<body style='display: none'>
+	<style>
+	span.orange {
+		color		: orange;
+	}
+	span.larger {
+		font-weight	: bolder;
+		font-size	: 120%;
+	}
+	</style>
+	<section class='slides layout-regular template-default'>
+
+<!-- ****************************************************************************
+		Talk Introduction
+********************************************************************************* -->
 	<article>
 		<h1>
 			<span style="font-size: 120%; color: orange;">tQuery</span>
@@ -67,7 +69,7 @@
 	</article>
 	<article>
 		<h3>
-			Who am i
+			Who Am I
 		</h3>
 		<img style="float:right" src='jetienne-avatar.jpg' />
 		<ul>
@@ -93,15 +95,50 @@
 		<h4>Contacts</h4>
 		<ul>
 			<li>
-				<a href='https://twitter.com/jerome_etienne'>@jerome_etienne</a> on twitter
-				+
+				<a href='https://twitter.com/jerome_etienne'>@jerome_etienne</a> on twitter,
 				<a href='http://github.com/jeromeetienne'>jeromeetienne</a> on github
+			</li>
+		</ul>
+	</article>
+
+<!-- ****************************************************************************
+		tQuery 5min Presentation
+********************************************************************************* -->
+	<article>
+		<h2>
+			tQuery in all that ?
+		</h2>
+	</article>
+	<article>
+		<h3>
+			tQuery Started as a Dream :)
+		</h3>
+		<h4>Wishes</h4>
+		<ul>
+			<li>
+				"You want to know webgl? Good news! You already know it, just replace
+				<span class='larger'>j</span> by <span class='larger'>t</span>!"
+				<ul>
+					<li>you know <span class='larger'>j</span>Query, so you know <span class='larger'>t</span>Query</li>
+				</ul>
+			</li>
+			<li>
+				"WebGL should not be harder than playing with lego."
+			</li>
+			<li>
+				"WebGL for jQuery enthousiasts"
+			</li>
+		</ul>
+		<h4>Would like them to be true one day...</h4>
+		<ul>
+			<li>
+				Working hard on it :)
 			</li>
 		</ul>
 	</article>
 	<article>
 		<h2>
-			tQuery in all that ?
+			and more preciselly ?
 		</h2>
 	</article>
 	<article>
@@ -134,7 +171,7 @@
 	</article>
 	<article class='nobackground'>
 		<h3>
-			Here is a <span style="color: orange">Minimal</span> Page - the <span style="color: orange">SOURCE</span>
+			Here is a <span class='orange'>Minimal</span> Page - the <span class='orange'>SOURCE</span>
 		</h3>
 		<section>
 		<pre>
@@ -234,8 +271,7 @@
 	<article>
 		<h3>
 			Why jQuery ?
-		</h3>
-		
+		</h3>		
 		<h4>Always admired their plugins ecosystem</h4>
 			<ul>
 				<li>
@@ -259,6 +295,101 @@
 			</ul>
 
 	</article>
+<!-- ****************************************************************************
+		Mimic jQuery-API
+********************************************************************************* -->
+	<article>
+		<h2>
+			So you copy jQuery ?
+		</h2>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			tQuery Mimics jQuery API
+		</h3>
+		<h4>Motivation</h4>
+		<ul>
+			<li>
+				It makes tQuery very easy to learn if you know jQuery
+			</li>
+			<li>
+				Very important. It got significant consequences.
+				<span class="orange">Not Kidding</span>
+			</li>
+		</ul>
+		<h4>Principles</h4>
+		<ul>
+			<li>
+				for api, copy jquery API whenever possible
+			</li>
+			<li>
+				helpers may be provided, but jquery is the auhority
+			</li>
+		</ul>
+
+	</article>
+	<article>
+		<h2>
+			hmm up to which point ?	
+		</h2>
+	</article>
+<!--
+* for Each
+  * short description
+  * add a <pre> with the code
+  * a short code in the playground
+    * prepared. not typed live
+-->
+	<article>
+		<h3>
+			Chained API	
+		</h3>
+	</article>
+	<article>
+		<h3>
+			Dom Tree
+		</h3>
+	</article>
+	<article>
+		<h3>
+			id and class
+		</h3>
+	</article>
+	<article>
+		<h3>
+			CSS-like Selector
+		</h3>
+	</article>
+	<article>
+		<h3>
+			Dom Events
+		</h3>
+	</article>
+	<article>
+		<h2>
+			ok so it is for real.
+		</h2>
+	</article>
+	<article>
+		<h3>
+			Mimicing jQuery API for fun and profit
+		</h3>
+		<ul>
+			<li>
+				Well-known for its usability
+			</li>
+			<li>
+				Much easier to learn
+			</li>
+		</ul>
+		<h4>
+			jQuery API is authoritative!
+		</h4>
+	</article>
+	
+<!-- ****************************************************************************
+		Tube Mini Game
+********************************************************************************* -->
 	<article>
 		<h2>
 			Bla bla bla ... all talk.
@@ -314,6 +445,14 @@ tubeTexture.material().textureScrolling({
 });
 </pre>
 		</section>
+		<ul>
+			<li>
+				It is all an illusion!
+			</li>
+			<li>
+				"There is no spoon" - matrix
+			</li>
+		</ul>
 	</article>
 	<article class='nobackground'>
 		<h3>
@@ -352,34 +491,12 @@ world.loop().hook(function(){
 </pre>
 
 	</article>
-	<article class='nobackground'>
-		<h3>
-			TOREMOVE
-			About the <span style="color: orange">music</span>
-		</h3>
-		<section>
-		<pre>
-// play a sound track
-tQuery.playSoundtrack('virt-lorem-ipsum.mp3');
-</pre>
-		</section>
-		<ul>
-			<li>
-				Available <a href="http://www.biglionmusic.com/content/virt_-_lorem_ipsum.mp3">here</a>
-				- made by <a href="http://www.biglionmusic.com/">virt / Jake kaufman</a>
-			</li>
-			<li>
-				Singing <a href="http://www.biglionmusic.com/music/lorem-ipsum/">lorem ipsum</a> -
-				Check the <a href="http://www.biglionmusic.com/content/lorem.txt">lyrics</a> :)
-			</li>
-			<li>
-			</li>
-			<li>
-				All that thru a vocoder - like <a href='http://www.youtube.com/watch?v=DTXO7KGHtjI'>hatsune miku</a>
-			</li>
-		</ul>
-<!--		<iframe style="height: 400px" width="560" height="315px" src="http://www.youtube.com/embed/DTXO7KGHtjI" frameborder="0" allowfullscreen></iframe>
--->	</article>
+
+
+
+<!-- ****************************************************************************
+		Tube Mini Game
+********************************************************************************* -->
 	<article>
 		<h2>
 			Anything else ?
@@ -387,20 +504,17 @@ tQuery.playSoundtrack('virt-lorem-ipsum.mp3');
 	</article>
 	<article>
 		<h3>Conclusion</h3>
-		<br>
+		<h4>three.js power + jQuery API Usability</h4>
 		<ul>
-			<li>three.js power + jQuery API Usability" ?</li>
-			<li>I like the idea a <span style="color:orange">LOT</span></li>
-			<li>Early results seem promising, only time will tell</li>
+			<li>
+				seems a good recipe
+			</li>
 		</ul>
-	</article>
-	<article>
-		<h3>What's next ?</h3>
-		<br>
+		<h4>The Code</h4>
 		<ul>
-			<li>more of tQuery hopefully :)</li>
-			<li>Complete tunnel game on <a href="http://learningthreejs.com" target="_blank">learningthreejs blog</a></li>
-			<li>Maybe a step by step tutorial "how to make <a href="http://jeromeetienne.github.com/demo.sundial/" target="_blank">sundial</a>"</li>
+			<li>All under MIT license</li>
+			<li>Code on github at <a href="https://github.com/jeromeetienne/tquery">https://github.com/jeromeetienne/tquery</a></li>
+			<li>Wanna play online ? use the <a href="/www/playground">playground</a></li>
 		</ul>
 	</article>
 	<article>
