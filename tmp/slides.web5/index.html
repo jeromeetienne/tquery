@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 
 <!--
+- What is tquery
+- show me the code
+- pick slide from html5game jam
+
+* list all the similarity with tquery
+  * from the blog
+* show power ofextension
+  * demo of extensions
+  * catalogue
+  * short description
+  * show a sample code
+  * show it in the action in /pluging/*/examples
+* code plus iframe same screen
+* big demo
+  * tunnelgl
+  * demo augmented joystick
+
+45m
+-->
+<!--
   Google HTML5 slide template
 
   Authors: Luke Mahé (code)
@@ -46,49 +66,106 @@
 		</p>
 	</article>
 	<article>
+		<h3>
+			Who am i
+		</h3>
+		<img style="float:right" src='jetienne-avatar.jpg' />
+		<ul>
+			<li>
+				coder, speaker, trainer
+			</li>
+			<li>
+				Proud member of Web-5 association
+			</li>
+			<li>
+				Javascript, Node.js, WebGL and other HTML5 games stuff
+			</li>
+		</ul>
+		<h4>Learning Three.js</h4>
+		<ul>
+			<li>
+				Author of <a href="http://learningthreejs.com">learningthreejs</a> blog
+			</li>
+			<li>
+				Lists of three.js tutorials or "WebGL for dummies"
+			</li>
+		</ul>
+		<h4>Contacts</h4>
+		<ul>
+			<li>
+				<a href='https://twitter.com/jerome_etienne'>@jerome_etienne</a> on twitter
+				+
+				<a href='http://github.com/jeromeetienne'>jeromeetienne</a> on github
+			</li>
+		</ul>
+	</article>
+	<article>
 		<h2>
-			Oh so kinda dom on webgl?
+			tQuery in all that ?
 		</h2>
 	</article>
 	<article>
 		<h3>
 			What is tQuery
 		</h3>
+		<h4>Technical</h4>
 		<ul>
-			<li>
-				Experimental</strong>
-			</li>
 			<li>
 				Extension system for three.js
 			</li>
 			<li>
-				Goal: three.js power + jQuery API usability
+				Mimic jQuery API
+			</li>
+		</ul>
+		<h4>Direction</h4>
+		<ul>
+			<li>
+				<strong>Technical:</strong> three.js power + jQuery API usability
+			</li>
+			<li>
+				<strong>Human:</strong> Bring 3D to non-specialists
 			</li>
 		</ul>
 	</article>
 	<article>
 		<h2>
-			Wait! Show, dont tell.
+			Freeze! Show, dont tell.
 		</h2>
 	</article>
 	<article class='nobackground'>
 		<h3>
-			Here is a <span style="color: orange">Minimal</span> Page
+			Here is a <span style="color: orange">Minimal</span> Page - the <span style="color: orange">SOURCE</span>
 		</h3>
-		<p>
-			demo is <a target="_blank" href="http://jeromeetienne.github.com/tquery/examples/minimal/">here</a>
-		</p>
 		<section>
 		<pre>
 &lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
 &lt;script src=&quot;../../build/tquery-bundle.js&quot;&gt;&lt;/script&gt;
 &lt;body&gt;&lt;script&gt;
-    var world	= tQuery.createWorld().fullpage().start();
+    var world	= tQuery.createWorld().boilerplate().start();
     var object	= tQuery.createTorus().addTo(world);
 &lt;/script&gt;&lt;/body&gt;
 </pre>
 		</section>
-		<iframe src='http://jeromeetienne.github.com/tquery/examples/minimal/' style="height: 200px;"
+		<ul>
+			<li>
+				Super short (only 6-lines !)
+			</li>
+			<li>
+				jQuery-like syntax
+			</li>
+			<li>
+				Full HTML page. valid HTML5
+			</li>
+			<li>
+				See it running <a target="_blank" href="http://127.0.0.1:8000/plugins/minimal/examples">here</a>
+			</li>
+		</ul>
+	</article>
+	<article class='nobackground'>
+		<h3>
+			Here is a <span style="color: orange">Minimal</span> Page - the <span style="color: orange">DEMO</span>
+		</h3>
+		<iframe src='http://127.0.0.1:8000/plugins/minimal/examples'
 			allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
 	</article>
 	<article>
@@ -96,26 +173,6 @@
 			OK, go on now.
 		</h2>
 	</article>
-	<article>
-		<h3>
-			tQuery is <span style="color: orange">Experimental</span>
-		</h3>
-		<ul>
-			<li>
-				Started 2 weeks ago
-			</li>
-			<li>
-				Show promises but only time will tell
-			</li>
-			<li>
-				Code is advancing at fast past tho
-			</li>
-			<li>
-				(and this is super fun to write :)
-			</li>
-		</ul>
-	</article>
-
 	<article>
 		<h3>
 			tQuery is an <span style="color: orange">Extension System</span>
@@ -213,9 +270,9 @@
 			Here is a <span style="color: orange">mini-game</span>
 		</h3>
 		<p>
-			click <a target="_blank" href="http://jeromeetienne.github.com/tquery/examples/tunnelgl/">here</a>
+			click <a target="_blank" href="http://127.0.0.1:8000/plugins/tunnelgl/">here</a>
 		</p>
-		<iframe src='http://jeromeetienne.github.com/tquery/examples/tunnelgl/' style="height: 80%;"
+		<iframe src='http://127.0.0.1:8000/plugins/tunnelgl/' style="height: 80%;"
 			allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
 	</article>
 	<article>
@@ -297,6 +354,7 @@ world.loop().hook(function(){
 	</article>
 	<article class='nobackground'>
 		<h3>
+			TOREMOVE
 			About the <span style="color: orange">music</span>
 		</h3>
 		<section>
