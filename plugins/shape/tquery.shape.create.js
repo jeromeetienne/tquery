@@ -36,6 +36,13 @@ tQuery.register('createSmiley', function(material){
 		.toMesh(material);	
 });
 
+tQuery.register('createTriangle', function(material){
+	return tQuery.createTriangleShape().extrude()
+		.computeAll().center()
+		.normalize()
+		.toMesh(material);	
+});
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////

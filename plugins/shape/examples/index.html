@@ -18,7 +18,6 @@
 
 	//shape	= tQuery.createTriangleShape();
 	shape.extrude().toMesh().id('obj').addTo(world);
-	
 
 	tQuery('#obj')
 		.geometry().computeAll().normalize().center().rotateZ(Math.PI).back();
