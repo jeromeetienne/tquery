@@ -75,6 +75,12 @@
 	character.bind('loaded', function(){
 		console.log("Character loaded");
 		console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
+		if( false ){
+			setTimeout(function(){
+			    character.setSkin(Math.floor(Math.random()*5 % 5));
+			    character.setWeapon(Math.floor(Math.random()*11 % 11));
+			}, 1000);			
+		}
 	});
 
 	// set the cameraControls	
@@ -101,9 +107,13 @@
 			tQuery.createSound().load('../../assets/sounds/eatghost.mp3', function(sound){
 				sound.play();
 			});
+			// change the weapon
+			character.setWeapon(Math.floor(Math.random()*11 % 11));
 		}
 		if( eventL === 'right' ){
 			character.animation('crpain');
+			// change the skin
+			character.setSkin(Math.floor(Math.random()*5 % 5));
 			tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
 				sound.play();
 			});
