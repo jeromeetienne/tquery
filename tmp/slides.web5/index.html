@@ -5,13 +5,13 @@
   * complete the 'mimic jquery api'
   * do a few slide in principles.md / relation with three.js
   * present a few featured existing plugin
-    * md2character
-    * shape
     * text
+    * shape
     * csg
     * domevent
-    * fireball
     * video
+    * fireball
+    * md2character
 
 * TODO relation three.js
   * three.js is actively maintained
@@ -313,6 +313,41 @@
 			<li>and i knew it already :)</li>
 		</ul>
 	</article>
+	<article>
+		<h3>
+			tQuery and Three.js sitting in a tree
+		</h3>
+		<h4>Principles</h4>
+		<ul>
+			<li>tquery.js core got a <span class='orange'>single dependancy: three.js</span></li>
+			<li>easy to go back and forth between the two</li>
+		</ul>
+		<h4>Coverage</h4>
+		<ul>
+			<li>tQuery must provide Access to three.js
+				<ul>
+					<li>ideally even easier API</li>
+				</ul>
+			</li>
+			<li>no requirement to cover it all</li>
+		</ul>
+	</article>
+	<article>
+		<h3>
+			Just another API on top of three.js
+		</h3>
+		<h4>What remains the same ?</h4>
+		<ul>
+			<li>no change in semantic</li>
+			<li>nothing smart</li>
+		</ul>
+		<h4>What changes ?</h4>
+		<ul>
+			<li>other functions</li>
+			<li>other defaults</li>
+			<li>easy plugins system</li>
+		</ul>
+	</article>
 <!-- ****************************************************************************
 		Mimic jQuery-API
 ********************************************************************************* -->
@@ -599,10 +634,88 @@ world.loop().hook(function(){
 
 	</article>
 
+<!-- ****************************************************************************
+		Featured Extensions
+********************************************************************************* -->
+	<article>
+		<h2>
+			hmm tQuery is about extension ?<br/>Show some!
+		</h2>
+	</article>
+<!--
+    * text
+    * shape
+    * csg
+    * domevent
+    * video
+    * fireball
+    * md2character
+-->
+	<article>
+		<h3>tQuery.text</h3>
 
+		<h4>Display Text in 3D</h4>
+		<h4>Playground <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\n\tvar world = tQuery.createWorld().boilerplate().start();\n\n\t// create a 3D text\n\ttQuery.createText(\"Hello Web-5\").addTo(world).scaleBy(1/4);\t\n</script></body>"}'>examples</a></h4>
+		<h4>Plugins layground <a href='http://127.0.0.1:8000/plugins/text/examples/'>examples</a></h4>
+	</article>
+	<article>
+		<h3>tQuery.Shapes</h3>
+
+		<h4>Build 3D shape with canvas-like path</h4>
+		<h4>Playground examples:
+			<a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\tvar world = tQuery.createWorld().boilerplate().start();\n\t// create the shape triangle\n\tvar shape = tQuery.createShape()\n\t\t.moveTo(   0, -30 )\n\t\t.lineTo( -40,  30 )\n\t\t.lineTo(  40,  30 )\n\t\t.lineTo(   0, -30 );\n\t// create the geometry from the shape\n\tvar geometry = shape.extrude().computeAll().scaleBy(1/100);\n\t// create a object3d from the geometry\n\tvar object3d = geometry.toMesh().addTo(world);\n</script></body>"}'>expanded version</a>
+			<a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\t// create the world\n\tvar world = tQuery.createWorld().boilerplate().start();\n\t// create a triangle and add it to the world\n\ttQuery.createTriangle().addTo(world);\n</script></body>"}'>short version</a>
+		</h4>
+		<h4>Plugins <a href='http://127.0.0.1:8000/plugins/shape/examples/'>examples</a></h4>
+		<h4>shape+text: <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\n\tvar world = tQuery.createWorld().fullpage().start();\n\n\ttQuery.createText(\"Valentine\").addTo(world)\n\t\t.zoom(1/4).translateY(0.6);\n\ttQuery.createText(\"Love\").addTo(world)\n\t\t.zoom(1/4).translateY(-0.6);\n\ttQuery.createHeart().id(\"heart\").addTo(world);\n\n\tworld.loop().hook(function(deltaTime, present){\n\t\tvar angle\t= present * 2 * Math.PI;\n\t\ttQuery(\"#heart\").scale( 0.8 + 0.4 * Math.abs(Math.sin(angle)))\n\t\ttQuery(\"text\").rotation( 0, Math.PI/6 * Math.sin(angle), 0 )\n\t});\n\t\n</script></body>"}'>Valentine card</a></h4>
+	</article>
+	<article>
+		<h3>tQuery.csg</h3>
+
+		<h4>Constructive Shape Geometry</h4>
+		<ul>
+			<li>ok strange words</li>
+		</ul>
+		<h4>Able to add/substract/join objects to build new ones</h4>
+		<ul>
+			<li>better ?</li>
+		</ul>
+		<h4>Plugins <a href='http://127.0.0.1:8000/plugins/csg/examples/'>examples</a></h4>
+	</article>
+	<article>
+		<h3>tQuery.domevents</h3>
+
+		<h4>Emulation of DOM event in 3D space</h4>
+		<h4>Plugins <a href='http://127.0.0.1:8000/plugins/domevent/examples/'>examples</a></h4>
+		<h4>Playground <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\tvar world = tQuery.createWorld().boilerplate().start();\n\t// add a cube\n\ttQuery.createCube().addTo(world);\n\t// bind the click event\n\ttQuery(\"cube\").on(\"click\", function(event){\n\t\t// get the target object\n\t\tvar object3d = tQuery(event.target);\n\t\t// double its size\n\t\tobject3d.scaleBy(1.2);\n\t});\n</script></body>"}'>example</a></h4>
+	</article>
+	<article>
+		<h3>tQuery.fireball</h3>
+
+		<h4>Pure Shader Material</h4>
+		<h4>Plugins <a href='http://127.0.0.1:8000/plugins/fireball/examples/'>examples</a></h4>
+	</article>
+	<article>
+		<h3>tQuery.md2character</h3>
+
+		<h4>Animate doom character without breaking a sweat</h4>
+		<ul>
+			<li>MD2 is the format of the character</li>
+		</ul>
+		<h4>Plugins <a href='http://127.0.0.1:8000/plugins/md2character/examples/'>examples</a></h4>
+	</article>
+	<article>
+		<h3>Just a few plugins in tQuery</h3>
+
+		<ul>
+			<li>Plugins allows much easier reuse</li>
+			<li>Written to see how tQuery reacts in practice</li>
+			<li>Currently 30 plugins in incubation</li>
+		</ul>
+	</article>
 
 <!-- ****************************************************************************
-		Tube Mini Game
+		Future work
 ********************************************************************************* -->
 	<article>
 		<h2>
