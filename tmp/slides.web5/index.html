@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 
 <!--
-* list all the similarity with tquery
-  * from the blog
+* TODO
+  * complete the 'mimic jquery api'
+  * do a few slide in principles.md / relation with three.js
+  * present a few featured existing plugin
+    * md2character
+    * shape
+    * text
+    * csg
+    * domevent
+    * fireball
+    * video
 
 * TODO relation three.js
   * three.js is actively maintained
@@ -17,11 +26,6 @@
   * show it in the action in /pluging/*/examples
   * code plus iframe same screen
 
-* big demo
-  * tunnelgl
-  * demo augmented joystick
-
-45m
 -->
 
 <html>
@@ -342,28 +346,124 @@
 -->
 	<article>
 		<h3>
-			Chained API	
+			Key aspects of jQuery
 		</h3>
+		<ul>
+			<li>DOM tree from webpages</li>
+			<li>Chained API</li>
+			<li>ID and Class</li>
+			<li>CSS-like selector</li>
+			<li>DOM events</li>
+		</ul>
 	</article>
 	<article>
 		<h3>
 			Dom Tree
 		</h3>
+		<h4>DOM and 3D Scene: <span class="orange">both suprisingly similar</strong></h4>
+		<ul>
+			<li>
+				<strong>jQuery and DOM</strong> got a tree of elements from webpages
+			</li>
+			<li>
+				<strong>three.js</strong> got a hierachy of objects too
+			</li>
+		</ul>
+		<table>
+			<tr>
+				<th></th>
+				<th>DOM</th>
+				<th>Three.js</th>
+			</tr>
+			<tr>
+				<th>Hierachy</th>
+				<td>DOM tree</th>
+				<td>scene</th>
+			</tr>
+			<tr>
+				<th>Element</th>
+				<td>DOMElement</th>
+				<td>THREE.Object3D</th>
+			</tr>
+		</table>
+		<ul>
+			<li>On one hand, jquery got the dom and its tree of element.</li>
+			<li>On the other hand, three.js got a scene with Object3D.</li>
+		</ul>
 	</article>
 	<article>
 		<h3>
-			id and class
+			Chained API	
 		</h3>
+		<pre>
+tQuery('.fooKlass').scale(2).translate(1,0,0);
+</pre>
+		<h4>Well known feature jQuery</h4>
+		<ul>
+			<li>Playground <a href='http://127.0.0.1:8000/www/playground'>example</a></li>
+		</ul>
+	</article>
+	<article>
+		<h3>
+			ID and Class
+		</h3>
+		<pre>
+var cube    = tQuery().createCube();
+cube.id("myId");    // set the id of this element
+cube.addClass('fooKlass');  // add 'fooKlass' class to this cube
+cube.data('goom', 'baa');
+</pre>
+		<ul>
+			<li>Playground <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\tvar world = tQuery.createWorld().boilerplate().start();\n\tvar object = tQuery.createTorus().addTo(world);\n\t\n\t// set the object ID\n\tobject.id(\"myObject\");\n\n\t// get the object by its ID\n\t// tQuery(\"#myObject\").scaleBy(2);\n\t\n</script></body>"}'>example</a></li>
+			<li>Notice css-like selector ?</li>
+			<li>it works for class and id with jQuery</li>
+		</ul>
 	</article>
 	<article>
 		<h3>
 			CSS-like Selector
 		</h3>
+		<p>for classes and id as we just saw in previous slide</p>
+		<h4>Selector based on <span class='orange'>geometry</span>, similar to a jQuery('span')</h4>
+		<pre>
+tQuery('sphere');   // select all objects with a sphere gemotry
+tQuery('cube');     // same with a cube gemotry
+</pre>
+		<ul>
+			<li>Playground <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\tvar world = tQuery.createWorld().boilerplate().start();\n\t// add a cube\n\ttQuery.createCube().addTo(world).translateX(+0.8);\n\t// add a sphere\n\ttQuery.createSphere().addTo(world).translateX(-0.8);\n\t\n\t// select an object based on its geometry\n\t// tQuery(\"cube\").scaleBy(0.5);\n\t// tQuery(\"sphere\").scaleBy(0.5);\n</script></body>"}'>example</a></li>
+		</ul>
+	</article>
+	<article>
+		<h3>
+			CSS-like Selector
+		</h3>
+		<h4>can <span class='orange'>compose</span> them like with jQuery</h4>
+		<pre>
+tQuery('.bar.foo')  // objects with class 'bar' and 'foo'
+tQuery('.bar cube') // objects with class 'bar' and cube descandants
+</pre>
+		<ul>
+			<li>Playground <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\tvar world = tQuery.createWorld().boilerplate().start();\n\t// add a cube\n\ttQuery.createCube().addTo(world).translateX(+0.8);\n\t// add a sphere\n\ttQuery.createCube().addTo(world).translateX(-0.8).addClass(\"foobar\");\n\t\n\t// select an object based on its geometry\n\t// tQuery(\"cube\").scaleBy(0.5);\n\t// tQuery(\"cube.foobar\").scaleBy(0.5);\n</script></body>"}'>example</a></li>
+		</ul>
 	</article>
 	<article>
 		<h3>
 			Dom Events
 		</h3>
+		<pre>
+tQuery('cube').on('click', function(){
+    console.log("somebody put the mouse over a cube");
+});
+</pre>
+		<ul>
+			<li>Playground <a href='http://127.0.0.1:8000/www/playground/#j/{"textValue":"<!doctype html><title>tQuery minimal page</title>\n<script src=\"../../build/tquery-all.js\"></script>\n<body><script>\n\tvar world = tQuery.createWorld().boilerplate().start();\n\t// add a cube\n\ttQuery.createCube().addTo(world);\n\t// bind the click event\n\ttQuery(\"cube\").on(\"click\", function(event){\n\t\t// get the target object\n\t\tvar object3d = tQuery(event.target);\n\t\t// double its size\n\t\tobject3d.scaleBy(1.2);\n\t});\n</script></body>"}'>example</a></li>
+		</ul>
+		<h4>Supported Events</h4>
+		<ul>
+			<li>click and dblclick</li>
+			<li>mouseup and mousedown</li>
+			<li>mouseover and mouse out</li>
+		</ul>
 	</article>
 	<article>
 		<h2>
