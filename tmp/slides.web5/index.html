@@ -703,6 +703,16 @@ world.loop().hook(function(){
 			<li>MD2 is the format of the character</li>
 		</ul>
 		<h4>Plugins <a href='http://127.0.0.1:8000/plugins/md2character/examples/'>examples</a></h4>
+		<h4>Play in javascript console</h4>
+		<pre>
+character.setSkin(2);		// to change the skin (5 of them)
+character.setWeapons(4);	// to change the weapons (11 of them)
+// some randomness
+setTimeout(function(){
+    character.setSkin(Math.floor(Math.random()*5 % 5));
+    character.setWeapon(Math.floor(Math.random()*11 % 11));
+}, 1000);
+</pre>
 	</article>
 	<article>
 		<h3>Just a few plugins in tQuery</h3>
