@@ -86,14 +86,14 @@ var optionsSave	= function(){
 	var options	= {
 		textValue	: textValue
 	};
-	location.hash	= '#j/'+JSON.stringify(options);	
+	location.hash	= '#j/'+encodeURIComponent(JSON.stringify(options));	
 }
 var optionsLoad	= function(){
 	if( !location.hash )	return;
 	console.log("Loading options from url...")
 	if( location.hash.substring(0,3) === "#j/" ){
 		var optionsJSON	= location.hash.substring(3);
-		var options	= JSON.parse(optionsJSON);
+		var options	= JSON.parse(decodeURIComponent(optionsJSON));
 	}else{
 		console.assert(false);
 	}
