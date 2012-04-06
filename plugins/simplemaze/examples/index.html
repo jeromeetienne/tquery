@@ -1,0 +1,30 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../tquery.simplemaze.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position( 1,1, 1).color(0xFF4444);
+	tQuery.createDirectionalLight().addTo(world).position(-1,-1,1).color(0x4444FF);
+
+	var maze	= new tQuery.SimpleMaze({
+		map	: [
+			'*********',
+			'*   *   *',
+			'*  ** ***',
+			'*       *',
+			'***     *',
+			'*       *',
+			'*********'
+		]
+	});
+	world.add(maze.container());
+	
+
+	
+</script></body>
