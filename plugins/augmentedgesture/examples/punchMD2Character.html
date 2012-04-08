@@ -3,7 +3,7 @@
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
 <script src="imageprocessing.js"></script>
-<script src="../tquery.createaugmentedjoystick.js"></script>
+<script src="../tquery.augmentedgesture.js"></script>
 <script src="../tquery.gesturerecognition.js"></script>
 
 <script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
@@ -44,10 +44,10 @@
 		segmentsH	: 100
 	}).addTo(world).scaleBy(100);
 
-	var aJoystick	= new tQuery.AugmentedJoystick();
+	var aGesture	= new tQuery.AugmentedGesture();
 
 	// put the debug texture on top
-	var domElement	= aJoystick.canvas();
+	var domElement	= aGesture.canvas();
 	document.body.appendChild(domElement);
 	domElement.style.position	= 'absolute';
 	domElement.style.top		= '0px';
@@ -91,8 +91,8 @@
 	// gesture recognition based on augmentedJoystick pointers
 	var gestureR	= new tQuery.GestureRecognition();
 	var gestureL	= new tQuery.GestureRecognition();
-	aJoystick.bind('update', function(pointerR, pointerL){
-		var canvas	= aJoystick.canvas();
+	aGesture.bind('update', function(pointerR, pointerL){
+		var canvas	= aGesture.canvas();
 		// parse the pointer coordinate and convert into events
 		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
 		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);

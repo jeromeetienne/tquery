@@ -1,15 +1,15 @@
 /**
  * Create tQuery.Scene
 */
-tQuery.register('AugmentedJoystick', function(opts){
+tQuery.register('AugmentedGesture', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
 	});
 
 	// init usermedia webcam
-	if( !tQuery.AugmentedJoystick.hasUserMedia )	alert('Panic: no UserMedia')
-	console.assert( tQuery.AugmentedJoystick.hasUserMedia, "no usermedia available");
+	if( !tQuery.AugmentedGesture.hasUserMedia )	alert('Panic: no UserMedia')
+	console.assert( tQuery.AugmentedGesture.hasUserMedia, "no usermedia available");
 	this._video	= this._videoCtor();
 
 	this._frameCount= 0;
@@ -29,30 +29,30 @@ tQuery.register('AugmentedJoystick', function(opts){
 });
 
 // make it eventable
-tQuery.MicroeventMixin(tQuery.AugmentedJoystick.prototype);
+tQuery.MicroeventMixin(tQuery.AugmentedGesture.prototype);
 
-tQuery.AugmentedJoystick.destroy	= function(){
+tQuery.AugmentedGesture.destroy	= function(){
 	opts.loop.unhook( this._$loopCb );
 }
 
 /**
  * equal to hasUserMedia
 */
-tQuery.AugmentedJoystick.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
+tQuery.AugmentedGesture.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
 
-tQuery.AugmentedJoystick.prototype.canvas	= function(){
+tQuery.AugmentedGesture.prototype.canvas	= function(){
 	return this._canvas;
 }
 
-tQuery.AugmentedJoystick.prototype.pointerR	= function(){
+tQuery.AugmentedGesture.prototype.pointerR	= function(){
 	return this._pointerR;
 }
 
-tQuery.AugmentedJoystick.prototype.pointerL	= function(){
+tQuery.AugmentedGesture.prototype.pointerL	= function(){
 	return this._pointerL;
 }
 
-tQuery.AugmentedJoystick.prototype._videoCtor	= function(){
+tQuery.AugmentedGesture.prototype._videoCtor	= function(){
 	var video	= document.createElement('video');
 	video.width	= 320;
 	video.height	= 240;
@@ -66,7 +66,7 @@ tQuery.AugmentedJoystick.prototype._videoCtor	= function(){
 	return video;
 }
 
-tQuery.AugmentedJoystick.prototype._loopCb	= function()
+tQuery.AugmentedGesture.prototype._loopCb	= function()
 {
 	var canvas	= this._canvas;
 	var ctx		= canvas.getContext("2d");
