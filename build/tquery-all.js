@@ -855,10 +855,11 @@ tQuery.VERSION	= "0.0.1";
  * @param {Object} object the object in which store the data
  * @param {String} key the key/name of the data to get/set
  * @param {*} value the value to set (optional)
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to false
  * 
  * @returns {*} return the value stored in this object for this key
 */
-tQuery.data	= function(object, key, value)
+tQuery.data	= function(object, key, value, mustNotExist)
 {
 	// sanity check
 	console.assert( object, 'invalid parameters' );
@@ -866,6 +867,10 @@ tQuery.data	= function(object, key, value)
 
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
+	// honor mustNotExist
+	if( mustNotExist ){
+		console.assert(object['_tqData'][key] === undefined, "This key already exists "+key);
+	}
 	// set the value if any
 	if( value ){
 		object['_tqData'][key]	= value;
@@ -876,8 +881,10 @@ tQuery.data	= function(object, key, value)
 
 /**
  * Same as jQuery.removeData()
+ *
+ * @param {Boolean} mustExist if true, ensure the key does exist, default to false
 */
-tQuery.removeData	= function(object, key)
+tQuery.removeData	= function(object, key, mustExist)
 {
 	// handle the 'key as Array' case
 	if( key instanceof Array ){
@@ -888,6 +895,10 @@ tQuery.removeData	= function(object, key)
 	}
 	// sanity check
 	console.assert( typeof key === "string");
+	// honor mustNotExist
+	if( mustExist ){
+		console.assert(object['_tqData'][key] !== undefined, "This key doesnt already exists "+key);
+	}
 	// do delete the key
 	delete object['_tqData'][key];
 	// TOTO remove object[_tqData] if empty now
@@ -956,28 +967,37 @@ tQuery.extend = function(obj, base){
  * 
  * @param {Object} object the object on which you mixin function
  * @param {Object} dest the object in which to register the plugin
+ * @param {string} suffix the suffix to add to the function name
 */
-tQuery.pluginsOn	= function(object, dest){
-	dest	= dest	|| object.prototype || object;
-	object.register	= function(name, funct) {
+tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
+	dest		= dest	|| object.prototype || object;
+	fnNameSuffix	= fnNameSuffix || '';
+	object['register'+fnNameSuffix]		= function(name, funct) {
 		if( dest[name] ){
 			throw new Error('Conflict! Already method called: ' + name);
 		}
 		dest[name]	= funct;
 	};
-	object.unregister	= function(name){
+	object['unregister'+fnNameSuffix]	= function(name){
 		if( dest.hasOwnProperty(name) === false ){
 			throw new Error('Plugin not found: ' + name);
 		}
 		delete dest[name];
 	};
-	object.registered	= function(name){
+	object['registered'+fnNameSuffix]	= function(name){
 		return dest.hasOwnProperty(name) === true;
 	}
 };
 
-tQuery.pluginsInstanceOn= function(klass){ return tQuery.pluginsOn(klass);		};
-tQuery.pluginsStaticOn	= function(klass){ return tQuery.pluginsOn(klass. klass);	};
+tQuery.pluginsInstanceOn= function(klass){ return tQuery._pluginsOn(klass);			};
+tQuery.pluginsStaticOn	= function(klass){ return tQuery._pluginsOn(klass, klass, 'Static');	};
+
+/** for backward compatibility only */
+tQuery.pluginsOn	= function(object, dest){
+	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticon");
+	console.trace();
+	return tQuery._pluginsOn(object, dest)
+}
 
 
 // make it pluginable
@@ -1679,8 +1699,7 @@ tQuery.Mesh	= function(elements)
 };
 
 /**
- * inherit from tQuery.Node
- * - TODO this should inherit from tQuery.Object3D but but in inheritance
+ * inherit from tQuery.Object3D
 */
 tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 
@@ -3381,6 +3400,13 @@ tQuery.register('createSmiley', function(material){
 	return tQuery.createSmileyShape().extrude()
 		.computeAll().center()
 		.normalize().rotateZ(Math.PI)
+		.toMesh(material);	
+});
+
+tQuery.register('createTriangle', function(material){
+	return tQuery.createTriangleShape().extrude()
+		.computeAll().center()
+		.normalize()
 		.toMesh(material);	
 });
 

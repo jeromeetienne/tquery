@@ -55,7 +55,8 @@
 		</h1>
 		<h3 style="font-size: 120%">
 			<center>
-				a new way to interact with your Browser
+				a tQuery way
+				to interact with your Browser
 			</center>
 			<br>
 		</h3>
@@ -149,6 +150,70 @@
 			<li>each user punch hurt the doom monster</li>
 			<li>here is the demo <a href='http://127.0.0.1:8000/plugins/augmentedjoystick/examples/demo.html'>demo</a></li>
 		</ul>
+	</article>
+	<article>
+		<h2>
+			"Show me the code" - linus torwald
+		</h2>
+	</article>
+	<article>
+		<h3>
+			Coding with augmented gesture
+		</h3>
+		<h4>Initialize it</h4>
+		<pre>
+var aGesture	= new tQuery.AugmentedGesture();
+</pre>
+		<h4>Add Debug View</h4>
+		<pre>
+// get debug texture
+var texture	= aJoystick.texture();	
+// put the debug texture on top on the screen
+var domElement	= texture.image;
+document.body.appendChild(domElement);
+</pre>
+	</article>
+	<article>
+		<h3>
+			Get a Gesture out of Pointers
+		</h3>
+		<h4>Get Pointers Coords</h4>
+		<pre>
+aGesture.bind('update', function(pointerR, pointerL){
+	console.log(pointerR, pointerL);
+});
+</pre>
+		<h4>Recognize the Gestures</h4>
+		<pre>
+var gestureR	= new tQuery.GestureRecognition();
+aGesture.bind('update', function(pointerR, pointerL){
+	var eventR	= gestureR.update(pointerR.x, pointerR.y, canvasW, canvasH);
+	// eventR === null if nothing recognize
+	// eventR === 'punch' if a punch if recognize
+});
+</pre>
+	</article>
+	<article>
+		<h3>
+			Pack it with Doom Character
+		</h3>
+		<h4>Get MD2 character</h4>
+		<pre>
+var character	= new tQuery.RatamahattaMD2Character();
+character.attach(world);
+</pre>
+		<h4>Action from Gestures</h4>
+		<pre>
+if( eventR === 'punch' ){
+    character.animation('crdeath');   // make character move
+    // play a sound
+    tQuery.createSound().load('eatghost.mp3', function(sound){
+        sound.play();
+    });
+    // change the weapon
+    character.setWeapon(Math.floor(Math.random()*11 % 11));
+}
+</pre>
 	</article>
 	<article>
 		<h2>
