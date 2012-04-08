@@ -18,7 +18,6 @@ tQuery.register('AugmentedJoystick', function(opts){
 	this._canvas	= canvas;
 	canvas.width	= this._video.width	/4;
 	canvas.height	= this._video.height	/4;
-	this._texture	= new THREE.Texture( canvas );
 	
 	// gesture recognition
 	this._pointerR	= { x : canvas.width/2, y : canvas.height/2	};
@@ -41,8 +40,8 @@ tQuery.AugmentedJoystick.destroy	= function(){
 */
 tQuery.AugmentedJoystick.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
 
-tQuery.AugmentedJoystick.prototype.texture	= function(){
-	return this._texture;
+tQuery.AugmentedJoystick.prototype.canvas	= function(){
+	return this._canvas;
 }
 
 tQuery.AugmentedJoystick.prototype.pointerR	= function(){
@@ -88,78 +87,74 @@ tQuery.AugmentedJoystick.prototype._loopCb	= function()
 	var imageData	= ctx.getImageData(0,0, canvas.width, canvas.height);
 
 	// flip horizontal 
-	ImageData.fliph(imageData);
-	//ImageData.luminance(imageData);
+	ImgProc.fliph(imageData);
+	//ImgProc.luminance(imageData);
 
 // Right
-	var rightData	= ImageData.duplicate(imageData, ctx);
-	ImageData.threshold(rightData, guiOpts.right.threshold.r, guiOpts.right.threshold.g, guiOpts.right.threshold.b);
+	var rightData	= ImgProc.duplicate(imageData, ctx);
+	ImgProc.threshold(rightData, guiOpts.right.colorFilter.r, guiOpts.right.colorFilter.g, guiOpts.right.colorFilter.b);
 	if( guiOpts.right.disp.enable )	imageData	= rightData;
 	// horizontal coord X discovery
-	var hist	= ImageData.computeVerticalHistogram(rightData, function(p, i){
+	var hist	= ImgProc.computeVerticalHistogram(rightData, function(p, i){
 		return p[i+1] !== 0 ? true : false;
 	});
-	ImageData.windowedAverageHistogram(hist, guiOpts.right.smooth.vWidth);
-	var maxVRight	= ImageData.getMaxHistogram(hist);
-	if( guiOpts.right.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
+	ImgProc.windowedAverageHistogram(hist, guiOpts.right.smooth.vWidth);
+	var maxVRight	= ImgProc.getMaxHistogram(hist);
+	if( guiOpts.right.disp.VHist )	ImgProc.displayVerticalHistogram(imageData, hist);
 	// horizontal coord Y discovery
-	var hist	= ImageData.computeHorizontalHistogram(rightData, function(p, i){
+	var hist	= ImgProc.computeHorizontalHistogram(rightData, function(p, i){
 		return p[i+1] !== 0 ? true : false;
 	});
-	ImageData.windowedAverageHistogram(hist, guiOpts.right.smooth.hWidth);
-	var maxHRight	= ImageData.getMaxHistogram(hist);
-	if( guiOpts.right.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
+	ImgProc.windowedAverageHistogram(hist, guiOpts.right.smooth.hWidth);
+	var maxHRight	= ImgProc.getMaxHistogram(hist);
+	if( guiOpts.right.disp.HHist )	ImgProc.displayHorizontalHistogram(imageData, hist);
 	
 // Left
-	var leftData	= ImageData.duplicate(imageData, ctx);
-	ImageData.threshold(leftData, guiOpts.left.threshold.r, guiOpts.left.threshold.g, guiOpts.left.threshold.b);
+	var leftData	= ImgProc.duplicate(imageData, ctx);
+	ImgProc.threshold(leftData, guiOpts.left.colorFilter.r, guiOpts.left.colorFilter.g, guiOpts.left.colorFilter.b);
 	if( guiOpts.left.disp.enable )	imageData	= leftData;
 	// horizontal coord X discovery
-	var hist	= ImageData.computeVerticalHistogram(leftData, function(p, i){
+	var hist	= ImgProc.computeVerticalHistogram(leftData, function(p, i){
 		return p[i+1] !== 0 ? true : false;
 	});
-	ImageData.windowedAverageHistogram(hist, guiOpts.left.smooth.vWidth);
-	var maxVLeft	= ImageData.getMaxHistogram(hist);
-	if( guiOpts.left.disp.VHist )	ImageData.displayVerticalHistogram(imageData, hist);
+	ImgProc.windowedAverageHistogram(hist, guiOpts.left.smooth.vWidth);
+	var maxVLeft	= ImgProc.getMaxHistogram(hist);
+	if( guiOpts.left.disp.VHist )	ImgProc.displayVerticalHistogram(imageData, hist);
 	// horizontal coord Y discovery
-	var hist	= ImageData.computeHorizontalHistogram(leftData, function(p, i){
+	var hist	= ImgProc.computeHorizontalHistogram(leftData, function(p, i){
 		return p[i+1] !== 0 ? true : false;
 	});
-	ImageData.windowedAverageHistogram(hist, guiOpts.left.smooth.hWidth);
-	var maxHLeft	= ImageData.getMaxHistogram(hist);
-	if( guiOpts.left.disp.HHist )	ImageData.displayHorizontalHistogram(imageData, hist);
+	ImgProc.windowedAverageHistogram(hist, guiOpts.left.smooth.hWidth);
+	var maxHLeft	= ImgProc.getMaxHistogram(hist);
+	if( guiOpts.left.disp.HHist )	ImgProc.displayHorizontalHistogram(imageData, hist);
 	
 // Display Crosses
 	// right
-	if( guiOpts.right.disp.VLine )	ImageData.vline(imageData, maxVRight.idx, 0, 0, 255);
-	if( guiOpts.right.disp.HLine )	ImageData.hline(imageData, maxHRight.idx, 0, 0, 255);
+	if( guiOpts.right.disp.VLine )	ImgProc.vline(imageData, maxVRight.idx, 0, 0, 255);
+	if( guiOpts.right.disp.HLine )	ImgProc.hline(imageData, maxHRight.idx, 0, 0, 255);
 	// left
-	if( guiOpts.left.disp.VLine )	ImageData.vline(imageData, maxVLeft.idx, 0, 255, 0);
-	if( guiOpts.left.disp.HLine )	ImageData.hline(imageData, maxHLeft.idx, 0, 255, 0);
-
+	if( guiOpts.left.disp.VLine )	ImgProc.vline(imageData, maxVLeft.idx, 0, 255, 0);
+	if( guiOpts.left.disp.HLine )	ImgProc.hline(imageData, maxHLeft.idx, 0, 255, 0);
 
 // pointer Right
 	var pointerR	= this._pointerR;
 	pointerR.x	+= (maxVRight.idx - pointerR.x) * guiOpts.right.pointer.coordSmoothV;
 	pointerR.y	+= (maxHRight.idx - pointerR.y) * guiOpts.right.pointer.coordSmoothH;
 	if( guiOpts.right.pointer.display ){
-		ImageData.vline(imageData, Math.floor(pointerR.x), 255, 0, 255);
-		ImageData.hline(imageData, Math.floor(pointerR.y), 255, 0, 255);
+		ImgProc.vline(imageData, Math.floor(pointerR.x), 255, 0, 255);
+		ImgProc.hline(imageData, Math.floor(pointerR.y), 255, 0, 255);
 	}
 // pointer Left
 	var pointerL	= this._pointerL;
 	pointerL.x	+= (maxVLeft.idx - pointerL.x) * guiOpts.left.pointer.coordSmoothV;
 	pointerL.y	+= (maxHLeft.idx - pointerL.y) * guiOpts.left.pointer.coordSmoothH;
 	if( guiOpts.left.pointer.display ){
-		ImageData.vline(imageData, Math.floor(pointerL.x), 255, 0, 0);
-		ImageData.hline(imageData, Math.floor(pointerL.y), 255, 0, 0);
+		ImgProc.vline(imageData, Math.floor(pointerL.x), 255, 0, 0);
+		ImgProc.hline(imageData, Math.floor(pointerL.y), 255, 0, 0);
 	}
-
 
 	// update the canvas
 	ctx.putImageData(imageData, 0, 0);
-	// mark the texture as needsUpdate
-	this._texture.needsUpdate	= true;
 	// notify the event
 	this.trigger('update', pointerR, pointerL);
 }

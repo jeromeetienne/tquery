@@ -1,7 +1,7 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 
-<script src="imagedata.js"></script>
+<script src="imageprocessing.js"></script>
 <script src="../tquery.createaugmentedjoystick.js"></script>
 <script src="../tquery.gesturerecognition.js"></script>
 
@@ -16,38 +16,30 @@
 	world.removeCameraControls();
 
 	var aJoystick	= new tQuery.AugmentedJoystick();
-	var texture	= aJoystick.texture();
 	
 	// put the debug texture on top
-	var domElement	= texture.image;
-	document.body.appendChild(texture.image);
-	domElement.style.position	= 'absolute';
-	domElement.style.bottom		= '0px';
-	domElement.style.right		= '0px';
-	domElement.style.width		= "320px";
-	domElement.style.width		= "240px";
+	if( true ){
+		var domElement	= aJoystick.canvas();
+		document.body.appendChild(domElement);
+		domElement.style.position	= 'absolute';
+		domElement.style.bottom		= '0px';
+		domElement.style.right		= '0px';
+		domElement.style.width		= "320px";
+		domElement.style.height		= "240px";		
+
+		domElement.style.width		= "100%";
+		domElement.style.height		= "100%";		
+	}
 	
-	// TODO put the gesture out
 	var gestureR	= new tQuery.GestureRecognition();
 	var gestureL	= new tQuery.GestureRecognition();
 	aJoystick.bind('update', function(pointerR, pointerL){
-		var canvas	= aJoystick.texture().image;
+		var canvas	= aJoystick.canvas();
 		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
 		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
-		//if( eventR )	console.log("gestureR event", eventR)
-		//if( eventL )	console.log("gestureL event", eventL)
+		if( eventR )	console.log("gesture RIGHT event", eventR)
+		if( eventL )	console.log("gesture LEFT  event", eventL)
 	});
-
-
-	//console.log("texture", texture)
-
-	var material	= new THREE.MeshBasicMaterial({
-		//color	: 0x4488FF,
-		map	: texture
-	});
-	var object	= tQuery.createPlane(2, 1, material).scaleBy(2).addTo(world);
-
-
 </script>
 
 </body>

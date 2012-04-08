@@ -19,18 +19,18 @@ var DatGuiOpts	= function(){
 			VLine	: false,
 			HLine	: false
 		},
-		threshold	: {
+		colorFilter	: {
 			r	: {
-				min	: 140,
+				min	: 125,
 				max	: 255
 			},
 			g	: {
-				min	:  41,
+				min	:   3,
 				max	: 140
 			},
 			b	: {
 				min	:  10,
-				max	: 100
+				max	:  90
 			}
 		},
 		smooth	: {
@@ -51,18 +51,95 @@ var DatGuiOpts	= function(){
 			VLine	: false,
 			HLine	: false
 		},
-		threshold	: {
+		colorFilter	: {
 			r	: {
 				min	:   0,
-				max	: 145
+				max	:  80
 			},
 			g	: {
-				min	: 145,
+				min	:  70,
 				max	: 255
 			},
 			b	: {
 				min	:   0,
-				max	: 155
+				max	: 113
+			}
+		},
+		smooth	: {
+			vWidth	: 9,
+			hWidth	: 9,
+			minVHist: 10,
+			minHHist: 10
+		}
+	};
+};
+
+
+var DatGuiOpts	= function(){
+	this.general	= {
+		video	: {
+			w		: 320/4,
+			h		: 240/4,
+			frameRate	: 1
+		}
+	};
+	this.right	= {
+		pointer	: {
+			display		: true,
+			coordSmoothV	: 0.3,
+			coordSmoothH	: 0.3
+		},
+		disp	: {
+			enable	: false,
+			VHist	: false,
+			HHist	: false,
+			VLine	: false,
+			HLine	: false
+		},
+		colorFilter	: {
+			r	: {
+				min	: 125,
+				max	: 255
+			},
+			g	: {
+				min	:   3,
+				max	: 140
+			},
+			b	: {
+				min	:  10,
+				max	:  90
+			}
+		},
+		smooth	: {
+			vWidth	: 9,
+			hWidth	: 9
+		}
+	};
+	this.left	= {
+		pointer	: {
+			display		: true,
+			coordSmoothV	: 0.3,
+			coordSmoothH	: 0.3
+		},
+		disp	: {
+			enable	: false,
+			VHist	: false,
+			HHist	: false,
+			VLine	: false,
+			HLine	: false
+		},
+		colorFilter	: {
+			r	: {
+				min	:   0,
+				max	:  80
+			},
+			g	: {
+				min	:  70,
+				max	: 255
+			},
+			b	: {
+				min	:   0,
+				max	: 113
 			}
 		},
 		smooth	: {
@@ -99,12 +176,12 @@ window.addEventListener('load', function(){
 // Right Threshold folder
 	var folder	= gui.addFolder('Right Threshold');
 	//folder.open();
-	folder.add(guiOpts.right.threshold.r	, 'min', 0, 255).name('red min');
-	folder.add(guiOpts.right.threshold.r	, 'max', 0, 255).name('red max');
-	folder.add(guiOpts.right.threshold.g	, 'min', 0, 255).name('green min');
-	folder.add(guiOpts.right.threshold.g	, 'max', 0, 255).name('green max');
-	folder.add(guiOpts.right.threshold.b	, 'min', 0, 255).name('blue min');
-	folder.add(guiOpts.right.threshold.b	, 'max', 0, 255).name('blue max');
+	folder.add(guiOpts.right.colorFilter.r	, 'min', 0, 255).name('red min');
+	folder.add(guiOpts.right.colorFilter.r	, 'max', 0, 255).name('red max');
+	folder.add(guiOpts.right.colorFilter.g	, 'min', 0, 255).name('green min');
+	folder.add(guiOpts.right.colorFilter.g	, 'max', 0, 255).name('green max');
+	folder.add(guiOpts.right.colorFilter.b	, 'min', 0, 255).name('blue min');
+	folder.add(guiOpts.right.colorFilter.b	, 'max', 0, 255).name('blue max');
 	folder.add(guiOpts.right.smooth		, 'hWidth', 0, 20).step(1);
 	folder.add(guiOpts.right.smooth		, 'vWidth', 0, 20).step(1);
 
@@ -124,12 +201,12 @@ window.addEventListener('load', function(){
 // Left Threshold folder
 	var folder	= gui.addFolder('Left Threshold');
 	//folder.open();
-	folder.add(guiOpts.left.threshold.r	, 'min', 0, 255).name('red min');
-	folder.add(guiOpts.left.threshold.r	, 'max', 0, 255).name('red max');
-	folder.add(guiOpts.left.threshold.g	, 'min', 0, 255).name('green min');
-	folder.add(guiOpts.left.threshold.g	, 'max', 0, 255).name('green max');
-	folder.add(guiOpts.left.threshold.b	, 'min', 0, 255).name('blue min');
-	folder.add(guiOpts.left.threshold.b	, 'max', 0, 255).name('blue max');
+	folder.add(guiOpts.left.colorFilter.r	, 'min', 0, 255).name('red min');
+	folder.add(guiOpts.left.colorFilter.r	, 'max', 0, 255).name('red max');
+	folder.add(guiOpts.left.colorFilter.g	, 'min', 0, 255).name('green min');
+	folder.add(guiOpts.left.colorFilter.g	, 'max', 0, 255).name('green max');
+	folder.add(guiOpts.left.colorFilter.b	, 'min', 0, 255).name('blue min');
+	folder.add(guiOpts.left.colorFilter.b	, 'max', 0, 255).name('blue max');
 	folder.add(guiOpts.left.smooth		, 'vWidth', 0, 20).step(1);
 	folder.add(guiOpts.left.smooth		, 'hWidth', 0, 20).step(1);
 
