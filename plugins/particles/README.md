@@ -18,6 +18,8 @@
 
 ## TODO
 * do a benchmark without display
+* all in typed array
+* support worker
 * how to link it with three.js, tquery, canvas2d
   * well it depends on the backend
   * which parameters may change the appearance ?
