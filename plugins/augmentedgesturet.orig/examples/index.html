@@ -2,7 +2,6 @@
 <script src="../../../build/tquery-bundle.js"></script>
 
 <script src="imageprocessing.js"></script>
-<script src="requestanimationframe.js"></script>
 <script src="../tquery.augmentedgesture.js"></script>
 <script src="../tquery.gesturerecognition.js"></script>
 
@@ -13,9 +12,10 @@
 	<div id="augmentedJoystick"></div>
 <script>
 	var world	= tQuery.createWorld().boilerplate().start();
+	world.camera().position.z	= 3;
+	world.removeCameraControls();
 
-
-	var aGesture	= new AugmentedGesture();
+	var aGesture	= new tQuery.AugmentedGesture();
 
 	// put the debug texture on top
 	if( true ){
@@ -31,22 +31,15 @@
 		domElement.style.height		= "100%";		
 	}
 	
-	function update(){
-		// loop the request anmation frame
-		requestAnimationFrame(update);
-		aGesture.update();
-	};
-	requestAnimationFrame(update);
-
-	//var gestureR	= new tQuery.GestureRecognition();
-	//var gestureL	= new tQuery.GestureRecognition();
-	//aGesture.bind('update', function(pointerR, pointerL){
-	//	var canvas	= aGesture.canvas();
-	//	var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
-	//	var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
-	//	if( eventR )	console.log("gesture RIGHT event", eventR)
-	//	if( eventL )	console.log("gesture LEFT  event", eventL)
-	//});
+	var gestureR	= new tQuery.GestureRecognition();
+	var gestureL	= new tQuery.GestureRecognition();
+	aGesture.bind('update', function(pointerR, pointerL){
+		var canvas	= aGesture.canvas();
+		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
+		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
+		if( eventR )	console.log("gesture RIGHT event", eventR)
+		if( eventL )	console.log("gesture LEFT  event", eventL)
+	});
 </script>
 
 </body>

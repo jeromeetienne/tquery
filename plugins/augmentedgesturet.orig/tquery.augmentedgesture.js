@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////////
-//		Augmented gesture								//
-//////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Create tQuery.Scene
 */
-AugmentedGesture	= function(){
+tQuery.register('AugmentedGesture', function(opts){
+	// handle parameters
+	opts	= tQuery.extend(opts, {
+		loop	: tQuery.world.loop()
+	});
+
 	// init usermedia webcam
-	if( !AugmentedGesture.hasUserMedia )	alert('Panic: no UserMedia')
-	console.assert( AugmentedGesture.hasUserMedia, "no usermedia available");
+	if( !tQuery.AugmentedGesture.hasUserMedia )	alert('Panic: no UserMedia')
+	console.assert( tQuery.AugmentedGesture.hasUserMedia, "no usermedia available");
 	this._video	= this._videoCtor();
 
 	this._frameCount= 0;
@@ -21,44 +22,37 @@ AugmentedGesture	= function(){
 	// gesture recognition
 	this._pointerR	= { x : canvas.width/2, y : canvas.height/2	};
 	this._pointerL	= { x : canvas.width/2,	y : canvas.height/2	};
-};
+
+	// init render loop
+	this._$loopCb		= this._loopCb.bind(this);
+	opts.loop.hook(this._$loopCb);
+});
 
 // make it eventable
-tQuery.MicroeventMixin(AugmentedGesture.prototype);
+tQuery.MicroeventMixin(tQuery.AugmentedGesture.prototype);
 
-/**
- * Destructor
-*/
-AugmentedGesture.destroy	= function(){
+tQuery.AugmentedGesture.destroy	= function(){
+	opts.loop.unhook( this._$loopCb );
 }
 
 /**
  * equal to hasUserMedia
 */
-AugmentedGesture.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
+tQuery.AugmentedGesture.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
 
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Getter								//
-//////////////////////////////////////////////////////////////////////////////////
-
-AugmentedGesture.prototype.canvas	= function(){
+tQuery.AugmentedGesture.prototype.canvas	= function(){
 	return this._canvas;
 }
 
-AugmentedGesture.prototype.pointerR	= function(){
+tQuery.AugmentedGesture.prototype.pointerR	= function(){
 	return this._pointerR;
 }
 
-AugmentedGesture.prototype.pointerL	= function(){
+tQuery.AugmentedGesture.prototype.pointerL	= function(){
 	return this._pointerL;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-AugmentedGesture.prototype._videoCtor	= function(){
+tQuery.AugmentedGesture.prototype._videoCtor	= function(){
 	var video	= document.createElement('video');
 	video.width	= 320;
 	video.height	= 240;
@@ -72,10 +66,7 @@ AugmentedGesture.prototype._videoCtor	= function(){
 	return video;
 }
 
-/**
- * When the video update
-*/
-AugmentedGesture.prototype.update	= function()
+tQuery.AugmentedGesture.prototype._loopCb	= function()
 {
 	var canvas	= this._canvas;
 	var ctx		= canvas.getContext("2d");

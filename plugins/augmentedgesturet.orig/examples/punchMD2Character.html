@@ -1,0 +1,124 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="imageprocessing.js"></script>
+<script src="../tquery.augmentedgesture.js"></script>
+<script src="../tquery.gesturerecognition.js"></script>
+
+<script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
+<script src="./handleDatGui.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+
+<script src='../../checkerboard/tquery.checkerboard.js'></script>
+<script src='../../fog/tquery.world.createfog.js'></script>
+
+<script src="../../md2character/tquery.md2character.js"></script>
+<script src="../../md2character/tquery.md2character.cameracontrols.js"></script>
+
+<script src="../../md2character/tquery.md2character.ratamahatta.js"></script>
+<script src="../../md2character/tquery.md2character.ratamahatta.keyboard.js"></script>
+
+<script src="../../webaudio/tquery.webaudio.js"></script>
+
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.camera().position.z	= 3;
+	world.removeCameraControls();
+
+	// change renderer clear color
+	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
+
+	// add a fog
+	world.addFogExp2({density : 0.15});
+
+	world.enableWebAudio();
+
+	// add a checkboard, 1 tile per 1 units
+	tQuery.createCheckerboard({
+		segmentsW	: 100,
+		segmentsH	: 100
+	}).addTo(world).scaleBy(100);
+
+	var aGesture	= new tQuery.AugmentedGesture();
+
+	// put the debug texture on top
+	var domElement	= aGesture.canvas();
+	document.body.appendChild(domElement);
+	domElement.style.position	= 'absolute';
+	domElement.style.top		= '0px';
+	domElement.style.left		= '0px';
+	domElement.style.width		= "320px";
+	domElement.style.height		= "240px";
+	if( false ){
+		domElement.style.width	= "100%";
+		domElement.style.height	= "100%";		
+	}
+
+	// Add lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFFFFFF).intensity(1);
+
+	var character	= new tQuery.RatamahattaMD2Character({
+		baseUrl	: '../../md2character/examples/ratamahatta/'
+	}).attach(world);
+	//character.hookKeyboard();
+	character.bind('animationCompleted', function(character, animationName){
+		console.log("anim completed", animationName);
+		this.animation('stand');
+	});
+	character.bind('loaded', function(){
+		console.log("Character loaded");
+		console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
+		if( false ){
+			setTimeout(function(){
+			    character.setSkin(Math.floor(Math.random()*5 % 5));
+			    character.setWeapon(Math.floor(Math.random()*11 % 11));
+			}, 1000);			
+		}
+	});
+
+	// set the cameraControls	
+	world.setCameraControls(new tQuery.MD2Character.CameraControls({
+		character	: character,
+		deltaPosition	: new THREE.Vector3(0,2,5).normalize().multiplyScalar(3),
+	}))
+
+	// gesture recognition based on augmentedJoystick pointers
+	var gestureR	= new tQuery.GestureRecognition();
+	var gestureL	= new tQuery.GestureRecognition();
+	aGesture.bind('update', function(pointerR, pointerL){
+		var canvas	= aGesture.canvas();
+		// parse the pointer coordinate and convert into events
+		var eventR	= gestureR.update(pointerR.x, pointerR.y, canvas.width, canvas.height);
+		var eventL	= gestureL.update(pointerL.x, pointerL.y, canvas.width, canvas.height);
+		// log the event
+		if( eventR )	console.log("gestureR event", eventR)
+		if( eventL )	console.log("gestureL event", eventL)
+		// action based on the event
+		if( eventR === 'left' ){
+			character.animation('crdeath');
+			// play a sound
+			tQuery.createSound().load('../../assets/sounds/eatghost.mp3', function(sound){
+				sound.play();
+			});
+			// change the skin
+			character.setSkin(Math.floor(Math.random()*5 % 5));
+		}
+		if( eventL === 'right' ){
+			character.animation('crpain');
+			// play a sound
+			tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
+				sound.play();
+			});
+			// change the weapon
+			character.setWeapon(Math.floor(Math.random()*11 % 11));
+		}
+	});
+</script>
+
+</body>
