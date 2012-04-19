@@ -69,7 +69,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-2-28' pubdate>2012-2-28 11:02</time>
+			<time datetime='2012-3-19' pubdate>2012-3-19 10:17</time>
 		</footer>
 	</div>
 </div>
@@ -205,7 +205,7 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.data">data</a></b>(object, key, value)
+													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.data">data</a></b>(object, key, value, mustNotExist)
 													</div>
 													<div class="description">generic getter/setter</div>
 												</td>
@@ -273,7 +273,7 @@
 												<td class="nameDescription">
 													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.pluginsOn">pluginsOn</a></b>(object, dest)
 													</div>
-													<div class="description">Make an object pluginable</div>
+													<div class="description">for backward compatibility only</div>
 												</td>
 											</tr>
 										
@@ -282,7 +282,7 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.removeData">removeData</a></b>(object, key)
+													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.removeData">removeData</a></b>(mustExist, key, mustExist)
 													</div>
 													<div class="description">Same as jQuery.removeData()</div>
 												</td>
@@ -454,7 +454,7 @@
 											
 											<span class="light">{*}</span>
 											
-											<span class="light">tQuery.</span><b>data</b>(object, key, value)
+											<span class="light">tQuery.</span><b>data</b>(object, key, value, mustNotExist)
 										</div>
 										
 										<div class="description">
@@ -488,6 +488,12 @@
 														
 													</dt>
 													<dd>the value to set (optional)</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Boolean}</span> <b>mustNotExist</b>
+														
+													</dt>
+													<dd>if true, ensure that the key doesnt already exist, optional default to false</dd>
 												
 											</dl>
 										
@@ -762,53 +768,7 @@ similar to jquery one but much smaller
 										</div>
 										
 										<div class="description">
-											Make an object pluginable
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
-												
-													<dt>
-														<span class="light fixedFont">{Object}</span> <b>object</b>
-														
-													</dt>
-													<dd>the object on which you mixin function</dd>
-												
-													<dt>
-														<span class="light fixedFont">{Object}</span> <b>dest</b>
-														
-													</dt>
-													<dd>the object in which to register the plugin</dd>
-												
-											</dl>
-										
-										
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item7'
-									>
-										<div class="fixedFont heading" id=".removeData">
-											<span class='lighter'>
-											&lt;static&gt; 
-											</span>
-											
-											
-											
-											<span class="light">tQuery.</span><b>removeData</b>(object, key)
-										</div>
-										
-										<div class="description">
-											Same as jQuery.removeData()
+											for backward compatibility only
 											
 											
 											
@@ -828,7 +788,59 @@ similar to jquery one but much smaller
 													<dd></dd>
 												
 													<dt>
+														<b>dest</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item7'
+									>
+										<div class="fixedFont heading" id=".removeData">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">tQuery.</span><b>removeData</b>(mustExist, key, mustExist)
+										</div>
+										
+										<div class="description">
+											Same as jQuery.removeData()
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Boolean}</span> <b>mustExist</b>
+														
+													</dt>
+													<dd>if true, ensure the key does exist, default to false</dd>
+												
+													<dt>
 														<b>key</b>
+														
+													</dt>
+													<dd></dd>
+												
+													<dt>
+														<b>mustExist</b>
 														
 													</dt>
 													<dd></dd>

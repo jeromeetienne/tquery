@@ -256,396 +256,438 @@
 <span class='line'>249</span> 
 <span class='line'>250</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype._addNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'>251</span> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>252</span> </span><span class="WHIT">	</span><span class="COMM">// connect this._lastNode to node if suitable</span><span class="WHIT">
-<span class='line'>253</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._lastNode</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._lastNode.connect</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>254</span> </span><span class="WHIT">	
-<span class='line'>255</span> 	</span><span class="COMM">// update this._firstNode && this._lastNode</span><span class="WHIT">
-<span class='line'>256</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._firstNode</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._firstNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>257</span> </span><span class="WHIT">	</span><span class="NAME">this._lastNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">	</span><span class="COMM">// update this._bufferSourceDst - needed for .cloneBufferSource()</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastIsBufferSource</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._lastNode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'playbackRate'</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">this._lastNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">lastIsBufferSource</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._bufferSourceDst</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>255</span> 
+<span class='line'>256</span> </span><span class="WHIT">	</span><span class="COMM">// connect this._lastNode to node if suitable</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._lastNode</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._lastNode.connect</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>258</span> </span><span class="WHIT">	
-<span class='line'>259</span> 	</span><span class="COMM">// apply properties to the node</span><span class="WHIT">
-<span class='line'>260</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">property</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>261</span> </span><span class="WHIT">		</span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>262</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>263</span> 
-<span class='line'>264</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>265</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>266</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span> 	</span><span class="COMM">// update this._firstNode && this._lastNode</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._firstNode</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">this._firstNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">	</span><span class="NAME">this._lastNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">		
+<span class='line'>263</span> 	</span><span class="COMM">// apply properties to the node</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">property</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">		</span><span class="NAME">node</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">[</span><span class="NAME">property</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>267</span> 
-<span class='line'>268</span> </span><span class="COMM">/**
-<span class='line'>269</span>  * add a bufferSource
-<span class='line'>270</span>  *
-<span class='line'>271</span>  * @param {Object} [properties] properties to set in the created node
-<span class='line'>272</span> */</span><span class="WHIT">
-<span class='line'>273</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.bufferSource</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>274</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createBufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>275</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.bufferSource</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>276</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>277</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>278</span> 
-<span class='line'>279</span> </span><span class="COMM">/**
-<span class='line'>280</span>  * add a panner
-<span class='line'>281</span>  * 
-<span class='line'>282</span>  * @param {Object} [properties] properties to set in the created node
-<span class='line'>283</span> */</span><span class="WHIT">
-<span class='line'>284</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>285</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createPanner</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>286</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>287</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>288</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>289</span> 
-<span class='line'>290</span> </span><span class="COMM">/**
-<span class='line'>291</span>  * add a analyser
-<span class='line'>292</span>  *
-<span class='line'>293</span>  * @param {Object} [properties] properties to set in the created node
-<span class='line'>294</span> */</span><span class="WHIT">
-<span class='line'>295</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>296</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createAnalyser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>297</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>298</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>299</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>300</span> 
-<span class='line'>301</span> 
-<span class='line'>302</span> 
-<span class='line'>303</span> 
-<span class='line'>304</span> 
-<span class='line'>305</span> 
-<span class='line'>306</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>307</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>308</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>309</span> </span><span class="COMM">//		tQuery.WebAudio.Sound						//</span><span class="WHIT">
-<span class='line'>310</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>311</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>312</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>313</span> 
-<span class='line'>314</span> </span><span class="NAME">tQuery.register</span><span class="PUNC">(</span><span class="STRN">'createSound'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">world</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>315</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.WebAudio.Sound</span><span class="PUNC">(</span><span class="NAME">world</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>316</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>317</span> 
-<span class='line'>318</span> </span><span class="COMM">/**
-<span class='line'>319</span>  * sound instance
-<span class='line'>320</span>  *
-<span class='line'>321</span>  * @class Handle one sound for tQuery.WebAudio
-<span class='line'>322</span>  *
-<span class='line'>323</span>  * @param {tQuery.World} [world] the world on which to run
-<span class='line'>324</span>  * @param {tQuery.WebAudio.NodeChainBuilder} [nodeChain] the nodeChain to use
+<span class='line'>268</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>269</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> 
+<span class='line'>272</span> 
+<span class='line'>273</span> </span><span class="COMM">/**
+<span class='line'>274</span>  * Clone the bufferSource. Used just before playing a sound
+<span class='line'>275</span>  * @returns {AudioBufferSourceNode} the clone AudioBufferSourceNode
+<span class='line'>276</span> */</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._nodes.bufferSource</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no buffersource presents. Add one."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">orig</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._nodes.bufferSource</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>280</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">clone</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createBufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">	</span><span class="NAME">clone.buffer</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">orig.buffer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="WHIT">	</span><span class="NAME">clone.playbackRate</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">orig.playbackRate</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="WHIT">	</span><span class="NAME">clone.loop</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">orig.loop</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="WHIT">	</span><span class="NAME">clone.connect</span><span class="PUNC">(</span><span class="NAME">this._bufferSourceDst</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">clone</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>287</span> 
+<span class='line'>288</span> </span><span class="COMM">/**
+<span class='line'>289</span>  * add a bufferSource
+<span class='line'>290</span>  *
+<span class='line'>291</span>  * @param {Object} [properties] properties to set in the created node
+<span class='line'>292</span> */</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.bufferSource</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createBufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.bufferSource</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>298</span> 
+<span class='line'>299</span> </span><span class="COMM">/**
+<span class='line'>300</span>  * add a panner
+<span class='line'>301</span>  * 
+<span class='line'>302</span>  * @param {Object} [properties] properties to set in the created node
+<span class='line'>303</span> */</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createPanner</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>309</span> 
+<span class='line'>310</span> </span><span class="COMM">/**
+<span class='line'>311</span>  * add a analyser
+<span class='line'>312</span>  *
+<span class='line'>313</span>  * @param {Object} [properties] properties to set in the created node
+<span class='line'>314</span> */</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createAnalyser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>317</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>320</span> 
+<span class='line'>321</span> </span><span class="COMM">/**
+<span class='line'>322</span>  * add a gainNode
+<span class='line'>323</span>  *
+<span class='line'>324</span>  * @param {Object} [properties] properties to set in the created node
 <span class='line'>325</span> */</span><span class="WHIT">
-<span class='line'>326</span> </span><span class="NAME">tQuery.WebAudio.Sound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">world</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>327</span> </span><span class="WHIT">	</span><span class="NAME">this._world</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">world</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">world</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.world</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>328</span> </span><span class="WHIT">	</span><span class="NAME">this._webaudio</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._world.getWebAudio</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>329</span> </span><span class="WHIT">	</span><span class="NAME">this._context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._webaudio.context</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>330</span> 
-<span class='line'>331</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._world</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery.World</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>332</span> </span><span class="WHIT">	
-<span class='line'>333</span> 	</span><span class="COMM">// create a default NodeChainBuilder if needed</span><span class="WHIT">
-<span class='line'>334</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>335</span> </span><span class="WHIT">		</span><span class="NAME">nodeChain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder</span><span class="PUNC">(</span><span class="NAME">this._webaudio.context</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>336</span> </span><span class="WHIT">					</span><span class="PUNC">.</span><span class="NAME">bufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">analyser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">panner</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>337</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>338</span> </span><span class="WHIT">	</span><span class="COMM">// setup this._chain</span><span class="WHIT">
-<span class='line'>339</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>340</span> </span><span class="WHIT">	</span><span class="NAME">this._chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>341</span> 
-<span class='line'>342</span> </span><span class="WHIT">	</span><span class="COMM">// connect this._chain.last() node to this._webaudio._entryNode()</span><span class="WHIT">
-<span class='line'>343</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.last</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._webaudio._entryNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>344</span> </span><span class="WHIT">	
-<span class='line'>345</span> 	</span><span class="COMM">// create some alias</span><span class="WHIT">
-<span class='line'>346</span> </span><span class="WHIT">	</span><span class="NAME">this._source</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">bufferSource</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>347</span> </span><span class="WHIT">	</span><span class="NAME">this._analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">analyser</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>348</span> </span><span class="WHIT">	</span><span class="NAME">this._panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">panner</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>349</span> </span><span class="WHIT">	
-<span class='line'>350</span> 	</span><span class="COMM">// sanity check</span><span class="WHIT">
-<span class='line'>351</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._source</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no bufferSource: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>352</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._analyser</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no analyser: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>353</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._panner</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no panner: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>354</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>355</span> 
-<span class='line'>356</span> </span><span class="COMM">/**
-<span class='line'>357</span>  * destructor
-<span class='line'>358</span> */</span><span class="WHIT">
-<span class='line'>359</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>360</span> </span><span class="WHIT">	</span><span class="COMM">// disconnect from this._webaudio</span><span class="WHIT">
-<span class='line'>361</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.last</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">disconnect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>362</span> </span><span class="WHIT">	</span><span class="COMM">// destroy this._chain</span><span class="WHIT">
-<span class='line'>363</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>364</span> </span><span class="WHIT">	</span><span class="NAME">this._chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>365</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>366</span> 
-<span class='line'>367</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>368</span> </span><span class="COMM">//										//</span><span class="WHIT">
-<span class='line'>369</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>370</span> 
-<span class='line'>371</span> </span><span class="COMM">/**
-<span class='line'>372</span>  * follow a object3D
-<span class='line'>373</span> */</span><span class="WHIT">
-<span class='line'>374</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.follow</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>375</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this.isFollowing</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>376</span> </span><span class="WHIT">	</span><span class="COMM">// handle parameter</span><span class="WHIT">
-<span class='line'>377</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>378</span> </span><span class="WHIT">		</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">object3d.length</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>379</span> </span><span class="WHIT">		</span><span class="NAME">object3d</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>380</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>381</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
-<span class='line'>382</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>383</span> 
-<span class='line'>384</span> </span><span class="WHIT">	</span><span class="COMM">// hook the world loop</span><span class="WHIT">
-<span class='line'>385</span> </span><span class="WHIT">	</span><span class="NAME">this._followCb</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>386</span> </span><span class="WHIT">		</span><span class="NAME">this.updateWithObject3d</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>387</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>388</span> </span><span class="WHIT">	</span><span class="NAME">this._world.loop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">hook</span><span class="PUNC">(</span><span class="NAME">this._followCb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>389</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>390</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>391</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>392</span> 
-<span class='line'>393</span> </span><span class="COMM">/**
-<span class='line'>394</span>  * unfollow the object3D if any
-<span class='line'>395</span> */</span><span class="WHIT">
-<span class='line'>396</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.unfollow</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>397</span> </span><span class="WHIT">	</span><span class="NAME">this._world.loop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">unhook</span><span class="PUNC">(</span><span class="NAME">this._followCb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>398</span> </span><span class="WHIT">	</span><span class="NAME">this._followCb</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>399</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>400</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>401</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>402</span> 
-<span class='line'>403</span> </span><span class="COMM">/**
-<span class='line'>404</span>  * @returns {Boolean} true if this sound is following a object3d, false overwise
-<span class='line'>405</span> */</span><span class="WHIT">
-<span class='line'>406</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.isFollowing</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>407</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._followCb</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>408</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>409</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>410</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>411</span> 
-<span class='line'>412</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>413</span> </span><span class="COMM">//										//</span><span class="WHIT">
-<span class='line'>414</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>415</span> 
-<span class='line'>416</span> </span><span class="COMM">/**
-<span class='line'>417</span>  * getter of the chain nodes
-<span class='line'>418</span> */</span><span class="WHIT">
-<span class='line'>419</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.nodes</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>420</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>421</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>422</span> 
-<span class='line'>423</span> </span><span class="COMM">/**
-<span class='line'>424</span>  * @returns {Boolean} true if the sound is playable, false otherwise
-<span class='line'>425</span> */</span><span class="WHIT">
-<span class='line'>426</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.isPlayable</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>427</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._source.buffer</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>428</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>429</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>430</span> 
-<span class='line'>431</span> </span><span class="COMM">/**
-<span class='line'>432</span>  * play the sound
-<span class='line'>433</span>  *
-<span class='line'>434</span>  * @param {Number} [time] time when to play the sound
-<span class='line'>435</span> */</span><span class="WHIT">
-<span class='line'>436</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.play</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>437</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT">  </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>438</span> </span><span class="WHIT">	</span><span class="NAME">this._source.noteOn</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>439</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>440</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>441</span> 
-<span class='line'>442</span> </span><span class="COMM">/**
-<span class='line'>443</span>  * stop the sound
-<span class='line'>444</span>  *
-<span class='line'>445</span>  * @param {Number} [time] time when to stop the sound
-<span class='line'>446</span> */</span><span class="WHIT">
-<span class='line'>447</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.stop</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>448</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT">  </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>449</span> </span><span class="WHIT">	</span><span class="NAME">this._source.noteOff</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>450</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>451</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>452</span> 
-<span class='line'>453</span> </span><span class="COMM">/**
-<span class='line'>454</span>  * getter/setter on the volume
-<span class='line'>455</span>  *
-<span class='line'>456</span>  * @param {Number} [value] the value to set, if not provided, get current value
-<span class='line'>457</span> */</span><span class="WHIT">
-<span class='line'>458</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.volume</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>459</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._source.gain.value</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>460</span> </span><span class="WHIT">	</span><span class="NAME">this._source.gain.value</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>461</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>462</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>463</span> 
-<span class='line'>464</span> </span><span class="COMM">/**
-<span class='line'>465</span>  * Set parameter for the pannerCone
-<span class='line'>466</span>  *
-<span class='line'>467</span>  * @param {Number} innerAngle the inner cone hangle in radian
-<span class='line'>468</span>  * @param {Number} outerAngle the outer cone hangle in radian
-<span class='line'>469</span>  * @param {Number} outerGain the gain to apply when in the outerCone
-<span class='line'>470</span> */</span><span class="WHIT">
-<span class='line'>471</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerCone</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">innerAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outerAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outerGain</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>472</span> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>473</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">innerAngle</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>474</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">outerAngle</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>475</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">outerGain</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>476</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>477</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>478</span> 
-<span class='line'>479</span> </span><span class="COMM">/**
-<span class='line'>480</span>  * getter/setter on the pannerConeInnerAngle
-<span class='line'>481</span>  * 
-<span class='line'>482</span>  * @param {Number} value the angle in radian
-<span class='line'>483</span> */</span><span class="WHIT">
-<span class='line'>484</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerConeInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>485</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>486</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>487</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>488</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>489</span> 
-<span class='line'>490</span> </span><span class="COMM">/**
-<span class='line'>491</span>  * getter/setter on the pannerConeOuterAngle
-<span class='line'>492</span>  *
-<span class='line'>493</span>  * @param {Number} value the angle in radian
-<span class='line'>494</span> */</span><span class="WHIT">
-<span class='line'>495</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerConeOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>496</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>497</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>498</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>499</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>500</span> 
-<span class='line'>501</span> </span><span class="COMM">/**
-<span class='line'>502</span>  * getter/setter on the pannerConeOuterGain
-<span class='line'>503</span>  * 
-<span class='line'>504</span>  * @param {Number} value the value
-<span class='line'>505</span> */</span><span class="WHIT">
-<span class='line'>506</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerConeOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>507</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._panner.coneOuterGain</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>508</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>509</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>510</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>511</span> 
-<span class='line'>512</span> </span><span class="COMM">/**
-<span class='line'>513</span>  * compute the amplitude of the sound (not sure at all it is the proper term)
-<span class='line'>514</span>  *
-<span class='line'>515</span>  * @param {Number} width the number of frequencyBin to take into account
-<span class='line'>516</span>  * @returns {Number} return the amplitude of the sound
-<span class='line'>517</span> */</span><span class="WHIT">
-<span class='line'>518</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.amplitude</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>519</span> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>520</span> </span><span class="WHIT">	</span><span class="COMM">// handle paramerter</span><span class="WHIT">
-<span class='line'>521</span> </span><span class="WHIT">	</span><span class="NAME">width</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>522</span> </span><span class="WHIT">	</span><span class="COMM">// inint variable</span><span class="WHIT">
-<span class='line'>523</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._analyser</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>524</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">freqByte</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Uint8Array</span><span class="PUNC">(</span><span class="NAME">analyser.frequencyBinCount</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>525</span> </span><span class="WHIT">	</span><span class="COMM">// get the frequency data</span><span class="WHIT">
-<span class='line'>526</span> </span><span class="WHIT">	</span><span class="NAME">analyser.getByteFrequencyData</span><span class="PUNC">(</span><span class="NAME">freqByte</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>527</span> </span><span class="WHIT">	</span><span class="COMM">// compute the sum</span><span class="WHIT">
-<span class='line'>528</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sum</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>529</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>530</span> </span><span class="WHIT">		</span><span class="NAME">sum</span><span class="WHIT">	</span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">freqByte</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>531</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>532</span> </span><span class="WHIT">	</span><span class="COMM">// complute the amplitude</span><span class="WHIT">
-<span class='line'>533</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">amplitude</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sum</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">*</span><span class="NUMB">256</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>534</span> </span><span class="WHIT">	</span><span class="COMM">// return ampliture</span><span class="WHIT">
-<span class='line'>535</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">amplitude</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>536</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>537</span> 
-<span class='line'>538</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>539</span> </span><span class="COMM">//										//</span><span class="WHIT">
-<span class='line'>540</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>541</span> 
-<span class='line'>542</span> </span><span class="COMM">/**
-<span class='line'>543</span>  * Update the source with object3d. usefull for positional sounds
-<span class='line'>544</span>  * 
-<span class='line'>545</span>  * @param {THREE.Object3D} object3d the object which originate the source
-<span class='line'>546</span>  * @param {Number} deltaTime the number of seconds since last update
+<span class='line'>326</span> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder.prototype.gainNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context.createGainNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">	</span><span class="NAME">this._nodes.gainNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._addNode</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> 
+<span class='line'>332</span> 
+<span class='line'>333</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>336</span> </span><span class="COMM">//		tQuery.WebAudio.Sound						//</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>340</span> 
+<span class='line'>341</span> </span><span class="NAME">tQuery.register</span><span class="PUNC">(</span><span class="STRN">'createSound'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">world</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.WebAudio.Sound</span><span class="PUNC">(</span><span class="NAME">world</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>344</span> 
+<span class='line'>345</span> </span><span class="COMM">/**
+<span class='line'>346</span>  * sound instance
+<span class='line'>347</span>  *
+<span class='line'>348</span>  * @class Handle one sound for tQuery.WebAudio
+<span class='line'>349</span>  *
+<span class='line'>350</span>  * @param {tQuery.World} [world] the world on which to run
+<span class='line'>351</span>  * @param {tQuery.WebAudio.NodeChainBuilder} [nodeChain] the nodeChain to use
+<span class='line'>352</span> */</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="NAME">tQuery.WebAudio.Sound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">world</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="WHIT">	</span><span class="NAME">this._world</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">world</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">world</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.world</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">	</span><span class="NAME">this._webaudio</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._world.getWebAudio</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="WHIT">	</span><span class="NAME">this._context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._webaudio.context</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> 
+<span class='line'>358</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._world</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery.World</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">	
+<span class='line'>360</span> 	</span><span class="COMM">// create a default NodeChainBuilder if needed</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="WHIT">		</span><span class="NAME">nodeChain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder</span><span class="PUNC">(</span><span class="NAME">this._context</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">					</span><span class="PUNC">.</span><span class="NAME">bufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">gainNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">analyser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">panner</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="WHIT">	</span><span class="COMM">// setup this._chain</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery.WebAudio.NodeChainBuilder</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="WHIT">	</span><span class="NAME">this._chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">nodeChain</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>368</span> 
+<span class='line'>369</span> </span><span class="WHIT">	</span><span class="COMM">// connect this._chain.last() node to this._webaudio._entryNode()</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.last</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">connect</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._webaudio._entryNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>371</span> </span><span class="WHIT">	
+<span class='line'>372</span> 	</span><span class="COMM">// create some alias</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">	</span><span class="NAME">this._source</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">bufferSource</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">gainNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">	</span><span class="NAME">this._analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">analyser</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>376</span> </span><span class="WHIT">	</span><span class="NAME">this._panner</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">panner</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">	
+<span class='line'>378</span> 	</span><span class="COMM">// sanity check</span><span class="WHIT">
+<span class='line'>379</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._source</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no bufferSource: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._gainNode</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no gainNode: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._analyser</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no analyser: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">this._panner</span><span class="WHIT">	</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"no panner: not yet supported"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>384</span> 
+<span class='line'>385</span> </span><span class="COMM">/**
+<span class='line'>386</span>  * destructor
+<span class='line'>387</span> */</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">	</span><span class="COMM">// disconnect from this._webaudio</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.last</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">disconnect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">	</span><span class="COMM">// destroy this._chain</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">	</span><span class="NAME">this._chain.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">	</span><span class="NAME">this._chain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> 
+<span class='line'>396</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="COMM">//		TODO put that in a plugins					//</span><span class="WHIT">
+<span class='line'>398</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>399</span> 
+<span class='line'>400</span> </span><span class="COMM">/**
+<span class='line'>401</span>  * follow a object3D
+<span class='line'>402</span> */</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.follow</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this.isFollowing</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">	</span><span class="COMM">// handle parameter</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">tQuery.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="WHIT">		</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">object3d.length</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>408</span> </span><span class="WHIT">		</span><span class="NAME">object3d</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object3d.get</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>409</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>410</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>412</span> 
+<span class='line'>413</span> </span><span class="WHIT">	</span><span class="COMM">// hook the world loop</span><span class="WHIT">
+<span class='line'>414</span> </span><span class="WHIT">	</span><span class="NAME">this._followCb</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="WHIT">		</span><span class="NAME">this.updateWithObject3d</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">	</span><span class="NAME">this._world.loop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">hook</span><span class="PUNC">(</span><span class="NAME">this._followCb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>421</span> 
+<span class='line'>422</span> </span><span class="COMM">/**
+<span class='line'>423</span>  * unfollow the object3D if any
+<span class='line'>424</span> */</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.unfollow</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">	</span><span class="NAME">this._world.loop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">unhook</span><span class="PUNC">(</span><span class="NAME">this._followCb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">	</span><span class="NAME">this._followCb</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>431</span> 
+<span class='line'>432</span> </span><span class="COMM">/**
+<span class='line'>433</span>  * @returns {Boolean} true if this sound is following a object3d, false overwise
+<span class='line'>434</span> */</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.isFollowing</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._followCb</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>440</span> 
+<span class='line'>441</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>442</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>444</span> 
+<span class='line'>445</span> </span><span class="COMM">/**
+<span class='line'>446</span>  * getter of the chain nodes
+<span class='line'>447</span> */</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.nodes</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._chain.nodes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>451</span> 
+<span class='line'>452</span> </span><span class="COMM">/**
+<span class='line'>453</span>  * @returns {Boolean} true if the sound is playable, false otherwise
+<span class='line'>454</span> */</span><span class="WHIT">
+<span class='line'>455</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.isPlayable</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._source.buffer</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> 
+<span class='line'>459</span> </span><span class="COMM">/**
+<span class='line'>460</span>  * play the sound
+<span class='line'>461</span>  *
+<span class='line'>462</span>  * @param {Number} [time] time when to play the sound
+<span class='line'>463</span> */</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.play</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT">  </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">	</span><span class="COMM">// clone the bufferSource</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">clonedNode</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._chain.cloneBufferSource</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">	</span><span class="COMM">// set the noteOn</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">	</span><span class="NAME">clonedNode.noteOn</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">	</span><span class="COMM">// create the source object</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">source</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>472</span> </span><span class="WHIT">		</span><span class="NAME">node</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">clonedNode</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="WHIT">		</span><span class="NAME">stop</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT">  </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>475</span> </span><span class="WHIT">			</span><span class="NAME">this.node.noteOff</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">source</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">	</span><span class="COMM">// return it</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">source</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>482</span> 
+<span class='line'>483</span> </span><span class="COMM">/**
+<span class='line'>484</span>  * getter/setter on the volume
+<span class='line'>485</span>  *
+<span class='line'>486</span>  * @param {Number} [value] the value to set, if not provided, get current value
+<span class='line'>487</span> */</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.volume</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._gainNode.gain.value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">	</span><span class="NAME">this._gainNode.gain.value</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>493</span> 
+<span class='line'>494</span> 
+<span class='line'>495</span> </span><span class="COMM">/**
+<span class='line'>496</span>  * getter/setter on the loop
+<span class='line'>497</span>  * 
+<span class='line'>498</span>  * @param {Number} [value] the value to set, if not provided, get current value
+<span class='line'>499</span> */</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.loop</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._source.loop</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">	</span><span class="NAME">this._source.loop</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>505</span> 
+<span class='line'>506</span> </span><span class="COMM">/**
+<span class='line'>507</span>  * Set parameter for the pannerCone
+<span class='line'>508</span>  *
+<span class='line'>509</span>  * @param {Number} innerAngle the inner cone hangle in radian
+<span class='line'>510</span>  * @param {Number} outerAngle the outer cone hangle in radian
+<span class='line'>511</span>  * @param {Number} outerGain the gain to apply when in the outerCone
+<span class='line'>512</span> */</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerCone</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">innerAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outerAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">outerGain</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">innerAngle</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">outerAngle</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">outerGain</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>520</span> 
+<span class='line'>521</span> </span><span class="COMM">/**
+<span class='line'>522</span>  * getter/setter on the pannerConeInnerAngle
+<span class='line'>523</span>  * 
+<span class='line'>524</span>  * @param {Number} value the angle in radian
+<span class='line'>525</span> */</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerConeInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneInnerAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> 
+<span class='line'>532</span> </span><span class="COMM">/**
+<span class='line'>533</span>  * getter/setter on the pannerConeOuterAngle
+<span class='line'>534</span>  *
+<span class='line'>535</span>  * @param {Number} value the angle in radian
+<span class='line'>536</span> */</span><span class="WHIT">
+<span class='line'>537</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerConeOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>538</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>539</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterAngle</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NAME">Math.PI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>542</span> 
+<span class='line'>543</span> </span><span class="COMM">/**
+<span class='line'>544</span>  * getter/setter on the pannerConeOuterGain
+<span class='line'>545</span>  * 
+<span class='line'>546</span>  * @param {Number} value the value
 <span class='line'>547</span> */</span><span class="WHIT">
-<span class='line'>548</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.updateWithObject3d</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>549</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
-<span class='line'>550</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>551</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>552</span> 
-<span class='line'>553</span> </span><span class="WHIT">	</span><span class="COMM">// ensure object3d.matrixWorld is up to date</span><span class="WHIT">
-<span class='line'>554</span> </span><span class="WHIT">	</span><span class="NAME">object3d.updateMatrixWorld</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>555</span> </span><span class="WHIT">	
-<span class='line'>556</span> 	</span><span class="NAME">this.updateWithMatrix4</span><span class="PUNC">(</span><span class="NAME">object3d.matrixWorld</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>557</span> </span><span class="WHIT">	
-<span class='line'>558</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>559</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>560</span> 
-<span class='line'>561</span> </span><span class="COMM">/**
-<span class='line'>562</span>  * Update the source with a matrixWorld. usefull for positional sounds
-<span class='line'>563</span>  * 
-<span class='line'>564</span>  * @param {THREE.Matrix4} matrixWorld the matrixWorld describing the position of the sound
-<span class='line'>565</span>  * @param {Number} deltaTime the number of seconds since last update
-<span class='line'>566</span> */</span><span class="WHIT">
-<span class='line'>567</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.updateWithMatrix4</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">matrixWorld</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>568</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
-<span class='line'>569</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">matrixWorld</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Matrix4</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>570</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>571</span> 
-<span class='line'>572</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>573</span> </span><span class="WHIT">	</span><span class="COMM">// set position</span><span class="WHIT">
-<span class='line'>574</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>575</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.setPosition</span><span class="PUNC">(</span><span class="NAME">position.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>576</span> 
-<span class='line'>577</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>578</span> </span><span class="WHIT">	</span><span class="COMM">// set orientation</span><span class="WHIT">
-<span class='line'>579</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.Vector3</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>580</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>581</span> </span><span class="WHIT">	</span><span class="COMM">// zero the translation</span><span class="WHIT">
-<span class='line'>582</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.setPosition</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">z</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>583</span> </span><span class="WHIT">	</span><span class="COMM">// Multiply the 0,0,1 vector by the world matrix and normalize the result.</span><span class="WHIT">
-<span class='line'>584</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.multiplyVector3</span><span class="PUNC">(</span><span class="NAME">vOrientation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>585</span> </span><span class="WHIT">	</span><span class="NAME">vOrientation.normalize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>586</span> </span><span class="WHIT">	</span><span class="COMM">// Set panner orientation</span><span class="WHIT">
-<span class='line'>587</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.setOrientation</span><span class="PUNC">(</span><span class="NAME">vOrientation.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vOrientation.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vOrientation.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>588</span> </span><span class="WHIT">	
-<span class='line'>589</span> 	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>590</span> </span><span class="WHIT">	</span><span class="COMM">// set velocity</span><span class="WHIT">
-<span class='line'>591</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._prevPos</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>592</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>593</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>594</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>595</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">velocity</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">subSelf</span><span class="PUNC">(</span><span class="NAME">this._prevPos</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">divideScalar</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>596</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>597</span> </span><span class="WHIT">		</span><span class="NAME">this._panner.setVelocity</span><span class="PUNC">(</span><span class="NAME">velocity.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>598</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>599</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>600</span> 
-<span class='line'>601</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>602</span> </span><span class="COMM">//										//</span><span class="WHIT">
-<span class='line'>603</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>604</span> 
-<span class='line'>605</span> </span><span class="COMM">/**
-<span class='line'>606</span>  * Load a sound
-<span class='line'>607</span>  *
-<span class='line'>608</span>  * @param {String} url the url of the sound to load
-<span class='line'>609</span>  * @param {Function} callback function to notify once the url is loaded (optional)
-<span class='line'>610</span> */</span><span class="WHIT">
-<span class='line'>611</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>612</span> </span><span class="WHIT">	</span><span class="NAME">this._loadAndDecodeSound</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>613</span> </span><span class="WHIT">		</span><span class="NAME">this._source.buffer</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>614</span> </span><span class="WHIT">		</span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>615</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>616</span> </span><span class="WHIT">		</span><span class="NAME">console.warn</span><span class="PUNC">(</span><span class="STRN">"unable to load sound "</span><span class="PUNC">+</span><span class="NAME">url</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>617</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>618</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>619</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>620</span> 
-<span class='line'>621</span> </span><span class="COMM">/**
-<span class='line'>622</span>  * Load and decode a sound
-<span class='line'>623</span>  *
-<span class='line'>624</span>  * @param {String} url the url where to get the sound
-<span class='line'>625</span>  * @param {Function} onLoad the function called when the sound is loaded and decoded (optional)
-<span class='line'>626</span>  * @param {Function} onError the function called when an error occured (optional)
-<span class='line'>627</span> */</span><span class="WHIT">
-<span class='line'>628</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype._loadAndDecodeSound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onLoad</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>629</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>630</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">request</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">XMLHttpRequest</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>631</span> </span><span class="WHIT">	</span><span class="NAME">request.open</span><span class="PUNC">(</span><span class="STRN">'GET'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>632</span> </span><span class="WHIT">	</span><span class="NAME">request.responseType</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'arraybuffer'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>633</span> </span><span class="WHIT">	</span><span class="COMM">// Decode asynchronously</span><span class="WHIT">
-<span class='line'>634</span> </span><span class="WHIT">	</span><span class="NAME">request.onload</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>635</span> </span><span class="WHIT">		</span><span class="NAME">context.decodeAudioData</span><span class="PUNC">(</span><span class="NAME">request.response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>636</span> </span><span class="WHIT">			</span><span class="NAME">onLoad</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">onLoad</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>637</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>638</span> </span><span class="WHIT">			</span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>639</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>640</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>641</span> </span><span class="WHIT">	</span><span class="COMM">// actually start the request</span><span class="WHIT">
-<span class='line'>642</span> </span><span class="WHIT">	</span><span class="NAME">request.send</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>643</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>644</span> </span></pre></body></html>
+<span class='line'>548</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.pannerConeOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>549</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._panner.coneOuterGain</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>550</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.coneOuterGain</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>551</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>553</span> 
+<span class='line'>554</span> </span><span class="COMM">/**
+<span class='line'>555</span>  * compute the amplitude of the sound (not sure at all it is the proper term)
+<span class='line'>556</span>  *
+<span class='line'>557</span>  * @param {Number} width the number of frequencyBin to take into account
+<span class='line'>558</span>  * @returns {Number} return the amplitude of the sound
+<span class='line'>559</span> */</span><span class="WHIT">
+<span class='line'>560</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.amplitude</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>561</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>562</span> </span><span class="WHIT">	</span><span class="COMM">// handle paramerter</span><span class="WHIT">
+<span class='line'>563</span> </span><span class="WHIT">	</span><span class="NAME">width</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>564</span> </span><span class="WHIT">	</span><span class="COMM">// inint variable</span><span class="WHIT">
+<span class='line'>565</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">analyser</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._analyser</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">freqByte</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Uint8Array</span><span class="PUNC">(</span><span class="NAME">analyser.frequencyBinCount</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>567</span> </span><span class="WHIT">	</span><span class="COMM">// get the frequency data</span><span class="WHIT">
+<span class='line'>568</span> </span><span class="WHIT">	</span><span class="NAME">analyser.getByteFrequencyData</span><span class="PUNC">(</span><span class="NAME">freqByte</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>569</span> </span><span class="WHIT">	</span><span class="COMM">// compute the sum</span><span class="WHIT">
+<span class='line'>570</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sum</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="WHIT">		</span><span class="NAME">sum</span><span class="WHIT">	</span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">freqByte</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>573</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>574</span> </span><span class="WHIT">	</span><span class="COMM">// complute the amplitude</span><span class="WHIT">
+<span class='line'>575</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">amplitude</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sum</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">*</span><span class="NUMB">256</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>576</span> </span><span class="WHIT">	</span><span class="COMM">// return ampliture</span><span class="WHIT">
+<span class='line'>577</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">amplitude</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>578</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>579</span> 
+<span class='line'>580</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>581</span> </span><span class="COMM">//		TODO put that in a plugin					//</span><span class="WHIT">
+<span class='line'>582</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>583</span> 
+<span class='line'>584</span> </span><span class="COMM">/**
+<span class='line'>585</span>  * Update the source with object3d. usefull for positional sounds
+<span class='line'>586</span>  * 
+<span class='line'>587</span>  * @param {THREE.Object3D} object3d the object which originate the source
+<span class='line'>588</span>  * @param {Number} deltaTime the number of seconds since last update
+<span class='line'>589</span> */</span><span class="WHIT">
+<span class='line'>590</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.updateWithObject3d</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object3d</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">object3d</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Object3D</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>594</span> 
+<span class='line'>595</span> </span><span class="WHIT">	</span><span class="COMM">// ensure object3d.matrixWorld is up to date</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">	</span><span class="NAME">object3d.updateMatrixWorld</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">	
+<span class='line'>598</span> 	</span><span class="NAME">this.updateWithMatrix4</span><span class="PUNC">(</span><span class="NAME">object3d.matrixWorld</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">	
+<span class='line'>600</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>601</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>602</span> 
+<span class='line'>603</span> </span><span class="COMM">/**
+<span class='line'>604</span>  * Update the source with a matrixWorld. usefull for positional sounds
+<span class='line'>605</span>  * 
+<span class='line'>606</span>  * @param {THREE.Matrix4} matrixWorld the matrixWorld describing the position of the sound
+<span class='line'>607</span>  * @param {Number} deltaTime the number of seconds since last update
+<span class='line'>608</span> */</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.updateWithMatrix4</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">matrixWorld</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check on parameters</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">matrixWorld</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">THREE.Matrix4</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>613</span> 
+<span class='line'>614</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>615</span> </span><span class="WHIT">	</span><span class="COMM">// set position</span><span class="WHIT">
+<span class='line'>616</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>617</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.setPosition</span><span class="PUNC">(</span><span class="NAME">position.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>618</span> 
+<span class='line'>619</span> </span><span class="WHIT">	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>620</span> </span><span class="WHIT">	</span><span class="COMM">// set orientation</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">THREE.Vector3</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mOrientation</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>623</span> </span><span class="WHIT">	</span><span class="COMM">// zero the translation</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.setPosition</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">z</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="WHIT">	</span><span class="COMM">// Multiply the 0,0,1 vector by the world matrix and normalize the result.</span><span class="WHIT">
+<span class='line'>626</span> </span><span class="WHIT">	</span><span class="NAME">mOrientation.multiplyVector3</span><span class="PUNC">(</span><span class="NAME">vOrientation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">	</span><span class="NAME">vOrientation.normalize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="WHIT">	</span><span class="COMM">// Set panner orientation</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="WHIT">	</span><span class="NAME">this._panner.setOrientation</span><span class="PUNC">(</span><span class="NAME">vOrientation.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vOrientation.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">vOrientation.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">	
+<span class='line'>631</span> 	</span><span class="COMM">////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>632</span> </span><span class="WHIT">	</span><span class="COMM">// set velocity</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">this._prevPos</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>634</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>637</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">velocity</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">subSelf</span><span class="PUNC">(</span><span class="NAME">this._prevPos</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">divideScalar</span><span class="PUNC">(</span><span class="NAME">deltaTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>638</span> </span><span class="WHIT">		</span><span class="NAME">this._prevPos</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matrixWorld.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">		</span><span class="NAME">this._panner.setVelocity</span><span class="PUNC">(</span><span class="NAME">velocity.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">velocity.z</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>642</span> 
+<span class='line'>643</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'>645</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>646</span> 
+<span class='line'>647</span> </span><span class="COMM">/**
+<span class='line'>648</span>  * Load a sound
+<span class='line'>649</span>  *
+<span class='line'>650</span>  * @param {String} url the url of the sound to load
+<span class='line'>651</span>  * @param {Function} callback function to notify once the url is loaded (optional)
+<span class='line'>652</span> */</span><span class="WHIT">
+<span class='line'>653</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>654</span> </span><span class="WHIT">	</span><span class="NAME">this._loadAndDecodeSound</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>655</span> </span><span class="WHIT">		</span><span class="NAME">this._source.buffer</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>656</span> </span><span class="WHIT">		</span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">		</span><span class="NAME">console.warn</span><span class="PUNC">(</span><span class="STRN">"unable to load sound "</span><span class="PUNC">+</span><span class="NAME">url</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>659</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>660</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>662</span> 
+<span class='line'>663</span> </span><span class="COMM">/**
+<span class='line'>664</span>  * Load and decode a sound
+<span class='line'>665</span>  *
+<span class='line'>666</span>  * @param {String} url the url where to get the sound
+<span class='line'>667</span>  * @param {Function} onLoad the function called when the sound is loaded and decoded (optional)
+<span class='line'>668</span>  * @param {Function} onError the function called when an error occured (optional)
+<span class='line'>669</span> */</span><span class="WHIT">
+<span class='line'>670</span> </span><span class="NAME">tQuery.WebAudio.Sound.prototype._loadAndDecodeSound</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onLoad</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>671</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._context</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>672</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">request</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">XMLHttpRequest</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>673</span> </span><span class="WHIT">	</span><span class="NAME">request.open</span><span class="PUNC">(</span><span class="STRN">'GET'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="WHIT">	</span><span class="NAME">request.responseType</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'arraybuffer'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>675</span> </span><span class="WHIT">	</span><span class="COMM">// Decode asynchronously</span><span class="WHIT">
+<span class='line'>676</span> </span><span class="WHIT">	</span><span class="NAME">request.onload</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>677</span> </span><span class="WHIT">		</span><span class="NAME">context.decodeAudioData</span><span class="PUNC">(</span><span class="NAME">request.response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>678</span> </span><span class="WHIT">			</span><span class="NAME">onLoad</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">onLoad</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>680</span> </span><span class="WHIT">			</span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>681</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>682</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>683</span> </span><span class="WHIT">	</span><span class="COMM">// actually start the request</span><span class="WHIT">
+<span class='line'>684</span> </span><span class="WHIT">	</span><span class="NAME">request.send</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>685</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>686</span> </span></pre></body></html>
