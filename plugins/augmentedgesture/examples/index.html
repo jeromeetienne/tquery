@@ -1,10 +1,10 @@
-<!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
+<!doctype html><title>augmented gesture examples</title>
+<script src="requestanimationframe.js"></script>
 
 <script src="imageprocessing.js"></script>
-<script src="requestanimationframe.js"></script>
-<script src="../tquery.augmentedgesture.js"></script>
-<script src="../tquery.gesturerecognition.js"></script>
+
+<script src="../augmentedgesture.js"></script>
+<script src="../gesturerecognition.js"></script>
 
 <script src="../../assets/vendor/dat.gui/dat.gui.js"></script>
 <script src="./handleDatGui.js"></script>
@@ -12,10 +12,12 @@
 <body>
 	<div id="augmentedJoystick"></div>
 <script>
-	var world	= tQuery.createWorld().boilerplate().start();
-
-
-	var aGesture	= new AugmentedGesture();
+	var aGesture	= new AugmentedGesture().start();
+	//aGesture.start();
+	
+	//setTimeout(function(){
+	//	aGesture.destroy();
+	//}, 2000)
 
 	// put the debug texture on top
 	if( true ){
@@ -31,12 +33,10 @@
 		domElement.style.height		= "100%";		
 	}
 	
-	function update(){
-		// loop the request anmation frame
-		requestAnimationFrame(update);
-		aGesture.update();
-	};
-	requestAnimationFrame(update);
+
+	//aGesture.bind('update', function(pointerR, pointerL){
+	//	console.log("update")
+	//});
 
 	//var gestureR	= new tQuery.GestureRecognition();
 	//var gestureL	= new tQuery.GestureRecognition();

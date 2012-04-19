@@ -1,9 +1,9 @@
-tQuery.register('GestureRecognition', function(){
+AugmentedGesture.GestureRecognition	= function(){
 	this._lastEvent	= null;
-});
+};
 
 
-tQuery.GestureRecognition.prototype.update	= function(x, y, areaW, areaH)
+AugmentedGesture.GestureRecognition.prototype.update	= function(x, y, areaW, areaH)
 {
 	var sectionW	= areaW/3;
 	var sectionH	= areaH/3;

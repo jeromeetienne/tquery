@@ -1,12 +1,13 @@
 //////////////////////////////////////////////////////////////////////////////////
-//		Augmented gesture								//
+//		Augmented gesture						//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Create tQuery.Scene
+ * Constructor
 */
 AugmentedGesture	= function(){
 	// init usermedia webcam
+	// - TODO change this by a exception
 	if( !AugmentedGesture.hasUserMedia )	alert('Panic: no UserMedia')
 	console.assert( AugmentedGesture.hasUserMedia, "no usermedia available");
 	this._video	= this._videoCtor();
@@ -23,13 +24,11 @@ AugmentedGesture	= function(){
 	this._pointerL	= { x : canvas.width/2,	y : canvas.height/2	};
 };
 
-// make it eventable
-tQuery.MicroeventMixin(AugmentedGesture.prototype);
-
 /**
  * Destructor
 */
-AugmentedGesture.destroy	= function(){
+AugmentedGesture.prototype.destroy	= function(){
+	this.stop();
 }
 
 /**
@@ -37,6 +36,61 @@ AugmentedGesture.destroy	= function(){
 */
 AugmentedGesture.hasUserMedia	= navigator.webkitGetUserMedia ? true : false;
 
+//////////////////////////////////////////////////////////////////////////////////
+//		MicroEvent							//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * microevents.js - https://github.com/jeromeetienne/microevent.js
+*/
+AugmentedGesture.MicroeventMixin	= function(destObj){
+	destObj.bind	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		this._events[event] = this._events[event]	|| [];
+		this._events[event].push(fct);
+		return fct;
+	};
+	destObj.unbind	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		if( event in this._events === false  )	return;
+		this._events[event].splice(this._events[event].indexOf(fct), 1);
+	};
+	destObj.trigger	= function(event /* , args... */){
+		if(this._events === undefined) 	this._events	= {};
+		if( this._events[event] === undefined )	return;
+		var tmpArray	= this._events[event].slice(); 
+		for(var i = 0; i < tmpArray.length; i++){
+			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+		}
+	}
+};
+
+// make it eventable
+AugmentedGesture.MicroeventMixin(AugmentedGesture.prototype);
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Start/Stop							//
+//////////////////////////////////////////////////////////////////////////////////
+
+
+AugmentedGesture.prototype.start	= function(){
+	// define the callback
+	var updateFn	 = function(){
+		this._reqAnimId	= requestAnimationFrame(updateFn);
+		this._update();
+	}.bind(this);
+	// initiate the looping
+	updateFn();
+	// for chained api
+	return this;
+}
+
+AugmentedGesture.prototype.stop	= function(){
+	cancelAnimationFrame(this._reqAnimId);
+	// for chained api
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Getter								//
@@ -75,7 +129,7 @@ AugmentedGesture.prototype._videoCtor	= function(){
 /**
  * When the video update
 */
-AugmentedGesture.prototype.update	= function()
+AugmentedGesture.prototype._update	= function()
 {
 	var canvas	= this._canvas;
 	var ctx		= canvas.getContext("2d");
