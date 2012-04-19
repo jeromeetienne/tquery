@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>tQuery.Material | tQuery library</title>
+		<title>tQuery.RatamahattaMD2Character | tQuery library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -86,12 +86,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Class <span>tQuery.Material</span>
+					Class <span>tQuery.RatamahattaMD2Character</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						include THREE.Material. It inherit from <a href="../symbols/tQuery.Node.html">tQuery.Node</a>
+						
 					</p>
 						
 					
@@ -99,8 +99,10 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/js_tquery.material.js.html">tquery.material.js</a></li>
+								<li>Defined in: <a href="../symbols/src/plugins_md2character_tquery.md2character.ratamahatta.js.html">tquery.md2character.ratamahatta.js</a></li>
 							
+							<li>Extends <span class="fixedFont">
+								<a href="../symbols/tQuery.MD2Character.html">tQuery.MD2Character</a></span></li>
 							
 						</ul>
 					
@@ -110,7 +112,7 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.Material.">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.RatamahattaMD2Character.">
 							<caption class="sectionTitle">Class Summary</caption>
 							<thead>
 								<tr>
@@ -123,9 +125,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/tQuery.Material.html#constructor">tQuery.Material</a></b>(object)
+											<b><a href="../symbols/tQuery.RatamahattaMD2Character.html#constructor">tQuery.RatamahattaMD2Character</a></b>()
 										</div>
-										<div class="description">Handle material</div>
+										<div class="description">implement Ratamahatta character.</div>
 									</td>
 								</tr>
 							</tbody>
@@ -134,6 +136,58 @@
 				</section>
 			
 			
+			
+				
+				<section>
+					
+						<nav>
+							<div class="props">
+								<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tQuery.RatamahattaMD2Character.">
+									<caption class="sectionTitle">Field Summary</caption>
+									
+									<thead>
+										<tr>
+											<th scope="col">Field Attributes</th>
+											<th scope="col">Field Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+											<tr>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													tQuery.RatamahattaMD2Character.<b><a href="../symbols/tQuery.RatamahattaMD2Character.html#.hookKeyboard">hookKeyboard</a></b>
+													</div>
+													<div class="description">Hook the keyboard</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													tQuery.RatamahattaMD2Character.<b><a href="../symbols/tQuery.RatamahattaMD2Character.html#.unhookKeyboard">unhookKeyboard</a></b>
+													</div>
+													<div class="description">unhook the keyboard</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</div>
+						</nav>
+					
+					
+					
+						<nav>
+							<dl class="inheritsList">
+							
+							</dl>
+						</nav>
+					
+				</section>
 			
 	<!--
 	#### METHODS SUMMARY
@@ -147,7 +201,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tQuery.Material.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tQuery.RatamahattaMD2Character.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -163,9 +217,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Material.html#back">back</a></b>(back)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.RatamahattaMD2Character.html#goForward">goForward</a></b>(angle)
 													</div>
-													<div class="description">getter/setter of the back pointer</div>
+													<div class="description">go forward to a distance</div>
 												</td>
 											</tr>
 										
@@ -174,9 +228,9 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Material.html#each">each</a></b>(callback)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.RatamahattaMD2Character.html#turn">turn</a></b>(angle)
 													</div>
-													<div class="description">loop over element</div>
+													<div class="description">Turn to an angle</div>
 												</td>
 											</tr>
 										
@@ -185,9 +239,20 @@
 											>
 												<td class="attributes">&nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/tQuery.Material.html#get">get</a></b>(callback)
+													<div class="fixedFont"><b><a href="../symbols/tQuery.RatamahattaMD2Character.html#turnLeft">turnLeft</a></b>(angle)
 													</div>
-													<div class="description">Retrieve the elements matched by the tQuery object</div>
+													<div class="description">Turn left</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/tQuery.RatamahattaMD2Character.html#turnRight">turnRight</a></b>(angle)
+													</div>
+													<div class="description">Turn right</div>
 												</td>
 											</tr>
 										
@@ -196,6 +261,12 @@
 							</nav>
 						
 					
+						
+							<nav>
+								<dl class="inheritsList" id="MethodsListInherited">
+								<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html">tQuery.MD2Character</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#animation">animation</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#container">container</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#destroy">destroy</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#isLoaded">isLoaded</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#load">load</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#scale">scale</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#setPlaybackRate">setPlaybackRate</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#setSkin">setSkin</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#setWeapon">setWeapon</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#setWireframe">setWireframe</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tQuery.MD2Character.html#update">update</a></span></dd>
+								</dl>
+							</nav>
 						
 					</div>
 				</section>
@@ -217,27 +288,16 @@
 							</h2>
 							
 							<div class="fixedFont">
-								<b>tQuery.Material</b>(object)
+								<b>tQuery.RatamahattaMD2Character</b>()
 							</div>
 							
 							<div class="description">
-								Handle material
+								implement Ratamahatta character.
 								
 							</div>
 							
 							
 						
-							
-								<dl class="detailList params">
-									<dt class="heading">Parameters:</dt>
-									
-										<dt>
-											<span class="light fixedFont">{THREE.Material}</span>  <b>object</b>
-											
-										</dt>
-										<dd>an instance or array of instance</dd>
-									
-								</dl>
 							
 							
 							
@@ -248,6 +308,68 @@
 	<!--
 	#### FIELD DETAILS
 	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Field Detail
+							</h2>
+							
+							
+								<div class="fixedFont heading" id=".hookKeyboard">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tQuery.RatamahattaMD2Character.</span><b>hookKeyboard</b>							
+								</div>
+								
+								<div class="description">
+									Hook the keyboard
+									
+										<br />
+										<i>Defined in: </i> <a href="../symbols/src/plugins_md2character_tquery.md2character.ratamahatta.keyboard.js.html">tquery.md2character.ratamahatta.keyboard.js</a>.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id=".unhookKeyboard">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tQuery.RatamahattaMD2Character.</span><b>unhookKeyboard</b>							
+								</div>
+								
+								<div class="description">
+									unhook the keyboard
+									
+										<br />
+										<i>Defined in: </i> <a href="../symbols/src/plugins_md2character_tquery.md2character.ratamahatta.keyboard.js.html">tquery.md2character.ratamahatta.keyboard.js</a>.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								
+							
+						</div>
+					</div>
+				</section>
 			
 	<!--
 	#### METHOD DETAILS
@@ -266,22 +388,19 @@
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id="back">
+										<div class="fixedFont heading" id="goForward">
 											<span class='lighter'>
 											
 											</span>
 											
 											
 											
-											<b>back</b>(back)
+											<b>goForward</b>(angle)
 										</div>
 										
 										<div class="description">
-											getter/setter of the back pointer
+											go forward to a distance
 											
-											
-												<br />
-												<i>Defined in: </i> <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a>.
 											
 											
 											
@@ -294,10 +413,10 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Object}</span> <b>back</b>
+														<span class="light fixedFont">{Number}</span> <b>angle</b>
 														
 													</dt>
-													<dd>the value to return when .back() is called. optional</dd>
+													<dd>angle to turn to in radian</dd>
 												
 											</dl>
 										
@@ -309,22 +428,19 @@
 									<li 
 										 class='item1'
 									>
-										<div class="fixedFont heading" id="each">
+										<div class="fixedFont heading" id="turn">
 											<span class='lighter'>
 											
 											</span>
 											
-											<span class="light">{Boolean}</span>
 											
-											<b>each</b>(callback)
+											
+											<b>turn</b>(angle)
 										</div>
 										
 										<div class="description">
-											loop over element
+											Turn to an angle
 											
-											
-												<br />
-												<i>Defined in: </i> <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a>.
 											
 											
 											
@@ -337,36 +453,14 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Function}</span> <b>callback</b>
+														<span class="light fixedFont">{Number}</span> <b>angle</b>
 														
 													</dt>
-													<dd>the function to notify. function(element){ }.
-			loop interrupted if it returns false</dd>
+													<dd>angle to turn to in radian</dd>
 												
 											</dl>
 										
 										
-										
-											<dl class="detailList nomargin">
-											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{Boolean}</span> return true if completed, false if interrupted</dd>
-													
-												
-												
-												
-												
-												
-											
-											</dl>
 										
 										<div class="hr"></div>
 									</li>
@@ -374,22 +468,19 @@
 									<li 
 										 class='item2'
 									>
-										<div class="fixedFont heading" id="get">
+										<div class="fixedFont heading" id="turnLeft">
 											<span class='lighter'>
 											
 											</span>
 											
-											<span class="light">{Boolean}</span>
 											
-											<b>get</b>(callback)
+											
+											<b>turnLeft</b>(angle)
 										</div>
 										
 										<div class="description">
-											Retrieve the elements matched by the tQuery object
+											Turn left
 											
-											
-												<br />
-												<i>Defined in: </i> <a href="../symbols/src/js_tquery.node.js.html">tquery.node.js</a>.
 											
 											
 											
@@ -402,36 +493,54 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Function}</span> <b>callback</b>
+														<span class="light fixedFont">{Number}</span> <b>angle</b>
 														
 													</dt>
-													<dd>the function to notify. function(element){ }.
-			loop interrupted if it returns false</dd>
+													<dd>angle to turn to in radian</dd>
 												
 											</dl>
 										
 										
 										
-											<dl class="detailList nomargin">
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
+									>
+										<div class="fixedFont heading" id="turnRight">
+											<span class='lighter'>
 											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{Boolean}</span> return true if completed, false if interrupted</dd>
-													
-												
-												
-												
-												
-												
+											</span>
 											
+											
+											
+											<b>turnRight</b>(angle)
+										</div>
+										
+										<div class="description">
+											Turn right
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>angle</b>
+														
+													</dt>
+													<dd>angle to turn to in radian</dd>
+												
 											</dl>
+										
+										
 										
 										
 									</li>
