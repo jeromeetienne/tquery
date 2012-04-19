@@ -1,7 +1,9 @@
 /**
- * implement Ratamahatta character
+ * implement Ratamahatta character.
  *
- * inherit from tQuery.MD2Character
+ * @name	tQuery.RatamahattaMD2Character
+ * @augments	tQuery.MD2Character
+ * @constructor
 */
 tQuery.register('RatamahattaMD2Character', function(opts){
 	// call parent ctor

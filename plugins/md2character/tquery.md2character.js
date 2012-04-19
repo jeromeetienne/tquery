@@ -9,6 +9,9 @@
 
 /**
  * widely inspired from MD2Character.js from alteredq / http://alteredqualia.com/
+ *
+ * @name tQuery.MD2Character
+ * @class
 */
 tQuery.register('MD2Character', function(){
 	this._scale		= 1;
@@ -26,6 +29,7 @@ tQuery.register('MD2Character', function(){
 	this._curAnimation	= null;
 	this._nLoadInProgress	= 0;
 });
+//tQuery.MD2Character	= function(){
 
 // make it eventable
 tQuery.MicroeventMixin(tQuery.MD2Character.prototype);

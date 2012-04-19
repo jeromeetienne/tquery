@@ -1,5 +1,11 @@
 // TODO make it require.js compatible
 
+/**
+ * Hook the keyboard
+ *
+ * @name	hookKeyboard
+ * @memberOf	tQuery.RatamahattaMD2Character
+*/
 tQuery.RatamahattaMD2Character.register('hookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
@@ -15,6 +21,12 @@ tQuery.RatamahattaMD2Character.register('hookKeyboard', function(opts){
 	return this;
 });
 
+/**
+ * unhook the keyboard
+ *
+ * @name	unhookKeyboard
+ * @memberOf	tQuery.RatamahattaMD2Character
+*/
 tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
@@ -30,6 +42,13 @@ tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
 	return this;
 });
 
+/**
+ * callback for hook the keyboard
+ * 
+ * @private
+ * @name	hookKeyboardLoopCb
+ * @memberOf	tQuery.RatamahattaMD2Character
+*/
 tQuery.RatamahattaMD2Character.register('hookKeyboardLoopCb', function(deltaTime, present){
 	var keyboard	= tQuery.keyboard();
 	// keyboard handling
