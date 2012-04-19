@@ -249,13 +249,17 @@ tQuery.WebAudio.NodeChainBuilder.prototype.last	= function(){
 
 tQuery.WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 {
+	// update this._bufferSourceDst - needed for .cloneBufferSource()
+	var lastIsBufferSource	= this._lastNode && ('playbackRate' in this._lastNode) ? true : false;
+	if( lastIsBufferSource )	this._bufferSourceDst	= node;
+
 	// connect this._lastNode to node if suitable
 	if( this._lastNode !== null )	this._lastNode.connect(node);
 	
 	// update this._firstNode && this._lastNode
 	if( this._firstNode === null )	this._firstNode	= node;
 	this._lastNode	= node;
-	
+		
 	// apply properties to the node
 	for( var property in properties ){
 		node[property]	= properties[property];
@@ -305,8 +309,7 @@ tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
 	clone.buffer		= orig.buffer;
 	clone.playbackRate	= orig.playbackRate;
 	clone.loop		= orig.loop;
-// TODO make that this._analysze isnt hardcoded
-	clone.connect(this._nodes.analyser);
+	clone.connect(this._bufferSourceDst);
 	return clone;
 }
 
@@ -444,38 +447,27 @@ tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
 */
 tQuery.WebAudio.Sound.prototype.play		= function(time){
 	if( time ===  undefined )	time	= 0;
-	
-if(false){	
-	this._source.noteOn(time);
-	return this;	// for chained API
-}
-
-	//var orig	= this._source;
-	//var copy	= this._context.createBufferSource()
-	//copy.buffer		= orig.buffer;
-	//copy.playbackRate	= orig.playbackRate;
-	//copy.loop		= orig.loop;
-	//copy.connect(this._analyser);
-
-
+	// clone the bufferSource
 	var clonedNode	= this._chain.cloneBufferSource();
+	// set the noteOn
 	clonedNode.noteOn(time);
-	return this;	// for chained API
-};
-
-/**
- * stop the sound
- *
- * @param {Number} [time] time when to stop the sound
-*/
-tQuery.WebAudio.Sound.prototype.stop		= function(time){
-	if( time ===  undefined )	time	= 0;
-	this._source.noteOff(time);
-	return this;	// for chained API
+	// create the source object
+	var source	= {
+		node	: clonedNode,
+		stop	: function(time){
+			if( time ===  undefined )	time	= 0;
+			this.node.noteOff(time);
+			return source;	// for chained API
+		}
+	}
+	// return it
+	return source;
 };
 
 /**
  * getter/setter on the volume
+ *
+ * TODO put that in another node
  *
  * @param {Number} [value] the value to set, if not provided, get current value
 */
