@@ -269,6 +269,22 @@ tQuery.WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 	return this;
 };
 
+
+/**
+ * Clone the bufferSource. Used just before playing a sound
+ * @returns {AudioBufferSourceNode} the clone AudioBufferSourceNode
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
+	console.assert(this._nodes.bufferSource, "no buffersource presents. Add one.");
+	var orig	= this._nodes.bufferSource;
+	var clone	= this._context.createBufferSource()
+	clone.buffer		= orig.buffer;
+	clone.playbackRate	= orig.playbackRate;
+	clone.loop		= orig.loop;
+	clone.connect(this._bufferSourceDst);
+	return clone;
+}
+
 /**
  * add a bufferSource
  *
@@ -302,16 +318,16 @@ tQuery.WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
 	return this._addNode(node, properties)
 };
 
-
-tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
-	var orig	= this._nodes.bufferSource;
-	var clone	= this._context.createBufferSource()
-	clone.buffer		= orig.buffer;
-	clone.playbackRate	= orig.playbackRate;
-	clone.loop		= orig.loop;
-	clone.connect(this._bufferSourceDst);
-	return clone;
-}
+/**
+ * add a gainNode
+ *
+ * @param {Object} [properties] properties to set in the created node
+*/
+tQuery.WebAudio.NodeChainBuilder.prototype.gainNode	= function(properties){
+	var node		= this._context.createGainNode()
+	this._nodes.gainNode	= node;
+	return this._addNode(node, properties)
+};
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -343,9 +359,8 @@ tQuery.WebAudio.Sound	= function(world, nodeChain){
 	
 	// create a default NodeChainBuilder if needed
 	if( nodeChain === undefined ){
-		// TODO use this._context here
-		nodeChain	= new tQuery.WebAudio.NodeChainBuilder(this._webaudio.context())
-					.bufferSource().analyser().panner();
+		nodeChain	= new tQuery.WebAudio.NodeChainBuilder(this._context)
+					.bufferSource().gainNode().analyser().panner();
 	}
 	// setup this._chain
 	console.assert( nodeChain instanceof tQuery.WebAudio.NodeChainBuilder );
@@ -356,11 +371,13 @@ tQuery.WebAudio.Sound	= function(world, nodeChain){
 	
 	// create some alias
 	this._source	= this._chain.nodes().bufferSource;
+	this._gainNode	= this._chain.nodes().gainNode;
 	this._analyser	= this._chain.nodes().analyser;
 	this._panner	= this._chain.nodes().panner;
 	
 	// sanity check
 	console.assert(this._source	, "no bufferSource: not yet supported")
+	console.assert(this._gainNode	, "no gainNode: not yet supported")
 	console.assert(this._analyser	, "no analyser: not yet supported")
 	console.assert(this._panner	, "no panner: not yet supported")
 };
@@ -437,7 +454,6 @@ tQuery.WebAudio.Sound.prototype.nodes	= function(){
 */
 tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
 	return this._source.buffer ? true : false;
-	return this;	// for chained API
 };
 
 /**
@@ -467,13 +483,23 @@ tQuery.WebAudio.Sound.prototype.play		= function(time){
 /**
  * getter/setter on the volume
  *
- * TODO put that in another node
- *
  * @param {Number} [value] the value to set, if not provided, get current value
 */
 tQuery.WebAudio.Sound.prototype.volume	= function(value){
-	if( value === undefined )	return this._source.gain.value;
-	this._source.gain.value	= value;
+	if( value === undefined )	return this._gainNode.gain.value;
+	this._gainNode.gain.value	= value;
+	return this;	// for chained API
+};
+
+
+/**
+ * getter/setter on the loop
+ * 
+ * @param {Number} [value] the value to set, if not provided, get current value
+*/
+tQuery.WebAudio.Sound.prototype.loop	= function(value){
+	if( value === undefined )	return this._source.loop;
+	this._source.loop	= value;
 	return this;	// for chained API
 };
 
