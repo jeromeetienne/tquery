@@ -1,22 +1,24 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
-<script src="../../requirejs/tquery.norequirejs.js"></script>
-
+<script>
+tQuery = {};
+</script>
 <script src="../webaudio.js"></script>
 <script src="../webaudio.nodechainbuilder.js"></script>
 <script src="../webaudio.sound.js"></script>
+<!--<script src="../webaudio.sound.tquery.js"></script>
+<script src="../webaudio.sound.three.js"></script>
 <script src="../webaudio.tquery.js"></script>
-
+-->
 <body><script>
-	var world	= tQuery.createWorld().boilerplate().start();
-//	world.removeCameraControls();
-	world.enableWebAudio();
+	var webaudio	= new tQuery.WebAudio();
+	var sound	= new tQuery.WebAudio.Sound(webaudio);	
 
 //	var sound	= tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
-	var sound	= tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){
+	sound.load('../../assets/sounds/techno.mp3', function(sound){
 		//sound.nodes().bufferSource.loop	= true;
 		//sound.volume(1);
 		//sound.loop(true);
+		sound.loop(true);
 		var source	= sound.play();
 		setTimeout(function(){
 			//source.stop();

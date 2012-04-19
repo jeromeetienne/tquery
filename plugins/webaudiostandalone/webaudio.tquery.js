@@ -37,7 +37,8 @@ tQuery.World.register('supportWebAudio', function(){
 });
 
 tQuery.register('createSound', function(world, nodeChain){
-	return new tQuery.WebAudio.Sound(world, nodeChain);
+	world	= world || tQuery.world;
+	return new tQuery.WebAudio.Sound(world.getWebAudio(), nodeChain);
 });
 
 
