@@ -299,8 +299,16 @@ tQuery.WebAudio.NodeChainBuilder.prototype.analyser	= function(properties){
 };
 
 
-
-
+tQuery.WebAudio.NodeChainBuilder.prototype.cloneBufferSource	= function(){
+	var orig	= this._nodes.bufferSource;
+	var clone	= this._context.createBufferSource()
+	clone.buffer		= orig.buffer;
+	clone.playbackRate	= orig.playbackRate;
+	clone.loop		= orig.loop;
+// TODO make that this._analysze isnt hardcoded
+	clone.connect(this._nodes.analyser);
+	return clone;
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -332,6 +340,7 @@ tQuery.WebAudio.Sound	= function(world, nodeChain){
 	
 	// create a default NodeChainBuilder if needed
 	if( nodeChain === undefined ){
+		// TODO use this._context here
 		nodeChain	= new tQuery.WebAudio.NodeChainBuilder(this._webaudio.context())
 					.bufferSource().analyser().panner();
 	}
@@ -365,7 +374,7 @@ tQuery.WebAudio.Sound.prototype.destroy	= function(){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		TODO put that in a plugins					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -435,7 +444,22 @@ tQuery.WebAudio.Sound.prototype.isPlayable	= function(){
 */
 tQuery.WebAudio.Sound.prototype.play		= function(time){
 	if( time ===  undefined )	time	= 0;
+	
+if(false){	
 	this._source.noteOn(time);
+	return this;	// for chained API
+}
+
+	//var orig	= this._source;
+	//var copy	= this._context.createBufferSource()
+	//copy.buffer		= orig.buffer;
+	//copy.playbackRate	= orig.playbackRate;
+	//copy.loop		= orig.loop;
+	//copy.connect(this._analyser);
+
+
+	var clonedNode	= this._chain.cloneBufferSource();
+	clonedNode.noteOn(time);
 	return this;	// for chained API
 };
 
@@ -536,7 +560,7 @@ tQuery.WebAudio.Sound.prototype.amplitude	= function(width)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		TODO put that in a plugin					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
