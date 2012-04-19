@@ -17,7 +17,8 @@ docs:
 			-D="title:tQuery library"			\
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/					\
-			js/ js/plugins plugins/webaudio
+			js/ js/plugins					\
+			plugins/webaudio plugins/md2character
 
 help:
 	@echo "Inline help for Makefile"
