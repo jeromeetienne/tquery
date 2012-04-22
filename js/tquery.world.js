@@ -19,7 +19,7 @@ tQuery.World	= function()
 	this._scene	= new THREE.Scene();
 
 	// create a renderer
-	if( this._hasWebGL ){
+	if( tQuery.World.hasWebGL() ){
 		this._renderer = new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
@@ -71,7 +71,7 @@ tQuery.World.prototype.destroy	= function(){
 /**
  * true if webgl is available, false otherwise
 */
-tQuery.World.prototype._hasWebGL	= (function(){
+tQuery.World._ hasWebGL	= (function(){
 	// test from Detector.js
 	try{
 		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
@@ -79,6 +79,13 @@ tQuery.World.prototype._hasWebGL	= (function(){
 		return false;
 	}
 })();
+
+/**
+ * @returns {Boolean} true if webgl is available, false otherwise
+*/
+tQuery.World.hasWebGL	= function(){
+	return tQuery.World._hasWebGL;
+};
 
 /**
 */
