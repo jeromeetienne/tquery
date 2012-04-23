@@ -62,7 +62,10 @@ function updatePreview() {
 
 	// replace iframe
 	jQuery('#previewContainer').empty();
-	jQuery('<iframe>').attr('id', 'preview').appendTo('#previewContainer');
+	jQuery('<iframe>')
+		.attr('id', 'preview')
+		.attr('allowfullscreen', '').attr('webkitallowfullscreen', '').attr('mozallowfullscreen', '')
+		.appendTo('#previewContainer');
 	
 	// put content in <iframe>
 	setTimeout(function(){
