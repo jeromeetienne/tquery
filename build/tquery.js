@@ -945,21 +945,7 @@ tQuery.World	= function()
 	// create a scene
 	this._scene	= new THREE.Scene();
 
-	// create a renderer
-	if( this._hasWebGL ){
-		this._renderer = new THREE.WebGLRenderer({
-			antialias		: true,	// to get smoother output
-			preserveDrawingBuffer	: true	// to allow screenshot
-		});
-		this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-	}else{
-		this._addGetWebGLMessage();
-		throw new Error("WebGL required and not available")
-	}
-	// FIXME this window dimension is crap
-	this._renderer.setSize( window.innerWidth, window.innerHeight );
-
-	// create a camera in the scene
+ 	// create a camera in the scene
 	// FIXME this window dimension is crap
 	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.01, 10000 );
 	this._camera.position.set(0, 0, 3);
@@ -967,6 +953,20 @@ tQuery.World	= function()
 	
 	// create the loop
 	this._loop	= new tQuery.Loop(this)
+
+	// create a renderer
+	if( tQuery.World.hasWebGL() ){
+		this._renderer = new THREE.WebGLRenderer({
+			antialias		: true,	// to get smoother output
+			preserveDrawingBuffer	: true	// to allow screenshot
+		});
+		this._renderer.setClearColorHex( 0xBBBBBB, 1 );
+		// FIXME this window dimension is crap
+		this._renderer.setSize( window.innerWidth, window.innerHeight );
+	}else{
+		//this._addGetWebGLMessage();
+		throw new Error("WebGL required and not available")
+	}
 };
 
 // make it pluginable
@@ -998,7 +998,7 @@ tQuery.World.prototype.destroy	= function(){
 /**
  * true if webgl is available, false otherwise
 */
-tQuery.World.prototype._hasWebGL	= (function(){
+tQuery.World._hasWebGL	= (function(){
 	// test from Detector.js
 	try{
 		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
@@ -1006,6 +1006,13 @@ tQuery.World.prototype._hasWebGL	= (function(){
 		return false;
 	}
 })();
+
+/**
+ * @returns {Boolean} true if webgl is available, false otherwise
+*/
+tQuery.World.hasWebGL	= function(){
+	return tQuery.World._hasWebGL;
+};
 
 /**
 */

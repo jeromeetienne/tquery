@@ -1,5 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../build/tquery-bundle.js"></script>
+<script src="../requirejs/tquery.norequirejs.js"></script>
 
 <script src="../../vendor/threex/THREEx.GeometryWobble.js"></script>
 <script src="../wobble/tquery.geometry.wobble.js"></script>
@@ -9,7 +10,7 @@
 <body><script>
 	//Math.seed(1328475429280);
 	
-	var world	= tQuery.createWorld().fullpage().start();
+	var world	= tQuery.createWorld().boilerplate().start();
 	
 	tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0x444444));
 	tQuery.createDirectionalLight().addTo(world);
