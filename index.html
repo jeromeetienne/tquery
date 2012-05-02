@@ -121,17 +121,6 @@
 	</div>
 	<div class="row">
 		<div class="span7">
-<style>
-pre.prettyprint .hasAnnotation{
-	background-color	: hsl(216, 100%, 90%);
-	-webkit-border-radius	: 3px;
-	border			: 1px solid hsl(240, 13%, 90%)
-}
-pre.prettyprint .hasAnnotation:hover {
-	background-color	: hsl(216, 100%, 80%);
-	color			: hsl(220, 56%, 31%);
-}
-</style>
 			<pre class="prettyprint linenums">
 &lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
 &lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
@@ -140,16 +129,6 @@ pre.prettyprint .hasAnnotation:hover {
     var object = tQuery.createTorus().addTo(world);
 &lt;/script&gt;&lt;/body&gt;
 </pre>
-		<script type="text/codeannotation">
-		{ "\"tquery-all.js\"": "include the library. tquery-all.js is a special breed which include all. good for experimenting.",
-		  "createWorld"	: "Create the world",
-		  "boilerplate"	: "Create the boilerplate for the world",
-		  "start"	: "start the world",
-		  "createTorus"	: "Create a 3D torus object",
-		  "addTo"	: "Add the torus to the world we just created"
-		}
-		</script>
-
 		</div>
 		<div class="span5">
 			<iframe style="width: 100%; height: 120px" src="plugins/minimal/examples" allowfullscreen webkitallowfullscreen mozallowfullscreen>
@@ -303,29 +282,6 @@ see it running. Up to you to modify index.html until it fits your needs. See its
 	<script src="www/vendor/bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
 	<script src="www/vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
 	<script src="www/vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
-	<script>
-	/**
-	 * For Source Annotations
-	*/
-	jQuery(function(){
-		jQuery('pre.prettyprint + script[type="text/codeannotation"]').each(function(){
-			var annotJSON	= jQuery(this).text();
-			var annotations	= JSON.parse(annotJSON);
-			var preElement	= jQuery(this).prev()
-			Object.keys(annotations).forEach(function(text){
-				jQuery("*:contains('"+text+"')", preElement).each(function(){
-					if( this.innerText !== text )	return;
-					jQuery(this).addClass('hasAnnotation');
-					jQuery(this).popover({
-						title	: text,
-						content	: annotations[text]
-					});
-				});
-			})
-		})
-	})
-	</script>
-
 
   </body>
 </html>
