@@ -1,0 +1,9 @@
+pre.prettyprint .hasAnnotation{
+	background-color	: hsl(216, 100%, 90%);
+	-webkit-border-radius	: 3px;
+	border			: 1px solid hsl(240, 13%, 90%)
+}
+pre.prettyprint .hasAnnotation:hover {
+	background-color	: hsl(216, 100%, 80%);
+	color			: hsl(220, 56%, 31%);
+}

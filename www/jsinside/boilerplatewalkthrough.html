@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Boilerplate walkthrough</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+	<link href="../vendor/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+	<link href="../vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+	<link href="./bootstrap-srcannotate.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">tQuery</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+            </ul>
+          </div><!--/.nav-collapse --> 
+        </div>
+      </div>
+    </div>
+	<div class="container">
+		<div class="row">
+			<div class="span7">
+				<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+				<script type="text/codeannotation">
+				{ "\"tquery-all.js\"": "include the library. tquery-all.js is a special breed which include all. good for experimenting.",
+				  "createWorld"	: "Create the world",
+				  "boilerplate"	: "Create the boilerplate for the world",
+				  "start"	: "start the world",
+				  "createTorus"	: "Create a 3D torus object",
+				  "addTo"	: "Add the torus to the world we just created"
+				}
+				</script>
+			</div>
+			<div class="span5">
+				<iframe style="width: 100%; height: 120px" src="../../plugins/minimal/examples" allowfullscreen webkitallowfullscreen mozallowfullscreen>
+				</iframe>
+			</div>
+		</div>
+		<div class="page-header">
+			<h1>Boilerplate <small>a walkthru</small></h1>
+		</div>
+		<div class="row">
+			<ul class="nav nav-tabs">
+			  <li class="active"><a data-target="#tut1_intro" data-toggle="tab">Intro</a></li>
+			  <li><a data-target="#tut1_step1" data-toggle="tab">Step 1</a></li>
+			  <li><a data-target="#tut1_step2" data-toggle="tab">Step 2</a></li>
+			  <li><a data-target="#tut1_step3" data-toggle="tab">Step 3</a></li>
+			  <li><a data-target="#tut1_step4" data-toggle="tab">Step 4</a></li>
+			  <li><a data-target="#tut1_final" data-toggle="tab">Final</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tut1_intro">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Intro</h3>
+						This is the boilerplate that you see
+						on the right. This is the base of most
+						of tQuery application. I will walk you thru
+						it.
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+var world = tQuery.createWorld().boilerplate().start();
+var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_step1">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>First an empty page</h3>
+						Let's start by an empty index.html.
+						The code you see is a valid HTML5
+						page.
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;&lt;/title&gt;
+&lt;body&gt;&lt;script&gt;
+&lt;!-- Your code goes here --&gt;
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "title"	: "This is required to be valid html5.",
+						  "code"	: "Where you will put your code"
+						}
+						</script>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_step2">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Let's include the library</h3>
+						We added a script tag to load the library.
+						Additionnaly we add a title thus it
+						is easier 
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;tQuery Boilerplate&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "\"tquery-all.js\"": "include the library. tquery-all.js is a special breed which include all. good for experimenting.",
+						  "Boilerplate"	: "We add a title."
+						}
+						</script>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_step3">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Let's create a world</h3>
+						Now we got a page which load tquery. Nice! but
+						still it doesnt do much. We will create a tQuery
+						world to our page.
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;tQuery Boilerplate&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "world"	: "The variable to store the world we are creating",
+						  "tQuery"	: "It is the prefix for the library. It starts all chains of operations.",
+						  "createWorld"	: "We create a world. It include a rendering loop, a renderer, a camera and a camera controls",
+						  "boilerplate"	: "We add the boilerplate to our world. It include best practices and various goodies, like fullscreen, window scaling, or even print screen. It isn't mandatory at all, but it is a fast way to get your started on the right foot",
+						  "start"	: "Start the rendering loop of the world."
+						}
+						</script>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_step4">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Now we add an object</h3>
+						Our page is now creating a world. Cool! but still
+						still it isn't too visual. Let's add a object to our world.
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;tQuery Boilerplate&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "object"	: "The variable to store the object we are creating",
+						  "createTorus"	: "Create a torus with the default material",
+						  "addTo"	: "Add this torus to the world. Thus we can see it :)"
+						}
+						</script>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_final">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Done!</h3>
+						Now we understand tQuery boilerplate.
+						It includes the library.
+						Then create a world, add the boilerplate, and then start it.
+						We just have to add a torus to our world and we are done!
+						Only 6 lines btw.
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "tquery-all.js": "include the library. tquery-all.js is a special breed which include all. good for experimenting.",
+						  "createWorld"	: "Create the world",
+						  "boilerplate"	: "Create the boilerplate for the world",
+						  "start"	: "start the world",
+						  "createTorus"	: "Create a 3D torus object",
+						  "addTo"	: "Add the torus to the world we just created"
+						}
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- /container -->
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="../vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.js"></script>
+	<script>jQuery(function(){ prettyPrint(); });</script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-transition.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-alert.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-modal.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-dropdown.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-scrollspy.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-tab.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-tooltip.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-popover.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-button.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
+	<script src="./bootstrap-srcannotate.js"></script>
+  </body>
+</html>

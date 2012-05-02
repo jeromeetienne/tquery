@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Render loop and Animation</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <base target="_blank">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+	<link href="../vendor/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+	<link href="../vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+	<link href="./bootstrap-srcannotate.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">tQuery</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+            </ul>
+          </div><!--/.nav-collapse --> 
+        </div>
+      </div>
+    </div>
+	<div class="container">
+		<div class="row">
+			<div class="span7">
+				<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+    world.loop().hook(function(){
+	object.rotateX(0.01);
+    });
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+				</script>
+			</div>
+			<div class="span5">
+				<iframe style="width: 100%; height: 120px" src="../../plugins/minimal/examples" allowfullscreen webkitallowfullscreen mozallowfullscreen>
+				</iframe>
+			</div>
+		</div>
+		<div class="page-header">
+			<h1>Render loop and Animation</h1>
+		</div>
+		<div class="row">
+			<ul class="nav nav-tabs">
+			  <li class="active"><a data-target="#tut1_intro" data-toggle="tab">Intro</a></li>
+			  <li><a data-target="#tut1_step1" data-toggle="tab">Step 1</a></li>
+			  <li><a data-target="#tut1_step2" data-toggle="tab">Step 2</a></li>
+			  <li><a data-target="#tut1_final" data-toggle="tab">Final</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tut1_intro">
+					<div class="span4">
+						<h3>Intro</h3>
+						<p>
+							This is the boilerplate that you see on the right. We will use
+							that as a base to how to use the <strong>rendering loop</strong> to
+							make <strong>animations</strong>. Each world got a rendering
+							loop. You can hook function to this loop.
+						</p>
+						<a class="btn btn-mini btn-primary" href="http://bit.ly/wlMvNS">Playground</a>
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;../../build/tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_step1">
+					<div class="span4">
+						<h3>Hook the rendering loop</h3>
+						<p>
+						Now that we got a basic tQuery page.
+						We will hook function in the rendering loop.
+						This function will be executed at every iteration of this
+						loop. So everytime the 3D scene is rendered.
+						</p>
+						<a class="btn btn-mini btn-primary" href="http://bit.ly/IEyWdH">Playground</a>
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;Rendering loop and Animation&lt;/title&gt;
+&lt;script src=&quot;../../build/tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+    world.loop().hook(function(){
+        /* ... your animation code goes here */
+    });
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "loop"	: "Access the loop of this tQuery.world",
+						  "hook"	: "Hook a function.",
+						  "function"	: "The function which gonna be run at every iteraction of the rendering loop.",
+						  "rotateX"	: "Rotate the object by 0.01 radian."
+						}
+						</script>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_step2">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Make the object move</h3>
+						<p>
+							Inside the hooked function, we rotate the object
+							by 0.01 radian. We do that at every iteration of the
+							loop, so the object is moving.
+						</p>
+						<a class="btn btn-mini btn-primary" href="http://bit.ly/IEyWdH">Playground</a>
+					</div>
+					<div class="span8">
+						<pre class="prettyprint linenums">
+&lt;!doctype html&gt;&lt;title&gt;&lt;/title&gt;
+&lt;script src=&quot;../../build/tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+    world.loop().hook(function(){
+	object.rotateX(0.01);
+    });
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+						<script type="text/codeannotation">
+						{ "function"	: "The function which gonna be run at every iteraction of the rendering loop.",
+						  "rotateX"	: "Rotate the object by 0.01 radian."
+						}
+						</script>
+					</div>
+				</div>
+				<div class="tab-pane" id="tut1_final">
+					<div class="span4">
+						<!-- this should be markdown -->
+						<h3>Done!</h3>
+						<p>
+							Now we animated an object in the rendering loop.
+							This loop is executed during a <code>requestanimationframe</code>
+							for efficiency. 
+							It is possible to hook functions at various stage of the rendering.
+							This loop is the base of most animation in tQuery.
+						</p>
+						<a class="btn btn-mini btn-primary" href="http://bit.ly/IAH3yC">Playground</a>
+					</div>
+					<div class="span8">
+						<pre class="prettyprint">
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;../../build/tquery-all.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world = tQuery.createWorld().boilerplate().start();
+    var object = tQuery.createTorus().addTo(world);
+    world.loop().hook(function(){
+	object.rotateX(0.04);
+    });
+&lt;/script&gt;&lt;/body&gt;
+</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- /container -->
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="../vendor/bootstrap/docs/assets/js/jquery.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/google-code-prettify/prettify.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-transition.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-alert.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-modal.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-dropdown.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-scrollspy.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-tab.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-tooltip.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-popover.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-button.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-collapse.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
+	<script src="../vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
+	<script src="./bootstrap-srcannotate.js"></script>
+	<script>
+	// ==UserScript==
+	// @name Use Markdown, sometimes, in your HTML.
+	// @author Paul Irish <http://paulirish.com/>
+	// @link http://git.io/data-markdown
+	// @match *
+	// ==/UserScript==
+
+
+	// If you're not using this as a userscript just delete from this line up. It's cool, homey.
+
+	(function markdownSlideToHtml(){
+
+		if (!window.Showdown){
+			var scr		= document.createElement('script');
+			scr.onload	= markdownSlideToHtml;
+			scr.src		= 'https://raw.github.com/github/github-flavored-markdown/gh-pages/scripts/showdown.js';
+			document.body.appendChild(scr);
+			return;
+		}
+
+		[].forEach.call(document.querySelectorAll('[data-markdown]'), function fn(elem){
+			// strip leading whitespace so it isn't evaluated as code
+			//var text      = elem.textContent.replace(/\n\s*\n/g,'\n');
+			// jerome- to have better support of html within markdown
+			var text      = elem.innerHTML;
+			//console.log("origin innerHTML", text.split('\n'));
+			// remove all blanks lines
+			//text		= text.replace(/\n\s*\n/g,'\n');
+			//console.log("step text", text)
+			// set indentation level so your markdown can be indented within your HTML
+			var matches	= text.match(/^\n([ \t]*)/);
+			var leadingws	= matches[1].length;
+			//console.log("first line", matches)
+			//console.log("leadingws", leadingws)
+			var regex	= new RegExp('\\n[ \\t]{' + leadingws + '}','g');
+			var md		= text.replace(regex,'\n');
+			//console.log("pre md", md);
+			html      = (new Showdown.converter()).makeHtml(md);
+			//console.log("post html", html);
+
+			// to support prettyprint
+			html		= html.replace(/<code><br \/>/g,'<pre class="prettyprint">');
+			html		= html.replace(/<br \/><\/code>/g,'</pre>');
+			// unescape [><]
+			html		= html.replace(/&amp;gt;/g,'>');
+			html		= html.replace(/&amp;lt;/g,'<');
+			//console.log("escaped html", html);
+
+			// here, have sum HTML
+			elem.innerHTML = html;
+		});
+		// callback prettyprint to highlight code found in markdown
+		prettyPrint();
+	}());
+	</script>
+  </body>
+</html>
