@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Augmented 3D Pong: notes</title>
+	<base target=”_blank” />
+	<meta charset='utf-8'/>
+	<script src='slides.js'></script>
+</head>
+
+<body style='display: none'>
+	<style>
+		[data-markdown] em {
+			color		: orange;
+			font-style	: normal;
+			font-weight	: bolder;
+			
+		}
+		[data-markdown] h3 {
+			font-size	: 180%;
+		}
+	</style>
+	<section class='slides layout-regular template-default'>
+
+<!-- ****************************************************************************
+		Talk Introduction
+********************************************************************************* -->
+	<article data-markdown>
+		
+		# Augmented Reality 3D Pong
+		
+		## Notes about screencast
+		
+		Jerome Etienne
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### Augmented Reality 3D Pong
+
+		#### augmented reality + webgl 
+		#### *+*
+		#### game classic + live coding
+		#### *=>* augmented pong in WebGL
+		* lots of fun with technology too :)
+	</article>
+	<article data-markdown>
+		# *Augmented Reality 3D Pong*
+		## (Show Demo [here](../))
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### table of content
+
+		* goal: make a augmented pong
+		* Initialistation: tquery for 3d/augmentedgesture.js for augmented reality 
+		* Code the players
+		* Code the ball
+	</article>
+<!-- ****************************************************************************
+		init libraries
+********************************************************************************* -->
+	<article data-markdown>
+		# *Step 1*: Init libraries
+	</article>
+	<article data-markdown>
+		### Libraries
+
+		#### Why ? code size
+		* helps produce very short code
+		* *only 100 lines* to do that
+
+		#### Which helpers
+		* [augmentedgesture.js](https://github.com/jeromeetienne/augmentedgesture.js) for augmented gesture
+		* [imageprocessing.js](https://github.com/jeromeetienne/imageprocessing.js) for image processing
+		* [tquery.js](https://github.com/jeromeetienne/tquery) for 3D - thin lib on top of [three.js](https://github.com/mrdoob/three.js/) marvel
+		* all MIT license
+	</article>
+	<article data-markdown>
+		## install augmented gesture
+	</article>
+	<article data-markdown>
+		### Install augmented gesture
+
+		#### include the script
+		```
+		 <script src="../../build/augmentedgesture-bundle.js"></script>
+		```
+		
+		* contains augmentedgesture.js
+		* plus a bunch of usefull js files
+	</article>
+	<article data-markdown>
+		### Install augmented gesture
+
+		#### the first line of js
+		```
+		// create a AugmentedGesture
+		var aGesture	= new AugmentedGesture().enableDatGui()
+					.start().domElementThumbnail();
+		```
+		
+		#### Steps
+		1. instanciate an object
+		1. enable Dat.gui to tune pointer detections
+		1. .start() the monitoring
+		1. add a webcam view as thumbnail
+	</article>
+	<article data-markdown>
+		### What is augmented gesture
+
+		#### What is that ?
+
+		* people moves colored balls in front of webcam
+		* computer sees that and analyze that
+		* new way to interact with computer
+		
+		#### Alternatives
+		* like **Wii** or **xbox360** but *much cheaper*
+		* anything flashy will do
+		* e.g. child toy or postit
+	</article>
+	<article data-markdown>
+		### What is augmented gesture
+
+		* a library [augmentedgesture.js](http://jeromeetienne.github.com/augmentedgesture.js/)
+		* interpret gesture in front of the webcam and produce events
+
+		#### Tech
+		1. Read the webcam with [webrtc](http://www.webrtc.org/)
+		  * more specifically with [getusermedia](http://dev.opera.com/articles/view/playing-with-html5-video-and-getusermedia-support/)
+		1. image processing with [imageprocessing.js](http://jeromeetienne.github.com/imageprocessing.js/)
+		1. extract pointer events with [augmentedgesture.js](http://jeromeetienne.github.com/augmentedgesture.js/)
+	</article>
+	<article data-markdown>
+		## install tquery for webgl
+	</article>
+	<article data-markdown>
+		### Install tQuery
+
+		#### include the script
+		```
+		 <script src="tquery-bundle.js"></script>
+		```
+		
+		* contains tquery.js
+		* plus three.js
+	</article>
+	<article data-markdown>
+		### Install tQuery
+		
+		* a 3D library mimicing jQuery API on top of three.js
+		* "three.js power + jQuery API flexibility"
+		* people knowing jQuery can learn tQuery in notime
+		* [tquery.js](https://github.com/jeromeetienne/tquery)
+		
+		#### Boilerplate
+		```
+		    <!doctype html><title>Minimal tQuery Page</title>
+		    <script src="tquery-all.js"></script>
+		    <body><script>
+		        var world = tQuery.createWorld().boilerplate().start();
+		        var object = tQuery.createTorus().addTo(world);
+		    </script></body>
+		```
+	</article>
+	<article data-markdown>
+		### Install tQuery
+		
+		```
+		// create a tQuery.World
+		var world	= tQuery.createWorld().boilerplate().start();
+		// no camera controls is needed
+		world.removeCameraControls();
+		```
+	</article>
+<!-- ****************************************************************************
+		Players
+********************************************************************************* -->
+	<article data-markdown>
+		# *Step 2*: Players
+	</article>
+	<article data-markdown>
+		### Lets start simple
+		```
+		// PLAYERS
+		var playerId	= 'right';
+		var player	= {};
+		```
+	</article>
+	<article data-markdown>
+		## First the 3D
+	</article>
+	<article data-markdown>
+		### Create tQuery object3D
+		```
+		// create tQuery.Object3D for a racket
+		var object3d	= tQuery.createCube().addTo(world).scale(0.25,1,0.5).scaleBy(0.5);
+		object3d.translateX(1.3);
+		player.object3d	= object3d;
+		```
+	</article>
+	<article data-markdown>
+		## Second the augmented gesture 
+	</article>
+	<article data-markdown>
+		### Create a augmented gesture pointer
+		
+		#### the object itself
+		```
+		// add a pointer for this player
+		var pointerOpts	= new AugmentedGesture.OptionPointer();
+		aGesture.addPointer(playerId, pointerOpts);
+		```
+		
+		#### tune its color
+		
+		```
+		pointerOpts.pointer.crossColor	= {r:  255, g:  50, b:   50};
+		pointerOpts.colorFilter.r	= {min: 160, max: 255};
+		pointerOpts.colorFilter.g	= {min:   0, max: 255};
+		pointerOpts.colorFilter.b	= {min:   0, max: 100};			
+		```
+	</article>
+	<article data-markdown>
+		## Third we bind them together
+	</article>
+	<article data-markdown>
+		### Bind augmented gesture with tquery object
+		
+		#### global in the **init**
+		```
+		var racketW	= 0.25*0.5;
+		var racketH	= 1.00*0.5;
+		var racketRangeY= 2;
+		```
+		#### after **augmented gesture init**
+		```
+		// bind aGesture 'mousemove' and update object3d position with it
+		aGesture.bind("mousemove."+playerId, function(event){
+			object3d.get(0).position.y	= -(-racketRangeY/2 + event.y*racketRangeY);
+		});
+		```
+
+	</article>
+	<article data-markdown>
+		## Now make that generic to get 2 players
+	</article>
+	<article data-markdown>
+		### Make that two players
+
+		#### Init players		
+		```
+		var players	= { 'right' : {}, 'left': {} };	
+		```
+		
+		#### loops for each players
+
+		```
+		Object.keys(players).forEach(function(playerId){
+			var player	= players[playerId];
+			/* ... */
+		});
+		```
+	</article>
+	<article data-markdown>
+		### Make that two players
+		
+		#### move racket to the right or left
+		```
+		object3d.translateX(1.3 * (playerId === "right" ? +1 : -1));
+		```
+
+		#### tune augmented pointer differently
+		```
+		if( playerId === 'right' ){
+			// ....
+		}else{
+			pointerOpts.pointer.crossColor	= {r:   50, g: 255, b:   50};
+			pointerOpts.colorFilter.r	= {min:   0, max: 130};
+			pointerOpts.colorFilter.g	= {min: 145, max: 255};
+			pointerOpts.colorFilter.b	= {min:  60, max: 210};						
+		}
+		```
+		
+	</article>
+	<article data-markdown>
+		# *Step 3*: the ball
+	</article>
+	<article data-markdown>
+		## First the 3D
+	</article>
+	<article data-markdown>
+		### Create object3d tQuery
+
+		#### Initialisation of some contants
+		```
+		// constant for the ball
+		var ballRadius	= 1/5;
+		```
+		
+		#### create tQuery object3d
+		```
+		// create a tQuery.Object3d for the ball
+		var ball3d = tQuery.createSphere().addTo(world).scaleBy(ballRadius);
+		```
+	</article>
+	<article data-markdown>
+		### Make tQuery.Object3d move
+
+		#### Initialisation of ball velocity
+		```
+		var angle	= Math.random()*Math.PI*2;
+		var ballVelX	= Math.cos(angle)*0.03;
+		var ballVelY	= Math.sin(angle)*0.03;
+		```
+		
+		#### Loop to update position with velocity
+		
+		```
+		world.loop().hook(function(){
+			// get ball position
+			var position	= ball3d.get(0).position;
+			// update position
+			position.x	+= ballVelX;
+			position.y	+= ballVelY;
+		});
+		```
+	</article>
+	<article data-markdown>
+		# *Step 4*: Game Logic
+	</article>
+	<article data-markdown>
+		## *Field* Collision Detection 
+	</article>
+	<article data-markdown>
+		### Handle Field collision
+		
+		#### Init of some constants
+		```
+		// constant for the field
+		var fieldW	= 3;
+		var fieldH	= 1.8;
+		```
+		
+		#### Bounce ball on border
+		```
+		// bounce the ball if it reach the border
+		if( position.x < -fieldW/2 )	ballVelX	*= -1;
+		if( position.x > +fieldW/2 )	ballVelX	*= -1;
+		if( position.y < -fieldH/2 )	ballVelY	*= -1;
+		if( position.y > +fieldH/2 )	ballVelY	*= -1;
+		```
+	</article>
+	<article data-markdown>
+		### Handle Field collision
+
+
+		#### Ensure boundaries 		
+		```
+		// get the boundaries
+		position.x	= Math.max(position.x, -fieldW/2);
+		position.x	= Math.min(position.x, +fieldW/2);
+		position.y	= Math.max(position.y, -fieldH/2);
+		position.y	= Math.min(position.y, +fieldH/2);
+		```
+	</article>
+	<article data-markdown>
+		## *Player* Collision Detection 
+	</article>
+	<article data-markdown>
+		### First player loop
+		
+		```
+		// check collision with each player racket
+		['right', 'left'].forEach(function(playerId){
+			// get tQuery.Object3D for this player
+			var object3d	= players[playerId].object3d;
+			// get the position in X and Y
+			var racketX	= object3d.get(0).position.x;
+			var racketY	= object3d.get(0).position.y;
+		});
+		```
+	</article>
+	<article data-markdown>
+		### ball colliding with player ?
+
+		#### test each ball boundary
+		```
+		var mayHitLeft	= (position.x+ballRadius/2) >= (racketX-racketW/2);
+		var mayHitRight	= (position.x-ballRadius/2) <= (racketX+racketW/2);
+		var mayHitTop	= (position.y+ballRadius/2) >= (racketY-racketH/2);
+		var mayHitBottom= (position.y-ballRadius/2) <= (racketY+racketH/2);
+		```
+	</article>
+	<article data-markdown>
+		### When colliding
+
+		#### test
+		```
+		if( mayHitLeft && mayHitRight
+			&& mayHitTop && mayHitBottom ){
+		}
+		```
+		#### reaction
+		```
+		ballVelX	*= -1;
+		var deltaX	= racketW/2 + ballRadius/2;
+		position.x	= racketX + (playerId === 'right'? -deltaX : +deltaX);
+		```
+	</article>
+	<article data-markdown>
+		# *Step 5*: Last One!
+	</article>
+	<article data-markdown>
+		# *Enjoy!* You are *DONE !*
+		## (Show Demo [here](../))
+	</article>
+
+<!-- *****************************************************************************
+**		THE END								**
+******************************************************************************* -->
+	<article data-markdown>
+		### Rescource
+		
+		* [tquery.js](https://github.com/jeromeetienne/tquery) for 3D - thin lib on top of [three.js](https://github.com/mrdoob/three.js/) marvel
+		* [webrtc](http://www.webrtc.org/)/[getusermedia](http://dev.opera.com/articles/view/playing-with-html5-video-and-getusermedia-support/)
+		* [imageprocessing.js](http://jeromeetienne.github.com/imageprocessing.js/)
+		* extract pointer events with [augmentedgesture.js](http://jeromeetienne.github.com/augmentedgesture.js/)
+	</article>
+	<article data-markdown>
+		# That's all folks
+		
+		### Question ?
+		
+		Jerome Etienne
+	</article>
+
+	<script>
+	// ==UserScript==
+	// @name Use Markdown, sometimes, in your HTML.
+	// @author Paul Irish <http://paulirish.com/>
+	// @link http://git.io/data-markdown
+	// @match *
+	// ==/UserScript==
+	
+	
+	// If you're not using this as a userscript just delete from this line up. It's cool, homey.
+	
+	(function markdownSlideToHtml(){
+	  
+		if (!window.Showdown){
+			var scr		= document.createElement('script');
+			scr.onload	= markdownSlideToHtml;
+			scr.src		= 'https://raw.github.com/github/github-flavored-markdown/gh-pages/scripts/showdown.js';
+			document.body.appendChild(scr);
+			return;
+		}
+	
+		[].forEach.call(document.querySelectorAll('[data-markdown]'), function fn(elem){
+			// strip leading whitespace so it isn't evaluated as code
+			//var text      = elem.textContent.replace(/\n\s*\n/g,'\n');
+			// jerome- to have better support of html within markdown
+			var text      = elem.innerHTML;
+			//console.log("origin innerHTML", text.split('\n'));
+			// remove all blanks lines
+			//text		= text.replace(/\n\s*\n/g,'\n');
+			//console.log("step text", text)
+			// set indentation level so your markdown can be indented within your HTML
+			var matches	= text.match(/^\n([ \t]*)/);
+			var leadingws	= matches[1].length;
+			//console.log("first line", matches)
+			//console.log("leadingws", leadingws)
+			var regex	= new RegExp('\\n[ \\t]{' + leadingws + '}','g');
+			var md		= text.replace(regex,'\n');
+			//console.log("pre md", md);
+			html      = (new Showdown.converter()).makeHtml(md);
+			//console.log("post html", html);
+	
+			// to support prettyprint
+			html		= html.replace(/<code><br \/>/g,'<pre class="prettyprint">');
+			html		= html.replace(/<br \/><\/code>/g,'</pre>');
+			// unescape [><]
+			html		= html.replace(/&amp;gt;/g,'>');
+			html		= html.replace(/&amp;lt;/g,'<');
+			//console.log("escaped html", html);
+		  
+			// here, have sum HTML
+			elem.innerHTML = html;
+		});
+		// callback prettyprint to highlight code found in markdown
+		prettyPrint();
+	}());
+
+//* http://jsclassroom.com
+//* http://jscoaches.com
+//* http://html5coaches.com
+//* http://jsuni.com
+//* http://javascriptuni.com
+//
+//prefix: js html5 javascript
+//
+//suffix: school classroom univesity academy class education 
+//
+//
+//* https://github.com/hakimel/reveal.js/issues/15 reveal.js in markdown
+//  * do the same for html5slide
+//  * standalone, no compilation, no need to commit all to markdown
+//* https://github.com/vinyll/html5-slides-markdown does well but not proper target
+//  * nice on how to make slides in markdown tho
+//
+// http://tbassetto.github.com/chrome-dev-tools-tips-and-tricks/#8
+/*
+ * Controls flow:
+ * - describe the issue:
+ *   http://eloquentjavascript.net/chapter2.html
+ * - fix with Flow.js
+ *
+ * Js Basic:
+ * - if / else
+ * - condition
+ * - what is true/false
+ * - falsy values
+ *
+ *
+ * 
+*/
+	</script> 
+</body>
+</html>
