@@ -1,0 +1,69 @@
+<!DOCTYPE html><title>D</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<link  rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css">
+<script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
+
+<script src="https://raw.github.com/github/github-flavored-markdown/gh-pages/scripts/showdown.js"></script>
+<script>
+	var text	= null;
+	jQuery(function(){
+		var url	= "index.js";
+		jQuery.get(url, function(text){
+			var sections	= parseDocco(text);
+			console.log("sections", sections)
+		}, 'text');
+	})
+
+
+	/**
+	 * Parse a docco text
+	 *
+	 * @param {String} text the text to parse
+	*/
+	function parseDocco(text){
+		var sections	= [];
+		// go thru each lines, to build the sections
+		var lines	= text.split('\n');
+		lines.forEach(function(line){
+			// if this line is a comment
+			var isComment	= lineIsComment(line);
+			// determine the type of last line and current line
+			var lastType	= sections.length === 0 ? "none" : sections[sections.length-1].type;
+			var curType	= isComment ? "comment" : "code"
+			// create a section if needed
+			if( lastType !== curType )	sections.push({	type	: curType});
+			// if this is a comment, remove the header immediatly
+			if( curType === "comment" )	line	= lineRemoveCommentMarkup(line);
+			// get current sections
+			var section	= sections[sections.length-1];
+			// create text if needed
+			section.text	= section.text	|| '';
+			// append a line
+			section.text	+= line+'\n';
+		})
+		// go thru each sections to htmlize it
+		sections.forEach(function(section){
+			if( section.type === "code" ){
+				// use prettyprint
+				section.html	= prettyPrintOne(section.text);
+			}else if( section.type === "comment" ){
+				// use showdown
+				section.html	= new Showdown.converter().makeHtml(section.text);		
+			}
+		});
+		return sections;
+
+		function lineIsComment(line){
+			var re		= new RegExp('^\\s*' + '//' + '\\s?')
+			var matches	= line.match(re);
+			return matches ? true : false;
+		}
+		function lineRemoveCommentMarkup(line){
+			var re		= new RegExp('^\\s*' + '//' + '\\s?(.*)')
+			var matches	= line.match(re);
+			console.assert(matches[1])
+			return matches[1];
+		}
+	}
+</script>
