@@ -1,0 +1,67 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+<script src="vendor/Car.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.removeCameraControls();
+	world.camera().position.set(500,100,300)
+	world.camera().lookAt(new THREE.Vector3(0,0,0))
+
+	var clock	= new THREE.Clock();
+	// render the scene
+	var controlsCar	= {
+		moveForward	: false,
+		moveBackward	: false,
+		moveLeft	: false,
+		moveRight	: false
+	};
+	
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFF88BB).intensity(3);
+	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0x4444FF).intensity(2);
+
+	car = new THREE.Car();
+
+	car.modelScale		= 1;
+	car.backWheelOffset	= 25 * car.modelScale;
+	car.FRONT_ACCELERATION	*= car.modelScale;
+	car.BACK_ACCELERATION	*= car.modelScale;
+	car.STEERING_RADIUS_RATIO	/= car.modelScale;
+	car.callback	= function( object ) {
+		console.log("callback called")
+		console.dir(object)
+
+		object.root.position.set( 0, 0, 0 );
+		world.add( object.root );
+return;		
+		var materials	= car.bodyGeometry.materials;
+		materials[ 0 ]	= new THREE.MeshNormalMaterial();	// body
+		materials[ 1 ]	= new THREE.MeshNormalMaterial();	// front under lights, back
+
+		materials	= car.wheelGeometry.materials;
+		materials[ 0 ]	= new THREE.MeshNormalMaterial();	// insides
+		materials[ 1 ]	= new THREE.MeshNormalMaterial();	// tire
+	};
+
+	car.loadPartsBinary( "obj/gallardo/parts/gallardo_body_bin.js", "obj/gallardo/parts/gallardo_wheel_bin.js" );
+
+	world.loop().hook(function(deltaTime){
+		car.updateCarModel( deltaTime, controlsCar );
+	});
+	
+	world.loop().hook(function(){
+		var keyboard	= tQuery.keyboard();
+		// keyboard handling
+		controlsCar.moveLeft		= keyboard.pressed("left");
+		controlsCar.moveRight		= keyboard.pressed("right");
+		controlsCar.moveForward		= keyboard.pressed("up");
+		controlsCar.moveBackward	= keyboard.pressed("down");
+	});
+
+</script></body>
