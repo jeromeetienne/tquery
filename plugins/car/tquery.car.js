@@ -7,6 +7,7 @@ tQuery.register('Car', function(){
 	this._car	= car;
 	
 	car.modelScale	 	= 1/400;
+	//car.modelScale	 	= 1;
 	car.backWheelOffset	= 25 * car.modelScale;
 	car.MAX_SPEED		*= car.modelScale;
 	car.MAX_REVERSE_SPEED	*= car.modelScale;
@@ -24,7 +25,7 @@ tQuery.register('Car', function(){
 
 		//this._setMaterial();
 		
-		//this._addFlare();
+		this._addFlare();
 	}.bind(this);
 
 	car.loadPartsBinary( "obj/gallardo/parts/gallardo_body_bin.js", "obj/gallardo/parts/gallardo_wheel_bin.js" );
@@ -33,7 +34,7 @@ tQuery.register('Car', function(){
 		moveForward	: false,
 		moveBackward	: false,
 		moveLeft	: false,
-		moveRight	: false
+		moveRight	: false,
 	};
 
 	this._loopCb	= function(deltaTime){
@@ -97,13 +98,14 @@ tQuery.Car.prototype._addFlare	= function(){
 	for ( var i = 0; i < flares.length; i ++ ) {
 		var flare	= flares[i];
 		var param	= params[ flare[ 0 ] ];
-		var scale	= flare[ 1 ];
+		var scale	= flare[ 1 ] * this._car.modelScale;
 		var position	= flare[ 2 ];
 
-		var sprite = new THREE.Sprite( param );
+		var sprite	= new THREE.Sprite( param );
 		sprite.scale.set( scale, scale, scale );
-		sprite.position.set( position[0]*1.5, position[1]/5, position[2]*1.5 );
-
+		sprite.position.x	= position[0]*1.5;
+		sprite.position.y	= position[1]/ 5;
+		sprite.position.z	= position[2]*1.5;
 		object.bodyMesh.add( sprite );
 	}
 };
