@@ -16,7 +16,7 @@
 
 	world.removeCameraControls();
 	world.camera().position.set(500,100,300)
-	world.camera().position.set(5,1,3)
+	world.camera().position.set(5,0.5,3)
 	world.camera().lookAt(new THREE.Vector3(0,0,0))
 
 	//world.camera().position.set(10,0,0).normalize().multiplyScalar(2);
@@ -37,4 +37,24 @@
 
 	var car	= new tQuery.Car();
 	car.hookKeyboard();
+
+
+	var car	= new tQuery.Car({
+		type	: "gallardo"
+	});
+	car.hookKeyboard();
+	
+	if( false ){
+		var car	= new tQuery.Car({
+			type	: "veyron",
+			scale	: 1.5/400
+		});
+		car.hookKeyboard({
+			keyStateRight	: "d",
+			keyStateUp	: "z",
+			keyStateLeft	: "q",
+			keyStateDown	: "s"
+		});		
+	}
+
 </script></body>

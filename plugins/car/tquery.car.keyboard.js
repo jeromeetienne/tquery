@@ -7,12 +7,19 @@
 tQuery.Car.register('hookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
-		loop	: tQuery.world.loop()
+		loop		: tQuery.world.loop(),
+		keyStateRight	: "right",
+		keyStateUp	: "up",
+		keyStateLeft	: "left",
+		keyStateDown	: "down"
 	});
 	// create the loop callback
 	var loopCb	= this.hookKeyboardLoopCb.bind(this);
 	// store the loopCb
-	tQuery.data(this, 'keyboard', loopCb, true);
+	tQuery.data(this, 'keyboard', {
+		loopCb	: loopCb,
+		opts	: opts
+	}, true);
 	// hook the callback
 	opts.loop.hook(loopCb);
 	// for chained API
@@ -30,12 +37,12 @@ tQuery.Car.register('unhookKeyboard', function(opts){
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
 	});
-	// fetch loopCb
-	var loopCb	= tQuery.data(this, 'hookKeyboardLoopCb');
+	// fetch data
+	var data	= tQuery.data(this, 'keyboard');
 	// unstore loopCb
-	tQuery.removeData(this, 'hookKeyboardLoopCb');
+	tQuery.removeData(this, 'keyboard');
 	// unhook the callback
-	opts.loop.unhook(loopCb);
+	opts.loop.unhook(data.loopCb);
 	// for chained API
 	return this;
 });
@@ -48,10 +55,16 @@ tQuery.Car.register('unhookKeyboard', function(opts){
  * @memberOf	tQuery.Car
 */
 tQuery.Car.register('hookKeyboardLoopCb', function(deltaTime, present){
+	var data	= tQuery.data(this, 'keyboard');
+	var opts	= data.opts;
 	var keyboard	= tQuery.keyboard();
 	// keyboard handling
-	this.controls().moveLeft	= keyboard.pressed("left");
-	this.controls().moveRight	= keyboard.pressed("right");
-	this.controls().moveForward	= keyboard.pressed("up");
-	this.controls().moveBackward	= keyboard.pressed("down");
+	this.controls().moveLeft	= keyboard.pressed(opts.keyStateLeft);
+	this.controls().moveRight	= keyboard.pressed(opts.keyStateRight);
+	this.controls().moveForward	= keyboard.pressed(opts.keyStateUp);
+	this.controls().moveBackward	= keyboard.pressed(opts.keyStateDown);
+	
+	this.backFlareVisibility( keyboard.pressed(opts.keyStateDown) );
+	this.frontFlareVisibility( keyboard.pressed("space") );
+	
 });

@@ -2,25 +2,39 @@
 /**
  * Plugins for sport car
 */
-tQuery.register('Car', function(){
-	var car	= new THREE.Car();
+tQuery.register('Car', function(opts){
+	// handle parameters
+	this._opts	= tQuery.extend(opts, {
+		//type	: "gallardo",
+		type	: "veyron",
+		scale	: 1/400
+	});
+
+
+	var car		= new THREE.Car();
 	this._car	= car;
 	
-	car.modelScale	 	= 1/400;
-	//car.modelScale	 	= 1;
-	car.backWheelOffset	= 25 * car.modelScale;
+	car.modelScale	 	= this._opts.scale;
+	
+	car.backWheelOffset	= {
+		"gallardo"	: 25 * car.modelScale,
+		"veyron"	:  0 * car.modelScale
+	}[this._opts.type];
 	car.MAX_SPEED		*= car.modelScale;
 	car.MAX_REVERSE_SPEED	*= car.modelScale;
 	car.FRONT_ACCELERATION	*= car.modelScale;
 	car.BACK_ACCELERATION	*= car.modelScale;
 	car.FRONT_DECCELERATION	*= car.modelScale;
-	car.STEERING_RADIUS_RATIO/= car.modelScale/1.5;
+	car.STEERING_RADIUS_RATIO/= car.modelScale/2;
 
 	car.callback	= function( object ) {
 		console.log("callback called", object === car)
 		console.dir(object)
 
-		object.root.position.set( 0, 0.13, 0 );
+		object.root.position.y	= {
+			"gallardo"	: 0.13,
+			"veyron"	: 0
+		}[this._opts.type]
 		world.add( object.root );
 
 		//this._setMaterial();
@@ -28,19 +42,28 @@ tQuery.register('Car', function(){
 		this._addFlare();
 	}.bind(this);
 
-	car.loadPartsBinary( "obj/gallardo/parts/gallardo_body_bin.js", "obj/gallardo/parts/gallardo_wheel_bin.js" );
+	if( this._opts.type === "gallardo" ){
+		car.loadPartsBinary( "obj/gallardo/parts/gallardo_body_bin.js", "obj/gallardo/parts/gallardo_wheel_bin.js" );	
+	}else if( this._opts.type === "veyron" ){
+		car.loadPartsBinary( "obj/veyron/parts/veyron_body_bin.js", "obj/veyron/parts/veyron_wheel_bin.js" );
+	}else	console.assert(false);
 
+	// the controls of the car
 	this._controlsCar	= {
 		moveForward	: false,
 		moveBackward	: false,
 		moveLeft	: false,
-		moveRight	: false,
+		moveRight	: false
 	};
 
+	// hook the rendering loop and update the car model
 	this._loopCb	= function(deltaTime){
 		this._car.updateCarModel( deltaTime, this._controlsCar );
 	}.bind(this);
 	world.loop().hook(this._loopCb);
+
+	// to contains the flares sprite
+	this._flareSprites	= {}
 });
 
 // make it pluginable
@@ -66,6 +89,22 @@ tQuery.Car.prototype.object3d	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.Car.prototype.frontFlareVisibility	= function(enable){
+	var fn	= function(sprite){
+		sprite.visible	= enable;
+	};
+	this._flareSprites["frontA"]	&& this._flareSprites["frontA"].forEach(fn)
+	this._flareSprites["frontB"]	&& this._flareSprites["frontB"].forEach(fn)
+};
+
+tQuery.Car.prototype.backFlareVisibility	= function(enable){
+	var fn	= function(sprite){
+		sprite.visible	= enable;
+	};
+	this._flareSprites["backA"]	&& this._flareSprites["backA"].forEach(fn)
+	this._flareSprites["backB"]	&& this._flareSprites["backB"].forEach(fn)
+};
+
 tQuery.Car.prototype._addFlare	= function(){
 	var object	= this._car;
 	var scaleA	= 2;
@@ -82,31 +121,51 @@ tQuery.Car.prototype._addFlare	= function(){
 		"backB" 	: { map: flareB, useScreenCoordinates: false, color: 0xff0000, blending: THREE.AdditiveBlending }
 	};
 
-	var flares = [
-		// front
-		[ "frontA", scaleA, [  47, 38, 120 ] ]	, [ "frontA", scaleA, [  40, 38, 120 ] ], [ "frontA", scaleA, [  32, 38, 122 ] ],
-		[ "frontB", scaleB, [  47, 38, 120 ] ]	, [ "frontB", scaleB, [  40, 38, 120 ] ], [ "frontB", scaleB, [  32, 38, 122 ] ],
-		[ "frontA", scaleA, [ -47, 38, 120 ] ]	, [ "frontA", scaleA, [ -40, 38, 120 ] ], [ "frontA", scaleA, [ -32, 38, 122 ] ],
-		[ "frontB", scaleB, [ -47, 38, 120 ] ]	, [ "frontB", scaleB, [ -40, 38, 120 ] ], [ "frontB", scaleB, [ -32, 38, 122 ] ],
-		// back
-		[ "backA", scaleA, [  22, 50, -123 ] ]	, [ "backA", scaleA, [  32, 49, -123 ] ],
-		[ "backB", scaleB, [  22, 50, -123 ] ]	, [ "backB", scaleB, [  32, 49, -123 ] ],
-		[ "backA", scaleA, [ -22, 50, -123 ] ]	, [ "backA", scaleA, [ -32, 49, -123 ] ],
-		[ "backB", scaleB, [ -22, 50, -123 ] ]	, [ "backB", scaleB, [ -32, 49, -123 ] ],		
-	];
+	if( this._opts.type === "gallardo" ){
+		var flares = [
+			// front
+			[ "frontA", scaleA, [ 70, 10, 160 ] ], [ "frontA", scaleA, [ 66, -1, 175 ] ], [ "frontA", scaleA, [ 66, -1, 165 ] ],
+			[ "frontB", scaleB, [ 70, 10, 160 ] ], [ "frontB", scaleB, [ 66, -1, 175 ] ], [ "frontB", scaleB, [ 66, -1, 165 ] ],	
+			[ "frontA", scaleA, [ -70, 10, 160 ] ], [ "frontA", scaleA, [ -66, -1, 175 ] ], [ "frontA", scaleA, [ -66, -1, 165 ] ],
+			[ "frontB", scaleB, [ -70, 10, 160 ] ], [ "frontB", scaleB, [ -66, -1, 175 ] ], [ "frontB", scaleB, [ -66, -1, 165 ] ],
+			
+			// back
+			[ "backA", scaleA, [ 61, 19, -185 ] ], [ "backA", scaleA, [ 55, 19, -185 ] ],
+			[ "backB", scaleB, [ 61, 19, -185 ] ], [ "backB", scaleB, [ 55, 19, -185 ] ],
+			[ "backA", scaleA, [ -61, 19, -185 ] ], [ "backA", scaleA, [ -55, 19, -185 ] ],
+			[ "backB", scaleB, [ -61, 19, -185 ] ], [ "backB", scaleB, [ -55, 19, -185 ] ],
+		];
+		
+	}else if( this._opts.type === "veyron" ){
+		var flares = [
+			// front
+			[ "frontA", scaleA, [  47, 38, 120 ] ]	, [ "frontA", scaleA, [  40, 38, 120 ] ], [ "frontA", scaleA, [  32, 38, 122 ] ],
+			[ "frontB", scaleB, [  47, 38, 120 ] ]	, [ "frontB", scaleB, [  40, 38, 120 ] ], [ "frontB", scaleB, [  32, 38, 122 ] ],
+			[ "frontA", scaleA, [ -47, 38, 120 ] ]	, [ "frontA", scaleA, [ -40, 38, 120 ] ], [ "frontA", scaleA, [ -32, 38, 122 ] ],
+			[ "frontB", scaleB, [ -47, 38, 120 ] ]	, [ "frontB", scaleB, [ -40, 38, 120 ] ], [ "frontB", scaleB, [ -32, 38, 122 ] ],
+			// back
+			[ "backA", scaleA, [  22, 50, -123 ] ]	, [ "backA", scaleA, [  32, 49, -123 ] ],
+			[ "backB", scaleB, [  22, 50, -123 ] ]	, [ "backB", scaleB, [  32, 49, -123 ] ],
+			[ "backA", scaleA, [ -22, 50, -123 ] ]	, [ "backA", scaleA, [ -32, 49, -123 ] ],
+			[ "backB", scaleB, [ -22, 50, -123 ] ]	, [ "backB", scaleB, [ -32, 49, -123 ] ],		
+		];
+	}else	console.assert(false);
 
-	for ( var i = 0; i < flares.length; i ++ ) {
+	for( var i = 0; i < flares.length; i ++ ){
 		var flare	= flares[i];
-		var param	= params[ flare[ 0 ] ];
+		var name	= flare[ 0 ];
+		var param	= params[ name ];
 		var scale	= flare[ 1 ] * this._car.modelScale;
 		var position	= flare[ 2 ];
 
 		var sprite	= new THREE.Sprite( param );
 		sprite.scale.set( scale, scale, scale );
-		sprite.position.x	= position[0]*1.5;
-		sprite.position.y	= position[1]/ 5;
-		sprite.position.z	= position[2]*1.5;
+		sprite.position.set(position[0], position[1], position[2])
+		// add the sprite
 		object.bodyMesh.add( sprite );
+
+		this._flareSprites[name]	= this._flareSprites[name] || [];
+		this._flareSprites[name].push( sprite );
 	}
 };
 
