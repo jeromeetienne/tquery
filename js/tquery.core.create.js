@@ -40,6 +40,12 @@ tQuery.register('createDirectionalLight', function(){
 	return tQuery(tLight);
 });
 
+tQuery.register('createSpotLight', function(){
+	var tLight	= new THREE.SpotLight(0xFFFFFF * Math.random());
+	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	return tQuery(tLight);
+});
+
 tQuery.register('createAmbientLight', function(){
 	var tLight	= new THREE.AmbientLight(0xFFFFFF);
 	return tQuery(tLight);

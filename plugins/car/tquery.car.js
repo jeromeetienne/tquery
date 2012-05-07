@@ -1,4 +1,8 @@
 
+tQuery.register('createCar', function(opts){
+	return new tQuery.Car(opts)
+});
+
 /**
  * Plugins for sport car
 */

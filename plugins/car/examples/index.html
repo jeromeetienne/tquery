@@ -26,28 +26,83 @@
 	
 	world.addFogExp2({density : 0.05});
 	
-	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xFF88BB).intensity(3);
-	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0x4444FF).intensity(2);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(2);
+	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0xffffff).intensity(2);
+	
+	//tQuery.createSpotLight().addTo(world).position( 1,1,-1).color(0x4444FF).intensity(2);
+
+//	var tLight	= new THREE.SpotLight(0x8888ff);
+////	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+//	tLight.position.set(0,1,0);
+//	tLight.target.position.set( 0, 0, 0 );
+//	tLight.intensity	= 2;
+//	world.scene().add(tLight)
+
 
 	tQuery.createCheckerboard({
 		segmentsW	: 100,	// number of segment in width
-		segmentsH	: 100	// number of segment in Height
+		segmentsH	: 100,	// number of segment in Height
+		//materialEven	: new THREE.MeshPhongMaterial({
+		//	ambient	: 0x888888,
+		//	color	: 0xcccccc,
+		//	specular: 0xff00ff,
+		//	shininess: 5
+		//}),
+		//materialOdd	: new THREE.MeshPhongMaterial({
+		//	ambient	: 0x111111,
+		//	color	: 0x444444,
+		//	specular: 0xff00ff,
+		//	shininess: 5
+		//})
 	}).addTo(world).scaleBy(100);
 
-	var car	= new tQuery.Car();
-	car.hookKeyboard();
+	//var car	= tQuery.createCar().hookKeyboard();
 
 
-	var car	= new tQuery.Car({
-		type	: "gallardo"
+	var car	= tQuery.createCar({
+		type	: "veyron",
+		scale	: 1.5/400
+	}).hookKeyboard();
+	
+	// attempts at camera control
+	var curAngle	= 0;
+	var maxAngle	= Math.PI/8;
+	var spdAngle	= 0.8;
+	var prevPosition= null;
+	world.loop().hook(function(){
+		var tObject3d	= car.object3d();
+
+		var carAngle	= car._car.carOrientation;
+		curAngle	= spdAngle*curAngle + (1-spdAngle)*carAngle;
+		curAngle	= Math.max(curAngle, carAngle - maxAngle);
+		curAngle	= Math.min(curAngle, carAngle + maxAngle);
+
+		var distance	= -2;
+		if( prevPosition && false ){
+			var delta	= tObject3d.position.clone().subSelf(prevPosition);
+			var speed	= delta.length();
+			console.log("len", speed)
+			speed	= Math.max(speed, 0);
+			speed	= Math.min(speed, 0.15);
+			
+			distance	= -1-(speed / 0.15)*2;
+		}
+		prevPosition	= tObject3d.position.clone();
+
+		//car._car.carOrientation
+		
+		var offset	= new THREE.Vector3(0, 0.5, distance);
+		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
+		matrix.multiplyVector3(offset);
+		
+		world.camera().position.copy(tObject3d.position).addSelf(offset);
+		world.camera().lookAt(tObject3d.position)
 	});
-	car.hookKeyboard();
 	
 	if( false ){
 		var car	= new tQuery.Car({
-			type	: "veyron",
-			scale	: 1.5/400
+			type	: "gallardo"
 		});
 		car.hookKeyboard({
 			keyStateRight	: "d",

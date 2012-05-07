@@ -50,7 +50,7 @@ tQuery.Car.register('unhookKeyboard', function(opts){
 /**
  * callback for hook the keyboard
  * 
- * @private
+ * @private 
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.Car
 */
