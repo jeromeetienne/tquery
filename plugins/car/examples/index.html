@@ -67,6 +67,8 @@
 	
 	// attempts at camera control
 	var curAngle	= 0;
+	var curDistance	= 0;
+	var spdDistance	= 0.95;
 	var maxAngle	= Math.PI/8;
 	var spdAngle	= 0.8;
 	var prevPosition= null;
@@ -78,26 +80,28 @@
 		curAngle	= Math.max(curAngle, carAngle - maxAngle);
 		curAngle	= Math.min(curAngle, carAngle + maxAngle);
 
-		var distance	= -2;
-		if( prevPosition && false ){
+		var distance	= -1;
+		if( prevPosition ){
 			var delta	= tObject3d.position.clone().subSelf(prevPosition);
 			var speed	= delta.length();
 			console.log("len", speed)
 			speed	= Math.max(speed, 0);
 			speed	= Math.min(speed, 0.15);
+			distance	= -1-(speed / 0.15)*2.5;
 			
-			distance	= -1-(speed / 0.15)*2;
+			curDistance	= spdDistance*curDistance + (1-spdDistance)*distance;			
 		}
 		prevPosition	= tObject3d.position.clone();
 
-		//car._car.carOrientation
-		
-		var offset	= new THREE.Vector3(0, 0.5, distance);
+		var offset	= new THREE.Vector3(0, 0.5, curDistance);
 		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
-		matrix.multiplyVector3(offset);
+		matrix.multiplyVector3(offset).addSelf(tObject3d.position);
+		world.camera().position.copy(offset);
 		
-		world.camera().position.copy(tObject3d.position).addSelf(offset);
-		world.camera().lookAt(tObject3d.position)
+		var offset	= new THREE.Vector3(0, 0, -curDistance);
+		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
+		matrix.multiplyVector3(offset).addSelf(tObject3d.position);
+		world.camera().lookAt(offset);
 	});
 	
 	if( false ){
