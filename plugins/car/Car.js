@@ -8,9 +8,9 @@ THREE.Car = function () {
 
 	// car geometry manual parameters
 
-	this.modelScale = 1;
+	this.modelScale		= 1;
 
-	this.backWheelOffset = 2;
+	this.backWheelOffset	= 2;
 
 	this.autoWheelGeometry = true;
 
@@ -20,44 +20,42 @@ THREE.Car = function () {
 	//	- other wheels are mirrored against car root
 	//	- if necessary back wheels can be offset manually
 
-	this.wheelOffset = new THREE.Vector3();
-
-	this.wheelDiameter = 1;
+	this.wheelOffset	= new THREE.Vector3();
+	this.wheelDiameter	= 1;
 
 	// car "feel" parameters
 
-	this.MAX_SPEED = 2200;
-	this.MAX_REVERSE_SPEED = -1500;
+	this.MAX_SPEED		= 2200;
+	this.MAX_REVERSE_SPEED	= -1500;
 
-	this.MAX_WHEEL_ROTATION = 0.6;
+	this.MAX_WHEEL_ROTATION	= 0.6;
 
-	this.FRONT_ACCELERATION = 1250;
-	this.BACK_ACCELERATION = 1500;
+	this.FRONT_ACCELERATION	= 1250;
+	this.BACK_ACCELERATION	= 1500;
 
-	this.WHEEL_ANGULAR_ACCELERATION = 1.5;
+	this.FRONT_DECCELERATION	= 750;
+	this.WHEEL_ANGULAR_ACCELERATION	= 1.5;
+	this.WHEEL_ANGULAR_DECCELERATION	= 1.0;
 
-	this.FRONT_DECCELERATION = 750;
-	this.WHEEL_ANGULAR_DECCELERATION = 1.0;
+	this.STEERING_RADIUS_RATIO	= 0.0023;
 
-	this.STEERING_RADIUS_RATIO = 0.0023;
-
-	this.MAX_TILT_SIDES = 0.05;
-	this.MAX_TILT_FRONTBACK = 0.015;
+	this.MAX_TILT_SIDES	= 0.05;
+	this.MAX_TILT_FRONTBACK	= 0.015;
 
 	// internal control variables
 
-	this.speed = 0;
-	this.acceleration = 0;
+	this.speed		= 0;
+	this.acceleration	= 0;
 
-	this.wheelOrientation = 0;
-	this.carOrientation = 0;
+	this.wheelOrientation	= 0;
+	this.carOrientation	= 0;
 
 	// car rigging
 
-	this.root = new THREE.Object3D();
+	this.root		= new THREE.Object3D();
 
-	this.frontLeftWheelRoot = new THREE.Object3D();
-	this.frontRightWheelRoot = new THREE.Object3D();
+	this.frontLeftWheelRoot	= new THREE.Object3D();
+	this.frontRightWheelRoot= new THREE.Object3D();
 
 	this.bodyMesh = null;
 
@@ -72,50 +70,38 @@ THREE.Car = function () {
 
 	// internal helper variables
 
-	this.loaded = false;
+	this.loaded	= false;
 
-	this.meshes = [];
+	this.meshes	= [];
 
 	// API
 
 	this.enableShadows = function ( enable ) {
-
 		for ( var i = 0; i < this.meshes.length; i ++ ) {
-
 			this.meshes[ i ].castShadow = enable;
 			this.meshes[ i ].receiveShadow = enable;
-
 		}
-
 	};
 
 	this.setVisible = function ( enable ) {
-
 		for ( var i = 0; i < this.meshes.length; i ++ ) {
-
 			this.meshes[ i ].visible = enable;
 			this.meshes[ i ].visible = enable;
-
 		}
-
 	};
 
-	this.loadPartsJSON = function ( bodyURL, wheelURL ) {
-
-		var loader = new THREE.JSONLoader();
+	this.loadPartsJSON	= function ( bodyURL, wheelURL ){
+		var loader	= new THREE.JSONLoader();
 
 		loader.load( bodyURL, function( geometry ) { createBody( geometry ) } );
 		loader.load( wheelURL, function( geometry ) { createWheels( geometry ) } );
-
 	};
 
-	this.loadPartsBinary = function ( bodyURL, wheelURL ) {
-
+	this.loadPartsBinary	= function ( bodyURL, wheelURL ){
 		var loader = new THREE.BinaryLoader();
 
 		loader.load( bodyURL, function( geometry ) { createBody( geometry ) } );
 		loader.load( wheelURL, function( geometry ) { createWheels( geometry ) } );
-
 	};
 
 	this.updateCarModel = function ( delta, controls ) {
