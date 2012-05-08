@@ -64,7 +64,7 @@ tQuery.Car.register('hookKeyboardLoopCb', function(deltaTime, present){
 	this.controls().moveForward	= keyboard.pressed(opts.keyStateUp);
 	this.controls().moveBackward	= keyboard.pressed(opts.keyStateDown);
 	
-	this.backFlareVisibility( keyboard.pressed(opts.keyStateDown) );
-	this.frontFlareVisibility( keyboard.pressed("space") );
+	this.flareVisible(['backA', 'backB']	, keyboard.pressed(opts.keyStateDown) );
+	this.flareVisible(['frontA', 'frontB']	, keyboard.pressed("space") );
 	
 });

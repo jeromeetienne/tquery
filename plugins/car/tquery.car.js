@@ -94,21 +94,30 @@ tQuery.Car.prototype.object3d	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Car.prototype.frontFlareVisibility	= function(enable){
-	var fn	= function(sprite){
-		sprite.visible	= enable;
-	};
-	this._flareSprites["frontA"]	&& this._flareSprites["frontA"].forEach(fn)
-	this._flareSprites["frontB"]	&& this._flareSprites["frontB"].forEach(fn)
+tQuery.Car.prototype.flareVisible	= function(categories, value){
+	var flareCategories	= ['frontA', 'frontB', 'backA', 'backB'];
+	categories.forEach(function(category){
+		console.assert( flareCategories.indexOf(category) !== -1 );
+		var flares	= this._flareSprites[category];
+		if( !flares )	return;
+		flares.forEach(function(sprite){
+			sprite.visible	= value;
+		})
+	}.bind(this))
 };
 
-tQuery.Car.prototype.backFlareVisibility	= function(enable){
-	var fn	= function(sprite){
-		sprite.visible	= enable;
-	};
-	this._flareSprites["backA"]	&& this._flareSprites["backA"].forEach(fn)
-	this._flareSprites["backB"]	&& this._flareSprites["backB"].forEach(fn)
+tQuery.Car.prototype.flareOpacity	= function(categories, value){
+	var flareCategories	= ['frontA', 'frontB', 'backA', 'backB'];
+	categories.forEach(function(category){
+		console.assert( flareCategories.indexOf(category) !== -1 );
+		var flares	= this._flareSprites[category];
+		if( !flares )	return;
+		flares.forEach(function(sprite){
+			sprite.opacity	= value;
+		})
+	}.bind(this))
 };
+
 
 tQuery.Car.prototype._addFlare	= function(){
 	var object	= this._car;
