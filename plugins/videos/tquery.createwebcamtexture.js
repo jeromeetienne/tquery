@@ -19,7 +19,7 @@ tQuery.register('createWebcamTexture', function(opts){
 	var texture;
 
 	if( hasUserMedia ){
-		navigator.webkitGetUserMedia('video', function(stream){
+		navigator.webkitGetUserMedia({video:true}, function(stream){
 			video.src	= webkitURL.createObjectURL(stream);
 			console.log("pseudo object URL", video.src);
 		}, function(error){

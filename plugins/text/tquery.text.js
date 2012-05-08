@@ -23,7 +23,7 @@ define(function(){
 		center.y	= ( geometry.boundingBox.max.y - geometry.boundingBox.min.y ) / 2;
 		center.z	= ( geometry.boundingBox.max.z - geometry.boundingBox.min.z ) / 2;
 		geometry.vertices.forEach(function(vertex){
-			vertex.position.subSelf(center);
+			vertex.subSelf(center);
 		});
 		
 		// create a mesh with it

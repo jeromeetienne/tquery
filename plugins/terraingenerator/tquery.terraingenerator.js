@@ -124,7 +124,7 @@ tQuery.register('generateTerrainGeometry', function(opts){
 	var heights	= generateHeight( opts.segmentsW, opts.segmentsH );	
 	for( var i = 0; i < tGeometry.vertices.length; i ++ ){
 // TODO find out what are all those constant and make them tunable
-		tGeometry.vertices[i].position.z = heights[i] / 375;
+		tGeometry.vertices[i].y = heights[i] / 375;
 	}
 	
 	var canvas	= generateTexture( heights, opts.segmentsW, opts.segmentsH );
@@ -132,7 +132,7 @@ tQuery.register('generateTerrainGeometry', function(opts){
 	texture.needsUpdate = true;
 
 	// mark the vertices as dirty
-	tGeometry.__dirtyVertices = true;
+	tGeometry.verticesNeedUpdate = true;
 	tGeometry.computeBoundingBox();
 	tGeometry.computeCentroids();	
 	tGeometry.computeFaceNormals();

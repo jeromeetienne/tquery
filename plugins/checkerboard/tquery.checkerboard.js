@@ -24,7 +24,7 @@ tQuery.register('createCheckerboard', function(opts){
 	var material	= new THREE.MeshFaceMaterial();
 	var mesh	= new THREE.Mesh(geometry, material);
 	// put it horizontal by default
-	mesh.rotation.x	= -Math.PI/2
+	//mesh.rotation.x	= -Math.PI/2
 	// return the tQuery
 	return tQuery(mesh);
 });

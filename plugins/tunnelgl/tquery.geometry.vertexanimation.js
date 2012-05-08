@@ -30,7 +30,7 @@ tQuery.Geometry.register('vertexAnimation', function(options){
 				transform(origVector3, vector3, present);
 			}
 			// mark the vertices as dirty
-			tGeometry.__dirtyVertices = true;
+			tGeometry.verticesNeedUpdate = true;
 			tGeometry.computeBoundingBox();
 			tGeometry.computeCentroids();
 			tGeometry.computeFaceNormals();

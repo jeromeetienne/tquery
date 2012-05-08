@@ -40,10 +40,10 @@ tQuery.Geometry.register('scaleBy', function(vector3){
 	this.each(function(geometry){
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.position.multiplySelf(vector3); 
+			vertex.multiplySelf(vector3); 
 		}
 		// mark the vertices as dirty
-		geometry.__dirtyVertices = true;
+		geometry.verticesNeedUpdate = true;
 		geometry.computeBoundingBox();
 	})
 
@@ -127,10 +127,10 @@ tQuery.Geometry.register('translate', function(delta){
 		// change all geometry.vertices
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.position.addSelf(delta); 
+			vertex.addSelf(delta); 
 		}
 		// mark the vertices as dirty
-		geometry.__dirtyVertices = true;
+		geometry.verticesNeedUpdate = true;
 		geometry.computeBoundingBox();
 	})
 
@@ -157,7 +157,7 @@ tQuery.Geometry.register('rotate', function(angles, order){
 		geometry.applyMatrix( matrix );
 	
 		// mark the vertices as dirty
-		geometry.__dirtyVertices = true;
+		geometry.verticesNeedUpdate = true;
 		geometry.computeBoundingBox();
 	});
 

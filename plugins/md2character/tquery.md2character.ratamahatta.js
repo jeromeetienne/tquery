@@ -133,7 +133,7 @@ tQuery.RatamahattaMD2Character.prototype.goForward	= function(distance){
 	var angle	= container.rotation.y;
 	
 	var speed	= new THREE.Vector3(0, 0, distance);
-	var matrix	= new THREE.Matrix4().setRotationY(angle);
+	var matrix	= new THREE.Matrix4().makeRotationY(angle);
 	matrix.multiplyVector3(speed);
 	container.position.addSelf(speed);
 	return this;	// for chained API

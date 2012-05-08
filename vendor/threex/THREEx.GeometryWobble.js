@@ -10,8 +10,8 @@ THREEx.GeometryWobble.init	= function(geometry)
 {
 	for(var i = 0; i < geometry.vertices.length; i++){
 		var vertex	= geometry.vertices[i];
-		vertex.originalPosition	= vertex.position.clone();
-		vertex.dirVector	= vertex.position.clone().normalize();
+		vertex.originalPosition	= vertex.clone();
+		vertex.dirVector	= vertex.clone().normalize();
 	}
 	geometry.dynamic	= true;
 	
@@ -45,9 +45,9 @@ THREEx.GeometryWobble.Animate	= function(geometry, phase, magnitude)
 		var vertex	= geometry.vertices[i];
 		var vertexPhase	= Math.cos(phase + vertex.axisValue);
 		
-		vertex.position.x = vertex.originalPosition.x + vertexPhase * vertex.dirVector.x * magnitude.x;
-		vertex.position.y = vertex.originalPosition.y + vertexPhase * vertex.dirVector.y * magnitude.y;
-		vertex.position.z = vertex.originalPosition.z + vertexPhase * vertex.dirVector.z * magnitude.z;
+		vertex.x = vertex.originalPosition.x + vertexPhase * vertex.dirVector.x * magnitude.x;
+		vertex.y = vertex.originalPosition.y + vertexPhase * vertex.dirVector.y * magnitude.y;
+		vertex.z = vertex.originalPosition.z + vertexPhase * vertex.dirVector.z * magnitude.z;
 	}
-	geometry.__dirtyVertices = true;
+	geometry.verticesNeedUpdate = true;
 }

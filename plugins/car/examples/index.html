@@ -96,12 +96,12 @@
 		prevPosition	= tObject3d.position.clone();
 
 		var position	= new THREE.Vector3(0, 0.35, 0.7*curDistance);
-		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
+		var matrix	= new THREE.Matrix4().makeRotationY(curAngle);
 		matrix.multiplyVector3(position).addSelf(tObject3d.position);
 		world.camera().position.copy(position);
 		
 		var target	= new THREE.Vector3(0, 0, -2*curDistance);
-		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
+		var matrix	= new THREE.Matrix4().makeRotationY(curAngle);
 		matrix.multiplyVector3(target).addSelf(tObject3d.position);
 		world.camera().lookAt(target);
 	});
