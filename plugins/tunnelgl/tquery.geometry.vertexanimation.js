@@ -14,8 +14,8 @@ tQuery.Geometry.register('vertexAnimation', function(options){
 		// TODO put that in a .data()
 		tGeometry._origVertices	= new Array(length)
 		for(var i = 0; i < length; i++){
-			var vertex	= new THREE.Vertex();
-			vertex.position.copy(tGeometry.vertices[i].position.clone())
+			var vertex	= new THREE.Vector3();
+			vertex.copy(tGeometry.vertices[i].clone())
 			tGeometry._origVertices[i]	= vertex;
 		}
 	});
@@ -25,8 +25,8 @@ tQuery.Geometry.register('vertexAnimation', function(options){
 	tQuery.world.loop().hook(function(deltaTime, present){
 		this.each(function(tGeometry){
 			for(var i = 0; i < tGeometry.vertices.length; i++) {
-				var origVector3	= tGeometry._origVertices[i].position;
-				var vector3	= tGeometry.vertices[i].position;
+				var origVector3	= tGeometry._origVertices[i];
+				var vector3	= tGeometry.vertices[i];
 				transform(origVector3, vector3, present);
 			}
 			// mark the vertices as dirty

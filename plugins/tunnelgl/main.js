@@ -34,6 +34,19 @@ var material	= new THREE.MeshLambertMaterial({
 //material	= new THREE.MeshNormalMaterial();
 
 
+// create the player object
+var object	= tQuery.createSphere(0.5, 32, 16, new THREE.MeshLambertMaterial({
+	ambient	: 0x444444,
+	color	: 0x44FF44,
+	map	: waterTexture
+}));
+
+object.id('player').addTo(world)
+	.geometry()
+		.rotateZ(Math.PI/2)
+		.zoom(0.2)
+		.back()
+
 var tunnelH	= 11;
 //tunnelH	= 3;
 
@@ -53,8 +66,6 @@ tunnel.material().textureScrolling({
 });
 // TODO this would be better to flip the geometry. put it in tquery.geometry.toolbox.js
 tunnel.get(0).flipSided	= true;
-
-
 
 var playerZ		= 0;
 var playerAz		= 0;
@@ -138,17 +149,3 @@ world.renderer().setClearColorHex( 0x000000, 1 );
 
 // add a fog
 world.addFogExp2({ density : 0.15 });
-
-// create the player object
-var object	= tQuery.createSphere(0.5, 32, 16, new THREE.MeshLambertMaterial({
-	ambient	: 0x444444,
-	color	: 0x44FF44,
-	map	: waterTexture
-}));
-
-object.id('player').addTo(world)
-	.geometry()
-		.rotateZ(Math.PI/2)
-		.zoom(0.2)
-		.back()
-

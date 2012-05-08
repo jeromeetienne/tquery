@@ -1,7 +1,7 @@
 describe('tQuery.world', function(){
 	it('should support webgl', function(){
 		var world	= tQuery.createWorld();
-		console.assert(world._hasWebGL === true);
+		console.assert(tQuery.World.hasWebGL() === true);
 		world.destroy();
 	});
 
