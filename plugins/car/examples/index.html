@@ -63,17 +63,17 @@
 	//var car	= tQuery.createCar().hookKeyboard();
 
 
-	var car	= tQuery.createCar({
+	var car	= tQuery.createCar({ 
 		type	: "veyron",
-		scale	: 1.5/400
+		scale	: 1.5
 	}).hookKeyboard();
 	
 	// attempts at camera control
 	var curAngle	= 0;
 	var curDistance	= 0;
-	var spdDistance	= 0.90;
-	var maxAngle	= Math.PI/8;
-	var spdAngle	= 0.8;
+	var spdDistance	= 0.95;
+	var maxAngle	= Math.PI/5;
+	var spdAngle	= 0.85;
 	var prevPosition= null;
 	world.loop().hook(function(){
 		var tObject3d	= car.object3d();
@@ -87,32 +87,32 @@
 		if( prevPosition ){
 			var delta	= tObject3d.position.clone().subSelf(prevPosition);
 			var speed	= delta.length();
-			speed	= Math.max(speed, 0);
-			speed	= Math.min(speed, 0.15);
-			distance	= -1-(speed / 0.15)*2.5;
+			speed		= Math.max(speed, 0);
+			speed		= Math.min(speed, 0.15);
+			distance	= -1-(speed / 0.15)*4;
 			
 			curDistance	= spdDistance*curDistance + (1-spdDistance)*distance;			
 		}
 		prevPosition	= tObject3d.position.clone();
 
-		var offset	= new THREE.Vector3(0, 0.5, curDistance);
+		var position	= new THREE.Vector3(0, 0.35, 0.7*curDistance);
 		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
-		matrix.multiplyVector3(offset).addSelf(tObject3d.position);
-		world.camera().position.copy(offset);
+		matrix.multiplyVector3(position).addSelf(tObject3d.position);
+		world.camera().position.copy(position);
 		
-		var offset	= new THREE.Vector3(0, 0, -curDistance);
+		var target	= new THREE.Vector3(0, 0, -2*curDistance);
 		var matrix	= new THREE.Matrix4().setRotationY(curAngle);
-		matrix.multiplyVector3(offset).addSelf(tObject3d.position);
-		world.camera().lookAt(offset);
+		matrix.multiplyVector3(target).addSelf(tObject3d.position);
+		world.camera().lookAt(target);
 	});
 
-	// init the library
-	world.enableWebAudio();
-	// create a sound
-	var sound	= tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){
-		sound.play();
-	});
-	sound.loop(true).follow(car.object3d(), world);
+	//// init the library
+	//world.enableWebAudio();
+	//// create a sound
+	//var sound	= tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){
+	//	sound.play();
+	//});
+	//sound.loop(true).follow(car.object3d(), world);
 
 	
 	if( false ){

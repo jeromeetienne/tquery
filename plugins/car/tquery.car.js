@@ -9,10 +9,11 @@ tQuery.register('createCar', function(opts){
 tQuery.register('Car', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
-		//type	: "gallardo",
-		type	: "veyron",
-		scale	: 1/400
+		type	: "gallardo",
+		scale	: 1
 	});
+
+	this._opts.scale	/= 400;
 
 
 	var car		= new THREE.Car();
