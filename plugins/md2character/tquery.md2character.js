@@ -223,12 +223,10 @@ tQuery.MD2Character.prototype.load		= function ( config )
 	}
 
 	// SKINS
-
-	this._skinsBody	= this._loadTextures( config.baseUrl + "skins/", config.skins );
-	this._skinsWeapon= this._loadTextures( config.baseUrl + "skins/", weaponsTextures );
+	this._skinsBody		= this._loadTextures( config.baseUrl + "skins/", config.skins );
+	this._skinsWeapon	= this._loadTextures( config.baseUrl + "skins/", weaponsTextures );
 
 	// BODY
-
 	var loader	= new THREE.JSONLoader();
 
 	loader.load( config.baseUrl + config.body, function( geometry ) {
@@ -247,7 +245,6 @@ tQuery.MD2Character.prototype.load		= function ( config )
 	} );
 
 	// WEAPONS
-
 	var generateCallback = function( index, name ){
 		return function( geometry ) {
 			var mesh	= createPart( geometry, _this._skinsWeapon[ index ] );
