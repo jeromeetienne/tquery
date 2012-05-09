@@ -9,8 +9,8 @@ tQuery.register('createCar', function(opts){
 tQuery.register('Car', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
-		type	: "gallardo",
-		scale	: 1
+		type	: "veyron",
+		scale	: 1.5
 	});
 
 	this._opts.scale	/= 400;
@@ -18,8 +18,7 @@ tQuery.register('Car', function(opts){
 
 	var car		= new THREE.Car();
 	this._car	= car;
-	
-	car.modelScale	 	= this._opts.scale;
+	car.modelScale	= this._opts.scale;
 	
 	car.backWheelOffset	= {
 		"gallardo"	: 25 * car.modelScale,
@@ -45,6 +44,8 @@ tQuery.register('Car', function(opts){
 		//this._setMaterial();
 		
 		this._addFlare();
+		
+		this.trigger('load');
 	}.bind(this);
 
 	if( this._opts.type === "gallardo" ){
@@ -71,8 +72,13 @@ tQuery.register('Car', function(opts){
 	this._flareSprites	= {}
 });
 
-// make it pluginable
+// make it pluginable at instance level
 tQuery.pluginsInstanceOn(tQuery.Car);
+// Make it pluginable at class level
+tQuery.pluginsStaticOn(tQuery.Car);
+// make it eventable
+tQuery.MicroeventMixin(tQuery.Car.prototype);
+
 
 tQuery.Car.prototype.destroy	= function(){
 	world.loop().unhook(this._loopCb);

@@ -77,9 +77,9 @@ THREE.Car = function () {
 	// API
 
 	this.enableShadows = function ( enable ) {
-		for ( var i = 0; i < this.meshes.length; i ++ ) {
-			this.meshes[ i ].castShadow = enable;
-			this.meshes[ i ].receiveShadow = enable;
+		for ( var i = 0; i < scope.meshes.length; i ++ ) {
+			scope.meshes[ i ].castShadow = enable;
+			scope.meshes[ i ].receiveShadow = enable;
 		}
 	};
 

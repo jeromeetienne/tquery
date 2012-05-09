@@ -1,0 +1,129 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+<script src='../../grassground/tquery.grassground.js'></script>
+<script src='../../checkerboard/tquery.checkerboard.js'></script>
+<script src='../../fog/tquery.world.createfog.js'></script>
+
+<script src="../Car.js"></script>
+<script src="../tquery.car.js"></script>
+<script src="../tquery.car.keyboard.js"></script>
+<script src="../tquery.car.cameracontrols.js"></script>
+
+<script src="../../assets/vendor/webaudio-bundle.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
+
+	world.renderer().shadowMapEnabled	= true;
+	world.renderer().shadowMapSoft		= true;
+	
+	//world.addFogExp2({density : 0.1});
+	
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(2);
+	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0xffffff).intensity(2);
+
+	tQuery.DirectionalLight.register('shadowMap', function(width, height){
+		return this.shadowMapWidth(width).shadowMapHeight(height);
+	});
+	
+	tQuery.DirectionalLight.register('shadowCamera', function(right, left, top, bottom){
+		return this.shadowCameraRight(right)
+				.shadowCameraLeft(left)
+				.shadowCameraTop(top)
+				.shadowCameraBottom(bottom);
+	});
+
+	var light	= tQuery.createDirectionalLight().addTo(world).color(0xaaaaaa)
+		.position(new THREE.Vector3(0, 1, 2).normalize().multiplyScalar(3))
+		.intensity(2)
+		.castShadow(true).shadowDarkness(0.8)
+		.shadowMap(512*2,512*2)
+		.shadowCameraVisible(true)
+		.shadowCamera(20, -20, 20, -20)
+		.shadowCameraNear(0.1);
+if(true){
+	var ground	= tQuery.createGrassGround({
+		textureUrl	: '../../grassground/images/grasslight-big.jpg',
+		textureRepeatX	: 30,
+		textureRepeatY	: 30,		
+	}).addTo(world).scaleBy(100);
+	ground.get(0).receiveShadow	= true;
+}
+
+if( true ){
+	var car	= tQuery.createCar({ 
+		type	: "veyron",
+		scale	: 1.5
+	}).hookKeyboard();
+	car.bind('load', function(){
+		car._car.enableShadows(true);
+	})
+	world.setCameraControls(new tQuery.Car.CameraControls(car));
+}
+
+	var object	= tQuery.createTorus().addTo(world);
+	object.get(0).castShadow	= true;
+
+	//// init the library
+	//world.enableWebAudio();
+	//// create a sound
+	//var sound	= tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){
+	//	sound.play();
+	//});
+	//sound.loop(true).follow(car.object3d(), world);
+
+	
+	if( false ){
+		var car	= new tQuery.Car({
+			type	: "gallardo"
+		});
+		car.hookKeyboard({
+			keyStateRight	: "d",
+			keyStateUp	: "z",
+			keyStateLeft	: "q",
+			keyStateDown	: "s"
+		});		
+	}
+	
+        var sampleClosedSpline	= new THREE.ClosedSplineCurve3([
+		new THREE.Vector3(-40, 0, -80),
+		new THREE.Vector3( 40, 0, -80),
+		new THREE.Vector3( 40, 0,  80),
+		new THREE.Vector3(-40, 0,  80),
+        ]);
+
+        var extrudeSettings	= {
+		amount		: 200,
+		bevelEnabled	: false,
+		bevelSegments	: 2,
+		steps		: 75,
+		extrudePath	: sampleClosedSpline
+	};
+
+        var shape	= new THREE.Shape();
+        shape.moveTo(  -0, -7 );
+        shape.lineTo(  -0,  7 );
+        shape.lineTo( 0.1,  0 );
+
+        var geometry	= shape.extrude( extrudeSettings );
+	//var mesh	= new THREE.Mesh( geometry, new THREE.MeshNormalMaterial());
+	var mesh	= THREE.SceneUtils.createMultiMaterialObject( geometry, [
+		new THREE.MeshBasicMaterial( { color: 0xAAAAAA, opacity: 1, transparent: true } ),
+		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true,  opacity: 0.3 } )
+	]);
+	//var mesh	= new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0xFF00FF, opacity: 0.6, transparent: true } ));
+	var scale	= 1/5;
+	mesh.scale.set(scale, scale, scale);
+	mesh.position.y	= 0.001;
+	//mesh.rotation.y	= Math.PI/2;
+	world.add(mesh);
+
+</script></body>

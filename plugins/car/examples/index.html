@@ -6,140 +6,42 @@
 <script src="../../keyboard/tquery.keyboard.js"></script>
 
 <script src='../../grassground/tquery.grassground.js'></script>
-<script src='../../checkerboard/tquery.checkerboard.js'></script>
 <script src='../../fog/tquery.world.createfog.js'></script>
 
 <script src="../Car.js"></script>
 <script src="../tquery.car.js"></script>
 <script src="../tquery.car.keyboard.js"></script>
-
-<script src="../../assets/vendor/webaudio-bundle.js"></script>
-
+<script src="../tquery.car.cameracontrols.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-
-	world.removeCameraControls();
-	world.camera().position.set(500,100,300)
-	world.camera().position.set(5,0.5,3)
-	world.camera().lookAt(new THREE.Vector3(0,0,0))
-
-	//world.camera().position.set(10,0,0).normalize().multiplyScalar(2);
-	//world.camera().lookAt(new THREE.Vector3(0,0,0))
-
-	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
-	
+	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
+	// add a fog
 	world.addFogExp2({density : 0.1});
-	
+	// add the lights
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(2);
 	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0xffffff).intensity(2);
-	
-if(true){
-	tQuery.createGrassGround({
+
+	// add a ground
+	var ground	= tQuery.createGrassGround({
 		textureUrl	: '../../grassground/images/grasslight-big.jpg',
 		textureRepeatX	: 30,
 		textureRepeatY	: 30,		
 	}).addTo(world).scaleBy(100);
-}
 
-	//var car	= tQuery.createCar().hookKeyboard();
+	// add the car itself
+	var car	= tQuery.createCar().hookKeyboard();
+	// setup the camera controls
+	tQuery.Car.createCameraControls(car, world);
 
-
-	var car	= tQuery.createCar({ 
-		type	: "veyron",
-		scale	: 1.5
-	}).hookKeyboard();
-	
-	// attempts at camera control
-	var curAngle	= 0;
-	var curDistance	= 0;
-	var spdDistance	= 0.95;
-	var maxAngle	= Math.PI/5;
-	var spdAngle	= 0.85;
-	var prevPosition= null;
-	world.loop().hook(function(){
-		var tObject3d	= car.object3d();
-
-		var carAngle	= car._car.carOrientation;
-		curAngle	= spdAngle*curAngle + (1-spdAngle)*carAngle;
-		curAngle	= Math.max(curAngle, carAngle - maxAngle);
-		curAngle	= Math.min(curAngle, carAngle + maxAngle);
-
-		var distance	= -1;
-		if( prevPosition ){
-			var delta	= tObject3d.position.clone().subSelf(prevPosition);
-			var speed	= delta.length();
-			speed		= Math.max(speed, 0);
-			speed		= Math.min(speed, 0.15);
-			distance	= -1-(speed / 0.15)*4;
-			
-			curDistance	= spdDistance*curDistance + (1-spdDistance)*distance;			
-		}
-		prevPosition	= tObject3d.position.clone();
-
-		var position	= new THREE.Vector3(0, 0.35, -0.3+0.3*curDistance);
-		var matrix	= new THREE.Matrix4().makeRotationY(curAngle);
-		matrix.multiplyVector3(position).addSelf(tObject3d.position);
-		world.camera().position.copy(position);
-		
-		var target	= new THREE.Vector3(0, 0, -2*curDistance);
-		var matrix	= new THREE.Matrix4().makeRotationY(curAngle);
-		matrix.multiplyVector3(target).addSelf(tObject3d.position);
-		world.camera().lookAt(target);
+	// create the corridors
+	var material	= new THREE.MeshLambertMaterial({
+		ambient		: 0x444444,
+		color		: 0x666666,
+		shading		: THREE.SmoothShading
 	});
-
-	//// init the library
-	//world.enableWebAudio();
-	//// create a sound
-	//var sound	= tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){
-	//	sound.play();
-	//});
-	//sound.loop(true).follow(car.object3d(), world);
-
-	
-	if( false ){
-		var car	= new tQuery.Car({
-			type	: "gallardo"
-		});
-		car.hookKeyboard({
-			keyStateRight	: "d",
-			keyStateUp	: "z",
-			keyStateLeft	: "q",
-			keyStateDown	: "s"
-		});		
+	for(var i = 0; i < 5; i++){
+		var object	= tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world);
+		object.translateZ( i * 5 );		
 	}
-	
-        var sampleClosedSpline	= new THREE.ClosedSplineCurve3([
-		new THREE.Vector3(-40, 0, -80),
-		new THREE.Vector3( 40, 0, -80),
-		new THREE.Vector3( 40, 0,  80),
-		new THREE.Vector3(-40, 0,  80),
-        ]);
-
-        var extrudeSettings	= {
-		amount		: 200,
-		bevelEnabled	: false,
-		bevelSegments	: 2,
-		steps		: 200,
-		extrudePath	: sampleClosedSpline
-	};
-
-        var shape	= new THREE.Shape();
-        shape.moveTo(  -0, -7 );
-        shape.lineTo(  -0,  7 );
-        shape.lineTo( 0.1,  0 );
-
-        var geometry	= shape.extrude( extrudeSettings );
-	//var mesh	= new THREE.Mesh( geometry, new THREE.MeshNormalMaterial());
-	var mesh	= THREE.SceneUtils.createMultiMaterialObject( geometry, [
-		new THREE.MeshBasicMaterial( { color: 0xAAAAAA, opacity: 1, transparent: true } ),
-		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true,  opacity: 0.3 } )
-	]);
-	//var mesh	= new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0xFF00FF, opacity: 0.6, transparent: true } ));
-	var scale	= 1/5;
-	mesh.scale.set(scale, scale, scale);
-	mesh.position.y	= 0.001;
-	//mesh.rotation.y	= Math.PI/2;
-	world.add(mesh);
-
 </script></body>
