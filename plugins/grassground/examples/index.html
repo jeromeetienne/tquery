@@ -1,0 +1,14 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+
+<script src='../tquery.grassground.js'></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(30);
+</script></body>
