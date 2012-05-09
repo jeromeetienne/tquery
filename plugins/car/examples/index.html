@@ -5,6 +5,7 @@
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
 
+<script src='../../grassground/tquery.grassground.js'></script>
 <script src='../../checkerboard/tquery.checkerboard.js'></script>
 <script src='../../fog/tquery.world.createfog.js'></script>
 
@@ -27,38 +28,19 @@
 
 	world.renderer().setClearColorHex( 0x000000, world.renderer().getClearAlpha() );
 	
-	world.addFogExp2({density : 0.05});
+	world.addFogExp2({density : 0.1});
 	
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(2);
 	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0xffffff).intensity(2);
 	
-	//tQuery.createSpotLight().addTo(world).position( 1,1,-1).color(0x4444FF).intensity(2);
-
-//	var tLight	= new THREE.SpotLight(0x8888ff);
-////	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
-//	tLight.position.set(0,1,0);
-//	tLight.target.position.set( 0, 0, 0 );
-//	tLight.intensity	= 2;
-//	world.scene().add(tLight)
-
-
-	tQuery.createCheckerboard({
-		segmentsW	: 100,	// number of segment in width
-		segmentsH	: 100,	// number of segment in Height
-		//materialEven	: new THREE.MeshPhongMaterial({
-		//	ambient	: 0x888888,
-		//	color	: 0xcccccc,
-		//	specular: 0xff00ff,
-		//	shininess: 5
-		//}),
-		//materialOdd	: new THREE.MeshPhongMaterial({
-		//	ambient	: 0x111111,
-		//	color	: 0x444444,
-		//	specular: 0xff00ff,
-		//	shininess: 5
-		//})
+if(true){
+	tQuery.createGrassGround({
+		textureUrl	: '../../grassground/images/grasslight-big.jpg',
+		textureRepeatX	: 30,
+		textureRepeatY	: 30,		
 	}).addTo(world).scaleBy(100);
+}
 
 	//var car	= tQuery.createCar().hookKeyboard();
 
@@ -95,7 +77,7 @@
 		}
 		prevPosition	= tObject3d.position.clone();
 
-		var position	= new THREE.Vector3(0, 0.35, 0.7*curDistance);
+		var position	= new THREE.Vector3(0, 0.35, -0.3+0.3*curDistance);
 		var matrix	= new THREE.Matrix4().makeRotationY(curAngle);
 		matrix.multiplyVector3(position).addSelf(tObject3d.position);
 		world.camera().position.copy(position);
@@ -126,5 +108,38 @@
 			keyStateDown	: "s"
 		});		
 	}
+	
+        var sampleClosedSpline	= new THREE.ClosedSplineCurve3([
+		new THREE.Vector3(-40, 0, -80),
+		new THREE.Vector3( 40, 0, -80),
+		new THREE.Vector3( 40, 0,  80),
+		new THREE.Vector3(-40, 0,  80),
+        ]);
+
+        var extrudeSettings	= {
+		amount		: 200,
+		bevelEnabled	: false,
+		bevelSegments	: 2,
+		steps		: 200,
+		extrudePath	: sampleClosedSpline
+	};
+
+        var shape	= new THREE.Shape();
+        shape.moveTo(  -0, -7 );
+        shape.lineTo(  -0,  7 );
+        shape.lineTo( 0.1,  0 );
+
+        var geometry	= shape.extrude( extrudeSettings );
+	//var mesh	= new THREE.Mesh( geometry, new THREE.MeshNormalMaterial());
+	var mesh	= THREE.SceneUtils.createMultiMaterialObject( geometry, [
+		new THREE.MeshBasicMaterial( { color: 0xAAAAAA, opacity: 1, transparent: true } ),
+		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true,  opacity: 0.3 } )
+	]);
+	//var mesh	= new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0xFF00FF, opacity: 0.6, transparent: true } ));
+	var scale	= 1/5;
+	mesh.scale.set(scale, scale, scale);
+	mesh.position.y	= 0.001;
+	//mesh.rotation.y	= Math.PI/2;
+	world.add(mesh);
 
 </script></body>

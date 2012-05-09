@@ -30,7 +30,7 @@ tQuery.register('Car', function(opts){
 	car.FRONT_ACCELERATION	*= car.modelScale;
 	car.BACK_ACCELERATION	*= car.modelScale;
 	car.FRONT_DECCELERATION	*= car.modelScale;
-	car.STEERING_RADIUS_RATIO/= car.modelScale/2;
+	car.STEERING_RADIUS_RATIO/= car.modelScale;
 
 	car.callback	= function( object ) {
 		console.log("callback called", object === car)
