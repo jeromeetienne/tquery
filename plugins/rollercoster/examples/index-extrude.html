@@ -1,0 +1,70 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var points	= [
+		new THREE.Vector3(-40, 0, -40),
+		new THREE.Vector3( 40, 0, -40),
+		new THREE.Vector3( 40, 0,  40),
+		new THREE.Vector3(-40, 0,  40),
+	];
+	
+	//var points	= [];
+	//for( var i = 0; i < 40; i++){
+	//	var x	= (i-20) * 20;
+	//	//var y	= Math.random()*15;
+	//	var y	= 0;
+	//	points.push( new THREE.Vector3(x, y, x) );
+	//}
+
+	var path	= new THREE.ClosedSplineCurve3(points);
+	//var path	= new THREE.SplineCurve3(points);
+	var scale	= 1/40;
+	
+if( false ){
+	var nbFeet	= 10;
+	for(var i = 0; i < nbFeet; i++){
+		var pct		= i/nbFeet;
+		var point	= path.getPointAt(pct).multiplyScalar(scale);		
+		var object	= tQuery.createCube().scale(0.1,1,0.1).addTo(world);
+		object.position(point);
+		object.get(0).position.y	-= 0.5 + 0.001;
+	}
+}
+
+        var extrudeSettings	= {
+		steps		: 150*2,
+		debug		: true,
+		extrudePath	: path
+	};
+	
+	var shape	= new THREE.Shape();
+	shape.moveTo( 0  , -1*3 );
+	shape.lineTo( 0  ,  1*3 );
+	shape.lineTo( 0.1,  0 );
+
+	var geometry	= shape.extrude( extrudeSettings );
+	var mesh	= THREE.SceneUtils.createMultiMaterialObject(geometry, [
+		new THREE.MeshBasicMaterial( { color: 0x8888FF, opacity: 0.9, transparent: true } ),
+		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true,  opacity: 0.3 } )
+	]);
+	mesh.scale.set(scale, scale, scale);
+	world.add(mesh);
+	
+	//world.removeCameraControls();
+	//world.loop().hook(function(deltaTime, present){
+	//	var camera	= world.camera();
+	//	var pct		= (present % 10)/10;
+	//
+	//	var point	= path.getPointAt(pct);
+	//	point.multiplyScalar(scale);
+	//	camera.position.copy(point);
+	//	camera.position.y	+= 0.01;
+	//
+	//	var point	= path.getPointAt((pct+0.1)%1);
+	//	point.multiplyScalar(scale);
+	//	camera.lookAt(point);
+	//});
+</script></body>

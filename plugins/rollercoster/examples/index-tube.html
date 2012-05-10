@@ -1,0 +1,23 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+        var sampleClosedSpline	= new THREE.ClosedSplineCurve3([
+		new THREE.Vector3(-40, 0, -40),
+		new THREE.Vector3( 40, 0, -40),
+		new THREE.Vector3( 40, 0,  40),
+		new THREE.Vector3(-40, 0,  40),
+        ]);
+
+        var geometry	= new THREE.TubeGeometry(sampleClosedSpline, 50, 4, 3, false, true);
+	var mesh	= THREE.SceneUtils.createMultiMaterialObject( geometry, [
+		new THREE.MeshBasicMaterial( { color: 0x8888FF, opacity: 0.9, transparent: true } ),
+		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true,  opacity: 0.3 } )
+	]);
+	var scale	= 1/40;
+	mesh.scale.set(scale, scale, scale);
+	world.add(mesh);
+	if( geometry.debug )		mesh.add(geometry.debug);
+</script></body>
