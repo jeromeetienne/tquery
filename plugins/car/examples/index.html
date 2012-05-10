@@ -7,6 +7,7 @@
 
 <script src='../../grassground/tquery.grassground.js'></script>
 <script src='../../fog/tquery.world.createfog.js'></script>
+<script src='../../light/tquery.light.shadow.js'></script>
 
 <script src="../Car.js"></script>
 <script src="../tquery.car.js"></script>
@@ -15,12 +16,25 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
+
+	world.renderer().shadowMapEnabled	= true;
+	world.renderer().shadowMapSoft		= true;
+	
 	// add a fog
 	world.addFogExp2({density : 0.1});
+
 	// add the lights
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(2);
 	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0xffffff).intensity(2);
+
+	var light	= tQuery.createDirectionalLight().addTo(world).color(0xaaaaaa)
+		.position(new THREE.Vector3(1, 1, -2).normalize().multiplyScalar(3))
+		.intensity(2)
+		.castShadow(true).shadowDarkness(0.8)
+		.shadowMap(256*2,512*4)
+		.shadowCamera(10, -10, 20, -20, 0.1, 50)
+		//.shadowCameraVisible(true)
 
 	// add a ground
 	var ground	= tQuery.createGrassGround({
@@ -28,9 +42,14 @@
 		textureRepeatX	: 30,
 		textureRepeatY	: 30,		
 	}).addTo(world).scaleBy(100);
+	ground.get(0).receiveShadow	= true;
 
 	// add the car itself
 	var car	= tQuery.createCar().hookKeyboard();
+	car.bind('load', function(){
+		car._car.enableShadows(true);
+	})
+	
 	// setup the camera controls
 	tQuery.Car.createCameraControls(car, world);
 
@@ -43,5 +62,6 @@
 	for(var i = 0; i < 5; i++){
 		var object	= tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world);
 		object.translateZ( i * 5 );		
+		object.get(0).castShadow	= true;
 	}
 </script></body>

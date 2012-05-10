@@ -79,7 +79,7 @@ THREE.Car = function () {
 	this.enableShadows = function ( enable ) {
 		for ( var i = 0; i < scope.meshes.length; i ++ ) {
 			scope.meshes[ i ].castShadow = enable;
-			scope.meshes[ i ].receiveShadow = enable;
+			//scope.meshes[ i ].receiveShadow = enable;
 		}
 	};
 
