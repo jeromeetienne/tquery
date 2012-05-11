@@ -215,16 +215,15 @@ tQuery.Car.prototype._addFlare	= function(){
 	if( this._opts.type === "gallardo" ){
 		var flares = [
 			// front
-			[ "frontA", scaleA, [ 70, 10, 160 ] ], [ "frontA", scaleA, [ 66, -1, 175 ] ], [ "frontA", scaleA, [ 66, -1, 165 ] ],
-			[ "frontB", scaleB, [ 70, 10, 160 ] ], [ "frontB", scaleB, [ 66, -1, 175 ] ], [ "frontB", scaleB, [ 66, -1, 165 ] ],	
-			[ "frontA", scaleA, [ -70, 10, 160 ] ], [ "frontA", scaleA, [ -66, -1, 175 ] ], [ "frontA", scaleA, [ -66, -1, 165 ] ],
-			[ "frontB", scaleB, [ -70, 10, 160 ] ], [ "frontB", scaleB, [ -66, -1, 175 ] ], [ "frontB", scaleB, [ -66, -1, 165 ] ],
-			
+			[ "frontA", scaleA, [ 70, 10, 160 ] ]	, [ "frontA", scaleA, [ 66, -1, 175 ] ]	, [ "frontA", scaleA, [ 66, -1, 165 ] ],
+			[ "frontB", scaleB, [ 70, 10, 160 ] ]	, [ "frontB", scaleB, [ 66, -1, 175 ] ]	, [ "frontB", scaleB, [ 66, -1, 165 ] ],	
+			[ "frontA", scaleA, [ -70, 10, 160 ] ]	, [ "frontA", scaleA, [ -66, -1, 175 ] ], [ "frontA", scaleA, [ -66, -1, 165 ] ],
+			[ "frontB", scaleB, [ -70, 10, 160 ] ]	, [ "frontB", scaleB, [ -66, -1, 175 ] ], [ "frontB", scaleB, [ -66, -1, 165 ] ],
 			// back
-			[ "backA", scaleA, [ 61, 19, -185 ] ], [ "backA", scaleA, [ 55, 19, -185 ] ],
-			[ "backB", scaleB, [ 61, 19, -185 ] ], [ "backB", scaleB, [ 55, 19, -185 ] ],
-			[ "backA", scaleA, [ -61, 19, -185 ] ], [ "backA", scaleA, [ -55, 19, -185 ] ],
-			[ "backB", scaleB, [ -61, 19, -185 ] ], [ "backB", scaleB, [ -55, 19, -185 ] ],
+			[ "backA", scaleA, [ 61, 19, -185 ] ]	, [ "backA", scaleA, [ 55, 19, -185 ] ],
+			[ "backB", scaleB, [ 61, 19, -185 ] ]	, [ "backB", scaleB, [ 55, 19, -185 ] ],
+			[ "backA", scaleA, [ -61, 19, -185 ] ]	, [ "backA", scaleA, [ -55, 19, -185 ] ],
+			[ "backB", scaleB, [ -61, 19, -185 ] ]	, [ "backB", scaleB, [ -55, 19, -185 ] ],
 		];
 		
 	}else if( this._opts.type === "veyron" ){
