@@ -18,6 +18,6 @@ benchsuite('Various Selectors', function(){
 		tQuery('#myId');
 	})
 	bench('class selector', function() {
-		tQuery('#myClass');
+		tQuery('.myClass');
 	});
 });
