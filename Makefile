@@ -34,19 +34,11 @@ help:
 	@echo ""
 	@echo "*** internal target ***"
 	@echo "make deploy		<- deploy tquery to his gh-pages"
-	@echo "make release		<- copy -dev branch to -master branch"
 	@echo "make boilerplateBuild	<- generate a boilerplate in ~/Downloads"
 
 #################################################################################
 #		misc to sort							#
 #################################################################################
-
-# after that you need to push it
-# git checkout master
-# git merge dev
-# git push 
-release:
-	@(git symbolic-ref HEAD | grep ^refs/heads/master$$ >/dev/null) && git merge dev || echo "you MUST on on master"
 
 boilerplateBuild:
 	rm -f ~/Downloads/tqueryboilerplate.zip
