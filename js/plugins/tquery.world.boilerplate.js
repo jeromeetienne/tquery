@@ -11,7 +11,8 @@ tQuery.World.register('boilerplate', function(opts){
 	domElement.style.padding	= "0";
 	domElement.style.overflow	= 'hidden';
 	this.appendTo(domElement);
-
+	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
+	
 	// add the boilerplate
 	this.addBoilerplate(opts);
 	
@@ -25,6 +26,7 @@ tQuery.World.register('addBoilerplate', function(opts){
 	console.assert( this.hasBoilerplate() !== true );
 	// handle parameters	
 	opts	= tQuery.extend(opts, {
+		honorInfo	: true,
 		stats		: true,
 		cameraControls	: true,
 		windowResize	: true,
@@ -36,6 +38,16 @@ tQuery.World.register('addBoilerplate', function(opts){
 
 	// create the context
 	tQuery.data(this, '_boilerplateCtx', ctx);
+
+	// add css for the info element if any
+	if( opts.honorInfo ){
+		var element	= document.getElementById('info');
+		if( element ){
+			element.style.position	= "absolute";
+			element.style.width	= "100%";
+			element.style.textAlign	= "center";
+		}
+	}
 
 	// add Stats.js - https://github.com/mrdoob/stats.js
 	if( opts.stats ){
