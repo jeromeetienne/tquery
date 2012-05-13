@@ -9,8 +9,14 @@
  * 
  * @param {THREE.Material} object an instance or an array of instance
 */
-tQuery.World	= function()
+tQuery.World	= function(opts)
 {
+	// handle parameters
+	opts	= opts	|| {};
+	opts	= tQuery.extend(opts, {
+		renderW	: window.innerWidth,
+		renderH	: window.innerHeight
+	});
 	// update default world.
 	// - TODO no sanity check ?
 	tQuery.world	= this;
@@ -19,8 +25,7 @@ tQuery.World	= function()
 	this._scene	= new THREE.Scene();
 
  	// create a camera in the scene
-	// FIXME this window dimension is crap
-	this._camera	= new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.01, 10000 );
+	this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
 	this._camera.position.set(0, 0, 3);
 	this._scene.add(this._camera);
 	
@@ -34,8 +39,7 @@ tQuery.World	= function()
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
 		this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-		// FIXME this window dimension is crap
-		this._renderer.setSize( window.innerWidth, window.innerHeight );
+		this._renderer.setSize( opts.renderW, opts.renderH );
 	}else{
 		//this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
@@ -181,7 +185,6 @@ tQuery.World.prototype.remove	= function(object3d)
 tQuery.World.prototype.appendTo	= function(domElement)
 {
 	domElement.appendChild(this._renderer.domElement)
-	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
 	// for chained API
 	return this;
 }

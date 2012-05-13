@@ -10,8 +10,8 @@
 /**
  * Create tQuery.World
 */
-tQuery.register('createWorld', function(){
-	return new tQuery.World();
+tQuery.register('createWorld', function(opts){
+	return new tQuery.World(opts);
 });
 
 /**
