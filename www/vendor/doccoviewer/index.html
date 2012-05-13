@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Docco.js</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+	<link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+	<div class="container">
+		<div class="row" id="doccoContainer">
+		</div>
+	</div> <!-- /container -->
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-button.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"></script>
+	<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"></script>
+
+
+	<script src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
+	<script src="https://raw.github.com/github/github-flavored-markdown/gh-pages/scripts/showdown.js"></script>
+	<script src="http://jsinside.github.com/docco.js/parseDocco.js"></script>	
+<!--	<script src="./parseDocco.js"></script>	
+-->	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
+
+	<script type="text/mytempl" id="mytempl">
+		<table class="table table-condensed">
+			<% var lineNum = 1; %>
+			<% sections.forEach(function(section, idx){	%>
+				<%= idx % 2 === 0 ? "<tr>" : "" %>
+				<%= "<td data-type='"+section.type+"'>" %> 
+					<% if(section.type === "comment" ){ %>
+						<div class='span4 comment'>
+							<%= section.html %>
+						</div>
+					<% }else if(section.type === "code" ){ %>
+						<% var codeIsEmpty = section.text.match(/^[\s\n]*$/) ? true : false; %>
+						<% if( codeIsEmpty === false ){ %>
+							<pre class='span8 prettyprint <%= codeIsEmpty ? '' : 'linenums:'+lineNum %>'><%= section.text %></pre>
+							<% lineNum += section.text.match(/\n/g) ? section.text.match(/\n/g).length : 0; %>
+						<% }else{ %>
+							<pre class='span8'></pre>
+						<% } %>
+					<% }else console.assert(false, 'invalid type'); %>
+				<%= "</td>" %> 
+				<%= idx % 2 === 1 ? "</tr>" : "" %>
+			<% }); %>
+		</table>
+	</script>
+	
+	<script>
+		var onSuccess	= function(text){
+			var sections	= parseDocco(text);
+			console.log("sections", sections);
+			
+			if( sections[0].type === "code"){					
+				sections.unshift({type : "comment",text : "",html : ""});
+			}
+			
+			var textTmpl	= document.getElementById('mytempl').innerText;
+			var html	= _.template(textTmpl, {sections: sections});
+			document.getElementById('doccoContainer').innerHTML	= html;
+			
+			prettyPrint();
+		};
+
+		var text	= null;
+		jQuery(function(){
+			var url	= location.hash ? location.hash.substr(1) : null;
+			//url	= url	|| "examples/index.html";
+			//url	= url	|| "examples/webaudio.html";
+			//url	= url	|| "examples/index.js";
+			//url	= "http://jeromeetienne.github.com/webaudio.js/examples/jsfx/index.html";
+			url	= url	|| "examples/minimal.html";
+			jQuery.get(url, onSuccess, 'text');
+		});
+	</script>
+
+	<script src="http://jeromeetienne.github.com/webaudio.js/examples/jsfx/index.html" type="text/bla" id="slota"></script>
+    </body>
+</html>
