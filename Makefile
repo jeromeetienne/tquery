@@ -18,7 +18,7 @@ docs:
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/					\
 			js/ js/plugins					\
-			plugins/webaudio plugins/md2character
+			plugins/md2character
 
 help:
 	@echo "Inline help for Makefile"
@@ -53,6 +53,7 @@ build:	minifyPlain minifyBundle minifyAll
 
 buildPlain:
 	echo $(BANNER)			>  build/tquery.js
+	cat vendor/es5-shim.js		>> build/tquery.js
 	cat js/tquery.core.js		>> build/tquery.js
 	cat js/tquery.convert.js	>> build/tquery.js
 	cat js/tquery.node.js		>> build/tquery.js
@@ -133,8 +134,7 @@ buildAll: buildBundle
 	cat plugins/text/tquery.text.js					>> build/tquery-all.js
 	# plugins/linkify
 	cat plugins/linkify/tquery.mesh.linkify.js		>> build/tquery-all.js
-	# plugins/webaudio
-	cat plugins/webaudio/tquery.webaudio.js			>> build/tquery-all.js
+
 
 minifyAll: buildAll
 	echo $(BANNER)	>  build/tquery-all.min.js
