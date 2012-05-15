@@ -14,8 +14,9 @@ tQuery.World	= function(opts)
 	// handle parameters
 	opts	= opts	|| {};
 	opts	= tQuery.extend(opts, {
-		renderW	: window.innerWidth,
-		renderH	: window.innerHeight
+		renderW		: window.innerWidth,
+		renderH		: window.innerHeight,
+		webGLNeeded	: false
 	});
 	// update default world.
 	// - TODO no sanity check ?
@@ -38,12 +39,14 @@ tQuery.World	= function(opts)
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
-		this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-		this._renderer.setSize( opts.renderW, opts.renderH );
+	}else if( !opts.webGLNeeded ){
+		this._renderer	= new THREE.CanvasRenderer();
 	}else{
-		//this._addGetWebGLMessage();
+		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
+	this._renderer.setClearColorHex( 0xBBBBBB, 1 );
+	this._renderer.setSize( opts.renderW, opts.renderH );
 };
 
 // make it pluginable
