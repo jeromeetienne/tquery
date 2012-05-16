@@ -8,12 +8,19 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
+	tQuery.createAxis().addTo(object);
 	
 	world.removeCameraControls();
 	
 	world.loop().hook(function(){
 		var orientation	= tQuery.deviceOrientation();
-		// TODO this is a angleY on X ??? bug in threex ?
+		// for macbook
 		object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
+		object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
+//console.log("ay", orientation.angleY() * 180 / Math.PI)
+		// for ipad
+		//object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
+		
+		// no idea why it is different, nor what is the theorical value
 	})
 </script></body>
