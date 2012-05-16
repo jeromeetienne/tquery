@@ -5,6 +5,9 @@
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
 
+<script src="../../../vendor/threex/THREEx.DeviceOrientationState.js"></script>
+<script src="../../deviceorientation/tquery.deviceorientation.js"></script>
+
 <script src='../../grassground/tquery.grassground.js'></script>
 <script src='../../fog/tquery.world.createfog.js'></script>
 <script src='../../light/tquery.light.shadow.js'></script>
@@ -12,13 +15,14 @@
 <script src="../Car.js"></script>
 <script src="../tquery.car.js"></script>
 <script src="../tquery.car.keyboard.js"></script>
+<script src="../tquery.car.deviceorientation.js"></script>
 <script src="../tquery.car.cameracontrols.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
 
-	world.renderer().shadowMapEnabled	= true;
-	world.renderer().shadowMapSoft		= true;
+//	world.renderer().shadowMapEnabled	= true;
+//	world.renderer().shadowMapSoft		= true;
 	
 	// add a fog
 	world.addFogExp2({density : 0.1});
@@ -45,7 +49,10 @@
 	ground.get(0).receiveShadow	= true;
 
 	// add the car itself
-	var car	= tQuery.createCar().hookKeyboard();
+	var car	= tQuery.createCar()
+	if( "ontouchstart" in window )	car.hookDeviceOrientation();
+	else				car.hookKeyboard();
+	
 	car.bind('load', function(){
 		car._car.enableShadows(true);
 	})

@@ -33,9 +33,6 @@ tQuery.register('Car', function(opts){
 	car.STEERING_RADIUS_RATIO/= car.modelScale;
 
 	car.callback	= function( object ) {
-		console.log("callback called", object === car)
-		console.dir(object)
-
 		object.root.position.y	= {
 			"gallardo"	: 0.13,
 			"veyron"	: 0
