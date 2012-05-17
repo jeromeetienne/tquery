@@ -15,11 +15,11 @@
 	world.loop().hook(function(){
 		var orientation	= tQuery.deviceOrientation();
 		// for macbook
-		object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
-		object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
-//console.log("ay", orientation.angleY() * 180 / Math.PI)
+		//object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
+		//object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
+
 		// for ipad
-		//object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
+		object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
 		
 		// no idea why it is different, nor what is the theorical value
 	})
