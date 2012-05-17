@@ -95,7 +95,7 @@ tQuery.Car.prototype.object3d	= function(){
 }
 
 tQuery.Car.prototype.skin	= function(){
-	var cubeTarget	= undefined;
+	var cubeTarget	= tQuery.createTextureCube('swedishRoyalCastle');
 	// TODO put an actual cubeTarget
 	var mlib	= {
 		body: [],

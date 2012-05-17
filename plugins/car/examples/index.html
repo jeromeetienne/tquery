@@ -12,6 +12,9 @@
 <script src='../../fog/tquery.world.createfog.js'></script>
 <script src='../../light/tquery.light.shadow.js'></script>
 
+<script src="../../skymap/tquery.texturecube.js"></script>
+<script src="../../skymap/tquery.skymap.js"></script>
+
 <script src="../Car.js"></script>
 <script src="../tquery.car.js"></script>
 <script src="../tquery.car.keyboard.js"></script>
@@ -21,11 +24,10 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
 
-//	world.renderer().shadowMapEnabled	= true;
-//	world.renderer().shadowMapSoft		= true;
+	world.renderer().shadowMapEnabled	= true;
+	world.renderer().shadowMapSoft		= true;
 	
-	// add a fog
-	world.addFogExp2({density : 0.1});
+	tQuery.createSkymap('skybox').addTo(world);
 
 	// add the lights
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
@@ -49,12 +51,13 @@
 	ground.get(0).receiveShadow	= true;
 
 	// add the car itself
-	var car	= tQuery.createCar()
+	var car	= tQuery.createCar();
 	if( "ontouchstart" in window )	car.hookDeviceOrientation();
 	else				car.hookKeyboard();
 	
 	car.bind('load', function(){
 		car._car.enableShadows(true);
+		car.skin();
 	})
 	
 	// setup the camera controls
@@ -62,9 +65,10 @@
 
 	// create the corridors
 	var material	= new THREE.MeshLambertMaterial({
-		ambient		: 0x444444,
-		color		: 0x666666,
-		shading		: THREE.SmoothShading
+		ambient	: 0x444444,
+		color	: 0x666666,
+		shading	: THREE.SmoothShading,
+		envMap	: tQuery.createTextureCube('skybox')
 	});
 	for(var i = 0; i < 5; i++){
 		var object	= tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world);
