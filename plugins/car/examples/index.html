@@ -36,7 +36,7 @@
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xffffff).intensity(2);
 	tQuery.createDirectionalLight().addTo(world).color(0xffffff)
-		.position(-20, 20, 40).intensity(4)
+		.position(-10, 20, 30).intensity(4)
 		.castShadow(true).shadowDarkness(0.8)
 		.shadowMap(256,512*2)
 		.shadowCamera(10, -10, 20, -20, 0.1, 50)
@@ -65,6 +65,6 @@
 	});
 	for(var i = 0; i < 5; i++){
 		tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world)
-			.castShadow(true).translateZ( i * 5 );		
+			.castShadow(true).translateZ( 2 + i * 5 );		
 	}
 </script></body>
