@@ -2325,6 +2325,14 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
 */
 tQuery.pluginsInstanceOn(tQuery.Object3D);
 
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Object3D, {
+	receiveShadow	: tQuery.convert.toBool,
+	castShadow	: tQuery.convert.toBool
+});
+
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -3360,8 +3368,6 @@ tQuery.pluginsInstanceOn(tQuery.DirectionalLight);
 tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	intensity	: tQuery.convert.toNumber,
 	distance	: tQuery.convert.toNumber,
-
-	castShadow	: tQuery.convert.toBool,
 
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
 	shadowMapWidth		: tQuery.convert.toInteger,
