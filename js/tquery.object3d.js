@@ -31,6 +31,14 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
 */
 tQuery.pluginsInstanceOn(tQuery.Object3D);
 
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Object3D, {
+	receiveShadow	: tQuery.convert.toBool,
+	castShadow	: tQuery.convert.toBool
+});
+
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
