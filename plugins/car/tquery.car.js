@@ -39,10 +39,13 @@ tQuery.register('Car', function(opts){
 		}[this._opts.type]
 		world.add( object.root );
 
-		//this._setMaterial();
-		
+		//this._setNormalMaterial();
+		this._setNiceMaterial();
+
 		this._addFlare();
-		
+
+		this._car.enableShadows(true);
+
 		this.trigger('load');
 	}.bind(this);
 
@@ -92,76 +95,6 @@ tQuery.Car.prototype.controls	= function(){
 
 tQuery.Car.prototype.object3d	= function(){
 	return this._car.root;
-}
-
-tQuery.Car.prototype.skin	= function(){
-	var cubeTarget	= tQuery.createTextureCube('swedishRoyalCastle');
-	// TODO put an actual cubeTarget
-	var mlib	= {
-		body: [],
-
-		"Chrome"	: new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xffffff, envMap: cubeTarget  } ),
-		"ChromeN"	: new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xffffff, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.75  } ),
-		"Dark chrome"	: new THREE.MeshLambertMaterial( { color: 0x444444, ambient: 0x444444, envMap: cubeTarget } ),
-
-		"Black rough"	: new THREE.MeshLambertMaterial( { color: 0x050505, ambient: 0x050505 } ),
-
-		"Dark glass"	: new THREE.MeshLambertMaterial( { color: 0x101020, ambient: 0x101020, envMap: cubeTarget, opacity: 0.5, transparent: true } ),
-		"Orange glass"	: new THREE.MeshLambertMaterial( { color: 0xffbb00, ambient: 0xffbb00, opacity: 0.5, transparent: true } ),
-		"Red glass"	: new THREE.MeshLambertMaterial( { color: 0xff0000, ambient: 0xff0000, opacity: 0.5, transparent: true } ),
-
-		"Black metal"	: new THREE.MeshLambertMaterial( { color: 0x222222, ambient: 0x222222, envMap: cubeTarget, combine: THREE.MultiplyOperation } ),
-		"Orange metal"	: new THREE.MeshLambertMaterial( { color: 0xff6600, ambient: 0xff6600, envMap: cubeTarget, combine: THREE.MultiplyOperation } )
-	}
-
-	mlib.body.push( [ "Orange"	, new THREE.MeshLambertMaterial( { color: 0x883300, ambient: 0x883300, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.1 } ) ] );
-	mlib.body.push( [ "Blue"	, new THREE.MeshLambertMaterial( { color: 0x113355, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.1 } ) ] );
-	mlib.body.push( [ "Red"		, new THREE.MeshLambertMaterial( { color: 0x660000, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.1 } ) ] );
-	mlib.body.push( [ "Black"	, new THREE.MeshLambertMaterial( { color: 0x000000, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.2 } ) ] );
-	mlib.body.push( [ "White"	, new THREE.MeshLambertMaterial( { color: 0xffffff, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.2 } ) ] );
-
-	mlib.body.push( [ "Carmine"	, new THREE.MeshPhongMaterial( { color: 0x770000, specular: 0xffaaaa, envMap: cubeTarget, combine: THREE.MultiplyOperation } ) ] );
-	mlib.body.push( [ "Gold"	, new THREE.MeshPhongMaterial( { color: 0xaa9944, specular: 0xbbaa99, shininess: 50, envMap: cubeTarget, combine: THREE.MultiplyOperation } ) ] );
-	mlib.body.push( [ "Bronze"	, new THREE.MeshPhongMaterial( { color: 0x150505, specular: 0xee6600, shininess: 10, envMap: cubeTarget, combine: THREE.MixOperation, reflectivity: 0.2 } ) ] );
-	mlib.body.push( [ "Chrome"	, new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, envMap: cubeTarget, combine: THREE.MultiplyOperation } ) ] );
-
-	var car	= this._car;
-	if( this._opts.type === 'gallardo' ){
-		// BODY
-		var materials = car.bodyGeometry.materials;
-		materials[ 0 ] = mlib.body[ 0 ][ 1 ]; 		// body
-		materials[ 1 ] = mlib[ "Dark chrome" ]; 	// front under lights, back
-
-		// WHEELS
-		materials = car.wheelGeometry.materials;
-		materials[ 0 ] = mlib[ "Chrome" ];		// insides
-		materials[ 1 ] = mlib[ "Black rough" ];		// tire
-	}else if( this._opts.type === 'veyron' ){
-		// 0 - top, front center, back sides
-		// 1 - front sides
-		// 2 - engine
-		// 3 - small chrome things
-		// 4 - backlights
-		// 5 - back signals
-		// 6 - bottom, interior
-		// 7 - windshield
-		
-		// BODY
-		var materials = car.bodyGeometry.materials;
-		materials[ 0 ] = mlib[ "Black metal" ];		// top, front center, back sides
-		materials[ 1 ] = mlib[ "Chrome" ];		// front sides
-		materials[ 2 ] = mlib[ "Chrome" ];		// engine
-		materials[ 3 ] = mlib[ "Dark chrome" ];		// small chrome things
-		materials[ 4 ] = mlib[ "Red glass" ];		// backlights
-		materials[ 5 ] = mlib[ "Orange glass" ];	// back signals
-		materials[ 6 ] = mlib[ "Black rough" ];		// bottom, interior
-		materials[ 7 ] = mlib[ "Dark glass" ];		// windshield
-		
-		// WHEELS		
-		materials = car.wheelGeometry.materials;
-		materials[ 0 ] = mlib[ "Chrome" ];		// insides
-		materials[ 1 ] = mlib[ "Black rough" ];		// tire
-	}else	console.assert( false );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -256,7 +189,11 @@ tQuery.Car.prototype._addFlare	= function(){
 	}
 };
 
-tQuery.Car.prototype._setMaterial	= function()
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Car.prototype._setNormalMaterial	= function()
 {
 	var car	= this._car;
 	var materials	= car.bodyGeometry.materials;
@@ -267,3 +204,74 @@ tQuery.Car.prototype._setMaterial	= function()
 	materials[ 0 ]	= new THREE.MeshNormalMaterial();	// insides
 	materials[ 1 ]	= new THREE.MeshNormalMaterial();	// tire
 }
+
+tQuery.Car.prototype._setNiceMaterial	= function(){
+	var textureCube	= tQuery.createTextureCube('swedishRoyalCastle');
+	// directly from altered demo
+	var mlib	= {
+		body: [],
+
+		"Chrome"	: new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xffffff, envMap: textureCube  } ),
+		"ChromeN"	: new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xffffff, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.75  } ),
+		"Dark chrome"	: new THREE.MeshLambertMaterial( { color: 0x444444, ambient: 0x444444, envMap: textureCube } ),
+
+		"Black rough"	: new THREE.MeshLambertMaterial( { color: 0x050505, ambient: 0x050505 } ),
+
+		"Dark glass"	: new THREE.MeshLambertMaterial( { color: 0x101020, ambient: 0x101020, envMap: textureCube, opacity: 0.5, transparent: true } ),
+		"Orange glass"	: new THREE.MeshLambertMaterial( { color: 0xffbb00, ambient: 0xffbb00, opacity: 0.5, transparent: true } ),
+		"Red glass"	: new THREE.MeshLambertMaterial( { color: 0xff0000, ambient: 0xff0000, opacity: 0.5, transparent: true } ),
+
+		"Black metal"	: new THREE.MeshLambertMaterial( { color: 0x222222, ambient: 0x222222, envMap: textureCube, combine: THREE.MultiplyOperation } ),
+		"Orange metal"	: new THREE.MeshLambertMaterial( { color: 0xff6600, ambient: 0xff6600, envMap: textureCube, combine: THREE.MultiplyOperation } )
+	}
+
+	mlib.body.push( [ "Orange"	, new THREE.MeshLambertMaterial( { color: 0x883300, ambient: 0x883300, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.1 } ) ] );
+	mlib.body.push( [ "Blue"	, new THREE.MeshLambertMaterial( { color: 0x113355, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.1 } ) ] );
+	mlib.body.push( [ "Red"		, new THREE.MeshLambertMaterial( { color: 0x660000, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.1 } ) ] );
+	mlib.body.push( [ "Black"	, new THREE.MeshLambertMaterial( { color: 0x000000, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.2 } ) ] );
+	mlib.body.push( [ "White"	, new THREE.MeshLambertMaterial( { color: 0xffffff, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.2 } ) ] );
+
+	mlib.body.push( [ "Carmine"	, new THREE.MeshPhongMaterial( { color: 0x770000, specular: 0xffaaaa, envMap: textureCube, combine: THREE.MultiplyOperation } ) ] );
+	mlib.body.push( [ "Gold"	, new THREE.MeshPhongMaterial( { color: 0xaa9944, specular: 0xbbaa99, shininess: 50, envMap: textureCube, combine: THREE.MultiplyOperation } ) ] );
+	mlib.body.push( [ "Bronze"	, new THREE.MeshPhongMaterial( { color: 0x150505, specular: 0xee6600, shininess: 10, envMap: textureCube, combine: THREE.MixOperation, reflectivity: 0.2 } ) ] );
+	mlib.body.push( [ "Chrome"	, new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, envMap: textureCube, combine: THREE.MultiplyOperation } ) ] );
+
+	var car	= this._car;
+	if( this._opts.type === 'gallardo' ){
+		// BODY
+		var materials = car.bodyGeometry.materials;
+		materials[ 0 ] = mlib.body[ 0 ][ 1 ]; 		// body
+		materials[ 1 ] = mlib[ "Dark chrome" ]; 	// front under lights, back
+
+		// WHEELS
+		materials = car.wheelGeometry.materials;
+		materials[ 0 ] = mlib[ "Chrome" ];		// insides
+		materials[ 1 ] = mlib[ "Black rough" ];		// tire
+	}else if( this._opts.type === 'veyron' ){
+		// 0 - top, front center, back sides
+		// 1 - front sides
+		// 2 - engine
+		// 3 - small chrome things
+		// 4 - backlights
+		// 5 - back signals
+		// 6 - bottom, interior
+		// 7 - windshield
+		
+		// BODY
+		var materials = car.bodyGeometry.materials;
+		materials[ 0 ] = mlib[ "Black metal" ];		// top, front center, back sides
+		materials[ 1 ] = mlib[ "Chrome" ];		// front sides
+		materials[ 2 ] = mlib[ "Chrome" ];		// engine
+		materials[ 3 ] = mlib[ "Dark chrome" ];		// small chrome things
+		materials[ 4 ] = mlib[ "Red glass" ];		// backlights
+		materials[ 5 ] = mlib[ "Orange glass" ];	// back signals
+		materials[ 6 ] = mlib[ "Black rough" ];		// bottom, interior
+		materials[ 7 ] = mlib[ "Dark glass" ];		// windshield
+		
+		// WHEELS		
+		materials = car.wheelGeometry.materials;
+		materials[ 0 ] = mlib[ "Chrome" ];		// insides
+		materials[ 1 ] = mlib[ "Black rough" ];		// tire
+	}else	console.assert( false );
+}
+

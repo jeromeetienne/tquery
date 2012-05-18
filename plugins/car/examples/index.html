@@ -1,4 +1,4 @@
-<!doctype html><title>Minimal tQuery Page</title>
+<!doctype html><title>tQuery Car Example</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
@@ -22,23 +22,23 @@
 <script src="../tquery.car.cameracontrols.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+	// setup renderer
+	// TODO should i make a tQuery.WebGLRenderer ? just to tQuerying the api
+	// would become something like : world.renderer().clearColor(0x6666AA).shadowMap(true)
 	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
-
 	world.renderer().shadowMapEnabled	= true;
 	world.renderer().shadowMapSoft		= true;
 	
+	// add a skymap. 
 	tQuery.createSkymap('skybox').addTo(world);
 
 	// add the lights
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
-	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(2);
-	tQuery.createDirectionalLight().addTo(world).position( 1,1,-1).color(0xffffff).intensity(2);
-
-	var light	= tQuery.createDirectionalLight().addTo(world).color(0xaaaaaa)
-		.position(new THREE.Vector3(1, 1, -2).normalize().multiplyScalar(3))
-		.intensity(2)
+	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xffffff).intensity(2);
+	tQuery.createDirectionalLight().addTo(world).color(0xffffff)
+		.position(-20, 20, 40).intensity(4)
 		.castShadow(true).shadowDarkness(0.8)
-		.shadowMap(256*2,512*4)
+		.shadowMap(256,512*2)
 		.shadowCamera(10, -10, 20, -20, 0.1, 50)
 		//.shadowCameraVisible(true)
 
@@ -47,18 +47,12 @@
 		textureUrl	: '../../grassground/images/grasslight-big.jpg',
 		textureRepeatX	: 30,
 		textureRepeatY	: 30,		
-	}).addTo(world).scaleBy(100);
-	ground.get(0).receiveShadow	= true;
+	}).addTo(world).receiveShadow(true).scaleBy(100);
 
 	// add the car itself
 	var car	= tQuery.createCar();
 	if( "ontouchstart" in window )	car.hookDeviceOrientation();
 	else				car.hookKeyboard();
-	
-	car.bind('load', function(){
-		car._car.enableShadows(true);
-		car.skin();
-	})
 	
 	// setup the camera controls
 	tQuery.Car.createCameraControls(car, world);
@@ -67,12 +61,10 @@
 	var material	= new THREE.MeshLambertMaterial({
 		ambient	: 0x444444,
 		color	: 0x666666,
-		shading	: THREE.SmoothShading,
 		envMap	: tQuery.createTextureCube('skybox')
 	});
 	for(var i = 0; i < 5; i++){
-		var object	= tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world);
-		object.translateZ( i * 5 );		
-		object.get(0).castShadow	= true;
+		tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world)
+			.castShadow(true).translateZ( i * 5 );		
 	}
 </script></body>
