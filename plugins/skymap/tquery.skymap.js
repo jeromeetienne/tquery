@@ -3,12 +3,11 @@ tQuery.register('createSkymap', function(opts){
 	if( typeof(opts) === 'string' )	opts	= {textureCube: opts};
 	// handle parameters
 	opts	= tQuery.extend(opts, {
-		cubeW		: 100,
-		cubeH		: 100,
-		cubeD		: 100
+		cubeW		: 1000,
+		cubeH		: 1000,
+		cubeD		: 1000
 	});
 	console.assert(opts.textureCube);
-
 
 	var textureCube	= tQuery.createTextureCube(opts.textureCube);
 
@@ -22,7 +21,7 @@ tQuery.register('createSkymap', function(opts){
 		depthWrite	: false
 	});
 
-	var geometry	= new THREE.CubeGeometry( 100, 100, 100 );
+	var geometry	= new THREE.CubeGeometry( opts.cubeW, opts.cubeH, opts.cubeD );
 	var mesh	= new THREE.Mesh(geometry, material );
 	mesh.flipSided = true;
 

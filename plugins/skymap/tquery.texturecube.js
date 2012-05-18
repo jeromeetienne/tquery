@@ -36,8 +36,12 @@ tQuery.register('createTextureCube', function(opts){
 	return textureCube;
 });
 
+/** @namespace */
 tQuery.register('TextureCube', {});
 
+/**
+ * To create urls compatible with THREE.ImageUtils.loadTextureCube
+*/
 tQuery.TextureCube.createUrls	= function(basename, format, rootUrl, posPrefix, negPrefix){
 	posPrefix	= posPrefix || "p";
 	negPrefix	= negPrefix || "n";
@@ -50,6 +54,10 @@ tQuery.TextureCube.createUrls	= function(basename, format, rootUrl, posPrefix, n
 	return urls;
 }
 
+/**
+ * predefined urls compatible with THREE.ImageUtils.loadTextureCube.
+ * They points toward the cube maps in plugins/assets
+*/
 tQuery.TextureCube.WellKnownUrls	= {
 	bridge2			: tQuery.TextureCube.createUrls('Bridge2', '.jpg', '../../assets/images/textures/cube', 'pos', 'neg'),
 	escher			: tQuery.TextureCube.createUrls('Escher', '.jpg', '../../assets/images/textures/cube'),
