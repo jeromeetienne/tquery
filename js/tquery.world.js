@@ -16,8 +16,10 @@ tQuery.World	= function(opts)
 	opts	= tQuery.extend(opts, {
 		renderW		: window.innerWidth,
 		renderH		: window.innerHeight,
-		webGLNeeded	: false
+		webGLNeeded	: false,
+		autoRendering	: true
 	});
+	this._opts	= opts;
 	// update default world.
 	// - TODO no sanity check ?
 	tQuery.world	= this;
@@ -217,10 +219,19 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.World.prototype.autoRendering	= function(value)
+{
+	if(value === undefined)	return this._opts.autoRendering;
+	this._opts.autoRendering	= value;
+	return this;
+}
+
 tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
+	// if autorendering === false, do nothing
+	if( this._opts.autoRendering === false )	return;
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );
 }
