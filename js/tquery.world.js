@@ -17,7 +17,10 @@ tQuery.World	= function(opts)
 		renderW		: window.innerWidth,
 		renderH		: window.innerHeight,
 		webGLNeeded	: false,
-		autoRendering	: true
+		autoRendering	: true,
+		scene		: null,
+		camera		: null,
+		renderer	: null
 	});
 	this._opts	= opts;
 	// update default world.
@@ -25,19 +28,25 @@ tQuery.World	= function(opts)
 	tQuery.world	= this;
 	
 	// create a scene
-	this._scene	= new THREE.Scene();
+	if( !opts.scene ){
+		this._scene	= new THREE.Scene();
+	}
 
  	// create a camera in the scene
-	this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
-	this._camera.position.set(0, 0, 3);
-	this._scene.add(this._camera);
+	if( !opts.camera ){
+		this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._camera.position.set(0, 0, 3);
+		this._scene.add(this._camera);
+	}
 	
 	// create the loop
 	this._loop	= new tQuery.Loop(this)
 
 	// create a renderer
-	if( tQuery.World.hasWebGL() ){
-		this._renderer = new THREE.WebGLRenderer({
+	if( opts.renderer === renderer ){
+		this._renderer	= renderer;
+	}else if( tQuery.World.hasWebGL() ){
+		this._renderer	= new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
