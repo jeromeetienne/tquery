@@ -2063,8 +2063,11 @@ tQuery.World	= function(opts)
 		renderer	: null
 	});
 	this._opts	= opts;
+
 	// update default world.
 	// - TODO no sanity check ?
+	// - not clear what to do with this...
+	// - tQuery.world is the user world. like the camera controls
 	tQuery.world	= this;
 	
 	// create a scene
@@ -2080,7 +2083,13 @@ tQuery.World	= function(opts)
 	}
 	
 	// create the loop
-	this._loop	= new tQuery.Loop(this)
+	this._loop	= new tQuery.Loop();
+
+	// hook the render function in this._loop
+	this._loop.hookOnRender(this._$loopCb = function(){
+		this.render();
+	}.bind(this));
+
 
 	// create a renderer
 	if( opts.renderer === renderer ){
@@ -2110,6 +2119,8 @@ tQuery.MicroeventMixin(tQuery.World.prototype)
 tQuery.World.prototype.destroy	= function(){
 	// microevent.js notification
 	this.trigger('destroy');
+	// unhook the render function in this._loop
+	this._loop.hookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
 	// remove this._cameraControls if needed
@@ -2274,15 +2285,14 @@ tQuery.World.prototype.autoRendering	= function(value)
 	this._opts.autoRendering	= value;
 	return this;
 }
-
 tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
-	// if autorendering === false, do nothing
-	if( this._opts.autoRendering === false )	return;
-	// actually render the scene
-	this._renderer.render( this._scene, this._camera );
+	// if autorendering, then render
+	if( this._opts.autoRendering ){
+		this._renderer.render( this._scene, this._camera );
+	}
 }
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -2295,17 +2305,11 @@ tQuery.World.prototype.render	= function()
  *
  * @param {THREE.World} world the world to display (optional)
 */
-tQuery.Loop	= function(world)
+tQuery.Loop	= function()
 {	
 	// internally if world present do that
-	this._world	= world;
 	this._hooks	= [];
 	this._lastTime	= null;
-
-	// if world is available, hook it ON_RENDER
-	this._world && this.hookOnRender(function(){
-		this._world.render();
-	}.bind(this));
 };
 
 // make it pluginable
@@ -2317,7 +2321,6 @@ tQuery.pluginsInstanceOn(tQuery.Loop);
 tQuery.Loop.prototype.destroy	= function()
 {
 	this.stop();
-	if( tQuery.loop === this )	tQuery.loop = null;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
