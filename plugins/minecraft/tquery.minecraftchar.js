@@ -2,6 +2,7 @@
  * http://danielmcgraw.com/2010/10/06/How-To-Skin-Your-Minecraft-Character/
  * http://www.minecraftskins.com/
  * http://www.minecraftskins.info/
+ * http://www.minecraftwiki.net/wiki/Anvil_file_format
 */
 tQuery.register('MinecraftChar', function(){
 	/**

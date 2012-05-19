@@ -50,6 +50,8 @@ tQuery.World	= function(opts)
 		this.render();
 	}.bind(this));
 
+	// init effectComposer
+	this._effectComposer	= null;
 
 	// create a renderer
 	if( opts.renderer ){
@@ -239,18 +241,26 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.World.prototype.autoRendering	= function(value)
-{
-	if(value === undefined)	return this._opts.autoRendering;
-	this._opts.autoRendering	= value;
-	return this;
+tQuery.World.prototype.addEffectComposer	= function(composer){
+	this._composer	= composer || tQuery.createEffectComposer({world: this, back: this}).renderPass();
+	return this._composer;
 }
+tQuery.World.prototype.getEffectComposer	= function(){
+	return this._composer;
+}
+tQuery.World.prototype.removeEffectComposer	= function(){
+	this._composer	= null;
+}
+
+
 tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
-	// if autorendering, then render
-	if( this._opts.autoRendering ){
+
+	if( this._composer ){
+		this._composer.tComposer().render();
+	}else{
 		this._renderer.render( this._scene, this._camera );
 	}
 }

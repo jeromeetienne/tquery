@@ -19,10 +19,10 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 
-	world.renderer().setClearColorHex( 0x000000, 1 );
+	world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
 	
-	var composer	= tQuery.createEffectComposer().renderPass();
-	composer.sepia()
+	//var composer	= tQuery.createEffectComposer().renderPass();
+	//composer.sepia()
 	//composer.bleachbypass()
 	//composer.verticalBlur(1.1)
 	//composer.horizontalBlur(1.1)
@@ -33,5 +33,5 @@
 	//composer.film(0.25, 0.25, 648, false)
 	//composer.screen();
 	//composer.vignette();
-	composer.finish();
+	//composer.finish();
 </script></body>
