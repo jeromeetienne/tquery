@@ -33,19 +33,19 @@ looks like the code below... Quite short.
 
 ## Changelog
 
-*current*
+**Head**
 
-* added attributes to tQuery.Object3D (needed for shadow)
+* added attributes to ```tQuery.Object3D``` (needed for shadow)
 * added plugins/skymap to handle textureCube and skymap
 * added plugins/bluesky to generate blue sky html page background - no texture
 
-*r49.1*
+Release **r49.1**
 
-* port to IOS
+* support IOS
 * support canvasRenderer 
 * included doccoviewer to visualize annoted source
 * added plugins/glfx.js as example of interaction with glfx.js
 
-*r49.0*
+Release **r49.0**
 
 * First numbered release (synched on three.js version)
