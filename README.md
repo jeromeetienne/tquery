@@ -35,13 +35,13 @@ looks like the code below... Quite short.
 
 *current*
 
-* added attributes to tQuery.Object3D (needed for shadow)
+* added attributes to ```tQuery.Object3D``` (needed for shadow)
 * added plugins/skymap to handle textureCube and skymap
 * added plugins/bluesky to generate blue sky html page background - no texture
 
 *r49.1*
 
-* port to IOS
+* support IOS
 * support canvasRenderer 
 * included doccoviewer to visualize annoted source
 * added plugins/glfx.js as example of interaction with glfx.js
