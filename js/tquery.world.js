@@ -23,8 +23,11 @@ tQuery.World	= function(opts)
 		renderer	: null
 	});
 	this._opts	= opts;
+
 	// update default world.
 	// - TODO no sanity check ?
+	// - not clear what to do with this...
+	// - tQuery.world is the user world. like the camera controls
 	tQuery.world	= this;
 	
 	// create a scene
@@ -239,8 +242,8 @@ tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
-	// if autorendering === false, do nothing
-	if( this._opts.autoRendering === false )	return;
-	// actually render the scene
-	this._renderer.render( this._scene, this._camera );
+	// if autorendering, then render
+	if( this._opts.autoRendering ){
+		this._renderer.render( this._scene, this._camera );
+	}
 }
