@@ -9,17 +9,11 @@
  *
  * @param {THREE.World} world the world to display (optional)
 */
-tQuery.Loop	= function(world)
+tQuery.Loop	= function()
 {	
 	// internally if world present do that
-	this._world	= world;
 	this._hooks	= [];
 	this._lastTime	= null;
-
-	// if world is available, hook it ON_RENDER
-	this._world && this.hookOnRender(function(){
-		this._world.render();
-	}.bind(this));
 };
 
 // make it pluginable
@@ -31,7 +25,6 @@ tQuery.pluginsInstanceOn(tQuery.Loop);
 tQuery.Loop.prototype.destroy	= function()
 {
 	this.stop();
-	if( tQuery.loop === this )	tQuery.loop = null;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

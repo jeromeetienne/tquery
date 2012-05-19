@@ -43,7 +43,13 @@ tQuery.World	= function(opts)
 	}
 	
 	// create the loop
-	this._loop	= new tQuery.Loop(this)
+	this._loop	= new tQuery.Loop();
+
+	// hook the render function in this._loop
+	this._loop.hookOnRender(this._$loopCb = function(){
+		this.render();
+	}.bind(this));
+
 
 	// create a renderer
 	if( opts.renderer === renderer ){
@@ -73,6 +79,8 @@ tQuery.MicroeventMixin(tQuery.World.prototype)
 tQuery.World.prototype.destroy	= function(){
 	// microevent.js notification
 	this.trigger('destroy');
+	// unhook the render function in this._loop
+	this._loop.hookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
 	// remove this._cameraControls if needed
@@ -237,7 +245,6 @@ tQuery.World.prototype.autoRendering	= function(value)
 	this._opts.autoRendering	= value;
 	return this;
 }
-
 tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
