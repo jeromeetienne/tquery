@@ -2326,6 +2326,14 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
 */
 tQuery.pluginsInstanceOn(tQuery.Object3D);
 
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Object3D, {
+	receiveShadow	: tQuery.convert.toBool,
+	castShadow	: tQuery.convert.toBool
+});
+
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -2779,8 +2787,10 @@ tQuery.World	= function(opts)
 	opts	= tQuery.extend(opts, {
 		renderW		: window.innerWidth,
 		renderH		: window.innerHeight,
-		webGLNeeded	: false
+		webGLNeeded	: false,
+		autoRendering	: true
 	});
+	this._opts	= opts;
 	// update default world.
 	// - TODO no sanity check ?
 	tQuery.world	= this;
@@ -2980,10 +2990,19 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.World.prototype.autoRendering	= function(value)
+{
+	if(value === undefined)	return this._opts.autoRendering;
+	this._opts.autoRendering	= value;
+	return this;
+}
+
 tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
+	// if autorendering === false, do nothing
+	if( this._opts.autoRendering === false )	return;
 	// actually render the scene
 	this._renderer.render( this._scene, this._camera );
 }
@@ -3362,8 +3381,6 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	intensity	: tQuery.convert.toNumber,
 	distance	: tQuery.convert.toNumber,
 
-	castShadow	: tQuery.convert.toBool,
-
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
 	shadowMapWidth		: tQuery.convert.toInteger,
 	shadowMapHeight		: tQuery.convert.toInteger,
@@ -3454,8 +3471,6 @@ tQuery.pluginsInstanceOn(tQuery.SpotLight);
 tQuery.mixinAttributes(tQuery.SpotLight, {
 	intensity	: tQuery.convert.toNumber,
 	distance	: tQuery.convert.toNumber,
-
-	castShadow	: tQuery.convert.toBool,
 
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
 	shadowMapWidth		: tQuery.convert.toInteger,
