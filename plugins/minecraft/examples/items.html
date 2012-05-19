@@ -81,7 +81,7 @@
 					}
 					isAllEmpty = false;
 					
-					var voxel = new THREE.CubeGeometry(1, 1, 1, 1, 1 , 1, undefined, getSides(x, y));
+					var voxel = new THREE.CubeGeometry(1, 1, 2, 1, 1 , 1, undefined, getSides(x, y));
 					
 					for(var i=0; i < 6; i++) { // Fix color of voxel
 						if(voxel.faceVertexUvs[0][i]) {
@@ -97,15 +97,7 @@
 					
 					THREE.GeometryUtils.merge(geo, voxel);
 				}
-			}
-			if(!supportWebGL) {
-				var sides = new THREE.CubeGeometry(16, 16, 1, 1, 1, 1, undefined, { px: false, nx: false, py: false, ny: false });
-				uvmap(sides, 0, Math.floor(id % 16)*16, Math.floor(id / 16)*16, 16, 16);
-				uvmap(sides, 1, Math.floor(id % 16)*16+16, Math.floor(id / 16)*16, -16, 16);
-				THREE.GeometryUtils.merge(geo, sides);
-			}
-			
-			
+			}			
 			itemgeometries[id] = geo;
 		}
 		else {
@@ -113,15 +105,14 @@
 		}
 		
 		var mesh = new THREE.Mesh( geo, itemsMaterial );
-		
 		return mesh;
-	};
+	};	
 
-	var itemscanvas = global.document.createElement('canvas');
-	itemscanvas.width = 256;
-	itemscanvas.height = 256;
-	var itemsc = itemscanvas.getContext('2d');
-	var itemsMaterial = getMaterial(itemscanvas, true);
+	var itemscanvas		= global.document.createElement('canvas');
+	itemscanvas.width	= 256;
+	itemscanvas.height	= 256;
+	var itemsc		= itemscanvas.getContext('2d');
+	var itemsMaterial	= getMaterial(itemscanvas, true);
 
 	//world.renderer().setClearColorHex( 0x000000, 1 );
 
@@ -146,21 +137,6 @@
 				itemsmeshes.push(item);
 			}
 		}
-		
-		
-		var lefthand = createItem(16*6+2); // Iron pickaxe
-		lefthand.position.x = 6;
-		lefthand.position.y = -8;
-		lefthand.rotation.z = -Math.PI/4;
-		lefthand.rotation.x = Math.PI;
-		leftarm.add(lefthand);
-		
-		var righthand = createItem(16*4+2); // Iron sword
-		righthand.position.x = 6;
-		righthand.position.y = -9;
-		righthand.rotation.z = -Math.PI/4;
-		righthand.rotation.x = Math.PI;
-		rightarm.add(righthand);
 	};	
 	items.src = "items.png";
 	
