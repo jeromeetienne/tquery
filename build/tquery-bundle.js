@@ -2822,8 +2822,8 @@ tQuery.World	= function(opts)
 
 
 	// create a renderer
-	if( opts.renderer === renderer ){
-		this._renderer	= renderer;
+	if( opts.renderer ){
+		this._renderer	= opts.renderer;
 	}else if( tQuery.World.hasWebGL() ){
 		this._renderer	= new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output

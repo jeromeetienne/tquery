@@ -1,6 +1,21 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="creeper.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
@@ -8,6 +23,23 @@
 	world.camera().position.z	= 70;
 	world.getCameraControls().rangeX	*=	20;
 	world.getCameraControls().rangeY	*=	20;
+
+	//world.renderer().setClearColorHex( 0x000000, 1 );
+	
+	var composer	= tQuery.createEffectComposer().renderPass();
+	composer.sepia()
+	composer.bleachbypass()
+	//composer.verticalBlur(1.1)
+	//composer.horizontalBlur(1.1)
+	composer.motionBlur(0.9);
+	//composer.fxaa();
+	//composer.colorify();
+	//composer.bloom(1.2)
+	composer.film(0.25, 0.25, 648, false)
+	//composer.screen();
+	composer.vignette();
+	composer.finish();
+
 
 	function cubeFromPlanes (size, mat) {
 		var cube = new THREE.Object3D();

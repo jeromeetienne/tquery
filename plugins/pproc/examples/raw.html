@@ -1,0 +1,135 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+
+<script src="./tquery.effectcomposer.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+
+	world.autoRendering(false);
+
+
+	var renderer	= world.renderer();
+	var scene	= world.scene();
+	var camera	= world.camera();
+
+	//renderer.setClearColorHex( 0x000000, 1 );
+	renderer.autoClear = false;
+	
+	
+
+	var composer	= new THREE.EffectComposer( renderer );
+
+	var renderModel = new THREE.RenderPass( scene, camera );
+	composer.addPass( renderModel );
+
+	//var effectFXAA = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
+	//effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+	//composer.addPass( effectFXAA );
+
+	// need the background to be black	
+	//var effectBloom		= new THREE.BloomPass( 1.2 );
+	//composer.addPass( effectBloom );
+
+	//var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "colorify" ] );
+	//effect.uniforms[ 'color' ].value.setRGB( 1, 0.8, 0.8 );
+	//composer.addPass( effect );
+
+	//var effectSepia = new THREE.ShaderPass( THREE.ShaderExtras[ "sepia" ] );
+	//effectSepia.uniforms[ "amount" ].value	= 0.9;
+	//composer.addPass( effectSepia );
+
+	//var effectFilmBW = new THREE.FilmPass( 0.35, 0.5, 2048, true );
+	//composer.addPass( effectFilmBW );
+
+	//var effect	= new THREE.FilmPass( 0.25, 0.25, 648, false );
+	//composer.addPass( effect );
+
+	//var effectDotScreen	= new THREE.DotScreenPass( new THREE.Vector2( 0, 0 ), 0.5, 0.6 );
+	//composer.addPass( effectDotScreen );
+
+	var effectBleach	= new THREE.ShaderPass( THREE.ShaderExtras[ "bleachbypass" ] );
+	effectBleach.uniforms[ "opacity" ].value = 0.95;
+	composer.addPass( effectBleach );
+
+	var effectHBlur = new THREE.ShaderPass( THREE.ShaderExtras[ "horizontalBlur" ] );
+	effectHBlur.uniforms[ 'h' ].value = 0.3 / ( window.innerWidth/2 );
+	composer.addPass( effectHBlur );
+	
+	var effectVBlur = new THREE.ShaderPass( THREE.ShaderExtras[ "verticalBlur" ] );
+	effectVBlur.uniforms[ 'v' ].value = 0.3 / ( window.innerHeight/2 );
+	composer.addPass( effectVBlur );
+
+	var renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
+	var renderTarget= new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, renderTargetParameters );
+	var effectSave	= new THREE.SavePass( renderTarget );
+	var effectBlend	= new THREE.ShaderPass( THREE.ShaderExtras["blend"], "tDiffuse1" );
+	effectBlend.uniforms[ 'tDiffuse2' ].texture	= effectSave.renderTarget;
+	effectBlend.uniforms[ 'mixRatio' ].value	= 0.8;
+	composer.addPass( effectBlend );
+	composer.addPass( effectSave );
+
+
+	var effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] );
+	effectVignette.uniforms[ "offset"	].value	= 1.05;
+	effectVignette.uniforms[ "darkness"	].value = 1.5;
+	composer.addPass( effectVignette );
+
+	//var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );
+	//effect.uniforms[ 'opacity' ].value = 1;
+	//composer.addPass( effect );
+
+	composer.passes[composer.passes.length -1 ].renderToScreen	= true;
+		
+	world.loop().hookOnRender(function(){
+		renderer.clear();
+		composer.render();
+	}.bind(this));
+
+if(false){
+	//var effectFilm = new THREE.FilmPass( 0.25, 0.25, 648, false );
+	//composer.addPass( effectFilm );
+	composer.pushFilmPass(0.25, 0.25, 648, false);
+
+	// - original
+	//var effectHBlur = new THREE.ShaderPass( THREE.ShaderExtras[ "horizontalBlur" ] );
+	//effectHBlur.uniforms[ 'h' ].value = 1.1 / ( window.innerWidth/2 );
+	//composer.addPass( effectHBlur );
+	// - tQuery
+	// how to handle, window resize
+	composer.pushHBlur(1.1)
+
+	composer.pushBloom(1.2)
+
+	composer.pushVignette(1.05, 1.5)
+	composer.pushVignette({
+		offset	: 1.05,
+		darkness: 1.5
+	});
+	
+	// add a pass
+	composer.pushScreen('myScreenPass', opacity);
+	
+	// access existing passes
+	var pass	= composer.passes('myScreenPass');
+	pass.uniform('opacity', 0.9)
+}
+
+	
+
+
+</script></body>
