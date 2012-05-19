@@ -35,6 +35,7 @@ looks like the code below... Quite short.
 
 #### Head
 
+* working on postprocessing in tQuery.World
 * added attributes to ```tQuery.Object3D``` (needed for shadow)
 * added plugins/skymap to handle textureCube and skymap
 * added plugins/bluesky to generate blue sky html page background - no texture
