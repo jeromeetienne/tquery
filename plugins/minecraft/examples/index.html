@@ -13,7 +13,7 @@
 		var parts	= character.parts;
 		parts.headGroup.rotation.y	= Math.sin(now*1.5)/3;
 		parts.headGroup.rotation.z	= Math.sin(now)/3;
-	})
+	}); 
 	
 	world.loop().hook(function(delta, now){
 		var angle	= 0.6662 * now * 10;

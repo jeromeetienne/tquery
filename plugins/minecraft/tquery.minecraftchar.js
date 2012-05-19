@@ -1,3 +1,8 @@
+/**
+ * http://danielmcgraw.com/2010/10/06/How-To-Skin-Your-Minecraft-Character/
+ * http://www.minecraftskins.com/
+ * http://www.minecraftskins.info/
+*/
 tQuery.register('MinecraftChar', function(){
 	/**
 	 * Could be replace by a CubeGeometry but would require to change the whole indexing
@@ -220,7 +225,7 @@ tQuery.register('MinecraftChar', function(){
 
 
 	//////////////////////////////////////////////////////////////////////////
-	//									//
+	//		load the skin							//
 	//////////////////////////////////////////////////////////////////////////
 	var skinImage	= new Image();
 	skinImage.onload = function () {
@@ -229,7 +234,10 @@ tQuery.register('MinecraftChar', function(){
 		material.map.needsUpdate = true;
 		materialTrans.map.needsUpdate = true;
 	};
-	skinImage.src = "char.png";
+	skinImage.src = "images/char.png";
+	skinImage.src = "images/batman.png";
+	skinImage.src = "images/Mario.png";
+	skinImage.src = "images/3djesus.png";
 
 	return {
 		model	: playerModel,
