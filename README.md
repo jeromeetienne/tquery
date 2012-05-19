@@ -33,7 +33,7 @@ looks like the code below... Quite short.
 
 ## Changelog
 
-**Head**
+#### Head
 
 * added attributes to ```tQuery.Object3D``` (needed for shadow)
 * added plugins/skymap to handle textureCube and skymap
