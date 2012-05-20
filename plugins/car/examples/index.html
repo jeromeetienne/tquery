@@ -1,3 +1,15 @@
+<!-- # Examples of tQuery.car.js -->
+
+<!-- ```tquery.car.js``` is a plugin provides rendering and controls of sport cars. -->
+<!-- It is based on some examples by [alteredq](http://alteredqualia.com/) in -->
+<!-- [three.js](http://github.com/mrdoob/three.js/). -->
+<!-- You can find them -->
+<!-- [here](http://mrdoob.github.com/three.js/examples/webgl_materials_cars.html) -->
+<!-- and -->
+<!-- [here](http://mrdoob.github.com/three.js/examples/webgl_materials_cubemap_dynamic.html). -->
+
+<!-- -->
+
 <!doctype html><title>tQuery Car Example</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../../requirejs/tquery.norequirejs.js"></script>
@@ -12,7 +24,7 @@
 <script src='../../fog/tquery.world.createfog.js'></script>
 <script src='../../light/tquery.light.shadow.js'></script>
 
-<script src="../../skymap/tquery.texturecube.js"></script>
+<script src="../../skymap/tquery.cubetexture.js"></script>
 <script src="../../skymap/tquery.skymap.js"></script>
 
 <script src="../Car.js"></script>
@@ -24,49 +36,100 @@
 <script src="../../../vendor/three.js/ShaderExtras.js"></script>
 <script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
 
-<body><script>
+<!-- Add a body and add a title -->
+<body style="margin:0;padding:0;overflow:'hidden';"><div id="info" style="z-index: 2">
+	Example of interaction with <a href="http://evanw.github.com/glfx.js/">glfx.js</a> post processing library<br/>
+	<a href="../../../www/vendor/doccoviewer/#../../../plugins/car/examples/" target="_blank">Annotated Source</a>
+</div><script>
+	// ## Let's start coding
+
 	var world	= tQuery.createWorld().boilerplate().start();
 	// setup renderer
 	// TODO should i make a tQuery.WebGLRenderer ? just to tQuerying the api
 	// would become something like : world.renderer().clearColor(0x6666AA).shadowMap(true)
 	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
-	world.renderer().shadowMapEnabled	= true;
-	world.renderer().shadowMapSoft		= true;
+	//world.renderer().shadowMapEnabled	= true;
+	//world.renderer().shadowMapSoft		= true;
 	
-	// add a skymap. 
-	tQuery.createSkymap('skybox').addTo(world);
+	// ## The Lights
 
-	// add the lights
+	// Those parameters can be tricky to tune. It helps if you make the shaddow
+	// camera visible. You can do so with ```.shadowCameraVisible(true)```.
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xffffff).intensity(2);
 	tQuery.createDirectionalLight().addTo(world).color(0xffffff)
 		.position(-10, 20, 30).intensity(4)
 		.castShadow(true).shadowDarkness(0.8)
 		.shadowMap(256,512*2)
-		.shadowCamera(10, -10, 20, -20, 0.1, 50)
-		//.shadowCameraVisible(true)
+		.shadowCamera(10, -10, 20, -20, 0.1, 50);
 
-	// add a ground
+	// add a skymap.
+	// For more info on skymap, see ["let's do a sky"](http://learningthreejs.com/blog/2011/08/15/lets-do-a-sky/) post.
+	tQuery.createSkymap('skybox').addTo(world);
+
+	// ## The Ground
+	
+	// Now we add the ground. A car needs a ground to stand on :)
+	// For that, we got a little helper ```tquery.grassground.js```.
+	// This is just building a ```THREE.Plane``` and mapping a grass
+	// texture into it. does the job for a simple and fast ground.
+	// We have seen something similar with ```tquery.checkerboard.js``` in
+	// ["tQuery Plugin for Doom Characters"](http://learningthreejs.com/blog/2012/05/04/tquery-md2character-a-plugin-for-doom-characters/)
+	// post.
 	var ground	= tQuery.createGrassGround({
 		textureUrl	: '../../grassground/images/grasslight-big.jpg',
 		textureRepeatX	: 30,
 		textureRepeatY	: 30,		
 	}).addTo(world).receiveShadow(true).scaleBy(100);
 
-	// add the car itself
+	// ## The Car
+
+	// First we instanciate a ```tQuery.Car``` object with ```tQuery.createCar()```.
+	// It will load the models, then material will be setup.
+	// ```tQuery.Car``` handles the displacement of the car too.
+	// You can make the car turn, go forward and backward, using ```car.controls()```.
+	// you can even switch on/off the lights with ```.flareVisible()```
 	var car	= tQuery.createCar();
-	if( "ontouchstart" in window )	car.hookDeviceOrientation();
-	else				car.hookKeyboard();
+	// Then we had the car model in our world scene. Important if you want to see it :)
+	world.add(car.model())
 	
 	// setup the camera controls
 	tQuery.Car.createCameraControls(car, world);
 
+	// ## Car Controls
+
+	// Now we hook the controls to the car. This determines how the player will controls the
+	// car. It can be controlled by the keyboard, so users press arrows on keyboard
+	// and the car moves.
+	// It can be controlled by the [device orientation](http://dev.w3.org/geo/api/spec-source-orientation.html).
+	// We already talked device orientation in game in
+	// [this post](http://learningthreejs.com/blog/2011/09/20/lets-make-a-3D-game-device-orientation/).
+	var hasTouchEvent	= "ontouchstart" in window;
+	if( hasTouchEvent )	car.hookDeviceOrientation();
+	else			car.hookKeyboard();
+	
+	// Now maybe you wonder "why this devices orientation" ?
+	// I ported tQuery to IOS. So since tQuery r49.1, it is possible to run
+	// tquery on your iphones or ipads.
+	// It is possible to render with [canvas 2D](http://www.w3.org/TR/2dcontext/) in the regular browser.
+	// Even possible to render WebGL using
+	// [WebGL Browser](https://github.com/benvanik/WebGLBrowser) by [Ben Vanik](https://twitter.com/#!/benvanik).
+
+
+	// ## The Road
+	
 	// create the corridors
+	
+	// We create the material we gonna use. This is a [lambert](http://en.wikipedia.org/wiki/Lambertian_reflectance)
+	// with a [reflection](http://en.wikipedia.org/wiki/Reflection_mapping). You put a cube texture in the
+	// ```envMap``` parameter and you got your reflection :) Here we use tquery.skymap.js to create the cube texture.
 	var material	= new THREE.MeshLambertMaterial({
 		ambient	: 0x444444,
 		color	: 0x666666,
-		envMap	: tQuery.createTextureCube('skybox')
+		envMap	: tQuery.createCubeTexture('skybox')
 	});
+
+	// create the arches
 	for(var i = 0; i < 5; i++){
 		tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world)
 			.castShadow(true).translateZ( 2 + i * 5 );		

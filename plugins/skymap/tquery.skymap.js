@@ -9,7 +9,7 @@ tQuery.register('createSkymap', function(opts){
 	});
 	console.assert(opts.textureCube);
 
-	var textureCube	= tQuery.createTextureCube(opts.textureCube);
+	var textureCube	= tQuery.createCubeTexture(opts.textureCube);
 
 	var shader	= THREE.ShaderUtils.lib[ "cube" ];
 	shader.uniforms[ "tCube" ].texture = textureCube;

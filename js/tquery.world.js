@@ -29,6 +29,9 @@ tQuery.World	= function(opts)
 	// - not clear what to do with this...
 	// - tQuery.world is the user world. like the camera controls
 	tQuery.world	= this;
+
+
+	this._autoRendering	= value;
 	
 	// create a scene
 	if( !opts.scene ){
@@ -49,9 +52,6 @@ tQuery.World	= function(opts)
 	this._loop.hookOnRender(this._$loopCb = function(){
 		this.render();
 	}.bind(this));
-
-	// init effectComposer
-	this._effectComposer	= null;
 
 	// create a renderer
 	if( opts.renderer ){
@@ -241,15 +241,10 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.World.prototype.addEffectComposer	= function(composer){
-	this._composer	= composer || tQuery.createEffectComposer({world: this, back: this}).renderPass();
-	return this._composer;
-}
-tQuery.World.prototype.getEffectComposer	= function(){
-	return this._composer;
-}
-tQuery.World.prototype.removeEffectComposer	= function(){
-	this._composer	= null;
+tQuery.World.prototype.autoRendering	= function(value){
+	if(value === undefined)	return this._autoRendering;
+	this._autoRendering	= value;
+	return this;
 }
 
 
@@ -257,10 +252,6 @@ tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
-
-	if( this._composer ){
-		this._composer.tComposer().render();
-	}else{
-		this._renderer.render( this._scene, this._camera );
-	}
+	// render the scene 
+	if( this._autoRendering )	this._renderer.render( this._scene, this._camera );
 }

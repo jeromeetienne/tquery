@@ -6,6 +6,23 @@ tQuery.register('createEffectComposer', function(opts){
 	return new tQuery.EffectComposer(opts);
 });
 
+
+// TODO make it plugin
+tQuery.World.prototype.addEffectComposer	= function(composer){
+	this._composer	= composer || tQuery.createEffectComposer({world: this, back: this}).renderPass();
+	return this._composer;
+}
+tQuery.World.prototype.getEffectComposer	= function(){
+	return this._composer;
+}
+tQuery.World.prototype.removeEffectComposer	= function(){
+	this._composer	= null;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.register('EffectComposer', function(opts){
 	// handle parameters
 	this._opts	= opts	= tQuery.extend(opts, {

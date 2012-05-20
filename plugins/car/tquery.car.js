@@ -37,7 +37,6 @@ tQuery.register('Car', function(opts){
 			"gallardo"	: 0.13,
 			"veyron"	: 0
 		}[this._opts.type]
-		world.add( object.root );
 
 		//this._setNormalMaterial();
 		this._setNiceMaterial();
@@ -93,7 +92,7 @@ tQuery.Car.prototype.controls	= function(){
 	return this._controlsCar;
 }
 
-tQuery.Car.prototype.object3d	= function(){
+tQuery.Car.prototype.model	= function(){
 	return this._car.root;
 }
 
@@ -206,7 +205,7 @@ tQuery.Car.prototype._setNormalMaterial	= function()
 }
 
 tQuery.Car.prototype._setNiceMaterial	= function(){
-	var textureCube	= tQuery.createTextureCube('swedishRoyalCastle');
+	var textureCube	= tQuery.createCubeTexture('swedishRoyalCastle');
 	// directly from altered demo
 	var mlib	= {
 		body: [],

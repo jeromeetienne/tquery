@@ -30,7 +30,7 @@ tQuery.Car.CameraControls.prototype.update	= function()
 	var maxAngle	= Math.PI/5;
 	var spdAngle	= 0.85;
 	var car		= this._opts.car;
-	var tObject3d	= car.object3d();
+	var tObject3d	= car.model();
 
 	var carAngle	= car._car.carOrientation;
 	this._curAngle	= spdAngle*this._curAngle + (1-spdAngle)*carAngle;
