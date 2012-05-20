@@ -31,7 +31,7 @@ tQuery.World	= function(opts)
 	tQuery.world	= this;
 
 
-	this._autoRendering	= value;
+	this._autoRendering	= true;
 	
 	// create a scene
 	if( !opts.scene ){

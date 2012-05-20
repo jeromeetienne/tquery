@@ -63,8 +63,8 @@ tQuery.register('Car', function(opts){
 	};
 
 	// hook the rendering loop and update the car model
-	this._loopCb	= function(deltaTime){
-		this._car.updateCarModel( deltaTime, this._controlsCar );
+	this._loopCb	= function(delta){
+		this._car.updateCarModel(delta, this._controlsCar);
 	}.bind(this);
 	world.loop().hook(this._loopCb);
 

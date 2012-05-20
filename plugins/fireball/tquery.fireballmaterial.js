@@ -21,8 +21,8 @@ tQuery.Object3D.register('useFileballMaterial', function(scale){
 		
 		object3d.material	= material;
 		
-		tQuery.world.loop().hook(function(deltaTime, present){
-			uniforms.time.value += 0.275 * deltaTime;
+		tQuery.world.loop().hook(function(delta, now){
+			uniforms.time.value += 0.275 * delta;
 		});
 	});
 	// for chained API

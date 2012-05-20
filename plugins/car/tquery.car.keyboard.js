@@ -54,7 +54,7 @@ tQuery.Car.register('unhookKeyboard', function(opts){
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('hookKeyboardLoopCb', function(deltaTime, present){
+tQuery.Car.register('hookKeyboardLoopCb', function(delta, now){
 	var data	= tQuery.data(this, 'keyboard');
 	var opts	= data.opts;
 	var keyboard	= tQuery.keyboard();

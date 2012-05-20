@@ -2799,6 +2799,9 @@ tQuery.World	= function(opts)
 	// - not clear what to do with this...
 	// - tQuery.world is the user world. like the camera controls
 	tQuery.world	= this;
+
+
+	this._autoRendering	= true;
 	
 	// create a scene
 	if( !opts.scene ){
@@ -2820,15 +2823,12 @@ tQuery.World	= function(opts)
 		this.render();
 	}.bind(this));
 
-	// init effectComposer
-	this._effectComposer	= null;
-
 	// create a renderer
 	if( opts.renderer ){
 		this._renderer	= opts.renderer;
 	}else if( tQuery.World.hasWebGL() ){
 		this._renderer	= new THREE.WebGLRenderer({
-			antialias		: true,	// to get smoother output
+			//antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
 	}else if( !opts.webGLNeeded ){
@@ -3011,16 +3011,10 @@ tQuery.World.prototype.get	= function(){ return this._scene;	}
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.World.prototype.addEffectComposer	= function(composer){
-	this._renderer.autoClear = false;
-	this._composer	= composer || tQuery.createEffectComposer({world: this, back: this}).renderPass();
-	return this._composer;
-}
-tQuery.World.prototype.getEffectComposer	= function(){
-	return this._composer;
-}
-tQuery.World.prototype.removeEffectComposer	= function(){
-	this._composer	= null;
+tQuery.World.prototype.autoRendering	= function(value){
+	if(value === undefined)	return this._autoRendering;
+	this._autoRendering	= value;
+	return this;
 }
 
 
@@ -3028,13 +3022,8 @@ tQuery.World.prototype.render	= function()
 {
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._cameraControls.update();
-
-	if( this._composer ){
-		this._renderer.clear();
-		this._composer.tComposer().render();
-	}else{
-		this._renderer.render( this._scene, this._camera );
-	}
+	// render the scene 
+	if( this._autoRendering )	this._renderer.render( this._scene, this._camera );
 }
 //////////////////////////////////////////////////////////////////////////////////
 //										//

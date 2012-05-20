@@ -49,7 +49,7 @@ tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.RatamahattaMD2Character.register('hookKeyboardLoopCb', function(deltaTime, present){
+tQuery.RatamahattaMD2Character.register('hookKeyboardLoopCb', function(){
 	var keyboard	= tQuery.keyboard();
 	// keyboard handling
 	if( keyboard.pressed("left") )	character.turnLeft();

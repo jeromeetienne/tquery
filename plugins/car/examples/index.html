@@ -38,18 +38,18 @@
 
 <!-- Add a body and add a title -->
 <body style="margin:0;padding:0;overflow:'hidden';"><div id="info" style="z-index: 2">
-	Example of interaction with <a href="http://evanw.github.com/glfx.js/">glfx.js</a> post processing library<br/>
+	Example of tQuery.car plugins<br/>
 	<a href="../../../www/vendor/doccoviewer/#../../../plugins/car/examples/" target="_blank">Annotated Source</a>
 </div><script>
 	// ## Let's start coding
-
+	
 	var world	= tQuery.createWorld().boilerplate().start();
 	// setup renderer
 	// TODO should i make a tQuery.WebGLRenderer ? just to tQuerying the api
 	// would become something like : world.renderer().clearColor(0x6666AA).shadowMap(true)
 	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
-	//world.renderer().shadowMapEnabled	= true;
-	//world.renderer().shadowMapSoft		= true;
+	world.renderer().shadowMapEnabled	= true;
+	world.renderer().shadowMapSoft		= true;
 	
 	// ## The Lights
 

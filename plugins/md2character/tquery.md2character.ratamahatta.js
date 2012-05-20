@@ -78,8 +78,8 @@ tQuery.RatamahattaMD2Character.prototype.detach	= function(){
 	return this;	// for chained API
 };
 
-tQuery.RatamahattaMD2Character.prototype._loopCb	= function(deltaTime){
-	this.update( deltaTime );
+tQuery.RatamahattaMD2Character.prototype._loopCb	= function(delta, now){
+	this.update( delta, now);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
