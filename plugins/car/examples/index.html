@@ -1,5 +1,7 @@
 <!-- # Examples of tQuery.car.js -->
 
+
+
 <!-- ```tquery.car.js``` is a plugin provides rendering and controls of sport cars. -->
 <!-- It is based on some examples by [alteredq](http://alteredqualia.com/) in -->
 <!-- [three.js](http://github.com/mrdoob/three.js/). -->
@@ -42,30 +44,52 @@
 	<a href="../../../www/vendor/doccoviewer/#../../../plugins/car/examples/" target="_blank">Annotated Source</a>
 </div><script>
 	// ## Let's start coding
-	
+
+	// We start to create our world as usual. We enable the
+	// [boilerplate for three.js](http://learningthreejs.com/blog/2011/12/20/boilerplate-for-three-js/).
+	// It is a fast way start, avoids repetitive tasks, following DRY principles and includes all those good practices which are so easy to forget.
+	// Then we just have to ```.start()``` the rendering loop on this world.
 	var world	= tQuery.createWorld().boilerplate().start();
-	// setup renderer
-	// TODO should i make a tQuery.WebGLRenderer ? just to tQuerying the api
-	// would become something like : world.renderer().clearColor(0x6666AA).shadowMap(true)
-	world.renderer().setClearColorHex( 0x6666AA, world.renderer().getClearAlpha() );
+
+	// Now we setup the renderer.
+	// In this scene, we want to cast shadows as if it cames from the sun.
+	// This is a nice way to improve the realism in our 3D scene
+	// We already talked about it in ["Casting Shadow"](http://learningthreejs.com/blog/2012/01/20/casting-shadows/) 
+	// The renderer needs to be notified so we set ```.shadowMapEnabled``` and ```.shadowMapSoft``` to true.
 	world.renderer().shadowMapEnabled	= true;
 	world.renderer().shadowMapSoft		= true;
+
+	// ## The Sky
 	
+	// Now we add a sky to the 3D scene.
+	// It will fill the space and make the scene more realistiv.
+	// We use a skymap for that. It is is WebGL trick which take a cube, make it so large that it seems infinite.
+	// On it, we map a 360degeree texture shaped as a cube, and use a special shader to display it. All is in this
+	// shader, it makes the cube appears as if we were in a gigantic sphere. Exactly like we would feel with a sky above
+	// our head.
+	// We already saw skymaps in ["let's do a sky"](http://learningthreejs.com/blog/2011/08/15/lets-do-a-sky/) post.
+	// We just added a new plugins ```tquery.skymap.js```.
+	// It avoid repeative code when you do skymap or environement map.
+	tQuery.createSkymap('skybox').addTo(world);
+
 	// ## The Lights
 
-	// Those parameters can be tricky to tune. It helps if you make the shaddow
-	// camera visible. You can do so with ```.shadowCameraVisible(true)```.
+	// Here we setup the lights. We put one ambient and 2 directional lights.
+
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xffffff).intensity(2);
-	tQuery.createDirectionalLight().addTo(world).color(0xffffff)
-		.position(-10, 20, 30).intensity(4)
-		.castShadow(true).shadowDarkness(0.8)
-		.shadowMap(256,512*2)
-		.shadowCamera(10, -10, 20, -20, 0.1, 50);
 
-	// add a skymap.
-	// For more info on skymap, see ["let's do a sky"](http://learningthreejs.com/blog/2011/08/15/lets-do-a-sky/) post.
-	tQuery.createSkymap('skybox').addTo(world);
+	// It is rather simple so lets focus on the last one, the one casting shadow.
+	// We want it to appear as coming from the sun. 
+	// So we looks at the skymap and approximatly localized the sun at ```(-10, 20, 30)```.
+	// Then we tune shadow parameters to fit our tastes.
+	// You can find more details in ["Casting Shadow"](http://learningthreejs.com/blog/2012/01/20/casting-shadows/) post.
+	// Those parameters can be tricky to tune. It helps if you make the shaddow
+	// camera visible. You can do so with ```.shadowCameraVisible(true)```.
+	tQuery.createDirectionalLight().addTo(world).position(-10, 20, 30).color(0xffffff).intensity(4)
+		.castShadow(true).shadowDarkness(0.8)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(10, -10, 20, -20, 0.1, 50);
 
 	// ## The Ground
 	
@@ -93,7 +117,10 @@
 	// Then we had the car model in our world scene. Important if you want to see it :)
 	world.add(car.model())
 	
-	// setup the camera controls
+	// Now we got the car on the scene, this is all good.
+	// But we need the camera to follow this car. We create a camera controls specific
+	// to mimic the usual camera in car game. The camera is placed a bit behind the car and look forward.
+	// The faster you go, the further you look. This is always nice to see what is coming at you :)
 	tQuery.Car.createCameraControls(car, world);
 
 	// ## Car Controls
@@ -115,23 +142,30 @@
 	// Even possible to render WebGL using
 	// [WebGL Browser](https://github.com/benvanik/WebGLBrowser) by [Ben Vanik](https://twitter.com/#!/benvanik).
 
-
 	// ## The Road
 	
-	// create the corridors
-	
-	// We create the material we gonna use. This is a [lambert](http://en.wikipedia.org/wiki/Lambertian_reflectance)
+	// In a scene, it is cool to create a goal, something for the user to do.
+	// A road seems like a perfect goal for a car :)
+	// First we create the material we gonna use. This is a [lambert](http://en.wikipedia.org/wiki/Lambertian_reflectance)
 	// with a [reflection](http://en.wikipedia.org/wiki/Reflection_mapping). You put a cube texture in the
-	// ```envMap``` parameter and you got your reflection :) Here we use tquery.skymap.js to create the cube texture.
+	// ```envMap``` parameter and you got your reflection :) Here again, we use tquery.skymap.js to create the cube texture.
 	var material	= new THREE.MeshLambertMaterial({
 		ambient	: 0x444444,
 		color	: 0x666666,
 		envMap	: tQuery.createCubeTexture('skybox')
 	});
 
-	// create the arches
+	// Now we add the arches. In fact, they are torus which are half in the ground, so the visible part looks like an arche.
+	// We put 5 of them along the Z axis. they are all aligned to give an kindof road.
+	// ```.castShadow(true)``` make the 3D object as casting shadow. Always a nice trick to enhance realism.
 	for(var i = 0; i < 5; i++){
 		tQuery.createTorus(1.25-0.25, 0.25, 8, 6*4, material).addTo(world)
 			.castShadow(true).translateZ( 2 + i * 5 );		
 	}
+	
+	// And we are **DONE**! We got a nice looking car, driving on grass with a sun set. It is 
+	// controlled by keyboard and the camera controls is suitable for a game. Not bad
+	// for 40 lines of javascripts.
+	
+	// TODO here put the iframe of the demo
 </script></body>
