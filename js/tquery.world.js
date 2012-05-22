@@ -232,9 +232,19 @@ tQuery.World.prototype.stop	= function(){
 }
 
 tQuery.World.prototype.loop	= function(){ return this._loop;	}
-tQuery.World.prototype.renderer	= function(){ return this._renderer;	}
-tQuery.World.prototype.camera	= function(){ return this._camera;	}
-tQuery.World.prototype.scene	= function(){ return this._scene;	}
+
+tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
+tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
+tQuery.World.prototype.tScene	= function(){ return this._scene;	}
+
+
+// backward compatible functions to remove
+tQuery.World.prototype.renderer	= function(){ //console.warn("world.renderer() is ovbslete, use .tRenderer() instead");
+						return this._renderer;	}
+tQuery.World.prototype.camera	= function(){ //console.warn("world.camera() is obsolete, use .tCamerar() instead");
+						return this._camera;	}
+tQuery.World.prototype.scene	= function(){ //console.warn("world.scene() is obsolete, use .tScene() instead");
+						return this._scene;	}
 tQuery.World.prototype.get	= function(){ return this._scene;	}
 
 //////////////////////////////////////////////////////////////////////////////////
