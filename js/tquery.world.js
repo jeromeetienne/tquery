@@ -16,7 +16,7 @@ tQuery.World	= function(opts)
 	opts	= tQuery.extend(opts, {
 		renderW		: window.innerWidth,
 		renderH		: window.innerHeight,
-		webGLNeeded	: false,
+		webGLNeeded	: true,
 		autoRendering	: true,
 		scene		: null,
 		camera		: null,
