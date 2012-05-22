@@ -20,7 +20,7 @@
 	character.model.addTo(world);
 	//.translateX(1)
 	
-	world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
+	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
 	world.loop().hook(function(delta, now){
 		var parts	= character.parts;
