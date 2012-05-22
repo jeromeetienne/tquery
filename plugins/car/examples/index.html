@@ -35,9 +35,6 @@
 <script src="../tquery.car.deviceorientation.js"></script>
 <script src="../tquery.car.cameracontrols.js"></script>
 
-<script src="../../../vendor/three.js/ShaderExtras.js"></script>
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-
 <!-- Add a body and add a title -->
 <body style="margin:0;padding:0;overflow:'hidden';"><div id="info" style="z-index: 2">
 	Example of tQuery.car plugins<br/>
@@ -56,8 +53,8 @@
 	// This is a nice way to improve the realism in our 3D scene
 	// We already talked about it in ["Casting Shadow"](http://learningthreejs.com/blog/2012/01/20/casting-shadows/) 
 	// The renderer needs to be notified so we set ```.shadowMapEnabled``` and ```.shadowMapSoft``` to true.
-	world.renderer().shadowMapEnabled	= true;
-	world.renderer().shadowMapSoft		= true;
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
 
 	// ## The Sky
 	

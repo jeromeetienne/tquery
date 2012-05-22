@@ -62,8 +62,8 @@ tQuery.World.register('addBoilerplate', function(opts){
 	}
 
 	// get some variables
-	var camera	= this.camera();
-	var renderer	= this.renderer();
+	var camera	= this.tCamera();
+	var renderer	= this.tRenderer();
 
 	// create a camera contol
 	if( opts.cameraControls ){

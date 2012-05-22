@@ -31,10 +31,23 @@ tQuery.register('EffectComposer', function(opts){
 	});
 	console.assert(opts.world);
 
-	var renderer	= opts.world.renderer();
-	this._tComposer	= new THREE.EffectComposer( renderer );
+	var world	= opts.world;
+	var tRenderer	= world.tRenderer();
+
+	this._tComposer	= new THREE.EffectComposer( tRenderer );
+
+	world.autoRendering(false);
+	tRenderer.autoClear = false;
+
+	world.loop().hookOnRender(function(){
+		tRenderer.clear();
+		this._tComposer.render();
+	}.bind(this))
 });
 
+
+tQuery.EffectComposer.prototype.destroy	= function(){
+}
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -56,13 +69,13 @@ tQuery.EffectComposer.prototype.finish	= function(){
 tQuery.EffectComposer.prototype.back		= tQuery.EffectComposer.prototype.finish;
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		List of all the Passes						//
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.EffectComposer.prototype.renderPass	= function(scene, camera){
 	// handle parameters default values
-	scene	= scene		|| this._opts.world.scene();
-	camera	= camera	|| this._opts.world.camera();
+	scene	= scene		|| this._opts.world.tScene();
+	camera	= camera	|| this._opts.world.tCamera();
 	// create the effect
 	var effect	= new THREE.RenderPass( scene, camera );
 	// add the effect

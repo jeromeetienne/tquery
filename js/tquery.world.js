@@ -239,11 +239,11 @@ tQuery.World.prototype.tScene	= function(){ return this._scene;	}
 
 
 // backward compatible functions to remove
-tQuery.World.prototype.renderer	= function(){ //console.warn("world.renderer() is ovbslete, use .tRenderer() instead");
+tQuery.World.prototype.renderer	= function(){  console.trace();console.warn("world.renderer() is ovbslete, use .tRenderer() instead");
 						return this._renderer;	}
-tQuery.World.prototype.camera	= function(){ //console.warn("world.camera() is obsolete, use .tCamerar() instead");
+tQuery.World.prototype.camera	= function(){ console.trace();console.warn("world.camera() is obsolete, use .tCamerar() instead");
 						return this._camera;	}
-tQuery.World.prototype.scene	= function(){ //console.warn("world.scene() is obsolete, use .tScene() instead");
+tQuery.World.prototype.scene	= function(){ console.trace();console.warn("world.scene() is obsolete, use .tScene() instead");
 						return this._scene;	}
 tQuery.World.prototype.get	= function(){ return this._scene;	}
 

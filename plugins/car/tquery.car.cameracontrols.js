@@ -53,11 +53,11 @@ tQuery.Car.CameraControls.prototype.update	= function()
 	var position	= new THREE.Vector3(0, 0.35, -0.4+0.3*this._curDistance);
 	var matrix	= new THREE.Matrix4().makeRotationY(this._curAngle);
 	matrix.multiplyVector3(position).addSelf(tObject3d.position);
-	world.camera().position.copy(position);
+	world.tCamera().position.copy(position);
 	
 	// set set camera target
 	var target	= new THREE.Vector3(0, 0, -2*this._curDistance);
 	var matrix	= new THREE.Matrix4().makeRotationY(this._curAngle);
 	matrix.multiplyVector3(target).addSelf(tObject3d.position);
-	world.camera().lookAt(target);
+	world.tCamera().lookAt(target);
 }
