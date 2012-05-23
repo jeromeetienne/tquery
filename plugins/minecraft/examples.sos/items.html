@@ -64,8 +64,8 @@
 		};
 		
 		if(itemgeometries[id] === undefined) {
-			var imgdata = itemsc.getImageData(Math.floor(id % 16)*16, Math.floor(id / 16)*16, 16, 16);
-			var imd = imgdata.data;
+			var imgdata	= itemsc.getImageData(Math.floor(id % 16)*16, Math.floor(id / 16)*16, 16, 16);
+			var imd		= imgdata.data;
 			
 			tileUvWidth = 1/256;
 			tileUvHeight = 1/256;
