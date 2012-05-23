@@ -232,8 +232,8 @@ tQuery.register('MinecraftChar', function(){
 	skinImage.onload = function () {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		context.drawImage(skinImage, 0, 0);
-		material.map.needsUpdate = true;
-		materialTrans.map.needsUpdate = true;
+		material.map.needsUpdate	= true;
+		materialTrans.map.needsUpdate	= true;
 	};
 	skinImage.src = "images/char.png";
 	skinImage.src = "images/batman.png";
