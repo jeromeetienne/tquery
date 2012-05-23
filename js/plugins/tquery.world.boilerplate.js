@@ -49,21 +49,21 @@ tQuery.World.register('addBoilerplate', function(opts){
 		}
 	}
 
+	// get some variables
+	var camera	= this.camera();
+	var renderer	= this.renderer();
+
 	// add Stats.js - https://github.com/mrdoob/stats.js
 	if( opts.stats ){
 		ctx.stats	= new Stats();
 		ctx.stats.domElement.style.position	= 'absolute';
 		ctx.stats.domElement.style.bottom	= '0px';
-		document.body.appendChild( ctx.stats.domElement );
+		renderer.domElement.parentNode.appendChild( ctx.stats.domElement );
 		ctx.loopStats	= function(){
 			ctx.stats.update();
 		};
 		this.loop().hook(ctx.loopStats);		
 	}
-
-	// get some variables
-	var camera	= this.camera();
-	var renderer	= this.renderer();
 
 	// create a camera contol
 	if( opts.cameraControls ){
