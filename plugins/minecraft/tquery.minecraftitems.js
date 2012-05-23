@@ -3,7 +3,6 @@ tQuery.register('MinecraftItems', function(opts){
 	this._opts	= tQuery.extend(opts, {
 		url	: 'images/items/items.png'
 	});
-	
 	function getMaterial(image, transparent) {
 		var tex		= new THREE.Texture(image);
 		tex.magFilter	= THREE.NearestFilter;
@@ -110,8 +109,11 @@ tQuery.register('MinecraftItems', function(opts){
 	// load the image
 	var items	= new Image();
 	items.onload	= function(){
+		// clear the canvas - TODO is this necessary ?
 		context.clearRect(0, 0, canvas.width, canvas.height);
+		// draw the loaded image to the canvas
 		context.drawImage(items, 0, 0);
+		// trigger the 'load' event
 		this.trigger("load");
 	}.bind(this);
 	items.src = this._opts.url;
