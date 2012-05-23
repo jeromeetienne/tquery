@@ -59,7 +59,7 @@
 	// Then we just have to ```.start()``` the rendering loop on this world.
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	world.addEffectComposer().film(0.5, 0.25, 648, false).vignette().finish();
+	world.addEffectComposer().vignette().finish();
 
 	// Now we setup the renderer.
 	// In this scene, we want to cast shadows as if it cames from the sun.
