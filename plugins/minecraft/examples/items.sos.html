@@ -38,7 +38,7 @@
 		uvs[ (3 + rotateBy) % 4 ].v = tileV * tileUvH;
 	};
 	// TODO change that to getGeometry. it is cached
-	function getGeometry( id ){
+	function createItem (id) {
 		function getSides(x, y){
 			var ix = Math.floor(id % 16)*16;
 			var iy = Math.floor(id / 16)*16;
@@ -53,52 +53,47 @@
 				nx: !nx,
 				py: !py,
 				ny: !ny,
-				pz: true,
-				nz: true
+				pz: supportWebGL,
+				nz: supportWebGL
 			};
 		};
-
-		if(geometries[id] !== undefined )	return geometries[id];
 		
-		var imgdata	= context.getImageData(Math.floor(id % 16)*16, Math.floor(id / 16)*16, 16, 16);
-		var imd		= imgdata.data;			
-		var geometry	= new THREE.Geometry();
-		
-		for(var x=0; x < 16; x++) {
-			for(var y=0; y < 16; y++) {
-				// is this pixel transparent, skip it
-				if( imd[(x+y*16)*4+3] === 0)	continue;
-				
-				var voxel	= new THREE.CubeGeometry(1, 1, 2, 1, 1, 1, undefined, getSides(x, y));
-				// TODO why is there a texture here ????
-				// - this is a single pixel. get the pixel and set the color
-				// - this may fix the anti alias issue
-				for(var i=0; i < 6; i++) { // Fix color of voxel
-					if(voxel.faceVertexUvs[0][i]) {
-						uvmap(voxel, i, Math.floor(id % 16)*16+x, Math.floor(id / 16)*16+y, 1, 1);
+		if(geometries[id] === undefined) {
+			var imgdata	= context.getImageData(Math.floor(id % 16)*16, Math.floor(id / 16)*16, 16, 16);
+			var imd		= imgdata.data;			
+			var geometry	= new THREE.Geometry();
+			
+			for(var x=0; x < 16; x++) {
+				for(var y=0; y < 16; y++) {
+					// is this pixel transparent, skip it
+					if(imd[(x+y*16)*4+3] === 0)	continue;
+					
+					var voxel	= new THREE.CubeGeometry(1, 1, 2, 1, 1 , 1, undefined, getSides(x, y));
+					// TODO why is there a texture here ????
+					// - this is a single pixel. get the pixel and set the color
+					// - this may fix the anti alias issue
+					for(var i=0; i < 6; i++) { // Fix color of voxel
+						if(voxel.faceVertexUvs[0][i]) {
+							uvmap(voxel, i, Math.floor(id % 16)*16+x, Math.floor(id / 16)*16+y, 1, 1);
+						}
 					}
-				}
-				// TODO what is this ... it seems a translation but why ?
-				for(var i=0; i < 8; i++) { // Fix voxel's position
-					if(voxel.vertices[i]){
-						voxel.vertices[i].x += x-7.5;
-						voxel.vertices[i].y += -(y-7.5);
+					// TODO what is this ... it seems a translation but why ?
+					for(var i=0; i < 8; i++) { // Fix voxel's position
+						if(voxel.vertices[i]){
+							voxel.vertices[i].x += x-7.5;
+							voxel.vertices[i].y += -(y-7.5);
+						}
 					}
+					THREE.GeometryUtils.merge(geometry, voxel);
 				}
-				THREE.GeometryUtils.merge(geometry, voxel);
 			}
+			if( geometry.faces.length === 0 )	geometry = null;
+			geometries[id]	= geometry;
+		}else{
+			var geometry	= geometries[id];
 		}
-		if( geometry.faces.length === 0 )	geometry = null;
-		// cache the result
-		geometries[id]	= geometry;
-		// return the result
-		return geometry;
-	};	
-	function createItem (id) {
-		var geometry	= getGeometry(id);
-		if( !geometry )	return null;
-		
-		var mesh	= new THREE.Mesh( geometry, material );
+		if( geometry === null )	return null;
+		var mesh = new THREE.Mesh( geometry, material );
 		return mesh;
 	};	
 
