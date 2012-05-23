@@ -35,6 +35,17 @@
 <script src="../tquery.car.deviceorientation.js"></script>
 <script src="../tquery.car.cameracontrols.js"></script>
 
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
 <!-- Add a body and add a title -->
 <body style="margin:0;padding:0;overflow:'hidden';"><div id="info" style="z-index: 2">
 	Example of tQuery.car plugins<br/>
@@ -47,6 +58,8 @@
 	// It is a fast way start, avoids repetitive tasks, following DRY principles and includes all those good practices which are so easy to forget.
 	// Then we just have to ```.start()``` the rendering loop on this world.
 	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.addEffectComposer().film(0.5, 0.25, 648, false).vignette().finish();
 
 	// Now we setup the renderer.
 	// In this scene, we want to cast shadows as if it cames from the sun.
@@ -147,7 +160,7 @@
 	// with a [reflection](http://en.wikipedia.org/wiki/Reflection_mapping). You put a cube texture in the
 	// ```envMap``` parameter and you got your reflection :) Here again, we use tquery.skymap.js to create the cube texture.
 	var material	= new THREE.MeshLambertMaterial({
-		ambient	: 0x444444,
+		ambient	: 0x444444, 
 		color	: 0x666666,
 		envMap	: tQuery.createCubeTexture('skybox')
 	});
