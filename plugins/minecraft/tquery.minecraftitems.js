@@ -3,7 +3,7 @@ tQuery.register('MinecraftItems', function(opts){
 	this._opts	= tQuery.extend(opts, {
 		url	: 'images/items/items.png'
 	});
-	function getMaterial(image, transparent) {
+	function getMaterial(image, transparent){
 		var tex		= new THREE.Texture(image);
 		tex.magFilter	= THREE.NearestFilter;
 		tex.minFilter	= THREE.NearestFilter;
@@ -15,9 +15,8 @@ tQuery.register('MinecraftItems', function(opts){
 		});
 		return material;
 	}
-	function uvmap (geometry, face, x, y, w, h, rotateBy) {
+	function uvmap (geometry, face, x, y, w, h, rotateBy){
 		rotateBy	= rotateBy !== undefined ? rotateBy : 0;
-		var uvs		= geometry.faceVertexUvs[0][face];
 		var tileU	= x;
 		var tileV	= y;
 		
