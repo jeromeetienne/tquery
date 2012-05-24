@@ -51,15 +51,15 @@ tQuery.World.register('addBoilerplate', function(opts){
 
 
 	// get some variables
-	var camera	= this.tCamera();
-	var renderer	= this.tRenderer();
+	var tCamera	= this.tCamera();
+	var tRenderer	= this.tRenderer();
 
 	// add Stats.js - https://github.com/mrdoob/stats.js
 	if( opts.stats ){
 		ctx.stats	= new Stats();
 		ctx.stats.domElement.style.position	= 'absolute';
 		ctx.stats.domElement.style.bottom	= '0px';
-		renderer.domElement.appendChild( ctx.stats.domElement );
+		tRenderer.domElement.parentNode.appendChild( ctx.stats.domElement );
 		ctx.loopStats	= function(){
 			ctx.stats.update();
 		};
@@ -68,17 +68,17 @@ tQuery.World.register('addBoilerplate', function(opts){
 
 	// create a camera contol
 	if( opts.cameraControls ){
-		ctx.cameraControls	= new THREEx.DragPanControls(camera);
+		ctx.cameraControls	= new THREEx.DragPanControls(tCamera);
 		this.setCameraControls(ctx.cameraControls);		
 	}
 
 	// transparently support window resize
 	if( opts.windowResize ){
-		ctx.windowResize	= THREEx.WindowResize.bind(renderer, camera);		
+		ctx.windowResize	= THREEx.WindowResize.bind(tRenderer, tCamera);		
 	}
 	// allow 'p' to make screenshot
 	if( opts.screenshot ){		
-		ctx.screenshot		= THREEx.Screenshot.bindKey(renderer);
+		ctx.screenshot		= THREEx.Screenshot.bindKey(tRenderer);
 	}
 	// allow 'f' to go fullscreen where this feature is supported
 	if( opts.fullscreen && THREEx.FullScreen.available() ){
