@@ -86,6 +86,7 @@ tQuery.register('MinecraftChar', function(){
 
 	var playerModel	= tQuery.createObject3D();
 	playerModel.scaleBy(1/35).rotateY(-Math.PI/2)
+	//playerModel.scaleBy(1/35).rotateY(-Math.PI/2)
 	
 	
 	var tileUvW	= 1/canvas.width;
@@ -211,8 +212,8 @@ tQuery.register('MinecraftChar', function(){
 	var rightear	= new THREE.Mesh(eargeo, material);
 	leftear.position.y	= 2+(9/8)*5;
 	rightear.position.y	= 2+(9/8)*5;
-	leftear.position.z	= -(9/8)*5;
-	rightear.position.z	=  (9/8)*5;
+	leftear.position.z	=  -(9/8)*5;
+	rightear.position.z	=   (9/8)*5;
 	uvmap(eargeo, 0, 25, 1, 6, 6);		// Front side
 	uvmap(eargeo, 1, 32, 1, 6, 6);		// Back side
 	uvmap(eargeo, 2, 25, 0, 6, 1, 1);	// Top edge

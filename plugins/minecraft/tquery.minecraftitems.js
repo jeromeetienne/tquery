@@ -17,6 +17,7 @@ tQuery.register('MinecraftItems', function(opts){
 	}
 	function uvmap (geometry, face, x, y, w, h, rotateBy){
 		rotateBy	= rotateBy !== undefined ? rotateBy : 0;
+		var uvs		= geometry.faceVertexUvs[0][face];
 		var tileU	= x;
 		var tileV	= y;
 		
@@ -29,6 +30,10 @@ tQuery.register('MinecraftItems', function(opts){
 		uvs[ (3 + rotateBy) % 4 ].u = tileU * tileUvW + w * tileUvW;
 		uvs[ (3 + rotateBy) % 4 ].v = tileV * tileUvH;
 	};
+	/**
+	 * Create the geometry of the sprite 'id'. It is cached
+	 * @returns {THREE.Geometry} geometry built
+	*/
 	function getGeometry( id ){
 		if( geometries[id] !== undefined )	return geometries[id];
 		
@@ -84,10 +89,9 @@ tQuery.register('MinecraftItems', function(opts){
 		// return the result
 		return geometry;
 	};
-	function createItem (id) {
+	function createMeshItem (id) {
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
-		
 		var mesh	= new THREE.Mesh( geometry, material );
 		return tQuery(mesh).scale(1/16);
 	};	
@@ -98,7 +102,7 @@ tQuery.register('MinecraftItems', function(opts){
 	canvas.height	= 256;
 	var context	= canvas.getContext('2d');
 	var material	= getMaterial(canvas, true);
-
+	// init some constants
 	var tileUvW	= 1/canvas.width;
 	var tileUvH	= 1/canvas.height;
 	
@@ -117,8 +121,8 @@ tQuery.register('MinecraftItems', function(opts){
 	}.bind(this);
 	items.src = this._opts.url;
 	
-	// setup the public function	
-	this.create	= createItem;
+	// setup the public function
+	this.create	= createMeshItem;
 });
 
 // make it eventable

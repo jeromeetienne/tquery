@@ -1,8 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.minecraftchar.js"></script>
-<script src="../tquery.minecraftitems.js"></script>
-
 
 <script src="../../../vendor/three.js/ShaderExtras.js"></script>
 <script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
@@ -20,27 +18,14 @@
 
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world);
+	//.translateX(1)
 	
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
-	//var items	= new tQuery.MinecraftItems();
-	//var item;
-	//items.bind('load', function(){
-	//	item	= items.create(10+2*16).scaleBy(35);
-	//	item.rotateY(Math.PI/2)
-	//	//item.rotateY(Math.PI/2)
-	//	item.translateY(35/2)
-	//	//item.translateX(2);
-	//	//item.addTo(character.parts.armR);
-	//	//item.addTo(world);
-	//	console.log("jjj", character.parts.armR)
-	//	//character.parts.armR.add(item.get(0))
-	//	character.parts.armR.add(item.get(0))
-	//});
-
 	world.loop().hook(function(delta, now){
-		character.parts.headGroup.rotation.y	= Math.sin(now*1.5)/3;
-		character.parts.headGroup.rotation.z	= Math.sin(now)/3;
+		var parts	= character.parts;
+		parts.headGroup.rotation.y	= Math.sin(now*1.5)/3;
+		parts.headGroup.rotation.z	= Math.sin(now)/3;
 	}); 
 	
 	world.loop().hook(function(delta, now){

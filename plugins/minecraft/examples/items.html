@@ -9,9 +9,9 @@
 	var items	= new tQuery.MinecraftItems();
 	items.bind('load', function(){
 		console.log("image loaded");
-		items.create(0).addTo(world);
+		items.create(10+2*16).addTo(world);
 
-		if( true ){
+		if( false ){
 			var nItems	= (256/16)*(256/16);
 			for(var i=0; i < nItems; i++){
 				for(var j=0; j < 5; j++) {
