@@ -34,15 +34,15 @@ tQuery.World	= function(opts)
 	this._autoRendering	= true;
 	
 	// create a scene
-	if( !opts.scene ){
-		this._scene	= new THREE.Scene();
-	}
+	this._scene	= opts.scene	||Ê(new THREE.Scene());
 
  	// create a camera in the scene
 	if( !opts.camera ){
 		this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
 		this._camera.position.set(0, 0, 3);
 		this._scene.add(this._camera);
+	}else{
+		this._camera	= opts.camera;
 	}
 	
 	// create the loop
