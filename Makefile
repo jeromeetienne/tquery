@@ -65,8 +65,7 @@ buildCore:
 	cat js/tquery.loop.js		>> build/tquery.js
 	cat js/tquery.core.create.js	>> build/tquery.js
 	cat js/plugins/lights/*.js	>> build/tquery.js
-	cat js/plugins/tquery.geometry.toolbox.js		>> build/tquery.js
-	cat js/plugins/tquery.object3d.geometry.js		>> build/tquery.js
+	cat js/plugins/*.js		>> build/tquery.js
 
 minifyCore: buildCore
 	echo $(BANNER)	>  build/tquery.min.js
@@ -81,8 +80,8 @@ buildBundle: buildCore
 	cat vendor/es5-shim.js		>> build/tquery-bundle.js
 	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js
-	cat js/plugins/tquery.world.boilerplate.js		>> build/tquery-bundle.js
-	# include boilerplate - FIXME this is kludgy - put the boilerplate in -bundle.js
+	# include boilerplate
+	cat plugins/boilerplate/tquery.world.boilerplate.js		>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.WindowResize.js	>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.screenshot.js		>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.FullScreen.js		>> build/tquery-bundle.js
