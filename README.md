@@ -36,6 +36,7 @@ looks like the code below... Quite short.
 #### Head
 
 * working on postprocessing in tQuery.World
+* added .clone() to ```tQuery.Object3D```
 * added attributes to ```tQuery.Object3D``` (needed for shadow)
 * added plugins/skymap to handle textureCube and skymap
 * added plugins/bluesky to generate blue sky html page background - no texture
@@ -50,3 +51,13 @@ looks like the code below... Quite short.
 #### Release - r49.0
 
 * First numbered release (synched on three.js version)
+
+
+## Distributions
+
+build/tquery.js: tquery core
+
+build/tquery-bundle.js: tquery core + three.js + boilerplate
+
+build/tquery-all.js: tquery bundle + all the plugin in incubations (dont use :)
+
