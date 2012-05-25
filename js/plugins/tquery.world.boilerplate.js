@@ -59,7 +59,7 @@ tQuery.World.register('addBoilerplate', function(opts){
 		ctx.stats	= new Stats();
 		ctx.stats.domElement.style.position	= 'absolute';
 		ctx.stats.domElement.style.bottom	= '0px';
-		tRenderer.domElement.parentNode.appendChild( ctx.stats.domElement );
+		tRenderer.domElement.parentNode && tRenderer.domElement.parentNode.appendChild( ctx.stats.domElement );
 		ctx.loopStats	= function(){
 			ctx.stats.update();
 		};

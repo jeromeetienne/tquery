@@ -66,9 +66,9 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 
 	// update time values
 	var now		= time/1000;
-	if( !this._lastTime )	this._lastTime = currentTime - 1/60;
-	var delta	= currentTime - this._lastTime;
-	this._lastTime	= currentTime;
+	if( !this._lastTime )	this._lastTime = now - 1/60;
+	var delta	= now - this._lastTime;
+	this._lastTime	= now;
 
 	// run all the hooks - from lower priority to higher - in order of registration
 	for(var priority = 0; priority <= this._hooks.length; priority++){

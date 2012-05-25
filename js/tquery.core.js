@@ -197,12 +197,10 @@ tQuery.pluginsStaticOn	= function(klass){ return tQuery._pluginsOn(klass, klass,
 
 /** for backward compatibility only */
 tQuery.pluginsOn	= function(object, dest){
-	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticon");
+	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
 	console.trace();
 	return tQuery._pluginsOn(object, dest)
 }
-
-
 // make it pluginable
 tQuery.pluginsOn(tQuery, tQuery);
 
