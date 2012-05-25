@@ -22,14 +22,14 @@
 		windowResize	: false
 	});
 	
-	world.camera().position.z	= 2;
+	world.tCamera().position.z	= 2;
 
 	// add an object
 	var object	= tQuery.createTorus().addTo(world);	
 
 	
 	
-	var sourceEl	= world.renderer().domElement;
+	var sourceEl	= world.tRenderer().domElement;
 	var canvas	= fx.canvas();
 	var texture	= canvas.texture(sourceEl);
 

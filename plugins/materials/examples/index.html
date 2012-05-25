@@ -4,7 +4,7 @@
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	
+
 	tQuery.createAmbientLight().addTo(world).color(new THREE.Color(0x444444));
 	tQuery.createDirectionalLight().addTo(world);
 	tQuery.createDirectionalLight().addTo(world);
@@ -14,28 +14,17 @@
 		ambient	: 0x444444,
 		color	: 0xFF5588
 	});
-	
-	var object	= tQuery.createTorus(material).addTo(world);
-	
-	tQuery.register('setLambert', function(){
-		var material	= new THREE.MeshLambertMaterial({
-			ambient	: 0x444444,
-			color	: 0xFF5588
-		});
-		return tQuery(tLight);
+
+	var object	= tQuery.createTorus().addTo(world);
+
+	tQuery.Mesh.register('setLambertMaterial', function(opts){
+		var tMaterial	= new THREE.MeshLambertMaterial(opts);
+		
+		return this.material(tMaterial);
 	});
 	
+	console.log("jj", object.setLambertMaterial());
 	
-	//console.log("object", object)
-	//
-	//object.setLambertMaterial({
-	//	ambient	: 0x444444,
-	//	color	: 0xFF5588,
-	//})
-	//tQuery.Mesh.register('setLambertMaterial', function(){
-	//	var material	= new THREE.MeshLambertMaterial({
-	//		ambient	: 0x444444,
-	//		color	: 0xFF5588,
-	//	});
-	//});	
+	//object.setLambertMaterial().ambient(0x444444).color(0xFF5588).back();
+	//object.setBasicMaterial().wireframe(true).color(0xFF5588).back();
 </script></body>
