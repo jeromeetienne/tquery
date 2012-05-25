@@ -34,7 +34,7 @@ tQuery.World	= function(opts)
 	this._autoRendering	= true;
 	
 	// create a scene
-	this._scene	= opts.scene	||Ê(new THREE.Scene());
+	this._scene	= opts.scene	||(new THREE.Scene());
 
  	// create a camera in the scene
 	if( !opts.camera ){
