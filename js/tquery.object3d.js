@@ -73,6 +73,19 @@ tQuery.Object3D.prototype.material	= function(){
 	return new tQuery.Material(materials);
 };
 
+
+/**
+ * Clone a Object3D
+*/
+tQuery.Object3D.prototype.clone	= function(){
+	var clones	= [];
+	this._lists.forEach(function(object3d){
+		var clone	= THREE.SceneUtils.cloneObject(object3d)
+		clones.push(clone);
+	})  
+	return tQuery(clones)
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//
 //////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +255,7 @@ tQuery.Object3D._removeClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| tQuery.world.scene();
+	root		= root	|| tQuery.world.tScene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 
 	var lists	= [];	
