@@ -52,12 +52,11 @@ looks like the code below... Quite short.
 
 * First numbered release (synched on three.js version)
 
-
 ## Distributions
 
-build/tquery.js: tquery core
+build/tquery.js: tquery core - 6k gzip+min
 
-build/tquery-bundle.js: tquery core + three.js + boilerplate
+build/tquery-bundle.js: es5-shim + tquery core + three.js + boilerplate - 100k gzip+min
 
-build/tquery-all.js: tquery bundle + all the plugin in incubations (dont use :)
+build/tquery-all.js: tquery bundle + all the plugin in incubations - infinite size - dont use :)
 
