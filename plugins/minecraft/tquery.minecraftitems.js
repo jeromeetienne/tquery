@@ -122,7 +122,8 @@ tQuery.register('MinecraftItems', function(opts){
 	items.src = this._opts.url;
 	
 	// setup the public function
-	this.create	= createMeshItem;
+	this.createMesh		= createMeshItem;
+	this.createGeometry	= getGeometry;
 });
 
 // make it eventable

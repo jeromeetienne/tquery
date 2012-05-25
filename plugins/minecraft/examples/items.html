@@ -3,19 +3,22 @@
 <script src="../tquery.minecraftitems.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var object	= tQuery.createCube().addTo(world).translateX(1);
-	var object	= tQuery.createCube().addTo(world).translateX(-1);
+	var material	= new THREE.MeshBasicMaterial({
+		color		: 0x000000,
+		wireframe	: true
+	})
+	tQuery.createCube(material).addTo(world);
 
 	var items	= new tQuery.MinecraftItems();
 	items.bind('load', function(){
 		console.log("image loaded");
-		items.create(10+2*16).addTo(world);
+		items.createMesh(10+2*16).addTo(world);
 
 		if( false ){
 			var nItems	= (256/16)*(256/16);
 			for(var i=0; i < nItems; i++){
 				for(var j=0; j < 5; j++) {
-					var item	= items.create(i);
+					var item	= items.createMesh(i);
 					// if this spot is empty, do nothing
 					if( item === null )	continue;
 					item.get(0).position.x = Math.random()*30-15;
