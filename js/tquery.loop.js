@@ -65,9 +65,9 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
 	// update time values
-	var currentTime	= time/1000;
+	var now		= time/1000;
 	if( !this._lastTime )	this._lastTime = currentTime - 1/60;
-	var deltaTime	= currentTime - this._lastTime;
+	var delta	= currentTime - this._lastTime;
 	this._lastTime	= currentTime;
 
 	// run all the hooks - from lower priority to higher - in order of registration
@@ -75,9 +75,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 		if( this._hooks[priority] === undefined )	continue;
 		var callbacks	= this._hooks[priority].slice(0)
 		for(var i = 0; i < callbacks.length; i++){
-			// TODO ? change that to {delta, current} ?
-			// thus function(time){ time.current }
-			callbacks[i](deltaTime, currentTime);
+			callbacks[i](delta, now);
 		}
 	}
 }
