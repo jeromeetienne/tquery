@@ -1855,23 +1855,26 @@ var tQuery	= function(object, root)
 //   - create() return new tQuery(object)
 // - this list is processed in order here
 
-	if( object instanceof THREE.Mesh  && tQuery.Mesh){
-		return new tQuery.Mesh(object);
+	// if the object is an array, compare only the first element
+	// - up to the subconstructor to check if the whole array has proper type
+	var instance	= Array.isArray(object) ? object[0] : object;
 
-	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
+	if( instance instanceof THREE.Mesh  && tQuery.Mesh){
+		return new tQuery.Mesh(object);
+	}else if( instance instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
 		return new tQuery.DirectionalLight(object);
-	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
+	}else if( instance instanceof THREE.AmbientLight && tQuery.AmbientLight){
 		return new tQuery.AmbientLight(object);
-	}else if( object instanceof THREE.Light && tQuery.Light){
+	}else if( instance instanceof THREE.Light && tQuery.Light){
 		return new tQuery.Light(object);
 
-	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
+	}else if( instance instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
-	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
+	}else if( instance instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
-	}else if( object instanceof THREE.Material && tQuery.Material){
+	}else if( instance instanceof THREE.Material && tQuery.Material){
 		return new tQuery.Material(object);
-	}else if( typeof object === "string" && tQuery.Object3D){
+	}else if( typeof instance === "string" && tQuery.Object3D){
 		return new tQuery.Object3D(object, root);
 	}else{
 		console.assert(false, "unsupported type")
@@ -2037,8 +2040,6 @@ tQuery.pluginsOn	= function(object, dest){
 	console.trace();
 	return tQuery._pluginsOn(object, dest)
 }
-
-
 // make it pluginable
 tQuery.pluginsOn(tQuery, tQuery);
 
@@ -2367,6 +2368,19 @@ tQuery.Object3D.prototype.material	= function(){
 	return new tQuery.Material(materials);
 };
 
+
+/**
+ * Clone a Object3D
+*/
+tQuery.Object3D.prototype.clone	= function(){
+	var clones	= [];
+	this._lists.forEach(function(object3d){
+		var clone	= THREE.SceneUtils.cloneObject(object3d)
+		clones.push(clone);
+	})  
+	return tQuery(clones)
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//
 //////////////////////////////////////////////////////////////////////////////////
@@ -2536,7 +2550,7 @@ tQuery.Object3D._removeClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| tQuery.world.scene();
+	root		= root	|| tQuery.world.tScene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 
 	var lists	= [];	
@@ -2756,7 +2770,13 @@ tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 */
 tQuery.pluginsInstanceOn(tQuery.Mesh);
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * TODO to remove. this function is crap
+*/
 tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case

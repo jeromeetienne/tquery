@@ -20,23 +20,26 @@ var tQuery	= function(object, root)
 //   - create() return new tQuery(object)
 // - this list is processed in order here
 
-	if( object instanceof THREE.Mesh  && tQuery.Mesh){
-		return new tQuery.Mesh(object);
+	// if the object is an array, compare only the first element
+	// - up to the subconstructor to check if the whole array has proper type
+	var instance	= Array.isArray(object) ? object[0] : object;
 
-	}else if( object instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
+	if( instance instanceof THREE.Mesh  && tQuery.Mesh){
+		return new tQuery.Mesh(object);
+	}else if( instance instanceof THREE.DirectionalLight && tQuery.DirectionalLight){
 		return new tQuery.DirectionalLight(object);
-	}else if( object instanceof THREE.AmbientLight && tQuery.AmbientLight){
+	}else if( instance instanceof THREE.AmbientLight && tQuery.AmbientLight){
 		return new tQuery.AmbientLight(object);
-	}else if( object instanceof THREE.Light && tQuery.Light){
+	}else if( instance instanceof THREE.Light && tQuery.Light){
 		return new tQuery.Light(object);
 
-	}else if( object instanceof THREE.Object3D  && tQuery.Object3D){
+	}else if( instance instanceof THREE.Object3D  && tQuery.Object3D){
 		return new tQuery.Object3D(object);
-	}else if( object instanceof THREE.Geometry && tQuery.Geometry){
+	}else if( instance instanceof THREE.Geometry && tQuery.Geometry){
 		return new tQuery.Geometry(object);
-	}else if( object instanceof THREE.Material && tQuery.Material){
+	}else if( instance instanceof THREE.Material && tQuery.Material){
 		return new tQuery.Material(object);
-	}else if( typeof object === "string" && tQuery.Object3D){
+	}else if( typeof instance === "string" && tQuery.Object3D){
 		return new tQuery.Object3D(object, root);
 	}else{
 		console.assert(false, "unsupported type")
@@ -202,8 +205,6 @@ tQuery.pluginsOn	= function(object, dest){
 	console.trace();
 	return tQuery._pluginsOn(object, dest)
 }
-
-
 // make it pluginable
 tQuery.pluginsOn(tQuery, tQuery);
 
@@ -532,6 +533,19 @@ tQuery.Object3D.prototype.material	= function(){
 	return new tQuery.Material(materials);
 };
 
+
+/**
+ * Clone a Object3D
+*/
+tQuery.Object3D.prototype.clone	= function(){
+	var clones	= [];
+	this._lists.forEach(function(object3d){
+		var clone	= THREE.SceneUtils.cloneObject(object3d)
+		clones.push(clone);
+	})  
+	return tQuery(clones)
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//
 //////////////////////////////////////////////////////////////////////////////////
@@ -701,7 +715,7 @@ tQuery.Object3D._removeClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
-	root		= root	|| tQuery.world.scene();
+	root		= root	|| tQuery.world.tScene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 
 	var lists	= [];	
@@ -921,7 +935,13 @@ tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 */
 tQuery.pluginsInstanceOn(tQuery.Mesh);
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * TODO to remove. this function is crap
+*/
 tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case
@@ -2006,504 +2026,3 @@ tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1
 tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
 
 })();	// closure function end
-// backward compatibility only
-tQuery.World.register('fullpage', function(){
-	console.log("world.fullpage() is obsolete. use world.boilerplate() instead.");
-	return this.boilerplate();
-});
-
-tQuery.World.register('boilerplate', function(opts){
-	// put renderer fullpage
-	var domElement	= document.body;
-	domElement.style.margin		= "0";
-	domElement.style.padding	= "0";
-	domElement.style.overflow	= 'hidden';
-	this.appendTo(domElement);
-	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
-	
-	// add the boilerplate
-	this.addBoilerplate(opts);
-	
-	// for chained API
-	return this;
-});
-
-tQuery.World.register('addBoilerplate', function(opts){
-	var _this	= this;
-	// sanity check - no boilerplate is already installed
-	console.assert( this.hasBoilerplate() !== true );
-	// handle parameters	
-	opts	= tQuery.extend(opts, {
-		honorInfo	: true,
-		stats		: true,
-		cameraControls	: true,
-		windowResize	: true,
-		screenshot	: true,
-		fullscreen	: true
-	});
-	// get the context
-	var ctx	= {};
-
-	// create the context
-	tQuery.data(this, '_boilerplateCtx', ctx);
-
-	// add css for the info element if any
-	if( opts.honorInfo ){
-		var element	= document.getElementById('info');
-		if( element ){
-			element.style.position	= "absolute";
-			element.style.width	= "100%";
-			element.style.textAlign	= "center";
-		}
-	}
-
-
-	// get some variables
-	var tCamera	= this.tCamera();
-	var tRenderer	= this.tRenderer();
-
-	// add Stats.js - https://github.com/mrdoob/stats.js
-	if( opts.stats ){
-		ctx.stats	= new Stats();
-		ctx.stats.domElement.style.position	= 'absolute';
-		ctx.stats.domElement.style.bottom	= '0px';
-		tRenderer.domElement.parentNode && tRenderer.domElement.parentNode.appendChild( ctx.stats.domElement );
-		ctx.loopStats	= function(){
-			ctx.stats.update();
-		};
-		this.loop().hook(ctx.loopStats);		
-	}
-
-	// create a camera contol
-	if( opts.cameraControls ){
-		ctx.cameraControls	= new THREEx.DragPanControls(tCamera);
-		this.setCameraControls(ctx.cameraControls);		
-	}
-
-	// transparently support window resize
-	if( opts.windowResize ){
-		ctx.windowResize	= THREEx.WindowResize.bind(tRenderer, tCamera);		
-	}
-	// allow 'p' to make screenshot
-	if( opts.screenshot ){		
-		ctx.screenshot		= THREEx.Screenshot.bindKey(tRenderer);
-	}
-	// allow 'f' to go fullscreen where this feature is supported
-	if( opts.fullscreen && THREEx.FullScreen.available() ){
-		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
-	}
-
-	// bind 'destroy' event on tQuery.world
-	ctx._$onDestroy	= this.bind('destroy', function(){
-		if( this.hasBoilerplate() === false )	return;
-		this.removeBoilerplate();	
-	});
-	
-	// for chained API
-	return this;
-});
-
-tQuery.World.register('hasBoilerplate', function(){
-	// get the context
-	var ctx	= tQuery.data(this, "_boilerplateCtx")
-	// return true if ctx if defined, false otherwise
-	return ctx === undefined ? false : true;
-});
-
-tQuery.World.register('removeBoilerplate', function(){
-	// get context
-	var ctx	= tQuery.data(this, '_boilerplateCtx');
-	// if not present, return now
-	if( ctx === undefined )	return	this;
-	// remove the context from this
-	tQuery.removeData(this, '_boilerplateCtx');
-
-	// unbind 'destroy' for tQuery.World
-	this.unbind('destroy', this._$onDestroy);
-
-	// remove stats.js
-	ctx.stats		&& document.body.removeChild(ctx.stats.domElement );
-	ctx.stats		&& this.loop().unhook(ctx.loopStats);
-	// remove camera
-	ctx.cameraControls	&& this.removeCameraControls()
-	// stop windowResize
-	ctx.windowResize	&& ctx.windowResize.stop();
-	// unbind screenshot
-	ctx.screenshot		&& ctx.screenshot.unbind();
-	// unbind fullscreen
-	ctx.fullscreen		&& ctx.fullscreen.unbind();
-});// This THREEx helper makes it easy to handle window resize.
-// It will update renderer and camera when window is resized.
-//
-// # Usage
-//
-// **Step 1**: Start updating renderer and camera
-//
-// ```var windowResize = THREEx.WindowResize(aRenderer, aCamera)```
-//    
-// **Step 2**: Start updating renderer and camera
-//
-// ```windowResize.stop()```
-// # Code
-
-//
-
-/** @namespace */
-var THREEx	= THREEx 		|| {};
-
-/**
- * Update renderer and camera when the window is resized
- * 
- * @param {Object} renderer the renderer to update
- * @param {Object} Camera the camera to update
-*/
-THREEx.WindowResize	= function(renderer, camera){
-	var callback	= function(){
-		// notify the renderer of the size change
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		// update the camera
-		camera.aspect	= window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-	}
-	// bind the resize event
-	window.addEventListener('resize', callback, false);
-	// return .stop() the function to stop watching window resize
-	return {
-		/**
-		 * Stop watching window resize
-		*/
-		stop	: function(){
-			window.removeEventListener('resize', callback);
-		}
-	};
-}
-
-THREEx.WindowResize.bind	= function(renderer, camera){
-	return THREEx.WindowResize(renderer, camera);
-}
-/** @namespace */
-var THREEx	= THREEx 		|| {};
-
-// TODO http://29a.ch/2011/9/11/uploading-from-html5-canvas-to-imgur-data-uri
-// able to upload your screenshot without running servers
-
-// forced closure
-(function(){
-
-	/**
-	 * Take a screenshot of a renderer
-	 * - require WebGLRenderer to have "preserveDrawingBuffer: true" to be set
-	 * - TODO is it possible to check if this variable is set ? if so check it
-	 *   and make advice in the console.log
-	 *   - maybe with direct access to the gl context...
-	 * 
-	 * @param {Object} renderer to use
-	 * @param {String} mimetype of the output image. default to "image/png"
-	 * @param {String} dataUrl of the image
-	*/
-	var toDataURL	= function(renderer, mimetype)
-	{
-		mimetype	= mimetype	|| "image/png";
-		var dataUrl	= renderer.domElement.toDataURL(mimetype);
-		return dataUrl;
-	}
-
-	/**
-	 * resize an image to another resolution while preserving aspect
-	 *
-	 * @param {String} srcUrl the url of the image to resize
-	 * @param {Number} dstWidth the destination width of the image
-	 * @param {Number} dstHeight the destination height of the image
-	 * @param {Number} callback the callback to notify once completed with callback(newImageUrl)
-	*/
-	var _aspectResize	= function(srcUrl, dstW, dstH, callback){
-		// to compute the width/height while keeping aspect
-		var cpuScaleAspect	= function(maxW, maxH, curW, curH){
-			var ratio	= curH / curW;
-			if( curW >= maxW && ratio <= 1 ){ 
-				curW	= maxW;
-				curH	= maxW * ratio;
-			}else if(curH >= maxH){
-				curH	= maxH;
-				curW	= maxH / ratio;
-			}
-			return { width: curW, height: curH };
-		}
-		// callback once the image is loaded
-		var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-		var onLoad	= __bind(function(){
-			// init the canvas
-			var canvas	= document.createElement('canvas');
-			canvas.width	= dstW;	canvas.height	= dstH;
-			var ctx		= canvas.getContext('2d');
-
-			// TODO is this needed
-			ctx.fillStyle	= "black";
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-			// scale the image while preserving the aspect
-			var scaled	= cpuScaleAspect(canvas.width, canvas.height, image.width, image.height);
-
-			// actually draw the image on canvas
-			var offsetX	= (canvas.width  - scaled.width )/2;
-			var offsetY	= (canvas.height - scaled.height)/2;
-			ctx.drawImage(image, offsetX, offsetY, scaled.width, scaled.height);
-
-			// dump the canvas to an URL		
-			var mimetype	= "image/png";
-			var newDataUrl	= canvas.toDataURL(mimetype);
-			// notify the url to the caller
-			callback && callback(newDataUrl)
-		}, this);
-
-		// Create new Image object
-		var image 	= new Image();
-		image.onload	= onLoad;
-		image.src	= srcUrl;
-	}
-	
-
-	// Super cooked function: THREEx.Screenshot.bindKey(renderer)
-	// and you are done to get screenshot on your demo
-
-	/**
-	 * Bind a key to renderer screenshot
-	*/
-	var bindKey	= function(renderer, opts){
-		// handle parameters
-		opts		= opts		|| {};
-		var charCode	= opts.charCode	|| 'p'.charCodeAt(0);
-		var width	= opts.width;
-		var height	= opts.height;
-		var callback	= opts.callback	|| function(url){
-			window.open(url, "name-"+Math.random());
-		};
-
-		// callback to handle keypress
-		var __bind	= function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-		var onKeyPress	= __bind(function(event){
-			// return now if the KeyPress isnt for the proper charCode
-			if( event.which !== charCode )	return;
-			// get the renderer output
-			var dataUrl	= this.toDataURL(renderer);
-
-			if( width === undefined && height === undefined ){
-				callback( dataUrl )
-			}else{
-				// resize it and notify the callback
-				// * resize == async so if callback is a window open, it triggers the pop blocker
-				_aspectResize(dataUrl, width, height, callback);				
-			}
-		}, this);
-
-		// listen to keypress
-		// NOTE: for firefox it seems mandatory to listen to document directly
-		document.addEventListener('keypress', onKeyPress, false);
-
-		return {
-			unbind	: function(){
-				document.removeEventListener('keypress', onKeyPress, false);
-			}
-		};
-	}
-
-	// export it	
-	THREEx.Screenshot	= {
-		toDataURL	: toDataURL,
-		bindKey		: bindKey
-	};
-})();
-// This THREEx helper makes it easy to handle the fullscreen API
-// * it hides the prefix for each browser
-// * it hides the little discrepencies of the various vendor API
-// * at the time of this writing (nov 2011) it is available in 
-//   [firefox nightly](http://blog.pearce.org.nz/2011/11/firefoxs-html-full-screen-api-enabled.html),
-//   [webkit nightly](http://peter.sh/2011/01/javascript-full-screen-api-navigation-timing-and-repeating-css-gradients/) and
-//   [chrome stable](http://updates.html5rocks.com/2011/10/Let-Your-Content-Do-the-Talking-Fullscreen-API).
-
-// 
-// # Code
-
-//
-
-/** @namespace */
-var THREEx		= THREEx 		|| {};
-THREEx.FullScreen	= THREEx.FullScreen	|| {};
-
-/**
- * test if it is possible to have fullscreen
- * 
- * @returns {Boolean} true if fullscreen API is available, false otherwise
-*/
-THREEx.FullScreen.available	= function()
-{
-	return this._hasWebkitFullScreen || this._hasMozFullScreen;
-}
-
-/**
- * test if fullscreen is currently activated
- * 
- * @returns {Boolean} true if fullscreen is currently activated, false otherwise
-*/
-THREEx.FullScreen.activated	= function()
-{
-	if( this._hasWebkitFullScreen ){
-		return document.webkitIsFullScreen;
-	}else if( this._hasMozFullScreen ){
-		return document.mozFullScreen;
-	}else{
-		console.assert(false);
-	}
-}
-
-/**
- * Request fullscreen on a given element
- * @param {DomElement} element to make fullscreen. optional. default to document.body
-*/
-THREEx.FullScreen.request	= function(element)
-{
-	element	= element	|| document.body;
-	if( this._hasWebkitFullScreen ){
-		element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-	}else if( this._hasMozFullScreen ){
-		element.mozRequestFullScreen();
-	}else{
-		console.assert(false);
-	}
-}
-
-/**
- * Cancel fullscreen
-*/
-THREEx.FullScreen.cancel	= function()
-{
-	if( this._hasWebkitFullScreen ){
-		document.webkitCancelFullScreen();
-	}else if( this._hasMozFullScreen ){
-		document.mozCancelFullScreen();
-	}else{
-		console.assert(false);
-	}
-}
-
-
-// internal functions to know which fullscreen API implementation is available
-THREEx.FullScreen._hasWebkitFullScreen	= 'webkitCancelFullScreen' in document	? true : false;	
-THREEx.FullScreen._hasMozFullScreen	= 'mozCancelFullScreen' in document	? true : false;	
-
-/**
- * Bind a key to renderer screenshot
-*/
-THREEx.FullScreen.bindKey	= function(opts){
-	opts		= opts		|| {};
-	var charCode	= opts.charCode	|| 'f'.charCodeAt(0);
-	var dblclick	= opts.dblclick !== undefined ? opts.dblclick : false;
-	var element	= opts.element
-
-	var toggle	= function(){
-		if( THREEx.FullScreen.activated() ){
-			THREEx.FullScreen.cancel();
-		}else{
-			THREEx.FullScreen.request(element);
-		}		
-	}
-
-	// callback to handle keypress
-	var __bind	= function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-	var onKeyPress	= __bind(function(event){
-		// return now if the KeyPress isnt for the proper charCode
-		if( event.which !== charCode )	return;
-		// toggle fullscreen
-		toggle();
-	}, this);
-
-	// listen to keypress
-	// NOTE: for firefox it seems mandatory to listen to document directly
-	document.addEventListener('keypress', onKeyPress, false);
-	// listen to dblclick
-	dblclick && document.addEventListener('dblclick', toggle, false);
-
-	return {
-		unbind	: function(){
-			document.removeEventListener('keypress', onKeyPress, false);
-			dblclick && document.removeEventListener('dblclick', toggle, false);
-		}
-	};
-}
-/** @namespace */
-var THREEx	= THREEx 		|| {};
-
-THREEx.DragPanControls	= function(object, domElement)
-{
-	this._object	= object;
-	this._domElement= domElement || document;
-
-	// parameters that you can change after initialisation
-	this.target	= new THREE.Vector3(0, 0, 0);
-	this.speedX	= 0.03;
-	this.speedY	= 0.03;
-	this.rangeX	= -40;
-	this.rangeY	= +40;
-
-	// private variables
-	this._mouseX	= 0;
-	this._mouseY	= 0;
-
-	var _this	= this;
-	this._$onMouseMove	= function(){ _this._onMouseMove.apply(_this, arguments); };
-	this._$onTouchStart	= function(){ _this._onTouchStart.apply(_this, arguments); };
-	this._$onTouchMove	= function(){ _this._onTouchMove.apply(_this, arguments); };
-
-	this._domElement.addEventListener( 'mousemove', this._$onMouseMove, false );
-	this._domElement.addEventListener( 'touchstart', this._$onTouchStart,false );
-	this._domElement.addEventListener( 'touchmove', this._$onTouchMove, false );
-}
-
-THREEx.DragPanControls.prototype.destroy	= function()
-{
-	this._domElement.removeEventListener( 'mousemove', this._$onMouseMove, false );
-	this._domElement.removeEventListener( 'touchstart', this._$onTouchStart,false );
-	this._domElement.removeEventListener( 'touchmove', this._$onTouchMove, false );
-}
-
-THREEx.DragPanControls.prototype.update	= function(event)
-{
-	this._object.position.x += ( this._mouseX * this.rangeX - this._object.position.x ) * this.speedX;
-	this._object.position.y += ( this._mouseY * this.rangeY - this._object.position.y ) * this.speedY;
-	this._object.lookAt( this.target );
-}
-
-THREEx.DragPanControls.prototype._onMouseMove	= function(event)
-{
-	this._mouseX	= ( event.clientX / window.innerWidth ) - 0.5;
-	this._mouseY	= ( event.clientY / window.innerHeight) - 0.5;
-}
-
-THREEx.DragPanControls.prototype._onTouchStart	= function(event)
-{
-	if( event.touches.length != 1 )	return;
-
-	// no preventDefault to get click event on ios
-
-	this._mouseX	= ( event.touches[ 0 ].pageX / window.innerWidth ) - 0.5;
-	this._mouseY	= ( event.touches[ 0 ].pageY / window.innerHeight) - 0.5;
-}
-
-THREEx.DragPanControls.prototype._onTouchMove	= function(event)
-{
-	if( event.touches.length != 1 )	return;
-
-	event.preventDefault();
-
-	this._mouseX	= ( event.touches[ 0 ].pageX / window.innerWidth ) - 0.5;
-	this._mouseY	= ( event.touches[ 0 ].pageY / window.innerHeight) - 0.5;
-}
-
-// stats.js r8 - http://github.com/mrdoob/stats.js
-var Stats=function(){var h,a,n=0,o=0,i=Date.now(),u=i,p=i,l=0,q=1E3,r=0,e,j,f,b=[[16,16,48],[0,255,255]],m=0,s=1E3,t=0,d,k,g,c=[[16,48,16],[0,255,0]];h=document.createElement("div");h.style.cursor="pointer";h.style.width="80px";h.style.opacity="0.9";h.style.zIndex="10001";h.addEventListener("mousedown",function(a){a.preventDefault();n=(n+1)%2;n==0?(e.style.display="block",d.style.display="none"):(e.style.display="none",d.style.display="block")},!1);e=document.createElement("div");e.style.textAlign=
-"left";e.style.lineHeight="1.2em";e.style.backgroundColor="rgb("+Math.floor(b[0][0]/2)+","+Math.floor(b[0][1]/2)+","+Math.floor(b[0][2]/2)+")";e.style.padding="0 0 3px 3px";h.appendChild(e);j=document.createElement("div");j.style.fontFamily="Helvetica, Arial, sans-serif";j.style.fontSize="9px";j.style.color="rgb("+b[1][0]+","+b[1][1]+","+b[1][2]+")";j.style.fontWeight="bold";j.innerHTML="FPS";e.appendChild(j);f=document.createElement("div");f.style.position="relative";f.style.width="74px";f.style.height=
-"30px";f.style.backgroundColor="rgb("+b[1][0]+","+b[1][1]+","+b[1][2]+")";for(e.appendChild(f);f.children.length<74;)a=document.createElement("span"),a.style.width="1px",a.style.height="30px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+b[0][0]+","+b[0][1]+","+b[0][2]+")",f.appendChild(a);d=document.createElement("div");d.style.textAlign="left";d.style.lineHeight="1.2em";d.style.backgroundColor="rgb("+Math.floor(c[0][0]/2)+","+Math.floor(c[0][1]/2)+","+Math.floor(c[0][2]/2)+")";d.style.padding=
-"0 0 3px 3px";d.style.display="none";h.appendChild(d);k=document.createElement("div");k.style.fontFamily="Helvetica, Arial, sans-serif";k.style.fontSize="9px";k.style.color="rgb("+c[1][0]+","+c[1][1]+","+c[1][2]+")";k.style.fontWeight="bold";k.innerHTML="MS";d.appendChild(k);g=document.createElement("div");g.style.position="relative";g.style.width="74px";g.style.height="30px";g.style.backgroundColor="rgb("+c[1][0]+","+c[1][1]+","+c[1][2]+")";for(d.appendChild(g);g.children.length<74;)a=document.createElement("span"),
-a.style.width="1px",a.style.height=Math.random()*30+"px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+c[0][0]+","+c[0][1]+","+c[0][2]+")",g.appendChild(a);return{domElement:h,update:function(){i=Date.now();m=i-u;s=Math.min(s,m);t=Math.max(t,m);k.textContent=m+" MS ("+s+"-"+t+")";var a=Math.min(30,30-m/200*30);g.appendChild(g.firstChild).style.height=a+"px";u=i;o++;if(i>p+1E3)l=Math.round(o*1E3/(i-p)),q=Math.min(q,l),r=Math.max(r,l),j.textContent=l+" FPS ("+q+"-"+r+")",a=Math.min(30,30-l/
-100*30),f.appendChild(f.firstChild).style.height=a+"px",p=i,o=0}}};
-
