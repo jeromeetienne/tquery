@@ -81,7 +81,7 @@ buildBundle: buildCore
 	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js
 	# include boilerplate
-	cat plugins/boilerplate/tquery.world.boilerplate.js		>> build/tquery-bundle.js
+	cat plugins/boilerplate/*.js			>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.WindowResize.js	>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.screenshot.js		>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.FullScreen.js		>> build/tquery-bundle.js
