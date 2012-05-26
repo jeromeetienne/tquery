@@ -48,7 +48,8 @@ tQuery.inherit(tQuery.MeshLambertMaterial, tQuery.Material);
 */
 tQuery.mixinAttributes(tQuery.MeshLambertMaterial, {
 	color	: tQuery.convert.toThreeColor,
-	ambient	: tQuery.convert.toThreeColor
+	ambient	: tQuery.convert.toThreeColor,
+	map	: tQuery.convert.toTexture
 });
 
 

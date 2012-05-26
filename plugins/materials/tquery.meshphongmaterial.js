@@ -50,7 +50,8 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 	color		: tQuery.convert.toThreeColor,
 	ambient		: tQuery.convert.toThreeColor,
 	specular	: tQuery.convert.toThreeColor,
-	shininess	: tQuery.convert.toNumber
+	shininess	: tQuery.convert.toNumber,
+	map		: tQuery.convert.toTexture
 });
 
 
