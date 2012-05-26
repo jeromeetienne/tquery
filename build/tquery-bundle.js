@@ -2199,6 +2199,17 @@ tQuery.convert.toBool	= function(value){
 	}
 	return undefined;	// never reached - just to workaround linter complaint
 };
+
+tQuery.convert.toTexture	= function(value){
+	if( arguments.length === 1 && value instanceof THREE.Texture ){
+		return value;
+	}else if( arguments.length === 1 && typeof(value) === 'string' ){
+		return THREE.ImageUtils.loadTexture(value);
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
 /**
  * implementation of the tQuery.Node
  *
