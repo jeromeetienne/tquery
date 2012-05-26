@@ -1,0 +1,33 @@
+<!doctype html><title>examples</title>
+<script src="./consolex.js"></script>
+<body><script>
+//function foobar(a, b){
+//	console.log("inside foobar");
+//	return a+b;
+//}
+//foobar	= consolex.debug(foobar)
+//foobar	= consolex.obsolete(foobar)
+//console.log("res=", foobar(2, 3));
+
+var SuperClass	= function(){
+	//console.log("Instance of SuperClass created")
+}
+
+var foo	= {
+	bar	: 32,
+	instance: new SuperClass()
+};
+
+//consolex.checkTypeOf(foo, 'bar', 'number')
+
+consolex.noNaN(foo, 'bar')
+console.log("value", foo.bar);
+
+
+consolex.checkInstanceOf(foo, 'bar', SuperClass);
+
+
+
+
+
+</script></body>
