@@ -93,7 +93,7 @@ tQuery.register('MinecraftItems', function(opts){
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
 		var mesh	= new THREE.Mesh( geometry, material );
-		return tQuery(mesh).scale(1/16);
+		return tQuery(mesh).geometry().scaleBy(1/16).back();
 	};	
 
 	// create the canvas element

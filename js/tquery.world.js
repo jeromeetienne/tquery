@@ -28,8 +28,8 @@ tQuery.World	= function(opts)
 	// - TODO no sanity check ?
 	// - not clear what to do with this...
 	// - tQuery.world is the user world. like the camera controls
+	console.assert( !tQuery.word );
 	tQuery.world	= this;
-
 
 	this._autoRendering	= true;
 	
