@@ -23,6 +23,7 @@
 <script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
 
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
@@ -38,18 +39,25 @@
 	character.parts.armR.rotation.x	= Math.PI/8;
 	character.parts.armR.rotation.y	= 0;
 	character.parts.armR.rotation.z	= Math.PI-Math.PI/6;
+	
+	character.hookKeyboard();
 
 	// Create the skymap
 	var skymap	= tQuery.createSkymap('skybox').addTo(world);
 	skymap.get(0).position	= character.model.get(0).position;
 
 	var tGeometry	= tQuery.createTorus(0.5-0.03, 0.03, 8*2, 32).geometry().scaleBy(4).get(0);
-	for(var i = 0; i < 30; i++ ){
+	var position	= new THREE.Vector3();
+	for(var i = 0; i < 15; i++ ){
+		position.addSelf({
+			x	: (Math.random()*2-1)*2,
+			y	: (Math.random()*2-1)*2,
+			z	: 0
+		});
 		tQuery(new THREE.Mesh(tGeometry, new THREE.MeshNormalMaterial()))
-			//.translateX((Math.random()*2-1)*1)
-			//.translateY((Math.random()*2-1)*1)
-			.translateZ(-i*5)
-			.addTo(world);		
+			.position(position)
+			.translateZ(-i*20)
+			.addTo(world);	
 	}
 	
 	world.loop().hook(function(delta, now){

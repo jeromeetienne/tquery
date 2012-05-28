@@ -95,6 +95,10 @@ tQuery.register('createTorus', function(){
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
+tQuery.register('createVector3', function(){
+	return new THREE.Vector3();
+});
+
 tQuery.register('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
 	var dflGeometry	= [0.5, 32, 16];

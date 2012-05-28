@@ -2829,8 +2829,8 @@ tQuery.World	= function(opts)
 	// - TODO no sanity check ?
 	// - not clear what to do with this...
 	// - tQuery.world is the user world. like the camera controls
+	console.assert( !tQuery.word );
 	tQuery.world	= this;
-
 
 	this._autoRendering	= true;
 	
@@ -3306,6 +3306,10 @@ tQuery.register('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var dflGeometry	= [0.5-0.15, 0.15];
 	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.register('createVector3', function(){
+	return new THREE.Vector3();
 });
 
 tQuery.register('createSphere', function(){

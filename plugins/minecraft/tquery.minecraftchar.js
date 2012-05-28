@@ -236,19 +236,18 @@ tQuery.register('MinecraftChar', function(){
 		materialTrans.map.needsUpdate	= true;
 	};
 	skinImage.src = "images/char.png";
-	skinImage.src = "images/batman.png";
-	skinImage.src = "images/Mario.png";
-	skinImage.src = "images/3djesus.png";
+	//skinImage.src = "images/batman.png";
+	//skinImage.src = "images/Mario.png";
+	//skinImage.src = "images/3djesus.png";
 
-	return {
-		model	: playerModel,
-		parts	: {
-			headGroup	: headgroup,
-			legL		: leftleg,
-			legR		: rightleg,
-			armR		: rightarm,
-			armL		: leftarm
-		}
+	// export public variable
+	this.model	= playerModel;
+	this.parts	= {
+		headGroup	: headgroup,
+		legL		: leftleg,
+		legR		: rightleg,
+		armR		: rightarm,
+		armL		: leftarm
 	};
 });
 

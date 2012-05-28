@@ -14,7 +14,11 @@ tQuery.MinecraftChar.register('hookKeyboard', function(opts){
 	// create the loop callback
 	var loopCb	= this.hookKeyboardLoopCb.bind(this);
 	// store the loopCb
-	tQuery.data(this, 'hookKeyboardLoopCb', loopCb, true);
+	tQuery.data(this, 'hookKeyboardLoopCb', {
+		loopCb	: loopCb,
+		rotation: tQuery.createVector3(),
+		position: tQuery.createVector3()
+	}, true);
 	// hook the callback
 	opts.loop.hook(loopCb);
 	// for chained API
@@ -49,12 +53,12 @@ tQuery.MinecraftChar.register('unhookKeyboard', function(opts){
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.MinecraftChar.register('hookKeyboardLoopCb', function(){
+tQuery.MinecraftChar.register('hookKeyboardLoopCb', function(delta, now){
 	var keyboard	= tQuery.keyboard();
+	var model	= this.model;
 	// keyboard handling
-	if( keyboard.pressed("left") )	character.turnLeft();
-	if( keyboard.pressed("right") )	character.turnRight();
-	if( keyboard.pressed("up") )	character.goForward();
-	if( keyboard.pressed("down") )	character.goForward();
-
+	if( keyboard.pressed("left") )	model.translateX(-4*delta);
+	if( keyboard.pressed("right") )	model.translateX(+4*delta);
+	if( keyboard.pressed("up") )	model.translateY(+4*delta);
+	if( keyboard.pressed("down") )	model.translateY(-4*delta);
 });
