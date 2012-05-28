@@ -1,0 +1,74 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+<script src="../tquery.minecraftchar.js"></script>
+<script src="../tquery.minecraftchar.keyboard.js"></script>
+
+<script src="../../skymap/tquery.skymap.js"></script>
+<script src="../../skymap/tquery.cubetexture.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// add post processing
+	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
+
+
+	var character	= new tQuery.MinecraftChar();
+	character.model.addTo(world)
+		.rotateY(+Math.PI/2)
+		.rotateX(-Math.PI/3)
+		
+	character.parts.armR.rotation.x	= Math.PI/8;
+	character.parts.armR.rotation.y	= 0;
+	character.parts.armR.rotation.z	= Math.PI-Math.PI/6;
+
+	// Create the skymap
+	var skymap	= tQuery.createSkymap('skybox').addTo(world);
+	skymap.get(0).position	= character.model.get(0).position;
+
+	var tGeometry	= tQuery.createTorus(0.5-0.03, 0.03, 8*2, 32).geometry().scaleBy(4).get(0);
+	for(var i = 0; i < 30; i++ ){
+		tQuery(new THREE.Mesh(tGeometry, new THREE.MeshNormalMaterial()))
+			//.translateX((Math.random()*2-1)*1)
+			//.translateY((Math.random()*2-1)*1)
+			.translateZ(-i*5)
+			.addTo(world);		
+	}
+	
+	world.loop().hook(function(delta, now){
+		character.model.translateZ(-10*delta)
+	})
+	
+	world.removeCameraControls()
+	world.loop().hook(function(delta, now){
+		var charPosition= character.model.get(0).position;
+
+		var position	= charPosition.clone();
+		position.y	+= 0.5;
+		position.z	+= 3;
+		world.tCamera().position	= position;
+
+		var position	= charPosition.clone();
+		position.z	-= 1;
+		world.tCamera().lookAt(position);
+	})
+	
+
+</script></body>

@@ -251,3 +251,6 @@ tQuery.register('MinecraftChar', function(){
 		}
 	};
 });
+
+// make it pluginable
+tQuery.pluginsInstanceOn(tQuery.MinecraftChar);
