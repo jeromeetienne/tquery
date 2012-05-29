@@ -347,5 +347,17 @@ see it running. Up to you to modify index.html until it fits your needs. See its
 	<script src="www/vendor/bootstrap/docs/assets/js/bootstrap-carousel.js"></script>
 	<script src="www/vendor/bootstrap/docs/assets/js/bootstrap-typeahead.js"></script>
 
+<!-- twitter bootstrap snippet - make all non internal link with target='_blank' -->
+<script>
+jQuery(function(){
+	jQuery('a').filter(function(index){
+		if( this.href.match(/\#/) )	return;
+		jQuery(this).attr('target', '_blank');
+	});
+});
+</script>
+
+<!-- github ribbon -->
+<a href="https://github.com/you"><img style="position: fixed; top: 0; right: 0; border: 0;z-index: 9999;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
   </body>
 </html>

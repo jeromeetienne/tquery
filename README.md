@@ -36,6 +36,7 @@ looks like the code below... Quite short.
 #### Head
 
 * working on postprocessing in tQuery.World
+* improved home page with more screenshots and link to tutorials
 * added .clone() to ```tQuery.Object3D```
 * added attributes to ```tQuery.Object3D``` (needed for shadow)
 * added plugins/skymap to handle textureCube and skymap
