@@ -54,10 +54,10 @@ tQuery.Car.register('hookDeviceOrientationLoopCb', function(deltaTime, present){
 	var opts	= data.opts;
 	var dOrientation= tQuery.deviceOrientation();
 	// device orientation handling
-	this.controls().moveLeft	= (dOrientation.angleY() * 180 / Math.PI) >  10.0;
-	this.controls().moveRight	= (dOrientation.angleY() * 180 / Math.PI) < -10.0;
-	this.controls().moveForward	= (dOrientation.angleZ() * 180 / Math.PI) < -10.0;
-	this.controls().moveBackward	= (dOrientation.angleZ() * 180 / Math.PI) > +10.0;
+	this.controls().moveLeft	= (dOrientation.angleY() * 180 / Math.PI) > ( 10.0 + 0);
+	this.controls().moveRight	= (dOrientation.angleY() * 180 / Math.PI) < (-10.0 + 0);
+	this.controls().moveForward	= (dOrientation.angleZ() * 180 / Math.PI) < (-10.0 + 0);
+	this.controls().moveBackward	= (dOrientation.angleZ() * 180 / Math.PI) > (+10.0 + 0);
 	this.flareVisible(['backA', 'backB']	, this.controls().moveBackward );
 	this.flareVisible(['frontA', 'frontB']	, false );
 });
