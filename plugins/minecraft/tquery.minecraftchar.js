@@ -238,7 +238,7 @@ tQuery.register('MinecraftChar', function(){
 	skinImage.src = "images/char.png";
 	//skinImage.src = "images/batman.png";
 	//skinImage.src = "images/Mario.png";
-	//skinImage.src = "images/3djesus.png";
+	skinImage.src = "images/3djesus.png";
 
 	// export public variable
 	this.model	= playerModel;
