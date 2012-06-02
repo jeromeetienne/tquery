@@ -13,6 +13,11 @@
 */
 var tQuery	= function(object, root)
 {
+	// support for tQuery(tGeometry, tMaterial)
+	if( arguments.length === 2 && arguments[0] instanceof THREE.Geometry && arguments[1] instanceof THREE.Material ){
+		return tQuery(new THREE.Mesh(arguments[0], arguments[1]))
+	}
+
 // TODO make tthat cleaner
 // - there is a list of functions registered by each plugins
 //   - handle() object instanceof THREE.Mesh
