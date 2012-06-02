@@ -126,15 +126,15 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 	
 	// message directly taken from Detector.js
 	var domElement = document.createElement( 'div' );
-	domElement.style.fontFamily = 'monospace';
-	domElement.style.fontSize = '13px';
-	domElement.style.textAlign = 'center';
-	domElement.style.background = '#eee';
-	domElement.style.color = '#000';
-	domElement.style.padding = '1em';
-	domElement.style.width = '475px';
-	domElement.style.margin = '5em auto 0';
-	domElement.innerHTML = window.WebGLRenderingContext ? [
+	domElement.style.fontFamily	= 'monospace';
+	domElement.style.fontSize	= '13px';
+	domElement.style.textAlign	= 'center';
+	domElement.style.background	= '#eee';
+	domElement.style.color		= '#000';
+	domElement.style.padding	= '1em';
+	domElement.style.width		= '475px';
+	domElement.style.margin		= '5em auto 0';
+	domElement.innerHTML		= window.WebGLRenderingContext ? [
 		'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>.<br />',
 		'Find out how to get it <a href="http://get.webgl.org/">here</a>.'
 	].join( '\n' ) : [
