@@ -6,8 +6,32 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	var skymap	= tQuery.createSkymap('pisa').addTo(world);
 
-	var material	= new THREE.MeshBasicMaterial({
-		envMap	: tQuery.createCubeTexture('skybox')
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world).color(0xffffff).position(-1,1,1).intensity(1);
+
+	//var envMap	= tQuery.createCubeTexture('pisa');
+	//envMap		= new THREE.Texture( envMap.image, new THREE.CubeRefractionMapping() );
+
+	var path	= "../../assets/images/textures/cube/SwedishRoyalCastle/";
+	var format	= '.jpg';
+	var urls	= [
+		path + 'px' + format, path + 'nx' + format,
+		path + 'py' + format, path + 'ny' + format,
+		path + 'pz' + format, path + 'nz' + format
+	];
+
+	var reflectionCube	= THREE.ImageUtils.loadTextureCube( urls );
+	reflectionCube.format	= THREE.RGBFormat;
+
+	var refractionCube	= new THREE.Texture( reflectionCube.image, new THREE.CubeRefractionMapping() );
+	refractionCube.format	= THREE.RGBFormat;
+
+	var material		= new THREE.MeshBasicMaterial({
+		envMap		: refractionCube,
+		//envMap	: tQuery.createCubeTexture('skybox'),
+		refractionRatio	: 0.95,
+		ambient		: 0xFFFFFF,
+		color		: 0xFFFFFF
 	});
 	
 	var object	= tQuery.createSphere(material).addTo(world).scaleBy(3);
