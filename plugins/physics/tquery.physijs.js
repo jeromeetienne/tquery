@@ -1,0 +1,96 @@
+// tQuery API
+//
+// world.enablePhysics();
+// world.physics()		// here access physijs.xScene
+// world.hasPhysics()
+// world.disablePhysics();
+//
+// object.enablePhysics()
+// object.physics()		// here access physijs.xMesh and physijs.xMaterial
+// object.hasPhysics()
+// object.disablePhysics()
+
+//////////////////////////////////////////////////////////////////////////////////
+//		tQuery.World							//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.World.register('enablePhysics', function(){
+	var world	= this;
+	var tScene	= world.tScene();
+	console.assert(tScene._xScene === undefined)
+	tScene._xScene	= new Physijs.xScene();
+	
+	world.loop().hook(function(){
+		tScene._xScene.simulate(2*1/60, 2);
+	});
+})
+
+tQuery.World.register('physics', function(){
+	console.assert( this.hasPhysics() );
+	return world.tScene()._xScene;
+});
+
+tQuery.World.register('hasPhysics', function(){
+	return world.tScene()._xScene ? true : false;
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//		tQuery.Mesh							//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Mesh.register('enablePhysics', function(opts){
+	opts		= opts	|| {};
+	var mesh	= this;
+	var tMesh	= mesh.get(0);
+	console.assert(tMesh._xMesh === undefined)
+	console.assert(tMesh._physijs === undefined)
+	tMesh._xMesh	= new Physijs.xMesh(tMesh.geometry, opts.mass)
+	tMesh._physijs	= tMesh._xMesh._physijs;
+
+	// init the geometry
+	var tGeometry	= opts.tGeometry	 || tMesh.geometry;
+	if( tGeometry instanceof THREE.CubeGeometry ){
+		tGeometry.computeBoundingBox();
+		tMesh._xMesh._boxGeometryInit(tGeometry, opts.mass)
+	}else if( tGeometry instanceof THREE.SphereGeometry ){
+		tGeometry.computeBoundingSphere();
+		tMesh._xMesh._sphereGeometryInit(tGeometry, opts.mass)
+	}else if( tGeometry instanceof THREE.PlaneGeometry ){
+		tGeometry.computeBoundingBox();
+		tMesh._xMesh._planeGeometryInit(tGeometry, opts.mass)
+	}else if( tGeometry instanceof THREE.CylinderGeometry ){
+		tGeometry.computeBoundingBox();
+		tMesh._xMesh._cylinderGeometryInit(tGeometry, opts.mass)
+	}else{
+		console.assert(false, "unknown geometry type");	
+	}
+
+	// init the material
+	// TODO does it have to be the actual mesh.material ? can it be another struct ?
+	var tMaterial	= tMesh.material;
+	console.assert(tMaterial._physijs === undefined)
+	tMaterial._xMaterial	= new Physijs.xMaterial(tMaterial, opts.friction, opts.restitution);
+	tMaterial._physijs	= tMaterial._xMaterial._physijs;
+
+
+	// TODO to remove hardcoded
+	// - possible solution: here if attached, get the scene to this world
+	// - if not yet attached, hook the scene.add function to add the physics world too
+	// - TODO this mechanism to hook .add.remove in a scene isnt yet availble
+	var tScene	= tQuery.world.tScene();
+
+	tScene._xScene.add( tMesh, function(){
+		//console.log("this tMesh has been added")
+	});
+
+	return this;	// for chained API
+})
+
+tQuery.Mesh.register('hasPhysics', function(){
+	return this.get(0)._xMesh ? true : false;
+});
+
+tQuery.Mesh.register('physics', function(){
+	return this.get(0)._xMesh;
+});
+

@@ -6,16 +6,11 @@
 <script src="../tquery.object3d.domevent.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var cube	= tQuery.createCube().addTo(world);
-
-	tQuery('cube').on('mouseover', function(event){
-		console.log(event.type, "on cube", event)
-	});
 	
-	tQuery('cube').on('click', function(event){
-		console.log("click on cube", event)
-	});
-	tQuery(world.scene()).on('click', function(event){
-		console.log("click on scene", event);
+	new THREE.JSONLoader().load('teapot.js', function(tGeometry){
+		var tMaterial	= new THREE.MeshNormalMaterial();
+		var object	= tQuery(tGeometry, tMaterial).addTo(world);
+		object.geometry().computeAll().center().normalize().back();
+		
 	});
 </script></body>

@@ -33,11 +33,10 @@
 	// add post processing
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
-
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world)
-		.rotateY(+Math.PI/2)
 		.rotateX(-Math.PI/2)
+		.rotateY(+Math.PI/2)
 		
 	character.parts.armR.rotation.x	= Math.PI/8;
 	character.parts.armR.rotation.y	= 0;
@@ -53,21 +52,42 @@
 	var position	= new THREE.Vector3();
 	for(var i = 0; i < 15; i++ ){
 		position.addSelf({
-			x	: (Math.random()*2-1)*2,
-			y	: (Math.random()*2-1)*2,
+			x	: (Math.random()*2-1)*2*0,
+			y	: (Math.random()*2-1)*2*0,
 			z	: 0
 		});
 		var object	= tQuery(new THREE.Mesh(tGeometry, new THREE.MeshNormalMaterial()))
-			.position(position).translateZ(-i*20)
-			.addTo(world)
-			.setBasicMaterial()
-				.color(0xffAAAA)
-				.map('../../assets/images/water.jpg')
-				.back();
+			.position(position).translateZ(-i*20).addTo(world)
+			.setBasicMaterial().color(0xffAAAA).map('../../assets/images/water.jpg').back();
 	}
 	
+	
+	var charRotationZ	= 0;
+	var charRotationX	= 0;
 	world.loop().hook(function(delta, now){
-		character.model.translateZ(-10*delta)
+		var keyboard	= tQuery.keyboard();
+		var model	= character.model;
+	
+		model.translateZ(-10*delta)
+		
+		// keyboard handling
+		if( keyboard.pressed("left") )	charRotationZ	-= delta*Math.PI/3;
+		if( keyboard.pressed("right") )	charRotationZ	+= delta*Math.PI/3;		
+		charRotationZ	= Math.max(charRotationZ, -Math.PI/6)
+		charRotationZ	= Math.min(charRotationZ, +Math.PI/6)
+		
+		model.get(0).rotation.y = Math.PI/2 + charRotationZ;
+		
+		charRotationZ	*= 0.96; 
+
+		// keyboard handling
+		if( keyboard.pressed("up") )	charRotationX	+= delta*Math.PI/3;
+		if( keyboard.pressed("down") )	charRotationX	-= delta*Math.PI/3;		
+		charRotationX	= Math.max(charRotationX, -Math.PI/6)
+		charRotationX	= Math.min(charRotationX, +Math.PI/6)
+		
+		model.get(0).rotation.x = -Math.PI/2 + Math.PI/10 + charRotationX;
+		charRotationX	*= 0.96; 
 	})
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -75,13 +95,13 @@
 	//////////////////////////////////////////////////////////////////////////
 
 	// create the arrow
-	var arrow	= tQuery.createCylinder(0, 0.4, 2, 3).addTo(world)
-		.geometry().scaleBy(1/10).rotate(+Math.PI / 2, Math.PI, 0).back()
-		.setBasicMaterial().wireframe(true).color(0x000000).back();
+	var arrow	= tQuery.createCube(0.5, 0.5, 2).addTo(world)
+		.geometry().scaleBy(1/10).back()
+		//.setBasicMaterial().wireframe(true).color(0x000000).back();
 	world.loop().hook(function(delta, now){
 		var charPosition= character.model.get(0).position
 
-		var position	= charPosition.clone().addSelf(new THREE.Vector3(0, 0.3, 0));
+		var position	= charPosition.clone().addSelf(new THREE.Vector3(0, 0.4, 0));
 		arrow.get(0).position.copy(position);
 		
 		var position	= charPosition.clone();
