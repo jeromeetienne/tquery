@@ -13,7 +13,7 @@ define(['plugins/domevent/threex.domevent'], function(){
 			// - tQuery.on('cameraChange', function(world){
 			//   
 			//   })
-			domEvent.camera(tQuery.world.camera());
+			domEvent.camera(tQuery.world.tCamera());
 		}
 		return domEvent
 	}

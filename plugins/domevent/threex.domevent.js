@@ -115,6 +115,7 @@ THREEx.DomEvent.eventNames	= [
 	"dblclick",
 	"mouseover",
 	"mouseout",
+	"mousemove",
 	"mousedown",
 	"mouseup"
 ];
@@ -214,12 +215,17 @@ THREEx.DomEvent.prototype._onMove	= function(mouseX, mouseY, origDomEvent)
 	
 	var oldSelected	= this._selected;
 
+	var notifyOver, notifyOut, notifyMove;
+
+console.log("instesects", intersects.length)
 	if( intersects.length > 0 ){
 		var intersect	= intersects[ 0 ];
 		var newSelected	= intersect.object;
 		this._selected	= newSelected;
 	
-		var notifyOver, notifyOut;
+		// if newSelected bound mousemove, notify it
+		notifyMove	= this._bound('mousemove', newSelected);
+
 		if( oldSelected != newSelected ){
 			// if newSelected bound mouseenter, notify it
 			notifyOver	= this._bound('mouseover', newSelected);
@@ -232,6 +238,9 @@ THREEx.DomEvent.prototype._onMove	= function(mouseX, mouseY, origDomEvent)
 		this._selected	= null;
 	}
 
+
+	// notify mouseEnter - done at the end with a copy of the list to allow callback to remove handlers
+	notifyMove && this._notify('mousemove', newSelected, origDomEvent);
 	// notify mouseEnter - done at the end with a copy of the list to allow callback to remove handlers
 	notifyOver && this._notify('mouseover', newSelected, origDomEvent);
 	// notify mouseLeave - done at the end with a copy of the list to allow callback to remove handlers
