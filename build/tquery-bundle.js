@@ -3442,6 +3442,7 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	distance	: tQuery.convert.toNumber,
 
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
+	shadowBias		: tQuery.convert.toNumber,
 	shadowMapWidth		: tQuery.convert.toInteger,
 	shadowMapHeight		: tQuery.convert.toInteger,
 	shadowCameraRight	: tQuery.convert.toNumber,
@@ -3533,6 +3534,7 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 	distance	: tQuery.convert.toNumber,
 
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
+	shadowBias		: tQuery.convert.toNumber,
 	shadowMapWidth		: tQuery.convert.toInteger,
 	shadowMapHeight		: tQuery.convert.toInteger,
 	shadowCameraRight	: tQuery.convert.toNumber,
