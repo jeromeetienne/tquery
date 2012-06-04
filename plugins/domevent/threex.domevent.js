@@ -207,22 +207,19 @@ THREEx.DomEvent.prototype._bound	= function(eventName, object3d)
 
 THREEx.DomEvent.prototype._onMove	= function(mouseX, mouseY, origDomEvent)
 {
-	var vector	= new THREE.Vector3( mouseX, mouseY, 1 );
+	var vector	= new THREE.Vector3( mouseX, mouseY, 0.5 );
 	this._projector.unprojectVector( vector, this._camera );
 
 	var ray		= new THREE.Ray( this._camera.position, vector.subSelf( this._camera.position ).normalize() );
 	var intersects = ray.intersectObjects( this._boundObjs );
 	
 	var oldSelected	= this._selected;
-
-	var notifyOver, notifyOut, notifyMove;
-
-console.log("instesects", intersects.length)
+	
 	if( intersects.length > 0 ){
+		var notifyOver, notifyOut, notifyMove;
 		var intersect	= intersects[ 0 ];
 		var newSelected	= intersect.object;
 		this._selected	= newSelected;
-	
 		// if newSelected bound mousemove, notify it
 		notifyMove	= this._bound('mousemove', newSelected);
 
@@ -239,12 +236,12 @@ console.log("instesects", intersects.length)
 	}
 
 
+	// notify mouseMove - done at the end with a copy of the list to allow callback to remove handlers
+	notifyMove && this._notify('mousemove', newSelected, origDomEvent, intersect);
 	// notify mouseEnter - done at the end with a copy of the list to allow callback to remove handlers
-	notifyMove && this._notify('mousemove', newSelected, origDomEvent);
-	// notify mouseEnter - done at the end with a copy of the list to allow callback to remove handlers
-	notifyOver && this._notify('mouseover', newSelected, origDomEvent);
+	notifyOver && this._notify('mouseover', newSelected, origDomEvent, intersect);
 	// notify mouseLeave - done at the end with a copy of the list to allow callback to remove handlers
-	notifyOut  && this._notify('mouseout', oldSelected, origDomEvent);
+	notifyOut  && this._notify('mouseout', oldSelected, origDomEvent, intersect);
 }
 
 
@@ -273,17 +270,20 @@ THREEx.DomEvent.prototype._onEvent	= function(eventName, mouseX, mouseY, origDom
 	if( !objectCtx )	return;
 
 	// notify handlers
-	this._notify(eventName, object3d, origDomEvent);
+	this._notify(eventName, object3d, origDomEvent, intersect);
 }
 
-THREEx.DomEvent.prototype._notify	= function(eventName, object3d, origDomEvent)
+THREEx.DomEvent.prototype._notify	= function(eventName, object3d, origDomEvent, intersect)
 {
 	var objectCtx	= this._objectCtxGet(object3d);
 	var handlers	= objectCtx ? objectCtx[eventName+'Handlers'] : null;
+	
+	// parameter check
+	console.assert(arguments.length === 4)
 
 	// do bubbling
 	if( !objectCtx || !handlers || handlers.length === 0 ){
-		object3d.parent && this._notify(eventName, object3d.parent);
+		object3d.parent && this._notify(eventName, object3d.parent, origDomEvent, intersect);
 		return;
 	}
 	
@@ -296,6 +296,7 @@ THREEx.DomEvent.prototype._notify	= function(eventName, object3d, origDomEvent)
 			type		: eventName,
 			target		: object3d,
 			origDomEvent	: origDomEvent,
+			intersect	: intersect,
 			stopPropagation	: function(){
 				toPropagate	= false;
 			}
@@ -303,7 +304,7 @@ THREEx.DomEvent.prototype._notify	= function(eventName, object3d, origDomEvent)
 		if( !toPropagate )	continue;
 		// do bubbling
 		if( handler.useCapture === false ){
-			object3d.parent && this._notify(eventName, object3d.parent);
+			object3d.parent && this._notify(eventName, object3d.parent, origDomEvent, intersect);
 		}
 	}
 }
