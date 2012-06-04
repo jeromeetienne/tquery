@@ -27,8 +27,8 @@
 	refractionCube.format	= THREE.RGBFormat;
 
 	var material		= new THREE.MeshBasicMaterial({
-		envMap		: refractionCube,
-		//envMap	: tQuery.createCubeTexture('skybox'),
+		//envMap		: refractionCube,
+		envMap	: tQuery.createCubeTexture('skybox'),
 		refractionRatio	: 0.95,
 		ambient		: 0xFFFFFF,
 		color		: 0xFFFFFF

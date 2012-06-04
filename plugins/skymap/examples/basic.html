@@ -1,0 +1,14 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.skymap.js"></script>
+<script src="../tquery.cubetexture.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var skymap	= tQuery.createSkymap('pisa').addTo(world);
+
+	var material	= new THREE.MeshBasicMaterial({
+		envMap	: tQuery.createCubeTexture('skybox')
+	});
+	
+	var object	= tQuery.createSphere(material).addTo(world).scaleBy(3);
+</script></body>
