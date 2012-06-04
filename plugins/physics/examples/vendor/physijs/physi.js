@@ -508,6 +508,12 @@ window.Physijs = (function() {
 	}
 	Eventable.make( Physijs.xMesh );
 
+	Physijs.xMesh.prototype.back = function(value){
+		if( value === undefined )	return this._back;
+		this._back	= value;
+		return this;
+	};
+
 	Physijs.xMesh.prototype.execute	= function( cmd, params ) {
 		if( !this._scene )	return;
 		this._scene.postMessage({ cmd: cmd, params: params });
@@ -536,6 +542,8 @@ window.Physijs = (function() {
 	Physijs.xMesh.prototype.getLinearVelocity = function () {
 		return this._physijs.linearVelocity;
 	};
+	
+	
 	
 	// Physijs.Mesh.setLinearVelocity
 	Physijs.xMesh.prototype.setLinearVelocity = function ( velocity ) {

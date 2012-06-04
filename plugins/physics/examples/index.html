@@ -19,7 +19,7 @@
 
 	var texture	= THREE.ImageUtils.loadTexture( "../../assets/images/water.jpg" );
 
-	setInterval(function(){
+//	setInterval(function(){
 		var value	= Math.random();
 		// Cube
 		if( value < 0.33 )	var object	= tQuery.createCube()
@@ -35,8 +35,12 @@
 				//tGeometry	: new THREE.SphereGeometry(),
 				friction	: 0.5,
 				restitution	: 1
-			})
-	}, 1000);
+			});
+		object.physics().addEventListener('collision', function(){
+			console.log("collisiion", arguments)
+			object.get(0).material.color.setHex(0xffffff*Math.random());
+		})
+//	}, 1000);
 
 
 	// Ground

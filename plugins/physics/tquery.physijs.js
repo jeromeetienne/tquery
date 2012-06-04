@@ -44,7 +44,7 @@ tQuery.Mesh.register('enablePhysics', function(opts){
 	var tMesh	= mesh.get(0);
 	console.assert(tMesh._xMesh === undefined)
 	console.assert(tMesh._physijs === undefined)
-	tMesh._xMesh	= new Physijs.xMesh(tMesh.geometry, opts.mass)
+	tMesh._xMesh	= new Physijs.xMesh(tMesh.geometry, opts.mass).back(this);
 	tMesh._physijs	= tMesh._xMesh._physijs;
 
 	// init the geometry
