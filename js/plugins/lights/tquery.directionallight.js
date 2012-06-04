@@ -37,8 +37,10 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
 	shadowBias		: tQuery.convert.toNumber,
+
 	shadowMapWidth		: tQuery.convert.toInteger,
 	shadowMapHeight		: tQuery.convert.toInteger,
+
 	shadowCameraRight	: tQuery.convert.toNumber,
 	shadowCameraLeft	: tQuery.convert.toNumber,
 	shadowCameraTop		: tQuery.convert.toNumber,
