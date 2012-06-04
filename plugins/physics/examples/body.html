@@ -6,6 +6,7 @@
 <script src="../tquery.physijs.js"></script>
 
 <script src="../../materials/tquery.meshlambertmaterial.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
 
 <script src='../../light/tquery.light.shadow.js'></script>
 
@@ -40,30 +41,21 @@
 	cTexture.wrapS	= cTexture.wrapT = THREE.RepeatWrapping;
 	cTexture.repeat.set( 0.5, 0.5 );
 
-	//setInterval(function(){
-	//	var object	= tQuery.createCube().addTo(world)
-	//		.setLambertMaterial().map(cTexture).back()
-	//		.castShadow(true)
-	//		.geometry().scaleBy(4, 4, 4).back()
-	//		.rotation(Math.random()*Math.PI*2, Math.random()*Math.PI*2, Math.random()*Math.PI*2)
-	//		.position(Math.random()*15-7.5, 25, Math.random()*15-7.5)
-	//		.enablePhysics({
-	//			friction	: 0.4,
-	//			restitution	: 0.6
-	//		});
-	//
-	//	var nCollisions	= 0;
-	//	object.physics().addEventListener('collision', function(){
-	//		// count collisions
-	//		nCollisions++;
-	//		// set object color based on collisions count
-	//		var colliColors	= [0xcc8855, 0xbb9955, 0xaaaa55, 0x99bb55, 0x88cc55, 0x77dd55];
-	//		if( nCollisions < colliColors.length ){
-	//			var color	= colliColors[nCollisions];
-	//			object.get(0).material.color.setHex( color );
-	//		}
-	//	})
-	//}, 1000);
+
+	var boxes	= []
+	for(var i = 0; i < 10; i++){
+		var box	= tQuery.createCube().addTo(world)
+			.setLambertMaterial().map(cTexture).back()
+			.castShadow(true)
+			.geometry().scaleBy(4, 4, 4).back()
+			.rotation(Math.random()*Math.PI*2, Math.random()*Math.PI*2, Math.random()*Math.PI*2)
+			.position(Math.random()*50-25, 25, Math.random()*50-25)
+			.enablePhysics({
+				friction	: 0.4,
+				restitution	: 0.6
+			});
+		boxes.push(box);
+	}
 
 
 	var texture	= THREE.ImageUtils.loadTexture( "images/rocks.jpg" );
@@ -80,7 +72,26 @@
 			restitution	: 0.4
 		});
 
+
+	var axis	= tQuery.createSphere().addTo(world)
+		.setBasicMaterial().wireframe(true).color(0x222222).back()
+		.scaleBy(10)
+
+	var forceCenter;
 	ground.on('mousemove', function(event){
-		console.log(event.type, "on ground", event)
+		forceCenter	= event.intersect.point.clone();
+		axis.position(forceCenter)
 	});
+	
+	world.loop().hook(function(delta, now){
+		if( !forceCenter )	return;
+		var strength	= 50;
+		for(var i = 0; i < boxes.length; i++){
+			var tMesh	= boxes[i].get(0);
+			var distance	= forceCenter.distanceTo( tMesh.position );
+			var effect	= forceCenter.clone().subSelf( tMesh.position ).normalize().multiplyScalar( strength / distance ).negate();
+			var offset	= forceCenter.clone().subSelf( tMesh.position );
+			boxes[i].physics().applyImpulse( effect, offset );
+		}
+	})
 </script></body>

@@ -383,7 +383,7 @@ window.Physijs = (function() {
 			}
 			
 			object.world 		= this;
-			object._xMesh.scene	= this;
+			object._xMesh._scene	= this;
 			
 			if ( callback !== undefined ) {
 				object.readyCallback = callback;
@@ -508,6 +508,7 @@ window.Physijs = (function() {
 	}
 	Eventable.make( Physijs.xMesh );
 
+	// TODO jme- is that needed
 	Physijs.xMesh.prototype.back = function(value){
 		if( value === undefined )	return this._back;
 		this._back	= value;
@@ -516,7 +517,7 @@ window.Physijs = (function() {
 
 	Physijs.xMesh.prototype.execute	= function( cmd, params ) {
 		if( !this._scene )	return;
-		this._scene.postMessage({ cmd: cmd, params: params });
+		this._scene.execute(cmd, params);
 	};
 	// Physijs.Mesh.mass
 	Physijs.xMesh.prototype.__defineGetter__('mass', function() {
@@ -528,6 +529,11 @@ window.Physijs = (function() {
 		this.execute( 'updateMass', { id: this._physijs.id, mass: mass } );
 	});
 
+	// Physijs.xMesh.applyImpulse
+	Physijs.xMesh.prototype.applyImpulse = function ( force, offset ) {
+		this.execute( 'applyImpulse', { id: this._physijs.id, impulse_x: force.x, impulse_y: force.y, impulse_z: force.z, x: offset.x, y: offset.y, z: offset.z } );
+	};
+	
 	// Physijs.Mesh.getAngularVelocity
 	Physijs.xMesh.prototype.getAngularVelocity = function () {
 		return this._physijs.angularVelocity;
