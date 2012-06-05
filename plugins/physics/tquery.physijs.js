@@ -14,14 +14,23 @@
 //		tQuery.World							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.World.register('enablePhysics', function(){
+tQuery.World.register('enablePhysics', function(opts){
 	var world	= this;
 	var tScene	= world.tScene();
-	console.assert(tScene._xScene === undefined)
-	tScene._xScene	= new Physijs.xScene();
+	opts		= opts	|| {};
+	opts		= tQuery.extend(opts, {
+		maxSteps	: 5,	// see "Custom simulation steps" at https://github.com/chandlerprall/Physijs/wiki/Scene-Configuration
+		pathWorker	: '../vendor/physijs/physijs_worker.js',
+		xScene		: null
+	});
 	
-	world.loop().hook(function(){
-		tScene._xScene.simulate(2*1/60, 2);
+	Physijs.scripts.worker	= opts.pathWorker;
+
+	console.assert(tScene._xScene === undefined)
+	tScene._xScene	= new Physijs.xScene(opts.xScene);
+	
+	world.loop().hook(function(delta, now){
+		tScene._xScene.simulate(delta, opts.maxSteps);
 	});
 })
 

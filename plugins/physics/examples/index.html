@@ -1,6 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
-<script src="./vendor/physijs/physi.js"></script>
+<script src="../vendor/physijs/physi.js"></script>
 <script src="../tquery.physijs.js"></script>
 
 <script src="../../materials/tquery.meshlambertmaterial.js"></script>
@@ -9,17 +9,15 @@
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	world.tCamera().translateZ(-100);
 
-	// TODO this cause trouble. i dont want to setup that everytime
-	Physijs.scripts.worker	= 'vendor/physijs/physijs_worker.js';
-	Physijs.scripts.ammo	= 'ammo.js';
+	world.tCamera().translateZ(-100);
 
 	world.enablePhysics();
 
-	var texture	= THREE.ImageUtils.loadTexture( "../../assets/images/water.jpg" );
-
-//	setInterval(function(){
+	var texture	= THREE.ImageUtils.loadTexture( "images/rocks.jpg" );
+	texture.wrapS	= texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 3, 3 );
+	setInterval(function(){
 		var value	= Math.random();
 		// Cube
 		if( value < 0.33 )	var object	= tQuery.createCube()
@@ -37,16 +35,15 @@
 				restitution	: 1
 			});
 		object.physics().addEventListener('collision', function(){
-			console.log("collisiion", arguments)
 			object.get(0).material.color.setHex(0xffffff*Math.random());
 		})
-//	}, 1000);
+	}, 1000);
 
 
 	// Ground
 	tQuery.createCube().addTo(world)
 		.setBasicMaterial().map(texture).back()
-		.geometry().scaleBy(1000, 1, 1000).back()
+		.geometry().scaleBy(100, 1, 100).back()
 		.translateY(-10)
 		.enablePhysics({
 			mass		: 0,
