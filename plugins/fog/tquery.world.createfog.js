@@ -15,11 +15,11 @@
 tQuery.World.register('addFogExp2', function(opts){
 	// handle parameter
 	opts	= tQuery.extend(opts, {
-		colorHex	: this.renderer().getClearColor().getHex(),
+		colorHex	: this.tRenderer().getClearColor().getHex(),
 		density		: 0.1
 	});
 	// set the fog
-	this.scene().fog	= new THREE.FogExp2(opts.colorHex, opts.density );
+	this.tScene().fog	= new THREE.FogExp2(opts.colorHex, opts.density );
 	// for chained API
 	return this;
 });
@@ -35,12 +35,12 @@ tQuery.World.register('addFogExp2', function(opts){
 tQuery.World.register('addFog', function(opts){
 	// handle parameter
 	opts	= tQuery.extend(opts, {
-		colorHex	: this.renderer().getClearColor().getHex(),
+		colorHex	: this.tRenderer().getClearColor().getHex(),
 		near		: 1,
 		far		: 20
 	});
 	// set the fog
-	this.scene().fog	= new THREE.Fog(opts.colorHex, opts.near, opts.far);
+	this.tScene().fog	= new THREE.Fog(opts.colorHex, opts.near, opts.far);
 	// for chained API
 	return this;
 });

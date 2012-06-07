@@ -12,7 +12,7 @@ define(['plugins/csg/tquery.object3d.csg'], function(){
 		// build the underline
 		var underlineH	= size.y / 10;
 		var deltaY	= size.y / 20;
-		var underline	= tQuery.createCube(size.x, underlineH, size.z)
+		var underline	= tQuery.createCube(size.x, underlineH, size.z, mesh.get(0).material)
 				.translateY(-size.y/2 - deltaY - underlineH/2);
 		// make it invisible by default
 		underline.get(0).visible	= false;
