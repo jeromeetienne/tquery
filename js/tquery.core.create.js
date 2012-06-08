@@ -46,6 +46,12 @@ tQuery.register('createSpotLight', function(){
 	return tQuery(tLight);
 });
 
+tQuery.register('createPointLight', function(){
+	var tLight	= new THREE.PointLight(0xFFFFFF * Math.random());
+	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	return tQuery(tLight);
+});
+
 tQuery.register('createAmbientLight', function(){
 	var tLight	= new THREE.AmbientLight(0xFFFFFF);
 	return tQuery(tLight);

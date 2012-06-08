@@ -14,7 +14,7 @@
 	var tweenFwd	= new TWEEN.Tween(tweenvars).to({
 		scale	: 4
 	}, 800)
-	.easing(TWEEN.Easing.Elastic.InOut)
+	.easing(TWEEN.Easing.Bounce.Out)
 	.onUpdate(function(){
 		object.scale(this.scale);
 	});
