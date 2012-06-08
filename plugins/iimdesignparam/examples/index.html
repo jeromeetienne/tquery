@@ -38,7 +38,6 @@
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	//var object	= tQuery.createTorus().addTo(world);
 
 	world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
 
@@ -52,7 +51,7 @@
 	world.loop().hook(function(){
 		var position	= world.tCamera().position;
 		position.y	= Math.max(position.y, 1)
-	})
+	});
 
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
