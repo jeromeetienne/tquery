@@ -13,14 +13,16 @@
 	// setup a forward tween
 	var tweenFwd	= new TWEEN.Tween(tweenvars).to({
 		scale	: 4
-	}, 800).easing(TWEEN.Easing.Elastic.EaseInOut).onUpdate(function(){
+	}, 800)
+	.easing(TWEEN.Easing.Elastic.InOut)
+	.onUpdate(function(){
 		object.scale(this.scale);
 	});
 
 	// setup a backward tween
 	var tweenBack	= new TWEEN.Tween(tweenvars).to({
 		scale	: 1
-	}, 1500).easing(TWEEN.Easing.Bounce.EaseOut)
+	}, 300).easing(TWEEN.Easing.Linear.None)
 	.onUpdate(function(){
 		// TODO maybe to do something to make that automatic based on the properties
 		object.scale(this.scale);
