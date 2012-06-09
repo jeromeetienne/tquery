@@ -287,24 +287,42 @@ tQuery.Flow	= function(){
  * microevents.js - https://github.com/jeromeetienne/microevent.js
 */
 tQuery.MicroeventMixin	= function(destObj){
-	destObj.bind	= function(event, fct){
+	var bind	= function(event, fct){
 		if(this._events === undefined) 	this._events	= {};
 		this._events[event] = this._events[event]	|| [];
 		this._events[event].push(fct);
 		return fct;
 	};
-	destObj.unbind	= function(event, fct){
+	var unbind	= function(event, fct){
 		if(this._events === undefined) 	this._events	= {};
 		if( event in this._events === false  )	return;
 		this._events[event].splice(this._events[event].indexOf(fct), 1);
 	};
-	destObj.trigger	= function(event /* , args... */){
+	var trigger	= function(event /* , args... */){
 		if(this._events === undefined) 	this._events	= {};
 		if( this._events[event] === undefined )	return;
 		var tmpArray	= this._events[event].slice(); 
 		for(var i = 0; i < tmpArray.length; i++){
 			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
 		}
+	};
+	
+	// backward compatibility
+	destObj.bind	= bind;
+	destObj.unbind	= unbind;
+	destObj.trigger	= trigger;
+
+	destObj.addEventListener	= function(event, fct){
+		destObj.bind(event, fct)
+		return this;	// for chained API
+	}
+	destObj.removeEventListener	= function(event, fct){
+		destObj.unbind(event, fct)
+		return this;	// for chained API
+	}
+	destObj.dispatchEvent		= function(event){
+		destObj.trigger(event)
+		return this;
 	}
 };
 

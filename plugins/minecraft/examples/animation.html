@@ -6,7 +6,7 @@
 <script src="../../tweenjs/examples/Tween.js"></script>
 
 <script src="../tquery.animation.js"></script>
-<script src="../tquery.minecraftanimation.js"></script>
+<script src="../tquery.animations.js"></script>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -25,21 +25,18 @@
 	}).pushKeyframe(0.5, {
 		armRotationZ	: -angleRange,
 		legRotationZ	: +angleRange
-	});
-	animRun.bind('updatePosition', function(position){
+	}).addEventListener('updatePosition', function(position){
 		character.parts.armR.rotation.z	=  position.armRotationZ;
 		character.parts.armL.rotation.z = -position.armRotationZ;
 		character.parts.legR.rotation.z	=  position.legRotationZ;
 		character.parts.legL.rotation.z = -position.legRotationZ;
-	})
+	});
 	//animRun.start();
-
 
 	var animStand	= tQuery.createAnimation().pushKeyframe(1, {
 		armRotationZ	: 0,
 		legRotationZ	: 0
-	})
-	animStand.bind('updatePosition', function(position){
+	}).addEventListener('updatePosition', function(position){
 		character.parts.armR.rotation.z	=  position.armRotationZ;
 		character.parts.armL.rotation.z = -position.armRotationZ;
 		character.parts.legR.rotation.z	=  position.legRotationZ;
@@ -47,6 +44,8 @@
 	})
 	//animStand.start();
 	
-	
+	var animations	= tQuery.createAnimations();
+	animations.add('run', animRun)
+	animations.add('stand', animStand)
 
 </script></body>

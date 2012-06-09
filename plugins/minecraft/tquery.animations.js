@@ -1,13 +1,13 @@
-tQuery.register('createMinecraftCharAnimation', function(){
-	return new tQuery.MinecraftCharAnimation();
+tQuery.register('createAnimations', function(){
+	return new tQuery.Animations();
 });
 
-tQuery.register('MinecraftCharAnimation', function(){
+tQuery.register('Animations', function(){
 	this._animations	= {};
 	this._currentAnim	= null;
 });
 
-tQuery.MinecraftCharAnimation.prototype.destroy	= function(){
+tQuery.Animations.prototype.destroy	= function(){
 	this._currentAnim	&& this._currentAnim.destroy();
 }
 
@@ -15,7 +15,7 @@ tQuery.MinecraftCharAnimation.prototype.destroy	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.MinecraftCharAnimation.prototype.addAnimation	= function(name, animation){
+tQuery.Animations.prototype.add	= function(name, animation){
 	console.assert( animation instanceof tQuery.Animation );
 	this._animations[name]	= animation;
 };
@@ -24,19 +24,19 @@ tQuery.MinecraftCharAnimation.prototype.addAnimation	= function(name, animation)
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.MinecraftCharAnimation.prototype.start	= function(animationName){
+tQuery.Animations.prototype.start	= function(animationName){
 	if( this.isRunning() )	this.stop();
-	console.assert( this._animations[animationName] !== undefined )
+	console.assert( this._animations[animationName] !== undefined, "unknown animation name: "+animationName)
 	this._currentAnim	= this._animations[animationName];
 	this._currentAnim.start();
 };
 
-tQuery.Animation.prototype.isRunning	= function(){
+tQuery.Animations.prototype.isRunning	= function(){
 	return this._currentAnim ? true : false;
 }
 
 
-tQuery.MinecraftCharAnimation.prototype.stop	= function(){
+tQuery.Animations.prototype.stop	= function(){
 	this._currentAnim	&& this._currentAnim.destroy();
 	this._currentAnim	= null;
 }
