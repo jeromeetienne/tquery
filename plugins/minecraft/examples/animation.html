@@ -26,8 +26,7 @@
 		var animNames	= Object.keys(animations.list());
 		var animName	= animNames[Math.floor(Math.random()*animNames.length)];
 		animations.start(animName);
-
-		document.querySelectorAll("body div")[0].innerHTML	= animName;
-	}, 2*1000)
 	
+		document.querySelectorAll("body div")[0].innerHTML	= animName;
+	}, 2*1000)		
 </script></body>

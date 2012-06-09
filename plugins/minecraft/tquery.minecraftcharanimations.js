@@ -3,6 +3,12 @@ tQuery.register('MinecraftCharAnimations', function(){
 	// call parent ctor
 	tQuery.MinecraftCharAnimations.parent.constructor.call(this)
 	
+	var tweenAngle	= function(baseValue, nextValue, timePercent){
+		if( nextValue - baseValue >  Math.PI )	nextValue	-= Math.PI*2;
+		if( nextValue - baseValue < -Math.PI )	nextValue	+= Math.PI*2;
+		return (1-timePercent) * baseValue + timePercent * nextValue;
+	}
+
 	
 	var onUpdate	= function(position){
 		character.parts.armR.rotation.x	= position.armRRotationX;
@@ -20,6 +26,12 @@ tQuery.register('MinecraftCharAnimations', function(){
 		position.armRotationZ	= character.parts.armR.rotation.z;
 		position.legRotationZ	= character.parts.legR.rotation.z;
 	};
+	var propTweens	= {
+		armLRotationX	: tweenAngle,
+		armRRotationX	: tweenAngle,
+		armRotationZ	: tweenAngle,
+		legRotationZ	: tweenAngle		
+	}
 	
 	
 	// Setup 'run' animation
@@ -34,7 +46,7 @@ tQuery.register('MinecraftCharAnimations', function(){
 		armRRotationX	: 0,
 		armRotationZ	: -angleRange,
 		legRotationZ	: +angleRange
-	}).onCapture(onCapture).onUpdate(onUpdate));
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'walk' animation
 	var angleRange	= Math.PI/3-Math.PI/10;
@@ -48,7 +60,7 @@ tQuery.register('MinecraftCharAnimations', function(){
 		armRRotationX	: 0,
 		armRotationZ	: -angleRange,
 		legRotationZ	: +angleRange
-	}).onCapture(onCapture).onUpdate(onUpdate));
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'stand' animation
 	animations.add('stand', tQuery.createAnimation().pushKeyframe(0.2, {
@@ -61,7 +73,7 @@ tQuery.register('MinecraftCharAnimations', function(){
 		armRRotationX	: 0,
 		armRotationZ	: 0,
 		legRotationZ	: 0
-	}).onCapture(onCapture).onUpdate(onUpdate));
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'wave' animation
 	var angleRange	= Math.PI/2-Math.PI/10;
@@ -75,7 +87,7 @@ tQuery.register('MinecraftCharAnimations', function(){
 		armRRotationX	: Math.PI+Math.PI/10,
 		armRotationZ	: 0,
 		legRotationZ	: 0			
-	}).onCapture(onCapture).onUpdate(onUpdate));
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'hiwave' animation
 	var angleRange	= Math.PI/2-Math.PI/10;
@@ -89,7 +101,7 @@ tQuery.register('MinecraftCharAnimations', function(){
 		armRRotationX	: Math.PI+Math.PI/10,
 		armRotationZ	: 0,
 		legRotationZ	: 0			
-	}).onCapture(onCapture).onUpdate(onUpdate));
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 });
 
 

@@ -16,6 +16,7 @@ tQuery.register('Animation', function(){
 	this._onUpdate	= null;
 	this._onCapture	= function(position){};
 	this._initialPos= {};
+	this._propertyTweens	= {};
 });
 
 
@@ -44,6 +45,11 @@ tQuery.Animation.prototype.onUpdate	= function(fn){
 }
 tQuery.Animation.prototype.onCapture	= function(fn){
 	this._onCapture	= fn
+	return this;	// for chained API
+}
+
+tQuery.Animation.prototype.propertyTweens	= function(propertyTweens){
+	this._propertyTweens	= propertyTweens;
 	return this;	// for chained API
 }
 
@@ -100,9 +106,12 @@ tQuery.Animation.prototype.buildPosition	= function(age){
 		// linear interpolation between the values
 		var baseValue	= basePosition[property];
 		var nextValue	= nextPosition[property];
-		if( nextValue - baseValue >  Math.PI )	nextValue	-= Math.PI*2;
-		if( nextValue - baseValue < -Math.PI )	nextValue	+= Math.PI*2;
-		result[property]= (1-timePercent) * baseValue + timePercent * nextValue;
+		// define propertyTween for this property - default to linear interpolation
+		var propertyTween	= this._propertyTweens[property] || function(baseValue, nextValue, timePercent){
+			return (1-timePercent) * baseValue + timePercent * nextValue;
+		}
+		// compute the actual result
+		result[property]= propertyTween(baseValue, nextValue, timePercent);
 	}
 	// return the result
 	return result;
@@ -120,7 +129,7 @@ tQuery.Animation.prototype.start	= function(){
 		this._totalTime		+= keyframe.duration;
 		keyframe._endTime	= this._totalTime;
 	}.bind(this));
-	
+
 	// get this._initialPos from this._onCapture()
 	// - the initial position is the position when the animation started.
 	// - it will be used as basePosition during the first keyframe of the animation
