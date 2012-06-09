@@ -3166,7 +3166,8 @@ tQuery.Loop.prototype.POST_RENDER	= 80;
  *
  * @param {Number} priority for this callback
  * @param {Function} callback the function which will be called function(time){}
- * @returns {tQuery.Loop} chained API
+ * @returns {Function} the callback function. usefull for this._$callback = loop.hook(this._callback.bind(this))
+ *                     and later loop.unhook(this._$callback)
 */
 tQuery.Loop.prototype.hook	= function(priority, callback)
 {
@@ -3179,8 +3180,7 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 	this._hooks[priority]	= this._hooks[priority] || [];
 	console.assert(this._hooks[priority].indexOf(callback) === -1)
 	this._hooks[priority].push(callback);
-	// for chained API
-	return this;
+	return callback;
 }
 
 /**

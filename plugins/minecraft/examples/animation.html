@@ -1,65 +1,52 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.minecraftchar.js"></script>
+
+
 <script src="../../tweenjs/examples/Tween.js"></script>
+
+<script src="../tquery.animation.js"></script>
+<script src="../tquery.minecraftanimation.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world)
 	//character.model.rotateY(-2*Math.PI/3);
-	
-	world.loop().hook(function(delta, now){
-		var angle	= 1 * now*Math.PI*2;
-		character.parts.legR.rotation.z	= 1.4 * Math.cos(angle);
-		character.parts.legL.rotation.z	= 1.4 * Math.cos(angle + Math.PI);
-	});
 
 	// legs animation
 	// "walk", "run", "jump", "stand"
-	
-	
+
 	var angleRange	= Math.PI/2-Math.PI/10;
-	var delay	= 500;
-	// define the variables
-	var tweenvars	= {
-		legRotationZ	: -angleRange
-	};
-
-	// setup a forward tween
-	var tweenFwd	= new TWEEN.Tween(tweenvars).to({
+	var animRun	= tQuery.createAnimation().pushKeyframe(0.5, {
+		armRotationZ	: +angleRange,
+		legRotationZ	: -angleRange			
+	}).pushKeyframe(0.5, {
+		armRotationZ	: -angleRange,
 		legRotationZ	: +angleRange
-	}, delay)
-	.easing(TWEEN.Easing.Quadratic.InOut)
-	.onUpdate(function(){
-		character.parts.legR.rotation.z	=  this.legRotationZ;
-		character.parts.legL.rotation.z = -this.legRotationZ;
 	});
+	animRun.bind('updatePosition', function(position){
+		character.parts.armR.rotation.z	=  position.armRotationZ;
+		character.parts.armL.rotation.z = -position.armRotationZ;
+		character.parts.legR.rotation.z	=  position.legRotationZ;
+		character.parts.legL.rotation.z = -position.legRotationZ;
+	})
+	//animRun.start();
 
-	// setup a backward tween
-	var tweenBack	= new TWEEN.Tween(tweenvars).to({
-		legRotationZ	: -angleRange
-	}, delay)
-	.easing(TWEEN.Easing.Quadratic.InOut)
-	.onUpdate(function(){
-		character.parts.legR.rotation.z	=  this.legRotationZ;
-		character.parts.legL.rotation.z = -this.legRotationZ;
-	});
 
-	// chain them to make them loop
-	tweenFwd.chain(tweenBack);
-	tweenBack.chain(tweenFwd);
-
-	// start the tweenFwd
-	tweenFwd.start();
+	var animStand	= tQuery.createAnimation().pushKeyframe(1, {
+		armRotationZ	: 0,
+		legRotationZ	: 0
+	})
+	animStand.bind('updatePosition', function(position){
+		character.parts.armR.rotation.z	=  position.armRotationZ;
+		character.parts.armL.rotation.z = -position.armRotationZ;
+		character.parts.legR.rotation.z	=  position.legRotationZ;
+		character.parts.legL.rotation.z = -position.legRotationZ;
+	})
+	//animStand.start();
 	
 	
-	
-	
-	// update TWEEN with world.loop
-	world.loop().hook(function(){
-		TWEEN.update();
-	});
-
 
 </script></body>
