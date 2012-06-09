@@ -1418,24 +1418,22 @@ tQuery.register('createLoop', function(world){
 
 
 tQuery.register('createDirectionalLight', function(){
-	var tLight	= new THREE.DirectionalLight(0xFFFFFF * Math.random());
-	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);
 });
 
 tQuery.register('createSpotLight', function(){
-	var tLight	= new THREE.SpotLight(0xFFFFFF * Math.random());
-	tLight.position.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+	var tLight	= new THREE.SpotLight();
 	return new tQuery.SpotLight([tLight]);
 });
 
 tQuery.register('createPointLight', function(){
-	var tLight	= new THREE.PointLight(0xFFFFFF * Math.random());
+	var tLight	= new THREE.PointLight();
 	return new tQuery.PointLight([tLight]);
 });
 
 tQuery.register('createAmbientLight', function(){
-	var tLight	= new THREE.AmbientLight(0xFFFFFF);
+	var tLight	= new THREE.AmbientLight();
 	return new tQuery.AmbientLight([tLight]);
 });
 

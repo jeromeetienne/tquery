@@ -18,6 +18,8 @@
 
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world).rotateY(-Math.PI/2)
+	character.loadSkin('images/3djesus.png')
+
 	
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 

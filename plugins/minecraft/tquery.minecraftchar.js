@@ -10,11 +10,11 @@ tQuery.register('MinecraftChar', function(){
 	 * not now.
 	*/
 	function cubeFromPlanes (size, mat) {
-		var cube = new THREE.Object3D();
-		var meshes = [];
+		var cube	= new THREE.Object3D();
+		var meshes	= [];
 		for(var i=0; i < 6; i++) {
-			var mesh = new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat);
-			// mesh.doubleSided = true;
+			var mesh	= new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat);
+			mesh.doubleSided = true;
 			cube.add(mesh);
 			meshes.push(mesh);
 		}
@@ -48,13 +48,13 @@ tQuery.register('MinecraftChar', function(){
 		return cube;
 	};
 	function getMaterial(image, transparent) {
-		var tex		= new THREE.Texture(image);
-		tex.magFilter	= THREE.NearestFilter;
-		tex.minFilter	= THREE.NearestFilter;
-		tex.format	= transparent ? THREE.RGBAFormat : THREE.RGBFormat;
-		tex.needsUpdate	= true;
+		var texture		= new THREE.Texture(image);
+		texture.magFilter	= THREE.NearestFilter;
+		texture.minFilter	= THREE.NearestFilter;
+		texture.format		= transparent ? THREE.RGBAFormat : THREE.RGBFormat;
+		texture.needsUpdate	= true;
 		var material	= new THREE.MeshBasicMaterial({
-			map		: tex,
+			map		: texture,
 			transparent	: transparent ? true : false
 		});
 		return material;
@@ -78,12 +78,17 @@ tQuery.register('MinecraftChar', function(){
 	var canvas	= document.createElement('canvas');
 	canvas.width	= 64;
 	canvas.height	= 32;
+
 	var context	= canvas.getContext('2d');
+	this._context	= context;
+
 	var material	= getMaterial(canvas, false);
 	var materialTrans= getMaterial(canvas, true);
 
-	// Player model
+	this._material		= material;
+	this._materialTrans	= materialTrans;
 
+	// Player model
 	var playerModel	= tQuery.createObject3D();
 	playerModel.scaleBy(1/35);
 	
@@ -228,17 +233,12 @@ tQuery.register('MinecraftChar', function(){
 	//////////////////////////////////////////////////////////////////////////
 	//		load the skin						//
 	//////////////////////////////////////////////////////////////////////////
-	var skinImage	= new Image();
-	skinImage.onload = function () {
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		context.drawImage(skinImage, 0, 0);
-		material.map.needsUpdate	= true;
-		materialTrans.map.needsUpdate	= true;
-	};
-	skinImage.src = "images/char.png";
-	//skinImage.src = "images/batman.png";
-	//skinImage.src = "images/Mario.png";
-	skinImage.src = "images/3djesus.png";
+	var url	= "images/char.png";
+	//var url	= "images/batman.png";
+	//var url	= "images/Mario.png";
+	//var url = "images/3djesus.png";
+	this.loadSkin(url);
+
 
 	// export public variable
 	this.model	= playerModel;
@@ -253,3 +253,24 @@ tQuery.register('MinecraftChar', function(){
 
 // make it pluginable
 tQuery.pluginsInstanceOn(tQuery.MinecraftChar);
+
+/**
+ * Load a skin
+ *
+ * @param {string} url the url of the skin image
+*/
+tQuery.MinecraftChar.prototype.loadSkin	= function(url){
+	var canvas	= this._context.canvas;
+	var context	= this._context;
+	
+	var image	= new Image();
+	image.onload	= function () {
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.drawImage(image, 0, 0);
+
+		this._material.map.needsUpdate		= true;
+		this._materialTrans.map.needsUpdate	= true;
+	}.bind(this);
+	image.src = url;
+	return this;	// for chained API
+}

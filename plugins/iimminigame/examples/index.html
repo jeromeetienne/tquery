@@ -110,8 +110,8 @@
 
 	// lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444)
-
-	var light = tQuery.createDirectionalLight().addTo(world)
+	tQuery.createPointLight().addTo(world).intensity(2).distance(30);
+	tQuery.createDirectionalLight().addTo(world)
 		.position(2, 4, -1.5).color(0xffffff)
 		.castShadow(true)
 		.shadowCamera(6, -6, 6, -6, 0.01, 200)
