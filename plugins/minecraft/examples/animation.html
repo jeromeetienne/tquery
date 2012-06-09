@@ -9,9 +9,10 @@
 <script src="../tquery.animations.js"></script>
 <script src="../tquery.minecraftcharanimations.js"></script>
 
-<body><script>
+<body><div style="position: absolute; font-size: 200%; right: 0">walk</div>
+<script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	world.removeCameraControls();
+	//world.removeCameraControls();
 
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world)
@@ -20,4 +21,13 @@
 
 	var animations	= new tQuery.MinecraftCharAnimations()
 	animations.start('walk');
+	
+	setInterval(function(){
+		var animNames	= Object.keys(animations.list());
+		var animName	= animNames[Math.floor(Math.random()*animNames.length)];
+		animations.start(animName);
+
+		document.querySelectorAll("body div")[0].innerHTML	= animName;
+	}, 2*1000)
+	
 </script></body>

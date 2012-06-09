@@ -100,6 +100,8 @@ tQuery.Animation.prototype.buildPosition	= function(age){
 		// linear interpolation between the values
 		var baseValue	= basePosition[property];
 		var nextValue	= nextPosition[property];
+		if( nextValue - baseValue >  Math.PI )	nextValue	-= Math.PI*2;
+		if( nextValue - baseValue < -Math.PI )	nextValue	+= Math.PI*2;
 		result[property]= (1-timePercent) * baseValue + timePercent * nextValue;
 	}
 	// return the result
@@ -122,7 +124,7 @@ tQuery.Animation.prototype.start	= function(){
 	// get this._initialPos from this._onCapture()
 	// - the initial position is the position when the animation started.
 	// - it will be used as basePosition during the first keyframe of the animation
-	// - it is optional
+	// - it is optional. the user may not define it
 	this._initialPos= tQuery.extend({}, this._keyframes[0].position)
 	this._onCapture(this._initialPos);
 
