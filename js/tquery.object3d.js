@@ -258,7 +258,7 @@ tQuery.Object3D._select	= function(selector, root){
 	root		= root	|| tQuery.world.tScene();
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
 
-	var lists	= [];	
+	var lists	= [];
 	root.children.forEach(function(child){
 		var nodes	= this._crawls(child, selectItems);
 		// FIXME reallocate the array without need

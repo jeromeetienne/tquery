@@ -34,13 +34,10 @@
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
 	var character	= new tQuery.MinecraftChar();
-	character.model.addTo(world)
-		.rotateX(-Math.PI/2)
-		.rotateY(+Math.PI/2)
-		
+	character.model.addTo(world);
+	
 	character.parts.armR.rotation.x	= Math.PI/8;
-	character.parts.armR.rotation.y	= 0;
-	character.parts.armR.rotation.z	= Math.PI-Math.PI/6;
+	character.parts.armR.rotation.z	= Math.PI+Math.PI/8;
 	
 	character.hookKeyboard();
 
@@ -48,6 +45,7 @@
 	var skymap	= tQuery.createSkymap('skybox').addTo(world);
 	skymap.get(0).position	= character.model.get(0).position;
 
+	// set up all the circles
 	var tGeometry	= tQuery.createTorus(0.5-0.04, 0.04, 8*2, 32).geometry().scaleBy(4).get(0);
 	var position	= new THREE.Vector3();
 	for(var i = 0; i < 15; i++ ){
@@ -76,7 +74,7 @@
 		charRotationZ	= Math.max(charRotationZ, -Math.PI/6)
 		charRotationZ	= Math.min(charRotationZ, +Math.PI/6)
 		
-		model.get(0).rotation.y = Math.PI/2 + charRotationZ;
+		model.get(0).rotation.y = Math.PI + charRotationZ;
 		
 		charRotationZ	*= 0.96; 
 

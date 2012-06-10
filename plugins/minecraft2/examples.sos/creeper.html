@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="creeper.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	var creeper = new Creeper();
+	creeper.model.scale.setLength(1/20);
+	
+	world.add(creeper.model);
+	world.loop().hook(function(delta, now){
+		var time	= now;
+
+		creeper.head.rotation.y = Math.sin(time*3)/5-0.2;
+		creeper.head.rotation.z = Math.sin(time/2)/4;
+
+		creeper.legs.leftback.rotation.z	= creeper.legs.rightfront.rotation.z	= 0.3*Math.cos(time*10);
+		creeper.legs.leftfront.rotation.z	= creeper.legs.rightback.rotation.z	= 0.3*Math.cos(time*10 + Math.PI);
+	})
+
+</script></body>

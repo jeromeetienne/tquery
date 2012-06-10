@@ -1,0 +1,82 @@
+<!-- # Examples of tQuery.car.js -->
+
+
+
+<!-- ```tquery.car.js``` is a plugin provides rendering and controls of sport cars. -->
+<!-- It is based on some examples by [alteredq](http://alteredqualia.com/) in -->
+<!-- [three.js](http://github.com/mrdoob/three.js/). -->
+<!-- You can find them -->
+<!-- [here](http://mrdoob.github.com/three.js/examples/webgl_materials_cars.html) -->
+<!-- and -->
+<!-- [here](http://mrdoob.github.com/three.js/examples/webgl_materials_cubemap_dynamic.html). -->
+
+<!-- -->
+
+<!doctype html><title>tQuery Car Example</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src='../../grassground/tquery.grassground.js'></script>
+<script src='../../fog/tquery.world.createfog.js'></script>
+
+<script src="../../skymap/tquery.cubetexture.js"></script>
+<script src="../../skymap/tquery.skymap.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
+<script src="../../minecraft/tquery.minecraftchar.js"></script>
+
+<script src="../../minecraft/tquery.animation.js"></script>
+<script src="../../minecraft/tquery.animations.js"></script>
+
+<script src="../../minecraft/tquery.minecraftcharanimations.js"></script>
+<script src="../../minecraft/tquery.minecraftcharheadanimations.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	// no camera controls is needed
+	world.removeCameraControls();
+	world.tCamera().position.y	= 2;
+	world.tCamera().position.z	= 10;
+	world.tCamera().lookAt(world.tScene().position);
+
+	world.addEffectComposer().vignette().finish();
+
+	tQuery.createSkymap('skybox').addTo(world);
+
+	var ground	= tQuery.createGrassGround({
+		textureUrl	: '../../grassground/images/grasslight-big.jpg',
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,		
+	}).addTo(world).scaleBy(100);
+	
+	var character	= new tQuery.MinecraftChar({
+		skinUrl	: "../../minecraft/examples/images/char.png"
+	});
+	character.model.addTo(world)
+
+// TODO
+// - shadow casting
+// - make it move with path
+// - keyboard control
+
+	character.model.rotateY(-Math.PI/6);
+	character.model.translateY(1);
+
+	var bodyAnims	= new tQuery.MinecraftCharAnimations();
+	bodyAnims.start('walk');
+
+	var headAnims	= new tQuery.MinecraftCharHeadAnimations();
+	headAnims.start('still');
+
+</script></body>

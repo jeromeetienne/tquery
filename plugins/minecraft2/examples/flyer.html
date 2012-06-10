@@ -1,0 +1,134 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+<script src="../tquery.minecraftchar.js"></script>
+<script src="../tquery.minecraftchar.keyboard.js"></script>
+
+<script src="../../skymap/tquery.skymap.js"></script>
+<script src="../../skymap/tquery.cubetexture.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
+<script src="../../materials/tquery.meshlambertmaterial.js"></script>
+<script src="../../materials/tquery.meshphongmaterial.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// add post processing
+	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
+
+	var character	= new tQuery.MinecraftChar();
+	character.model.addTo(world)
+		.rotateX(-Math.PI/2)
+		.rotateY(+Math.PI/2)
+		
+	character.parts.armR.rotation.x	= Math.PI/8;
+	character.parts.armR.rotation.y	= 0;
+	character.parts.armR.rotation.z	= Math.PI-Math.PI/6;
+	
+	character.hookKeyboard();
+
+	// Create the skymap
+	var skymap	= tQuery.createSkymap('skybox').addTo(world);
+	skymap.get(0).position	= character.model.get(0).position;
+
+	var tGeometry	= tQuery.createTorus(0.5-0.04, 0.04, 8*2, 32).geometry().scaleBy(4).get(0);
+	var position	= new THREE.Vector3();
+	for(var i = 0; i < 15; i++ ){
+		position.addSelf({
+			x	: (Math.random()*2-1)*2*0,
+			y	: (Math.random()*2-1)*2*0,
+			z	: 0
+		});
+		var object	= tQuery(new THREE.Mesh(tGeometry, new THREE.MeshNormalMaterial()))
+			.position(position).translateZ(-i*20).addTo(world)
+			.setBasicMaterial().color(0xffAAAA).map('../../assets/images/water.jpg').back();
+	}
+	
+	
+	var charRotationZ	= 0;
+	var charRotationX	= 0;
+	world.loop().hook(function(delta, now){
+		var keyboard	= tQuery.keyboard();
+		var model	= character.model;
+	
+		model.translateZ(-10*delta)
+		
+		// keyboard handling
+		if( keyboard.pressed("left") )	charRotationZ	-= delta*Math.PI/3;
+		if( keyboard.pressed("right") )	charRotationZ	+= delta*Math.PI/3;		
+		charRotationZ	= Math.max(charRotationZ, -Math.PI/6)
+		charRotationZ	= Math.min(charRotationZ, +Math.PI/6)
+		
+		model.get(0).rotation.y = Math.PI/2 + charRotationZ;
+		
+		charRotationZ	*= 0.96; 
+
+		// keyboard handling
+		if( keyboard.pressed("up") )	charRotationX	+= delta*Math.PI/3;
+		if( keyboard.pressed("down") )	charRotationX	-= delta*Math.PI/3;		
+		charRotationX	= Math.max(charRotationX, -Math.PI/6)
+		charRotationX	= Math.min(charRotationX, +Math.PI/6)
+		
+		model.get(0).rotation.x = -Math.PI/2 + Math.PI/10 + charRotationX;
+		charRotationX	*= 0.96; 
+	})
+	
+	//////////////////////////////////////////////////////////////////////////
+	//		Arrow							//
+	//////////////////////////////////////////////////////////////////////////
+
+	// create the arrow
+	var arrow	= tQuery.createCube(0.5, 0.5, 2).addTo(world)
+		.geometry().scaleBy(1/10).back()
+		//.setBasicMaterial().wireframe(true).color(0x000000).back();
+	world.loop().hook(function(delta, now){
+		var charPosition= character.model.get(0).position
+
+		var position	= charPosition.clone().addSelf(new THREE.Vector3(0, 0.4, 0));
+		arrow.get(0).position.copy(position);
+		
+		var position	= charPosition.clone();
+		position.x	= 0;
+		position.y	= 0;
+		position.z	-= 3;
+		arrow.get(0).lookAt(position);
+	});
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		Controls						//
+	//////////////////////////////////////////////////////////////////////////
+	
+	world.removeCameraControls()
+	world.loop().hook(function(delta, now){
+		var charPosition= character.model.get(0).position;
+
+		var position	= charPosition.clone();
+		position.y	+= 0.5;
+		position.z	+= 3;
+		world.tCamera().position	= position;
+
+		var position	= charPosition.clone();
+		position.z	-= 5;
+		world.tCamera().lookAt(position);
+	})
+	
+
+</script></body>

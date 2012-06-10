@@ -18,6 +18,7 @@ docs:
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/					\
 			js/ js/plugins					\
+			plugins/minecraft				\
 			plugins/md2character
 
 help:

@@ -13,49 +13,57 @@
 <script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
 <script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
-<body><script>
+<body><div style="position: absolute; font-size: 200%; right: 0">
+	<select id="skinSelect" onchange='character.loadSkin(this.value);'>
+		<option value="images/char.png">char</option>
+		<option value="images/3djesus.png">3djesus</option>
+		<option value="images/agentsmith.png">agentsmith</option>
+		<option value="images/batman.png">batman</option>
+		<option value="images/god.png">god</option>
+		<option value="images/jamesbond-1.png">jamesbond-1</option>
+		<option value="images/Joker.png">Joker</option>
+		<option value="images/Mario.png">Mario</option>
+		<option value="images/martialartist.png">martialartist</option>
+		<option value="images/robocop.png">robocop</option>
+		<option value="images/Sonicthehedgehog.png">Sonic the hedgehog</option>
+		<option value="images/Spiderman.png">Spiderman</option>
+		<option value="images/Superman.png">Superman</option>
+		<option value="images/theflash.png">theflash</option>
+		<option value="images/woody.png">woody</option>
+	</select>
+</div><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+	//world.removeCameraControls();
+	world.tCamera().position.z	= 1.8;
 
 	var character	= new tQuery.MinecraftChar();
-	character.model.addTo(world).rotateY(-Math.PI/2)
+	character.model.addTo(world).rotateY(-Math.PI/8)
 	character.loadSkin('images/3djesus.png')
 
 	
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
 	var items	= new tQuery.MinecraftItems();
-	var item;
 	items.bind('load', function(){
-		item	= items.createMesh(2+6*16).scaleBy(35/2);
-		//item.rotateX(-Math.PI/2);
-		//item.rotateY( Math.PI/2)
-		//item.rotateZ( 0);
-		
-		//lefthand.position.x = 6;
-		//lefthand.position.y = -8;
-		//lefthand.rotation.z = -Math.PI/4;
-		//lefthand.rotation.x = Math.PI;
-		
-		item.translateY(-10)	
-
+		var item	= items.createMesh(2+6*16).scaleBy(35/2);
+		item.position(0,-9,6).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
 		item.addTo(character.parts.armR);
-		//item.addTo(world);
 	});
 
 	world.loop().hook(function(delta, now){
-		character.parts.headGroup.rotation.y	= Math.sin(now*1.5)/3;
-		character.parts.headGroup.rotation.z	= Math.sin(now)/3;
+		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;
+		character.parts.headGroup.rotation.y	= Math.sin(now)/3;
 	}); 
 	
 	world.loop().hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
-		character.parts.legR.rotation.z	= 1.4 * Math.cos(angle);
-		character.parts.legL.rotation.z	= 1.4 * Math.cos(angle + Math.PI);
+		character.parts.legR.rotation.x	= 1.4 * Math.cos(angle);
+		character.parts.legL.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
 	});
 
 	world.loop().hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
-		character.parts.armR.rotation.z	= 1.4 * Math.cos(angle + Math.PI);
-		character.parts.armL.rotation.z	= 1.4 * Math.cos(angle);
+		character.parts.armR.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
+		character.parts.armL.rotation.x	= 1.4 * Math.cos(angle);
 	});
 </script></body>

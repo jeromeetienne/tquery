@@ -4,7 +4,10 @@
  * http://www.minecraftskins.info/
  * http://www.minecraftwiki.net/wiki/Anvil_file_format
 */
-tQuery.register('MinecraftChar', function(){
+tQuery.register('MinecraftChar', function(opts){
+	opts	= tQuery.extend(opts, {
+		skinUrl	: "images/char.png"
+	});
 	/**
 	 * Could be replace by a CubeGeometry but would require to change the whole indexing
 	 * not now.
@@ -263,9 +266,7 @@ tQuery.register('MinecraftChar', function(){
 	//////////////////////////////////////////////////////////////////////////
 	//		load the skin						//
 	//////////////////////////////////////////////////////////////////////////
-	var url	= "images/char.png";
-	this.loadSkin(url);
-
+	this.loadSkin(opts.skinUrl);
 
 	// export public variable
 	this.model	= playerModel;
