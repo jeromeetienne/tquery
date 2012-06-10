@@ -100,46 +100,49 @@ tQuery.register('MinecraftChar', function(){
 	var upperBody	= new THREE.Object3D();
 
 	// Left leg
-	var leftleggeo = new THREE.CubeGeometry(4, 12, 4);
+	var legLgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
-		leftleggeo.vertices[i].y -= 6;
+		legLgeo.vertices[i].y -= 6;
 	}
-	var leftleg = new THREE.Mesh(leftleggeo, material);
-	leftleg.position.z = -2;
-	leftleg.position.y = -6;
-	uvmap(leftleggeo, 0,  8, 20, -4, 12);
-	uvmap(leftleggeo, 1, 16, 20, -4, 12);
-	uvmap(leftleggeo, 2,  4, 16,  4,  4, 3);
-	uvmap(leftleggeo, 3,  8, 20,  4, -4, 1);
-	uvmap(leftleggeo, 4, 12, 20, -4, 12);
-	uvmap(leftleggeo, 5,  4, 20, -4, 12);
-	playerModel.add(leftleg)
+	var legL	= new THREE.Mesh(legLgeo, material);
+	legL.position.z = -2;
+	legL.position.y = -6;
+	uvmap(legLgeo, 0,  8, 20, -4, 12);
+	uvmap(legLgeo, 1, 16, 20, -4, 12);
+	uvmap(legLgeo, 2,  4, 16,  4,  4, 3);
+	uvmap(legLgeo, 3,  8, 20,  4, -4, 1);
+	uvmap(legLgeo, 4, 12, 20, -4, 12);
+	uvmap(legLgeo, 5,  4, 20, -4, 12);
+	playerModel.add(legL)
 
 	
 	// Right leg
-	var rightleggeo = new THREE.CubeGeometry(4, 12, 4);
+	var legRgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
-		rightleggeo.vertices[i].y -= 6;
+		legRgeo.vertices[i].y -= 6;
 	}
-	var rightleg = new THREE.Mesh(rightleggeo, material);
-	rightleg.position.z = 2;
-	rightleg.position.y = -6;
-	uvmap(rightleggeo, 0,  4, 20,  4, 12);
-	uvmap(rightleggeo, 1, 12, 20,  4, 12);
-	uvmap(rightleggeo, 2,  8, 16, -4,  4, 3);
-	uvmap(rightleggeo, 3, 12, 20, -4, -4, 1);
-	uvmap(rightleggeo, 4,  0, 20,  4, 12);
-	uvmap(rightleggeo, 5,  8, 20,  4, 12);
-	playerModel.add(rightleg)
+	var legR	= new THREE.Mesh(legRgeo, material);
+	legR.name	= "legR";
+	legR.position.z = 2;
+	legR.position.y = -6;
+	uvmap(legRgeo, 0,  4, 20,  4, 12);
+	uvmap(legRgeo, 1, 12, 20,  4, 12);
+	uvmap(legRgeo, 2,  8, 16, -4,  4, 3);
+	uvmap(legRgeo, 3, 12, 20, -4, -4, 1);
+	uvmap(legRgeo, 4,  0, 20,  4, 12);
+	uvmap(legRgeo, 5,  8, 20,  4, 12);
+	playerModel.add(legR)
 
 
 	var upperBody	= tQuery.createObject3D();
+	upperBody.name	= "upperBody";
 	playerModel.add(upperBody)
 
 
 	// Body
 	var bodygeo	= new THREE.CubeGeometry(4, 12, 8);
 	var bodymesh	= new THREE.Mesh(bodygeo, material);
+	bodymesh.name	= "body";
 	uvmap(bodygeo, 0, 20, 20, 8, 12);
 	uvmap(bodygeo, 1, 32, 20, 8, 12);
 	uvmap(bodygeo, 2, 20, 16, 8, 4, 1);
@@ -150,38 +153,40 @@ tQuery.register('MinecraftChar', function(){
 	
 	
 	// Left arm
-	var leftarmgeo = new THREE.CubeGeometry(4, 12, 4);
+	var armLgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
-		leftarmgeo.vertices[i].y -= 4;
+		armLgeo.vertices[i].y -= 4;
 	}
-	var leftarm = new THREE.Mesh(leftarmgeo, material);
-	leftarm.position.z = -6;
-	leftarm.position.y = 4;
-	leftarm.rotation.x = Math.PI/32;
-	uvmap(leftarmgeo, 0, 48, 20, -4, 12);
-	uvmap(leftarmgeo, 1, 56, 20, -4, 12);
-	uvmap(leftarmgeo, 2, 48, 16, -4,  4, 1);
-	uvmap(leftarmgeo, 3, 52, 16, -4,  4, 3);
-	uvmap(leftarmgeo, 4, 52, 20, -4, 12);
-	uvmap(leftarmgeo, 5, 44, 20, -4, 12);
-	upperBody.add(leftarm);
+	var armL	= new THREE.Mesh(armLgeo, material);
+	armL.name	= "armL"
+	armL.position.z = -6;
+	armL.position.y = 4;
+	armL.rotation.x = Math.PI/32;
+	uvmap(armLgeo, 0, 48, 20, -4, 12);
+	uvmap(armLgeo, 1, 56, 20, -4, 12);
+	uvmap(armLgeo, 2, 48, 16, -4,  4, 1);
+	uvmap(armLgeo, 3, 52, 16, -4,  4, 3);
+	uvmap(armLgeo, 4, 52, 20, -4, 12);
+	uvmap(armLgeo, 5, 44, 20, -4, 12);
+	upperBody.add(armL);
 	
 	// Right arm
-	var rightarmgeo = new THREE.CubeGeometry(4, 12, 4);
+	var armRgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
-		rightarmgeo.vertices[i].y -= 4;
+		armRgeo.vertices[i].y -= 4;
 	}
-	var rightarm = new THREE.Mesh(rightarmgeo, material);
-	rightarm.position.z = 6;
-	rightarm.position.y = 4;
-	rightarm.rotation.x = -Math.PI/32;
-	uvmap(rightarmgeo, 0, 44, 20, 4, 12);
-	uvmap(rightarmgeo, 1, 52, 20, 4, 12);
-	uvmap(rightarmgeo, 2, 44, 16, 4, 4, 1);
-	uvmap(rightarmgeo, 3, 48, 16, 4, 4, 3);
-	uvmap(rightarmgeo, 4, 40, 20, 4, 12);
-	uvmap(rightarmgeo, 5, 48, 20, 4, 12);
-	upperBody.add(rightarm);
+	var armR 	= new THREE.Mesh(armRgeo, material);
+	armR.name	= "armR"
+	armR.position.z = 6;
+	armR.position.y = 4;
+	armR.rotation.x = -Math.PI/32;
+	uvmap(armRgeo, 0, 44, 20, 4, 12);
+	uvmap(armRgeo, 1, 52, 20, 4, 12);
+	uvmap(armRgeo, 2, 44, 16, 4, 4, 1);
+	uvmap(armRgeo, 3, 48, 16, 4, 4, 3);
+	uvmap(armRgeo, 4, 40, 20, 4, 12);
+	uvmap(armRgeo, 5, 48, 20, 4, 12);
+	upperBody.add(armR);
 
 	var headgroup	= new THREE.Object3D();
 	upperBody.add(headgroup)
@@ -190,6 +195,7 @@ tQuery.register('MinecraftChar', function(){
 	// Head
 	var headgeo	= new THREE.CubeGeometry(8, 8, 8);
 	var headmesh	= new THREE.Mesh(headgeo, material);
+	headmesh.name	= "head";
 	headmesh.position.y = 2;
 	uvmap(headgeo, 0,  8, 8, 8, 8);
 	uvmap(headgeo, 1, 24, 8, 8, 8);	
@@ -201,6 +207,7 @@ tQuery.register('MinecraftChar', function(){
 
 	
 	var helmet	= cubeFromPlanes(9, materialTrans);
+	helmet.name	= "helmet";
 	helmet.position.y = 2;
 	uvmap(helmet.children[0].geometry, 0, 32+ 8, 8, 8, 8);
 	uvmap(helmet.children[1].geometry, 0, 32+24, 8, 8, 8);
@@ -212,21 +219,23 @@ tQuery.register('MinecraftChar', function(){
 	
 	var ears	= new THREE.Object3D();
 	var eargeo	= new THREE.CubeGeometry(1, (9/8)*6, (9/8)*6);
-	var leftear	= new THREE.Mesh(eargeo, material);
-	var rightear	= new THREE.Mesh(eargeo, material);
-	leftear.position.y	= 2+(9/8)*5;
-	rightear.position.y	= 2+(9/8)*5;
-	leftear.position.z	=  -(9/8)*5;
-	rightear.position.z	=   (9/8)*5;
+	var earL	= new THREE.Mesh(eargeo, material);
+	earL.name	= "earL";
+	var earR	= new THREE.Mesh(eargeo, material);
+	earR.name	= "earR";
+	earL.position.y	= 2+(9/8)*5;
+	earR.position.y	= 2+(9/8)*5;
+	earL.position.z	=  -(9/8)*5;
+	earR.position.z	=   (9/8)*5;
 	uvmap(eargeo, 0, 25, 1, 6, 6);		// Front side
 	uvmap(eargeo, 1, 32, 1, 6, 6);		// Back side
 	uvmap(eargeo, 2, 25, 0, 6, 1, 1);	// Top edge
 	uvmap(eargeo, 3, 31, 0, 6, 1, 1);	// Bottom edge	
 	uvmap(eargeo, 4, 24, 1, 1, 6);		// Left edge
 	uvmap(eargeo, 5, 31, 1, 1, 6);		// Right edge
-	ears.add(leftear);
-	ears.add(rightear);
-	leftear.visible = rightear.visible = false;
+	ears.add(earL);
+	ears.add(earR);
+	earL.visible = earR.visible = false;
 	headgroup.add(ears);
 
 
@@ -234,9 +243,6 @@ tQuery.register('MinecraftChar', function(){
 	//		load the skin						//
 	//////////////////////////////////////////////////////////////////////////
 	var url	= "images/char.png";
-	//var url	= "images/batman.png";
-	//var url	= "images/Mario.png";
-	//var url = "images/3djesus.png";
 	this.loadSkin(url);
 
 
@@ -244,10 +250,10 @@ tQuery.register('MinecraftChar', function(){
 	this.model	= playerModel;
 	this.parts	= {
 		headGroup	: headgroup,
-		legL		: leftleg,
-		legR		: rightleg,
-		armR		: rightarm,
-		armL		: leftarm
+		legL		: legL,
+		legR		: legR,
+		armR		: armR,
+		armL		: armL
 	};
 });
 
