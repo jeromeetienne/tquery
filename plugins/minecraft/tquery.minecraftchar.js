@@ -19,30 +19,30 @@ tQuery.register('MinecraftChar', function(){
 			meshes.push(mesh);
 		}
 		// Front
-		meshes[0].rotation.x = Math.PI/2;
+		meshes[0].rotation.x =  Math.PI/2;
 		meshes[0].rotation.z = -Math.PI/2;
-		meshes[0].position.x = size/2;
+		meshes[0].position.x =  size/2;
 		
 		// Back
-		meshes[1].rotation.x = Math.PI/2;
-		meshes[1].rotation.z = Math.PI/2;
+		meshes[1].rotation.x =  Math.PI/2;
+		meshes[1].rotation.z =  Math.PI/2;
 		meshes[1].position.x = -size/2;
 		
 		// Top
-		meshes[2].position.y = size/2;
+		meshes[2].position.y =  size/2;
 		
 		// Bottom
-		meshes[3].rotation.y = Math.PI;
-		meshes[3].rotation.z = Math.PI;
+		meshes[3].rotation.y =  Math.PI;
+		meshes[3].rotation.z =  Math.PI;
 		meshes[3].position.y = -size/2;
 		
 		// Left
-		meshes[4].rotation.x = Math.PI/2;
-		meshes[4].position.z = size/2;
+		meshes[4].rotation.x =  Math.PI/2;
+		meshes[4].position.z =  size/2;
 		
 		// Right
 		meshes[5].rotation.x = -Math.PI/2;
-		meshes[5].rotation.y = Math.PI;
+		meshes[5].rotation.y =  Math.PI;
 		meshes[5].position.z = -size/2;
 		
 		return cube;
