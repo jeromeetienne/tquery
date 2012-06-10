@@ -9,42 +9,46 @@ tQuery.register('MinecraftChar', function(){
 	 * Could be replace by a CubeGeometry but would require to change the whole indexing
 	 * not now.
 	*/
-	function cubeFromPlanes (size, mat) {
+	function cubeFromPlanes (size, material) {
 		var cube	= new THREE.Object3D();
 		var meshes	= [];
-		for(var i=0; i < 6; i++) {
-			var mesh	= new THREE.Mesh(new THREE.PlaneGeometry(size, size), mat);
-			mesh.doubleSided = true;
+		for( var i=0; i < 6; i++ ){
+			var geometry	= new THREE.PlaneGeometry(size, size);
+			var mesh	= new THREE.Mesh(geometry, material);
+			mesh.doubleSided= true;
+			//mesh.visible	= false
 			cube.add(mesh);
 			meshes.push(mesh);
 		}
 		// Front
-		meshes[0].rotation.x =  Math.PI/2;
-		meshes[0].rotation.z = -Math.PI/2;
-		meshes[0].position.x =  size/2;
-		
+		meshes[0].rotation.x	=  Math.PI/2;
+		meshes[0].position.z	=  size/2;
+
 		// Back
-		meshes[1].rotation.x =  Math.PI/2;
-		meshes[1].rotation.z =  Math.PI/2;
-		meshes[1].position.x = -size/2;
-		
+		meshes[1].rotation.x	=  Math.PI/2;
+		meshes[1].rotation.z	=  Math.PI;
+		meshes[1].position.z	= -size/2;
+
 		// Top
-		meshes[2].position.y =  size/2;
-		
+		meshes[1].rotation.y	=  Math.PI/2;
+		meshes[2].position.y	=  size/2;
+
 		// Bottom
-		meshes[3].rotation.y =  Math.PI;
-		meshes[3].rotation.z =  Math.PI;
-		meshes[3].position.y = -size/2;
-		
+		meshes[3].rotation.y	= -Math.PI/2;
+		meshes[3].rotation.z	=  Math.PI;
+		meshes[3].position.y	= -size/2;
+
 		// Left
-		meshes[4].rotation.x =  Math.PI/2;
-		meshes[4].position.z =  size/2;
-		
+		meshes[4].rotation.x	=  Math.PI/2;
+		meshes[4].rotation.z	=  Math.PI/2;
+		meshes[4].position.x	= -size/2;
+
 		// Right
-		meshes[5].rotation.x = -Math.PI/2;
-		meshes[5].rotation.y =  Math.PI;
-		meshes[5].position.z = -size/2;
-		
+		meshes[5].rotation.x	= -Math.PI/2;
+		meshes[5].rotation.y	=  Math.PI;
+		meshes[5].rotation.z	=  Math.PI/2;
+		meshes[5].position.x	=  size/2;
+
 		return cube;
 	};
 	function getMaterial(image, transparent) {
@@ -99,13 +103,15 @@ tQuery.register('MinecraftChar', function(){
 	var headgroup	= new THREE.Object3D();
 	var upperBody	= new THREE.Object3D();
 
+	////////////////////////////////////////////////////////////////////////
 	// Left leg
 	var legLgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
 		legLgeo.vertices[i].y -= 6;
 	}
 	var legL	= new THREE.Mesh(legLgeo, material);
-	legL.position.z = -2;
+	tQuery(legL).geometry().rotateY(-Math.PI/2)
+	legL.position.x =  2;
 	legL.position.y = -6;
 	uvmap(legLgeo, 0,  8, 20, -4, 12);
 	uvmap(legLgeo, 1, 16, 20, -4, 12);
@@ -116,14 +122,16 @@ tQuery.register('MinecraftChar', function(){
 	playerModel.add(legL)
 
 	
+	////////////////////////////////////////////////////////////////////////
 	// Right leg
 	var legRgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
 		legRgeo.vertices[i].y -= 6;
 	}
 	var legR	= new THREE.Mesh(legRgeo, material);
+	tQuery(legR).geometry().rotateY(-Math.PI/2)
 	legR.name	= "legR";
-	legR.position.z = 2;
+	legR.position.x = -2;
 	legR.position.y = -6;
 	uvmap(legRgeo, 0,  4, 20,  4, 12);
 	uvmap(legRgeo, 1, 12, 20,  4, 12);
@@ -134,14 +142,17 @@ tQuery.register('MinecraftChar', function(){
 	playerModel.add(legR)
 
 
+	////////////////////////////////////////////////////////////////////////
 	var upperBody	= tQuery.createObject3D();
 	upperBody.name	= "upperBody";
 	playerModel.add(upperBody)
 
 
+	////////////////////////////////////////////////////////////////////////
 	// Body
 	var bodygeo	= new THREE.CubeGeometry(4, 12, 8);
 	var bodymesh	= new THREE.Mesh(bodygeo, material);
+	tQuery(bodymesh).geometry().rotateY(-Math.PI/2)
 	bodymesh.name	= "body";
 	uvmap(bodygeo, 0, 20, 20, 8, 12);
 	uvmap(bodygeo, 1, 32, 20, 8, 12);
@@ -152,16 +163,18 @@ tQuery.register('MinecraftChar', function(){
 	upperBody.add(bodymesh);
 	
 	
+	////////////////////////////////////////////////////////////////////////
 	// Left arm
 	var armLgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
 		armLgeo.vertices[i].y -= 4;
 	}
 	var armL	= new THREE.Mesh(armLgeo, material);
+	tQuery(armL).geometry().rotateY(-Math.PI/2)
 	armL.name	= "armL"
-	armL.position.z = -6;
+	armL.position.x = 6;
 	armL.position.y = 4;
-	armL.rotation.x = Math.PI/32;
+	armL.rotation.z = Math.PI/32;
 	uvmap(armLgeo, 0, 48, 20, -4, 12);
 	uvmap(armLgeo, 1, 56, 20, -4, 12);
 	uvmap(armLgeo, 2, 48, 16, -4,  4, 1);
@@ -170,16 +183,18 @@ tQuery.register('MinecraftChar', function(){
 	uvmap(armLgeo, 5, 44, 20, -4, 12);
 	upperBody.add(armL);
 	
+	////////////////////////////////////////////////////////////////////////
 	// Right arm
 	var armRgeo	= new THREE.CubeGeometry(4, 12, 4);
 	for(var i=0; i < 8; i+=1) {
 		armRgeo.vertices[i].y -= 4;
 	}
 	var armR 	= new THREE.Mesh(armRgeo, material);
+	tQuery(armR).geometry().rotateY(-Math.PI/2)
 	armR.name	= "armR"
-	armR.position.z = 6;
-	armR.position.y = 4;
-	armR.rotation.x = -Math.PI/32;
+	armR.position.x = -6;
+	armR.position.y =  4;
+	armR.rotation.z = -Math.PI/32;
 	uvmap(armRgeo, 0, 44, 20, 4, 12);
 	uvmap(armRgeo, 1, 52, 20, 4, 12);
 	uvmap(armRgeo, 2, 44, 16, 4, 4, 1);
@@ -188,6 +203,8 @@ tQuery.register('MinecraftChar', function(){
 	uvmap(armRgeo, 5, 48, 20, 4, 12);
 	upperBody.add(armR);
 
+	////////////////////////////////////////////////////////////////////////
+	// head group
 	var headgroup	= new THREE.Object3D();
 	upperBody.add(headgroup)
 	headgroup.position.y = 8;
@@ -195,6 +212,7 @@ tQuery.register('MinecraftChar', function(){
 	// Head
 	var headgeo	= new THREE.CubeGeometry(8, 8, 8);
 	var headmesh	= new THREE.Mesh(headgeo, material);
+	tQuery(headmesh).geometry().rotateY(-Math.PI/2)
 	headmesh.name	= "head";
 	headmesh.position.y = 2;
 	uvmap(headgeo, 0,  8, 8, 8, 8);
@@ -205,8 +223,9 @@ tQuery.register('MinecraftChar', function(){
 	uvmap(headgeo, 5, 16, 8, 8, 8);
 	headgroup.add(headmesh);
 
-	
+	// Helmet	
 	var helmet	= cubeFromPlanes(9, materialTrans);
+//tQuery(helmet).geometry().rotateY(-Math.PI/2)
 	helmet.name	= "helmet";
 	helmet.position.y = 2;
 	uvmap(helmet.children[0].geometry, 0, 32+ 8, 8, 8, 8);
@@ -216,28 +235,30 @@ tQuery.register('MinecraftChar', function(){
 	uvmap(helmet.children[4].geometry, 0, 32+ 0, 8, 8, 8);
 	uvmap(helmet.children[5].geometry, 0, 32+16, 8, 8, 8);
 	headgroup.add(helmet);
-	
+
+	// earL and earR	
 	var ears	= new THREE.Object3D();
 	var eargeo	= new THREE.CubeGeometry(1, (9/8)*6, (9/8)*6);
 	var earL	= new THREE.Mesh(eargeo, material);
+	tQuery(earL).geometry().rotateY(-Math.PI/2)
 	earL.name	= "earL";
 	var earR	= new THREE.Mesh(eargeo, material);
+	tQuery(earR).geometry().rotateY(-Math.PI/2)
 	earR.name	= "earR";
-	earL.position.y	= 2+(9/8)*5;
-	earR.position.y	= 2+(9/8)*5;
+	earL.position.x	= -2-(9/8)*5;
+	earR.position.x	= -2-(9/8)*5;
 	earL.position.z	=  -(9/8)*5;
 	earR.position.z	=   (9/8)*5;
 	uvmap(eargeo, 0, 25, 1, 6, 6);		// Front side
 	uvmap(eargeo, 1, 32, 1, 6, 6);		// Back side
 	uvmap(eargeo, 2, 25, 0, 6, 1, 1);	// Top edge
-	uvmap(eargeo, 3, 31, 0, 6, 1, 1);	// Bottom edge	
+	uvmap(eargeo, 3, 31, 0, 6, 1, 1);	// Bottom edge
 	uvmap(eargeo, 4, 24, 1, 1, 6);		// Left edge
 	uvmap(eargeo, 5, 31, 1, 1, 6);		// Right edge
 	ears.add(earL);
 	ears.add(earR);
 	earL.visible = earR.visible = false;
 	headgroup.add(ears);
-
 
 	//////////////////////////////////////////////////////////////////////////
 	//		load the skin						//
