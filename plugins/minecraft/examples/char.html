@@ -8,12 +8,11 @@
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world);
 	//.translateX(1)
-	
+
 	character.loadSkin('images/3djesus.png')
-	
-	tQuery('mesh', character.model.get(0))
-	
-	
+
+	tQuery('mesh', character.model.get(0));
+
 	var plane	= tQuery.createPlane(2, 1, 1).addTo(world);
 	//plane.get(0).rotation.x =  Math.PI/10;
 	//plane.get(0).rotation.x =  Math.PI/2;

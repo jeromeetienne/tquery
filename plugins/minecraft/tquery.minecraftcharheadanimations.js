@@ -11,41 +11,41 @@ tQuery.register('MinecraftCharHeadAnimations', function(){
 
 	
 	var onUpdate	= function(position){
+		character.parts.headGroup.rotation.x	= position.headRotationX;
 		character.parts.headGroup.rotation.y	= position.headRotationY
-		character.parts.headGroup.rotation.z	= position.headRotationZ;
 	};
 	var onCapture	= function(position){
+		position.headRotationX	= character.parts.headGroup.rotation.x;
 		position.headRotationY	= character.parts.headGroup.rotation.y;
-		position.headRotationZ	= character.parts.headGroup.rotation.z;
 	};
 	var propTweens	= {
-		headRotationY	: tweenAngle,
-		headRotationZ	: tweenAngle
+		headRotationX	: tweenAngle,
+		headRotationY	: tweenAngle
 	};
 	
 	
 	// Setup 'still' animation
 	animations.add('still'	, tQuery.createAnimation().pushKeyframe(0.5, {
-		headRotationY	: 0,
-		headRotationZ	: 0
+		headRotationX	: 0,
+		headRotationY	: 0
 	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'no' animation
 	animations.add('no'	, tQuery.createAnimation().pushKeyframe(0.5, {
-		headRotationY	: +Math.PI/6,
-		headRotationZ	: 0
+		headRotationX	: 0,
+		headRotationY	: +Math.PI/6
 	}).pushKeyframe(0.5, {
-		headRotationY	: -Math.PI/6,
-		headRotationZ	: 0
+		headRotationX	: 0,
+		headRotationY	: -Math.PI/6
 	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'yes' animation
 	animations.add('yes'	, tQuery.createAnimation().pushKeyframe(0.3, {
 		headRotationY	: 0,
-		headRotationZ	: +Math.PI/8
+		headRotationX	: +Math.PI/8
 	}).pushKeyframe(0.3, {
-		headRotationY	: 0,
-		headRotationZ	: -Math.PI/8
+		headRotationX	: -Math.PI/8,
+		headRotationY	: 0
 	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 });
 

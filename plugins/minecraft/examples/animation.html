@@ -22,8 +22,9 @@
 	var character	= new tQuery.MinecraftChar();
 	character.model.addTo(world)
 	character.loadSkin('images/agentsmith.png')
+	character.loadSkin('images/3djesus.png')
 
-	character.model.rotateY(-2*Math.PI/3);
+	//character.model.rotateY(-2*Math.PI/3);
 
 
 	var bodyAnims	= new tQuery.MinecraftCharAnimations();
@@ -35,7 +36,7 @@
 		bodyAnims.start(animName);	
 		document.querySelectorAll(".bodyAnims")[0].innerHTML	= "Body: "+animName;
 	}, 2*1000)
-	
+
 	var headAnims	= new tQuery.MinecraftCharHeadAnimations();
 	headAnims.start('still');
 
