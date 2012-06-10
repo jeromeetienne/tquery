@@ -9,23 +9,4 @@
 	//.translateX(1)
 	
 	character.loadSkin('images/3djesus.png')
-	
-
-	world.loop().hook(function(delta, now){
-		var parts	= character.parts;
-		parts.headGroup.rotation.y	= Math.sin(now*1.5)/3;
-		parts.headGroup.rotation.z	= Math.sin(now)/3;
-	}); 
-	
-	world.loop().hook(function(delta, now){
-		var angle	= 1 * now*Math.PI*2;
-		character.parts.legR.rotation.z	= 1.4 * Math.cos(angle);
-		character.parts.legL.rotation.z	= 1.4 * Math.cos(angle + Math.PI);
-	});
-	
-	world.loop().hook(function(delta, now){
-		var angle	= 1 * now*Math.PI*2;
-		character.parts.armR.rotation.z	= 1.4 * Math.cos(angle + Math.PI);
-		character.parts.armL.rotation.z	= 1.4 * Math.cos(angle);
-	});
 </script></body>

@@ -9,17 +9,24 @@ tQuery.register('createAnimation', function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * handle an animation
+ *
+ * @name tQuery.Animation
+ * @class
 */
 tQuery.register('Animation', function(){
-	this._keyframes	= new Array;
-	this._totalTime	= null;
-	this._onUpdate	= null;
-	this._onCapture	= function(position){};
-	this._initialPos= {};
+	this._keyframes		= new Array;
+	this._totalTime		= null;
+	this._onUpdate		= null;
+	this._onCapture		= function(position){};
+	this._initialPos	= {};
 	this._propertyTweens	= {};
 });
 
 
+/**
+ * Destructor
+*/
 tQuery.Animation.prototype.destroy	= function(){
 	this.stop();
 };	
@@ -30,6 +37,8 @@ tQuery.Animation.prototype.destroy	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * @param {Number} duration the duration of this keyframe validity in seconds
+ * @param {Object} position list of properties involved in the animations
 */
 tQuery.Animation.prototype.pushKeyframe	= function(duration, position){
 	this._keyframes.push({
@@ -39,21 +48,39 @@ tQuery.Animation.prototype.pushKeyframe	= function(duration, position){
 	return this;	// for chained API
 };
 
+/**
+ * Set the Update callback
+ * 
+ * @param {function} fn the update callback
+*/
 tQuery.Animation.prototype.onUpdate	= function(fn){
 	this._onUpdate	= fn
 	return this;	// for chained API
 }
+
+/**
+ * Set the Capture callback
+ * 
+ * @param {function} fn the update callback
+*/
 tQuery.Animation.prototype.onCapture	= function(fn){
 	this._onCapture	= fn
 	return this;	// for chained API
 }
 
+/**
+ * Set propertyTweens 
+ * 
+ * @param {function} fn the update callback
+*/
 tQuery.Animation.prototype.propertyTweens	= function(propertyTweens){
 	this._propertyTweens	= propertyTweens;
 	return this;	// for chained API
 }
 
 /**
+ * get the total animation duration
+ * 
  * @returns {Number} the duration of the whole animation
 */
 tQuery.Animation.prototype.duration	= function(){
@@ -67,7 +94,12 @@ tQuery.Animation.prototype.duration	= function(){
 //		interpolation							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Animation.prototype.buildPosition	= function(age){
+/**
+ * build a interpolated position
+ * 
+ * @param {Number} age amount of seconds since the animation started
+*/
+tQuery.Animation.prototype._buildPosition	= function(age){
 	// compute the deltatime
 	var delta	= age % this.duration();
 	// find baseFrame based on delta
@@ -121,6 +153,9 @@ tQuery.Animation.prototype.buildPosition	= function(age){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Start the animation
+*/
 tQuery.Animation.prototype.start	= function(){
 	// update _startTime and _endTime
 	this._totalTime	= 0;
@@ -142,15 +177,23 @@ tQuery.Animation.prototype.start	= function(){
 	var duration	= this.duration();
 	this._$loopCb	= world.loop().hook(function(){
 		var age		= Date.now()/1000 - startDate;
-		var position	= this.buildPosition(age)
+		var position	= this._buildPosition(age)
 		this._onUpdate(position)
 	}.bind(this));
 }
 
+/**
+ * test if the animation is running or not
+ * 
+ * @returns {boolean} return true if the animation is running, false otherwise
+*/
 tQuery.Animation.prototype.isRunning	= function(){
 	return this._$loopCb	? true : false;
 };
 
+/**
+ * Stop the animation
+*/
 tQuery.Animation.prototype.stop	= function(){
 	this._$loopCb	&& world.loop().unhook(this._$loopCb);
 	this._$loopCb	= null;
