@@ -64,6 +64,10 @@ tQuery.convert.toTexture	= function(value){
 		return value;
 	}else if( arguments.length === 1 && typeof(value) === 'string' ){
 		return THREE.ImageUtils.loadTexture(value);
+	}else if( arguments.length === 1 && (value instanceof Image || value instanceof HTMLCanvasElement) ){
+		var texture		= new THREE.Texture( value );
+		texture.needsUpdate	= true;
+		return texture;
 	}else{
 		console.assert(false, "invalid parameter");
 	}
