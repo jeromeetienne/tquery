@@ -17,7 +17,8 @@
 <script src="../../requirejs/tquery.norequirejs.js"></script>
 
 <script src='../../grassground/tquery.grassground.js'></script>
-<script src='../../fog/tquery.world.createfog.js'></script>
+
+<script src='../../light/tquery.light.shadow.js'></script>
 
 <script src="../../skymap/tquery.cubetexture.js"></script>
 <script src="../../skymap/tquery.skymap.js"></script>
@@ -48,33 +49,48 @@
 	world.removeCameraControls();
 	world.tCamera().position.y	= 2;
 	world.tCamera().position.z	= 10;
-	world.tCamera().lookAt(world.tScene().position);
+	world.tCamera().position.normalize().setLength(2)
+	world.tCamera().lookAt(world.tScene().position.clone().addSelf(new THREE.Vector3(0,0.5,0)));
 
+	// enable shadow casting in world renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+
+	// add a light with shadow casting
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-10, 20, 30).color(0xffffff).intensity(4)
+		.castShadow(true).shadowDarkness(0.8)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(10, -10, 20, -20, 0.1, 50);
+
+	// add some posteffect
 	world.addEffectComposer().vignette().finish();
 
+	// add a skymap
 	tQuery.createSkymap('skybox').addTo(world);
 
 	var ground	= tQuery.createGrassGround({
 		textureUrl	: '../../grassground/images/grasslight-big.jpg',
 		textureRepeatX	: 10,
 		textureRepeatY	: 10,		
-	}).addTo(world).scaleBy(100);
+	}).addTo(world).scaleBy(100).receiveShadow(true);
 	
 	var character	= new tQuery.MinecraftChar({
 		skinUrl	: "../../minecraft/examples/images/char.png"
 	});
 	character.model.addTo(world)
 
+	tQuery('mesh', character.model).castShadow(true)
 // TODO
 // - shadow casting
 // - make it move with path
 // - keyboard control
 
 	character.model.rotateY(-Math.PI/6);
-	character.model.translateY(1);
+	character.model.translateY(0.5);
 
 	var bodyAnims	= new tQuery.MinecraftCharAnimations();
-	bodyAnims.start('walk');
+	bodyAnims.start('wave');
 
 	var headAnims	= new tQuery.MinecraftCharHeadAnimations();
 	headAnims.start('still');
