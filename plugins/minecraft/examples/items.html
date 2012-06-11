@@ -9,6 +9,8 @@
 	})
 	tQuery.createCube(material).addTo(world);
 
+	var texture	= THREE.ImageUtils.loadTexture('../../grassground/images/grasslight-big.jpg');
+
 	var items	= new tQuery.MinecraftItems();
 	items.bind('load', function(){
 		console.log("image loaded");
@@ -17,13 +19,13 @@
 		if( false ){
 			var nItems	= (256/16)*(256/16);
 			for(var i=0; i < nItems; i++){
-				for(var j=0; j < 5; j++) {
-					var item	= items.createMesh(i);
+				for(var j=0; j < 1; j++) {
+					var item	= items.createMesh(i)
 					// if this spot is empty, do nothing
 					if( item === null )	continue;
-					item.get(0).position.x = Math.random()*30-15;
-					item.get(0).position.y = Math.random()*30-15;
-					item.get(0).position.z = Math.random()*30-15;
+					// set a random position
+					item.position((Math.random()*2-1)*15, (Math.random()*2-1)*15, (Math.random()*2-1)*15)
+					// add it to the worldPP
 					item.addTo(world);
 				}
 			}			

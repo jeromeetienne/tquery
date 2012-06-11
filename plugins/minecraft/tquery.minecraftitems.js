@@ -84,6 +84,8 @@ tQuery.register('MinecraftItems', function(opts){
 		}
 		// if the geometry is fully transparent, unset it - NOTE: this is set to null, not unsigned
 		if( geometry.faces.length === 0 )	geometry = null;
+		// scale it to be Cube(1, 1, 1)
+		geometry	&& tQuery(geometry).scaleBy(1/16)
 		// cache the result
 		geometries[id]	= geometry;
 		// return the result
@@ -93,7 +95,7 @@ tQuery.register('MinecraftItems', function(opts){
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
 		var mesh	= new THREE.Mesh( geometry, material );
-		return tQuery(mesh).geometry().scaleBy(1/16).back();
+		return tQuery(mesh);
 	};	
 
 	// create the canvas element
