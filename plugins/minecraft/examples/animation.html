@@ -22,10 +22,11 @@
 
 	character.model.rotateY(-Math.PI/6);
 
-
+	// init bodyAnims
 	var bodyAnims	= new tQuery.MinecraftCharAnimations();
 	bodyAnims.start('walk');
 	
+	// randomly change bodyAnims every 2 seconds
 	setInterval(function(){
 		var animNames	= bodyAnims.names();
 		var animName	= animNames[Math.floor(Math.random()*animNames.length)];
@@ -33,9 +34,11 @@
 		document.querySelectorAll(".bodyAnims")[0].innerHTML	= "Body: "+animName;
 	}, 2*1000)
 
+	// init headAnims
 	var headAnims	= new tQuery.MinecraftCharHeadAnimations();
 	headAnims.start('still');
 
+	// randomly change headAnims every 2 seconds
 	setInterval(function(){
 		var animNames	= headAnims.names();
 		var animName	= animNames[Math.floor(Math.random()*animNames.length)];
@@ -43,4 +46,5 @@
 		document.querySelectorAll(".headAnims")[0].innerHTML	= "Head: "+animName;
 	}, 2*1000)
 
+tQuery('mesh', character.model.get(0))
 </script></body>
