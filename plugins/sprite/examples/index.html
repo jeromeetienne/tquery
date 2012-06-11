@@ -1,0 +1,11 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="./tquery.sprite.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createSprite().addTo(world)
+		.map('../../grassground/images/grasslight-big.jpg')
+		.scaleBy(1/100)
+</script></body>
