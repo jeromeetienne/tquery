@@ -43,6 +43,12 @@
 <script src="../../minecraft/tquery.minecraftcharanimations.js"></script>
 <script src="../../minecraft/tquery.minecraftcharheadanimations.js"></script>
 
+<script src="../../minecraft/tquery.minecraftitems.js"></script>
+
+<script src="../../materials/tquery.meshlambertmaterial.js"></script>
+<script src="../../materials/tquery.meshphongmaterial.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	// no camera controls is needed
@@ -87,12 +93,52 @@
 // - keyboard control
 
 	character.model.rotateY(-Math.PI/6);
+	character.model.translateX(0.5);
+	character.model.translateZ(0.5);
 	character.model.translateY(0.5);
 
 	var bodyAnims	= new tQuery.MinecraftCharAnimations();
-	bodyAnims.start('wave');
+	bodyAnims.start('hiwave');
 
 	var headAnims	= new tQuery.MinecraftCharHeadAnimations();
-	headAnims.start('still');
+	headAnims.start('yes');
+	
+	var items	= new tQuery.MinecraftItems({
+		url	: '../../minecraft/examples/images/items/items.png'
+	});
+	items.bind('load', function(){
+		var item	= items.createMesh(10+2*16).addTo(world);
+		
+		item.translateX(-0.5)
+		item.translateY(0.5)
+		item.castShadow(true)
+		var canvas	= document.createElement('canvas');
+		var context	= canvas.getContext('2d');
+		context.fillStyle	= "rgba(80, 48, 32, 1)";
+		context.fillRect(0, 0, canvas.width, canvas.height);  
+
+		context.fillStyle	= "rgb(230,230,230)"; 
+		context.font	= "900 "+(2*24)+"px Arial";
+		var print	= function(x, y, text){
+			context.fillText(text, 8+(16*x), 28+(28*y));
+		}
+		print(2,1, "Hello")
+		print(7,3, "#bbg !!")
+
+
+
+		var url		= '../../grassground/images/grasslight-big.jpg';
+		var mesh	= tQuery.createPlane().addTo(item)
+			.geometry()
+				.rotateX(Math.PI/2)
+				.translateX(1/16)
+				.translateY(3/16 + 0.5/16)
+				.translateZ(1/16+0.1)
+				.scaleBy(11/16, 7/16,1)
+				.back()
+			.setBasicMaterial().ambient(0x444444).color(0xffffff).map(canvas).transparent(true).back()
+			.castShadow(true)
+	});
+
 
 </script></body>
