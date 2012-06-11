@@ -255,8 +255,13 @@ tQuery.Object3D._removeClassOne	= function(object3d, className){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Object3D._select	= function(selector, root){
+	// handle parameter
 	root		= root	|| tQuery.world.tScene();
+	if( root instanceof tQuery.Object3D )	root	= root.get(0)
 	var selectItems	= selector.split(' ').filter(function(v){ return v.length > 0;})
+	
+	// sanity check
+	console.assert(root instanceof THREE.Object3D);
 
 	var lists	= [];
 	root.children.forEach(function(child){
