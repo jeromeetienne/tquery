@@ -52,22 +52,24 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	// no camera controls is needed
-	world.removeCameraControls();
-	world.tCamera().position.y	= 2;
-	world.tCamera().position.z	= 10;
-	world.tCamera().position.normalize().setLength(2)
-	world.tCamera().lookAt(world.tScene().position.clone().addSelf(new THREE.Vector3(0,0.5,0)));
+//	world.removeCameraControls();
+	world.getCameraControls().target.set(0, 0.5, 0.5)
+	//world.tCamera().position.y	= 2;
+	//world.tCamera().position.z	= 10;
+	//world.tCamera().position.normalize().setLength(2)
+	//world.tCamera().lookAt(world.tScene().position.clone().addSelf(new THREE.Vector3(0,0.5,0)));
 
 	// enable shadow casting in world renderer
 	world.tRenderer().shadowMapEnabled	= true;
 	world.tRenderer().shadowMapSoft		= true;
 
 	// add a light with shadow casting
-	tQuery.createDirectionalLight().addTo(world)
-		.position(-10, 20, 30).color(0xffffff).intensity(4)
-		.castShadow(true).shadowDarkness(0.8)
-		.shadowMap(512*2,512*2)
-		.shadowCamera(10, -10, 20, -20, 0.1, 50);
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(2, 10, 10).color(0xffffff).intensity(0.6)
+		.castShadow(true).shadowDarkness(0.6)
+		.shadowMap(512,512)
+		.shadowBias(0.01)
+		.shadowCamera(2, -2, 2, -2, 0.1, 50);
 
 	// add some posteffect
 	world.addEffectComposer().vignette().finish();
@@ -111,19 +113,19 @@
 		
 		item.translateX(-0.5)
 		item.translateY(0.5)
-		item.castShadow(true)
+		item.castShadow(true);
 		var canvas	= document.createElement('canvas');
 		var context	= canvas.getContext('2d');
 		context.fillStyle	= "rgba(80, 48, 32, 1)";
 		context.fillRect(0, 0, canvas.width, canvas.height);  
 
 		context.fillStyle	= "rgb(230,230,230)"; 
-		context.font	= "900 "+(2*24)+"px Arial";
+		context.font	= "900 "+(24*2)+"px Arial";
 		var print	= function(x, y, text){
 			context.fillText(text, 8+(16*x), 28+(28*y));
 		}
 		print(2,1, "Hello")
-		print(7,3, "#bbg !!")
+		print(7,3, "IIM!!") 
 
 
 
@@ -131,10 +133,10 @@
 		var mesh	= tQuery.createPlane().addTo(item)
 			.geometry()
 				.rotateX(Math.PI/2)
-				.translateX(1/16)
+				.translateX(1/16-0.5/16)
 				.translateY(3/16 + 0.5/16)
-				.translateZ(1/16+0.1)
-				.scaleBy(11/16, 7/16,1)
+				.translateZ(1/16+0.0002)
+				.scaleBy(11/16+0.5/16, 7/16,1)
 				.back()
 			.setBasicMaterial().ambient(0x444444).color(0xffffff).map(canvas).transparent(true).back()
 			.castShadow(true)
