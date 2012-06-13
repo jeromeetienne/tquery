@@ -23,7 +23,7 @@
 	character.model.rotateY(-Math.PI/6);
 
 	// init bodyAnims
-	var bodyAnims	= new tQuery.MinecraftCharAnimations();
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
 	bodyAnims.start('walk');
 	
 	// randomly change bodyAnims every 2 seconds
@@ -35,7 +35,7 @@
 	}, 2*1000)
 
 	// init headAnims
-	var headAnims	= new tQuery.MinecraftCharHeadAnimations();
+	var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
 	headAnims.start('still');
 
 	// randomly change headAnims every 2 seconds

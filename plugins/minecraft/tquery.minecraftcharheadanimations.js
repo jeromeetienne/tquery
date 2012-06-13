@@ -1,4 +1,4 @@
-tQuery.register('MinecraftCharHeadAnimations', function(){
+tQuery.register('MinecraftCharHeadAnimations', function(character){
 	var animations	= this;
 	// call parent ctor
 	tQuery.MinecraftCharAnimations.parent.constructor.call(this)
