@@ -96,6 +96,42 @@ THREEx.DomEvent	= function(camera, domElement)
 	this._domElement.addEventListener( 'touchstart'	, this._$onTouchStart	, false );
 	this._domElement.addEventListener( 'touchend'	, this._$onTouchEnd	, false );
 	this._domElement.addEventListener( 'contextmenu', this._$onContextmenu	, false );
+	
+	this._getRelativeMouseXY = function(domEvent) {
+		var e, element, elPosition, elDimension, style;
+		
+	    element = domEvent.target || domEvent.srcElement;
+		if (element.nodeType === 3) {
+			element = element.parentNode; //Safari fix -- see http://www.quirksmode.org/js/events_properties.html
+		}
+		
+		//get the real position of an element relative to the page starting point (0, 0)
+		//credits go to brainjam on answering http://stackoverflow.com/questions/5755312/getting-mouse-position-relative-to-content-area-of-an-element
+		elPosition = { x : 0 , y : 0};
+		e = element;
+		//store padding
+		style = getComputedStyle(e, null);
+		elPosition.y += parseInt(style.getPropertyValue("padding-top"), 10);
+		elPosition.x += parseInt(style.getPropertyValue("padding-left"), 10);
+		//add positions
+		do {
+			elPosition.x += e.offsetLeft;
+			elPosition.y += e.offsetTop;
+			style = getComputedStyle(e, null);
+			elPosition.y += parseInt(style.getPropertyValue("border-top-width"), 10);
+			elPosition.x += parseInt(style.getPropertyValue("border-left-width"), 10);
+		} while (e = e.offsetParent);
+		
+		elDimension = {
+			width: (element === window) ? window.innerWidth : element.offsetWidth,
+			height: (element === window) ? window.innerHeight : element.offsetHeight
+		}
+		
+		return {
+			x : +((domEvent.pageX - elPosition.x) / elDimension.width) * 2 - 1	,
+			y : -((domEvent.pageY - elPosition.y) / elDimension.height) * 2 + 1
+		};
+	};
 }
 
 // # Destructor
@@ -324,16 +360,14 @@ THREEx.DomEvent.prototype._onMouseUp	= function(event){ return this._onMouseEven
 
 THREEx.DomEvent.prototype._onMouseEvent	= function(eventName, domEvent)
 {
-	var mouseX	= +(domEvent.clientX / window.innerWidth ) * 2 - 1;
-	var mouseY	= -(domEvent.clientY / window.innerHeight) * 2 + 1;
-	return this._onEvent(eventName, mouseX, mouseY, domEvent);
+	var mouseCoords = this._getRelativeMouseXY(domEvent);
+	return this._onEvent(eventName, mouseCoords.x, mouseCoords.y, domEvent);
 }
 
 THREEx.DomEvent.prototype._onMouseMove	= function(domEvent)
 {
-	var mouseX	= +(domEvent.clientX / window.innerWidth ) * 2 - 1;
-	var mouseY	= -(domEvent.clientY / window.innerHeight) * 2 + 1;
-	return this._onMove(mouseX, mouseY, domEvent);
+	var mouseCoords = this._getRelativeMouseXY(domEvent);
+	return this._onMove(mouseCoords.x, mouseCoords.y, domEvent);
 }
 
 THREEx.DomEvent.prototype._onClick		= function(event)
