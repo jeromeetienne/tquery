@@ -86,6 +86,7 @@ THREEx.DomEvent	= function(camera, domElement)
 	this._$onTouchMove	= function(){ _this._onTouchMove.apply(_this, arguments);	};
 	this._$onTouchStart	= function(){ _this._onTouchStart.apply(_this, arguments);	};
 	this._$onTouchEnd	= function(){ _this._onTouchEnd.apply(_this, arguments);	};
+	this._$onContextmenu= function(){ _this.onContextmenu.apply(_this, arguments);	};
 	this._domElement.addEventListener( 'click'	, this._$onClick	, false );
 	this._domElement.addEventListener( 'dblclick'	, this._$onDblClick	, false );
 	this._domElement.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
@@ -94,6 +95,7 @@ THREEx.DomEvent	= function(camera, domElement)
 	this._domElement.addEventListener( 'touchmove'	, this._$onTouchMove	, false );
 	this._domElement.addEventListener( 'touchstart'	, this._$onTouchStart	, false );
 	this._domElement.addEventListener( 'touchend'	, this._$onTouchEnd	, false );
+	this._domElement.addEventListener( 'contextmenu', this._$onContextmenu	, false );
 }
 
 // # Destructor
@@ -108,6 +110,7 @@ THREEx.DomEvent.prototype.destroy	= function()
 	this._domElement.removeEventListener( 'touchmove'	, this._$onTouchMove	, false );
 	this._domElement.removeEventListener( 'touchstart'	, this._$onTouchStart	, false );
 	this._domElement.removeEventListener( 'touchend'	, this._$onTouchEnd	, false );
+	this._domElement.removeEventListener( 'contextmenu'	, this._$onContextmenu	, false );
 }
 
 THREEx.DomEvent.eventNames	= [
@@ -117,7 +120,8 @@ THREEx.DomEvent.eventNames	= [
 	"mouseout",
 	"mousemove",
 	"mousedown",
-	"mouseup"
+	"mouseup",
+	"contextmenu"
 ];
 
 /********************************************************************************/
@@ -341,6 +345,12 @@ THREEx.DomEvent.prototype._onDblClick		= function(event)
 {
 	// TODO handle touch ?
 	return this._onMouseEvent('dblclick'	, event);
+}
+
+THREEx.DomEvent.prototype._onContextmenu	= function(event)
+{
+	//TODO don't have a clue about how this should work with touch..
+	return this._onMouseEvent('contextmenu'	, event);
 }
 
 /********************************************************************************/
