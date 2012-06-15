@@ -36,7 +36,10 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 */
 tQuery.mixinAttributes(tQuery.Object3D, {
 	receiveShadow	: tQuery.convert.toBool,
-	castShadow	: tQuery.convert.toBool
+	castShadow	: tQuery.convert.toBool,
+	
+	doubleSided	: tQuery.convert.toBool,
+	flipSided	: tQuery.convert.toBool
 });
 
 //////////////////////////////////////////////////////////////////////////////////
