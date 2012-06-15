@@ -183,6 +183,27 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
 	return this;
 });
 
+/**
+ * Smooth the geometry using catmull-clark
+ *
+ * @param {Number} subdivision the number of subdivision to do
+*/
+tQuery.Geometry.register('smooth', function(subdivision){
+	// init the modifier
+	var modifier	= new THREE.SubdivisionModifier( subdivision );
+	// apply it to each geometry
+	this.each(function(geometry){
+		// apply it
+		modifier.modify( geometry )
+	
+		// mark the vertices as dirty
+		geometry.verticesNeedUpdate = true;
+		geometry.computeBoundingBox();
+	});
+	// return this, to get chained API	
+	return this;
+});
+
 // some shortcuts
 tQuery.Geometry.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Geometry.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
