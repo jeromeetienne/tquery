@@ -63,13 +63,15 @@
 <div id="scoreLeft"	class="score">0</div>
 <div id="scoreRight"	class="score">0</div>
 <script>
+	// init audio layer
 	var webaudio	= new WebAudio();
+	webaudio.volume(0.5)
+	// init each sound
 	var jsfxParam	= ["saw",0.0000,0.4000,0.0000,0.1640,0.0000,0.1880,20.0000,594.0000,2400.0000,0.5440,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.5616,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
-	var jsfxParam	= ["square",0.0000,0.4000,0.0000,0.0940,0.5460,0.2940,20.0000,1479.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
-	var soundBoing	= webaudio.createSound().generateWithJsfx(jsfxParam);
+	var soundRacketWall	= webaudio.createSound().generateWithJsfx(jsfxParam);
 	var jsfxParam	= ["square",0.0000,0.4000,0.0000,0.3560,0.0000,0.1900,20.0000,358.0000,2400.0000,0.3000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.1810,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
-	var soundJump	= webaudio.createSound().generateWithJsfx(jsfxParam);
-	soundJump.volume(0.1)
+	var soundRacketBall	= webaudio.createSound().generateWithJsfx(jsfxParam);
+	soundRacketBall.volume(0.1)
 	var jsfxParam	= ["square",0.0000,0.4000,0.0000,0.1640,0.0000,0.1380,20.0000,231.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0625,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.1000,0.0000];
 	var soundWall	= webaudio.createSound().generateWithJsfx(jsfxParam);
 	soundWall.volume(0.1)
@@ -82,33 +84,30 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	// no camera controls is needed
 	world.removeCameraControls();
-	world.tCamera().position.y	= 5.5;
+	world.tCamera().position.y	= 1.5;
 	world.tCamera().position.z	= 3.2;
 	world.tCamera().lookAt(world.tScene().position);
 
+	// enable shadow in the renderer
 	world.tRenderer().shadowMapEnabled	= true;
 	world.tRenderer().shadowMapSoft		= true;
 	
+	// add a skybox
 	tQuery.createSkymap('skybox').addTo(world);
 
-	var ground	= tQuery.createGrassGround({
-		textureUrl	: '../../grassground/images/grasslight-big.jpg',
-	}).addTo(world);
-	ground.receiveShadow(true)
+	// create the ground
+	tQuery.createPlane().addTo(world)
+		.receiveShadow(true)
 		.scale(3*1.5, 1, 1.8*1.5)
 		.translateY(-0.2)
 		.setLambertMaterial().map('../../grassground/images/grasslight-big.jpg').ambient(0x444444).back();
 
 
-	world.addEffectComposer();
-	//world.getEffectComposer().film(0.25, 0.25, 648, false).vignette();
-	//world.getEffectComposer().verticalBlur(1.1)
-	//world.getEffectComposer().horizontalBlur(1.1)
-	world.getEffectComposer().motionBlur(0.6);
-	//world.getEffectComposer().screen();
-	//world.getEffectComposer().film(0.25, 0.25, 648, false)
-	world.getEffectComposer().vignette();
-	world.getEffectComposer().finish();
+	// add postprocessing effects
+	world.addEffectComposer()
+		//.motionBlur(0.7)
+		.vignette()
+		.finish();
 
 	// lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444)
@@ -116,14 +115,14 @@
 	tQuery.createDirectionalLight().addTo(world)
 		.position(2, 4, -1.5).color(0xffffff)
 		.castShadow(true)
-		.shadowCamera(6, -6, 6, -6, 0.01, 200)
+		.shadowCamera(2, -2, 2, -2, 0.01, 200)
 		.shadowDarkness(0.7).shadowBias(.002)
 		//.shadowCameraVisible(true);
 
 	// some constants for players
 	var players	= { "right" : {}, "left": {} };	
-	var racketW	= 0.25*0.5;
-	var racketD	= 1.00*0.5;
+	var racketW	= 0.05;
+	var racketD	= 0.5;
 	var racketRangeY= 2;
 	// init each player
 	Object.keys(players).forEach(function(playerId){
@@ -132,14 +131,16 @@
 		var url		= "../../physics/examples/images/rocks.jpg";
 		var playerColor	= playerId === 'right' ? 0xffaacc : 0xccaaff;
 		var object3d	= tQuery.createCube().addTo(world)
-				.scale(0.25,0.5,1).scaleBy(0.5)
+				.scale(racketW, 0.2, racketD)
 				.setLambertMaterial().color(playerColor).ambient(0xaaaaaa).map(url).back()
 				.id(playerId)
 				.castShadow(true)
 		object3d.translateX(1.3 * (playerId === "right" ? +1 : -1));
 		player.object3d	= object3d;
 	})
-	
+	/**
+	 * Function called when playerId scored a point
+	*/
 	function addScore(playerId){
 		var selector	= {
 			right	: '#scoreRight',
@@ -151,13 +152,13 @@
 		element.innerHTML= score;
 		soundLose.play();
 		// reset ball velocity
-		ballVelX	= Math.cos(angle)*0.03;
-		ballVelZ	= Math.sin(angle)*0.03;
+		ballAngle	= 0.2 * Math.random()*Math.PI*2;
+		ballVelX	= Math.cos(ballAngle)*0.03;
+		ballVelZ	= Math.sin(ballAngle)*0.03;
 		// put it back in the center
-		ball3d.get(0).position.x	= 0;
-		ball3d.get(0).position.z	= 0;
+		ball3d.position(0,0,0);
 	};
-	// handle keyboard
+	// handle player keyboard
 	world.loop().hook(function(delta){
 		var keyboard	= tQuery.keyboard();
 		var speedY	= 2;
@@ -165,38 +166,42 @@
 		if( keyboard.pressed('down') )	players['right'].object3d.translateZ(+delta*speedY);
 		if( keyboard.pressed('q') )	players['left'] .object3d.translateZ(-delta*speedY);
 		if( keyboard.pressed('w') )	players['left'] .object3d.translateZ(+delta*speedY);
-	});
-
-	world.loop().hook(function(delta){
+		// handle racket limit
 		Object.keys(players).forEach(function(playerId){
 			var tMesh	= players[playerId].object3d.get(0);
-			if( tMesh.position.z < -fieldD/2 + racketD/2 )	soundBoing.play();
-			if( tMesh.position.z > +fieldD/2 - racketD/2 )	soundBoing.play();
+			if( tMesh.position.z < -fieldD/2 + racketD/2 )	soundRacketWall.play();
+			if( tMesh.position.z > +fieldD/2 - racketD/2 )	soundRacketWall.play();
 			tMesh.position.z	= Math.max(tMesh.position.z, -fieldD/2 + racketD/2);
 			tMesh.position.z	= Math.min(tMesh.position.z, +fieldD/2 - racketD/2);
 		});
 	});
-	
+	/**
+	 * Function called when the ball touch the racket
+	*/
 	players['right'].onContact = players['left'].onContact = function(player, ball3d){
-		soundJump.play();
+		// play a sound
+		soundRacketBall.play();
 
-		//ballVelX 	*= 1.1;
-		//ballVelZ	*= 1.1;
-
-		var deltaZ	= player.object3d.get(0).position.z - ball3d.get(0).position.z;
-		deltaZ		/= racketD;
-
-		var speed	= Math.sqrt(ballVelX*ballVelX+ballVelZ*ballVelZ)
-		var angle	= Math.atan2(ballVelZ,ballVelX);
-		console.log(Math.atan2(ballVelZ,ballVelX))
+		// increase velocity 
+		ballVelX 	*= 1.1;
+		ballVelZ	*= 1.1;
 		
-		var maxDeltaAng	= 60 * Math.PI/180;
-		var deltaAngle	= deltaZ * 2 * maxDeltaAng;
-		angle		+= deltaAngle * (player.object3d.id() === "right" ? +1 : -1);
-		
-		ballVelX	= Math.cos(angle)*speed;
-		ballVelZ	= Math.sin(angle)*speed;
+		if( false ){
+			var deltaZ	= player.object3d.get(0).position.z - ball3d.get(0).position.z;
+			deltaZ		/= racketD;
 
+			var speed	= Math.sqrt(ballVelX*ballVelX+ballVelZ*ballVelZ)
+			var ballAngle	= Math.atan2(ballVelZ,ballVelX);
+			console.log(Math.atan2(ballVelZ,ballVelX)/Math.PI*180)
+			
+			var maxDeltaAng	= 30 * Math.PI/180;
+			var deltaAngle	= deltaZ * 2 * maxDeltaAng;
+			ballAngle	+= deltaAngle * (player.object3d.id() === "right" ? +1 : -1);
+			
+			ballVelX	= Math.cos(ballAngle)*speed;
+			ballVelZ	= Math.sin(ballAngle)*speed;			
+		}
+		// change racket color randomly
 		player.object3d.get(0).material.color.setHex(0xFfffff*Math.random());
 	};
 
@@ -205,10 +210,10 @@
 	var fieldD	= 1.8;
 	// constant for the ball
 	var ballRadius	= 1/5;
-	var angle	= Math.random()*Math.PI*2;
-	var angle	= 0.2 * Math.random()*Math.PI*2;
-	var ballVelX	= Math.cos(angle)*0.03;
-	var ballVelZ	= Math.sin(angle)*0.03;
+	var ballAngle	= Math.random()*Math.PI*2;
+	var ballAngle	= 0.2 * Math.random()*Math.PI*2;
+	var ballVelX	= Math.cos(ballAngle)*0.03;
+	var ballVelZ	= Math.sin(ballAngle)*0.03;
 	// create a tQuery.Object3d for the ball
 	var ball3d	= tQuery.createSphere().addTo(world).scaleBy(ballRadius)
 			.setLambertMaterial().color(0xFFFF00).ambient(0xFFFFFF).map("../../physics/examples/images/rocks.jpg").back()
@@ -261,16 +266,19 @@
 		});
 	});
 
+	//////////////////////////////////////////////////////////////////////////
+	//		Walls							//
+	//////////////////////////////////////////////////////////////////////////
 	var walls	= {};
 	var url		= "../../physics/examples/images/plywood.jpg";
 	walls['north']	= tQuery.createCylinder(0.05, 0.05, 3, 16, 4).addTo(world)
-		.setLambertMaterial().color(0xFFFFFF).ambient(0x222222).map(url).back()
+		.setLambertMaterial().color(0xFFFFFF).ambient(0xFFFFFF).map(url).back()
 		.geometry().rotateZ(Math.PI/2).back()
 		.translateY(-0.1)
 		.translateZ(-1.8/2 - 0.05/2)
 		.castShadow(true)
 	walls['south']	= tQuery.createCylinder(0.05, 0.05, 3, 16, 4).addTo(world)
-		.setLambertMaterial().color(0xcccccc).ambient(0x444444).map(url).back()
+		.setLambertMaterial().color(0xFFFFFF).ambient(0xFFFFFF).map(url).back()
 		.geometry().rotateZ(Math.PI/2).back()
 		.translateY(-0.1)
 		.translateZ(+1.8/2 + 0.05/2)

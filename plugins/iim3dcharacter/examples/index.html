@@ -53,11 +53,10 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	// no camera controls is needed
 	world.removeCameraControls();
-//	world.getCameraControls().target.set(0, 0.5, 0.5)
-	world.tCamera().position.y	= 2;
+	world.tCamera().position.y	= 5;
 	world.tCamera().position.z	= 15;
-	world.tCamera().position.normalize().setLength(4)
-	world.tCamera().lookAt(world.tScene().position.clone().addSelf(new THREE.Vector3(0,0.5,0)));
+	world.tCamera().position.normalize().setLength(2.5)
+	world.tCamera().lookAt(world.tScene().position.clone().addSelf(new THREE.Vector3(0.5,0.5,0)));
 
 	// enable shadow casting in world renderer
 	world.tRenderer().shadowMapEnabled	= true;
@@ -84,7 +83,7 @@
 	}).addTo(world).scaleBy(100).receiveShadow(true);
 	
 	var character	= new tQuery.MinecraftChar({
-		skinUrl	: "../../minecraft/examples/images/theflash.png"
+		skinUrl	: "../../minecraft/examples/images/agentsmith.png"
 	});
 	character.model.addTo(world)
 
@@ -94,8 +93,8 @@
 // - make it move with path
 // - keyboard control
 
-	//character.model.rotateY(-Math.PI/6);
-	character.model.translateX(0.5);
+	character.model.rotateY(-Math.PI/10);
+	character.model.translateX(1);
 	character.model.translateZ(0.5);
 	character.model.translateY(0.5);
 	
@@ -107,55 +106,55 @@
 	var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
 	headAnims.start('yes');
 
+	character.model.rotateY(-Math.PI/10);
 
+//	character.model.rotateY(-Math.PI);
+//	bodyAnims.start('walk')
 
-	character.model.rotateY(-Math.PI);
-	bodyAnims.start('walk')
-
-	world.loop().hook(function(delta, now){
-		var angle	= 0.2*now * Math.PI*2;
-		var positionX	= Math.cos(angle)*1
-		var positionZ	= Math.sin(angle)*1
-		character.model.position(positionX, 0.5, positionZ)
-		character.model.get(0).rotation.y	= -angle;
-	})
+	//world.loop().hook(function(delta, now){
+	//	var angle	= 0.2*now * Math.PI*2;
+	//	var positionX	= Math.cos(angle)*1
+	//	var positionZ	= Math.sin(angle)*1
+	//	character.model.position(positionX, 0.5, positionZ)
+	//	character.model.get(0).rotation.y	= -angle;
+	//})
 	
 	var items	= new tQuery.MinecraftItems({
 		url	: '../../minecraft/examples/images/items/items.png'
 	});
 	items.bind('load', function(){
-		//var item	= items.createMesh(10+2*16).addTo(world);
-		var item	= items.createMesh(0+0*16).addTo(world);
+		var item	= items.createMesh(10+2*16).addTo(world);
+		//var item	= items.createMesh(0+0*16).addTo(world);
 		
 		//item.translateX(-0.5)
 		item.translateY(0.5)
 		item.castShadow(true);
-		//var canvas	= document.createElement('canvas');
-		//var context	= canvas.getContext('2d');
-		//context.fillStyle	= "rgba(80, 48, 32, 1)";
-		//context.fillRect(0, 0, canvas.width, canvas.height);  
-		//
-		//context.fillStyle	= "rgb(230,230,230)"; 
-		//context.font	= "900 "+(24*2)+"px Arial";
-		//var print	= function(x, y, text){
-		//	context.fillText(text, 8+(16*x), 28+(28*y));
-		//}
-		//print(2,1, "Hello")
-		//print(7,3, "World!!") 
-		//
-		//
-		//
-		//var url		= '../../grassground/images/grasslight-big.jpg';
-		//var mesh	= tQuery.createPlane().addTo(item)
-		//	.geometry()
-		//		.rotateX(Math.PI/2)
-		//		.translateX(1/16-0.5/16)
-		//		.translateY(3/16 + 0.5/16)
-		//		.translateZ(1/16+0.0002)
-		//		.scaleBy(11/16+0.5/16, 7/16,1)
-		//		.back()
-		//	.setBasicMaterial().ambient(0x444444).color(0xffffff).map(canvas).transparent(true).back()
-		//	.castShadow(true)
+		var canvas	= document.createElement('canvas');
+		var context	= canvas.getContext('2d');
+		context.fillStyle	= "rgba(80, 48, 32, 1)";
+		context.fillRect(0, 0, canvas.width, canvas.height);  
+		
+		context.fillStyle	= "rgb(230,230,230)"; 
+		context.font	= "900 "+(24*1.5)+"px Arial";
+		var print	= function(x, y, text){
+			context.fillText(text, 8+(16*x), 28+(28*y));
+		}
+		print(1,1, "Hello")
+		print(3,3, "WebEvents!") 
+		
+		
+		
+		var url		= '../../grassground/images/grasslight-big.jpg';
+		var mesh	= tQuery.createPlane().addTo(item)
+			.geometry()
+				.rotateX(Math.PI/2)
+				.translateX(1/16-0.5/16)
+				.translateY(3/16 + 0.5/16)
+				.translateZ(1/16+0.0002)
+				.scaleBy(11/16+0.5/16, 7/16,1)
+				.back()
+			.setBasicMaterial().ambient(0x444444).color(0xffffff).map(canvas).transparent(true).back()
+			.castShadow(true)
 	});
 
 

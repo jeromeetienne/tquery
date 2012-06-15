@@ -534,7 +534,10 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 */
 tQuery.mixinAttributes(tQuery.Object3D, {
 	receiveShadow	: tQuery.convert.toBool,
-	castShadow	: tQuery.convert.toBool
+	castShadow	: tQuery.convert.toBool,
+	
+	doubleSided	: tQuery.convert.toBool,
+	flipSided	: tQuery.convert.toBool
 });
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1922,6 +1925,27 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
 		if( noZ )	delta.z	= 0;
 
 		return geometry.translate(delta)
+	});
+	// return this, to get chained API	
+	return this;
+});
+
+/**
+ * Smooth the geometry using catmull-clark
+ *
+ * @param {Number} subdivision the number of subdivision to do
+*/
+tQuery.Geometry.register('smooth', function(subdivision){
+	// init the modifier
+	var modifier	= new THREE.SubdivisionModifier( subdivision );
+	// apply it to each geometry
+	this.each(function(geometry){
+		// apply it
+		modifier.modify( geometry )
+	
+		// mark the vertices as dirty
+		geometry.verticesNeedUpdate = true;
+		geometry.computeBoundingBox();
 	});
 	// return this, to get chained API	
 	return this;

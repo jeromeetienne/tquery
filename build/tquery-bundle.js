@@ -2369,7 +2369,10 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 */
 tQuery.mixinAttributes(tQuery.Object3D, {
 	receiveShadow	: tQuery.convert.toBool,
-	castShadow	: tQuery.convert.toBool
+	castShadow	: tQuery.convert.toBool,
+	
+	doubleSided	: tQuery.convert.toBool,
+	flipSided	: tQuery.convert.toBool
 });
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -3762,6 +3765,27 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
 	return this;
 });
 
+/**
+ * Smooth the geometry using catmull-clark
+ *
+ * @param {Number} subdivision the number of subdivision to do
+*/
+tQuery.Geometry.register('smooth', function(subdivision){
+	// init the modifier
+	var modifier	= new THREE.SubdivisionModifier( subdivision );
+	// apply it to each geometry
+	this.each(function(geometry){
+		// apply it
+		modifier.modify( geometry )
+	
+		// mark the vertices as dirty
+		geometry.verticesNeedUpdate = true;
+		geometry.computeBoundingBox();
+	});
+	// return this, to get chained API	
+	return this;
+});
+
 // some shortcuts
 tQuery.Geometry.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Geometry.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
@@ -3952,6 +3976,10 @@ tQuery.World.register('addBoilerplate', function(opts){
 	});
 	// get the context
 	var ctx	= {};
+	
+	// make tRenderer.domElement style "display: block" - by default it is inline-block
+	// - so it is affected by line-height and create a white line at the bottom
+	this.tRenderer().domElement.style.display = "block"
 
 	// create the context
 	tQuery.data(this, '_boilerplateCtx', ctx);
