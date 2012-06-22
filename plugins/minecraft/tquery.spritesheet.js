@@ -116,7 +116,7 @@ tQuery.register('Spritesheet', function(opts){
 	canvas.width	= imgW;
 	canvas.height	= imgH;
 	var context	= canvas.getContext('2d');
-	var material	= getMaterial(canvas, true);
+	var material	= getMaterial(canvas, false);
 	// init some constants
 	var tileUvW	= 1/canvas.width;
 	var tileUvH	= 1/canvas.height;

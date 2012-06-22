@@ -985,7 +985,8 @@ tQuery.pluginsInstanceOn(tQuery.Mesh);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Mesh, {
-	visible	: tQuery.convert.toBool,
+	visible		: tQuery.convert.toBool,
+	doubleSided	: tQuery.convert.toBool
 });
 
 //////////////////////////////////////////////////////////////////////////////////

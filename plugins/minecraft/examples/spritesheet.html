@@ -2,12 +2,16 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.spritesheet.js"></script>
 <body><script>
-	var world	= tQuery.createWorld().boilerplate().start();
+	var world	= tQuery.createWorld({
+		webGLNeeded	: false
+	}).boilerplate().start();
 	//var material	= new THREE.MeshBasicMaterial({
 	//	color		: 0x000000,
 	//	wireframe	: true
 	//})
 	//tQuery.createCube(material).addTo(world);
+
+//world.tRenderer().setClearColorHex(0x444444,1);
 
 	if( false ){ 
 		var spritesheet	= new tQuery.Spritesheet({
@@ -38,7 +42,7 @@
 		for(var i=0; i < nSpriteX; i++){
 			var mesh	= spritesheet.createMesh(i+0*16);
 
-			mesh.visible(true).scaleBy(2)
+			mesh.visible(true).scaleBy(2,2,2*3)
 			mesh.addTo(world)
 
 			meshes.push(mesh)
