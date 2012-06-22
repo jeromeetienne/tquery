@@ -9,7 +9,7 @@
 	//})
 	//tQuery.createCube(material).addTo(world);
 
-	if( false ){
+	if( false ){ 
 		var spritesheet	= new tQuery.Spritesheet({
 			url	: 'images/items/items.png',
 			imgW	: 256,
@@ -18,12 +18,14 @@
 			spriteH	: 16
 		});
 	}else{
+		var spriteW	= 48;
+		var spriteH	= 48;
 		var spritesheet	= new tQuery.Spritesheet({
 			url	: 'images/items/explosion.png',
-			imgW	: 16*17,
-			imgH	: 16*3,
-			spriteW	: 16,
-			spriteH	: 16
+			imgW	: spriteW*17,
+			imgH	: spriteH*3,
+			spriteW	: spriteW,
+			spriteH	: spriteH
 		});		
 	}
 	spritesheet.bind('load', function(){
@@ -35,8 +37,8 @@
 		var nSpriteX	= 17
 		for(var i=0; i < nSpriteX; i++){
 			var mesh	= spritesheet.createMesh(i+0*16);
-			//mesh.translateX(i)
-			mesh.get(0).visible	= false;
+
+			mesh.visible(true).scaleBy(2)
 			mesh.addTo(world)
 
 			meshes.push(mesh)
@@ -44,27 +46,11 @@
 		
 		world.loop().hook(function(delta, now){
 			meshes.forEach(function(mesh){
-				mesh.get(0).visible	= false;
+				mesh.visible(false);
 			})
 			var idx	= Math.floor(now*20) % nSpriteX;
-			meshes[idx].get(0).visible	= true;
+			meshes[idx].visible(true);
 		})
-
-		if( false ){
-			var nItems	= (256/16)*(256/16);
-			for(var i=0; i < nItems; i++){
-				for(var j=0; j < 1; j++) {
-					var item	= items.createMesh(i)
-					// if this spot is empty, do nothing
-					if( item === null )	continue;
-					// set a random position
-					item.position((Math.random()*2-1)*15, (Math.random()*2-1)*15, (Math.random()*2-1)*15)
-					// add it to the worldPP
-					item.addTo(world);
-				}
-			}			
-			
-		}
 	})
 	
 

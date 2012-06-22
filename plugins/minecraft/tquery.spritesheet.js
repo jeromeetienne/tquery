@@ -51,10 +51,10 @@ tQuery.register('Spritesheet', function(opts){
 			var ix = Math.floor(id % nSpriteX)*spriteW;
 			var iy = Math.floor(id / nSpriteX)*spriteH;
 			
-			var alphaPx	= (x+1) < 16 ? imd[((x+1)+y*16)*4+3] : 0;
-			var alphaNx	= (x-1) >= 0 ? imd[((x-1)+y*16)*4+3] : 0;
-			var alphaPy	= (y+1) < 16 ? imd[(x+(y-1)*16)*4+3] : 0;
-			var alphaNy	= (y-1) >= 0 ? imd[(x+(y+1)*16)*4+3] : 0;
+			var alphaPx	= (x+1) < spriteW	? imd[((x+1)+y*spriteW)*4+3] : 0;
+			var alphaNx	= (x-1) >= 0		? imd[((x-1)+y*spriteW)*4+3] : 0;
+			var alphaPy	= (y+1) < spriteH	? imd[(x+(y-1)*spriteW)*4+3] : 0;
+			var alphaNy	= (y-1) >= 0		? imd[(x+(y+1)*spriteW)*4+3] : 0;
 			
 			return {
 				px: !alphaPx, // Turns zero and undefined to true
@@ -80,14 +80,17 @@ tQuery.register('Spritesheet', function(opts){
 				// - this is a single pixel. get the pixel and set the color
 				// - this may fix the anti alias issue
 				for(var i=0; i < voxel.faceVertexUvs[0].length; i++) { // Fix color of voxel
-					uvmap(voxel, i, Math.floor(id % 16)*16+x, Math.floor(id / 16)*16+y, 1, 1);
+					uvmap(voxel, i,
+						Math.floor(id % nSpriteX)*spriteW + x,
+						Math.floor(id / nSpriteX)*spriteH+y,
+						1, 1);
 				}
 				
 				// TODO what is this ... it seems a translation but why ?
 				console.assert(voxel.vertices.length)
 				for(var i=0; i < voxel.vertices.length; i++) { // Fix voxel's position
-					voxel.vertices[i].x += +(x-15/2);	// what is this 7.5 ? why not 8 ? as in 16/2
-					voxel.vertices[i].y += -(y-15/2);
+					voxel.vertices[i].x += +(x-(spriteW-1)/2);	// what is this 7.5 ? why not 8 ? as in 16/2
+					voxel.vertices[i].y += -(y-(spriteH-1)/2);
 				}
 				THREE.GeometryUtils.merge(geometry, voxel);
 			}

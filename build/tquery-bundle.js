@@ -2816,6 +2816,13 @@ tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 */
 tQuery.pluginsInstanceOn(tQuery.Mesh);
 
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Mesh, {
+	visible	: tQuery.convert.toBool,
+});
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
