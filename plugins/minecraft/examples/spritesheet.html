@@ -1,0 +1,72 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.spritesheet.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	//var material	= new THREE.MeshBasicMaterial({
+	//	color		: 0x000000,
+	//	wireframe	: true
+	//})
+	//tQuery.createCube(material).addTo(world);
+
+	if( false ){
+		var spritesheet	= new tQuery.Spritesheet({
+			url	: 'images/items/items.png',
+			imgW	: 256,
+			imgH	: 256,
+			spriteW	: 16,
+			spriteH	: 16
+		});
+	}else{
+		var spritesheet	= new tQuery.Spritesheet({
+			url	: 'images/items/explosion.png',
+			imgW	: 16*17,
+			imgH	: 16*3,
+			spriteW	: 16,
+			spriteH	: 16
+		});		
+	}
+	spritesheet.bind('load', function(){
+		console.log("image loaded");
+		//items.createMesh(10+2*16).addTo(world);
+		//spritesheet.createMesh(10+2*16).addTo(world);
+
+		var meshes	= [];
+		var nSpriteX	= 17
+		for(var i=0; i < nSpriteX; i++){
+			var mesh	= spritesheet.createMesh(i+0*16);
+			//mesh.translateX(i)
+			mesh.get(0).visible	= false;
+			mesh.addTo(world)
+
+			meshes.push(mesh)
+		}
+		
+		world.loop().hook(function(delta, now){
+			meshes.forEach(function(mesh){
+				mesh.get(0).visible	= false;
+			})
+			var idx	= Math.floor(now*20) % nSpriteX;
+			meshes[idx].get(0).visible	= true;
+		})
+
+		if( false ){
+			var nItems	= (256/16)*(256/16);
+			for(var i=0; i < nItems; i++){
+				for(var j=0; j < 1; j++) {
+					var item	= items.createMesh(i)
+					// if this spot is empty, do nothing
+					if( item === null )	continue;
+					// set a random position
+					item.position((Math.random()*2-1)*15, (Math.random()*2-1)*15, (Math.random()*2-1)*15)
+					// add it to the worldPP
+					item.addTo(world);
+				}
+			}			
+			
+		}
+	})
+	
+
+
+</script></body>
