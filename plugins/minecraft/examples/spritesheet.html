@@ -2,18 +2,17 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.spritesheet.js"></script>
 <body><script>
-	var world	= tQuery.createWorld({
-		webGLNeeded	: false
-	}).boilerplate().start();
+	var world	= tQuery.createWorld().boilerplate().start();
 	//var material	= new THREE.MeshBasicMaterial({
 	//	color		: 0x000000,
 	//	wireframe	: true
 	//})
 	//tQuery.createCube(material).addTo(world);
 
-//world.tRenderer().setClearColorHex(0x444444,1);
+	world.tRenderer().setClearColorHex(0x444444,1);
+	world.tCamera().position.z	= 8;
 
-	if( false ){ 
+	if( true ){ 
 		var spritesheet	= new tQuery.Spritesheet({
 			url	: 'images/items/items.png',
 			imgW	: 256,
@@ -22,8 +21,8 @@
 			spriteH	: 16
 		});
 	}else{
-		var spriteW	= 48;
-		var spriteH	= 48;
+		var spriteW	= 32;
+		var spriteH	= 32;
 		var spritesheet	= new tQuery.Spritesheet({
 			url	: 'images/items/explosion.png',
 			imgW	: spriteW*17,
@@ -37,12 +36,14 @@
 		//items.createMesh(10+2*16).addTo(world);
 		//spritesheet.createMesh(10+2*16).addTo(world);
 
+		var nSpriteX		= 17
+		var nSpritePerSecond	= 20;
+
 		var meshes	= [];
-		var nSpriteX	= 17
 		for(var i=0; i < nSpriteX; i++){
 			var mesh	= spritesheet.createMesh(i+0*16);
 
-			mesh.visible(true).scaleBy(2,2,2*3)
+			mesh.visible(true).scaleBy(2,2,2*4)
 			mesh.addTo(world)
 
 			meshes.push(mesh)
@@ -52,7 +53,7 @@
 			meshes.forEach(function(mesh){
 				mesh.visible(false);
 			})
-			var idx	= Math.floor(now*20) % nSpriteX;
+			var idx	= Math.floor(now*nSpritePerSecond) % nSpriteX;
 			meshes[idx].visible(true);
 		})
 	})

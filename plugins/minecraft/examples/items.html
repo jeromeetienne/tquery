@@ -1,6 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
-<script src="../tquery.minecraftitems.js"></script>
+<script src="../tquery.spritesheet.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var material	= new THREE.MeshBasicMaterial({
@@ -9,16 +9,22 @@
 	})
 	tQuery.createCube(material).addTo(world);
 
-	var items	= new tQuery.MinecraftItems();
-	items.bind('load', function(){
+	var spritesheet	= new tQuery.Spritesheet({
+		url	: 'images/items/items.png',
+		imgW	: 256,
+		imgH	: 256,
+		spriteW	: 16,
+		spriteH	: 16
+	});
+	spritesheet.bind('load', function(){
 		console.log("image loaded");
-		items.createMesh(10+2*16).addTo(world);
+		spritesheet.createMesh(10+2*16).addTo(world);
 
 		if( true ){
 			var nItems	= (256/16)*(256/16);
 			for(var i=0; i < nItems; i++){
 				for(var j=0; j < 1; j++) {
-					var item	= items.createMesh(i)
+					var item	= spritesheet.createMesh(i)
 					// if this spot is empty, do nothing
 					if( item === null )	continue;
 					// set a random position
