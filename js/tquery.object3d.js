@@ -35,11 +35,20 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Object3D, {
-	receiveShadow	: tQuery.convert.toBool,
-	castShadow	: tQuery.convert.toBool,
+	eulerOrder		: tQuery.convert.toString,
 	
-	doubleSided	: tQuery.convert.toBool,
-	flipSided	: tQuery.convert.toBool
+	doubleSided		: tQuery.convert.toBool,
+	flipSided		: tQuery.convert.toBool,
+	
+	rotationAutoUpdate	: tQuery.convert.toBool,
+	matrixAutoUpdate	: tQuery.convert.toBool,
+	matrixWorldNeedsUpdate	: tQuery.convert.toBool,
+	useQuaternion		: tQuery.convert.toBool,
+
+	visible			: tQuery.convert.toBool,
+
+	receiveShadow		: tQuery.convert.toBool,
+	castShadow		: tQuery.convert.toBool
 });
 
 //////////////////////////////////////////////////////////////////////////////////

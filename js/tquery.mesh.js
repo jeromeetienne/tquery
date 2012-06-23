@@ -24,19 +24,10 @@ tQuery.Mesh	= function(elements)
 */
 tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 
-
 /**
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Mesh);
-
-/**
- * define all acceptable attributes for this class
-*/
-tQuery.mixinAttributes(tQuery.Mesh, {
-	visible		: tQuery.convert.toBool,
-	doubleSided	: tQuery.convert.toBool
-});
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
