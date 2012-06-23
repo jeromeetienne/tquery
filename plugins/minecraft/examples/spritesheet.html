@@ -1,54 +1,43 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.spritesheet.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	//var material	= new THREE.MeshBasicMaterial({
-	//	color		: 0x000000,
-	//	wireframe	: true
-	//})
-	//tQuery.createCube(material).addTo(world);
+	tQuery.createCube().addTo(world)
+		.setBasicMaterial().color(0x000000).wireframe(true).back();
+
 
 	world.tRenderer().setClearColorHex(0x444444,1);
 	world.tCamera().position.z	= 8;
 
-	if( true ){ 
-		var spritesheet	= new tQuery.Spritesheet({
-			url	: 'images/items/items.png',
-			imgW	: 256,
-			imgH	: 256,
-			spriteW	: 16,
-			spriteH	: 16
-		});
-	}else{
-		var spriteW	= 32;
-		var spriteH	= 32;
-		var spritesheet	= new tQuery.Spritesheet({
-			url	: 'images/items/explosion.png',
-			imgW	: spriteW*17,
-			imgH	: spriteH*3,
-			spriteW	: spriteW,
-			spriteH	: spriteH
-		});		
-	}
+	// init the spritesheet
+	var spriteW	= 32;
+	var spriteH	= 32;
+	var spritesheet	= new tQuery.Spritesheet({
+		url	: 'images/items/explosion.png',
+		imgW	: spriteW*17,
+		imgH	: spriteH*3,
+		spriteW	: spriteW,
+		spriteH	: spriteH
+	});		
+	// wait for the spritesheet to be loaded
 	spritesheet.bind('load', function(){
 		console.log("image loaded");
-		//items.createMesh(10+2*16).addTo(world);
 		//spritesheet.createMesh(10+2*16).addTo(world);
 
+		// parameter of the animation
 		var nSpriteX		= 17
-		var nSpritePerSecond	= 20;
+		var nSpritePerSecond	= 25;
 
+		// build all the meshes and make them invisible
 		var meshes	= [];
 		for(var i=0; i < nSpriteX; i++){
-			var mesh	= spritesheet.createMesh(i+0*16);
-
-			mesh.visible(true).scaleBy(2,2,2*4)
-			mesh.addTo(world)
-
+			var mesh= spritesheet.createMesh(i+0*16).addTo(world)
+					.visible(true)//.scaleBy(2,2,2*4)
 			meshes.push(mesh)
 		}
-		
+		// create a loop which make one mesh visible 
 		world.loop().hook(function(delta, now){
 			meshes.forEach(function(mesh){
 				mesh.visible(false);

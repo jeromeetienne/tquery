@@ -1,13 +1,11 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.spritesheet.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var material	= new THREE.MeshBasicMaterial({
-		color		: 0x000000,
-		wireframe	: true
-	})
-	tQuery.createCube(material).addTo(world);
+	tQuery.createCube().addTo(world)
+		.setBasicMaterial().color(0x000000).wireframe(true).back();
 
 	var spritesheet	= new tQuery.Spritesheet({
 		url	: 'images/items/items.png',
