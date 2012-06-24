@@ -1,3 +1,5 @@
+tQuery.define(function(){	// AMD module definition
+
 /**
  * Create a tQuery.Sprite
  * 
@@ -43,3 +45,4 @@ tQuery.mixinAttributes(tQuery.Sprite, {
 
 
 
+});	// tQuery.define() End
