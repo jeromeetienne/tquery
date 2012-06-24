@@ -1,0 +1,23 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../vendor/ezrequire.js"></script>
+<script src="../tquery.ezrequire.js"></script>
+<body><script>
+
+tQuery.require([
+	//'plugins/fireball/tquery.fireballmaterial.js',
+	//'plugins/ezrequire/examples/tquery.require.pproc',
+	//'plugins/ezrequire/examples/tquery.require.minecraft'
+], function(){
+	console.log("jjj")
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+//	object.useFileballMaterial(2);
+//	world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
+
+	//var character	= new tQuery.MinecraftChar({
+	//	skinUrl	: '../../minecraft/examples/images/agentsmith.png'
+	//});
+	//character.model.addTo(world)
+})
+</script></body>
