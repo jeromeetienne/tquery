@@ -1,5 +1,3 @@
-tQuery.define(function(){	// AMD module definition
-
 /**
  * Create a tQuery.Sprite
  * 
@@ -42,7 +40,3 @@ tQuery.mixinAttributes(tQuery.Sprite, {
 	map			: tQuery.convert.toTexture,
 	useScreenCoordinates	: tQuery.convert.toBool
 });
-
-
-
-});	// tQuery.define() End

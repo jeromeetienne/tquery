@@ -1,7 +1,7 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.minecraftchar.js"></script>
-<script src="../tquery.minecraftitems.js"></script>
+
 <script src="../../../vendor/three.js/ShaderExtras.js"></script>
 <script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
 <script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
@@ -42,13 +42,6 @@
 
 	
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
-
-	var items	= new tQuery.MinecraftItems();
-	items.bind('load', function(){
-		var item	= items.createMesh(2+6*16).scaleBy(35/2);
-		item.position(0,-9,6).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
-		item.addTo(character.parts.armR);
-	});
 
 	world.loop().hook(function(delta, now){
 		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;

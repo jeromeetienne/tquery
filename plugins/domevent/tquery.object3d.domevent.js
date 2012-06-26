@@ -1,7 +1,8 @@
 /**
  * plugin to handle deviceOrientation API
 */
-define(['plugins/domevent/threex.domevent'], function(){
+(function(){
+	//alert('kkk')
 	var domEvent;
 	var getInstance	= function(){
 		if( !domEvent ){
@@ -34,6 +35,6 @@ define(['plugins/domevent/threex.domevent'], function(){
 		});
 		return this;	// for chained API
 	});
-});
+})();
 
 

@@ -43,6 +43,23 @@ tQuery.MeshBasicMaterial	= function(elements)
 */
 tQuery.inherit(tQuery.MeshBasicMaterial, tQuery.Material);
 
+
+/**
+ * Initial code to automatically extract attribute names from THREE.Material child classes
+
+ 	var extractMaterialAttribute	= function(className){
+		var parentClass	= new THREE.Material();
+		var mainClass	= new THREE[className]();
+		var parentProps	= Object.keys(parentClass)
+		var mainProps	= Object.keys(mainClass)
+		console.log("parentProps", JSON.stringify(parentProps, null, '\t'),"mainProps", JSON.stringify(mainProps, null, '\t'));
+		mainProps	= mainProps.filter(function(property){
+			return parentProps.indexOf(property) === -1;
+		})
+		console.log("mainProps", JSON.stringify(mainProps, null, '\t'));
+		return mainProps;
+	}
+*/
 /**
  * define all acceptable attributes for this class
 */
@@ -50,7 +67,9 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	color		: tQuery.convert.toThreeColor,
 	ambient		: tQuery.convert.toThreeColor,
 	map		: tQuery.convert.toTexture,
-	wireframe	: tQuery.convert.toBool
+	wireframe	: tQuery.convert.toBool,
+	wireframeLinewidth	: tQuery.convert.toInteger,
+	wireframeLinecap	: tQuery.convert.toString
 });
 
 
