@@ -3,21 +3,48 @@
 <script src="../vendor/ezrequire.js"></script>
 <script src="../tquery.ezrequire.js"></script>
 <body><script>
+tQuery.EzRequire.urlModifiers.unshift(function(url){
+	if( url != 'plugins/text' )	return url;
+	return [
+		'plugins/text/fonts/gentilis_bold.typeface.js',
+		'plugins/text/fonts/gentilis_regular.typeface.js',
+		'plugins/text/fonts/optimer_bold.typeface.js',
+		'plugins/text/fonts/optimer_regular.typeface.js',
+		'plugins/text/fonts/helvetiker_bold.typeface.js',
+		'plugins/text/fonts/helvetiker_regular.typeface.js',
+		'plugins/text/fonts/droid/droid_sans_regular.typeface.js',
+		'plugins/text/fonts/droid/droid_sans_bold.typeface.js',
+		'plugins/text/fonts/droid/droid_serif_regular.typeface.js',
+		'plugins/text/fonts/droid/droid_serif_bold.typeface.js',
+		"plugins/text/tquery.text.js",
+	];
+});
 
 tQuery.require([
-	//'plugins/fireball/tquery.fireballmaterial.js',
-	//'plugins/ezrequire/examples/tquery.require.pproc',
-	//'plugins/ezrequire/examples/tquery.require.minecraft'
+	'plugins/fireball/tquery.fireballmaterial.js',
+	'plugins/ezrequire/examples/tquery.require.pproc',
+	'plugins/ezrequire/examples/tquery.require.minecraft',
+	'plugins/ezrequire/examples/tquery.require.domevent',
+	'plugins/ezrequire/examples/tquery.require.text'
 ], function(){
-	console.log("jjj")
+	console.log("require example loaded")
 	var world	= tQuery.createWorld().boilerplate().start();
+	
 	var object	= tQuery.createTorus().addTo(world);
-//	object.useFileballMaterial(2);
-//	world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
 
+	object.useFileballMaterial(2);
+	
+	//world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
+	//
 	//var character	= new tQuery.MinecraftChar({
 	//	skinUrl	: '../../minecraft/examples/images/agentsmith.png'
 	//});
 	//character.model.addTo(world)
+	//
+	//tQuery.createCube().addTo(world).on('click', function(event){
+	//	console.log(event.type, "on cube", event)
+	//});
+
+	//tQuery.createText("tQuery is Fun!").scaleBy(1/4).addTo(world);
 })
 </script></body>

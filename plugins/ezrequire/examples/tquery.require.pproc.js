@@ -13,5 +13,7 @@ tQuery.define([
 	
 	"plugins/pproc/tquery.effectcomposer.js"
 ], function(){
-	console.log("all loaded")
+	console.log("pproc loaded")
+	//alert("all loaded")
+	//debugger;
 })
