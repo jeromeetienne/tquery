@@ -51,6 +51,21 @@ tQuery.mixinAttributes(tQuery.Object3D, {
 	castShadow		: tQuery.convert.toBool
 });
 
+/**
+ * Traverse the hierarchy of Object3D. 
+ * 
+ * @returns {tQuery.Object3D} return the tQuery.Object3D itself
+*/
+tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
+	this.each(function(object3d){
+		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
+			callback(object3d);
+		});
+	});
+	return this;	// for chained API
+};
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
