@@ -558,6 +558,21 @@ tQuery.mixinAttributes(tQuery.Object3D, {
 	castShadow		: tQuery.convert.toBool
 });
 
+/**
+ * Traverse the hierarchy of Object3D. 
+ * 
+ * @returns {tQuery.Object3D} return the tQuery.Object3D itself
+*/
+tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
+	this.each(function(object3d){
+		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
+			callback(object3d);
+		});
+	});
+	return this;	// for chained API
+};
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -891,7 +906,15 @@ tQuery.inherit(tQuery.Geometry, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsInstanceOn(tQuery.Geometry);/**
+tQuery.pluginsInstanceOn(tQuery.Geometry);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Geometry, {
+	hasTangents	: tQuery.convert.toBool,
+	dynamic		: tQuery.convert.toBool
+});/**
  * Handle material
  *
  * @class include THREE.Material. It inherit from {@link tQuery.Node}
@@ -1100,7 +1123,7 @@ tQuery.World.prototype.destroy	= function(){
 	// microevent.js notification
 	this.trigger('destroy');
 	// unhook the render function in this._loop
-	this._loop.hookOnRender(this._$loopCb);
+	this._loop.unhookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
 	// remove this._cameraControls if needed

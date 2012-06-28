@@ -1,7 +1,7 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.minecraftchar.js"></script>
-
+<script src="../tquery.spritesheet.js"></script>
 <script src="../../../vendor/three.js/ShaderExtras.js"></script>
 <script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
 <script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
@@ -13,7 +13,7 @@
 <script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
 <script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
-<body><div style="position: absolute; font-size: 200%; right: 0">
+<body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1">
 	<select id="skinSelect" onchange='character.loadSkin(this.value);'>
 		<option value="images/char.png">char</option>
 		<option value="images/3djesus.png">3djesus</option>
@@ -33,27 +33,53 @@
 	</select>
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	//world.removeCameraControls();
 	world.tCamera().position.z	= 1.8;
 
-	var character	= new tQuery.MinecraftChar();
-	character.model.addTo(world).rotateY(-Math.PI/8)
-	character.loadSkin('images/3djesus.png')
+	// load the minecraft character
+	// ```character.loadSkin(imageUrl)```
+	var character	= new tQuery.MinecraftChar({
+		skinUrl	: 'images/3djesus.png'
+	}); 
+	// add the model to our world
+	character.model.addTo(world);
 
-	
-	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
+	// add post processing
+	world.addEffectComposer()
+		.sepia()
+		//.film(0.5, 0.25, 648, false)
+		.vignette()
+		.finish();
+
+	// initiate a spritesheet
+	var items	= new tQuery.Spritesheet({
+		url	: 'images/items/items.png',
+		imgW	: 256,
+		imgH	: 256,
+		spriteW	: 16,
+		spriteH	: 16
+	});
+	// once the spritesheet is loaded, 
+	items.bind('load', function(){
+		var item	= items.createMesh(2+6*16).scaleBy(1/2);
+		item.position(0,-9/35,6/35).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+		item.addTo(character.parts.armR);
+	});
+
+	// make the head move
 	world.loop().hook(function(delta, now){
 		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;
 		character.parts.headGroup.rotation.y	= Math.sin(now)/3;
 	}); 
 	
+	// make the legs move
 	world.loop().hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.legR.rotation.x	= 1.4 * Math.cos(angle);
 		character.parts.legL.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
 	});
 
+	// make the arms move
 	world.loop().hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.armR.rotation.x	= 1.4 * Math.cos(angle + Math.PI);

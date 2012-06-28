@@ -2393,6 +2393,21 @@ tQuery.mixinAttributes(tQuery.Object3D, {
 	castShadow		: tQuery.convert.toBool
 });
 
+/**
+ * Traverse the hierarchy of Object3D. 
+ * 
+ * @returns {tQuery.Object3D} return the tQuery.Object3D itself
+*/
+tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
+	this.each(function(object3d){
+		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
+			callback(object3d);
+		});
+	});
+	return this;	// for chained API
+};
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -2726,7 +2741,15 @@ tQuery.inherit(tQuery.Geometry, tQuery.Node);
 /**
  * Make it pluginable
 */
-tQuery.pluginsInstanceOn(tQuery.Geometry);/**
+tQuery.pluginsInstanceOn(tQuery.Geometry);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Geometry, {
+	hasTangents	: tQuery.convert.toBool,
+	dynamic		: tQuery.convert.toBool
+});/**
  * Handle material
  *
  * @class include THREE.Material. It inherit from {@link tQuery.Node}
@@ -2935,7 +2958,7 @@ tQuery.World.prototype.destroy	= function(){
 	// microevent.js notification
 	this.trigger('destroy');
 	// unhook the render function in this._loop
-	this._loop.hookOnRender(this._$loopCb);
+	this._loop.unhookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
 	// remove this._cameraControls if needed
@@ -3978,13 +4001,30 @@ tQuery.World.register('boilerplate', function(opts){
 	return this;
 });
 
+/**
+ * Define a page title
+*/
+tQuery.World.register('pageTitle', function(element){
+	// handle parameters polymorphism
+	if( typeof(element) === 'string' ){
+		var element	= document.querySelector(element);
+	}
+	// sanity check
+	console.assert( element instanceof HTMLElement);
+	// set element.style
+	element.style.position	= "absolute";
+	element.style.width	= "100%";
+	element.style.textAlign	= "center";
+	// for chained API
+	return this;
+});
+
 tQuery.World.register('addBoilerplate', function(opts){
 	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
 	// handle parameters	
 	opts	= tQuery.extend(opts, {
-		honorInfo	: true,
 		stats		: true,
 		cameraControls	: true,
 		windowResize	: true,
@@ -4000,17 +4040,6 @@ tQuery.World.register('addBoilerplate', function(opts){
 
 	// create the context
 	tQuery.data(this, '_boilerplateCtx', ctx);
-
-	// add css for the info element if any
-	if( opts.honorInfo ){
-		var element	= document.getElementById('info');
-		if( element ){
-			element.style.position	= "absolute";
-			element.style.width	= "100%";
-			element.style.textAlign	= "center";
-		}
-	}
-
 
 	// get some variables
 	var tCamera	= this.tCamera();

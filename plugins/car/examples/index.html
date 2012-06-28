@@ -49,7 +49,7 @@
 <!-- Add a body and add a title -->
 <body style="margin:0;padding:0;overflow:'hidden';"><div id="info" style="z-index: 2">
 	Example of tQuery.car plugins<br/>
-	<a href="../../../www/vendor/doccoviewer/#../../../plugins/car/examples/" target="_blank">Annotated Source</a>
+	<a href="../../../www/vendor/doccoviewer/index.html#../../../plugins/car/examples/index.html" target="_blank">Annotated Source</a>
 </div><script>
 	// ## Let's start coding
 
@@ -57,7 +57,7 @@
 	// [boilerplate for three.js](http://learningthreejs.com/blog/2011/12/20/boilerplate-for-three-js/).
 	// It is a fast way start, avoids repetitive tasks, following DRY principles and includes all those good practices which are so easy to forget.
 	// Then we just have to ```.start()``` the rendering loop on this world.
-	var world	= tQuery.createWorld().boilerplate().start();
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 
 	world.addEffectComposer().vignette().finish();
 

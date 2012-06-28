@@ -27,3 +27,11 @@ tQuery.inherit(tQuery.Geometry, tQuery.Node);
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Geometry);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Geometry, {
+	hasTangents	: tQuery.convert.toBool,
+	dynamic		: tQuery.convert.toBool
+});

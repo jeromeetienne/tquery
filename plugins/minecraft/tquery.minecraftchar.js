@@ -12,7 +12,7 @@ tQuery.register('MinecraftChar', function(opts){
 	 * Could be replace by a CubeGeometry but would require to change the whole indexing
 	 * not now.
 	*/
-	function cubeFromPlanes (size, material) {
+	function cubeFromPlanes(size, material) {
 		var cube	= new THREE.Object3D();
 		var meshes	= [];
 		for( var i=0; i < 6; i++ ){
@@ -67,10 +67,10 @@ tQuery.register('MinecraftChar', function(opts){
 		return material;
 	}
 	function uvmap (geometry, face, x, y, w, h, rotateBy) {
-		if(!rotateBy) rotateBy = 0;
-		var uvs = geometry.faceVertexUvs[0][face];
-		var tileU = x;
-		var tileV = y;
+		if( !rotateBy )	rotateBy = 0;
+		var uvs		= geometry.faceVertexUvs[0][face];
+		var tileU	= x;
+		var tileV	= y;
 		
 		uvs[ (0 + rotateBy) % 4 ].u = tileU * tileUvW;
 		uvs[ (0 + rotateBy) % 4 ].v = tileV * tileUvH;
@@ -97,7 +97,6 @@ tQuery.register('MinecraftChar', function(opts){
 
 	// Player model
 	var playerModel	= tQuery.createObject3D();
-	playerModel.scaleBy(1/35);
 	
 	
 	var tileUvW	= 1/canvas.width;
@@ -267,6 +266,13 @@ tQuery.register('MinecraftChar', function(opts){
 	//		load the skin						//
 	//////////////////////////////////////////////////////////////////////////
 	this.loadSkin(opts.skinUrl);
+
+	// scale down the whole player at geometry level
+	tQuery('mesh', playerModel).geometry().scaleBy(1/35)
+	playerModel.traverseHierarchy(function(object3d){
+		object3d.position.multiplyScalar(1/35)
+	});
+
 
 	// export public variable
 	this.model	= playerModel;
