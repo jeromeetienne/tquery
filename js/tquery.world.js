@@ -82,7 +82,7 @@ tQuery.World.prototype.destroy	= function(){
 	// microevent.js notification
 	this.trigger('destroy');
 	// unhook the render function in this._loop
-	this._loop.hookOnRender(this._$loopCb);
+	this._loop.unhookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
 	// remove this._cameraControls if needed
