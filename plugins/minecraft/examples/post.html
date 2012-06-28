@@ -27,11 +27,21 @@
 </div><script>
 	// ## Let's start coding
 
-	// We start to create our world as usual. 
+	// We start to create our world as usual. This initialize the renderer, the camera,
+	// its controls and a rendering loop.
+	// We setup the 
+	// [boilerplate for three.js](http://learningthreejs.com/blog/2012/01/19/boilerplate-builder-for-three-js/)
+	// and add a page title with some info on our little 3D demo.
+	// We just put the camera a little closer to scene center. Thus the character
+	// will be bigger on screen. We just can't get enougth of it, can we ;)
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	world.tCamera().position.z	= 1.8;
 
+
+	// ## Hello Steve!
+
 	// Now that we go a world. We will create a minecraft character.
+	// In fact, minecraft main character is called ['steve'](http://www.minecraftwiki.net/wiki/The_Player).
 	// ```tQuery.MinecraftChar``` is the main class. It will create 
 	// a character model and expose all its limbs too e.g right legs or right arms.
 	// More on that later.
@@ -40,7 +50,7 @@
 	var character	= new tQuery.MinecraftChar({
 		skinUrl	: 'images/3djesus.png'
 	}); 
-	// add the model to our world
+	// Now that we got our character setup, we just need to include it in our 3D world.
 	character.model.addTo(world);
 
 	// ## Make this model moves
