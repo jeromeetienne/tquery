@@ -1,4 +1,5 @@
 /**
+ * original demo - http://djazz.mine.nu/lab/minecraft_items/
  * http://danielmcgraw.com/2010/10/06/How-To-Skin-Your-Minecraft-Character/
  * http://www.minecraftskins.com/
  * http://www.minecraftskins.info/

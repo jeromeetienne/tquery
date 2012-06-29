@@ -2,6 +2,18 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.minecraftchar.js"></script>
 
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
 <body><div id="info">
 	Example of tQuery.minecraft plugins<br/>
 	<a href="../../../www/vendor/doccoviewer/#../../../plugins/minecraft/examples/post.html" target="_blank">Annotated Source</a>
@@ -37,6 +49,22 @@
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	world.tCamera().position.z	= 1.8;
 
+	// Now we add a bit of post processing. It is the first time
+	// we talk about this, so let's details it a bit.
+	// What is post processing (in a 3d context) ?
+	// Post processing is performed after rendering the 3D, hence the name.
+	// It applies on the screen as a whole. So the effects are in 2D.
+	// What's it not ?
+	// So It isn't for 3d effect on specific objects in your world.
+	// 
+	// ```tquery.effectcomposer.js``` plugin provides a simple api to add 
+	// postprocessing to our world. It is a chained API on top of 
+	// [three.js effect composer](https://github.com/mrdoob/three.js/tree/master/examples/js/postprocessing). 
+	// In our case, we first apply ```.sepia()``` to change the colors toward 
+	// [sepia color](http://en.wikipedia.org/wiki/Sepia_\(color\)).
+	// Then we apply ```.vignette()``` and mark the effects list
+	// as finished. Not too hard hey ;)
+	world.addEffectComposer().sepia().vignette().finish();
 
 	// ## Hello Steve!
 
@@ -58,6 +86,7 @@
 	// So we talked about exposed limbs... kinda gross, almost disturbing :)
 	// In fact it just means each part of our model is exposed for you to 
 	// play with. It has the head, legs right and left, and the same for the arms.
+	// It is all in ```character.parts```.
 
 	// So the first step is to hook a function in the world rendering loop.
 	// two parameters are passed ```delta``` and ```now```. ```delta``` is the number
@@ -65,19 +94,21 @@
 	// time in seconds.
 	// We use those values to tune the animation. Thus it will be animated at the same
 	// speed no matter the [fps](http://en.wikipedia.org/wiki/Frame_rate) rate of your computer.
+
+
 	world.loop().hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.armR.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
 		character.parts.armL.rotation.x	= 1.4 * Math.cos(angle);
 	});
 
-	// make the head move
 	world.loop().hook(function(delta, now){
 		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;
 		character.parts.headGroup.rotation.y	= Math.sin(now)/3;
 	}); 
 	
-	// make the legs move
+	// Now we make the legs move to get the character walking... It is essentially the 
+	// same as the arms. 
 	world.loop().hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.legR.rotation.x	= 1.4 * Math.cos(angle);
