@@ -43,7 +43,7 @@
 <script src="../../minecraft/tquery.minecraftcharanimations.js"></script>
 <script src="../../minecraft/tquery.minecraftcharheadanimations.js"></script>
 
-<script src="../../minecraft/tquery.minecraftitems.js"></script>
+<script src="../../minecraft/tquery.spritesheet.js"></script>
 
 <script src="../../materials/tquery.meshlambertmaterial.js"></script>
 <script src="../../materials/tquery.meshphongmaterial.js"></script>
@@ -119,8 +119,12 @@
 	//	character.model.get(0).rotation.y	= -angle;
 	//})
 	
-	var items	= new tQuery.MinecraftItems({
-		url	: '../../minecraft/examples/images/items/items.png'
+	var items	= new tQuery.Spritesheet({
+		url	: '../../minecraft/examples/images/items/items.png',
+		imgW	: 256,
+		imgH	: 256,
+		spriteW	: 16,
+		spriteH	: 16
 	});
 	items.bind('load', function(){
 		var item	= items.createMesh(10+2*16).addTo(world);
@@ -140,7 +144,7 @@
 			context.fillText(text, 8+(16*x), 28+(28*y));
 		}
 		print(1,1, "Hello")
-		print(3,3, "WebEvents!") 
+		print(2,3, "WebGL Camp!") 
 		
 		
 		
