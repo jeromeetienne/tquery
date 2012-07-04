@@ -1,0 +1,92 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../vendor/physijs/physi.js"></script>
+<script src="../tquery.physijs.js"></script>
+
+<script src="../../materials/tquery.meshlambertmaterial.js"></script>
+<script src="../../materials/tquery.meshphongmaterial.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
+
+<script src='../../light/tquery.light.shadow.js'></script>
+
+<body><div id="info">
+	Domino Example of tQuery.physics plugins - based on physijs
+</div><script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+
+	world.removeCameraControls();
+	world.tCamera().position.set(-10, 5, 0.75).setLength(10);
+	world.tCamera().lookAt(new THREE.Vector3(0, 0, 0.75));
+
+	// enable shadow
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+	// enable physics
+	world.enablePhysics();
+	// fetch the texture
+	var texture	= THREE.ImageUtils.loadTexture( "images/rocks.jpg" );
+	texture.wrapS	= texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 3, 2 );
+
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(40, 40, -40).color(0xffffff)
+		.castShadow(true).shadowMap(512,512)
+		.shadowCamera(4, -4, 4, -4, 0.1, 200)
+		.shadowDarkness(0.7).shadowBias(.002)
+		//.shadowCameraVisible(true)
+
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(-40, 40, -40).color(0x8888ff)
+
+
+	// Ground
+	tQuery.createCube(5, 0.5, 8, 3, 3, 3).addTo(world)
+		.setLambertMaterial().map(texture).back()
+		//.geometry().scaleBy(20, 0.5, 8).back()
+		.geometry().smooth(2).back()
+		.translateY(-0.25)
+		.translateZ(0.7)
+		.receiveShadow(true)
+		.enablePhysics({
+			mass		: 0,
+			friction	: 0.2,
+			restitution	: 1
+		});
+	// place domino
+	var nDomino	= 11;
+	for(var i = 0; i < nDomino; i++){
+		var positionX	= 0;
+		var positionZ	= (i - nDomino/2) * 0.5;
+		var rotationY	= 0;
+		var object	= tQuery.createCube(0.5, 1, 0.2, 3,3,3).addTo(world)
+			.setLambertMaterial().color(0xffaa88).map(texture).back()
+			.geometry().smooth(2).back()
+			.position(positionX, 0.5, positionZ)
+			.rotateY(rotationY)
+			.castShadow(true)
+			.enablePhysics({
+				mass	: 0.05	
+			});
+	}
+
+	// result ball
+	var object	= tQuery.createSphere(0.5, 16, 32).addTo(world)
+		.setLambertMaterial().color(0x88aaff).map(texture).back()
+		.castShadow(true)
+		.translateY(+0.5)
+		.translateZ((nDomino/2)*0.5 + 0.5)
+		.enablePhysics({
+			mass	: 0.01,			
+		})
+
+	// falling ball
+	var object	= tQuery.createSphere(0.5, 16, 32).addTo(world)
+		.setLambertMaterial().color(0x88ffaa).map(texture).back()
+		.castShadow(true)
+	 	.translateY(10)
+		.translateZ(-(nDomino/2)*0.5 - 0.6)
+	 	.enablePhysics({
+			mass	: 100
+	 	})
+
+</script></body>
