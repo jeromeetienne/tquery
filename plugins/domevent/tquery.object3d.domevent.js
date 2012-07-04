@@ -20,17 +20,16 @@
 	}
 	
 	tQuery.Object3D.register('on', function(eventType, callback){
-		var domEvent	= getInstance();
-
 		this.each(function(object3d){
+			var domEvent	= getInstance();
 			domEvent.bind(object3d, eventType, callback, false);
 		});
 		return this;	// for chained API
 	});
 	
 	tQuery.Object3D.register('off', function(eventType, callback){
-		var domEvent	= getInstance();
 		this.each(function(object3d){
+			var domEvent	= getInstance();
 			domEvent.unbind(object3d, eventType, callback, false);
 		});
 		return this;	// for chained API

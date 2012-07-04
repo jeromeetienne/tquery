@@ -1,0 +1,52 @@
+<!doctype html><title>WebGL Camp Workshop</title>
+<script src="../../../build/tquery-all.js"></script>
+<body><script>
+	var world = tQuery.createWorld().boilerplate().start();	
+	
+	// enable shadow casting in world renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+
+	// add a light with shadow casting
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(2, 10, 10).color(0xffffff).intensity(0.6)
+		.castShadow(true).shadowDarkness(0.6)
+		.shadowMap(512,512)
+		.shadowBias(0.01)
+		.shadowCamera(2, -2, 2, -2, 0.1, 50);
+
+	// lets add a ground
+	tQuery.createCheckerboard({
+		segmentsW	: 100,	// number of segment in width
+		segmentsH	: 100	// number of segment in Height
+	}).addTo(world).scaleBy(100).receiveShadow(true);	
+	
+	// Lets create a minecraft character
+	var character	= new tQuery.MinecraftChar({
+		skinUrl	: "../../minecraft/examples/images/agentsmith.png"
+	});
+	// Now that we add the model to the world
+	character.model.addTo(world).translateY(0.5);
+
+	// make the minecraft object to castShadow
+	tQuery('mesh', character.model).castShadow(true)
+
+	// Move your body	
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	bodyAnims.start('hiwave');
+
+	// Move your head	
+	var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
+	headAnims.start('yes');
+	
+	// Lets add a tv :)
+	//var texture	= tQuery.createWebcamTexture();
+	//var texture	= tQuery.createTVSnowTexture();
+	var texture	= tQuery.createVideoTexture('../../videos/examples/sintel.ogv');
+	tQuery.createCube(1.6,0.9,0.2).addTo(world)
+		.setBasicMaterial().map(texture).back()
+		.translate(-1.3, 0.5, -0.4)
+		.rotateY(Math.PI/4)
+
+	
+</script></body>

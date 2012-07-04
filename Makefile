@@ -110,8 +110,8 @@ buildAll: buildBundle
 	# plugins/dollar3d
 	cat plugins/dollar3d/tquery.dollar3d.js		>> build/tquery-all.js
 	# plugins/deviceOrientation
-	cat vendor/threex/THREEx.DeviceOrientationState.js		>> build/tquery-all.js
-	cat plugins/deviceorientation/tquery.deviceorientation.js	>> build/tquery-all.js
+	#cat vendor/threex/THREEx.DeviceOrientationState.js		>> build/tquery-all.js
+	#cat plugins/deviceorientation/tquery.deviceorientation.js	>> build/tquery-all.js
 	# plugins/wobble
 	cat vendor/threex/THREEx.GeometryWobble.js		>> build/tquery-all.js
 	cat plugins/wobble/tquery.geometry.wobble.js		>> build/tquery-all.js
@@ -119,8 +119,8 @@ buildAll: buildBundle
 	cat vendor/three.js/ImprovedNoise.js			>> build/tquery-all.js
 	cat plugins/terrainGenerator/tquery.terrainGenerator.js	>> build/tquery-all.js
 	# plugins/domevent
-	cat plugins/domevent/threex.domevent.js			>> build/tquery-all.js
-	cat plugins/domevent/tquery.object3d.domevent.js	>> build/tquery-all.js
+	#cat plugins/domevent/threex.domevent.js			>> build/tquery-all.js
+	#cat plugins/domevent/tquery.object3d.domevent.js	>> build/tquery-all.js
 	# plugins/csg
 	cat plugins/csg/csg.js				>> build/tquery-all.js
 	cat plugins/csg/ThreeCSG.js			>> build/tquery-all.js
@@ -128,14 +128,21 @@ buildAll: buildBundle
 	cat plugins/csg/tquery.object3d.csg.js		>> build/tquery-all.js
 	# plugins/fireball
 	cat plugins/fireball/tquery.fireballmaterial.js	>> build/tquery-all.js
+	# plugins/fireball
+	cat plugins/checkerboard/tquery.checkerboard.js	>> build/tquery-all.js
 	# plugins/videos
-	cat plugins/videos/tquery.createvideotexture.js		>> build/tquery-all.js
-	cat plugins/videos/tquery.createwebcamtexture.js	>> build/tquery-all.js
+	cat plugins/videos/*.js		>> build/tquery-all.js
 	# plugins/text
 	cat plugins/text/fonts/droid/droid_serif_bold.typeface.js	>> build/tquery-all.js
 	cat plugins/text/tquery.text.js					>> build/tquery-all.js
 	# plugins/linkify
 	cat plugins/linkify/tquery.mesh.linkify.js		>> build/tquery-all.js
+	# plugins/lights
+	cat plugins/light/*.js		>> build/tquery-all.js
+	# plugins/materials
+	cat plugins/materials/*.js	>> build/tquery-all.js
+	# plugins/minecraft
+	cat plugins/minecraft/*.js	>> build/tquery-all.js
 
 
 minifyAll: buildAll
