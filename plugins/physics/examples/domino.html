@@ -52,15 +52,16 @@
 			friction	: 0.2,
 			restitution	: 1
 		});
+	// build domino geometry and material
+	var geometry	= tQuery.createCube(0.5, 1, 0.2, 3,3,3).geometry().smooth(2).get(0);
+	var material	= tQuery.createMeshLambertMaterial().color(0xffaa88).map(texture).get(0);
 	// place domino
 	var nDomino	= 11;
 	for(var i = 0; i < nDomino; i++){
 		var positionX	= 0;
 		var positionZ	= (i - nDomino/2) * 0.5;
 		var rotationY	= 0;
-		var object	= tQuery.createCube(0.5, 1, 0.2, 3,3,3).addTo(world)
-			.setLambertMaterial().color(0xffaa88).map(texture).back()
-			.geometry().smooth(2).back()
+		var object	= tQuery(geometry, material).addTo(world)
 			.position(positionX, 0.5, positionZ)
 			.rotateY(rotationY)
 			.castShadow(true)
@@ -86,7 +87,7 @@
 	 	.translateY(10)
 		.translateZ(-(nDomino/2)*0.5 - 0.6)
 	 	.enablePhysics({
-			mass	: 100
+			mass	: 1000
 	 	})
 
 </script></body>

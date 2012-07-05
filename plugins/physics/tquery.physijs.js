@@ -77,9 +77,10 @@ tQuery.Mesh.register('enablePhysics', function(opts){
 	// init the material
 	// TODO does it have to be the actual mesh.material ? can it be another struct ?
 	var tMaterial	= tMesh.material;
-	console.assert(tMaterial._physijs === undefined)
 	tMaterial._xMaterial	= new Physijs.xMaterial(tMaterial, opts.friction, opts.restitution);
-	tMaterial._physijs	= tMaterial._xMaterial._physijs;
+	if( tMaterial._physijs === undefined){
+		tMaterial._physijs	= tMaterial._xMaterial._physijs;	
+	}
 
 
 	// TODO to remove hardcoded
@@ -88,7 +89,7 @@ tQuery.Mesh.register('enablePhysics', function(opts){
 	// - TODO this mechanism to hook .add.remove in a scene isnt yet availble
 	var tScene	= tQuery.world.tScene();
 
-	tScene._xScene.add( tMesh, function(){
+	tScene._xScene.add(tMesh, function(){
 		//console.log("this tMesh has been added")
 	});
 
