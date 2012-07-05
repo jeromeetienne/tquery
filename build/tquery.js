@@ -15,8 +15,15 @@
 var tQuery	= function(object, root)
 {
 	// support for tQuery(tGeometry, tMaterial)
-	if( arguments.length === 2 && arguments[0] instanceof THREE.Geometry && arguments[1] instanceof THREE.Material ){
-		return tQuery(new THREE.Mesh(arguments[0], arguments[1]))
+	if( arguments.length === 2 && 
+			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
+			&& 
+			(arguments[1] instanceof THREE.Material || arguments[1] instanceof tQuery.Material)
+			){
+		var tGeometry	= arguments[0] instanceof tQuery.Geometry ? arguments[0].get(0) : arguments[0];
+		var tMaterial	= arguments[1] instanceof tQuery.Material ? arguments[1].get(0) : arguments[1];
+		var tMesh	= new THREE.Mesh(tGeometry, tMaterial);
+		return tQuery( tMesh );
 	}
 
 // TODO make tthat cleaner

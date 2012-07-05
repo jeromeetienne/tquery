@@ -53,8 +53,8 @@
 			restitution	: 1
 		});
 	// build domino geometry and material
-	var geometry	= tQuery.createCube(0.5, 1, 0.2, 3,3,3).geometry().smooth(2).get(0);
-	var material	= tQuery.createMeshLambertMaterial().color(0xffaa88).map(texture).get(0);
+	var geometry	= tQuery.createCube(0.5, 1, 0.2, 3,3,3).geometry().smooth(2);
+	var material	= tQuery.createMeshLambertMaterial().color(0xffaa88).map(texture);
 	// place domino
 	var nDomino	= 11;
 	for(var i = 0; i < nDomino; i++){
