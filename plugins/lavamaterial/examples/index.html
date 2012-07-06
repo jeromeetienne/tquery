@@ -1,8 +1,25 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.lavamaterial.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var object3d	= tQuery.createSphere().addTo(world);
-	object3d.useLavaMaterial(2);
+	world.tRenderer().setClearColorHex( 0x000000, 1 );	
+
+	var object3d	= tQuery.createTorus(0.5-0.15, 0.15, 32, 32).addTo(world);
+	object3d.useLavaMaterial().scale(2);
+
+	world.addEffectComposer().bloom(1.25).film(0.35, 0.95, 2048, false).finish();
 </script></body>

@@ -30,7 +30,7 @@ tQuery.Object3D.register('useLavaMaterial', function(scale){
 		object3d.material	= material;
 		
 		tQuery.world.loop().hook(function(delta, now){
-			uniforms.time.value += 0.2 * 10 * delta;
+			uniforms.time.value += 2 * delta;
 		});
 	});
 	// for chained API
