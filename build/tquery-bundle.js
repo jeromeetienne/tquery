@@ -1849,7 +1849,7 @@ fragmentShader:"precision mediump float;\nuniform vec3 color;\nuniform sampler2D
 */
 var tQuery	= function(object, root)
 {
-	// support for tQuery(tGeometry, tMaterial)
+	// support for tQuery(geometry, material)
 	if( arguments.length === 2 && 
 			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
 			&& 
@@ -4022,6 +4022,10 @@ tQuery.World.register('pageTitle', function(element){
 	element.style.position	= "absolute";
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
+	element.style.textAlign	= "center";
+	element.style.fontWeight= "bolder";
+	element.style.fontSize	= "120%";
+	element.style.fontFamily= "arial";
 	// for chained API
 	return this;
 });

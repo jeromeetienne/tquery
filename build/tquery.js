@@ -14,7 +14,7 @@
 */
 var tQuery	= function(object, root)
 {
-	// support for tQuery(tGeometry, tMaterial)
+	// support for tQuery(geometry, material)
 	if( arguments.length === 2 && 
 			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
 			&& 
