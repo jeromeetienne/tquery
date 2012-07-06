@@ -39,9 +39,9 @@ tQuery.register('EffectComposer', function(opts){
 	world.autoRendering(false);
 	tRenderer.autoClear = false;
 
-	world.loop().hookOnRender(function(){
+	world.loop().hookOnRender(function(delta, now){
 		tRenderer.clear();
-		this._tComposer.render();
+		this._tComposer.render(delta);
 	}.bind(this))
 });
 
