@@ -1,21 +1,25 @@
 /**
- * Fireball material
- * 
- * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
- * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
+ * lava shader by TheGameMaker - http://irrlicht.sourceforge.net/forum/viewtopic.php?t=21057
 */
-tQuery.Object3D.register('useLavaMaterial', function(scale){
-	scale	= scale !== undefined ? scale : 1;
+tQuery.Object3D.register('useLavaMaterial', function(opts){
+	opts	= tQuery.extend({
+		fogDensity	: 0.45,
+		fogColor	: new THREE.Vector3( 0, 0, 0 ),
+		uvScale		: new THREE.Vector2( 3.0, 1.0 ),
+		texture1Url	: "../images/cloud.png",
+		texture2Url	: "../images/lavatile.jpg",
+		timeSpeed	: 1
+	})
 
 	this.each(function(object3d){
 		var uniforms	= {
-			fogDensity	: { type: "f", value: 0.45 },
-			fogColor	: { type: "v3", value: new THREE.Vector3( 0, 0, 0 ) },
-			time		: { type: "f", value: 1.0 },
-			resolution	: { type: "v2", value: new THREE.Vector2( window.innerWidth, window.innerHeight ) },
-			uvScale		: { type: "v2", value: new THREE.Vector2( 3.0, 1.0 ) },
-			texture1	: { type: "t", value: 0, texture: THREE.ImageUtils.loadTexture( "../images/cloud.png" ) },
-			texture2	: { type: "t", value: 1, texture: THREE.ImageUtils.loadTexture( "../images/lavatile.jpg" ) }
+			fogDensity	: { type: "f"	, value: opts.fogDensity },
+			fogColor	: { type: "v3"	, value: opts.fogColor },
+			time		: { type: "f"	, value: 1.0 },
+			resolution	: { type: "v2"	, value: new THREE.Vector2( window.innerWidth, window.innerHeight ) },
+			uvScale		: { type: "v2"	, value: opts.uvScale },
+			texture1	: { type: "t"	, value: 0, texture: THREE.ImageUtils.loadTexture( opts.texture1Url ) },
+			texture2	: { type: "t"	, value: 1, texture: THREE.ImageUtils.loadTexture( opts.texture2Url ) }
 		};
 		
 		uniforms.texture1.texture.wrapS = uniforms.texture1.texture.wrapT = THREE.RepeatWrapping;
@@ -30,7 +34,7 @@ tQuery.Object3D.register('useLavaMaterial', function(scale){
 		object3d.material	= material;
 		
 		tQuery.world.loop().hook(function(delta, now){
-			uniforms.time.value += 2 * delta;
+			uniforms.time.value += opts.timeSpeed * delta;
 		});
 	});
 	// for chained API

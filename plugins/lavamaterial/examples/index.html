@@ -14,8 +14,13 @@
 <script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
 
-<body><script>
-	var world	= tQuery.createWorld().boilerplate().start();
+<body><div id="info" style="color: white;">
+	<a href="http://jeromeetienne.github.com/tquery/" target="_blank">tQuery</a>
+	- shader material demo
+	- featuring lava shader by
+	<a href="http://irrlicht.sourceforge.net/phpBB2/viewtopic.php?t=21057" target="_blank">TheGameMaker</a>
+</div><script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	world.tRenderer().setClearColorHex( 0x000000, 1 );	
 
 	var object3d	= tQuery.createTorus(0.5-0.15, 0.15, 32, 32).addTo(world);
