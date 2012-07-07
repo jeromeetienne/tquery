@@ -4022,9 +4022,9 @@ tQuery.World.register('pageTitle', function(element){
 	element.style.position	= "absolute";
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
-	element.style.textAlign	= "center";
 	element.style.fontWeight= "bolder";
-	element.style.fontSize	= "120%";
+	element.style.fontColor	= "white";
+	element.style.paddingTop= "0.5em";
 	element.style.fontFamily= "arial";
 	// for chained API
 	return this;
