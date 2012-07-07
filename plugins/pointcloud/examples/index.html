@@ -1,0 +1,76 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+//	var object	= tQuery.createTorus().addTo(world);
+
+var superline;
+
+	var url		= "data/mickey.asc";
+	//var url		= "data/acorn.asc";
+	loadFile(url, function(text, length){
+		console.log("fully loaded", length, text.length)
+		var lines	= text.split(/\n/);
+		var nPoints	= lines.length;
+//		nPoints		= 1;
+		console.log("nPoints", nPoints)
+		var tGeometry	= new THREE.Geometry();
+		for(var i = 0; i < nPoints; i++){
+			var line	= lines[i];
+			//var line	= lines[lines.length-1];
+			//var fields	= line.split(/\t/);
+			//line	= line.replace(/( |\t)+/, ' ')
+			var fields	= line.split(/\s/);
+//console.log("fields", line, fields)
+			var positionX	= parseFloat(fields[0]);
+			var positionY	= parseFloat(fields[1]);
+			var positionZ	= parseFloat(fields[2]);
+			var colorHex	= parseInt(fields[3], 10)*0x10000 +
+						parseInt(fields[4], 10)*0x100 +
+						parseInt(fields[5], 10)*0x1;
+			// update the geometry
+			var vertex	= new THREE.Vector3(positionX, positionY, positionZ);
+			tGeometry.vertices.push( vertex );
+			var color	= new THREE.Color( colorHex );
+			tGeometry.colors.push( color );
+		}
+
+		var tMaterial	= new THREE.ParticleBasicMaterial({
+			color		: 0xffffff,
+			vertexColors	: THREE.VertexColors,
+			size		: 4,
+			sizeAttenuation	: false
+		});
+		var tMesh	= new THREE.ParticleSystem(tGeometry, tMaterial);
+		tQuery(tMesh).geometry().computeAll().normalize().back().addTo(world);
+	})
+	
+	
+	function loadFile(url, onLoad, onError, onProgress){
+		var xhr		= new XMLHttpRequest()
+		var length	= 0;
+		xhr.onreadystatechange = function () {
+			if ( xhr.readyState == 4 ) {
+				if( xhr.status == 200 || xhr.status == 0 ){
+					console.log("loaded", xhr)
+					onLoad && onLoad(xhr.response, length);
+				}else{
+					console.error("error load [" + url + "] [" + xhr.status + "]" );
+					onError && onError(xhr.status, xhr);
+				}
+			} else if ( xhr.readyState == 3 ) {
+				if ( length == 0 ) {
+					length = xhr.getResponseHeader( "Content-Length" );
+				}
+				//console.log("progress length:", length, "loaded", xhr.response.length)
+				onProgress && onProgress(xhr.response.length, length)
+			} else if ( xhr.readyState == 2 ) {
+				length	= xhr.getResponseHeader( "Content-Length" );
+				//console.log("length", length)
+			}
+		};
+		xhr.open( "GET", url, true );
+		xhr.send( null );		
+	}
+</script></body>
+
