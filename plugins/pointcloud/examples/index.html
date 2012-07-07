@@ -2,15 +2,28 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+//world.removeCameraControls();
+// TODO
+// - add points during the load ?
+// - make it in a plugins
+// - a binary format would be much much smaller
+//   - a converter in node.js ?
+//   - is there a exsting format already ?
+// - make a ASCloader
+// - could be nice to push in three.js
+// - list of cloud https://github.com/asalga/XB-PointStream/tree/master/clouds
 
 	var url		= "data/mickey.asc";
-	//var url		= "data/acorn.asc";
+	var url		= "data/ariusman_421K.asc";
+	var url		= "data/fora-smalltree.asc";
+	// var url	= "data/acorn.asc";
+	var url		= "data/eggenburg.asc";
 	loadFile(url, function(text, length){
 		// console.log("fully loaded", length, text.length)
 		var lines	= text.split(/\n/);
 		var nPoints	= lines.length;
 		// nPoints	= 1;
-		//console.log("nPoints", nPoints)
+		console.log("nPoints", nPoints)
 		var tGeometry	= new THREE.Geometry();
 		for(var i = 0; i < nPoints; i++){
 			var line	= lines[i];
@@ -18,7 +31,7 @@
 			//var fields	= line.split(/\t/);
 			//line	= line.replace(/( |\t)+/, ' ')
 			var fields	= line.split(/\s/);
-//console.log("fields", line, fields)
+//console.log("fields", line, fields) 
 			var positionX	= parseFloat(fields[0]);
 			var positionY	= parseFloat(fields[1]);
 			var positionZ	= parseFloat(fields[2]);
@@ -35,11 +48,14 @@
 		var tMaterial	= new THREE.ParticleBasicMaterial({
 			color		: 0xffffff,
 			vertexColors	: THREE.VertexColors,
-			size		: 4,
+			size		: 3,
 			sizeAttenuation	: false
 		});
 		var tMesh	= new THREE.ParticleSystem(tGeometry, tMaterial);
-		tQuery(tMesh).geometry().computeAll().normalize().back().addTo(world);
+		tQuery(tMesh).addTo(world)
+			.geometry().computeAll().center().normalize().back()
+			.id("obj")
+			.scale(10);
 	})
 	
 	
