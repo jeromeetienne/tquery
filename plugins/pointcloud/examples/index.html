@@ -13,11 +13,9 @@
 // - could be nice to push in three.js
 // - list of cloud https://github.com/asalga/XB-PointStream/tree/master/clouds
 
-	var url		= "data/mickey.asc";
-	var url		= "data/ariusman_421K.asc";
-	var url		= "data/fora-smalltree.asc";
-	// var url	= "data/acorn.asc";
-	var url		= "data/eggenburg.asc";
+	var url	= "clouds/mickey.asc";
+	//var url	= "clouds/acorn.asc";
+	//var url	= "clouds/eggenburg.asc";
 	loadFile(url, function(text, length){
 		// console.log("fully loaded", length, text.length)
 		var lines	= text.split(/\n/);
@@ -48,14 +46,14 @@
 		var tMaterial	= new THREE.ParticleBasicMaterial({
 			color		: 0xffffff,
 			vertexColors	: THREE.VertexColors,
-			size		: 3,
+			size		: 4,
 			sizeAttenuation	: false
 		});
 		var tMesh	= new THREE.ParticleSystem(tGeometry, tMaterial);
 		tQuery(tMesh).addTo(world)
 			.geometry().computeAll().center().normalize().back()
 			.id("obj")
-			.scale(10);
+			.scale(2);
 	})
 	
 	

@@ -29,9 +29,13 @@ tQuery.World.register('enablePhysics', function(opts){
 	console.assert(tScene._xScene === undefined)
 	tScene._xScene	= new Physijs.xScene(opts.xScene);
 	
-	world.loop().hook(function(delta, now){
-		tScene._xScene.simulate(delta, opts.maxSteps);
-	});
+	// world.loop().hook(function(delta, now){
+	// 	tScene._xScene.simulate(delta, opts.maxSteps);
+	// });
+
+	setTimeout(function(){
+		tScene._xScene.simulate(1/60, opts.maxSteps);
+	}, 1000/60);
 })
 
 tQuery.World.register('physics', function(){
