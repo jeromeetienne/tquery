@@ -320,15 +320,15 @@ tQuery.MicroeventMixin	= function(destObj){
 	destObj.trigger	= trigger;
 
 	destObj.addEventListener	= function(event, fct){
-		destObj.bind(event, fct)
+		this.bind(event, fct)
 		return this;	// for chained API
 	}
 	destObj.removeEventListener	= function(event, fct){
-		destObj.unbind(event, fct)
+		this.unbind(event, fct)
 		return this;	// for chained API
 	}
 	destObj.dispatchEvent		= function(event){
-		destObj.trigger(event)
+		this.trigger(event)
 		return this;
 	}
 };
