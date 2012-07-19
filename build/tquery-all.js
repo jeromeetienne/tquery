@@ -1850,9 +1850,16 @@ fragmentShader:"precision mediump float;\nuniform vec3 color;\nuniform sampler2D
 */
 var tQuery	= function(object, root)
 {
-	// support for tQuery(tGeometry, tMaterial)
-	if( arguments.length === 2 && arguments[0] instanceof THREE.Geometry && arguments[1] instanceof THREE.Material ){
-		return tQuery(new THREE.Mesh(arguments[0], arguments[1]))
+	// support for tQuery(geometry, material)
+	if( arguments.length === 2 && 
+			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
+			&& 
+			(arguments[1] instanceof THREE.Material || arguments[1] instanceof tQuery.Material)
+			){
+		var tGeometry	= arguments[0] instanceof tQuery.Geometry ? arguments[0].get(0) : arguments[0];
+		var tMaterial	= arguments[1] instanceof tQuery.Material ? arguments[1].get(0) : arguments[1];
+		var tMesh	= new THREE.Mesh(tGeometry, tMaterial);
+		return tQuery( tMesh );
 	}
 
 // TODO make tthat cleaner
@@ -4016,6 +4023,10 @@ tQuery.World.register('pageTitle', function(element){
 	element.style.position	= "absolute";
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
+	element.style.textAlign	= "center";
+	element.style.fontWeight= "bolder";
+	element.style.fontSize	= "120%";
+	element.style.fontFamily= "arial";
 	// for chained API
 	return this;
 });
@@ -4491,6 +4502,7 @@ var Stats=function(){var h,a,n=0,o=0,i=Date.now(),u=i,p=i,l=0,q=1E3,r=0,e,j,f,b=
 a.style.width="1px",a.style.height=Math.random()*30+"px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+c[0][0]+","+c[0][1]+","+c[0][2]+")",g.appendChild(a);return{domElement:h,update:function(){i=Date.now();m=i-u;s=Math.min(s,m);t=Math.max(t,m);k.textContent=m+" MS ("+s+"-"+t+")";var a=Math.min(30,30-m/200*30);g.appendChild(g.firstChild).style.height=a+"px";u=i;o++;if(i>p+1E3)l=Math.round(o*1E3/(i-p)),q=Math.min(q,l),r=Math.max(r,l),j.textContent=l+" FPS ("+q+"-"+r+")",a=Math.min(30,30-l/
 100*30),f.appendChild(f.firstChild).style.height=a+"px",p=i,o=0}}};
 
+// tquery.js - https://github.com/jeromeetienne/tquery - MIT License
 /**
  * Declare a no-operation define to be able to load modules which use requirejs
  * without requirejs itself. The goal is to be compatible
@@ -4510,7 +4522,305 @@ function define(deps, callback){
 	
 	// call the callback
 	callback();
-}// THREEx.KeyboardState.js keep the current state of the keyboard.
+}// This THREEx helper makes it easy to handle window resize.
+// It will update renderer and camera when window is resized.
+//
+// # Usage
+//
+// **Step 1**: Start updating renderer and camera
+//
+// ```var windowResize = THREEx.WindowResize(aRenderer, aCamera)```
+//    
+// **Step 2**: Start updating renderer and camera
+//
+// ```windowResize.stop()```
+// # Code
+
+//
+
+/** @namespace */
+var THREEx	= THREEx 		|| {};
+
+/**
+ * Update renderer and camera when the window is resized
+ * 
+ * @param {Object} renderer the renderer to update
+ * @param {Object} Camera the camera to update
+*/
+THREEx.WindowResize	= function(renderer, camera){
+	var callback	= function(){
+		// notify the renderer of the size change
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		// update the camera
+		camera.aspect	= window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+	}
+	// bind the resize event
+	window.addEventListener('resize', callback, false);
+	// return .stop() the function to stop watching window resize
+	return {
+		/**
+		 * Stop watching window resize
+		*/
+		stop	: function(){
+			window.removeEventListener('resize', callback);
+		}
+	};
+}
+
+THREEx.WindowResize.bind	= function(renderer, camera){
+	return THREEx.WindowResize(renderer, camera);
+}
+/** @namespace */
+var THREEx	= THREEx 		|| {};
+
+// TODO http://29a.ch/2011/9/11/uploading-from-html5-canvas-to-imgur-data-uri
+// able to upload your screenshot without running servers
+
+// forced closure
+(function(){
+
+	/**
+	 * Take a screenshot of a renderer
+	 * - require WebGLRenderer to have "preserveDrawingBuffer: true" to be set
+	 * - TODO is it possible to check if this variable is set ? if so check it
+	 *   and make advice in the console.log
+	 *   - maybe with direct access to the gl context...
+	 * 
+	 * @param {Object} renderer to use
+	 * @param {String} mimetype of the output image. default to "image/png"
+	 * @param {String} dataUrl of the image
+	*/
+	var toDataURL	= function(renderer, mimetype)
+	{
+		mimetype	= mimetype	|| "image/png";
+		var dataUrl	= renderer.domElement.toDataURL(mimetype);
+		return dataUrl;
+	}
+
+	/**
+	 * resize an image to another resolution while preserving aspect
+	 *
+	 * @param {String} srcUrl the url of the image to resize
+	 * @param {Number} dstWidth the destination width of the image
+	 * @param {Number} dstHeight the destination height of the image
+	 * @param {Number} callback the callback to notify once completed with callback(newImageUrl)
+	*/
+	var _aspectResize	= function(srcUrl, dstW, dstH, callback){
+		// to compute the width/height while keeping aspect
+		var cpuScaleAspect	= function(maxW, maxH, curW, curH){
+			var ratio	= curH / curW;
+			if( curW >= maxW && ratio <= 1 ){ 
+				curW	= maxW;
+				curH	= maxW * ratio;
+			}else if(curH >= maxH){
+				curH	= maxH;
+				curW	= maxH / ratio;
+			}
+			return { width: curW, height: curH };
+		}
+		// callback once the image is loaded
+		var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+		var onLoad	= __bind(function(){
+			// init the canvas
+			var canvas	= document.createElement('canvas');
+			canvas.width	= dstW;	canvas.height	= dstH;
+			var ctx		= canvas.getContext('2d');
+
+			// TODO is this needed
+			ctx.fillStyle	= "black";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			// scale the image while preserving the aspect
+			var scaled	= cpuScaleAspect(canvas.width, canvas.height, image.width, image.height);
+
+			// actually draw the image on canvas
+			var offsetX	= (canvas.width  - scaled.width )/2;
+			var offsetY	= (canvas.height - scaled.height)/2;
+			ctx.drawImage(image, offsetX, offsetY, scaled.width, scaled.height);
+
+			// dump the canvas to an URL		
+			var mimetype	= "image/png";
+			var newDataUrl	= canvas.toDataURL(mimetype);
+			// notify the url to the caller
+			callback && callback(newDataUrl)
+		}, this);
+
+		// Create new Image object
+		var image 	= new Image();
+		image.onload	= onLoad;
+		image.src	= srcUrl;
+	}
+	
+
+	// Super cooked function: THREEx.Screenshot.bindKey(renderer)
+	// and you are done to get screenshot on your demo
+
+	/**
+	 * Bind a key to renderer screenshot
+	*/
+	var bindKey	= function(renderer, opts){
+		// handle parameters
+		opts		= opts		|| {};
+		var charCode	= opts.charCode	|| 'p'.charCodeAt(0);
+		var width	= opts.width;
+		var height	= opts.height;
+		var callback	= opts.callback	|| function(url){
+			window.open(url, "name-"+Math.random());
+		};
+
+		// callback to handle keypress
+		var __bind	= function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+		var onKeyPress	= __bind(function(event){
+			// return now if the KeyPress isnt for the proper charCode
+			if( event.which !== charCode )	return;
+			// get the renderer output
+			var dataUrl	= this.toDataURL(renderer);
+
+			if( width === undefined && height === undefined ){
+				callback( dataUrl )
+			}else{
+				// resize it and notify the callback
+				// * resize == async so if callback is a window open, it triggers the pop blocker
+				_aspectResize(dataUrl, width, height, callback);				
+			}
+		}, this);
+
+		// listen to keypress
+		// NOTE: for firefox it seems mandatory to listen to document directly
+		document.addEventListener('keypress', onKeyPress, false);
+
+		return {
+			unbind	: function(){
+				document.removeEventListener('keypress', onKeyPress, false);
+			}
+		};
+	}
+
+	// export it	
+	THREEx.Screenshot	= {
+		toDataURL	: toDataURL,
+		bindKey		: bindKey
+	};
+})();
+// This THREEx helper makes it easy to handle the fullscreen API
+// * it hides the prefix for each browser
+// * it hides the little discrepencies of the various vendor API
+// * at the time of this writing (nov 2011) it is available in 
+//   [firefox nightly](http://blog.pearce.org.nz/2011/11/firefoxs-html-full-screen-api-enabled.html),
+//   [webkit nightly](http://peter.sh/2011/01/javascript-full-screen-api-navigation-timing-and-repeating-css-gradients/) and
+//   [chrome stable](http://updates.html5rocks.com/2011/10/Let-Your-Content-Do-the-Talking-Fullscreen-API).
+
+// 
+// # Code
+
+//
+
+/** @namespace */
+var THREEx		= THREEx 		|| {};
+THREEx.FullScreen	= THREEx.FullScreen	|| {};
+
+/**
+ * test if it is possible to have fullscreen
+ * 
+ * @returns {Boolean} true if fullscreen API is available, false otherwise
+*/
+THREEx.FullScreen.available	= function()
+{
+	return this._hasWebkitFullScreen || this._hasMozFullScreen;
+}
+
+/**
+ * test if fullscreen is currently activated
+ * 
+ * @returns {Boolean} true if fullscreen is currently activated, false otherwise
+*/
+THREEx.FullScreen.activated	= function()
+{
+	if( this._hasWebkitFullScreen ){
+		return document.webkitIsFullScreen;
+	}else if( this._hasMozFullScreen ){
+		return document.mozFullScreen;
+	}else{
+		console.assert(false);
+	}
+}
+
+/**
+ * Request fullscreen on a given element
+ * @param {DomElement} element to make fullscreen. optional. default to document.body
+*/
+THREEx.FullScreen.request	= function(element)
+{
+	element	= element	|| document.body;
+	if( this._hasWebkitFullScreen ){
+		element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+	}else if( this._hasMozFullScreen ){
+		element.mozRequestFullScreen();
+	}else{
+		console.assert(false);
+	}
+}
+
+/**
+ * Cancel fullscreen
+*/
+THREEx.FullScreen.cancel	= function()
+{
+	if( this._hasWebkitFullScreen ){
+		document.webkitCancelFullScreen();
+	}else if( this._hasMozFullScreen ){
+		document.mozCancelFullScreen();
+	}else{
+		console.assert(false);
+	}
+}
+
+
+// internal functions to know which fullscreen API implementation is available
+THREEx.FullScreen._hasWebkitFullScreen	= 'webkitCancelFullScreen' in document	? true : false;	
+THREEx.FullScreen._hasMozFullScreen	= 'mozCancelFullScreen' in document	? true : false;	
+
+/**
+ * Bind a key to renderer screenshot
+*/
+THREEx.FullScreen.bindKey	= function(opts){
+	opts		= opts		|| {};
+	var charCode	= opts.charCode	|| 'f'.charCodeAt(0);
+	var dblclick	= opts.dblclick !== undefined ? opts.dblclick : false;
+	var element	= opts.element
+
+	var toggle	= function(){
+		if( THREEx.FullScreen.activated() ){
+			THREEx.FullScreen.cancel();
+		}else{
+			THREEx.FullScreen.request(element);
+		}		
+	}
+
+	// callback to handle keypress
+	var __bind	= function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+	var onKeyPress	= __bind(function(event){
+		// return now if the KeyPress isnt for the proper charCode
+		if( event.which !== charCode )	return;
+		// toggle fullscreen
+		toggle();
+	}, this);
+
+	// listen to keypress
+	// NOTE: for firefox it seems mandatory to listen to document directly
+	document.addEventListener('keypress', onKeyPress, false);
+	// listen to dblclick
+	dblclick && document.addEventListener('dblclick', toggle, false);
+
+	return {
+		unbind	: function(){
+			document.removeEventListener('keypress', onKeyPress, false);
+			dblclick && document.removeEventListener('dblclick', toggle, false);
+		}
+	};
+}
+// THREEx.KeyboardState.js keep the current state of the keyboard.
 // It is possible to query it at any time. No need of an event.
 // This is particularly convenient in loop driven case, like in
 // 3D demos or games.
@@ -4626,6 +4936,83 @@ THREEx.KeyboardState.prototype.pressed	= function(keyDesc)
 	};
 	return true;
 }
+/** @namespace */
+var THREEx	= THREEx 		|| {};
+
+THREEx.DragPanControls	= function(object, domElement)
+{
+	this._object	= object;
+	this._domElement= domElement || document;
+
+	// parameters that you can change after initialisation
+	this.target	= new THREE.Vector3(0, 0, 0);
+	this.speedX	= 0.03;
+	this.speedY	= 0.03;
+	this.rangeX	= -40;
+	this.rangeY	= +40;
+
+	// private variables
+	this._mouseX	= 0;
+	this._mouseY	= 0;
+
+	var _this	= this;
+	this._$onMouseMove	= function(){ _this._onMouseMove.apply(_this, arguments); };
+	this._$onTouchStart	= function(){ _this._onTouchStart.apply(_this, arguments); };
+	this._$onTouchMove	= function(){ _this._onTouchMove.apply(_this, arguments); };
+
+	this._domElement.addEventListener( 'mousemove', this._$onMouseMove, false );
+	this._domElement.addEventListener( 'touchstart', this._$onTouchStart,false );
+	this._domElement.addEventListener( 'touchmove', this._$onTouchMove, false );
+}
+
+THREEx.DragPanControls.prototype.destroy	= function()
+{
+	this._domElement.removeEventListener( 'mousemove', this._$onMouseMove, false );
+	this._domElement.removeEventListener( 'touchstart', this._$onTouchStart,false );
+	this._domElement.removeEventListener( 'touchmove', this._$onTouchMove, false );
+}
+
+THREEx.DragPanControls.prototype.update	= function(event)
+{
+	this._object.position.x += ( this._mouseX * this.rangeX - this._object.position.x ) * this.speedX;
+	this._object.position.y += ( this._mouseY * this.rangeY - this._object.position.y ) * this.speedY;
+	this._object.lookAt( this.target );
+}
+
+THREEx.DragPanControls.prototype._onMouseMove	= function(event)
+{
+	this._mouseX	= ( event.clientX / window.innerWidth ) - 0.5;
+	this._mouseY	= ( event.clientY / window.innerHeight) - 0.5;
+}
+
+THREEx.DragPanControls.prototype._onTouchStart	= function(event)
+{
+	if( event.touches.length != 1 )	return;
+
+	// no preventDefault to get click event on ios
+
+	this._mouseX	= ( event.touches[ 0 ].pageX / window.innerWidth ) - 0.5;
+	this._mouseY	= ( event.touches[ 0 ].pageY / window.innerHeight) - 0.5;
+}
+
+THREEx.DragPanControls.prototype._onTouchMove	= function(event)
+{
+	if( event.touches.length != 1 )	return;
+
+	event.preventDefault();
+
+	this._mouseX	= ( event.touches[ 0 ].pageX / window.innerWidth ) - 0.5;
+	this._mouseY	= ( event.touches[ 0 ].pageY / window.innerHeight) - 0.5;
+}
+
+// stats.js r8 - http://github.com/mrdoob/stats.js
+var Stats=function(){var h,a,n=0,o=0,i=Date.now(),u=i,p=i,l=0,q=1E3,r=0,e,j,f,b=[[16,16,48],[0,255,255]],m=0,s=1E3,t=0,d,k,g,c=[[16,48,16],[0,255,0]];h=document.createElement("div");h.style.cursor="pointer";h.style.width="80px";h.style.opacity="0.9";h.style.zIndex="10001";h.addEventListener("mousedown",function(a){a.preventDefault();n=(n+1)%2;n==0?(e.style.display="block",d.style.display="none"):(e.style.display="none",d.style.display="block")},!1);e=document.createElement("div");e.style.textAlign=
+"left";e.style.lineHeight="1.2em";e.style.backgroundColor="rgb("+Math.floor(b[0][0]/2)+","+Math.floor(b[0][1]/2)+","+Math.floor(b[0][2]/2)+")";e.style.padding="0 0 3px 3px";h.appendChild(e);j=document.createElement("div");j.style.fontFamily="Helvetica, Arial, sans-serif";j.style.fontSize="9px";j.style.color="rgb("+b[1][0]+","+b[1][1]+","+b[1][2]+")";j.style.fontWeight="bold";j.innerHTML="FPS";e.appendChild(j);f=document.createElement("div");f.style.position="relative";f.style.width="74px";f.style.height=
+"30px";f.style.backgroundColor="rgb("+b[1][0]+","+b[1][1]+","+b[1][2]+")";for(e.appendChild(f);f.children.length<74;)a=document.createElement("span"),a.style.width="1px",a.style.height="30px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+b[0][0]+","+b[0][1]+","+b[0][2]+")",f.appendChild(a);d=document.createElement("div");d.style.textAlign="left";d.style.lineHeight="1.2em";d.style.backgroundColor="rgb("+Math.floor(c[0][0]/2)+","+Math.floor(c[0][1]/2)+","+Math.floor(c[0][2]/2)+")";d.style.padding=
+"0 0 3px 3px";d.style.display="none";h.appendChild(d);k=document.createElement("div");k.style.fontFamily="Helvetica, Arial, sans-serif";k.style.fontSize="9px";k.style.color="rgb("+c[1][0]+","+c[1][1]+","+c[1][2]+")";k.style.fontWeight="bold";k.innerHTML="MS";d.appendChild(k);g=document.createElement("div");g.style.position="relative";g.style.width="74px";g.style.height="30px";g.style.backgroundColor="rgb("+c[1][0]+","+c[1][1]+","+c[1][2]+")";for(d.appendChild(g);g.children.length<74;)a=document.createElement("span"),
+a.style.width="1px",a.style.height=Math.random()*30+"px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+c[0][0]+","+c[0][1]+","+c[0][2]+")",g.appendChild(a);return{domElement:h,update:function(){i=Date.now();m=i-u;s=Math.min(s,m);t=Math.max(t,m);k.textContent=m+" MS ("+s+"-"+t+")";var a=Math.min(30,30-m/200*30);g.appendChild(g.firstChild).style.height=a+"px";u=i;o++;if(i>p+1E3)l=Math.round(o*1E3/(i-p)),q=Math.min(q,l),r=Math.max(r,l),j.textContent=l+" FPS ("+q+"-"+r+")",a=Math.min(30,30-l/
+100*30),f.appendChild(f.firstChild).style.height=a+"px",p=i,o=0}}};
+
 /**
  * tquery.js plugin to handle keyboard
 */
@@ -4841,296 +5228,7 @@ tQuery.register('createSmileyShape', function(radius){
  * add a dollar prefix
 */
 window.$3d	= tQuery;
-var THREEx		= THREEx || {};
-
-THREEx.GeometryWobble	= {};
-
-// Geometry Wobble
-// based on paul lewis / areotwist - http://lab.aerotwist.com/webgl/undulating-monkey/
-
-
-THREEx.GeometryWobble.init	= function(geometry)
-{
-	for(var i = 0; i < geometry.vertices.length; i++){
-		var vertex	= geometry.vertices[i];
-		vertex.originalPosition	= vertex.clone();
-		vertex.dirVector	= vertex.clone().normalize();
-	}
-	geometry.dynamic	= true;
-	
-	this.cpuAxis(geometry, 'y');
-}
-
-THREEx.GeometryWobble.cpuAxis	= function(geometry, type, factor)
-{
-	if( type === undefined )	type	= 'x';
-	if( factor === undefined )	factor	= 0.2;
-	
-	for(var i = 0; i < geometry.vertices.length; i++) {
-		var vertex	= geometry.vertices[i];
-// Note: may need more axis ?
-		if( type === 'x' )	vertex.axisValue	= vertex.originalPosition.x * factor;
-		else if( type === 'y' )	vertex.axisValue	= vertex.originalPosition.y * factor;
-		else if( type === 'z' )	vertex.axisValue	= vertex.originalPosition.z * factor;
-		else	console.assert(false);
-	}
-}
-
-THREEx.GeometryWobble.Animate	= function(geometry, phase, magnitude)
-{
-	if( phase === undefined )	phase		= 0;
-	if( magnitude === undefined )	magnitude	= 0.2;
-	
-	if( typeof magnitude === "number" )	magnitude	= new THREE.Vector3(magnitude, magnitude, magnitude)
-
-
-	for(var i = 0; i < geometry.vertices.length; i++) {
-		var vertex	= geometry.vertices[i];
-		var vertexPhase	= Math.cos(phase + vertex.axisValue);
-		
-		vertex.x = vertex.originalPosition.x + vertexPhase * vertex.dirVector.x * magnitude.x;
-		vertex.y = vertex.originalPosition.y + vertexPhase * vertex.dirVector.y * magnitude.y;
-		vertex.z = vertex.originalPosition.z + vertexPhase * vertex.dirVector.z * magnitude.z;
-	}
-	geometry.verticesNeedUpdate = true;
-}
-/**
- * tquery.js plugin to handle keyboard
-*/
-define(['threex/THREEx.GeometryWobble'], function(){	
-	tQuery.Geometry.register('wobble', function(){
-		this.each(function(geometry){
-			THREEx.GeometryWobble.init(geometry);
-			THREEx.GeometryWobble.cpuAxis(geometry, 'x', 4);
-	
-			tQuery.world.loop().hook(function(delta, present){
-				var piSecond	= present * Math.PI;
-				var phase	= 200 * piSecond / 180;
-				var magnitude	= 0.25;
-				THREEx.GeometryWobble.Animate(geometry, phase, magnitude);
-			});
-		});
-		// for chained API
-		return this;
-	});	
-});// http://mrl.nyu.edu/~perlin/noise/
-
-var ImprovedNoise = function () {
-
-	var p = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,
-		 23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,
-		 174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,
-		 133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,
-		 89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,
-		 202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,
-		 248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,
-		 178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,
-		 14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,
-		 93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
-
-	for (var i=0; i < 256 ; i++) {
-
-		p[256+i] = p[i];
-
-	}
-
-	function fade(t) {
-
-		return t * t * t * (t * (t * 6 - 15) + 10);
-
-	}
-
-	function lerp(t, a, b) {
-
-		return a + t * (b - a);
-
-	}
-
-	function grad(hash, x, y, z) {
-
-		var h = hash & 15;
-		var u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
-		return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
-
-	}
-
-	return {
-
-		noise: function (x, y, z) {
-
-			var floorX = ~~x, floorY = ~~y, floorZ = ~~z;
-
-			var X = floorX & 255, Y = floorY & 255, Z = floorZ & 255;
-
-			x -= floorX;
-			y -= floorY;
-			z -= floorZ;
-
-			var xMinus1 = x -1, yMinus1 = y - 1, zMinus1 = z - 1;
-
-			var u = fade(x), v = fade(y), w = fade(z);
-
-			var A = p[X]+Y, AA = p[A]+Z, AB = p[A+1]+Z, B = p[X+1]+Y, BA = p[B]+Z, BB = p[B+1]+Z;
-
-			return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), 
-							grad(p[BA], xMinus1, y, z)),
-						lerp(u, grad(p[AB], x, yMinus1, z),
-							grad(p[BB], xMinus1, yMinus1, z))),
-					lerp(v, lerp(u, grad(p[AA+1], x, y, zMinus1),
-							grad(p[BA+1], xMinus1, y, z-1)),
-						lerp(u, grad(p[AB+1], x, yMinus1, zMinus1),
-							grad(p[BB+1], xMinus1, yMinus1, zMinus1))));
-
-		}
-	}
-}
-;(function(){
-
-/**
- * Generate a light map
- * TODO make it more tunable
- * TODO make that usable standalone
-*/
-function generateTexture( data, width, height ){
-
-	var sun		= new THREE.Vector3( 1, 0.5, 1 );
-	sun.normalize();
-
-	var canvas	= document.createElement( 'canvas' );
-	canvas.width	= width;
-	canvas.height	= height;
-
-	var context	= canvas.getContext( '2d' );
-	context.fillStyle = '#000';
-	context.fillRect(0, 0, width, height );
-
-	var image	= context.getImageData( 0, 0, canvas.width, canvas.height );
-	var imageData	= image.data;
-
-	var minColor	= new THREE.Color().setRGB(0.375, 0.125, 0);
-	var rngColor	= new THREE.Color().setRGB(0.5, 0.375, 0.375);
-
-	var normal	= new THREE.Vector3( 0, 0, 0 );
-	for ( var i = 0, j = 0, l = imageData.length; i < l; i += 4, j ++ ) {
-		// compute the normal
-		normal.x	= data[ j - 2 ] - data[ j + 2 ];
-		normal.y	= 2;
-		normal.z	= data[ j - width * 2 ] - data[ j + width * 2 ];
-		normal.normalize();
-		// compute the shade
-		var shade	= normal.dot( sun );
-		// fill the pixel
-		// - make color tunable
-		var factor		= 256.0 * ( 0.5 + data[ j ] * 0.015 );
-		//var factor		= 256.0;
-		imageData[i + 0]	= (minColor.r + shade * rngColor.r) * factor;
-		imageData[i + 1]	= (minColor.g + shade * rngColor.g) * factor;
-		imageData[i + 2]	= (minColor.b + shade * rngColor.b) * factor;
-	}
-	// draw the image in a canvas
-	context.putImageData(image, 0, 0);
-
-return canvas;
-
-	// Scaled 4x
-	var canvasScaled	= document.createElement( 'canvas' );
-	canvasScaled.width	= width  * 4;
-	canvasScaled.height	= height * 4;
-
-	var context	= canvasScaled.getContext( '2d' );
-	context.scale(4, 4);
-	context.drawImage(canvas, 0, 0);
-
-
-	var image	= context.getImageData(0, 0, canvasScaled.width, canvasScaled.height);
-	var imageData	= image.data;
-	for(var i = 0; i < imageData.length; i += 4){
-		var v	= Math.floor( Math.random() * 5 );
-		imageData[i + 0]	+= v;
-		imageData[i + 1]	+= v;
-		imageData[i + 2]	+= v;
-	}
-	context.putImageData(image, 0, 0);
-
-	return canvasScaled;
-
-}
-
-/**
- * Generate a terrain from Perlin
- * TODO make it more tunable
- * TODO make that usable standalone
-*/
-function generateHeight( width, height )
-{
-	var size	= width * height;
-	var heights	= new Float32Array( size );
-	var perlin	= new ImprovedNoise();
-	var z		= Math.random() * 100;
-	var quality	= 1;
-
-	// zero the heights
-	for(var i = 0; i < size; i ++)	heights[i] = 0;
-
-// TODO find out what are all those constant and make them tunable
-
-	for(var j = 0; j < 4; j++ ){
-		for(var y = 0, i = 0; y < height; y++ ){
-			for(var x = 0; x < width; x++, i++ ){
-				var i		= x + y * width;
-				var noise	= perlin.noise( x / quality, y / quality, z );
-				heights[i]	+= Math.abs( noise * quality * 1.75 *2 );
-			}
-		}
-		quality *= 5;
-	}
-	// return the generated heights
-	return heights;
-}
-
-
-/**
- * terrain generator geometry
- *
- * all hard work in http://mrdoob.github.com/three.js/examples/webgl_geometry_terrain.html
-*/
-tQuery.register('generateTerrainGeometry', function(opts){
-	
-	opts	= tQuery.extend(opts, {
-		width		: 10,
-		height		: 10,
-		segmentsW	: 128*2,
-		segmentsH	: 128*2
-	});
-
-	// build basic geometry
-	var tGeometry	= new THREE.PlaneGeometry(opts.width, opts.height, opts.segmentsW-1, opts.segmentsH-1 );
-	tGeometry.dynamic= true;
-
-	var heights	= generateHeight( opts.segmentsW, opts.segmentsH );	
-	for( var i = 0; i < tGeometry.vertices.length; i ++ ){
-// TODO find out what are all those constant and make them tunable
-		tGeometry.vertices[i].y = heights[i] / 375;
-	}
-	
-	var canvas	= generateTexture( heights, opts.segmentsW, opts.segmentsH );
-	var texture	= new THREE.Texture(canvas);
-	texture.needsUpdate = true;
-
-	// mark the vertices as dirty
-	tGeometry.verticesNeedUpdate = true;
-	tGeometry.computeBoundingBox();
-	tGeometry.computeCentroids();	
-	tGeometry.computeFaceNormals();
-	tGeometry.computeVertexNormals();
-	
-	return {
-		geometry	: tQuery(tGeometry),
-		texture		: texture
-	};
-});	
-
-})();// Constructive Solid Geometry (CSG) is a modeling technique that uses Boolean
+// Constructive Solid Geometry (CSG) is a modeling technique that uses Boolean
 // operations like union and intersection to combine 3D solids. This library
 // implements CSG operations on meshes elegantly and concisely using BSP trees,
 // and is meant to serve as an easily understandable implementation of the
@@ -5878,255 +5976,6 @@ THREE.CSG = {
 	tQuery.Object3D.register('subtract'	, function(tqObject){ return this.csg('subtract' , tqObject);	});
 	tQuery.Object3D.register('intersect'	, function(tqObject){ return this.csg('intersect', tqObject);	});
 });/**
- * Fireball material
- * 
- * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
- * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
-*/
-tQuery.Object3D.register('useFileballMaterial', function(scale){
-	scale	= scale !== undefined ? scale : 1;
-
-	this.each(function(object3d){
-		var uniforms	= {
-			time	: { type: "f", value: 1.0 },
-			scale	: { type: "f", value: scale }
-		};
-		
-		var material	= new THREE.ShaderMaterial({
-			uniforms	: uniforms,
-			vertexShader	: tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText,
-			fragmentShader	: tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText
-		});
-		
-		object3d.material	= material;
-		
-		tQuery.world.loop().hook(function(delta, now){
-			uniforms.time.value += 0.275 * delta;
-		});
-	});
-	// for chained API
-	return this;
-});	
-
-// converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');
-tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText = [
-'		uniform float time;',
-'		uniform float scale;',
-'',
-'		varying vec3 vTexCoord3D;',
-'		varying vec3 vNormal;',
-'		varying vec3 vViewPosition;',
-'',
-'		void main( void ) {',
-'',
-'			vec4 mPosition = objectMatrix * vec4( position, 1.0 );',
-'			vNormal = normalize( normalMatrix * normal );',
-'			vViewPosition = cameraPosition - mPosition.xyz;',
-'',
-'			vTexCoord3D = scale * ( position.xyz + vec3( 0.0, 0.0, -time ) );',
-'			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
-'',
-'		}',
-'',
-'	'	
-].join('\n');
-
-// converted by document.getElementById( 'fragmentShader' ).textContent.split('\n').map(function(line){ return "\""+line+"\","; }).join('\n');
-tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText = [
-"",
-"",
-"		//",
-"		// Description : Array and textureless GLSL 3D simplex noise function.",
-"		//      Author : Ian McEwan, Ashima Arts.",
-"		//  Maintainer : ijm",
-"		//     Lastmod : 20110409 (stegu)",
-"		//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.",
-"		//               Distributed under the MIT License. See LICENSE file.",
-"		//",
-"",
-"		uniform float time;",
-"",
-"		varying vec3 vTexCoord3D;",
-"		varying vec3 vNormal;",
-"		varying vec3 vViewPosition;",
-"",
-"		vec4 permute( vec4 x ) {",
-"",
-"			return mod( ( ( x * 34.0 ) + 1.0 ) * x, 289.0 );",
-"",
-"		}",
-"",
-"		vec4 taylorInvSqrt( vec4 r ) {",
-"",
-"			return 1.79284291400159 - 0.85373472095314 * r;",
-"",
-"		}",
-"",
-"		float snoise( vec3 v ) {",
-"",
-"			const vec2 C = vec2( 1.0 / 6.0, 1.0 / 3.0 );",
-"			const vec4 D = vec4( 0.0, 0.5, 1.0, 2.0 );",
-"",
-"			// First corner",
-"",
-"			vec3 i  = floor( v + dot( v, C.yyy ) );",
-"			vec3 x0 = v - i + dot( i, C.xxx );",
-"",
-"			// Other corners",
-"",
-"			vec3 g = step( x0.yzx, x0.xyz );",
-"			vec3 l = 1.0 - g;",
-"			vec3 i1 = min( g.xyz, l.zxy );",
-"			vec3 i2 = max( g.xyz, l.zxy );",
-"",
-"			//  x0 = x0 - 0. + 0.0 * C",
-"			vec3 x1 = x0 - i1 + 1.0 * C.xxx;",
-"			vec3 x2 = x0 - i2 + 2.0 * C.xxx;",
-"			vec3 x3 = x0 - 1. + 3.0 * C.xxx;",
-"",
-"			// Permutations",
-"",
-"			i = mod( i, 289.0 );",
-"			vec4 p = permute( permute( permute(",
-"					 i.z + vec4( 0.0, i1.z, i2.z, 1.0 ) )",
-"				   + i.y + vec4( 0.0, i1.y, i2.y, 1.0 ) )",
-"				   + i.x + vec4( 0.0, i1.x, i2.x, 1.0 ) );",
-"",
-"			// Gradients",
-"			// ( N*N points uniformly over a square, mapped onto an octahedron.)",
-"",
-"			float n_ = 1.0 / 7.0; // N=7",
-"",
-"			vec3 ns = n_ * D.wyz - D.xzx;",
-"",
-"			vec4 j = p - 49.0 * floor( p * ns.z *ns.z );  //  mod(p,N*N)",
-"",
-"			vec4 x_ = floor( j * ns.z );",
-"			vec4 y_ = floor( j - 7.0 * x_ );    // mod(j,N)",
-"",
-"			vec4 x = x_ *ns.x + ns.yyyy;",
-"			vec4 y = y_ *ns.x + ns.yyyy;",
-"			vec4 h = 1.0 - abs( x ) - abs( y );",
-"",
-"			vec4 b0 = vec4( x.xy, y.xy );",
-"			vec4 b1 = vec4( x.zw, y.zw );",
-"",
-"			vec4 s0 = floor( b0 ) * 2.0 + 1.0;",
-"			vec4 s1 = floor( b1 ) * 2.0 + 1.0;",
-"			vec4 sh = -step( h, vec4( 0.0 ) );",
-"",
-"			vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;",
-"			vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;",
-"",
-"			vec3 p0 = vec3( a0.xy, h.x );",
-"			vec3 p1 = vec3( a0.zw, h.y );",
-"			vec3 p2 = vec3( a1.xy, h.z );",
-"			vec3 p3 = vec3( a1.zw, h.w );",
-"",
-"			// Normalise gradients",
-"",
-"			vec4 norm = taylorInvSqrt( vec4( dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3) ) );",
-"			p0 *= norm.x;",
-"			p1 *= norm.y;",
-"			p2 *= norm.z;",
-"			p3 *= norm.w;",
-"",
-"			// Mix final noise value",
-"",
-"			vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3) ), 0.0 );",
-"			m = m * m;",
-"			return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),",
-"										dot(p2,x2), dot(p3,x3) ) );",
-"",
-"		}",
-"",
-"		float heightMap( vec3 coord ) {",
-"",
-"			float n = abs( snoise( coord ) );",
-"",
-"			n += 0.25   * abs( snoise( coord * 2.0 ) );",
-"			n += 0.25   * abs( snoise( coord * 4.0 ) );",
-"			n += 0.125  * abs( snoise( coord * 8.0 ) );",
-"			n += 0.0625 * abs( snoise( coord * 16.0 ) );",
-"",
-"			return n;",
-"",
-"		}",
-"",
-"		void main( void ) {",
-"",
-"			// height",
-"",
-"			float n = heightMap( vTexCoord3D );",
-"",
-"			// color",
-"",
-"			gl_FragColor = vec4( vec3( 1.5 - n, 1.0 - n, 0.5 - n ), 1.0 );",
-"",
-"			// normal",
-"",
-"			const float e = 0.001;",
-"",
-"			float nx = heightMap( vTexCoord3D + vec3( e, 0.0, 0.0 ) );",
-"			float ny = heightMap( vTexCoord3D + vec3( 0.0, e, 0.0 ) );",
-"			float nz = heightMap( vTexCoord3D + vec3( 0.0, 0.0, e ) );",
-"",
-"			vec3 normal = normalize( vNormal + 0.05 * vec3( n - nx, n - ny, n - nz ) / e );",
-"",
-"			// diffuse light",
-"",
-"			vec3 vLightWeighting = vec3( 0.1 );",
-"",
-"			vec4 lDirection = viewMatrix * vec4( normalize( vec3( 1.0, 0.0, 0.5 ) ), 0.0 );",
-"			float directionalLightWeighting = dot( normal, normalize( lDirection.xyz ) ) * 0.25 + 0.75;",
-"			vLightWeighting += vec3( 1.0 ) * directionalLightWeighting;",
-"",
-"			// specular light",
-"",
-"			vec3 dirHalfVector = normalize( lDirection.xyz + normalize( vViewPosition ) );",
-"",
-"			float dirDotNormalHalf = dot( normal, dirHalfVector );",
-"",
-"			float dirSpecularWeight = 0.0;",
-"			if ( dirDotNormalHalf >= 0.0 )",
-"				dirSpecularWeight = ( 1.0 - n ) * pow( dirDotNormalHalf, 5.0 );",
-"",
-"			vLightWeighting += vec3( 1.0, 0.5, 0.0 ) * dirSpecularWeight * n * 2.0;",
-"",
-"			gl_FragColor *= vec4( vLightWeighting, 1.0 );",
-"",
-"		}",
-"",
-"	"
-].join('\n');
-/**
- * Create a checkerboard tQuery.Mesh
-*/
-tQuery.register('createCheckerboard', function(opts){
-	// handle parameters
-	opts	= tQuery.extend(opts, {
-		width		: 1,		
-		height		: 1,
-		segmentsW	: 8,
-		segmentsH	: 8,
-		materialEven	: new THREE.MeshBasicMaterial({ color: 0xcccccc }),
-		materialOdd	: new THREE.MeshBasicMaterial({ color: 0x444444 })
-	});
-	// create the geometry	
-	var geometry		= new THREE.PlaneGeometry( opts.width, opts.height, opts.segmentsW, opts.segmentsH );
-	// set materials per faces
-	geometry.materials	= [opts.materialEven, opts.materialOdd];
-	geometry.faces.forEach(function(face, idx){
-		var y	= Math.floor(idx / opts.segmentsW);
-		var x	= idx - (y*opts.segmentsW);
-		face.materialIndex	= (y % 2 + x%2 ) %2;
-	});
-	// create the mesh
-	var material	= new THREE.MeshFaceMaterial();
-	var mesh	= new THREE.Mesh(geometry, material);
-	// return the tQuery
-	return tQuery(mesh);
-});/**
  * Create tQuery.Scene.
  *
  * TODO to optim with a sprite sheet. currently it push a change the canvas
@@ -6530,7 +6379,545 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 });
 
 
-tQuery.register('createAnimation', function(){
+var THREEx		= THREEx || {};
+
+THREEx.GeometryWobble	= {};
+
+// Geometry Wobble
+// based on paul lewis / areotwist - http://lab.aerotwist.com/webgl/undulating-monkey/
+
+
+THREEx.GeometryWobble.init	= function(geometry)
+{
+	for(var i = 0; i < geometry.vertices.length; i++){
+		var vertex	= geometry.vertices[i];
+		vertex.originalPosition	= vertex.clone();
+		vertex.dirVector	= vertex.clone().normalize();
+	}
+	geometry.dynamic	= true;
+	
+	this.cpuAxis(geometry, 'y');
+}
+
+THREEx.GeometryWobble.cpuAxis	= function(geometry, type, factor)
+{
+	if( type === undefined )	type	= 'x';
+	if( factor === undefined )	factor	= 0.2;
+	
+	for(var i = 0; i < geometry.vertices.length; i++) {
+		var vertex	= geometry.vertices[i];
+// Note: may need more axis ?
+		if( type === 'x' )	vertex.axisValue	= vertex.originalPosition.x * factor;
+		else if( type === 'y' )	vertex.axisValue	= vertex.originalPosition.y * factor;
+		else if( type === 'z' )	vertex.axisValue	= vertex.originalPosition.z * factor;
+		else	console.assert(false);
+	}
+}
+
+THREEx.GeometryWobble.Animate	= function(geometry, phase, magnitude)
+{
+	if( phase === undefined )	phase		= 0;
+	if( magnitude === undefined )	magnitude	= 0.2;
+	
+	if( typeof magnitude === "number" )	magnitude	= new THREE.Vector3(magnitude, magnitude, magnitude)
+
+
+	for(var i = 0; i < geometry.vertices.length; i++) {
+		var vertex	= geometry.vertices[i];
+		var vertexPhase	= Math.cos(phase + vertex.axisValue);
+		
+		vertex.x = vertex.originalPosition.x + vertexPhase * vertex.dirVector.x * magnitude.x;
+		vertex.y = vertex.originalPosition.y + vertexPhase * vertex.dirVector.y * magnitude.y;
+		vertex.z = vertex.originalPosition.z + vertexPhase * vertex.dirVector.z * magnitude.z;
+	}
+	geometry.verticesNeedUpdate = true;
+}
+/**
+ * tquery.js plugin to handle keyboard
+*/
+define(['threex/THREEx.GeometryWobble'], function(){	
+	tQuery.Geometry.register('wobble', function(){
+		this.each(function(geometry){
+			THREEx.GeometryWobble.init(geometry);
+			THREEx.GeometryWobble.cpuAxis(geometry, 'x', 4);
+	
+			tQuery.world.loop().hook(function(delta, present){
+				var piSecond	= present * Math.PI;
+				var phase	= 200 * piSecond / 180;
+				var magnitude	= 0.25;
+				THREEx.GeometryWobble.Animate(geometry, phase, magnitude);
+			});
+		});
+		// for chained API
+		return this;
+	});	
+});// http://mrl.nyu.edu/~perlin/noise/
+
+var ImprovedNoise = function () {
+
+	var p = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,
+		 23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,
+		 174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,
+		 133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,
+		 89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,
+		 202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,
+		 248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,
+		 178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,
+		 14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,
+		 93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+
+	for (var i=0; i < 256 ; i++) {
+
+		p[256+i] = p[i];
+
+	}
+
+	function fade(t) {
+
+		return t * t * t * (t * (t * 6 - 15) + 10);
+
+	}
+
+	function lerp(t, a, b) {
+
+		return a + t * (b - a);
+
+	}
+
+	function grad(hash, x, y, z) {
+
+		var h = hash & 15;
+		var u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+		return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
+
+	}
+
+	return {
+
+		noise: function (x, y, z) {
+
+			var floorX = ~~x, floorY = ~~y, floorZ = ~~z;
+
+			var X = floorX & 255, Y = floorY & 255, Z = floorZ & 255;
+
+			x -= floorX;
+			y -= floorY;
+			z -= floorZ;
+
+			var xMinus1 = x -1, yMinus1 = y - 1, zMinus1 = z - 1;
+
+			var u = fade(x), v = fade(y), w = fade(z);
+
+			var A = p[X]+Y, AA = p[A]+Z, AB = p[A+1]+Z, B = p[X+1]+Y, BA = p[B]+Z, BB = p[B+1]+Z;
+
+			return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), 
+							grad(p[BA], xMinus1, y, z)),
+						lerp(u, grad(p[AB], x, yMinus1, z),
+							grad(p[BB], xMinus1, yMinus1, z))),
+					lerp(v, lerp(u, grad(p[AA+1], x, y, zMinus1),
+							grad(p[BA+1], xMinus1, y, z-1)),
+						lerp(u, grad(p[AB+1], x, yMinus1, zMinus1),
+							grad(p[BB+1], xMinus1, yMinus1, zMinus1))));
+
+		}
+	}
+}
+;(function(){
+
+/**
+ * Generate a light map
+ * TODO make it more tunable
+ * TODO make that usable standalone
+*/
+function generateTexture( data, width, height ){
+
+	var sun		= new THREE.Vector3( 1, 0.5, 1 );
+	sun.normalize();
+
+	var canvas	= document.createElement( 'canvas' );
+	canvas.width	= width;
+	canvas.height	= height;
+
+	var context	= canvas.getContext( '2d' );
+	context.fillStyle = '#000';
+	context.fillRect(0, 0, width, height );
+
+	var image	= context.getImageData( 0, 0, canvas.width, canvas.height );
+	var imageData	= image.data;
+
+	var minColor	= new THREE.Color().setRGB(0.375, 0.125, 0);
+	var rngColor	= new THREE.Color().setRGB(0.5, 0.375, 0.375);
+
+	var normal	= new THREE.Vector3( 0, 0, 0 );
+	for ( var i = 0, j = 0, l = imageData.length; i < l; i += 4, j ++ ) {
+		// compute the normal
+		normal.x	= data[ j - 2 ] - data[ j + 2 ];
+		normal.y	= 2;
+		normal.z	= data[ j - width * 2 ] - data[ j + width * 2 ];
+		normal.normalize();
+		// compute the shade
+		var shade	= normal.dot( sun );
+		// fill the pixel
+		// - make color tunable
+		var factor		= 256.0 * ( 0.5 + data[ j ] * 0.015 );
+		//var factor		= 256.0;
+		imageData[i + 0]	= (minColor.r + shade * rngColor.r) * factor;
+		imageData[i + 1]	= (minColor.g + shade * rngColor.g) * factor;
+		imageData[i + 2]	= (minColor.b + shade * rngColor.b) * factor;
+	}
+	// draw the image in a canvas
+	context.putImageData(image, 0, 0);
+
+return canvas;
+
+	// Scaled 4x
+	var canvasScaled	= document.createElement( 'canvas' );
+	canvasScaled.width	= width  * 4;
+	canvasScaled.height	= height * 4;
+
+	var context	= canvasScaled.getContext( '2d' );
+	context.scale(4, 4);
+	context.drawImage(canvas, 0, 0);
+
+
+	var image	= context.getImageData(0, 0, canvasScaled.width, canvasScaled.height);
+	var imageData	= image.data;
+	for(var i = 0; i < imageData.length; i += 4){
+		var v	= Math.floor( Math.random() * 5 );
+		imageData[i + 0]	+= v;
+		imageData[i + 1]	+= v;
+		imageData[i + 2]	+= v;
+	}
+	context.putImageData(image, 0, 0);
+
+	return canvasScaled;
+
+}
+
+/**
+ * Generate a terrain from Perlin
+ * TODO make it more tunable
+ * TODO make that usable standalone
+*/
+function generateHeight( width, height )
+{
+	var size	= width * height;
+	var heights	= new Float32Array( size );
+	var perlin	= new ImprovedNoise();
+	var z		= Math.random() * 100;
+	var quality	= 1;
+
+	// zero the heights
+	for(var i = 0; i < size; i ++)	heights[i] = 0;
+
+// TODO find out what are all those constant and make them tunable
+
+	for(var j = 0; j < 4; j++ ){
+		for(var y = 0, i = 0; y < height; y++ ){
+			for(var x = 0; x < width; x++, i++ ){
+				var i		= x + y * width;
+				var noise	= perlin.noise( x / quality, y / quality, z );
+				heights[i]	+= Math.abs( noise * quality * 1.75 *2 );
+			}
+		}
+		quality *= 5;
+	}
+	// return the generated heights
+	return heights;
+}
+
+
+/**
+ * terrain generator geometry
+ *
+ * all hard work in http://mrdoob.github.com/three.js/examples/webgl_geometry_terrain.html
+*/
+tQuery.register('generateTerrainGeometry', function(opts){
+	
+	opts	= tQuery.extend(opts, {
+		width		: 10,
+		height		: 10,
+		segmentsW	: 128*2,
+		segmentsH	: 128*2
+	});
+
+	// build basic geometry
+	var tGeometry	= new THREE.PlaneGeometry(opts.width, opts.height, opts.segmentsW-1, opts.segmentsH-1 );
+	tGeometry.dynamic= true;
+
+	var heights	= generateHeight( opts.segmentsW, opts.segmentsH );	
+	for( var i = 0; i < tGeometry.vertices.length; i ++ ){
+// TODO find out what are all those constant and make them tunable
+		tGeometry.vertices[i].y = heights[i] / 375;
+	}
+	
+	var canvas	= generateTexture( heights, opts.segmentsW, opts.segmentsH );
+	var texture	= new THREE.Texture(canvas);
+	texture.needsUpdate = true;
+
+	// mark the vertices as dirty
+	tGeometry.verticesNeedUpdate = true;
+	tGeometry.computeBoundingBox();
+	tGeometry.computeCentroids();	
+	tGeometry.computeFaceNormals();
+	tGeometry.computeVertexNormals();
+	
+	return {
+		geometry	: tQuery(tGeometry),
+		texture		: texture
+	};
+});	
+
+})();/**
+ * Fireball material
+ * 
+ * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
+ * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
+*/
+tQuery.Object3D.register('useFireballMaterial', function(scale){
+	scale	= scale !== undefined ? scale : 1;
+
+	this.each(function(object3d){
+		var uniforms	= {
+			time	: { type: "f", value: 1.0 },
+			scale	: { type: "f", value: scale }
+		};
+		
+		var material	= new THREE.ShaderMaterial({
+			uniforms	: uniforms,
+			vertexShader	: tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText,
+			fragmentShader	: tQuery.Object3D.prototype.useFireballMaterial._fragmentShaderText
+		});
+		
+		object3d.material	= material;
+		
+		tQuery.world.loop().hook(function(delta, now){
+			uniforms.time.value += 0.275 * delta;
+		});
+	});
+	// for chained API
+	return this;
+});	
+
+// converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');
+tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText = [
+'		uniform float time;',
+'		uniform float scale;',
+'',
+'		varying vec3 vTexCoord3D;',
+'		varying vec3 vNormal;',
+'		varying vec3 vViewPosition;',
+'',
+'		void main( void ) {',
+'',
+'			vec4 mPosition = objectMatrix * vec4( position, 1.0 );',
+'			vNormal = normalize( normalMatrix * normal );',
+'			vViewPosition = cameraPosition - mPosition.xyz;',
+'',
+'			vTexCoord3D = scale * ( position.xyz + vec3( 0.0, 0.0, -time ) );',
+'			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+'',
+'		}',
+'',
+'	'	
+].join('\n');
+
+// converted by document.getElementById( 'fragmentShader' ).textContent.split('\n').map(function(line){ return "\""+line+"\","; }).join('\n');
+tQuery.Object3D.prototype.useFireballMaterial._fragmentShaderText = [
+"",
+"",
+"		//",
+"		// Description : Array and textureless GLSL 3D simplex noise function.",
+"		//      Author : Ian McEwan, Ashima Arts.",
+"		//  Maintainer : ijm",
+"		//     Lastmod : 20110409 (stegu)",
+"		//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.",
+"		//               Distributed under the MIT License. See LICENSE file.",
+"		//",
+"",
+"		uniform float time;",
+"",
+"		varying vec3 vTexCoord3D;",
+"		varying vec3 vNormal;",
+"		varying vec3 vViewPosition;",
+"",
+"		vec4 permute( vec4 x ) {",
+"",
+"			return mod( ( ( x * 34.0 ) + 1.0 ) * x, 289.0 );",
+"",
+"		}",
+"",
+"		vec4 taylorInvSqrt( vec4 r ) {",
+"",
+"			return 1.79284291400159 - 0.85373472095314 * r;",
+"",
+"		}",
+"",
+"		float snoise( vec3 v ) {",
+"",
+"			const vec2 C = vec2( 1.0 / 6.0, 1.0 / 3.0 );",
+"			const vec4 D = vec4( 0.0, 0.5, 1.0, 2.0 );",
+"",
+"			// First corner",
+"",
+"			vec3 i  = floor( v + dot( v, C.yyy ) );",
+"			vec3 x0 = v - i + dot( i, C.xxx );",
+"",
+"			// Other corners",
+"",
+"			vec3 g = step( x0.yzx, x0.xyz );",
+"			vec3 l = 1.0 - g;",
+"			vec3 i1 = min( g.xyz, l.zxy );",
+"			vec3 i2 = max( g.xyz, l.zxy );",
+"",
+"			//  x0 = x0 - 0. + 0.0 * C",
+"			vec3 x1 = x0 - i1 + 1.0 * C.xxx;",
+"			vec3 x2 = x0 - i2 + 2.0 * C.xxx;",
+"			vec3 x3 = x0 - 1. + 3.0 * C.xxx;",
+"",
+"			// Permutations",
+"",
+"			i = mod( i, 289.0 );",
+"			vec4 p = permute( permute( permute(",
+"					 i.z + vec4( 0.0, i1.z, i2.z, 1.0 ) )",
+"				   + i.y + vec4( 0.0, i1.y, i2.y, 1.0 ) )",
+"				   + i.x + vec4( 0.0, i1.x, i2.x, 1.0 ) );",
+"",
+"			// Gradients",
+"			// ( N*N points uniformly over a square, mapped onto an octahedron.)",
+"",
+"			float n_ = 1.0 / 7.0; // N=7",
+"",
+"			vec3 ns = n_ * D.wyz - D.xzx;",
+"",
+"			vec4 j = p - 49.0 * floor( p * ns.z *ns.z );  //  mod(p,N*N)",
+"",
+"			vec4 x_ = floor( j * ns.z );",
+"			vec4 y_ = floor( j - 7.0 * x_ );    // mod(j,N)",
+"",
+"			vec4 x = x_ *ns.x + ns.yyyy;",
+"			vec4 y = y_ *ns.x + ns.yyyy;",
+"			vec4 h = 1.0 - abs( x ) - abs( y );",
+"",
+"			vec4 b0 = vec4( x.xy, y.xy );",
+"			vec4 b1 = vec4( x.zw, y.zw );",
+"",
+"			vec4 s0 = floor( b0 ) * 2.0 + 1.0;",
+"			vec4 s1 = floor( b1 ) * 2.0 + 1.0;",
+"			vec4 sh = -step( h, vec4( 0.0 ) );",
+"",
+"			vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;",
+"			vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;",
+"",
+"			vec3 p0 = vec3( a0.xy, h.x );",
+"			vec3 p1 = vec3( a0.zw, h.y );",
+"			vec3 p2 = vec3( a1.xy, h.z );",
+"			vec3 p3 = vec3( a1.zw, h.w );",
+"",
+"			// Normalise gradients",
+"",
+"			vec4 norm = taylorInvSqrt( vec4( dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3) ) );",
+"			p0 *= norm.x;",
+"			p1 *= norm.y;",
+"			p2 *= norm.z;",
+"			p3 *= norm.w;",
+"",
+"			// Mix final noise value",
+"",
+"			vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3) ), 0.0 );",
+"			m = m * m;",
+"			return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),",
+"										dot(p2,x2), dot(p3,x3) ) );",
+"",
+"		}",
+"",
+"		float heightMap( vec3 coord ) {",
+"",
+"			float n = abs( snoise( coord ) );",
+"",
+"			n += 0.25   * abs( snoise( coord * 2.0 ) );",
+"			n += 0.25   * abs( snoise( coord * 4.0 ) );",
+"			n += 0.125  * abs( snoise( coord * 8.0 ) );",
+"			n += 0.0625 * abs( snoise( coord * 16.0 ) );",
+"",
+"			return n;",
+"",
+"		}",
+"",
+"		void main( void ) {",
+"",
+"			// height",
+"",
+"			float n = heightMap( vTexCoord3D );",
+"",
+"			// color",
+"",
+"			gl_FragColor = vec4( vec3( 1.5 - n, 1.0 - n, 0.5 - n ), 1.0 );",
+"",
+"			// normal",
+"",
+"			const float e = 0.001;",
+"",
+"			float nx = heightMap( vTexCoord3D + vec3( e, 0.0, 0.0 ) );",
+"			float ny = heightMap( vTexCoord3D + vec3( 0.0, e, 0.0 ) );",
+"			float nz = heightMap( vTexCoord3D + vec3( 0.0, 0.0, e ) );",
+"",
+"			vec3 normal = normalize( vNormal + 0.05 * vec3( n - nx, n - ny, n - nz ) / e );",
+"",
+"			// diffuse light",
+"",
+"			vec3 vLightWeighting = vec3( 0.1 );",
+"",
+"			vec4 lDirection = viewMatrix * vec4( normalize( vec3( 1.0, 0.0, 0.5 ) ), 0.0 );",
+"			float directionalLightWeighting = dot( normal, normalize( lDirection.xyz ) ) * 0.25 + 0.75;",
+"			vLightWeighting += vec3( 1.0 ) * directionalLightWeighting;",
+"",
+"			// specular light",
+"",
+"			vec3 dirHalfVector = normalize( lDirection.xyz + normalize( vViewPosition ) );",
+"",
+"			float dirDotNormalHalf = dot( normal, dirHalfVector );",
+"",
+"			float dirSpecularWeight = 0.0;",
+"			if ( dirDotNormalHalf >= 0.0 )",
+"				dirSpecularWeight = ( 1.0 - n ) * pow( dirDotNormalHalf, 5.0 );",
+"",
+"			vLightWeighting += vec3( 1.0, 0.5, 0.0 ) * dirSpecularWeight * n * 2.0;",
+"",
+"			gl_FragColor *= vec4( vLightWeighting, 1.0 );",
+"",
+"		}",
+"",
+"	"
+].join('\n');
+/**
+ * Create a checkerboard tQuery.Mesh
+*/
+tQuery.register('createCheckerboard', function(opts){
+	// handle parameters
+	opts	= tQuery.extend(opts, {
+		width		: 1,		
+		height		: 1,
+		segmentsW	: 8,
+		segmentsH	: 8,
+		materialEven	: new THREE.MeshBasicMaterial({ color: 0xcccccc }),
+		materialOdd	: new THREE.MeshBasicMaterial({ color: 0x444444 })
+	});
+	// create the geometry	
+	var geometry		= new THREE.PlaneGeometry( opts.width, opts.height, opts.segmentsW, opts.segmentsH );
+	// set materials per faces
+	geometry.materials	= [opts.materialEven, opts.materialOdd];
+	geometry.faces.forEach(function(face, idx){
+		var y	= Math.floor(idx / opts.segmentsW);
+		var x	= idx - (y*opts.segmentsW);
+		face.materialIndex	= (y % 2 + x%2 ) %2;
+	});
+	// create the mesh
+	var material	= new THREE.MeshFaceMaterial();
+	var mesh	= new THREE.Mesh(geometry, material);
+	// return the tQuery
+	return tQuery(mesh);
+});tQuery.register('createAnimation', function(){
 	return new tQuery.Animation();
 });
 
