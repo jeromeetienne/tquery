@@ -1,10 +1,25 @@
+/**
+ * Class to handle spritesheet and generate extruded 3d objects with it
+ * 
+ * @name tQuery.Spritesheet
+ * @class
+ *
+ * @param {Object?} opts the options to create the spritesheet
+ * @param {string} opts.url the url of the spritesheet image
+ * @param {Number} opts.imgW the width of the image
+ * @param {Number} opts.imgH the height of the image
+ * @param {Number} opts.spriteW the width of each sprite in the image
+ * @param {Number} opts.spriteH the height of each sprite in the image
+*/
 tQuery.register('Spritesheet', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
 		url	: 'images/items/items.png',
-		imgW	: 256,
+		imgW	: 256,	// TODO would be better if i didnt have to do that
+				// in fact there is some weird trick with explosion size
+				// sort this out
 		imgH	: 256,
-		spriteW	: 16,
+		spriteW	: 16,	// TODO is it smart to get 
 		spriteH	: 16
 	});
 	var imgW	= this._opts.imgW;
@@ -42,6 +57,8 @@ tQuery.register('Spritesheet', function(opts){
 	};
 	/**
 	 * Create the geometry of the sprite 'id'. It is cached
+	 *
+	 * @param {Number} id the id of the sprite. aka (x + y*nSpriteX)
 	 * @returns {THREE.Geometry} geometry built
 	*/
 	function getGeometry( id ){
@@ -104,7 +121,14 @@ tQuery.register('Spritesheet', function(opts){
 		// return the result
 		return geometry;
 	};
-	function createMeshItem (id) {
+	/**
+	 * Create a tQuery.Mesh with the sprite at x,y in the spritesheet
+	 * @param {Number} x the x position of the sprite in the spritesheet
+	 * @param {Number} y the y position of the sprite in the spritesheet
+	 * @returns {tQuery.Mesh} the generate mesh
+	*/
+	function createMeshItem(x, y) {
+		var id		= x + y * nSpriteX;
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
 		var mesh	= new THREE.Mesh( geometry, material );
@@ -139,6 +163,12 @@ tQuery.register('Spritesheet', function(opts){
 	// setup the public function
 	this.createMesh		= createMeshItem;
 	this.createGeometry	= getGeometry;
+	this.imgW		= function(){ return imgW;	};
+	this.imgH		= function(){ return imgH;	};
+	this.spriteW		= function(){ return spriteW;	};
+	this.spriteH		= function(){ return spriteH;	};
+	this.nSpriteX		= function(){ return nSpriteX;	};
+	this.nSpriteY		= function(){ return nSpriteY;	};
 });
 
 // make it eventable

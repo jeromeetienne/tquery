@@ -4,46 +4,46 @@
 <script src="../../materials/tquery.meshbasicmaterial.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+	
 	tQuery.createCube().addTo(world)
 		.setBasicMaterial().color(0x000000).wireframe(true).back();
 
 
 	world.tRenderer().setClearColorHex(0x444444,1);
-	world.tCamera().position.z	= 8;
+	//world.tCamera().position.z	= 2;
 
-	// init the spritesheet
-	var spriteW	= 32;
-	var spriteH	= 32;
+	// Now we need to init the spritesheet. 
+	// The image is contains 3 explosions of 17 sprites each. 
+	// one explosion per line, each line containing 17 sprites. 
+	// each sprite is 32 pixels by 32.
 	var spritesheet	= new tQuery.Spritesheet({
 		url	: 'images/items/explosion.png',
-		imgW	: spriteW*17,
-		imgH	: spriteH*3,
-		spriteW	: spriteW,
-		spriteH	: spriteH
-	});		
+		imgW	: 32*17,
+		imgH	: 32*3,
+		spriteW	: 32,		// the width of each sprite
+		spriteH	: 32		// the 
+	});
 	// wait for the spritesheet to be loaded
 	spritesheet.bind('load', function(){
-		console.log("image loaded");
-		//spritesheet.createMesh(10+2*16).addTo(world);
-
-		// parameter of the animation
-		var nSpriteX		= 17
-		var nSpritePerSecond	= 25;
-
-		// build all the meshes and make them invisible
+		// build all the meshes for one explosion
 		var meshes	= [];
-		for(var i=0; i < nSpriteX; i++){
-			var mesh= spritesheet.createMesh(i+0*16).addTo(world)
-					.visible(true)//.scaleBy(2,2,2*4)
+		for(var i = 0; i < spritesheet.nSpriteX(); i++){
+			var mesh= spritesheet.createMesh(i, 0).addTo(world);
 			meshes.push(mesh)
 		}
-		// create a loop which make one mesh visible 
+		// create a loop which make only one mesh visible 
 		world.loop().hook(function(delta, now){
+			// make all sprite invisible by defaults
 			meshes.forEach(function(mesh){
 				mesh.visible(false);
 			})
-			var idx	= Math.floor(now*nSpritePerSecond) % nSpriteX;
-			meshes[idx].visible(true);
+			// Now we find out which sprite is currently visible. It 
+			// depends on the animation speed and which is it now. 
+			var animSpeed	= 25;
+			var nSpriteX	= spritesheet.nSpriteX();
+			var meshIdx	= Math.floor(now*animSpeed) % nSpriteX;
+			// Now that we know which sprite is visible, let's make it so :)
+			meshes[meshIdx].visible(true);
 		})
 	})
 	
