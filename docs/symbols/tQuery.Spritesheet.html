@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>tQuery.createAnimations | tQuery library</title>
+		<title>tQuery.Spritesheet | tQuery library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -88,7 +88,7 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Class <span>tQuery.createAnimations</span>
+					Class <span>tQuery.Spritesheet</span>
 				</h1>
 				
 				<div class="intro">
@@ -101,7 +101,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/plugins_minecraft_tquery.animations.js.html">tquery.animations.js</a></li>
+								<li>Defined in: <a href="../symbols/src/plugins_minecraft_tquery.spritesheet.js.html">tquery.spritesheet.js</a></li>
 							
 							
 						</ul>
@@ -112,7 +112,7 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.createAnimations.">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tQuery.Spritesheet.">
 							<caption class="sectionTitle">Class Summary</caption>
 							<thead>
 								<tr>
@@ -125,9 +125,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/tQuery.createAnimations.html#constructor">tQuery.createAnimations</a></b>()
+											<b><a href="../symbols/tQuery.Spritesheet.html#constructor">tQuery.Spritesheet</a></b>(opts)
 										</div>
-										<div class="description">create a tQuery.Animations</div>
+										<div class="description">Class to handle spritesheet and generate extruded 3d objects with it</div>
 									</td>
 								</tr>
 							</tbody>
@@ -158,16 +158,57 @@
 							</h2>
 							
 							<div class="fixedFont">
-								<b>tQuery.createAnimations</b>()
+								<b>tQuery.Spritesheet</b>(opts)
 							</div>
 							
 							<div class="description">
-								create a tQuery.Animations
+								Class to handle spritesheet and generate extruded 3d objects with it
 								
 							</div>
 							
 							
 						
+							
+								<dl class="detailList params">
+									<dt class="heading">Parameters:</dt>
+									
+										<dt>
+											<span class="light fixedFont">{Object?}</span>  <b>opts</b>
+											
+										</dt>
+										<dd>the options to create the spritesheet</dd>
+									
+										<dt>
+											<span class="light fixedFont">{string}</span>  <b>opts.url</b>
+											
+										</dt>
+										<dd>the url of the spritesheet image</dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>opts.imgW</b>
+											
+										</dt>
+										<dd>the width of the image</dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>opts.imgH</b>
+											
+										</dt>
+										<dd>the height of the image</dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>opts.spriteW</b>
+											
+										</dt>
+										<dd>the width of each sprite in the image</dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>opts.spriteH</b>
+											
+										</dt>
+										<dd>the height of each sprite in the image</dd>
+									
+								</dl>
 							
 							
 							

@@ -89,7 +89,7 @@
 <span class='line'> 82</span> </span><span class="WHIT">	</span><span class="COMM">// microevent.js notification</span><span class="WHIT">
 <span class='line'> 83</span> </span><span class="WHIT">	</span><span class="NAME">this.trigger</span><span class="PUNC">(</span><span class="STRN">'destroy'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 84</span> </span><span class="WHIT">	</span><span class="COMM">// unhook the render function in this._loop</span><span class="WHIT">
-<span class='line'> 85</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.hookOnRender</span><span class="PUNC">(</span><span class="NAME">this._$loopCb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.unhookOnRender</span><span class="PUNC">(</span><span class="NAME">this._$loopCb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 86</span> </span><span class="WHIT">	</span><span class="COMM">// destroy the loop</span><span class="WHIT">
 <span class='line'> 87</span> </span><span class="WHIT">	</span><span class="NAME">this._loop.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 88</span> </span><span class="WHIT">	</span><span class="COMM">// remove this._cameraControls if needed</span><span class="WHIT">

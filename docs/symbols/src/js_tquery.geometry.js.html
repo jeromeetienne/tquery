@@ -33,4 +33,12 @@
 <span class='line'> 26</span> </span><span class="COMM">/**
 <span class='line'> 27</span>  * Make it pluginable
 <span class='line'> 28</span> */</span><span class="WHIT">
-<span class='line'> 29</span> </span><span class="NAME">tQuery.pluginsInstanceOn</span><span class="PUNC">(</span><span class="NAME">tQuery.Geometry</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'> 29</span> </span><span class="NAME">tQuery.pluginsInstanceOn</span><span class="PUNC">(</span><span class="NAME">tQuery.Geometry</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> 
+<span class='line'> 31</span> </span><span class="COMM">/**
+<span class='line'> 32</span>  * define all acceptable attributes for this class
+<span class='line'> 33</span> */</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="NAME">tQuery.mixinAttributes</span><span class="PUNC">(</span><span class="NAME">tQuery.Geometry</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">	</span><span class="NAME">hasTangents</span><span class="WHIT">	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.convert.toBool</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">	</span><span class="NAME">dynamic</span><span class="WHIT">		</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tQuery.convert.toBool</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
