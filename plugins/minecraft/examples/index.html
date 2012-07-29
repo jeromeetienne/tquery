@@ -61,8 +61,11 @@
 	});
 	// once the spritesheet is loaded, 
 	items.bind('load', function(){
-		var item	= items.createMesh(2+6*16).scaleBy(1/2);
+		var item	= items.createMesh(2, 6).scaleBy(1/2);
 		item.position(0,-9/35,6/35).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+
+		var item	= items.createMesh(5, 8).scaleBy(1/2);
+		item.position(0,-12/35,0/35).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
 		item.addTo(character.parts.armR);
 	});
 

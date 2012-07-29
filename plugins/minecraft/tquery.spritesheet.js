@@ -128,6 +128,8 @@ tQuery.register('Spritesheet', function(opts){
 	 * @returns {tQuery.Mesh} the generate mesh
 	*/
 	function createMeshItem(x, y) {
+		console.assert(typeof(x) === 'number');
+		console.assert(typeof(y) === 'number');
 		var id		= x + y * nSpriteX;
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
