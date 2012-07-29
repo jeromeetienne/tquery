@@ -1850,9 +1850,16 @@ fragmentShader:"precision mediump float;\nuniform vec3 color;\nuniform sampler2D
 */
 var tQuery	= function(object, root)
 {
-	// support for tQuery(tGeometry, tMaterial)
-	if( arguments.length === 2 && arguments[0] instanceof THREE.Geometry && arguments[1] instanceof THREE.Material ){
-		return tQuery(new THREE.Mesh(arguments[0], arguments[1]))
+	// support for tQuery(geometry, material)
+	if( arguments.length === 2 && 
+			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
+			&& 
+			(arguments[1] instanceof THREE.Material || arguments[1] instanceof tQuery.Material)
+			){
+		var tGeometry	= arguments[0] instanceof tQuery.Geometry ? arguments[0].get(0) : arguments[0];
+		var tMaterial	= arguments[1] instanceof tQuery.Material ? arguments[1].get(0) : arguments[1];
+		var tMesh	= new THREE.Mesh(tGeometry, tMaterial);
+		return tQuery( tMesh );
 	}
 
 // TODO make tthat cleaner
@@ -4016,6 +4023,10 @@ tQuery.World.register('pageTitle', function(element){
 	element.style.position	= "absolute";
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
+	element.style.fontWeight= "bolder";
+	element.style.fontColor	= "white";
+	element.style.paddingTop= "0.5em";
+	element.style.fontFamily= "arial";
 	// for chained API
 	return this;
 });
@@ -5883,7 +5894,7 @@ THREE.CSG = {
  * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
  * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
 */
-tQuery.Object3D.register('useFileballMaterial', function(scale){
+tQuery.Object3D.register('useFireballMaterial', function(scale){
 	scale	= scale !== undefined ? scale : 1;
 
 	this.each(function(object3d){
@@ -5894,8 +5905,8 @@ tQuery.Object3D.register('useFileballMaterial', function(scale){
 		
 		var material	= new THREE.ShaderMaterial({
 			uniforms	: uniforms,
-			vertexShader	: tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText,
-			fragmentShader	: tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText
+			vertexShader	: tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText,
+			fragmentShader	: tQuery.Object3D.prototype.useFireballMaterial._fragmentShaderText
 		});
 		
 		object3d.material	= material;
@@ -5909,7 +5920,7 @@ tQuery.Object3D.register('useFileballMaterial', function(scale){
 });	
 
 // converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');
-tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText = [
+tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText = [
 '		uniform float time;',
 '		uniform float scale;',
 '',
@@ -5932,7 +5943,7 @@ tQuery.Object3D.prototype.useFileballMaterial._vertexShaderText = [
 ].join('\n');
 
 // converted by document.getElementById( 'fragmentShader' ).textContent.split('\n').map(function(line){ return "\""+line+"\","; }).join('\n');
-tQuery.Object3D.prototype.useFileballMaterial._fragmentShaderText = [
+tQuery.Object3D.prototype.useFireballMaterial._fragmentShaderText = [
 "",
 "",
 "		//",
@@ -7352,13 +7363,28 @@ tQuery.register('MinecraftCharHeadAnimations', function(character){
 
 
 tQuery.inherit(tQuery.MinecraftCharHeadAnimations, tQuery.Animations);
+/**
+ * Class to handle spritesheet and generate extruded 3d objects with it
+ * 
+ * @name tQuery.Spritesheet
+ * @class
+ *
+ * @param {Object?} opts the options to create the spritesheet
+ * @param {string} opts.url the url of the spritesheet image
+ * @param {Number} opts.imgW the width of the image
+ * @param {Number} opts.imgH the height of the image
+ * @param {Number} opts.spriteW the width of each sprite in the image
+ * @param {Number} opts.spriteH the height of each sprite in the image
+*/
 tQuery.register('Spritesheet', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
 		url	: 'images/items/items.png',
-		imgW	: 256,
+		imgW	: 256,	// TODO would be better if i didnt have to do that
+				// in fact there is some weird trick with explosion size
+				// sort this out
 		imgH	: 256,
-		spriteW	: 16,
+		spriteW	: 16,	// TODO is it smart to get 
 		spriteH	: 16
 	});
 	var imgW	= this._opts.imgW;
@@ -7396,6 +7422,8 @@ tQuery.register('Spritesheet', function(opts){
 	};
 	/**
 	 * Create the geometry of the sprite 'id'. It is cached
+	 *
+	 * @param {Number} id the id of the sprite. aka (x + y*nSpriteX)
 	 * @returns {THREE.Geometry} geometry built
 	*/
 	function getGeometry( id ){
@@ -7458,7 +7486,14 @@ tQuery.register('Spritesheet', function(opts){
 		// return the result
 		return geometry;
 	};
-	function createMeshItem (id) {
+	/**
+	 * Create a tQuery.Mesh with the sprite at x,y in the spritesheet
+	 * @param {Number} x the x position of the sprite in the spritesheet
+	 * @param {Number} y the y position of the sprite in the spritesheet
+	 * @returns {tQuery.Mesh} the generate mesh
+	*/
+	function createMeshItem(x, y) {
+		var id		= x + y * nSpriteX;
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
 		var mesh	= new THREE.Mesh( geometry, material );
@@ -7493,6 +7528,12 @@ tQuery.register('Spritesheet', function(opts){
 	// setup the public function
 	this.createMesh		= createMeshItem;
 	this.createGeometry	= getGeometry;
+	this.imgW		= function(){ return imgW;	};
+	this.imgH		= function(){ return imgH;	};
+	this.spriteW		= function(){ return spriteW;	};
+	this.spriteH		= function(){ return spriteH;	};
+	this.nSpriteX		= function(){ return nSpriteX;	};
+	this.nSpriteY		= function(){ return nSpriteY;	};
 });
 
 // make it eventable
