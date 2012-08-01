@@ -1,0 +1,36 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+
+	// From Ilmari Heikkinen - https://plus.google.com/115293744081058969329/posts/8jDCjk5D6NQ
+	var fullSymbol	= Object.keys(THREE);
+	var _used	= {};
+	Object.keys(THREE).forEach(function(property){
+		var original	= THREE[property];
+		Object.defineProperty(THREE, property, {
+			get	: function(){
+				_used[property] = true;
+				return original;
+			}
+		});
+	});
+	
+	var unused;
+	var usedSymbol	= Object.keys(_used);
+	var unused	= fullSymbol.filter(function(symbol){ return usedSymbol.indexOf(symbol) === -1; });
+
+	console.log(THREE.ImageUtils)
+	
+	// var app;
+	// var r = tQuery.prototype.createTorus; 
+	// tQuery.prototype.createTorus = function(){
+	// 	app = this;
+	// 	this.createTorus = r;
+	// 	this.createTorus();
+	// }
+
+
+
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+</script></body>
