@@ -1,0 +1,68 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js">			</script>
+
+<script src="../../assets/vendor/dat.gui/dat.gui.js">		</script>
+<script src="../../assets/vendor/dat.gui/dat.color.js">		</script>
+
+<script src="../../materials/tquery.meshlambertmaterial.js">	</script>
+<script src="../../materials/tquery.meshphongmaterial.js">	</script>
+<script src="../../materials/tquery.meshbasicmaterial.js">	</script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.removeCameraControls();
+
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xff00ff).intensity(2);
+
+
+	var object	= tQuery.createTorus().addTo(world)
+			//.setBasicMaterial().color(0x00ff00).back();
+			.setPhongMaterial().ambient(0x444444).color(0xFF88FF).back()
+
+
+
+	var gui		= new dat.GUI();
+
+	var material	= object.get(0).material;
+	var folder	= addMaterialFolder(gui, material)
+	folder.open();
+	
+	
+	function addMaterialFolder(gui, material){
+		console.dir(material);
+		if( material instanceof THREE.MeshBasicMaterial ){
+			var folder	= gui.addFolder('MeshBasic');
+			addColor(folder, material, 'color');
+		}else if( material instanceof THREE.MeshPhongMaterial ){
+			var folder	= gui.addFolder('MeshPhong');
+			addColor(folder, material, 'ambient');
+			addColor(folder, material, 'color');
+			addColor(folder, material, 'emissive');
+			addColor(folder, material, 'specular');
+			folder.add(material, 'shininess')
+			folder.add(material, 'metal')
+		}else	console.assert(false, 'unhandled material')
+		return folder;
+
+		function addColor(folder, object, property){
+			var color	= object[property];
+			console.assert( color instanceof THREE.Color );
+			// change it to a css string. yet another bug in dat.gui
+			var tmp		= { color : {
+				r	: color.r * 255,
+				g	: color.g * 255,
+				b	: color.b * 255
+			}};
+			folder.addColor(tmp, 'color').onChange(function(value){
+				console.log('internal', JSON.stringify(tmp.color))
+				color.r	= tmp.color.r / 255;
+				color.g	= tmp.color.g / 255;
+				color.b	= tmp.color.b / 255;
+			}).name(property);
+		}		
+	}
+
+
+</script></body>
