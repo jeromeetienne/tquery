@@ -19,9 +19,9 @@ tQuery.register('createMeshBasicMaterial', function(opts){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Handle directional light
+ * Handle Basic Material
  *
- * @class include THREE.BasicMaterial. It inherit from {@link tQuery.Material}
+ * @class include THREE.MeshBasicMaterial. It inherit from {@link tQuery.Material}
  * 
  * @borrows tQuery.Node#get as this.get
  * @borrows tQuery.Node#each as this.each
