@@ -11,6 +11,7 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 
 	world.removeCameraControls();
+	world.tCamera().position.z	= 1;
 
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
@@ -25,19 +26,53 @@
 
 	var gui		= new dat.GUI();
 
-	var folder	= addLightFolder(gui, light.get(0))
-	folder.open();
+	tQuery('light').each(function(light){
+		var folder	= addLightFolder(gui, light);
+		folder.open();
+	});
 
 	var material	= object.get(0).material;
 	var folder	= addMaterialFolder(gui, material)
 	folder.open();
 	
+/**
+ * - use object picking to select the material you need to tune
+ *   - good for material
+ * - so either you do lights, or you do material or you pick the object you like
+ * - ok now you get something which is cool for interactive tunning
+ * - now how to push back those value in the source ?
+ * - is it possible to save in localStorage or so
+*/
+	
+	
 	function addLightFolder(gui, light){
-		if( material instanceof THREE.DirectionalLight ){
-			var folder	= gui.addFolder('DirectionalLight');
+		console.log('enter function', arguments.callee.name+'()')
+		// TODO what about the position/target ?
+		// put a folder for the light with shaddow
+		if( light instanceof THREE.AmbientLight ){
+			var folder	= gui.addFolder('AmbientLight-'+light.id);
+			addColor(folder, light, 'color');
+		}else if( light instanceof THREE.DirectionalLight ){
+			var folder	= gui.addFolder('DirectionalLight-'+light.id);
+			addColor(folder, light, 'color');
+			folder.add(light, 'intensity');
+			folder.add(light, 'distance');
+		}else if( light instanceof THREE.PointLight ){
+			var folder	= gui.addFolder('PointLight-'+light.id);
+			addColor(folder, light, 'color');
+			folder.add(light, 'intensity');
+			folder.add(light, 'distance');
+		}else if( light instanceof THREE.SpotLight ){
+			var folder	= gui.addFolder('SpotLight-'+light.id);
+			addColor(folder, light, 'color');
+			folder.add(light, 'intensity');
+			folder.add(light, 'distance');
+			folder.add(light, 'angle');
+			folder.add(light, 'exponent');
 		}else{
-			
+			console.log('unknown type of light', light)
 		}
+		return folder;
 	}
 	
 	function addMaterialFolder(gui, material){
@@ -47,12 +82,22 @@
 			addColor(folder, material, 'color');
 		}else if( material instanceof THREE.MeshPhongMaterial ){
 			var folder	= gui.addFolder('MeshPhongMaterial');
-			addColor(folder, material, 'ambient');
 			addColor(folder, material, 'color');
+			addColor(folder, material, 'ambient');
 			addColor(folder, material, 'emissive');
 			addColor(folder, material, 'specular');
 			folder.add(material, 'shininess')
 			folder.add(material, 'metal')
+			folder.add(material, 'perPixel')
+
+			folder.add(material, 'shading', {
+				NoShading	: THREE.NoShading,
+				FlatShading	: THREE.FlatShading,
+				SmoothShading	: THREE.SmoothShading
+			}).onChange(function(value){
+				// yet another dat.gui bug
+				material.shading	= parseInt(value)
+			});
 		}else	console.assert(false, 'unhandled material')
 		return folder;
 	}
@@ -66,7 +111,17 @@
 			b	: color.b * 255
 		}};
 		folder.addColor(tmp, 'color').onChange(function(value){
-			console.log('internal', JSON.stringify(tmp.color))
+			console.log('pre', JSON.stringify(tmp.color), tmp.color)
+			if( typeof(tmp.color) === 'string' ){
+				console.log('convert')
+				var colorHex	= parseInt(tmp.color.substr(1), 16)
+				tmp.color	= {
+					r	: (colorHex >> 16) & 255,
+					g	: (colorHex >>  8) & 255,
+					b	: (colorHex >>  0) & 255
+				};
+			}
+			console.log('post', JSON.stringify(tmp.color))
 			color.r	= tmp.color.r / 255;
 			color.g	= tmp.color.g / 255;
 			color.b	= tmp.color.b / 255;
