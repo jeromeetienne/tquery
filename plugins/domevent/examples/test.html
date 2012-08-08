@@ -1,6 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-all.js"></script>
-<script src="../../requirejs/tquery.norequirejs.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script> 
 
 <script src="../threex.domevent.js"></script>
 <script src="../tquery.object3d.domevent.js"></script>
@@ -18,6 +18,8 @@
     
 //	var world	= tQuery.createWorld().boilerplate().start();
 	var cube	= tQuery.createCube().addTo(world);
+	
+	console.log('current camera', world.tCamera());
 
 	tQuery('cube').on('mouseover', function(event){
 		console.log(event.type, "on cube", event)

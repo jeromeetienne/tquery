@@ -18,9 +18,7 @@
 		// - see github issue #11
 		// - better version would be to listen so events on tQuery ?
 		// - tQuery.on('cameraChange', function(world){
-		//   
 		//   })
-console.log('bouta')
 		domEvent.camera(tQuery.world.tCamera());
 		this.each(function(object3d){
 			domEvent.bind(object3d, eventType, callback, false);
@@ -35,7 +33,6 @@ console.log('bouta')
 		// - see github issue #11
 		// - better version would be to listen so events on tQuery ?
 		// - tQuery.on('cameraChange', function(world){
-		//   
 		//   })
 		domEvent.camera(tQuery.world.tCamera());
 		this.each(function(object3d){
