@@ -2056,6 +2056,7 @@ tQuery.pluginsOn	= function(object, dest){
 // make it pluginable
 tQuery.pluginsOn(tQuery, tQuery);
 
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -6375,9 +6376,9 @@ tQuery.register('createMeshBasicMaterial', function(opts){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Handle directional light
+ * Handle Basic Material
  *
- * @class include THREE.BasicMaterial. It inherit from {@link tQuery.Material}
+ * @class include THREE.MeshBasicMaterial. It inherit from {@link tQuery.Material}
  * 
  * @borrows tQuery.Node#get as this.get
  * @borrows tQuery.Node#each as this.each
@@ -7493,6 +7494,8 @@ tQuery.register('Spritesheet', function(opts){
 	 * @returns {tQuery.Mesh} the generate mesh
 	*/
 	function createMeshItem(x, y) {
+		console.assert(typeof(x) === 'number');
+		console.assert(typeof(y) === 'number');
 		var id		= x + y * nSpriteX;
 		var geometry	= getGeometry(id);
 		if( !geometry )	return null;
