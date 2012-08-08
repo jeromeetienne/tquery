@@ -1283,7 +1283,18 @@ tQuery.World.prototype.stop	= function(){
 tQuery.World.prototype.loop	= function(){ return this._loop;	}
 
 tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
-tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
+
+tQuery.World.prototype.tCamera	= function(value){
+	if(value instanceof THREE.Camera) {
+		this._scene.remove(this._camera);
+		this._camera = value;
+		this._scene.add(this._camera);
+		this.trigger("cameraChange", this);
+	}
+	
+	return this._camera;
+}
+
 tQuery.World.prototype.tScene	= function(){ return this._scene;	}
 
 

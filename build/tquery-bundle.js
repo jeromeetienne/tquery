@@ -3118,7 +3118,18 @@ tQuery.World.prototype.stop	= function(){
 tQuery.World.prototype.loop	= function(){ return this._loop;	}
 
 tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
-tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
+
+tQuery.World.prototype.tCamera	= function(value){
+	if(value instanceof THREE.Camera) {
+		this._scene.remove(this._camera);
+		this._camera = value;
+		this._scene.add(this._camera);
+		this.trigger("cameraChange", this);
+	}
+	
+	return this._camera;
+}
+
 tQuery.World.prototype.tScene	= function(){ return this._scene;	}
 
 
@@ -4087,6 +4098,19 @@ tQuery.World.register('addBoilerplate', function(opts){
 	if( opts.fullscreen && THREEx.FullScreen.available() ){
 		ctx.fullscreen	= THREEx.FullScreen.bindKey();		
 	}
+
+	this.bind('cameraChange', function(world) {
+		// update camera contol
+		if( opts.cameraControls ){
+			ctx.cameraControls	= new THREEx.DragPanControls(world.tCamera());
+			this.setCameraControls(ctx.cameraControls);
+		}
+
+		// update window resize
+		if( opts.windowResize ){
+			ctx.windowResize	= THREEx.WindowResize.bind(tRenderer, world.tCamera());
+		}
+	});
 
 	// bind 'destroy' event on tQuery.world
 	ctx._$onDestroy	= this.bind('destroy', function(){
