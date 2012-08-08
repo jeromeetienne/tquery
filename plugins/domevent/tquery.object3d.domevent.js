@@ -6,7 +6,7 @@
 	var domEvent;
 	var getInstance	= function(){
 		if( !domEvent ){
-			domEvent	= new THREEx.DomEvent();
+			domEvent	= new THREEx.DomEvent(tQuery.world.tCamera());
 		}
 		return domEvent
 	}
