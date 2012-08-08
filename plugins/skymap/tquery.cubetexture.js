@@ -19,6 +19,8 @@ tQuery.register('createCubeTexture', function(opts){
 	}else if( opts instanceof THREE.Texture ){
 		var textureCube	= opts;
 		return textureCube;
+	}else if( opts instanceof Array ){
+		var urls	= opts;
 	}else if( opts instanceof Object ){
 		console.assert(opts.path	, "opts.path must be defined");
 		console.assert(opts.format	, "opts.format must be defined");
@@ -27,8 +29,6 @@ tQuery.register('createCubeTexture', function(opts){
 			opts.path + 'py' + opts.format, opts.path + 'ny' + opts.format,
 			opts.path + 'pz' + opts.format, opts.path + 'nz' + opts.format
 		];
-	}else if( opts instanceof Array ){
-		var urls	= opts;
 	}else	console.assert(false, "opts invalid type "+opts);
 	// create the textureCube
 	var textureCube	= THREE.ImageUtils.loadTextureCube( urls );
