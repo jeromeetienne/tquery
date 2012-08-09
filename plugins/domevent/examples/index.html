@@ -5,15 +5,17 @@
 <script src="../tquery.domevent.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+
 	// enable domEvent on this world
 	world.enableDomEvent();
+
 	// create a cube
 	var cube	= tQuery.createCube().addTo(world);
-	// Bind some event on it
+
+	// bind some event on it
 	tQuery('cube').on('mouseover', function(event){
 		console.log(event.type, "on cube", event)
-	});
-	
+	});	
 	tQuery('cube').on('click', function(event){
 		console.log("click on cube", event)
 	});
