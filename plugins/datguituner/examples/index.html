@@ -1,0 +1,53 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js">			</script>
+
+<script src="../../assets/vendor/dat.gui/dat.gui.js">		</script>
+<script src="../../assets/vendor/dat.gui/dat.color.js">		</script>
+
+<script src="../../materials/tquery.meshlambertmaterial.js">	</script>
+<script src="../../materials/tquery.meshphongmaterial.js">	</script>
+<script src="../../materials/tquery.meshbasicmaterial.js">	</script>
+
+<script src="../tquery.datguituner.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// world.removeCameraControls();
+	// world.tCamera().position.z	= 2;
+
+	// setup some light
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xff00ff).intensity(2);
+
+	tQuery.createTorus(0.5-0.15, 0.15, 8*3, 6*6).addTo(world)
+			//.setBasicMaterial().color(0x00ff00).back();
+			.setPhongMaterial()
+				.ambient(0x444444)
+				.color(0xFF88FF)
+				//.metal(true)
+				.perPixel(true)
+				.back()
+
+	// world.loop().hook(function(){
+	// 	var angle	= 0.001 * Math.PI*2;
+	// 	object.rotateY(angle)
+	// })
+
+	// very simple example
+	//tQuery.DatguiTuner('light');
+	
+
+	// init dat.gui
+	var gui	= new dat.GUI();
+	// add all lights
+	tQuery.DatguiTuner({
+		selector: 'light',
+		gui	: gui
+	});
+	// add the material
+	tQuery.DatguiTuner({
+		selector: tQuery('mesh').material().get(),
+		gui	: gui
+	});
+</script></body>

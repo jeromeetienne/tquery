@@ -1,47 +1,3 @@
-<!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js">			</script>
-
-<script src="../../assets/vendor/dat.gui/dat.gui.js">		</script>
-<script src="../../assets/vendor/dat.gui/dat.color.js">		</script>
-
-<script src="../../materials/tquery.meshlambertmaterial.js">	</script>
-<script src="../../materials/tquery.meshphongmaterial.js">	</script>
-<script src="../../materials/tquery.meshbasicmaterial.js">	</script>
-<body><script>
-	var world	= tQuery.createWorld().boilerplate().start();
-
-	world.removeCameraControls();
-	world.tCamera().position.z	= 2;
-
-	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
-	var light	= tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xff00ff).intensity(2);
-
-	var object	= tQuery.createTorus(0.5-0.15, 0.15, 8*3, 6*6).addTo(world)
-			//.setBasicMaterial().color(0x00ff00).back();
-			.setPhongMaterial()
-				.ambient(0x444444)
-				.color(0xFF88FF)
-//				.metal(true)
-				.perPixel(true)
-				.back()
-
-	world.loop().hook(function(){
-		var angle	= 0.001 * Math.PI*2;
-		object.rotateY(angle)
-	})
-
-	var gui		= new dat.GUI();
-
-	tQuery('light').each(function(light){
-		var folder	= addLightFolder(gui, light);
-		folder.open();
-	});
-
-	var material	= object.get(0).material;
-	var folder	= addMaterialFolder(gui, material)
-	folder.open();
-	
 /**
  * - use object picking to select the material you need to tune
  *   - good for material
@@ -52,12 +8,35 @@
  * - now how to push back those value in the source ?
  * - is it possible to save in localStorage or so
 */
-	
-	
+tQuery.register('DatguiTuner', function(opts){
+	// handle parameters polymorphism
+	if( typeof(opts) === 'string' )	opts	= { selector: opts };
+	// copy parameters
+	opts		= tQuery.extend(opts, {});
+	var gui		= opts.gui	|| new dat.GUI();
+	var selector	= opts.selector	|| console.assert(false, "selector opts is required.")
+	// process every element
+	tQuery(opts.selector).each(function(element){
+		if( element instanceof THREE.Light ){
+			addLightFolder(gui, element)
+		}else if( element instanceof THREE.Material ){
+			addMaterialFolder(gui, element)
+		}
+	});
+	// return this for chained UI
+	return this;
+
+
+	/**
+	*/	
 	function addLightFolder(gui, light){
 		console.log('enter function', arguments.callee.name+'()')
 		// TODO what about the position/target ?
 		// put a folder for the light with shaddow
+
+		// sanity check
+		console.assert( light instanceof THREE.Light );
+		
 		if( light instanceof THREE.AmbientLight ){
 			var folder	= gui.addFolder('AmbientLight-'+light.id);
 			addColor(folder, light, 'color');
@@ -83,8 +62,10 @@
 		}
 		return folder;
 	}
-	
 	function addMaterialFolder(gui, material){
+		// sanity check
+		console.assert( material instanceof THREE.Material);
+
 		//console.dir(material);
 		if( material instanceof THREE.MeshBasicMaterial ){
 			var folder	= gui.addFolder('MeshBasicMaterial');
@@ -136,7 +117,5 @@
 			color.g	= tmp.color.g / 255;
 			color.b	= tmp.color.b / 255;
 		}).name(property);
-	}		
-
-
-</script></body>
+	}
+});
