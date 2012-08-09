@@ -17,9 +17,6 @@
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
 	var light	= tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xff00ff).intensity(2);
 
-//( radius, tube, segmentsR, segmentsT, arc ) {
-
-
 	var object	= tQuery.createTorus(0.5-0.15, 0.15, 8*3, 6*6).addTo(world)
 			//.setBasicMaterial().color(0x00ff00).back();
 			.setPhongMaterial()
@@ -116,7 +113,7 @@
 	function addColor(folder, object, property){
 		var color	= object[property];
 		console.assert( color instanceof THREE.Color );
-		// change it to a css string. yet another bug in dat.gui
+		// create a color that is understood by dat.gui
 		var tmp		= { color : {
 			r	: color.r * 255,
 			g	: color.g * 255,
@@ -124,8 +121,9 @@
 		}};
 		folder.addColor(tmp, 'color').onChange(function(value){
 			console.log('pre', JSON.stringify(tmp.color), tmp.color)
+			// workaround dat.gui bugs
+			// sometime, not all the time, dat.gui report a string in css format. reason is unknown 
 			if( typeof(tmp.color) === 'string' ){
-				console.log('convert')
 				var colorHex	= parseInt(tmp.color.substr(1), 16)
 				tmp.color	= {
 					r	: (colorHex >> 16) & 255,
