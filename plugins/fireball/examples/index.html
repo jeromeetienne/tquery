@@ -3,6 +3,10 @@
 <script src="../tquery.fireballmaterial.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var object3d	= tQuery.createSphere().addTo(world);
-	object3d.useFireballMaterial(2);
+//	var object3d	= tQuery.createSphere().addTo(world);
+//	var object3d	= tQuery.createCube().addTo(world);
+	var object3d	= tQuery.createPlane().addTo(world);
+	object3d.useFireballMaterial({
+		scale	: 2
+	});
 </script></body>
