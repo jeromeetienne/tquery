@@ -1,0 +1,35 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-all.js"></script>
+<script src="../threex.domevent.js"></script>
+<script src="../tquery.domevent.js"></script>
+<body><script>
+	var orthographic	= true; // Change to false to see the standard working version
+	if( orthographic ){
+		var chosenCamera = new THREE.OrthographicCamera(
+			window.innerWidth / -430,
+			window.innerWidth / +430,
+			window.innerHeight/ +430,
+			window.innerHeight/ -430, -2000, 10000);		
+	}
+
+	var world = tQuery.createWorld({
+		camera : chosenCamera
+	}).boilerplate().start().enableDomEvent();
+
+	if (orthographic)	world.add(world.tCamera());
+    
+	var cube	= tQuery.createCube().addTo(world);
+	
+	console.log('current camera', world.tCamera());
+
+	tQuery('cube').on('mouseover', function(event){
+		console.log(event.type, "on cube", event)
+	});
+	
+	tQuery('cube').on('click', function(event){
+		console.log("click on cube", event)
+	});
+	tQuery(world.tScene()).on('click', function(event){
+		console.log("click on scene", event);
+	});
+</script></body>

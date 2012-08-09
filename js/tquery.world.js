@@ -149,20 +149,22 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 //		add/remove object3D						//
 //////////////////////////////////////////////////////////////////////////////////
 
+// TODO why not a getter/setter here
 tQuery.World.prototype.setCameraControls	= function(control){
 	if( this.hasCameraControls() )	this.removeCameraControls();
 	this._cameraControls	= control;
 	return this;	// for chained API
 };
 
+tQuery.World.prototype.getCameraControls	= function(){
+	return this._cameraControls;
+};
+
+
 tQuery.World.prototype.removeCameraControls	= function(){
 	if( this.hasCameraControls() === false )	return this;
 	this._cameraControls	= undefined;
 	return this;	// for chained API
-};
-
-tQuery.World.prototype.getCameraControls	= function(){
-	return this._cameraControls;
 };
 
 tQuery.World.prototype.hasCameraControls	= function(){
@@ -234,8 +236,8 @@ tQuery.World.prototype.stop	= function(){
 tQuery.World.prototype.loop	= function(){ return this._loop;	}
 
 tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
-tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
 tQuery.World.prototype.tScene	= function(){ return this._scene;	}
+tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
 
 
 // backward compatible functions to remove

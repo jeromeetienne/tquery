@@ -322,15 +322,15 @@ tQuery.MicroeventMixin	= function(destObj){
 	destObj.trigger	= trigger;
 
 	destObj.addEventListener	= function(event, fct){
-		destObj.bind(event, fct)
+		this.bind(event, fct)
 		return this;	// for chained API
 	}
 	destObj.removeEventListener	= function(event, fct){
-		destObj.unbind(event, fct)
+		this.unbind(event, fct)
 		return this;	// for chained API
 	}
-	destObj.dispatchEvent		= function(event){
-		destObj.trigger(event)
+	destObj.dispatchEvent		= function(event /* , args... */){
+		this.trigger.apply(this, arguments)
 		return this;
 	}
 };
@@ -1198,20 +1198,22 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 //		add/remove object3D						//
 //////////////////////////////////////////////////////////////////////////////////
 
+// TODO why not a getter/setter here
 tQuery.World.prototype.setCameraControls	= function(control){
 	if( this.hasCameraControls() )	this.removeCameraControls();
 	this._cameraControls	= control;
 	return this;	// for chained API
 };
 
+tQuery.World.prototype.getCameraControls	= function(){
+	return this._cameraControls;
+};
+
+
 tQuery.World.prototype.removeCameraControls	= function(){
 	if( this.hasCameraControls() === false )	return this;
 	this._cameraControls	= undefined;
 	return this;	// for chained API
-};
-
-tQuery.World.prototype.getCameraControls	= function(){
-	return this._cameraControls;
 };
 
 tQuery.World.prototype.hasCameraControls	= function(){
@@ -1283,8 +1285,21 @@ tQuery.World.prototype.stop	= function(){
 tQuery.World.prototype.loop	= function(){ return this._loop;	}
 
 tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
-tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
 tQuery.World.prototype.tScene	= function(){ return this._scene;	}
+
+/**
+ * Getter/setter for camera. It is up to the user to .add/.remove the camera to the scene
+ * 
+ * @param {THREE.Camera?} value the camera to set when used as a setter
+*/
+tQuery.World.prototype.tCamera	= function(value){
+	if( value === undefined )	return this._camera;
+	// set the value itself
+	this._camera	= value;
+	// trigger an event
+	this.trigger('cameraChange');
+	return this;
+}
 
 
 // backward compatible functions to remove

@@ -123,8 +123,8 @@ THREEx.DomEvent	= function(camera, domElement)
 		} while (e = e.offsetParent);
 		
 		elDimension = {
-			width: (element === window) ? window.innerWidth : element.offsetWidth,
-			height: (element === window) ? window.innerHeight : element.offsetHeight
+			width	: (element === window) ? window.innerWidth	: element.offsetWidth,
+			height	: (element === window) ? window.innerHeight	: element.offsetHeight
 		}
 		
 		return {
@@ -294,6 +294,7 @@ THREEx.DomEvent.prototype._onMove	= function(mouseX, mouseY, origDomEvent)
 THREEx.DomEvent.prototype._onEvent	= function(eventName, mouseX, mouseY, origDomEvent)
 {
 	var vector	= new THREE.Vector3( mouseX, mouseY, 1 );
+// TODO to change... see @leconcepteur bug on github. apparently this tech is only for perspectiveCamera
 	this._projector.unprojectVector( vector, this._camera );
 
 	vector.subSelf( this._camera.position ).normalize()
