@@ -1,3 +1,6 @@
+// TODO there is no cameraChange. is that a problem. is there somebody needing that right now ?
+// initially @leconcepteur issue was about orthographic
+
 //////////////////////////////////////////////////////////////////////////////////
 //		tQuery.World.*							//
 //////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +59,9 @@ tQuery.Object3D.register('on', function(eventType, callback, world){
 	console.assert(world.hasDomEvent() === true);
 	// get THREEx.DomEvent
 	var domEvent	= tQuery.data(world, '_DomEvent').domEvent;
-	// set the camera
-	domEvent.camera(tQuery.world.tCamera());
+	// set the camera in domEvent
+	domEvent.camera(world.tCamera());
+	// bind each object3d
 	this.each(function(object3d){
 		domEvent.bind(object3d, eventType, callback, false);
 	});
@@ -73,7 +77,8 @@ tQuery.Object3D.register('off', function(eventType, callback, world){
 	// get THREEx.DomEvent
 	var domEvent	= tQuery.data(world, '_DomEvent').domEvent;
 	// set the camera
-	domEvent.camera(tQuery.world.tCamera());
+	domEvent.camera(world.tCamera());
+	// unbind each object3d
 	this.each(function(object3d){
 		domEvent.unbind(object3d, eventType, callback, false);
 	});
