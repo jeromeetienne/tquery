@@ -30,7 +30,7 @@ tQuery.register('DatguiTuner', function(opts){
 	/**
 	*/	
 	function addLightFolder(gui, light){
-		console.log('enter function', arguments.callee.name+'()')
+		//console.log('enter function', arguments.callee.name+'()')
 		// TODO what about the position/target ?
 		// put a folder for the light with shaddow
 
@@ -85,7 +85,7 @@ tQuery.register('DatguiTuner', function(opts){
 				FlatShading	: THREE.FlatShading,
 				SmoothShading	: THREE.SmoothShading
 			}).onChange(function(value){
-				// yet another dat.gui bug
+				// the value is notified as a string... yet another dat.gui bug
 				material.shading	= parseInt(value)
 			});
 		}else	console.assert(false, 'unhandled material')

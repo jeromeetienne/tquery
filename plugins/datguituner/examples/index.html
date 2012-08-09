@@ -18,7 +18,16 @@
 	// setup some light
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
 	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
-	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xff00ff).intensity(2);
+	var light	= tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xff00ff).intensity(2);
+	
+	/**
+	 * #### possible enhancement
+	 * - goal here to make light position visible.
+	 * - then to be able to be dragable ? with domevent
+	 * - thus it would be possible to get THREE.Vector3 
+	 * - once again a je.gui thing
+	*/
+	tQuery.createSphere().geometry().scaleBy(0.25).back().addTo(light);
 
 	tQuery.createTorus(0.5-0.15, 0.15, 8*3, 6*6).addTo(world)
 			//.setBasicMaterial().color(0x00ff00).back();
@@ -45,7 +54,7 @@
 		selector: 'light',
 		gui	: gui
 	});
-	// add the material
+	// add the materialss
 	tQuery.DatguiTuner({
 		selector: tQuery('mesh').material().get(),
 		gui	: gui
