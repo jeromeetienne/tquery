@@ -6,20 +6,17 @@
 	var domEvent;
 	var getInstance	= function(){
 		if( !domEvent ){
-			domEvent	= new THREEx.DomEvent();
+			domEvent	= new THREEx.DomEvent(tQuery.world.tCamera());
 		}
 		return domEvent
 	}
 	
+	tQuery.World.bind('cameraChange', function(world) {
+		domEvent.camera(world.tCamera());
+	});
+	
 	tQuery.Object3D.register('on', function(eventType, callback){
 		var domEvent	= getInstance();
-		// yuk!!!! workaround a bug
-		// ugly kludge to automatically set the camera in threex.domevent
-		// - see github issue #11
-		// - better version would be to listen so events on tQuery ?
-		// - tQuery.on('cameraChange', function(world){
-		//   })
-		domEvent.camera(tQuery.world.tCamera());
 		this.each(function(object3d){
 			domEvent.bind(object3d, eventType, callback, false);
 		});
@@ -28,18 +25,9 @@
 	
 	tQuery.Object3D.register('off', function(eventType, callback){
 		var domEvent	= getInstance();
-		// yuk!!!! workaround a bug
-		// ugly kludge to automatically set the camera in threex.domevent
-		// - see github issue #11
-		// - better version would be to listen so events on tQuery ?
-		// - tQuery.on('cameraChange', function(world){
-		//   })
-		domEvent.camera(tQuery.world.tCamera());
 		this.each(function(object3d){
 			domEvent.unbind(object3d, eventType, callback, false);
 		});
 		return this;	// for chained API
 	});
 })();
-
-
