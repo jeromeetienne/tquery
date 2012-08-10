@@ -6,42 +6,56 @@
 	
 	
 	var triangles		= 50;
-	var vertexIndexArray	= new Int16Array(triangles * 3);
-	for(var i = 0; i < vertexIndexArray.length; i++){
-		vertexIndexArray[i]	= i;	
+	var vertexIdxArray	= new Int16Array(triangles * 3);
+	for(var i = 0; i < vertexIdxArray.length; i++){
+		vertexIdxArray[i]	= i;	
 	}
 
-	var vertexPositionArray	= new Float32Array(triangles * 3 * 3);
-	for(var i = 0; i < vertexPositionArray.length; i++ ){
-		vertexPositionArray[i]	= Math.random() * 2;
+	var vertexPosArray	= new Float32Array(triangles * 3 * 3);
+	for(var i = 0; i < vertexPosArray.length; i++ ){
+		vertexPosArray[i]	= Math.random() * 2;
 	}
+
+	var uvArray		= new Float32Array(triangles * 3 * 2);
+	for(var i = 0; i < uvArray.length; i++ ){
+		uvArray[i]	= Math.random();
+	}
+
 	var attributes = {
-		index: {
+		index		: {
 			itemSize: 1,
-			array	: vertexIndexArray,
-			numItems: vertexIndexArray.length
+			array	: vertexIdxArray,
+			numItems: vertexIdxArray.length
 		},
-		position: {
+		position	: {
 			itemSize: 3,
-			array	: vertexPositionArray,
-			numItems: vertexPositionArray.length
+			array	: vertexPosArray,
+			numItems: vertexPosArray.length
+		},
+		uv	: {
+			itemSize: 2,
+			array	: uvArray,
+			numItems: uvArray.length
 		}
 	};
-	var geometry	= new THREE.BufferGeometry();
-	geometry.attributes = attributes;
-	geometry.offsets = [{
+
+	var geometry		= new THREE.BufferGeometry();
+	geometry.attributes	= attributes;
+	geometry.offsets	= [{
 		start	: 0,
 		count	: triangles * 3,
 		index	: 0
 	}];
 
-	// geometry.computeBoundingBox();
-	// geometry.computeBoundingSphere();
-	//geometry.computeVertexNormals();
+	geometry.computeBoundingBox();
+	geometry.computeBoundingSphere();
+	geometry.computeVertexNormals();
 
 	var material	= new THREE.MeshBasicMaterial({
-		color: 0x000000
+		color	: 0xffffff,
+		map	: THREE.ImageUtils.loadTexture( "../../assets/images/water.jpg" )
 	});
+	//var material	= new THREE.MeshNormalMaterial();
 
 	var mesh	= new THREE.Mesh(geometry, material);
 

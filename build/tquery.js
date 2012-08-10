@@ -1286,20 +1286,7 @@ tQuery.World.prototype.loop	= function(){ return this._loop;	}
 
 tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
 tQuery.World.prototype.tScene	= function(){ return this._scene;	}
-
-/**
- * Getter/setter for camera. It is up to the user to .add/.remove the camera to the scene
- * 
- * @param {THREE.Camera?} value the camera to set when used as a setter
-*/
-tQuery.World.prototype.tCamera	= function(value){
-	if( value === undefined )	return this._camera;
-	// set the value itself
-	this._camera	= value;
-	// trigger an event
-	this.trigger('cameraChange');
-	return this;
-}
+tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
 
 
 // backward compatible functions to remove

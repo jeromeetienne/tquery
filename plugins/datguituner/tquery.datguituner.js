@@ -1,12 +1,18 @@
 /**
- * - use object picking to select the material you need to tune
- *   - good for material
- * - so either you do lights, or you do material or you pick the object you like
- * - ok now you get something which is cool for interactive tunning
- * - may be a very nice bookmarklet
+ * * ok now you get something which is cool for interactive tunning
  *
- * - now how to push back those value in the source ?
- * - is it possible to save in localStorage or so
+ * #### Possible enhancement - object3d picking to support THREE.Vector3 property
+ * * use object3d picking to select the material you need to tune
+ *   * good for material
+ * * so either you do lights, or you do material or you pick the object you like
+ *
+ * #### Possible enhancement - save data and/or push that back in source
+ * * now how to push back those value in the source ?
+ * * is it possible to save in localStorage or so
+ *
+ * #### various possibilities
+ * * may be a very nice bookmarklet
+ * * add shaddow parameters in lights
 */
 tQuery.register('DatguiTuner', function(opts){
 	// handle parameters polymorphism
@@ -28,15 +34,12 @@ tQuery.register('DatguiTuner', function(opts){
 
 
 	/**
-	*/	
+	 * add a dat.gui folder for a light
+	*/
 	function addLightFolder(gui, light){
-		//console.log('enter function', arguments.callee.name+'()')
-		// TODO what about the position/target ?
-		// put a folder for the light with shaddow
-
 		// sanity check
 		console.assert( light instanceof THREE.Light );
-		
+		// handle each type of lights		
 		if( light instanceof THREE.AmbientLight ){
 			var folder	= gui.addFolder('AmbientLight-'+light.id);
 			addColor(folder, light, 'color');
@@ -62,35 +65,59 @@ tQuery.register('DatguiTuner', function(opts){
 		}
 		return folder;
 	}
+	/**
+	 * add a dat.gui folder for a material
+	*/
 	function addMaterialFolder(gui, material){
 		// sanity check
 		console.assert( material instanceof THREE.Material);
-
-		//console.dir(material);
-		if( material instanceof THREE.MeshBasicMaterial ){
-			var folder	= gui.addFolder('MeshBasicMaterial');
+		// handle type of material
+		if( material instanceof THREE.MeshNormalMaterial ){
+			var folder	= gui.addFolder('MeshNormalMaterial'+material.id);
+			addShading(folder, material);
+		}else if( material instanceof THREE.MeshBasicMaterial ){
+			var folder	= gui.addFolder('MeshBasicMaterial'+material.id);
 			addColor(folder, material, 'color');
+			addShading(folder, material);
+		}else if( material instanceof THREE.MeshLambertMaterial ){
+			var folder	= gui.addFolder('MeshLambertMaterial'+material.id);
+			addColor(folder, material, 'color');
+			addColor(folder, material, 'ambient');
+			addColor(folder, material, 'emissive');
+			addShading(folder, material);
 		}else if( material instanceof THREE.MeshPhongMaterial ){
-			var folder	= gui.addFolder('MeshPhongMaterial');
+			var folder	= gui.addFolder('MeshPhongMaterial'+material.id);
 			addColor(folder, material, 'color');
 			addColor(folder, material, 'ambient');
 			addColor(folder, material, 'emissive');
 			addColor(folder, material, 'specular');
 			folder.add(material, 'shininess')
-			folder.add(material, 'metal')
+			folder.add(material, 'metal');
 			folder.add(material, 'perPixel')
-
-			folder.add(material, 'shading', {
-				NoShading	: THREE.NoShading,
-				FlatShading	: THREE.FlatShading,
-				SmoothShading	: THREE.SmoothShading
-			}).onChange(function(value){
-				// the value is notified as a string... yet another dat.gui bug
-				material.shading	= parseInt(value)
-			});
-		}else	console.assert(false, 'unhandled material')
+			addShading(folder, material);
+		}else	console.warn('unhandled material')
+		// by default, reinit the material
+		material.needsUpdate	= true;
 		return folder;
 	}
+	/**
+	 * add a shading property 
+	 * TODO this 
+	*/
+	function addShading(folder, material){
+		console.assert(material instanceof THREE.Material)
+		folder.add(material, 'shading', {
+			NoShading	: THREE.NoShading,
+			FlatShading	: THREE.FlatShading,
+			SmoothShading	: THREE.SmoothShading
+		}).onChange(function(value){
+			// the value is notified as a string... yet another dat.gui bug
+			material.shading	= parseInt(value);
+		});
+	}
+	/**
+	 * add a color property 
+	*/
 	function addColor(folder, object, property){
 		var color	= object[property];
 		console.assert( color instanceof THREE.Color );
@@ -101,7 +128,6 @@ tQuery.register('DatguiTuner', function(opts){
 			b	: color.b * 255
 		}};
 		folder.addColor(tmp, 'color').onChange(function(value){
-			console.log('pre', JSON.stringify(tmp.color), tmp.color)
 			// workaround dat.gui bugs
 			// sometime, not all the time, dat.gui report a string in css format. reason is unknown 
 			if( typeof(tmp.color) === 'string' ){
@@ -112,7 +138,6 @@ tQuery.register('DatguiTuner', function(opts){
 					b	: (colorHex >>  0) & 255
 				};
 			}
-			console.log('post', JSON.stringify(tmp.color))
 			color.r	= tmp.color.r / 255;
 			color.g	= tmp.color.g / 255;
 			color.b	= tmp.color.b / 255;
