@@ -1,0 +1,10 @@
+<!doctype html>
+<script src="../require.js"></script>
+<script>
+	require([
+		'../../../build/tquery-bundle',
+	], function(){
+		var world	= tQuery.createWorld().boilerplate().start();
+		tQuery.createTorus().addTo(world);
+	});
+</script>
