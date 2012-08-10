@@ -1,6 +1,3 @@
-// TODO there is no cameraChange. is that a problem. is there somebody needing that right now ?
-// initially @leconcepteur issue was about orthographic
-
 //////////////////////////////////////////////////////////////////////////////////
 //		tQuery.World.*							//
 //////////////////////////////////////////////////////////////////////////////////
@@ -50,8 +47,6 @@ tQuery.World.register('hasDomEvent', function(){
 //		tQuery.Object3D.*						//
 //////////////////////////////////////////////////////////////////////////////////
 
-// TODO for the API... the goal is get the world... is there an API closer to jQuery ?
-// check on their site
 tQuery.Object3D.register('on', function(eventType, callback, world){
 	// parameter polymorphism
 	world	= world	|| tQuery.world;
