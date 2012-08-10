@@ -33,5 +33,5 @@ tQuery.pluginsInstanceOn(tQuery.Material);
 */
 tQuery.mixinAttributes(tQuery.Material, {
 	opacity		: tQuery.convert.toNumber,
-	transparent	: tQuery.convert.toBool
+	transparent	: tQuery.convert.toBoolean
 });

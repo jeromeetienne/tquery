@@ -37,18 +37,18 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 tQuery.mixinAttributes(tQuery.Object3D, {
 	eulerOrder		: tQuery.convert.toString,
 	
-	doubleSided		: tQuery.convert.toBool,
-	flipSided		: tQuery.convert.toBool,
+	doubleSided		: tQuery.convert.toBoolean,
+	flipSided		: tQuery.convert.toBoolean,
 	
-	rotationAutoUpdate	: tQuery.convert.toBool,
-	matrixAutoUpdate	: tQuery.convert.toBool,
-	matrixWorldNeedsUpdate	: tQuery.convert.toBool,
-	useQuaternion		: tQuery.convert.toBool,
+	rotationAutoUpdate	: tQuery.convert.toBoolean,
+	matrixAutoUpdate	: tQuery.convert.toBoolean,
+	matrixWorldNeedsUpdate	: tQuery.convert.toBoolean,
+	useQuaternion		: tQuery.convert.toBoolean,
 
-	visible			: tQuery.convert.toBool,
+	visible			: tQuery.convert.toBoolean,
 
-	receiveShadow		: tQuery.convert.toBool,
-	castShadow		: tQuery.convert.toBool
+	receiveShadow		: tQuery.convert.toBoolean,
+	castShadow		: tQuery.convert.toBoolean
 });
 
 /**

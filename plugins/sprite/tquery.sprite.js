@@ -38,5 +38,5 @@ tQuery.inherit(tQuery.Sprite, tQuery.Object3D);
 tQuery.mixinAttributes(tQuery.Sprite, {
 	color			: tQuery.convert.toThreeColor,
 	map			: tQuery.convert.toTexture,
-	useScreenCoordinates	: tQuery.convert.toBool
+	useScreenCoordinates	: tQuery.convert.toBoolean
 });

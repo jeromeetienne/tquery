@@ -50,7 +50,7 @@ tQuery.convert.identity	= function(value){
 	return value;
 };
 
-tQuery.convert.toBool	= function(value){
+tQuery.convert.toBoolean	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'boolean'){
 		return value;
 	}else{

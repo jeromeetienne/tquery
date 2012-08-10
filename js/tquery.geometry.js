@@ -32,6 +32,6 @@ tQuery.pluginsInstanceOn(tQuery.Geometry);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Geometry, {
-	hasTangents	: tQuery.convert.toBool,
-	dynamic		: tQuery.convert.toBool
+	hasTangents	: tQuery.convert.toBoolean,
+	dynamic		: tQuery.convert.toBoolean
 });

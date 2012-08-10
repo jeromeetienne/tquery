@@ -56,8 +56,8 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 
 	shininess	: tQuery.convert.toNumber,
 
-	metal		: tQuery.convert.toBool,
-	perPixel	: tQuery.convert.toBool
+	metal		: tQuery.convert.toBoolean,
+	perPixel	: tQuery.convert.toBoolean
 });
 
 

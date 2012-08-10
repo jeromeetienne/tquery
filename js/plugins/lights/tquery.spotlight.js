@@ -43,7 +43,7 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 	shadowCameraLeft	: tQuery.convert.toNumber,
 	shadowCameraTop		: tQuery.convert.toNumber,
 	shadowCameraBottom	: tQuery.convert.toNumber,
-	shadowCameraVisible	: tQuery.convert.toBool
+	shadowCameraVisible	: tQuery.convert.toBoolean
 });
 
 

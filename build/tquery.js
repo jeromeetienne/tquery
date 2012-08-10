@@ -387,7 +387,7 @@ tQuery.convert.identity	= function(value){
 	return value;
 };
 
-tQuery.convert.toBool	= function(value){
+tQuery.convert.toBoolean	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'boolean'){
 		return value;
 	}else{
@@ -552,18 +552,18 @@ tQuery.pluginsInstanceOn(tQuery.Object3D);
 tQuery.mixinAttributes(tQuery.Object3D, {
 	eulerOrder		: tQuery.convert.toString,
 	
-	doubleSided		: tQuery.convert.toBool,
-	flipSided		: tQuery.convert.toBool,
+	doubleSided		: tQuery.convert.toBoolean,
+	flipSided		: tQuery.convert.toBoolean,
 	
-	rotationAutoUpdate	: tQuery.convert.toBool,
-	matrixAutoUpdate	: tQuery.convert.toBool,
-	matrixWorldNeedsUpdate	: tQuery.convert.toBool,
-	useQuaternion		: tQuery.convert.toBool,
+	rotationAutoUpdate	: tQuery.convert.toBoolean,
+	matrixAutoUpdate	: tQuery.convert.toBoolean,
+	matrixWorldNeedsUpdate	: tQuery.convert.toBoolean,
+	useQuaternion		: tQuery.convert.toBoolean,
 
-	visible			: tQuery.convert.toBool,
+	visible			: tQuery.convert.toBoolean,
 
-	receiveShadow		: tQuery.convert.toBool,
-	castShadow		: tQuery.convert.toBool
+	receiveShadow		: tQuery.convert.toBoolean,
+	castShadow		: tQuery.convert.toBoolean
 });
 
 /**
@@ -920,8 +920,8 @@ tQuery.pluginsInstanceOn(tQuery.Geometry);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Geometry, {
-	hasTangents	: tQuery.convert.toBool,
-	dynamic		: tQuery.convert.toBool
+	hasTangents	: tQuery.convert.toBoolean,
+	dynamic		: tQuery.convert.toBoolean
 });/**
  * Handle material
  *
@@ -957,7 +957,7 @@ tQuery.pluginsInstanceOn(tQuery.Material);
 */
 tQuery.mixinAttributes(tQuery.Material, {
 	opacity		: tQuery.convert.toNumber,
-	transparent	: tQuery.convert.toBool
+	transparent	: tQuery.convert.toBoolean
 });
 /**
  * Handle light
@@ -1699,7 +1699,7 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	shadowCameraLeft	: tQuery.convert.toNumber,
 	shadowCameraTop		: tQuery.convert.toNumber,
 	shadowCameraBottom	: tQuery.convert.toNumber,
-	shadowCameraVisible	: tQuery.convert.toBool,
+	shadowCameraVisible	: tQuery.convert.toBoolean,
 	
 	shadowCameraNear	: tQuery.convert.toNumber,
 	shadowCameraFar		: tQuery.convert.toNumber
@@ -1791,7 +1791,7 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 	shadowCameraLeft	: tQuery.convert.toNumber,
 	shadowCameraTop		: tQuery.convert.toNumber,
 	shadowCameraBottom	: tQuery.convert.toNumber,
-	shadowCameraVisible	: tQuery.convert.toBool
+	shadowCameraVisible	: tQuery.convert.toBoolean
 });
 
 
