@@ -102,7 +102,6 @@ tQuery.register('DatguiTuner', function(opts){
 	}
 	/**
 	 * add a shading property 
-	 * TODO this 
 	*/
 	function addShading(folder, material){
 		console.assert(material instanceof THREE.Material)
