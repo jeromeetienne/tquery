@@ -4,11 +4,11 @@ requirejs.config({
 		"plugins"	: "../..",
 		'threex'	: '../../../vendor/threex',
 	},
-	map	: {
-		"*"	: {
-			'tquery'	: 'build/tquery-bundle',
-		}
-	}
+	// map	: {
+	// 	"*"	: {
+	// 		'tquery'	: 'build/tquery-bundle',
+	// 	}
+	// }
 });
 requirejs.config({
 	map	: {
