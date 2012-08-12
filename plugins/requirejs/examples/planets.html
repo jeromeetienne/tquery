@@ -1,6 +1,7 @@
 <!doctype html>
 <script src="../require.js"></script>
 <script>
+	// TODO put that in a require-config.js
 	requirejs.config({
 		paths	: {
 			"build"		: "../../../build",
@@ -10,11 +11,11 @@
 		map	: {
 			"*"	: {
 				'tquery'		: 'build/tquery-bundle',
-				'tquery.createplanet'	: 'plugins/requirejs2/tquery.createplanet.require',
+				'tquery.createplanet'	: 'plugins/requirejs/confrequire/planets.initrequire',
 			}
 		},
 		shim	: {
-			'plugins/requirejs2/tquery.createplanet.require'	: ['tquery']
+			'plugins/requirejs/confrequire/planets.requireinit'	: ['tquery']
 		}
 	});
 
@@ -22,8 +23,6 @@
 		'tquery.createplanet',
 	], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
-		//tQuery.createTorus().addTo(world);
-
 		var planet	= tQuery.createPlanet().id('obj').addTo(world);
 
 		// setup light
@@ -37,3 +36,6 @@
 		});
 	});
 </script>
+
+
+
