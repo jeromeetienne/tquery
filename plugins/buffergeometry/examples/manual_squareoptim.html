@@ -1,0 +1,97 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	
+	var triangles		= 1;
+
+	var vertexIdxArray	= new Int16Array(3 * 2);
+	var i	= 0;
+	vertexIdxArray[i+0]	= 0;
+	vertexIdxArray[i+1]	= 1;	
+	vertexIdxArray[i+2]	= 2;
+	i	+= 3;
+	vertexIdxArray[i+0]	= 2;
+	vertexIdxArray[i+1]	= 1;
+	vertexIdxArray[i+2]	= 3;
+	i	+= 3;
+
+	var vertexPosArray	= new Float32Array(3 * 4);
+	var i	= 0;
+	vertexPosArray[i+0]	= 0;
+	vertexPosArray[i+1]	= 0;
+	vertexPosArray[i+2]	= 0;
+	i	+= 3;
+	vertexPosArray[i+0]	= 1;
+	vertexPosArray[i+1]	= 0;
+	vertexPosArray[i+2]	= 0;
+	i	+= 3;
+	vertexPosArray[i+0]	= 0;
+	vertexPosArray[i+1]	= 1;
+	vertexPosArray[i+2]	= 0;
+	i	+= 3;
+	vertexPosArray[i+0]	= 1;
+	vertexPosArray[i+1]	= 1;
+	vertexPosArray[i+2]	= 0;
+	i	+= 3;
+	
+
+	var uvArray		= new Float32Array(2 * 4);
+	var i	= 0;
+	uvArray[i+0]	= 0;
+	uvArray[i+1]	= 0;
+	i	+= 2;
+	uvArray[i+0]	= 1;
+	uvArray[i+1]	= 0;
+	i	+= 2;
+	uvArray[i+0]	= 0;
+	uvArray[i+1]	= 1;
+	i	+= 2;
+	uvArray[i+0]	= 1;
+	uvArray[i+1]	= 1;
+	i	+= 2;
+
+	var attributes = {
+		index		: {
+			itemSize: 1,
+			array	: vertexIdxArray,
+			numItems: vertexIdxArray.length
+		},
+		position	: {
+			itemSize: 3,
+			array	: vertexPosArray,
+			numItems: vertexPosArray.length
+		},
+		uv	: {
+			itemSize: 2,
+			array	: uvArray,
+			numItems: uvArray.length
+		}
+	};
+
+	var geometry		= new THREE.BufferGeometry();
+	geometry.attributes	= attributes;
+	geometry.offsets	= [{
+		start	: 0,
+		count	: vertexIdxArray.length,
+		index	: 0
+	}];
+
+	geometry.computeBoundingBox();
+	geometry.computeBoundingSphere();
+	geometry.computeVertexNormals();
+
+
+	var material	= new THREE.MeshBasicMaterial({
+		color	: 0xffffff,
+		map	: THREE.ImageUtils.loadTexture( "../../assets/images/ash_uvgrid01.jpg" )
+	});
+	//var material	= new THREE.MeshNormalMaterial();
+
+	var mesh	= new THREE.Mesh(geometry, material);
+
+	world.add(mesh);
+	
+</script></body>

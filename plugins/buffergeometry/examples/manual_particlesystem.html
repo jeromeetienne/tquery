@@ -1,0 +1,83 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	
+	var triangles		= 50;
+	var vertexIdxArray	= new Int16Array(triangles * 3);
+	for( var i = 0; i < vertexIdxArray.length; i++ ){
+		vertexIdxArray[i]	= i;	
+	}
+
+	var vertexPosArray	= new Float32Array(triangles * 3 * 3);
+	for( var i = 0; i < vertexPosArray.length; i += 3 ){
+		vertexPosArray[i+0]	= Math.random() - 0.5;
+		vertexPosArray[i+1]	= Math.random() - 0.5;
+		vertexPosArray[i+2]	= Math.random() - 0.5;
+	}
+
+	var uvArray		= new Float32Array(triangles * 3 * 2);
+	for( var i = 0; i < uvArray.length; i += 2 ){
+		uvArray[i+0]	= Math.random();
+		uvArray[i+1]	= Math.random();
+	}
+
+	var attributes = {
+		index		: {
+			itemSize: 1,
+			array	: vertexIdxArray,
+			numItems: vertexIdxArray.length
+		},
+		position	: {
+			itemSize: 3,
+			array	: vertexPosArray,
+			numItems: vertexPosArray.length
+		},
+		uv	: {
+			itemSize: 2,
+			array	: uvArray,
+			numItems: uvArray.length
+		}
+	};
+
+	var geometry		= new THREE.BufferGeometry();
+	geometry.attributes	= attributes;
+	geometry.offsets	= [{
+		start	: 0,
+		count	: triangles * 3,
+		index	: 0
+	}];
+
+	geometry.computeBoundingBox();
+	geometry.computeBoundingSphere();
+	geometry.computeVertexNormals();
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+
+	// var geometry	= new THREE.Geometry();
+	// for( var i = 0; i < triangles*3; i++ ){
+	// 	var vertex	= new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5);
+	// 	geometry.vertices.push(vertex);
+	// }
+	
+	var material	= new THREE.ParticleBasicMaterial({
+		size		: 0.1,
+		sizeAttenuation	: true,
+		color		: 0xffffff,
+		depthWrite	: false,
+		transparent	: true
+	});
+	var particleSystem		= new THREE.ParticleSystem(geometry, material);
+	// particleSystem.dynamic		= true;
+	// particleSystem.sortParticles	= true;
+	var mesh	= particleSystem;
+
+	world.add(mesh);
+	
+</script></body>

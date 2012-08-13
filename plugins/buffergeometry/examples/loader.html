@@ -1,0 +1,20 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	var url		= "./experiment.html"
+	var xhr		= new XMLHttpRequest();
+	xhr.open("GET", url, true);
+	xhr.responseType= "arraybuffer"; 
+	xhr.onload	= function(e) {
+		var arraybuffer	= xhr.response; // not responseText
+		console.log('loaded', arraybuffer);
+		
+		
+		
+	}
+	xhr.send();
+	
+</script></body>
