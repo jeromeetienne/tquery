@@ -1,24 +1,5 @@
-	// TODO put that in a require-config.js
-	requirejs.config({
-		paths	: {
-			"build"		: "../../../build",
-			"plugins"	: "../..",
-			'threex'	: '../../../vendor/threex',
-		},
-		map	: {
-			"*"	: {
-				'tquery'		: 'build/tquery-bundle',
-				'tquery.createplanet'	: 'plugins/requirejs/tquery.createplanet.require',
-			}
-		},
-		shim	: {
-			'plugins/requirejs/tquery.createplanet.require'	: ['tquery']
-		}
-	});
+	require(['tquery.createplanet','tquery.keyboard'], function(){
 
-	require([
-		'tquery.createplanet',
-	], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
 		var planet	= tQuery.createPlanet().id('obj').addTo(world);
 
@@ -31,4 +12,5 @@
 			var angle	= 0.05 * now * Math.PI * 2;
 			planet.get(0).rotation.y	= angle;
 		});
+
 	});
