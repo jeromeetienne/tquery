@@ -3,14 +3,15 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
-	
-	
+
 	var triangles		= 1;
 
 	var vertexIdxArray	= new Int16Array(triangles * 3);
-	vertexIdxArray[0]	= 0;
-	vertexIdxArray[1]	= 1;	
-	vertexIdxArray[2]	= 2;
+	var i	= 0;
+	vertexIdxArray[i+0]	= 0;
+	vertexIdxArray[i+1]	= 1;	
+	vertexIdxArray[i+2]	= 2;
+	i	+= 3;
 
 	var vertexPosArray	= new Float32Array(triangles * 3 * 3);
 	var i	= 0;
@@ -26,7 +27,6 @@
 	vertexPosArray[i+1]	= 1;
 	vertexPosArray[i+2]	= 0;
 	i	+= 3;
-	
 
 	var uvArray		= new Float32Array(triangles * 3 * 2);
 	var i	= 0;
@@ -62,7 +62,7 @@
 	geometry.attributes	= attributes;
 	geometry.offsets	= [{
 		start	: 0,
-		count	: triangles * 3,
+		count	: vertexIdxArray.length,
 		index	: 0
 	}];
 

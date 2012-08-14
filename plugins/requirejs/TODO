@@ -1,0 +1,9 @@
+* tomainconfig.js is a step for r.js
+  * it is currently mixed in makefile and node.js
+  * all that will end up in threejstool
+  * so put it all in 
+
+* DONE put require.js in /vendor
+* DONE put all.confrequire.js in /build
+* DONE put allmerged.confrequire.js /build
+* DONE put tomainconfigfile.js in /bin

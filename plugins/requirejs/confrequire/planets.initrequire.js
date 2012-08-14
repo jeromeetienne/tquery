@@ -4,4 +4,5 @@ define(['module', 'plugins/planets/tquery.createplanet'], function(module){
 			+ module.uri.replace(/[^/]*$/, '');
 	// set baseUrl for this plugin
 	tQuery.createPlanet.baseUrl	= baseUrl+'../../planets/';
+	console.log('baseUrl', baseUrl)
 });
