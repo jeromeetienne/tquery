@@ -1,0 +1,87 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	var url		= "./model-square.bin"
+	var xhr		= new XMLHttpRequest();
+	xhr.open("GET", url, true);
+	xhr.responseType= "arraybuffer"; 
+	xhr.onload	= function(e) {
+		var arraybuffer	= xhr.response; // not responseText
+		console.log('loaded', arraybuffer, arraybuffer.byteLength);
+		
+		
+		var offset	= 0;
+
+		// vertexIdxArray
+		var headerArray	= new Int32Array(arraybuffer, offset, 2);
+		offset	+= headerArray.byteLength;
+		var vertexIdxArray	= new Int16Array(arraybuffer, offset, headerArray[1]);
+		offset	+= vertexIdxArray.byteLength;
+console.log('offset', offset, headerArray[1], vertexIdxArray)
+
+		// vertexPosArray
+		var headerArray		= new Int32Array(arraybuffer, offset, 2); 
+console.log('pos', headerArray);
+		offset	+= headerArray.byteLength;
+		var vertexPosArray	= new Float32Array(arraybuffer, offset, headerArray[1]);
+		offset	+= vertexPosArray.byteLength;
+		
+		// uvArray
+		var headerArray		= new Int32Array(arraybuffer, offset, 2); 
+console.log('uv', headerArray);
+		offset	+= headerArray.byteLength;
+		var uvArray		= new Float32Array(arraybuffer, offset, headerArray[1]);
+		offset	+= uvArray.byteLength;
+
+		console.log('vertexIdxArray', vertexIdxArray)
+		console.log('vertexPosArray', vertexPosArray)
+		console.log('uvArray', uvArray)
+		
+		
+		var attributes = {
+			index		: {
+				itemSize: 1,
+				array	: vertexIdxArray,
+				numItems: vertexIdxArray.length
+			},
+			position	: {
+				itemSize: 3,
+				array	: vertexPosArray,
+				numItems: vertexPosArray.length
+			},
+			uv	: {
+				itemSize: 2,
+				array	: uvArray,
+				numItems: uvArray.length
+			}
+		};
+
+		var geometry		= new THREE.BufferGeometry();
+		geometry.attributes	= attributes;
+		geometry.offsets	= [{
+			start	: 0,
+			count	: vertexIdxArray.length,
+			index	: 0
+		}];
+
+		geometry.computeBoundingBox();
+		geometry.computeBoundingSphere();
+		geometry.computeVertexNormals();
+
+		var material	= new THREE.MeshBasicMaterial({
+			color	: 0xffffff,
+			map	: THREE.ImageUtils.loadTexture( "../../assets/images/ash_uvgrid01.jpg" )
+		});
+		//var material	= new THREE.MeshNormalMaterial();
+
+		var mesh	= new THREE.Mesh(geometry, material);
+
+		world.add(mesh);
+
+	}
+	xhr.send();
+	
+</script></body>
