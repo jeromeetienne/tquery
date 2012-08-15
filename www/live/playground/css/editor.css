@@ -1,0 +1,24 @@
+#editor {
+	width	: 100%;
+}
+
+.CodeMirror {
+}
+
+.CodeMirror-scroll {
+	-moz-box-shadow	: 0 0 5px 5px #888;
+	-webkit-box-shadow: 0 0 5px 5px#888;
+	box-shadow	: 0 0 5px 5px #888;
+	border-radius	: 15px;
+	width		: 100%;
+
+	font-size	: 20px;
+	line-height	: 1.3;
+}
+
+.cm-s-cobalt {
+	background	: rgba(0,34,64, 0.7)
+}
+.cm-s-night {
+	background	: rgba(45,45,45, 0.5)
+}

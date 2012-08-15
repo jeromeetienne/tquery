@@ -1,0 +1,102 @@
+body {
+	background-color: #BBB;
+	margin		: 0;
+	padding		: 0;
+	overflow	: hidden;
+}
+
+#osdContainer {
+	margin-left	: 20px;
+	margin-right	: 20px;
+
+	user-select		: none;
+	-webkit-user-select	: none;
+	-moz-user-select	: none;
+}
+
+/********************************************************************************/
+/*		#title								*/
+/********************************************************************************/
+
+#title {
+	text-align	: center;
+
+	font-size	: 300%;
+	font-family	: Georgia,serif;
+
+	color		: #4E443C;
+
+	font-variant	: small-caps;
+	font-weight	: 100;
+	margin-top	: 10px;
+	margin-bottom	: 30px;
+}
+#title .tee {
+	font-variant	: normal;
+}
+
+/********************************************************************************/
+/*		#toolbar							*/
+/********************************************************************************/
+
+#toolbar {
+	font-size	: 140%;
+	
+	position	: absolute;
+	left		: 0;
+	top		: 40px;
+	width		: 100%;
+}
+
+#toolbar .left {
+	float	: left;
+}
+
+#toolbar .right {
+	float	: right;
+}
+
+#syncStatus .state {
+	font-size	: 90%;
+	font-weight	: 500;
+	font-family	: Georgia,serif;
+	font-variant	: small-caps;
+	color		: #4E443C;
+	color		: #444;
+}
+#syncStatus .state.uptodate {
+	color		: #666;
+}
+#syncStatus .state.outofdate {
+}
+
+.button {
+	cursor		: pointer;
+	padding-right	: 10px;
+	padding-left	: 10px;
+	padding-top	: 2px;
+	padding-bottom	: 2px;
+	
+	margin-left	: 5px;
+	margin-right	: 5px;
+
+	background-color: #999;	
+	border-radius	: 8px;
+
+	background-color: #AAA;
+	color		: #444;
+
+	-moz-box-shadow	: 0 0 3px 3px #888;
+	-webkit-box-shadow: 0 0 3px 3px#888;
+	box-shadow	: 0 0 3px 3px #888;
+}
+
+.button:hover {
+	background-color: #888;	
+	color		: #222;
+}
+
+.shorturl input {
+	margin-top	: 5px;
+	font-size	: 14px;		
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+	<head>
+		<title>tQuery playground</title>
+		<meta charset=utf-8>
+		<script src=../lib/codemirror.js></script>
+		<script src=../mode/xml/xml.js></script>
+		<script src=../mode/javascript/javascript.js></script>
+		<script src=../mode/css/css.js></script>
+		<script src=../mode/htmlmixed/htmlmixed.js></script>
+		<link rel=stylesheet href=../lib/codemirror.css>
+		<link rel="stylesheet" href="../theme/cobalt.css">
+		<link rel=stylesheet href=../doc/docs.css>
+		<style type=text/css>
+			.CodeMirror {
+				float: left;
+				width: 50%;
+				border: 1px solid black;
+			}
+			iframe {
+				width: 49%;
+				float: left;
+				height: 300px;
+				border: 1px solid black;
+				border-left: 0px;
+			}
+		</style>
+	</head>
+<body>
+	<h1>CodeMirror: HTML5 preview</h1>
+
+	<textarea id=code name=code>
+<!doctype html>
+	<title>Minimal tQuery Page</title>
+	<script src="../../../../build/tquery-bundle.js"></script>
+<body>
+	<script>
+		var world	= tQuery.createWorld().fullpage().start();
+		var object	= tQuery.createTorus().addTo(world);
+	</script>
+</body>
+	</textarea>
+	<iframe id=preview></iframe>
+
+	<script>
+		var delay;
+		// Initialize CodeMirror editor with a nice html5 canvas demo.
+		var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+			mode		: 'text/html',
+			tabMode		: 'indent',
+			theme		: 'cobalt',
+			indentWithTabs	: true,
+			tabSize		: 8,
+			indentUnit	: 8,
+			onChange: function() {
+				clearTimeout(delay);
+				delay = setTimeout(updatePreview, 300);
+			}
+		});
+		
+		function updatePreview() {
+			var previewFrame = document.getElementById('preview');
+			var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+			preview.open();
+			preview.write(editor.getValue());
+			preview.close();
+		}
+		setTimeout(updatePreview, 300);
+	</script>
+</body>
+</html>
