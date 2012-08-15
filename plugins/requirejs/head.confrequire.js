@@ -1,12 +1,8 @@
 requirejs.config({
 	paths	: {
 		"build"		: "../../../build",
-		"plugins"	: "../..",
+		"plugins"	: "../../../plugins",
 		'threex'	: '../../../vendor/threex',
+		'three.js'	: '../../../vendor/three.js',
 	},
-	// map	: {
-	// 	"*"	: {
-	// 		'tquery'	: 'build/tquery-bundle',
-	// 	}
-	// }
 });

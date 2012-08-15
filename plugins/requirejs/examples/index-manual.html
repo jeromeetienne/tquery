@@ -7,11 +7,12 @@
 <script src="../confrequire/lavamaterial.confrequire.js"></script>
 <script src="../confrequire/materials.confrequire.js"></script>
 <script src="../confrequire/physics.confrequire.js"></script>
+<script src="../confrequire/pproc.confrequire.js"></script>
 <body><script>
 	require([
 		'tquery.createplanet','tquery.keyboard',
 		'tquery.lavamaterial', 'tquery.materials',
-		'tquery.physics'
+		'tquery.physics', 'tquery.pproc'
 		], function(){
 
 		var world	= tQuery.createWorld().boilerplate().start();
@@ -19,6 +20,9 @@
 		//var planet	= tQuery.createSphere().addTo(world);
 		
 		//planet.useLavaMaterial();
+		
+		world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
+
 
 		// setup light
 		tQuery.createDirectionalLight().addTo(world).position(1,1,1);
