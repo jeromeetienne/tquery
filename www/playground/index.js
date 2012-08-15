@@ -84,6 +84,7 @@ function updatePreview() {
 //////////////////////////////////////////////////////////////////////////////////
 
 var optionsSave	= function(){
+return;
 	console.log("Saving options to url...")
 	var textValue	= editor.getValue();
 	var options	= {
@@ -92,6 +93,7 @@ var optionsSave	= function(){
 	location.hash	= '#j/'+encodeURIComponent(JSON.stringify(options));	
 }
 var optionsLoad	= function(){
+return;
 	if( !location.hash )	return;
 	console.log("Loading options from url...")
 	if( location.hash.substring(0,3) === "#j/" ){
