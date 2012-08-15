@@ -6,8 +6,8 @@ tQuery.Object3D.register('useLavaMaterial', function(opts){
 		fogDensity	: 0.45,
 		fogColor	: new THREE.Vector3( 0, 0, 0 ),
 		uvScale		: new THREE.Vector2( 3.0, 1.0 ),
-		texture1Url	: "../images/cloud.png",
-		texture2Url	: "../images/lavatile.jpg",
+		texture1Url	: tQuery.Object3D.prototype.useLavaMaterial.baseUrl+"images/cloud.png",
+		texture2Url	: tQuery.Object3D.prototype.useLavaMaterial.baseUrl+"images/lavatile.jpg",
 		timeSpeed	: 1
 	})
 
@@ -40,6 +40,10 @@ tQuery.Object3D.register('useLavaMaterial', function(opts){
 	// for chained API
 	return this;
 });	
+
+
+// define the baseUrl for this plugins
+tQuery.Object3D.prototype.useLavaMaterial.baseUrl	= '../';
 
 // converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');
 tQuery.Object3D.prototype.useLavaMaterial._vertexShaderText = [
