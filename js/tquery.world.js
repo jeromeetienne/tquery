@@ -100,21 +100,17 @@ tQuery.World.prototype.destroy	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * true if webgl is available, false otherwise
-*/
-tQuery.World._hasWebGL	= (function(){
-	// test from Detector.js
-	try{
-		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
-	} catch( e ){
-		return false;
-	}
-})();
-
-/**
  * @returns {Boolean} true if webgl is available, false otherwise
 */
 tQuery.World.hasWebGL	= function(){
+	if( tQuery.World._hasWebGL !== undefined )	return tQuery.World._hasWebGL;
+
+	// test from Detector.js
+	try{
+		tQuery.World._hasWebGL	= !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
+	} catch( e ){
+		tQuery.World._hasWebGL	= false;
+	}
 	return tQuery.World._hasWebGL;
 };
 
