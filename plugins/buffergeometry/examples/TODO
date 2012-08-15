@@ -1,0 +1,4 @@
+* make an actual saver/loader which handle padding
+* understand x3d parsing
+* convert those files into my own format
+* see about skinning
