@@ -1,12 +1,24 @@
 <!doctype html>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../vendor/require.js"></script>
-<script src="../build/allmerged.confrequire.js"></script>
+<script src="../head.confrequire.js"></script>
+<script src="../confrequire/keyboard.confrequire.js"></script>
+<script src="../confrequire/planets.confrequire.js"></script>
+<script src="../confrequire/lavamaterial.confrequire.js"></script>
+<script src="../confrequire/materials.confrequire.js"></script>
+<script src="../confrequire/physics.confrequire.js"></script>
 <body><script>
-	require(['tquery.createplanet','tquery.keyboard'], function(){
+	require([
+		'tquery.createplanet','tquery.keyboard',
+		'tquery.lavamaterial', 'tquery.materials',
+		'tquery.physics'
+		], function(){
 
 		var world	= tQuery.createWorld().boilerplate().start();
 		var planet	= tQuery.createPlanet().addTo(world);
+		//var planet	= tQuery.createSphere().addTo(world);
+		
+		//planet.useLavaMaterial();
 
 		// setup light
 		tQuery.createDirectionalLight().addTo(world).position(1,1,1);

@@ -19,16 +19,11 @@ requirejs.config	= function(opts){
 	};
 }
 
-// get all filenames in confrequire/*.conrequire.js
-var filenames	= require('fs').readdirSync('confrequire').filter(function(filename){
-	return filename.match(/\.confrequire\.js$/)
-});
-// concat head.confrequire.js and all confrequire/*.configrequire.js
-var content	= require('fs').readFileSync('head.confrequire.js', 'utf8')
-filenames.forEach(function(filename){
-	content	+= require('fs').readFileSync('confrequire/'+filename, 'utf8')
-})
-// eval every *.confrequire.js config
+
+// read 'all.confrequire.js' to get all calls to requirejs.config()
+var filename	= process.argv[2]	|| console.assert(false, 'a filename MUST be provided');
+var content	= require('fs').readFileSync(filename, 'utf8');
+// eval 'all.confrequire.js' config
 eval(content)
 // output the merged options object for requirejs.config()
 console.log('requirejs.config('+JSON.stringify(output, null, '\t')+');')
