@@ -127,19 +127,17 @@ tQuery.register('createWheelShape', function(){
 });
 
 tQuery.register('createSmileyShape', function(radius){
-	var smileyShape	= new THREE.Shape();
-	smileyShape.moveTo( 0, 0 );
+	var smileyShape = new THREE.Shape();
+	smileyShape.moveTo( 80, 40 );
 	smileyShape.arc( 40, 40, 40, 0, Math.PI*2, false );
 
-// TODO should i do a tQuery.Path ?
-// - and shape would inherit from it
 	var smileyEye1Path = new THREE.Path();
-	smileyEye1Path.moveTo( 0, 0 );
+	smileyEye1Path.moveTo( 35, 20 );
 	smileyEye1Path.arc( 25, 20, 10, 0, Math.PI*2, true );
 	smileyShape.holes.push( smileyEye1Path );
 
 	var smileyEye2Path = new THREE.Path();
-	smileyEye2Path.moveTo( 0, 0 );
+	smileyEye2Path.moveTo( 65, 20 );
 	smileyEye2Path.arc( 55, 20, 10, 0, Math.PI*2, true );
 	smileyShape.holes.push( smileyEye2Path );
 
@@ -161,3 +159,10 @@ tQuery.register('createSmileyShape', function(radius){
 
 	return new tQuery.Shape(smileyShape);
 });
+
+
+
+
+
+
+

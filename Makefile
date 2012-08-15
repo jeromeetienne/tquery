@@ -97,6 +97,19 @@ minifyBundle: buildBundle
 		>> build/tquery-bundle.min.js
 	@echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
 
+buildBundleRequire: buildBundle
+	(cd plugins/requirejs && make compile)
+	cat build/tquery-bundle.js		 	 > build/tquery-bundle-require.js
+	cat plugins/requirejs/vendor/require.js		>> build/tquery-bundle-require.js
+	cat plugins/requirejs/build/all.confrequire.js	>> build/tquery-bundle-require.js
+
+minifyBundleRequire: buildBundleRequire
+	curl --data-urlencode "js_code@build/tquery-bundle-require.js" 	\
+		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
+		http://closure-compiler.appspot.com/compile	\
+		>> build/tquery-bundle-require.min.js
+	@echo size minified + gzip is `gzip -c build/tquery-bundle-require.min.js | wc -c` byte
+
 buildAll: buildBundle
 	echo $(BANNER)					>  build/tquery-all.js
 	cat build/tquery-bundle.js			>> build/tquery-all.js
