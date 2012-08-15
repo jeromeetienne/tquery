@@ -83,7 +83,9 @@ function updatePreview() {
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-function rot13( s ) {
+// use of rot13 to obfuscate url - a workaround of "Reflective XSS Protection" 
+// - http://blog.chromium.org/2010/01/security-in-depth-new-security-features.html
+function rot13( s ) { 
 	var b = [], c, i = s.length;
 	var a = 'a'.charCodeAt(), z = a + 26;
 	var A = 'A'.charCodeAt(), Z = A + 26;
