@@ -6,7 +6,6 @@ requirejs.config({
 	},
 	shim	: {
 	 	'plugins/physics/tquery.physijs'	: [
-	 		//'threex/THREEx.KeyboardState',
  			'plugins/physics/vendor/physijs/physi'
 	 	]
 	}

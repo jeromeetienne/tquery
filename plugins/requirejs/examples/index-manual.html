@@ -8,20 +8,24 @@
 <script src="../confrequire/materials.confrequire.js"></script>
 <script src="../confrequire/physics.confrequire.js"></script>
 <script src="../confrequire/pproc.confrequire.js"></script>
+<script src="../confrequire/shape.confrequire.js"></script>
 <body><script>
 	require([
 		'tquery.createplanet','tquery.keyboard',
 		'tquery.lavamaterial', 'tquery.materials',
-		'tquery.physics', 'tquery.pproc'
+		'tquery.physics', 'tquery.pproc',
+		'tquery.shape'
 		], function(){
 
 		var world	= tQuery.createWorld().boilerplate().start();
 		var planet	= tQuery.createPlanet().addTo(world);
 		//var planet	= tQuery.createSphere().addTo(world);
 		
-		//planet.useLavaMaterial();
+		var smiley	= tQuery.createSmiley().addTo(world).translateX(1)
+			
+		//smiley.useLavaMaterial();
 		
-		world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
+		//world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
 
 
 		// setup light
@@ -35,7 +39,7 @@
 
 			var curScale	= planet.get(0).scale.x;
 			var dstScale	= tQuery.keyboard().pressed('a') ? 2 : 1;
-			planet.scale( curScale + (dstScale-curScale)*0.1 );
+			smiley.scale( curScale + (dstScale-curScale)*0.1 );
 		});
 	});
 </script>

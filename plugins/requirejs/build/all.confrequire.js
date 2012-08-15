@@ -12,7 +12,8 @@ requirejs.config({
 			"tquery.materials": "plugins/materials/tquery.meshbasicmaterial",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.createplanet": "plugins/requirejs/confrequire/planets.initrequire",
-			"tquery.pproc": "plugins/pproc/tquery.effectcomposer"
+			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
+			"tquery.shape": "plugins/shape/tquery.shape"
 		}
 	},
 	"shim": {
@@ -35,7 +36,11 @@ requirejs.config({
 			"three.js/postprocessing/MaskPass",
 			"three.js/postprocessing/RenderPass",
 			"three.js/postprocessing/SavePass",
+			"three.js/postprocessing/ShaderPass",
 			"three.js/postprocessing/TexturePass"
+		],
+		"plugins/shape/tquery.shape": [
+			"plugins/shape/tquery.shape.create"
 		]
 	}
 });

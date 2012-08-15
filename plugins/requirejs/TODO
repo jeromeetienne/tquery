@@ -1,6 +1,6 @@
 #### TODO
 * add more confrequire files
-* merge that in tquery-bundle-require
+* DONE merge that in tquery-bundle-require
 * see how to change directory depth
   * from require.js config pov. rewrite rules build/plugins/threex ?
   * see baseUrl case
