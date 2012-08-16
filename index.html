@@ -352,7 +352,7 @@ see it running. Up to you to modify index.html until it fits your needs. See its
 jQuery(function(){
 	jQuery('a').filter(function(index){
 		if( this.href.match(/\#/) )	return;
-		jQuery(this).attr('target', '_blank');
+		jQuery(this).attr('target', '_blank' );
 	});
 });
 </script>

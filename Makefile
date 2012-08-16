@@ -1,5 +1,4 @@
-# makefile to automatize simple operations 
-
+# makefile to automatize simple operations
 server:
 	python -m SimpleHTTPServer
 
@@ -50,7 +49,7 @@ boilerplateBuild:
 #################################################################################
 
 BANNER="// tquery.js - https://github.com/jeromeetienne/tquery - MIT License"
-build:	minifyCore minifyBundle minifyAll
+build:	minifyCore minifyBundle minifyBundleRequire
 
 buildCore:
 	echo $(BANNER)			>  build/tquery.js
@@ -109,61 +108,5 @@ minifyBundleRequire: buildBundleRequire
 		http://closure-compiler.appspot.com/compile	\
 		>> build/tquery-bundle-require.min.js
 	@echo size minified + gzip is `gzip -c build/tquery-bundle-require.min.js | wc -c` byte
-
-buildAll: buildBundle
-	echo $(BANNER)					>  build/tquery-all.js
-	cat build/tquery-bundle.js			>> build/tquery-all.js
-	cat plugins/requirejs/tquery.norequirejs.js	>> build/tquery-all.js
-	# plugins/keyboard
-	cat vendor/threex/THREEx.KeyboardState.js	>> build/tquery-all.js
-	cat plugins/keyboard/tquery.keyboard.js		>> build/tquery-all.js
-	# plugins/shape
-	cat plugins/shape/tquery.shape.js		>> build/tquery-all.js
-	cat plugins/shape/tquery.shape.create.js	>> build/tquery-all.js
-	# plugins/dollar3d
-	cat plugins/dollar3d/tquery.dollar3d.js		>> build/tquery-all.js
-	# plugins/deviceOrientation
-	#cat vendor/threex/THREEx.DeviceOrientationState.js		>> build/tquery-all.js
-	#cat plugins/deviceorientation/tquery.deviceorientation.js	>> build/tquery-all.js
-	# plugins/wobble
-	cat vendor/threex/THREEx.GeometryWobble.js		>> build/tquery-all.js
-	cat plugins/wobble/tquery.geometry.wobble.js		>> build/tquery-all.js
-	# plugins/terrainGenerator
-	cat vendor/three.js/ImprovedNoise.js			>> build/tquery-all.js
-	cat plugins/terrainGenerator/tquery.terrainGenerator.js	>> build/tquery-all.js
-	# plugins/domevent
-	#cat plugins/domevent/threex.domevent.js			>> build/tquery-all.js
-	#cat plugins/domevent/tquery.object3d.domevent.js	>> build/tquery-all.js
-	# plugins/csg
-	cat plugins/csg/csg.js				>> build/tquery-all.js
-	cat plugins/csg/ThreeCSG.js			>> build/tquery-all.js
-	cat plugins/csg/tquery.geometry.csg.js		>> build/tquery-all.js
-	cat plugins/csg/tquery.object3d.csg.js		>> build/tquery-all.js
-	# plugins/fireball
-	cat plugins/fireball/tquery.fireballmaterial.js	>> build/tquery-all.js
-	# plugins/fireball
-	cat plugins/checkerboard/tquery.checkerboard.js	>> build/tquery-all.js
-	# plugins/videos
-	cat plugins/videos/*.js		>> build/tquery-all.js
-	# plugins/text
-	cat plugins/text/fonts/droid/droid_serif_bold.typeface.js	>> build/tquery-all.js
-	cat plugins/text/tquery.text.js					>> build/tquery-all.js
-	# plugins/linkify
-	cat plugins/linkify/tquery.mesh.linkify.js		>> build/tquery-all.js
-	# plugins/lights
-	cat plugins/light/*.js		>> build/tquery-all.js
-	# plugins/materials
-	cat plugins/materials/*.js	>> build/tquery-all.js
-	# plugins/minecraft
-	cat plugins/minecraft/*.js	>> build/tquery-all.js
-
-
-minifyAll: buildAll
-	echo $(BANNER)	>  build/tquery-all.min.js
-	curl --data-urlencode "js_code@build/tquery-all.js" 	\
-		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile	\
-		>> build/tquery-all.min.js
-	@echo size minified + gzip is `gzip -c build/tquery-all.min.js | wc -c` byte
 
 .PHONY: docs buildCore buildBundle minifyCore minifyBundle

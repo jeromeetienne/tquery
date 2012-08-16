@@ -99,6 +99,7 @@ tQuery.World.prototype.destroy	= function(){
 //		WebGL Support							//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.World._hasWebGL	= undefined;
 /**
  * @returns {Boolean} true if webgl is available, false otherwise
 */
