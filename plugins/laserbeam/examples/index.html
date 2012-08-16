@@ -10,15 +10,20 @@
 		envMap	: tQuery.createCubeTexture('skybox')
 	});
 	
-	//var object	= tQuery.createSphere(material).addTo(world).scaleBy(3);
 	
-	
-	var object	= tQuery.createTorus().addTo(world);
+	var object	= tQuery.createCylinder(0.30, 0.20, 1, 8*6, 6*6).addTo(world)
+				.geometry()
+					.rotateX(Math.PI/2)
+					.back()
+	var object	= tQuery.createTorus(0.35-0.05, 0.05, 6*8, 8*8).addTo(world)
+				.geometry()
+					.scaleBy(1, 1, 20)
+					.back()
 	
 	
 	var canvas	= generateCanvas();
-	//document.body.appendChild(canvas)
-
+	document.body.appendChild(canvas)
+	
 	var texture	= new THREE.Texture( canvas );
 	texture.needsUpdate = true;
 	
@@ -32,17 +37,20 @@
 	})
 	
 	var saber	= tQuery.createObject3D().addTo(world)
-		.scale(10, 1, 1)
+		.scale(2.8)
 		.rotateY(Math.PI/2)
 	
 	tQuery.createPlane().addTo(saber)
+		.scale(10, 1, 1)
 		.material(material)
 	 	.doubleSided(true)
 	tQuery.createPlane().addTo(saber)
+		.scale(10, 1, 1)
 		.rotateX(2*Math.PI/3)
 		.material(material)
 	 	.doubleSided(true)
 	tQuery.createPlane().addTo(saber)
+		.scale(10, 1, 1)
 		.rotateX(-2*Math.PI/3)
 		.material(material)
 	 	.doubleSided(true)
@@ -51,24 +59,30 @@
 	function generateCanvas(){
 		var canvas	= document.createElement( 'canvas' );
 		var context	= canvas.getContext( '2d' );
-		canvas.width	= 256;
+		canvas.width	= 64;
 		canvas.height	= 256;
 
+		// clear screen
 		context.fillStyle	= 'rgba(0,0,0,0)';
 		context.fillRect(0,0, canvas.width, canvas.height);
 
-		var gradient	= context.createRadialGradient( canvas.width/2, canvas.height /2, 0, canvas.width /2, canvas.height /2, canvas.width /2 );		
+
+		context.beginPath();
+		//context.arc(canvas.width/2, canvas.height/2, 1 * canvas.width/2, 0, Math.PI*2, false);
+		context.arc(canvas.width, canvas.height/2, 1 * canvas.width, 0, Math.PI*2, false);
+		context.closePath();
+
+
+		// set gradient
+		var gradient	= context.createRadialGradient(canvas.width/2, canvas.height /2, 0, canvas.width /2, canvas.height /2, canvas.width /2 );		
 		gradient.addColorStop( 0  , 'rgba(255,255,255,0.5)' );
 		gradient.addColorStop( 0.5, 'rgba(255,255,255,0.5)' );
 		gradient.addColorStop( 0.7, 'rgba(128,128,128,0.7)' );
 		gradient.addColorStop( 1  , 'rgba(0,0,0,0)' );
 
-		context.fillStyle	= gradient;
-		context.beginPath();
-		//context.arc(canvas.width/2, canvas.height/2, 1 * canvas.width/2, 0, Math.PI*2, false);
-		context.arc(canvas.width, canvas.height/2, 1 * canvas.width, 0, Math.PI*2, false);
-		context.closePath();
+
 		//context.fillStyle	= 'rgba(128,128,128,1)';
+		context.fillStyle	= gradient;
 		context.fill();
 		
 		return canvas;
