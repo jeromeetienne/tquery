@@ -1,0 +1,73 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../skymap/tquery.skymap.js"></script>
+<script src="../../skymap/tquery.cubetexture.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	//var skymap	= tQuery.createSkymap('pisa').addTo(world);
+
+	var material	= new THREE.MeshBasicMaterial({
+		envMap	: tQuery.createCubeTexture('skybox'),
+		color	: 0x44aaFF
+	});
+	
+	
+	var saber	= tQuery.createObject3D().addTo(world)
+
+	// internal part of the holder
+	var object	= tQuery.createCylinder(0.30, 0.20, 1, 8*6, 6*6, material).addTo(world)
+				.geometry()
+					.rotateZ(-Math.PI/2)
+					.back()
+	// external part of the holder
+	var object	= tQuery.createTorus(0.38-0.05, 0.05, 6*8, 8*8, material).addTo(world)
+				.rotateY(Math.PI/2)
+				.geometry()
+					.scaleBy(1, 1, 20)
+					.back()
+	
+	
+	// generate the texture
+	var canvas	= generateCanvas();	
+	var texture	= new THREE.Texture( canvas );
+	texture.needsUpdate = true;
+	
+	var material	= new THREE.MeshBasicMaterial({
+		map		: texture,
+		blending	: THREE.AdditiveBlending,
+		color		: 0x00BFFF,
+		depthWrite	: false,
+		transparent	: true
+	})
+	
+	var nPlanes	= 3;
+	for(var i = 0; i < nPlanes; i++){
+		tQuery.createPlane().addTo(saber)
+			.material(material).doubleSided(true)
+			.scale(30, 3, 3)
+			.rotateX(i*Math.PI/nPlanes)
+	}
+
+	
+	function generateCanvas(){
+		var canvas	= document.createElement( 'canvas' );
+		var context	= canvas.getContext( '2d' );
+		canvas.width	= 16;
+		canvas.height	= 64;
+		// set gradient
+		var gradient	= context.createRadialGradient(
+			canvas.width/2, canvas.height /2, 0,
+			canvas.width/2, canvas.height /2, canvas.width /2
+		);		
+		gradient.addColorStop( 0  , 'rgba(255,255,255,0.7)' );
+		gradient.addColorStop( 0.5, 'rgba(192,192,192,0.5)' );
+		gradient.addColorStop( 0.8, 'rgba(128,128,128,0.3)' );
+		gradient.addColorStop( 1  , 'rgba(0,0,0,0)' );
+
+
+		context.fillStyle	= gradient;
+		context.fillRect(0,0, canvas.width, canvas.height);
+		
+		return canvas;
+	}
+</script></body>

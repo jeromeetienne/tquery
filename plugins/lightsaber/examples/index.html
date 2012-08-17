@@ -1,0 +1,10 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.lightsaber.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	var saber	= tQuery.createLightSaber();
+	console.log(saber)
+	saber.object3D('root').addTo(world);
+</script></body>
