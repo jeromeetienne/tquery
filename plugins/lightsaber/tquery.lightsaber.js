@@ -37,7 +37,7 @@ tQuery.register('LightSaber', function(opts){
 	var material	= new THREE.MeshBasicMaterial({
 		map		: texture,
 		blending	: THREE.AdditiveBlending,
-		color		: 0x00BFFF,
+		color		: 0xffaacc,
 		depthWrite	: false,
 		transparent	: true
 	})

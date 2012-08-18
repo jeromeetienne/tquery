@@ -22,13 +22,13 @@
 
 <script src="../../minecraft/tquery.minecraftchar.js"></script>
 
-<body><div id='info' style='color:white'>
+<body><div id='info'>
 Riding a beam of light 
 <br/> 
 <a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a> thru 
 <a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a>
-- 
-(Hint: Move your mouse!)
+<br/> 
+<i>"Move your mouse over the spaceship, and Enjoy the Ride!"</i>
 </div><script>
 	// init the world
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
@@ -79,13 +79,13 @@ if(true){
 	//composer.bleachbypass()
 	//composer.verticalBlur(1.1)
 	//composer.horizontalBlur(1.1)
-	//composer.bloom(0.3)
-	composer.motionBlur(0.9);
+	composer.bloom(0.1)
+	composer.motionBlur(0.95);
 	//composer.fxaa();
 	//composer.colorify();
 	//composer.film(0.25, 0.25, 648, false)
 	composer.screen();
-	//composer.vignette(1.2,1);
+	composer.vignette(1.2,1);
 	composer.finish();
 }
 
