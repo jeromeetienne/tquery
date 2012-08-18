@@ -24,9 +24,9 @@ tQuery.register('createLensFlare', function(opts){
 		THREE.ColorUtils.adjustHSV( color, 0, -0.5, 0.5 );
 		
 		// init the textures
-		var texture0	= THREE.ImageUtils.loadTexture( "images/lensflare0.png" );
-		var texture2	= THREE.ImageUtils.loadTexture( "images/lensflare2.png" );
-		var texture3	= THREE.ImageUtils.loadTexture( "images/lensflare3.png" );
+		var texture0	= THREE.ImageUtils.loadTexture( "../../lensflare/examples/images/lensflare0.png" );
+		var texture2	= THREE.ImageUtils.loadTexture( "../../lensflare/examples/images/lensflare2.png" );
+		var texture3	= THREE.ImageUtils.loadTexture( "../../lensflare/examples/images/lensflare3.png" );
 
 		opts.flareParams.push([ texture0, 700, 0.0, THREE.AdditiveBlending, color ]);
 

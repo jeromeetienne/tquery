@@ -1,0 +1,25 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.lightsaber.js"></script>
+
+<script src="../../skymap/tquery.skymap.js"></script>
+<script src="../../skymap/tquery.cubetexture.js"></script>
+<script src="../../materials/tquery.meshbasicmaterial.js"></script>
+<body><script>
+	// init the world
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// make the background black
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+
+	// create the saber	
+	var saber	= tQuery.createLightSaber().addTo(world);
+
+	// change the material of the hilt
+	var material	= tQuery.createMeshBasicMaterial({
+		color	: 0x44aaFF,
+		envMap	: tQuery.createCubeTexture('skybox')
+	})
+	saber.object3D('hiltIn').material(material)
+	saber.object3D('hiltOut').material(material)
+</script></body>

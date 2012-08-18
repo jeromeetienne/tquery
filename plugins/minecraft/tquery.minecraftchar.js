@@ -277,6 +277,7 @@ tQuery.register('MinecraftChar', function(opts){
 	this.model	= playerModel;
 	this.parts	= {
 		headGroup	: headgroup,
+		upperBody	: upperBody,
 		legL		: legL,
 		legR		: legR,
 		armR		: armR,
@@ -307,3 +308,4 @@ tQuery.MinecraftChar.prototype.loadSkin	= function(url){
 	image.src = url;
 	return this;	// for chained API
 }
+

@@ -5,12 +5,65 @@
 <script src="../../skymap/tquery.skymap.js"></script>
 <script src="../../skymap/tquery.cubetexture.js"></script>
 <script src="../../materials/tquery.meshbasicmaterial.js"></script>
-<body><script>
-	var world	= tQuery.createWorld().boilerplate().start();
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
+<script src="../../minecraft/tquery.minecraftchar.js"></script>
+
+<body><div id='info' style='color:white'>
+Riding a beam of light 
+<br/> 
+<a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a> thru 
+<a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a>
+- 
+(Hint: Move your mouse!)
+</div><script>
+	// init the world
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+
+	// make the background black
+//	world.tRenderer().setClearColorHex( 0x000000, 1 );
+
+	world.tCamera().position.z	= -3;
+
+	var skymap	= tQuery.createSkymap('skybox').addTo(world);
 
 	// create the saber	
 	var saber	= tQuery.createLightSaber().addTo(world);
+	saber.object3D().translateY(-0.35).rotateY(Math.PI/2)
 
+	var character	= new tQuery.MinecraftChar({
+		skinUrl	: '../../minecraft/examples/images/3djesus.png'
+	});
+	character.model.addTo(saber.object3D())
+		.rotateY(Math.PI/2)
+		.translateY(0.6);
+
+	character.parts.legL.rotation.x	= -Math.PI/2 + 10*Math.PI/180;
+	character.parts.legL.rotation.z = +30*Math.PI/180;
+	character.parts.legR.rotation.x	= -Math.PI/2 + 10*Math.PI/180;
+	character.parts.legR.rotation.z = -30*Math.PI/180;
+
+	character.parts.armR.rotation.x = 45*Math.PI/180;
+	character.parts.armR.rotation.z = -30*Math.PI/180;
+
+	character.parts.armR.rotation.x = 45*Math.PI/180;
+	character.parts.armR.rotation.z = -30*Math.PI/180;
+
+	character.parts.armL.rotation.x = -60*Math.PI/180;
+	character.parts.armL.rotation.z = -15*Math.PI/180;
 
 	// change the material of the hilt
 	var material	= tQuery.createMeshBasicMaterial({
@@ -19,4 +72,21 @@
 	})
 	saber.object3D('hiltIn').material(material)
 	saber.object3D('hiltOut').material(material)
+
+if(true){
+	var composer	= tQuery.createEffectComposer().renderPass();
+	//composer.sepia()
+	//composer.bleachbypass()
+	//composer.verticalBlur(1.1)
+	//composer.horizontalBlur(1.1)
+	//composer.bloom(0.3)
+	composer.motionBlur(0.9);
+	//composer.fxaa();
+	//composer.colorify();
+	//composer.film(0.25, 0.25, 648, false)
+	composer.screen();
+	//composer.vignette(1.2,1);
+	composer.finish();
+}
+
 </script></body>

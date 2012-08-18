@@ -7,6 +7,9 @@ tQuery.register('createLightSaber', function(opts){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * TODO make it more flexible
+*/
 tQuery.register('LightSaber', function(opts){
 	
 	this._objRoot	= tQuery.createObject3D();
@@ -39,12 +42,12 @@ tQuery.register('LightSaber', function(opts){
 		transparent	: true
 	})
 	
-	var nPlanes	= 3;
+	var nPlanes	= 4;
 	for(var i = 0; i < nPlanes; i++){
 		tQuery.createPlane().addTo(this._objLaser)
 			.material(material)
 			.doubleSided(true)
-			.scale(30, 3, 3)
+			.scale(300, 3, 3)
 			.rotateX(i*Math.PI/nPlanes)
 	}
 
@@ -77,11 +80,17 @@ tQuery.LightSaber.prototype.object3D	= function(name, value){
 	return this;
 }
 
+/**
+ * Emulate tQuery.Object3D.addTo
+*/
 tQuery.LightSaber.prototype.addTo	= function(object3D){
 	this.object3D('root').addTo(object3D);
 	return this;
 };
 
+/**
+ * Emulate tQuery.Object3D.removeFrom
+*/
 tQuery.LightSaber.prototype.removeFrom	= function(object3D){
 	this.object3D('root').removeFrom(object3D);
 	return this;
