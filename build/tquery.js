@@ -1040,6 +1040,10 @@ tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case
 	if( value == undefined )	return parent.material.call(this);
+	// handle parameter polymorphism
+	if( value instanceof tQuery.Material )	value	= value.get(0)
+	// sanity check
+	console.assert( value instanceof THREE.Material )
 	// handle the setter case
 	this.each(function(tMesh){
 		tMesh.material	= value;

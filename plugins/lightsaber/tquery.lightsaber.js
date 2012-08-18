@@ -14,12 +14,12 @@ tQuery.register('LightSaber', function(opts){
 	this._objLaser	= tQuery.createObject3D().addTo(this._objRoot);
 
 	// internal part of the hilt
-	this._objHiltIn	= tQuery.createCylinder(0.30, 0.20, 1, 8*6, 6*6).addTo(this._oblHilt)
+	this._objHiltIn	= tQuery.createCylinder(0.30, 0.20, 1, 8*6, 6*6).addTo(this._objHilt)
 				.geometry()
 					.rotateZ(-Math.PI/2)
 					.back()
 	// external part of the holder
-	this._objHiltOut= tQuery.createTorus(0.38-0.05, 0.05, 6*8, 8*8).addTo(this._oblHilt)
+	this._objHiltOut= tQuery.createTorus(0.38-0.05, 0.05, 6*8, 8*8).addTo(this._objHilt)
 				.rotateY(Math.PI/2)
 				.geometry()
 					.scaleBy(1, 1, 20)
@@ -41,7 +41,7 @@ tQuery.register('LightSaber', function(opts){
 	
 	var nPlanes	= 3;
 	for(var i = 0; i < nPlanes; i++){
-		tQuery.createPlane().addTo(this._oblLaser)
+		tQuery.createPlane().addTo(this._objLaser)
 			.material(material)
 			.doubleSided(true)
 			.scale(30, 3, 3)
@@ -49,13 +49,13 @@ tQuery.register('LightSaber', function(opts){
 	}
 
 	
-	
+	// store built objects for later
 	this._objects3D	= {
 		'root'		: this._objRoot,
 		'hilt'		: this._objHilt,
 		'hiltIn'	: this._objHiltIn,
 		'hiltOut'	: this._objHiltOut,
-		'laser'		: this._oblLaser
+		'laser'		: this._objLaser
 	};
 });
 
@@ -69,10 +69,23 @@ tQuery.register('LightSaber', function(opts){
  * @param {string} name the name of the object3d to get
 */
 tQuery.LightSaber.prototype.object3D	= function(name, value){
+	// name default to 'root'
+	name	= name	|| 'root';
+	// handle getter case
 	if( value === undefined )	return this._objects3D[name];
 	this._objects3D[name]	= name;
 	return this;
 }
+
+tQuery.LightSaber.prototype.addTo	= function(object3D){
+	this.object3D('root').addTo(object3D);
+	return this;
+};
+
+tQuery.LightSaber.prototype.removeFrom	= function(object3D){
+	this.object3D('root').removeFrom(object3D);
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//

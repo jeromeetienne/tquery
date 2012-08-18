@@ -2875,6 +2875,10 @@ tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case
 	if( value == undefined )	return parent.material.call(this);
+	// handle parameter polymorphism
+	if( value instanceof tQuery.Material )	value	= value.get(0)
+	// sanity check
+	console.assert( value instanceof THREE.Material )
 	// handle the setter case
 	this.each(function(tMesh){
 		tMesh.material	= value;
@@ -2983,18 +2987,7 @@ tQuery.World.prototype.destroy	= function(){
 //		WebGL Support							//
 //////////////////////////////////////////////////////////////////////////////////
 
-/**
- * true if webgl is available, false otherwise
-*/
-// tQuery.World._hasWebGL	= (function(){
-// 	// test from Detector.js
-// 	try{
-// 		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
-// 	} catch( e ){
-// 		return false;
-// 	}
-// })();
-
+tQuery.World._hasWebGL	= undefined;
 /**
  * @returns {Boolean} true if webgl is available, false otherwise
 */
