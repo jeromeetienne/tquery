@@ -2,7 +2,7 @@
  * lava shader by TheGameMaker - http://irrlicht.sourceforge.net/forum/viewtopic.php?t=21057
 */
 tQuery.Object3D.register('setLavaMaterial', function(opts){
-	opts	= tQuery.extend({
+	opts	= tQuery.extend(opts, {
 		fogDensity	: 0.45,
 		fogColor	: new THREE.Vector3( 0, 0, 0 ),
 		uvScale		: new THREE.Vector2( 3.0, 1.0 ),
@@ -10,7 +10,6 @@ tQuery.Object3D.register('setLavaMaterial', function(opts){
 		texture2Url	: tQuery.Object3D.prototype.setLavaMaterial.baseUrl+"images/lavatile.jpg",
 		timeSpeed	: 1
 	})
-
 	this.each(function(object3d){
 		var uniforms	= {
 			fogDensity	: { type: "f"	, value: opts.fogDensity },
