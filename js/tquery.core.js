@@ -171,7 +171,7 @@ tQuery.extend = function(obj, base, deep){
 	var extendFn	= deep ? deepExtend : shallowExtend;
 	var result	= {};
 	base	&& extendFn(result, base);
-	obj	&& extendFn(result, base);
+	obj	&& extendFn(result, obj);
 	return result;
 	
 	function shallowExtend(dst, src){
