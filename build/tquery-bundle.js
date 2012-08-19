@@ -2001,15 +2001,32 @@ tQuery.inherit	= function(childClass, parentClass){
  * http://jsapi.info/_/extend
  * similar to jquery one but much smaller
 */
-tQuery.extend = function(obj, base){
+tQuery.extend = function(obj, base, deep){
+	// handle parameter polymorphism
+	deep		= deep !== undefined ? deep	: true;
+	var extendFn	= deep ? deepExtend : shallowExtend;
 	var result	= {};
-	base && Object.keys(base).forEach(function(key){
-		result[key]	= base[key];
-	})
-	obj && Object.keys(obj).forEach(function(key){
-		result[key]	= obj[key];
-	})
+	base	&& extendFn(result, base);
+	obj	&& extendFn(result, base);
 	return result;
+	
+	function shallowExtend(dst, src){
+		Object.keys(src).forEach(function(key){
+			dst[key]	= src[key];
+		})
+	};
+	// from http://andrewdupont.net/2009/08/28/deep-extending-objects-in-javascript/
+	function deepExtend(dst, src){
+		for (var property in src) {
+			if (src[property] && src[property].constructor && src[property].constructor === Object) {
+				dst[property] = dst[property] || {};
+				arguments.callee(dst[property], src[property]);
+			} else {
+				dst[property] = src[property];
+			}
+		}
+		return dst;
+	};
 };
 
 //////////////////////////////////////////////////////////////////////////////////
