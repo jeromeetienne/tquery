@@ -1,13 +1,13 @@
 /**
  * lava shader by TheGameMaker - http://irrlicht.sourceforge.net/forum/viewtopic.php?t=21057
 */
-tQuery.Object3D.register('useLavaMaterial', function(opts){
+tQuery.Object3D.register('setLavaMaterial', function(opts){
 	opts	= tQuery.extend({
 		fogDensity	: 0.45,
 		fogColor	: new THREE.Vector3( 0, 0, 0 ),
 		uvScale		: new THREE.Vector2( 3.0, 1.0 ),
-		texture1Url	: tQuery.Object3D.prototype.useLavaMaterial.baseUrl+"images/cloud.png",
-		texture2Url	: tQuery.Object3D.prototype.useLavaMaterial.baseUrl+"images/lavatile.jpg",
+		texture1Url	: tQuery.Object3D.prototype.setLavaMaterial.baseUrl+"images/cloud.png",
+		texture2Url	: tQuery.Object3D.prototype.setLavaMaterial.baseUrl+"images/lavatile.jpg",
 		timeSpeed	: 1
 	})
 
@@ -27,8 +27,8 @@ tQuery.Object3D.register('useLavaMaterial', function(opts){
 		
 		var material	= new THREE.ShaderMaterial({
 			uniforms	: uniforms,
-			vertexShader	: tQuery.Object3D.prototype.useLavaMaterial._vertexShaderText,
-			fragmentShader	: tQuery.Object3D.prototype.useLavaMaterial._fragmentShaderText
+			vertexShader	: tQuery.Object3D.prototype.setLavaMaterial._vertexShaderText,
+			fragmentShader	: tQuery.Object3D.prototype.setLavaMaterial._fragmentShaderText
 		});
 		
 		object3d.material	= material;
@@ -43,10 +43,10 @@ tQuery.Object3D.register('useLavaMaterial', function(opts){
 
 
 // define the baseUrl for this plugins
-tQuery.Object3D.prototype.useLavaMaterial.baseUrl	= '../';
+tQuery.Object3D.prototype.setLavaMaterial.baseUrl	= '../';
 
 // converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');
-tQuery.Object3D.prototype.useLavaMaterial._vertexShaderText = [
+tQuery.Object3D.prototype.setLavaMaterial._vertexShaderText = [
 '	uniform vec2 uvScale;',
 '	varying vec2 vUv;',
 '',
@@ -61,7 +61,7 @@ tQuery.Object3D.prototype.useLavaMaterial._vertexShaderText = [
 ].join('\n');
 
 // converted by document.getElementById( 'fragmentShader' ).textContent.split('\n').map(function(line){ return "\""+line+"\","; }).join('\n');
-tQuery.Object3D.prototype.useLavaMaterial._fragmentShaderText = [
+tQuery.Object3D.prototype.setLavaMaterial._fragmentShaderText = [
 '	uniform float time;',
 '	uniform vec2 resolution;',
 '',
