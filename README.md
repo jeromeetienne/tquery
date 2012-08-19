@@ -33,8 +33,17 @@ looks like the code below... Quite short.
 
 ## Changelog
 
-#### Head
 
+#### Current
+
+#### Release - r50.0
+
+* ported three.js r50
+* ported to require.js - see plugins/require.js
+* added plugins/lightsaber
+* added plugins/lensflare
+* added plugins/lavamaterial
+* added plugins/buffergeometry
 * working on postprocessing in tQuery.World
 * added catmull-clark subdivision in tQuery.Geometry
 * improved home page with more screenshots and link to tutorials

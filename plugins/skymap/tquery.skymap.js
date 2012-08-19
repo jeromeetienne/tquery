@@ -18,12 +18,12 @@ tQuery.register('createSkymap', function(opts){
 		fragmentShader	: shader.fragmentShader,
 		vertexShader	: shader.vertexShader,
 		uniforms	: shader.uniforms,
-		depthWrite	: false
+		depthWrite	: false,
+		side		: THREE.BackSide
 	});
 
 	var geometry	= new THREE.CubeGeometry( opts.cubeW, opts.cubeH, opts.cubeD );
 	var mesh	= new THREE.Mesh(geometry, material );
-	mesh.flipSided = true;
 
 	return tQuery(mesh);
 });

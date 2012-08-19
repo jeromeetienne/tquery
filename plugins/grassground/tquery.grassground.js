@@ -27,6 +27,7 @@ tQuery.register('createGrassGround', function(opts){
 	var geometry	= new THREE.PlaneGeometry( opts.width, opts.height, opts.segmentsW, opts.segmentsH);
 	// create the mesh
 	var mesh	= new THREE.Mesh(geometry, material);
+	mesh.rotation.x	= -Math.PI/2;
 	// return the tQuery
 	return tQuery(mesh);
 });
