@@ -2,3 +2,8 @@
 * understand x3d parsing
 * convert those files into my own format
 * see about skinning
+
+### TODO compression texture
+* Test with texture from tojiro
+* then port in webglrenderer
+* then pull request

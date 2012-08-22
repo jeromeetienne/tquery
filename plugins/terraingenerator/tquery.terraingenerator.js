@@ -119,7 +119,7 @@ tQuery.register('generateTerrainGeometry', function(opts){
 
 	// build basic geometry
 	var tGeometry	= new THREE.PlaneGeometry(opts.width, opts.height, opts.segmentsW-1, opts.segmentsH-1 );
-	tGeometry.dynamic= true;
+	tGeometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
 	var heights	= generateHeight( opts.segmentsW, opts.segmentsH );	
 	for( var i = 0; i < tGeometry.vertices.length; i ++ ){

@@ -26,6 +26,7 @@ tQuery.register('SimpleMaze', function(opts){
 		});
 		this._ground	= tQuery.createPlane(material)
 			.geometry()
+				.rotateX(-Math.PI/2)
 				.scaleBy(mapW, 1, mapD)
 				.back()
 			.addTo(this._container);		

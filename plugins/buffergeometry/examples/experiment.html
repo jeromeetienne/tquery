@@ -1,9 +1,9 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
+<script src="WebGLRenderer.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
-	
 	
 	var triangles		= 50;
 	var vertexIdxArray	= new Int16Array(triangles * 3);
@@ -46,7 +46,7 @@
 	geometry.attributes	= attributes;
 	geometry.offsets	= [{
 		start	: 0,
-		count	: triangles * 3,
+		count	: vertexIdxArray.length,
 		index	: 0
 	}];
 

@@ -1119,8 +1119,8 @@ tQuery.World	= function(opts)
 	this._loop	= new tQuery.Loop();
 
 	// hook the render function in this._loop
-	this._loop.hookOnRender(this._$loopCb = function(){
-		this.render();
+	this._$loopCb	= this._loop.hookOnRender(function(delta, now){
+		this.render(delta);
 	}.bind(this));
 
 	// create a renderer
@@ -1327,10 +1327,10 @@ tQuery.World.prototype.autoRendering	= function(value){
 }
 
 
-tQuery.World.prototype.render	= function()
+tQuery.World.prototype.render	= function(delta)
 {
 	// update the cameraControl
-	if( this.hasCameraControls() )	this._cameraControls.update();
+	if( this.hasCameraControls() )	this._cameraControls.update(delta);
 	// render the scene 
 	if( this._autoRendering )	this._renderer.render( this._scene, this._camera );
 }
