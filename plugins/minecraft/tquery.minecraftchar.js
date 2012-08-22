@@ -4,6 +4,9 @@
  * http://www.minecraftskins.com/
  * http://www.minecraftskins.info/
  * http://www.minecraftwiki.net/wiki/Anvil_file_format
+ * 
+ * http://www.minecraftwiki.net/wiki/File:Skintemplate.png
+ * http://www.minershoes.com/
 */
 tQuery.register('MinecraftChar', function(opts){
 	opts	= tQuery.extend(opts, {
