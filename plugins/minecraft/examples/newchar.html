@@ -130,7 +130,7 @@
 	
 	// build model.body
 	model.body	= tQuery.createCube(sizes.bodyW, sizes.bodyH, sizes.bodyD, tMaterial)
-				.addTo(model.root)
+				.addTo(model.root) 
 				.translateY(sizes.legH + sizes.bodyH/2);
 	var tGeometry	= model.body.geometry().get(0);
 	mapUv(tGeometry, 0, 28, 12, 32,  0)	// left
@@ -211,7 +211,7 @@
 	model.root
 		.scale(2)
 		.translateY(-1)
-		.rotateY(Math.PI)
+		//.rotateY(Math.PI)
 		.addTo(world)
 
 
