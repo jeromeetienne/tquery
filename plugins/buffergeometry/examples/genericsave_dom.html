@@ -1,0 +1,168 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><div id='info'>
+	<a download='slota.bin' href=''>Download .bin format</a>
+</div>
+<script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	var object	= tQuery.createCube().addTo(world);
+	saveGeometry(object.geometry().get(0))
+	
+	function saveGeometry(tGeometry){
+		console.log('tGeometry', tGeometry)
+		
+		// store tGeometry.faces
+		var numTriangles= 0;
+		tGeometry.faces.forEach(function(tFace, index){
+			if( tFace instanceof THREE.Face3 )	numTriangles += 1;
+			else if( tFace instanceof THREE.Face4 )	numTriangles += 2;
+			else console.assert(false);
+		});
+
+		var vIdxArray	= new Int16Array(numTriangles * 3);
+		var i		= 0;
+		tGeometry.faces.forEach(function(tFace, index){
+			if( tFace instanceof THREE.Face3 ){
+				vIdxArray[i+0]	= tFace.a;
+				vIdxArray[i+1]	= tFace.b;	
+				vIdxArray[i+2]	= tFace.c;
+				i	+= 3;
+			}else if( tFace instanceof THREE.Face4 ){
+				vIdxArray[i+0]	= tFace.a;
+				vIdxArray[i+1]	= tFace.b;	
+				vIdxArray[i+2]	= tFace.c;
+				i	+= 3;
+				vIdxArray[i+0]	= tFace.b;
+				vIdxArray[i+1]	= tFace.c;	
+				vIdxArray[i+2]	= tFace.d;
+				i	+= 3;
+			}else console.assert(false);
+		});
+
+		// store the tGeometry.vertices
+		var numItems	= tGeometry.vertices.length;
+		var vPosArray	= new Float32Array(numItems * 3);
+		tGeometry.vertices.forEach(function(tVertex, index){
+			vPosArray[index*3+0]	= tVertex.x;
+			vPosArray[index*3+1]	= tVertex.y;
+			vPosArray[index*3+2]	= tVertex.z;
+		});
+		//console.log('vPosArray', vPosArray)
+
+		// store tGeometry.faceVertexUvs
+		var vUvsArray	= new Float32Array(numTriangles * 3 * 2);
+		var i		= 0;
+		tGeometry.faceVertexUvs[0].forEach(function(faceUvs, index){
+			//console.log('faceUvs', faceUvs, index)
+			if( faceUvs.length === 3 ){
+				vUvsArray[i+0]	= faceUvs[0].u;	vUvsArray[i+1]	= faceUvs[0].v;
+				vUvsArray[i+2]	= faceUvs[1].u;	vUvsArray[i+3]	= faceUvs[1].v;
+				vUvsArray[i+4]	= faceUvs[2].u;	vUvsArray[i+5]	= faceUvs[2].v;
+				i	+= 6;
+			}else if( faceUvs.length === 4 ){
+				vUvsArray[i+0]	= faceUvs[0].u;	vUvsArray[i+1]	= faceUvs[0].v;
+				vUvsArray[i+2]	= faceUvs[1].u;	vUvsArray[i+3]	= faceUvs[1].v;
+				vUvsArray[i+4]	= faceUvs[2].u;	vUvsArray[i+5]	= faceUvs[2].v;
+				i	+= 6;
+				vUvsArray[i+0]	= faceUvs[0].u;	vUvsArray[i+1]	= faceUvs[0].v;
+				vUvsArray[i+2]	= faceUvs[2].u;	vUvsArray[i+3]	= faceUvs[2].v;
+				vUvsArray[i+4]	= faceUvs[3].u;	vUvsArray[i+5]	= faceUvs[3].v;
+				i	+= 6;
+			}else	console.assert(false);
+		});
+
+
+		var buffer	= saveToBuffer(vIdxArray, vPosArray, vUvsArray);
+		console.log('bufffer', buffer)
+
+		var blob	= new Blob([buffer], {
+			type	: 'application/octet-stream'
+		});
+		var objectURL	= webkitURL.createObjectURL( blob );
+		document.querySelector('#info a').href	= objectURL;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	//	
+	function saveToBuffer(vertexIdxArray, vertexPosArray, uvArray){
+		var types	= {
+			padding		: 0,
+			vertexIdx	: 1,
+			vertexPos	: 2,
+			vertexUv	: 3,
+		};
+
+		// compute the buffer length
+		var bufferLen	= 0;
+		bufferLen	+= chunkLength(bufferLen, vertexIdxArray);
+		bufferLen	+= chunkLength(bufferLen, vertexPosArray);
+		bufferLen	+= chunkLength(bufferLen, uvArray);
+
+		console.log('bufferLen', bufferLen);
+
+		var inNode	= typeof(window) === 'undefined' ? true : false;
+		if( inNode === false ){
+			var buffer	= new DataView(new ArrayBuffer(bufferLen));
+		}else{
+			var buffer	= new Buffer(bufferLen)
+		}
+
+		var offset	= 0;
+		offset		= chunkSave(buffer, offset, types.vertexIdx, vertexIdxArray);
+		offset		= chunkSave(buffer, offset, types.vertexPos, vertexPosArray);
+		offset		= chunkSave(buffer, offset, types.vertexUv , uvArray);
+
+		return buffer;
+
+		/**
+		 * TODO
+		 * * improve padding tech
+		 * * type of chunck as 8bit
+		 * * if type === 0, then skip. in reader
+		 * * offset % 4 != 2, then add padding
+		 * * how to estimate the size of the output ?
+		*/
+
+		function chunkLength(offset, arr){
+			var length	= 0;
+			// length of the padding
+			var padLength	= [3, 2, 1, 0][offset % 4];
+			length	+= padLength;
+			// length of type
+			length	+= 1;
+			// length of nElements
+			length	+= 4;
+			// length of the array itself
+			length	+= arr.byteLength;	
+			return length;
+		}
+
+		function chunkSave(buffer, offset, chunkType, arr){
+			// write the padding if needed
+			var padLength	= [3, 2, 1, 0][offset % 4];
+			for(var i = 0; i < padLength; i++){
+				buffer.setUint8(types.padding, offset);
+				offset		+= 1;
+			}
+			// write the chunk header
+			buffer.setUint8(chunkType, offset);
+			offset		+= 1;
+			// write the array
+			buffer.setUint32(arr.length, offset, false);
+			offset		+= 4;
+			if( arr.byteLength / arr.length === 4 ){
+				for(var i = 0; i < arr.length; i++){
+					buffer.setFloat32(arr[i], offset, false);
+					offset		+= 4;
+				}
+			}else if( arr.byteLength / arr.length === 2 ){
+				for(var i = 0; i < arr.length; i++){
+					buffer.setUint16(arr[i], offset, false);
+					offset		+= 2;
+				}
+			}else	console.assert(false);
+			// return the new offset
+			return offset;
+		}
+	}
+</script></body>
