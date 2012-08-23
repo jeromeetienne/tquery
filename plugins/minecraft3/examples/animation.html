@@ -16,14 +16,11 @@
 	//world.removeCameraControls();
 	world.tCamera().position.z	= 1.8;
 
-	// load the minecraft character
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: 'images/agentsmith.png'
-	}).addTo(world); 
-	// add the model to our world
-	character.object3D('root')
-		.translateY(-0.5)
-		.rotateY(-Math.PI/6);
+	var character	= new tQuery.MinecraftChar();
+	character.model.addTo(world)
+	character.loadSkin('images/agentsmith.png')
+
+	character.model.rotateY(-Math.PI/6);
 
 	// init bodyAnims
 	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
@@ -48,4 +45,6 @@
 		headAnims.start(animName);	
 		document.querySelectorAll(".headAnims")[0].innerHTML	= "Head: "+animName;
 	}, 2*1000)
+
+tQuery('mesh', character.model.get(0))
 </script></body>

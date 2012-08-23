@@ -1,9 +1,5 @@
-tQuery.register('createSpritesheet', function(opts){
-	return new tQuery.Spritesheet(opts)
-});
 /**
- * Class to handle spritesheet and generate extruded 3d objects with it.
- * TODO remove the canvas part, this is useless
+ * Class to handle spritesheet and generate extruded 3d objects with it
  * 
  * @name tQuery.Spritesheet
  * @class
@@ -58,11 +54,6 @@ tQuery.register('Spritesheet', function(opts){
 		uvs[ (2 + rotateBy) % 4 ].v = tileV * tileUvH + h * tileUvH;
 		uvs[ (3 + rotateBy) % 4 ].u = tileU * tileUvW + w * tileUvW;
 		uvs[ (3 + rotateBy) % 4 ].v = tileV * tileUvH;
-		
-		uvs[ (0 + rotateBy) % 4 ].v	= 1 - uvs[ (0 + rotateBy) % 4 ].v;
-		uvs[ (1 + rotateBy) % 4 ].v	= 1 - uvs[ (1 + rotateBy) % 4 ].v;
-		uvs[ (2 + rotateBy) % 4 ].v	= 1 - uvs[ (2 + rotateBy) % 4 ].v;
-		uvs[ (3 + rotateBy) % 4 ].v	= 1 - uvs[ (3 + rotateBy) % 4 ].v;
 	};
 	/**
 	 * Create the geometry of the sprite 'id'. It is cached

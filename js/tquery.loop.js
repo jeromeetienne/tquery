@@ -57,7 +57,7 @@ tQuery.Loop.prototype.stop	= function()
 	return this;
 }
 
-tQuery.Loop.prototype._onAnimationFrame	= function(time)
+tQuery.Loop.prototype._onAnimationFrame	= function()
 {
 	// loop on request animation loop
 	// - it has to be at the begining of the function

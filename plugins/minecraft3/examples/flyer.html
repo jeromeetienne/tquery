@@ -1,5 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
+<script src="../../requirejs/tquery.norequirejs.js"></script>
 
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
@@ -32,7 +33,8 @@
 	// add post processing
 	world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette().finish();
 
-	var character	= tQuery.createMinecraftChar().addTo(world);
+	var character	= new tQuery.MinecraftChar();
+	character.model.addTo(world);
 	
 	character.parts.armR.rotation.x	= Math.PI/8;
 	character.parts.armR.rotation.z	= Math.PI+Math.PI/8;
@@ -97,7 +99,7 @@
 	world.loop().hook(function(delta, now){
 		var charPosition= character.model.get(0).position
 
-		var position	= charPosition.clone().addSelf(new THREE.Vector3(0, 0.6, 0));
+		var position	= charPosition.clone().addSelf(new THREE.Vector3(0, 0.4, 0));
 		arrow.get(0).position.copy(position);
 		
 		var position	= charPosition.clone();

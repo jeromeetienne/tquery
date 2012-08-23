@@ -1,0 +1,120 @@
+<!doctype html><title>Example for tQuery.minecraft plugins</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.minecraftchar.js"></script>
+
+<script src="../../../vendor/three.js/ShaderExtras.js"></script>
+<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../pproc/tquery.effectcomposer.js"></script>
+
+<body><div id="info">
+	Example of tQuery.minecraft plugins<br/>
+	<a href="../../../www/vendor/doccoviewer/#../../../plugins/minecraft/examples/post.html" target="_blank">Annotated Source</a>
+</div>
+<div style="position: absolute; font-size: 200%; right: 0;">
+	<select id="skinSelect" onchange='character.loadSkin(this.value);'>
+		<option value="images/char.png">char</option>
+		<option value="images/3djesus.png">3djesus</option>
+		<option value="images/agentsmith.png">agentsmith</option>
+		<option value="images/batman.png">batman</option>
+		<option value="images/god.png">god</option>
+		<option value="images/jamesbond-1.png">jamesbond-1</option>
+		<option value="images/Joker.png">Joker</option>
+		<option value="images/Mario.png">Mario</option>
+		<option value="images/martialartist.png">martialartist</option>
+		<option value="images/robocop.png">robocop</option>
+		<option value="images/Sonicthehedgehog.png">Sonic the hedgehog</option>
+		<option value="images/Spiderman.png">Spiderman</option>
+		<option value="images/Superman.png">Superman</option>
+		<option value="images/theflash.png">theflash</option>
+		<option value="images/woody.png">woody</option>
+	</select>
+</div><script>
+	// ## Let's start coding
+
+	// We start to create our world as usual. This initialize the renderer, the camera,
+	// its controls and a rendering loop.
+	// We setup the 
+	// [boilerplate for three.js](http://learningthreejs.com/blog/2012/01/19/boilerplate-builder-for-three-js/)
+	// and add a page title with some info on our little 3D demo.
+	// We just put the camera a little closer to scene center. Thus the character
+	// will be bigger on screen. We just can't get enougth of it, can we ;)
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	world.tCamera().position.z	= 1.8;
+
+	// Now we add a bit of post processing. It is the first time
+	// we talk about this, so let's details it a bit.
+	// What is post processing (in a 3d context) ?
+	// Post processing is performed after rendering the 3D, hence the name.
+	// It applies on the screen as a whole. So the effects are in 2D.
+	// What's it not ?
+	// So It isn't for 3d effect on specific objects in your world.
+	// 
+	// ```tquery.effectcomposer.js``` plugin provides a simple api to add 
+	// postprocessing to our world. It is a chained API on top of 
+	// [three.js effect composer](https://github.com/mrdoob/three.js/tree/master/examples/js/postprocessing). 
+	// In our case, we first apply ```.sepia()``` to change the colors toward 
+	// [sepia color](http://en.wikipedia.org/wiki/Sepia_\(color\)).
+	// Then we apply ```.vignette()``` and mark the effects list
+	// as finished. Not too hard hey ;)
+	world.addEffectComposer().sepia().vignette().finish();
+
+	// ## Hello Steve!
+
+	// Now that we go a world. We will create a minecraft character.
+	// In fact, minecraft main character is called ['steve'](http://www.minecraftwiki.net/wiki/The_Player).
+	// ```tQuery.MinecraftChar``` is the main class. It will create 
+	// a character model and expose all its limbs too e.g right legs or right arms.
+	// More on that later.
+	// As you can see, we specify ```skinUrl``` parameter. It should point to the 
+	// image of the skin texture. You can change it anytime with ```character.loadSkin(skinUrl)```
+	var character	= new tQuery.MinecraftChar({
+		skinUrl	: 'images/3djesus.png'
+	}); 
+	// Now that we got our character setup, we just need to include it in our 3D world.
+	character.model.addTo(world);
+
+	// ## Make this model moves
+
+	// So we talked about exposed limbs... kinda gross, almost disturbing :)
+	// In fact it just means each part of our model is exposed for you to 
+	// play with. It has the head, legs right and left, and the same for the arms.
+	// It is all in ```character.parts```.
+
+	// So the first step is to hook a function in the world rendering loop.
+	// two parameters are passed ```delta``` and ```now```. ```delta``` is the number
+	// of seconds since the last iteration of the rendering loop. ```now``` is the absolute
+	// time in seconds.
+	// We use those values to tune the animation. Thus it will be animated at the same
+	// speed no matter the [fps](http://en.wikipedia.org/wiki/Frame_rate) rate of your computer.
+
+
+	world.loop().hook(function(delta, now){
+		var angle	= 1/2 * now*Math.PI*2;
+		character.parts.armR.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
+		character.parts.armL.rotation.x	= 1.4 * Math.cos(angle);
+	});
+
+
+
+	world.loop().hook(function(delta, now){
+		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;
+		character.parts.headGroup.rotation.y	= Math.sin(now)/3;
+	}); 
+	
+	// Now we make the legs move to get the character walking... It is essentially the 
+	// same as the arms. 
+	world.loop().hook(function(delta, now){
+		var angle	= 1/2 * now*Math.PI*2;
+		character.parts.legR.rotation.x	= 1.4 * Math.cos(angle);
+		character.parts.legL.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
+	});
+
+</script></body>

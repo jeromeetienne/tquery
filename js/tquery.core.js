@@ -151,12 +151,11 @@ tQuery.each	= function(arr, callback){
 */
 tQuery.now	= (function(){
 	var perf 	= window.performance || {};
-	var fnNow	= 
-		perf.now	||
-		perf.mozNow	||
-		perf.webkitNow	||
-		perf.msNow	||
-		perf.oNow;
+	var fnNow	= perf.now	||
+				perf.mozNow	||
+				perf.webkitNow	||
+				perf.msNow	||
+				perf.oNow;
 	// fn.bind will be available in all the browsers that support the advanced window.performance... ;-)
 	return fnNow ? fnNow.bind(perf) : function() { return Date.now(); };
 })();

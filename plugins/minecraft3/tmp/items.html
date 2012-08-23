@@ -1,0 +1,144 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="creeper.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	var global	= window;
+	var scene	= world.scene();
+	
+	world.camera().position.z	= 70;
+	world.getCameraControls().rangeX	*=	20;
+	world.getCameraControls().rangeY	*=	20;
+
+
+	function getMaterial (img, trans) {
+		var material = new THREE.MeshBasicMaterial({
+			map: new THREE.Texture(
+				img,
+				new THREE.UVMapping(),
+				THREE.ClampToEdgeWrapping,
+				THREE.ClampToEdgeWrapping,
+				THREE.NearestFilter,
+				THREE.NearestFilter,
+				(trans? THREE.RGBAFormat : THREE.RGBFormat)
+			),
+			transparent: trans
+		});
+		material.map.needsUpdate = true;
+		return material;
+	};
+	function uvmap (geometry, face, x, y, w, h, rotateBy) {
+		if(!rotateBy) rotateBy = 0;
+		var uvs = geometry.faceVertexUvs[0][face];
+		var tileU = x;
+		var tileV = y;
+		
+		uvs[ (0 + rotateBy) % 4 ].u = tileU * tileUvWidth;
+		uvs[ (0 + rotateBy) % 4 ].v = tileV * tileUvHeight;
+		uvs[ (1 + rotateBy) % 4 ].u = tileU * tileUvWidth;
+		uvs[ (1 + rotateBy) % 4 ].v = tileV * tileUvHeight + h * tileUvHeight;
+		uvs[ (2 + rotateBy) % 4 ].u = tileU * tileUvWidth + w * tileUvWidth;
+		uvs[ (2 + rotateBy) % 4 ].v = tileV * tileUvHeight + h * tileUvHeight;
+		uvs[ (3 + rotateBy) % 4 ].u = tileU * tileUvWidth + w * tileUvWidth;
+		uvs[ (3 + rotateBy) % 4 ].v = tileV * tileUvHeight;
+	};
+	function createItem (id) {
+		function getSides (x, y) {
+			var ix = Math.floor(id % 16)*16;
+			var iy = Math.floor(id / 16)*16;
+			
+			var px = (x+1) < 16? imd[((x+1)+y*16)*4+3] : 0;
+			var nx = (x-1) >= 0? imd[((x-1)+y*16)*4+3] : 0;
+			var py = (y+1) < 16? imd[(x+(y-1)*16)*4+3] : 0;
+			var ny = (y-1) >= 0? imd[(x+(y+1)*16)*4+3] : 0;
+			
+			return {
+				px: !px, // Turns zero and undefined to true
+				nx: !nx,
+				py: !py,
+				ny: !ny,
+				pz: supportWebGL,
+				nz: supportWebGL
+			};
+		};
+		
+		if(itemgeometries[id] === undefined) {
+			var imgdata	= itemsc.getImageData(Math.floor(id % 16)*16, Math.floor(id / 16)*16, 16, 16);
+			var imd		= imgdata.data;
+			
+			tileUvWidth = 1/256;
+			tileUvHeight = 1/256;
+			
+			var geo = new THREE.Geometry();
+			
+			var isAllEmpty = true;
+			
+			for(var x=0; x < 16; x++) {
+				for(var y=0; y < 16; y++) {
+					if(imd[(x+y*16)*4+3] === 0) {
+						continue;
+					}
+					isAllEmpty = false;
+					
+					var voxel = new THREE.CubeGeometry(1, 1, 2, 1, 1 , 1, undefined, getSides(x, y));
+					
+					for(var i=0; i < 6; i++) { // Fix color of voxel
+						if(voxel.faceVertexUvs[0][i]) {
+							uvmap(voxel, i, Math.floor(id % 16)*16+x, Math.floor(id / 16)*16+y, 1, 1);
+						}
+					}
+					for(var i=0; i < 8; i++) { // Fix voxel's position
+						if(voxel.vertices[i]) {
+							voxel.vertices[i].x += x-7.5;
+							voxel.vertices[i].y += -(y-7.5);
+						}
+					}
+					
+					THREE.GeometryUtils.merge(geo, voxel);
+				}
+			}			
+			itemgeometries[id] = geo;
+		}
+		else {
+			var geo = itemgeometries[id];
+		}
+		
+		var mesh = new THREE.Mesh( geo, itemsMaterial );
+		return mesh;
+	};	
+
+	var itemscanvas		= global.document.createElement('canvas');
+	itemscanvas.width	= 256;
+	itemscanvas.height	= 256;
+	var itemsc		= itemscanvas.getContext('2d');
+	var itemsMaterial	= getMaterial(itemscanvas, true);
+
+	//world.renderer().setClearColorHex( 0x000000, 1 );
+
+	var itemsmeshes = [];
+	var itemgeometries = [];
+	var supportWebGL = true;
+	
+	var items	= new Image();
+	items.onload	= function () {
+		itemsc.clearRect(0, 0, itemscanvas.width, itemscanvas.height);
+		itemsc.drawImage(items, 0, 0);
+		
+		var l = supportWebGL? 16*16 : 16*8;
+		
+		for(var i=0; i < l; i++) {
+			for(var j=0; j < (supportWebGL?5:1); j++) {
+				var item = createItem(i);
+				item.position.x = Math.random()*400-200;
+				item.position.y = Math.random()*400-200;
+				item.position.z = Math.random()*400-200;
+				scene.add(item);
+				itemsmeshes.push(item);
+			}
+		}
+	};	
+	items.src = "items.png";
+	
+
+</script></body>

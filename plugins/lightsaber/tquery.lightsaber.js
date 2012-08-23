@@ -21,7 +21,7 @@ tQuery.register('LightSaber', function(opts){
 				.geometry()
 					.rotateZ(-Math.PI/2)
 					.back()
-	// external part of the holder
+	// external part of the hilt
 	this._objHiltOut= tQuery.createTorus(0.38-0.05, 0.05, 6*8, 8*8).addTo(this._objHilt)
 				.rotateY(Math.PI/2)
 				.geometry()

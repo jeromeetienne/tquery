@@ -1,6 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
-<script src="../tquery.spritesheet.js"></script>
+<script src="../tquery.minecraftitems.js"></script>
 
 <script src="../../materials/tquery.meshlambertmaterial.js"></script>
 <script src="../../materials/tquery.meshphongmaterial.js"></script>
@@ -13,15 +13,9 @@
 	})
 	tQuery.createCube(material).addTo(world);
 
-	var items	= tQuery.createSpritesheet({
-		url	: 'images/items/items.png',
-		imgW	: 256,
-		imgH	: 256,
-		spriteW	: 16,
-		spriteH	: 16
-	});
+	var items	= new tQuery.MinecraftItems();
 	items.bind('load', function(){
-		var item	= items.createMesh(10, 2).addTo(world);
+		var item	= items.createMesh(10+2*16).addTo(world);
 	
 		var canvas	= document.createElement('canvas');
 		var context	= canvas.getContext('2d');
@@ -41,6 +35,7 @@
 		var url		= '../../grassground/images/grasslight-big.jpg';
 		var mesh	= tQuery.createPlane().addTo(item)
 			.geometry()
+				.rotateX(Math.PI/2)
 				.translateX(1/16 - 0.5/16)
 				.translateY(3/16 + 0.5/16)
 				.translateZ(1/16+0.001)

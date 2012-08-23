@@ -1,6 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
-<script src="../../requirejs/tquery.norequirejs.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
@@ -17,14 +16,13 @@
 		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true,  opacity: 0.3 } )
 	]);
 	var scale	= 1/40;
-	mesh.scale.set(scale, scale, scale);
-	world.add(mesh);
+	tQuery(mesh).scale(scale).addTo(world);
 	geometry.debug && mesh.add(geometry.debug);
 	
 	world.removeCameraControls();
-	world.loop().hook(function(){
-		var camera	= world.camera();
-		var pct		= (present % 4)/4;
+	world.loop().hook(function(delta, now){
+		var camera	= world.tCamera();
+		var pct		= (now % 4)/4;
 		var path	= geometry.path;
 
 		var point	= path.getPointAt(pct);

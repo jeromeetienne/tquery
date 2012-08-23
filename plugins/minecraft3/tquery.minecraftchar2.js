@@ -1,47 +1,23 @@
-<!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
+tQuery.register('createMinecraftChar', function(opts){
+	return new tQuery.MinecraftChar(opts);
+});
 
-<body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1">
-	<select id="skinSelect" onchange='loadSkin(this.value);'>
-		<option value="images/char.png">char</option>
-		<option value="images/3djesus.png">3djesus</option>
-		<option value="images/agentsmith.png">agentsmith</option>
-		<option value="images/batman.png">batman</option>
-		<option value="images/god.png">god</option>
-		<option value="images/jamesbond-1.png">jamesbond-1</option>
-		<option value="images/Joker.png">Joker</option>
-		<option value="images/Mario.png">Mario</option>
-		<option value="images/martialartist.png">martialartist</option>
-		<option value="images/robocop.png">robocop</option>
-		<option value="images/Sonicthehedgehog.png">Sonic the hedgehog</option>
-		<option value="images/Spiderman.png">Spiderman</option>
-		<option value="images/Superman.png">Superman</option>
-		<option value="images/theflash.png">theflash</option>
-		<option value="images/woody.png">woody</option>
-		<option value="images/Iron-Man-Minecraft-Skin.png">ironman</option>
-	</select>
-</div><script>
-	var world	= tQuery.createWorld({
-		renderer	: new THREE.WebGLRenderer({
-			antialias		: false,	// to get smoother output
-			preserveDrawingBuffer	: false	// to allow screenshot
-		})
-	}).boilerplate().start();
-
-	var tTexture	= THREE.ImageUtils.loadTexture( "images/char.png" );
-	var tTexture	= THREE.ImageUtils.loadTexture( "images/batman.png" );
-	var tTexture	= THREE.ImageUtils.loadTexture( "images/Mario.png" );
-	//var tTexture	= THREE.ImageUtils.loadTexture( "../../assets/images/ash_uvgrid01.jpg" );
+/**
+ * original demo - http://djazz.mine.nu/lab/minecraft_items/
+ * http://danielmcgraw.com/2010/10/06/How-To-Skin-Your-Minecraft-Character/
+ * http://www.minecraftskins.com/
+ * http://www.minecraftskins.info/
+ * http://www.minecraftwiki.net/wiki/Anvil_file_format
+ * 
+ * http://www.minecraftwiki.net/wiki/File:Skintemplate.png
+ * http://www.minershoes.com/
+*/
+tQuery.register('MinecraftChar', function(opts){
+	opts	= tQuery.extend(opts, {
+		skinUrl	: "images/char.png"
+	});
 	
-	var loadSkin	= function(url){
-		var image	= new Image();
-		image.onload	= function () {
-			tTexture.image	= image;
-			tTexture.needsUpdate	= true;
-		}.bind(this);
-		image.src = url;
-	}
-	
+	var tTexture	= THREE.ImageUtils.loadTexture( opts.skinUrl );
 	tTexture.magFilter	= THREE.NearestFilter;
 	tTexture.minFilter	= THREE.NearestFilter;
 
@@ -54,22 +30,9 @@
 		side		: THREE.DoubleSide
 	});
 	//tMaterial.overdraw	= true;
-	
-	tQuery.createPlane(64/32, 32/32, tMaterial).addTo(world)
-		.translateX(1.5)
 
-/**
- * original demo - http://djazz.mine.nu/lab/minecraft_items/
- * http://danielmcgraw.com/2010/10/06/How-To-Skin-Your-Minecraft-Character/
- * http://www.minecraftskins.com/
- * http://www.minecraftskins.info/
- * http://www.minecraftwiki.net/wiki/Anvil_file_format
- * 
- * http://www.minecraftwiki.net/wiki/File:Skintemplate.png
- * http://www.minershoes.com/
-*/
-
-
+	//////////////////////////////////////////////////////////////////////////
+	// define size constant
 	var sizes	= {};
 	sizes.charH	= 1;
 	sizes.pixRatio	= 1/32;
@@ -103,6 +66,14 @@
 	model.headGroup	= tQuery.createObject3D().addTo(model.root)
 				.translateY(sizes.charH - sizes.headH/2);
 	
+
+	// visualize the texture - good for debug
+	if( false ){
+		tQuery.createPlane(64/32, 32/32, tMaterial).addTo(model.root)
+			.translateX(1.5)
+	}
+
+
 
 
 	// build model.head
@@ -165,12 +136,12 @@
 				.translateX(sizes.bodyW/2 + sizes.armW/2)
 				.translateY(sizes.legH + sizes.bodyH)
 	var tGeometry	= model.armL.geometry().get(0);
-	mapUv(tGeometry, 0, 40, 12, 44,  0)	// right
-	mapUv(tGeometry, 1, 48, 12, 52,  0)	// left
+	mapUv(tGeometry, 0, 44, 12, 40,  0)	// right
+	mapUv(tGeometry, 1, 52, 12, 48,  0)	// left
 	mapUv(tGeometry, 2, 44, 16, 48, 12)	// top
 	mapUv(tGeometry, 3, 48, 16, 52, 12)	// bottom
-	mapUv(tGeometry, 4, 44, 12, 48,  0)	// front
-	mapUv(tGeometry, 5, 52, 12, 56,  0)	// back
+	mapUv(tGeometry, 4, 48, 12, 44,  0)	// front
+	mapUv(tGeometry, 5, 56, 12, 52,  0)	// back
 
 	// build model.legR
 	model.legR	= tQuery.createCube(sizes.legW, sizes.legH, sizes.legD, tMaterial)
@@ -197,22 +168,31 @@
 				.translateX(sizes.legW/2)
 				.translateY(sizes.legH)
 	var tGeometry	= model.legL.geometry().get(0);
-	mapUv(tGeometry, 0,  0, 12,  4,  0)	// left
-	mapUv(tGeometry, 1,  8, 12, 12,  0)	// right
-	mapUv(tGeometry, 2,  4, 16,  8, 12)	// top
-	mapUv(tGeometry, 3,  8, 16, 12, 12)	// bottom
-	mapUv(tGeometry, 4,  4, 12,  8,  0)	// front
-	mapUv(tGeometry, 5, 12, 12, 16,  0)	// back
+	mapUv(tGeometry, 0,  4, 12,  0,  0)	// left
+	mapUv(tGeometry, 1, 12, 12,  8,  0)	// right
+	mapUv(tGeometry, 2,  8, 16,  4, 12)	// top
+	mapUv(tGeometry, 3, 12, 16,  8, 12)	// bottom
+	mapUv(tGeometry, 4,  8, 12,  4,  0)	// front
+	mapUv(tGeometry, 5, 16, 12, 12,  0)	// back
 
 
-	//////////////////////////////////////////////////////////////////////////
-	//									//
-	//////////////////////////////////////////////////////////////////////////
-	model.root
-		.scale(2)
-		.translateY(-1)
-		//.rotateY(Math.PI)
-		.addTo(world)
+	this._model	= model;
+	
+	// backward compatibility only
+	if( true ){
+		this.model	= model.root;
+		this.parts	= {
+			headGroup	: model.headGroup.get(0),
+			upperBody	: model.body.get(0),
+			legL		: model.legL.get(0),
+			legR		: model.legR.get(0),
+			armR		: model.armR.get(0),
+			armL		: model.armL.get(0)
+		};		
+	}
+
+	
+	return;
 
 
 	function mapUv(tGeometry, faceIdx, x1, y1, x2, y2){
@@ -224,5 +204,58 @@
 		UVs[2].u = x2 * tileUvW;	UVs[2].v = y2 * tileUvH;
 		UVs[3].u = x2 * tileUvW;	UVs[3].v = y1 * tileUvH;		
 	}
-</script></body>
+});
+
+// make it pluginable
+tQuery.pluginsInstanceOn(tQuery.MinecraftChar);
+
+/**
+ * Load a skin
+ *
+ * @param {string} url the url of the skin image
+*/
+tQuery.MinecraftChar.prototype.loadSkin	= function(url){
+	var image	= new Image();
+	image.onload	= function () {
+
+		this._material.map.needsUpdate		= true;
+		this._materialTrans.map.needsUpdate	= true;
+	}.bind(this);
+	image.src = url;
+	return this;	// for chained API
+}
+
+/**
+ * getter/setter on objects3d
+ *
+ * @param {string} name the name of the object3d to get
+*/
+tQuery.MinecraftChar.prototype.object3D	= function(name){
+	// name default to 'root'
+	name	= name	|| 'root';
+	// sanity check
+	console.assert( this._model[name] !== undefined );
+	// handle getter case
+	return this._model[name];
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Emulate tQuery.Object3D.addTo
+*/
+tQuery.MinecraftChar.prototype.addTo	= function(object3D){
+	this._model.root.addTo(object3D);
+	return this;
+}
+
+/**
+ * Emulate tQuery.Object3D.removeFrom
+*/
+tQuery.MinecraftChar.prototype.removeFrom	= function(object3D){
+	this.object3D('root').removeFrom(object3D);
+	return this;
+};
 

@@ -20,6 +20,7 @@
 		<option value="images/agentsmith.png">agentsmith</option>
 		<option value="images/batman.png">batman</option>
 		<option value="images/god.png">god</option>
+		<option value="images/jamesbond-1.png">jamesbond-1</option>
 		<option value="images/Joker.png">Joker</option>
 		<option value="images/Mario.png">Mario</option>
 		<option value="images/martialartist.png">martialartist</option>
@@ -37,11 +38,11 @@
 
 	// load the minecraft character
 	// ```character.loadSkin(imageUrl)```
-	var character	= tQuery.createMinecraftChar({
+	var character	= new tQuery.MinecraftChar({
 		skinUrl	: 'images/3djesus.png'
-	}).addTo(world); 
+	}); 
 	// add the model to our world
-	character.object3D('root').translateY(-0.5);
+	character.model.addTo(world);
 
 
 	// add post processing
