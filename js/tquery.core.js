@@ -145,6 +145,24 @@ tQuery.each	= function(arr, callback){
 };
 
 /**
+ * precise timer based on window.performance.now() when available, fall back on Date.now()
+ * see http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision 
+ * code based on http://gent.ilcore.com/2012/06/better-timer-for-javascript.html
+*/
+tQuery.now	= (function(){
+	var perf 	= window.performance || {};
+	var fnNow	= 
+		perf.now	||
+		perf.mozNow	||
+		perf.webkitNow	||
+		perf.msNow	||
+		perf.oNow;
+	// fn.bind will be available in all the browsers that support the advanced window.performance... ;-)
+	return fnNow ? fnNow.bind(perf) : function() { return Date.now(); };
+})();
+
+
+/**
  * Make a child Class inherit from the parent class.
  *
  * @param {Object} childClass the child class which gonna inherit
@@ -155,6 +173,7 @@ tQuery.inherit	= function(childClass, parentClass){
 	var tempFn		= function() {};
 	tempFn.prototype	= parentClass.prototype;
 	childClass.prototype	= new tempFn();
+
 
 	childClass.parent	= parentClass.prototype;
 	childClass.prototype.constructor= childClass;	

@@ -65,7 +65,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
 	// update time values
-	var now		= time/1000;
+	var now		= tQuery.now()/1000;
 	if( !this._lastTime )	this._lastTime = now - 1/60;
 	var delta	= now - this._lastTime;
 	this._lastTime	= now;
