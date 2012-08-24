@@ -36,6 +36,13 @@ looks like the code below... Quite short.
 
 #### Current
 
+* implemented tQuery.now() - act as Date.now() with Performance.now() performance
+* notify tQuery.Loop hooks with Performance.now() precision
+* tQuery.extend() now support deep copy
+* renamed tQuery.convert.toBool to tQuery.convert.toBoolean
+* tquery.datguituner plugins - build a Dat.GUI on existing Scene Graph
+  * Very usefull to fine tune parameters
+
 #### Release - r50.0
 
 * ported three.js r50
@@ -45,7 +52,7 @@ looks like the code below... Quite short.
 * added plugins/lavamaterial
 * added plugins/buffergeometry
 * working on postprocessing in tQuery.World
-* added catmull-clark subdivision in tQuery.Geometry
+* added catmull-clark subdivision in tQuery.Geometry.smooth()
 * improved home page with more screenshots and link to tutorials
 * added .clone() to ```tQuery.Object3D```
 * added attributes to ```tQuery.Object3D``` (needed for shadow)
