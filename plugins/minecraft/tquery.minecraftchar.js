@@ -65,7 +65,7 @@ tQuery.register('MinecraftChar', function(opts){
 	var model	= {}
 	model.root	= tQuery.createObject3D();
 	model.headGroup	= tQuery.createObject3D().addTo(model.root)
-				.translateY(sizes.charH - sizes.headH/2);
+				.translateY(sizes.charH - sizes.headH);
 	
 
 	// visualize the texture - good for debug
@@ -78,6 +78,9 @@ tQuery.register('MinecraftChar', function(opts){
 	// build model.head
 	model.head	= tQuery.createCube(sizes.headW, sizes.headH, sizes.headD, tMaterial)
 				.addTo(model.headGroup)
+				.geometry()
+					.translateY(sizes.headH/2)
+					.back()
 	var tGeometry	= model.head.geometry().get(0);
 	mapUv(tGeometry, 0, 16, 24, 24, 16)	// left
 	mapUv(tGeometry, 1,  0, 24,  8, 16)	// right
@@ -89,6 +92,9 @@ tQuery.register('MinecraftChar', function(opts){
 	// // build model.helmet
 	model.helmet	= tQuery.createCube(sizes.helmetH, sizes.helmetH, sizes.helmetH, tMaterialt)
 				.addTo(model.headGroup)
+				.geometry()
+					.translateY(sizes.headH/2)
+					.back()
 	var tGeometry	= model.helmet.geometry().get(0);
 	mapUv(tGeometry, 0, 48, 24, 56, 16)	// left
 	mapUv(tGeometry, 1, 32, 24, 40, 16)	// right
