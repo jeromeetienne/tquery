@@ -150,14 +150,25 @@ tQuery.each	= function(arr, callback){
  * code based on http://gent.ilcore.com/2012/06/better-timer-for-javascript.html
 */
 tQuery.now	= (function(){
-	var perf 	= window.performance || {};
-	var fnNow	= perf.now	||
-				perf.mozNow	||
-				perf.webkitNow	||
-				perf.msNow	||
-				perf.oNow;
-	// fn.bind will be available in all the browsers that support the advanced window.performance... ;-)
-	return fnNow ? fnNow.bind(perf) : function() { return Date.now(); };
+	var fallbackFn	= function(){ return Date.now(); };
+	var performance	= window.performance;
+	if( performance.now ){
+		return function(){
+			return performance.timing.navigationStart + performance.now();
+		}
+	}else if( performance.mozNow ){
+		return function(){
+			return performance.timing.navigationStart + performance.mozNow();		
+		}
+	}else if( performance.webkitNow ){
+		return function(){
+			return performance.timing.navigationStart + performance.webkitNow()
+		}
+	}else{
+		return function(){
+			return Date.now;
+		};	
+	}	
 })();
 
 
