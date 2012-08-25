@@ -1,0 +1,94 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.meshlambertmaterial.js"></script>
+<script src="../tquery.meshphongmaterial.js"></script>
+<script src="../tquery.meshbasicmaterial.js"></script>
+
+<script src="../../assets/vendor/dat.gui/dat.gui.js">		</script>
+<script src="../../assets/vendor/dat.gui/dat.color.js">		</script>
+
+<script src="../../datguituner/tquery.datguituner.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.removeCameraControls();
+
+	var ligthAmb1	= tQuery.createAmbientLight().addTo(world)
+		.color(0xaaaaaa);
+	var ligthDir1	= tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,-1).color(0x884444);
+	var ligthDir2	= tQuery.createDirectionalLight().addTo(world)
+		.position(-0,1,1).color(0xaa88ff).intensity(2);
+		
+	world.loop().hook(function(delta, now){
+		var radius	= 1;
+		var angle	= 0.1 * now * Math.PI * 2;
+		ligthDir2.get(0).position.x	= Math.cos(angle*1.3) * radius;
+		ligthDir2.get(0).position.y	= Math.sin(angle*1.2) * radius;
+		ligthDir2.get(0).position.z	= Math.sin(angle) * radius;
+	})
+
+	world.loop().hook(function(delta, now){
+		var radius	= 1;
+		var angle	= 0.3 * now * Math.PI * 2;
+		ligthDir1.get(0).position.x	= Math.cos(angle*1.3) * radius;
+		ligthDir1.get(0).position.y	= Math.sin(angle*1.2) * radius;
+		ligthDir1.get(0).position.z	= Math.cos(angle*4.0) * radius;
+	})
+
+	var url		= "../../assets/images/water.jpg";
+	var url		= "../../assets/images/plywood.jpg";
+	var url		= "../../grassground/images/grasslight-big.jpg";
+	//var url		= "../../planets/images/moon_1024.jpg";
+	//var url		= "../../planets/images/earth_atmos_2048.jpg";
+	var tDiffuse	= THREE.ImageUtils.loadTexture(url);
+	// tDiffuse.wrapS	= THREE.RepeatWrapping; 
+	// tDiffuse.wrapT	= THREE.RepeatWrapping;
+	// tDiffuse.repeat.set( 0.2, 0.2 );
+	// tDiffuse.anisotropy = 16;
+
+
+	var url		= "../../assets/images/water.jpg";
+	var url		= "../../assets/images/plywood.jpg";
+	var url		= "../../grassground/images/grasslight-big.jpg";
+//	var url		= "../../planets/images/moon_1024.jpg";
+//	var url		= "../../planets/images/earth_atmos_2048.jpg";
+//	var url		= "../../planets/images/earth_clouds_1024.png";
+//	var url		= "../../planets/images/earth_normal_2048.jpg";
+//	var url		= "../../planets/images/earth_specular_2048.jpg";
+	var tBumpMap	= THREE.ImageUtils.loadTexture(url);
+	// tBumpMap.wrapS	= THREE.RepeatWrapping; 
+	// tBumpMap.wrapT	= THREE.RepeatWrapping;
+	// tBumpMap.repeat.set( 0.2, 0.2 );
+	// tBumpMap.anisotropy = 4;
+
+	var material	= tQuery.createMeshPhongMaterial({
+		map		: tDiffuse,
+		bumpMap		: tBumpMap,
+		bumpScale	: 0.1,
+		specular	: 0x88aa88,
+		shininess	: 50,
+		shading		: THREE.SmoothShading
+	});
+
+	var object	= tQuery.createSphere(material.get(0)).addTo(world)
+		.scaleBy(2)
+		//.geometry().smooth().back()
+
+	//////////////////////////////////////////////////////////////////////////
+	// more complex example
+	//////////////////////////////////////////////////////////////////////////
+	// init dat.gui
+	var gui	= new dat.GUI();
+	// add all lights
+	tQuery.DatguiTuner({
+		selector: 'light',
+		gui	: gui
+	});
+	// add the materialss
+	tQuery.DatguiTuner({
+		selector: tQuery('mesh').material().get(),
+		gui	: gui
+	});
+</script></body>

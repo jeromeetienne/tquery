@@ -55,6 +55,10 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 	specular	: tQuery.convert.toThreeColor,
 
 	shininess	: tQuery.convert.toNumber,
+	
+	bumpMap		: tQuery.convert.toTexture,
+	bumpScale	: tQuery.convert.toNumber,
+
 
 	metal		: tQuery.convert.toBoolean,
 	perPixel	: tQuery.convert.toBoolean
