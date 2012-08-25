@@ -173,7 +173,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 	var _glExtensionTextureFloat;
 	var _glExtensionStandardDerivatives;
 	var _glExtensionTextureFilterAnisotropic;
-	var _glExtensionCompressedTextureS3tc;
+	var _glExtensionCompressedTextureS3tc;	// jme-
 
 	initGL();
 
@@ -6227,7 +6227,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 			glType = paramThreeToGL( texture.type );
 
 			setTextureParameters( _gl.TEXTURE_2D, texture, isImagePowerOfTwo );
-			// TODO change this to get compressed texture
+			// TODO jme - change this to get compressed texture
 			if ( texture instanceof THREE.DataTexture ) {
 
 				_gl.texImage2D( _gl.TEXTURE_2D, 0, glFormat, image.width, image.height, 0, glFormat, glType, image.data );
@@ -6574,7 +6574,10 @@ THREE.WebGLRenderer = function ( parameters ) {
 		if ( p === THREE.RGBAFormat ) return _gl.RGBA;
 		if ( p === THREE.LuminanceFormat ) return _gl.LUMINANCE;
 		if ( p === THREE.LuminanceAlphaFormat ) return _gl.LUMINANCE_ALPHA;
-		// TODO put all version in there
+		// jme-
+		if ( p === THREE.CompressedRBGS3TCDXT1ExtFormat ) return _gl.COMPRESSED_RGB_S3TC_DXT1_EXT;
+		if ( p === THREE.CompressedRBGAS3TCDXT1ExtFormat ) return _gl.COMPRESSED_RGBA_S3TC_DXT1_EXT;
+		if ( p === THREE.CompressedRBGAS3TCDXT3ExtFormat ) return _gl.COMPRESSED_RGBA_S3TC_DXT3_EXT;
 		if ( p === THREE.CompressedRBGAS3TCDXT5ExtFormat ) return _gl.COMPRESSED_RGBA_S3TC_DXT5_EXT;
 
 		if ( p === THREE.AddEquation ) return _gl.FUNC_ADD;
@@ -6718,6 +6721,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 		_glExtensionTextureFilterAnisotropic = _gl.getExtension( 'EXT_texture_filter_anisotropic' ) ||
 											   _gl.getExtension( 'MOZ_EXT_texture_filter_anisotropic' ) ||
 											   _gl.getExtension( 'WEBKIT_EXT_texture_filter_anisotropic' );
+		// jme-
 		_glExtensionCompressedTextureS3tc = _gl.getExtension("WEBGL_compressed_texture_s3tc") ||
 						_gl.getExtension("MOZ_WEBGL_compressed_texture_s3tc") ||
 						_gl.getExtension("WEBKIT_WEBGL_compressed_texture_s3tc");

@@ -40,7 +40,7 @@ looks like the code below... Quite short.
 * notify tQuery.Loop hooks with Performance.now() precision
 * tQuery.extend() now support deep copy
 * renamed tQuery.convert.toBool to tQuery.convert.toBoolean
-* tquery.datguituner plugins - build a Dat.GUI on existing Scene Graph
+* tquery.datguituner plugin - build a Dat.GUI on existing Scene Graph
   * Very usefull to fine tune parameters
 
 #### Release - r50.0
