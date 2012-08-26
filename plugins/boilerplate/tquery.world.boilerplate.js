@@ -29,7 +29,7 @@ tQuery.World.register('pageTitle', function(element){
 		var element	= document.querySelector(element);
 	}
 	// sanity check
-	console.assert( element instanceof HTMLElement);
+	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
 	// set element.style
 	element.style.position	= "absolute";
 	element.style.width	= "100%";
