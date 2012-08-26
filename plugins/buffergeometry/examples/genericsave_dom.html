@@ -1,5 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.createbuffergeometry.js"></script>
 <body><div id='info'>
 	<a download='slota.3jsbg' href=''>Download .bin format</a>
 </div>
@@ -156,7 +157,9 @@
 	*/
 	function geometryTo3jsbg(tBgGeometry){
 		// parameter polymorphism
-		if( tBgGeometry instanceof THREE.Geometry )	tBgGeometry	= createBufferGeometry(tBgGeometry);
+		if( tBgGeometry instanceof THREE.Geometry ){
+			tBgGeometry	= tQuery.createBufferGeometry(tBgGeometry);		
+		}	
 		// sanity check
 		console.assert(tBgGeometry instanceof THREE.BufferGeometry );
 		// copy parameters 
