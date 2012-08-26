@@ -42,7 +42,7 @@ tQuery.register('createBufferGeometry', function(geometry){
 			fIdxArray[i+1]	= tFace.b;	
 			fIdxArray[i+2]	= tFace.c;
 			i	+= 3;
-			fIdxArray[i+0]	= tFace.b;
+			fIdxArray[i+0]	= tFace.a;
 			fIdxArray[i+1]	= tFace.c;	
 			fIdxArray[i+2]	= tFace.d;
 			i	+= 3;
@@ -63,7 +63,7 @@ tQuery.register('createBufferGeometry', function(geometry){
 			fUvsArray[i+2]	= faceUvs[1].u;	fUvsArray[i+3]	= faceUvs[1].v;
 			fUvsArray[i+4]	= faceUvs[2].u;	fUvsArray[i+5]	= faceUvs[2].v;
 			i	+= 6;
-			fUvsArray[i+0]	= faceUvs[1].u;	fUvsArray[i+1]	= faceUvs[1].v;
+			fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
 			fUvsArray[i+2]	= faceUvs[2].u;	fUvsArray[i+3]	= faceUvs[2].v;
 			fUvsArray[i+4]	= faceUvs[3].u;	fUvsArray[i+5]	= faceUvs[3].v;
 			i	+= 6;

@@ -74,6 +74,7 @@ console.log('offsets', offsets, offsetsJSON)
 	}
 	// http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
 	function stringSave(dataView, offset, chunkType, string){
+		
 		// write the padding if needed
 		var padLength	= [3, 2, 1, 0][offset % 4];
 		for(var i = 0; i < padLength; i++){
@@ -83,8 +84,8 @@ console.log('offsets', offsets, offsetsJSON)
 		// write the chunk header
 		dataView.setUint8(offset, chunkType);
 		offset		+= 1;
-		// write the string length
-		dataView.setUint32(offset, string.length * 2, true);
+		// write the numItems
+		dataView.setUint32(offset, string.length, true);
 		offset		+= 4;
 
 		// copy each char one by one

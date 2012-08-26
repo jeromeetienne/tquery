@@ -2,32 +2,38 @@
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.createbuffergeometry.js"></script>
 <script src="../tquery.geometryto3jsbg.js"></script>
-<script src="../tquery.hexdump.js"></script>
+<script src="../tquery.loader3jsbg.js">		</script>
+<script src="../tquery.hexdump.js">		</script>
 <body><div id='info'>
 	<a download='sample.3jsbg' href=''>Download .bin format</a>
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
-//	var object	= tQuery.createCube().addTo(world);
-//	saveGeometry(object.geometry().get(0))
-
 	
-	var geometry	= new THREE.Geometry();
-	geometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
-	geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
-	geometry.vertices.push( new THREE.Vector3( 1, 0, 0 ) );
-	geometry.faces.push( new THREE.Face3(0,1,2) );	
-	geometry.faceVertexUvs[0].push([
-		new THREE.UV(0, 1),
-		new THREE.UV(0, 0),
-		new THREE.UV(1, 0)
-	]);
-	geometry.computeBoundingBox();
-	geometry.computeFaceNormals();
-	geometry.computeCentroids();
-	geometry.computeVertexNormals();
-	geometry.computeMorphNormals();
-	//geometry.computeTangents();
-	geometry.computeBoundingSphere();
+
+	if( true ){
+		var geometry	= new THREE.Geometry();
+		geometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 1, 0, 0 ) );
+		geometry.faces.push( new THREE.Face3(0,1,2) );	
+		geometry.faceVertexUvs[0].push([
+			new THREE.UV(0, 1),
+			new THREE.UV(0, 0),
+			new THREE.UV(1, 0)
+		]);
+		geometry.computeBoundingBox();
+		geometry.computeFaceNormals();
+		geometry.computeCentroids();
+		geometry.computeVertexNormals();
+		geometry.computeMorphNormals();
+		//geometry.computeTangents();
+		geometry.computeBoundingSphere();		
+	}	
+	
+	// var geometry	= new THREE.CircleGeometry(0.5);
+	var geometry	= new THREE.PlaneGeometry(1,1);
+	// var geometry	= new THREE.TorusKnotGeometry(1-0.15, 0.15)
+	// var geometry	= new THREE.CubeGeometry();
 
 	var url		= "../../assets/images/ash_uvgrid01.jpg";
 	var tMaterial	= new THREE.MeshBasicMaterial({
@@ -35,7 +41,6 @@
 	});
 	//var tMaterial	= new THREE.MeshNormalMaterial();
 	var mesh	= tQuery(geometry, tMaterial).addTo(world);
-
 
 	var dataView	= tQuery.geometryTo3jsbg(geometry);
 	tQuery.hexDump(dataView)
