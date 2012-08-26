@@ -40,10 +40,10 @@ console.log('offsets', offsets, offsetsJSON)
 	};
 
 	var offset	= 0;
-	offset		= stringSave(dataView, offset,types.offsets  , offsetsJSON)
-	offset		= chunkSave(dataView, offset, types.vertexPos, vPosArray);
-	offset		= chunkSave(dataView, offset, types.vertexIdx, fIdxArray);
-	offset		= chunkSave(dataView, offset, types.vertexUvs, fUvsArray);
+	offset		= stringSave(dataView, offset,types.offsets, offsetsJSON)
+	offset		= chunkSave(dataView, offset, types.vertPos, vPosArray);
+	offset		= chunkSave(dataView, offset, types.faceIdx, fIdxArray);
+	offset		= chunkSave(dataView, offset, types.faceUvs, fUvsArray);
 
 	return dataView;
 
@@ -69,9 +69,10 @@ console.log('offsets', offsets, offsetsJSON)
 		// length of string - 4byte
 		length	+= 4;
 		// length of the string itself
-		length	+= string.length;	
+		length	+= string.length * 2;	
 		return length;
 	}
+	// http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
 	function stringSave(dataView, offset, chunkType, string){
 		// write the padding if needed
 		var padLength	= [3, 2, 1, 0][offset % 4];
@@ -83,14 +84,14 @@ console.log('offsets', offsets, offsetsJSON)
 		dataView.setUint8(offset, chunkType);
 		offset		+= 1;
 		// write the string length
-		dataView.setUint32(offset, string.length, false);
+		dataView.setUint32(offset, string.length * 2, true);
 		offset		+= 4;
 
 		// copy each char one by one
 		// FIXME i doubt it works with non ascii char 
 		for(var i = 0; i < string.length; i++){
-			dataView.setUint8(offset, string.charCodeAt(i), false);
-			offset		+= 1;
+			dataView.setUint16(offset, string.charCodeAt(i), true);
+			offset		+= 2;
 		}
 		// return the new offset
 		return offset;
@@ -124,17 +125,17 @@ console.log('offsets', offsets, offsetsJSON)
 		dataView.setUint8(offset, chunkType);
 		offset		+= 1;
 		// write the array length
-		dataView.setUint32(offset, arr.length, false);
+		dataView.setUint32(offset, arr.length, true);
 		offset		+= 4;
 		if( arr.byteLength / arr.length === 4 ){
-			// TODO do i have to copy one by one ? isnt there a copy function ?
+			// i copy element one by one to get little endian storage		
 			for(var i = 0; i < arr.length; i++){
-				dataView.setFloat32(offset, arr[i], false);
+				dataView.setFloat32(offset, arr[i], true);
 				offset		+= 4;
 			}
 		}else if( arr.byteLength / arr.length === 2 ){
 			for(var i = 0; i < arr.length; i++){
-				dataView.setUint16(offset, arr[i], false);
+				dataView.setUint16(offset, arr[i], true);
 				offset		+= 2;
 			}
 		}else	console.assert(false);

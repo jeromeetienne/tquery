@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js">	</script>
+<script src="../tquery.createbuffergeometry.js"></script>
+<script src="../tquery.geometryto3jsbg.js">	</script>
+<script src="../tquery.loader3jsbg.js">		</script>
+<script src="../tquery.hexdump.js">		</script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	var url		= 'sample.3jsbg'
+	var loader	= new tQuery.Loader3jsbg(url, function(tBgGeometry){
+		console.log('3jsbg loader', tBgGeometry)
+		
+		var tMaterial	= new THREE.MeshNormalMaterial();
+		var url		= "../../assets/images/ash_uvgrid01.jpg";
+		var tMaterial	= new THREE.MeshBasicMaterial({
+			map	: THREE.ImageUtils.loadTexture( url )
+		});
+		var mesh	= new THREE.Mesh(tBgGeometry, tMaterial)
+		world.add(mesh)		
+	})
+</script></body>
