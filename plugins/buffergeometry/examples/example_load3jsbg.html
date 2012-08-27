@@ -7,15 +7,27 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	
+	// setup a FirstPersonControls for camera
+	if( true ){
+		var controls	= new THREE.FirstPersonControls( world.tCamera() );
+		controls.movementSpeed	= 2;
+		controls.lookSpeed	= 0.06;
+		controls.lookVertical	= true;
+		controls.constrainVertical	= true;
+		controls.verticalMin	= 1.1;
+		controls.verticalMax	= 2.2;
+		world.setCameraControls(controls)		
+	}
+
 	var url		= 'sample.3jsbg'
 	var loader	= new tQuery.Loader3jsbg(url, function(tBgGeometry){
 		console.log('3jsbg loader', tBgGeometry)
 		
-		var tMaterial	= new THREE.MeshNormalMaterial();
 		var url		= "../../assets/images/ash_uvgrid01.jpg";
 		var tMaterial	= new THREE.MeshBasicMaterial({
 			map	: THREE.ImageUtils.loadTexture( url )
 		});
+		var tMaterial	= new THREE.MeshNormalMaterial();
 		var mesh	= new THREE.Mesh(tBgGeometry, tMaterial)
 		world.add(mesh)		
 	})

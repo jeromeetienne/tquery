@@ -8,6 +8,8 @@ tQuery.register('createBufferGeometry', function(geometry){
 
 	console.log('tGeometry', tGeometry)
 	
+	geometry	= THREE.GeometryUtils.triangulateQuads(geometry);
+	
 	// sanity check
 	console.assert(tGeometry instanceof THREE.Geometry );
 
@@ -21,55 +23,47 @@ tQuery.register('createBufferGeometry', function(geometry){
 	});
 
 	// compute the number of triangles - THREE.BufferGeometry support only triangles
-	var numTriangles= 0;
-	tGeometry.faces.forEach(function(tFace, index){
-		if( tFace instanceof THREE.Face3 )	numTriangles += 1;
-		else if( tFace instanceof THREE.Face4 )	numTriangles += 2;
-		else console.assert(false);
-	});
+	var numTriangles= tGeometry.faces.length;
 
 	// build face indices array - compatible to THREE.BufferGeometry	
 	var fIdxArray	= new Int16Array(numTriangles * 3);
 	var i		= 0;
 	tGeometry.faces.forEach(function(tFace, index){
-		if( tFace instanceof THREE.Face3 ){
-			fIdxArray[i+0]	= tFace.a;
-			fIdxArray[i+1]	= tFace.b;	
-			fIdxArray[i+2]	= tFace.c;
-			i	+= 3;
-		}else if( tFace instanceof THREE.Face4 ){
-			fIdxArray[i+0]	= tFace.a;
-			fIdxArray[i+1]	= tFace.b;	
-			fIdxArray[i+2]	= tFace.c;
-			i	+= 3;
-			fIdxArray[i+0]	= tFace.a;
-			fIdxArray[i+1]	= tFace.c;	
-			fIdxArray[i+2]	= tFace.d;
-			i	+= 3;
-		}else console.assert(false);
+		console.assert( tFace instanceof THREE.Face3 );
+		fIdxArray[i+0]	= tFace.a;
+		fIdxArray[i+1]	= tFace.b;	
+		fIdxArray[i+2]	= tFace.c;
+		i	+= 3;
 	});
 
 	// build face UVs array  - compatible to THREE.BufferGeometry
 	var fUvsArray	= new Float32Array(numTriangles * 3 * 2);
 	var i		= 0;
+if( true ){
 	tGeometry.faceVertexUvs[0].forEach(function(faceUvs, index){
-		if( faceUvs.length === 3 ){
-			fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
-			fUvsArray[i+2]	= faceUvs[1].u;	fUvsArray[i+3]	= faceUvs[1].v;
-			fUvsArray[i+4]	= faceUvs[2].u;	fUvsArray[i+5]	= faceUvs[2].v;
-			i	+= 6;
-		}else if( faceUvs.length === 4 ){
-			fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
-			fUvsArray[i+2]	= faceUvs[1].u;	fUvsArray[i+3]	= faceUvs[1].v;
-			fUvsArray[i+4]	= faceUvs[2].u;	fUvsArray[i+5]	= faceUvs[2].v;
-			i	+= 6;
-			fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
-			fUvsArray[i+2]	= faceUvs[2].u;	fUvsArray[i+3]	= faceUvs[2].v;
-			fUvsArray[i+4]	= faceUvs[3].u;	fUvsArray[i+5]	= faceUvs[3].v;
-			i	+= 6;
-		}else	console.assert(false);
+		console.assert( faceUvs.length === 3 );
+		fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
+		fUvsArray[i+2]	= faceUvs[1].u;	fUvsArray[i+3]	= faceUvs[1].v;
+		fUvsArray[i+4]	= faceUvs[2].u;	fUvsArray[i+5]	= faceUvs[2].v;
+		i	+= 6;
 	});
+}else{
+	tGeometry.faceVertexUvs[0].forEach(function(faceUvs, index){
+		var tFace	= tGeometry.faces[index];
+		console.assert( faceUvs.length === 3 );
+		// for face.a you got faceUvs[0].u/faceUvs[0].v
+		console.assert(tFace.a < vPosArray.length)
+		console.assert(tFace.b < vPosArray.length)
+		console.assert(tFace.c < vPosArray.length)
 
+		fUvsArray[tFace.a*2+0]	= faceUvs[0].u
+		fUvsArray[tFace.a*2+1]	= faceUvs[0].v
+		fUvsArray[tFace.b*2+0]	= faceUvs[1].u
+		fUvsArray[tFace.b*2+1]	= faceUvs[1].v
+		fUvsArray[tFace.c*2+0]	= faceUvs[2].u
+		fUvsArray[tFace.c*2+1]	= faceUvs[2].v
+	})
+}
 
 	// console.log('vPosArray', vPosArray)
 	// console.log('fIdxArray', fIdxArray)
@@ -99,5 +93,9 @@ tQuery.register('createBufferGeometry', function(geometry){
 		index	: 0
 	}];
 
+	bgGeometry.computeBoundingBox();
+	bgGeometry.computeBoundingSphere();
+	bgGeometry.computeVertexNormals();
+	bgGeometry.computeTangents();
 	return bgGeometry;
 })

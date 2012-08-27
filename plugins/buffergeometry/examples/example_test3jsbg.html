@@ -9,22 +9,26 @@
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 
+	// build the geometry
+	//var tGeometry	= new THREE.CircleGeometry(0.5);
+	//var tGeometry	= new THREE.PlaneGeometry(1,1);
+	var tGeometry	= new THREE.CubeGeometry(1,1,1);
 
-	// var tGeometry	= new THREE.CircleGeometry(0.5);
-	var tGeometry	= new THREE.PlaneGeometry(1,1);
-	// var tGeometry	= new THREE.CubeGeometry();
-
+	// build the mesh
 	var url		= "../../assets/images/ash_uvgrid01.jpg";
 	var tMaterial	= new THREE.MeshBasicMaterial({
 		map	: THREE.ImageUtils.loadTexture( url )
 	});
 	var tMaterial	= new THREE.MeshNormalMaterial();
-	var mesh	= tQuery(tGeometry, tMaterial).addTo(world);
+	var mesh	= tQuery(tGeometry, tMaterial).translateX(-1).addTo(world);
 
+
+	// convert tGeometry to 3jsbg
 	var dataView	= tQuery.geometryTo3jsbg(tGeometry);
 	tQuery.hexDump(dataView)
 
+	// convert 3jsbg to tGeometry
 	var tGeometry	= tQuery.convert3jsbgToGeometry(dataView.buffer)
-	tQuery(tGeometry, tMaterial).addTo(world).translateX(2);
+	tQuery(tGeometry, tMaterial).addTo(world).translateX(1);
 
 </script></body>

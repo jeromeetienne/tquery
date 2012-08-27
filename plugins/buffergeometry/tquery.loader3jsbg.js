@@ -13,8 +13,8 @@ tQuery.register('convert3jsbgToGeometry', function(arraybuffer){
 	};
 	var offset	= 0;
 
-	tQuery.hexDump(dataView)
-	//console.log('dataView', dataView)
+	// tQuery.hexDump(dataView)
+	// console.log('dataView', dataView)
 
 	while( true ){
 		// skip padding

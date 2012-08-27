@@ -1,8 +1,9 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	var object	= tQuery.createTorus().addTo(world);
+	var object	= tQuery.createAxis().addTo(world);
 
 	var triangles		= 1;
 
@@ -75,9 +76,36 @@
 		map	: THREE.ImageUtils.loadTexture( "../../assets/images/ash_uvgrid01.jpg" )
 	});
 	//var material	= new THREE.MeshNormalMaterial();
-
+	geometry.dynamic= true;
+	var bufferGeo	= geometry;
+	console.log('bufferGeo', bufferGeo)
 	var mesh	= new THREE.Mesh(geometry, material);
-
 	world.add(mesh);
+	
+	
+	if( true ){
+		var geometry	= new THREE.Geometry();
+		geometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 1, 0, 0 ) );
+		geometry.faces.push( new THREE.Face3(0,1,2) );	
+		geometry.faceVertexUvs[0].push([
+			new THREE.UV(0, 1),
+			new THREE.UV(0, 0),
+			new THREE.UV(1, 0)
+		]);
+		geometry.computeBoundingBox();
+		geometry.computeFaceNormals();
+		geometry.computeCentroids();
+		geometry.computeVertexNormals();
+		geometry.computeMorphNormals();
+		//geometry.computeTangents();
+		geometry.computeBoundingSphere();		
+		var mesh	= new THREE.Mesh(geometry, material);
+		mesh.position.x	= -1;
+		var normalGeo	= geometry;
+		world.add(mesh);
+	}
+
 	
 </script></body>
