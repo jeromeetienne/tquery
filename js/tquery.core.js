@@ -15,7 +15,9 @@ var tQuery	= function(object, root)
 {
 	// support for tQuery(geometry, material)
 	if( arguments.length === 2 && 
-			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
+			(arguments[0] instanceof THREE.Geometry
+				|| arguments[0] instanceof THREE.BufferGeometry
+				|| arguments[0] instanceof tQuery.Geometry)
 			&& 
 			(arguments[1] instanceof THREE.Material || arguments[1] instanceof tQuery.Material)
 			){
@@ -151,7 +153,7 @@ tQuery.each	= function(arr, callback){
  * see http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision 
 */
 tQuery.now	= (function(){
-	var performance	= window.performance	|| {};
+	var p			= window.performance	|| {};
 	if( p.now )		return function(){ return p.timing.navigationStart + p.now();		};
 	else if( p.mozNow )	return function(){ return p.timing.navigationStart + p.mozNow();	};
 	else if( p.webkitNow)	return function(){ return p.timing.navigationStart + p.webkitNow()	};
