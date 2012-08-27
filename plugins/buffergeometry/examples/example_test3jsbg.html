@@ -1,0 +1,30 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.createbuffergeometry.js"></script>
+<script src="../tquery.geometryto3jsbg.js"></script>
+<script src="../tquery.loader3jsbg.js">		</script>
+<script src="../tquery.hexdump.js">		</script>
+<body><div id='info'>
+	<a download='sample.3jsbg' href=''>Download .bin format</a>
+</div><script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+
+
+	// var tGeometry	= new THREE.CircleGeometry(0.5);
+	var tGeometry	= new THREE.PlaneGeometry(1,1);
+	// var tGeometry	= new THREE.CubeGeometry();
+
+	var url		= "../../assets/images/ash_uvgrid01.jpg";
+	var tMaterial	= new THREE.MeshBasicMaterial({
+		map	: THREE.ImageUtils.loadTexture( url )
+	});
+	var tMaterial	= new THREE.MeshNormalMaterial();
+	var mesh	= tQuery(tGeometry, tMaterial).addTo(world);
+
+	var dataView	= tQuery.geometryTo3jsbg(tGeometry);
+	tQuery.hexDump(dataView)
+
+	var tGeometry	= tQuery.convert3jsbgToGeometry(dataView.buffer)
+	tQuery(tGeometry, tMaterial).addTo(world).translateX(2);
+
+</script></body>

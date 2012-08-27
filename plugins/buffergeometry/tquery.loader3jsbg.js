@@ -57,7 +57,7 @@ console.dir(faceUvsArray);
 			var offsetsArray	= new Uint16Array(arraybuffer, offset, numItems);
 			offset			+= numItems * 2;
 			var offsetsJSON		= String.fromCharCode.apply(null, offsetsArray);
-console.log('offsetsJSON', offsetsJSON.length);
+console.log('offsetsJSON', offsetsJSON);
 		}else	console.assert(false);
 	}
 	console.assert(faceIdxArray)
