@@ -39,7 +39,7 @@ tQuery.register('createBufferGeometry', function(geometry){
 	// build face UVs array  - compatible to THREE.BufferGeometry
 	var fUvsArray	= new Float32Array(numTriangles * 3 * 2);
 	var i		= 0;
-if( true ){
+if( false ){
 	tGeometry.faceVertexUvs[0].forEach(function(faceUvs, index){
 		console.assert( faceUvs.length === 3 );
 		fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
@@ -52,17 +52,14 @@ if( true ){
 		var tFace	= tGeometry.faces[index];
 		console.assert( faceUvs.length === 3 );
 		// for face.a you got faceUvs[0].u/faceUvs[0].v
-		console.assert(tFace.a < vPosArray.length)
-		console.assert(tFace.b < vPosArray.length)
-		console.assert(tFace.c < vPosArray.length)
+		console.assert(tFace.a < vPosArray.length);
+		console.assert(tFace.b < vPosArray.length);
+		console.assert(tFace.c < vPosArray.length);
 
-		fUvsArray[tFace.a*2+0]	= faceUvs[0].u
-		fUvsArray[tFace.a*2+1]	= faceUvs[0].v
-		fUvsArray[tFace.b*2+0]	= faceUvs[1].u
-		fUvsArray[tFace.b*2+1]	= faceUvs[1].v
-		fUvsArray[tFace.c*2+0]	= faceUvs[2].u
-		fUvsArray[tFace.c*2+1]	= faceUvs[2].v
-	})
+		fUvsArray[tFace.a*2+0]	= faceUvs[0].u;	fUvsArray[tFace.a*2+1]	= faceUvs[0].v
+		fUvsArray[tFace.b*2+0]	= faceUvs[1].u;	fUvsArray[tFace.b*2+1]	= faceUvs[1].v
+		fUvsArray[tFace.c*2+0]	= faceUvs[2].u;	fUvsArray[tFace.c*2+1]	= faceUvs[2].v
+	});
 }
 
 	// console.log('vPosArray', vPosArray)
