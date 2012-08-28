@@ -8,6 +8,7 @@ tQuery.register('createBufferGeometry', function(geometry){
 
 	console.log('tGeometry', tGeometry)
 	
+	geometry	= THREE.GeometryUtils.clone(geometry);
 	geometry	= THREE.GeometryUtils.triangulateQuads(geometry);
 	
 	// sanity check

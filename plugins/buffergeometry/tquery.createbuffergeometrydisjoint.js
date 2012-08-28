@@ -9,7 +9,8 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 	console.log('tGeometry', tGeometry)
 	
 	// make the geometry with only THREE.Face3
-	geometry	= THREE.GeometryUtils.triangulateQuads(geometry);
+	tGeometry	= THREE.GeometryUtils.clone(tGeometry);
+	THREE.GeometryUtils.triangulateQuads(tGeometry);
 	
 	// sanity check
 	console.assert(tGeometry instanceof THREE.Geometry);
@@ -25,7 +26,7 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 
 		// set vPosArray
 		['a', 'b', 'c'].forEach(function(vertexProp, vertexOffset){
-			var tVertex	= tGeometry.vertices[tFace[vertexProp]];		
+			var tVertex	= tGeometry.vertices[tFace[vertexProp]];
 			var i		= faceIdx * 3 /* vertices */ * 3 /* xyz */
 					+ vertexOffset * 3 /* xyz */;
 			vPosArray[i+0]	= tVertex.x;
@@ -35,7 +36,7 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 
 		// set vIdxArray
 		var i		= faceIdx * 3 /* vertices */;
-		var vIdxOff	= faceIdx * 3 /* vertices */ * 3 /* xyz */;
+		var vIdxOff	= faceIdx * 3 /* vertices */;
 		fIdxArray[i+0]	= vIdxOff + 0;
 		fIdxArray[i+1]	= vIdxOff + 1;
 		fIdxArray[i+2]	= vIdxOff + 2;
