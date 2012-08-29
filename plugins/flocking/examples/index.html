@@ -1,0 +1,84 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="birdgeometry.js"></script>
+<script src="boidflocking.js"></script>
+<body><div id="info">
+	<a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - port of birds demo
+</div><script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	world.tCamera().position.z	= 800;
+	world.tRenderer().setClearColorHex( 0xffffff, 1 );
+/**
+ * TODO
+ * * add post processing
+ *   * motionblur
+ * * add a trail per boid ?
+ * * add additiveBlending ?
+*/
+	var birds	= [];
+	var boids	= [];
+	var boidBoxW	= 400;
+	var boidBoxH	= 250;
+	var boidBoxD	= 300;
+	for( var i = 0; i < 200; i ++ ){
+		// build boid
+		boids[ i ]	= new Boid();
+		var boid	= boids[i];
+		boid.position.x = Math.random() * boidBoxW - boidBoxW/2;
+		boid.position.y = Math.random() * boidBoxH - boidBoxH/2;
+		boid.position.z = Math.random() * boidBoxD - boidBoxD/2;
+		boid.velocity.x = Math.random() * 2 - 1;
+		boid.velocity.y = Math.random() * 2 - 1;
+		boid.velocity.z = Math.random() * 2 - 1;
+		boid.setAvoidWalls( true );
+		boid.setWorldSize( boidBoxW, boidBoxH, boidBoxD );
+
+		// build bird mesh
+		var tMaterial	= new THREE.MeshBasicMaterial({
+			//color	: Math.random() * 0xffffff,
+			side	: THREE.DoubleSide
+		});
+		birds[ i ]	= new THREE.Mesh( new Bird(), tMaterial );
+		var bird	= birds[ i ];
+		
+		// setup bird mesh
+		bird.phase	= Math.floor( Math.random() * 62.83 );
+		bird.position	= boids[ i ].position;
+		world.add( bird );
+	}
+	// make boid move
+	world.loop().hook(function(delta, now){
+		for ( var i = 0, il = birds.length; i < il && true; i++ ){
+			var boid	= boids[ i ];
+			var bird	= birds[ i ];
+			boid.run( boids );
+
+			
+			// handle fog for birds
+			var color	= bird.material.color;
+			color.r = color.g = color.b = ( 500 - bird.position.z ) / 1000;
+
+			// set bird rotation depending on boid.velocity
+			bird.rotation.y = Math.atan2( - boid.velocity.z, boid.velocity.x );
+			bird.rotation.z = Math.asin( boid.velocity.y / boid.velocity.length() );
+
+			bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
+			bird.geometry.vertices[ 5 ].y = 
+			bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 5;
+		}
+	});
+
+	// repulse on mouse cursor position
+	document.addEventListener( 'mousemove', function(event){
+		var positionX	= event.clientX - window.innerWidth/2;
+		var positionY	= event.clientY - window.innerHeight/2;
+		var vector	= new THREE.Vector3(positionX, positionY, 0);
+		for( var i = 0, il = boids.length; i < il; i++ ){
+			var boid	= boids[ i ];
+			vector.z	= boid.position.z;
+			boid.repulse( vector );
+		}
+	}, false );
+</script></body>

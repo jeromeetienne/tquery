@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js canvas - geometry - birds</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #808080;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #ffffff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<div id="info"><a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - birds demo</div>
+		<script src="../../../build/tquery-bundle.js"></script>
+		<script src="birdgeometry.js"></script>
+		<script src="boidflocking.js"></script>
+		<script>
+
+			var SCREEN_WIDTH = window.innerWidth,
+			SCREEN_HEIGHT = window.innerHeight,
+			SCREEN_WIDTH_HALF = SCREEN_WIDTH  / 2,
+			SCREEN_HEIGHT_HALF = SCREEN_HEIGHT / 2;
+
+			var camera, scene, renderer,
+			birds, bird;
+
+			var boid, boids;
+
+			var stats;
+
+			init();
+			animate();
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
+				camera.position.z = 450;
+
+				scene = new THREE.Scene();
+
+				birds = [];
+				boids = [];
+
+				for ( var i = 0; i < 400; i ++ ) {
+
+					boid = boids[ i ] = new Boid();
+					boid.position.x = Math.random() * 400 - 200;
+					boid.position.y = Math.random() * 400 - 200;
+					boid.position.z = Math.random() * 400 - 200;
+					boid.velocity.x = Math.random() * 2 - 1;
+					boid.velocity.y = Math.random() * 2 - 1;
+					boid.velocity.z = Math.random() * 2 - 1;
+					boid.setAvoidWalls( true );
+					boid.setWorldSize( 500, 300, 400 );
+
+					var tMaterial	= new THREE.MeshBasicMaterial({
+						color	: Math.random() * 0xffffff,
+						side	: THREE.DoubleSide
+					});
+					birds[ i ]	= new THREE.Mesh( new Bird(), tMaterial );
+					bird		= birds[ i ];
+					bird.phase	= Math.floor( Math.random() * 62.83 );
+					bird.position	= boids[ i ].position;
+					scene.add( bird );
+				}
+
+				renderer = new THREE.WebGLRenderer();
+				// renderer.autoClear = false;
+				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.body.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.left = '0px';
+				stats.domElement.style.top = '0px';
+
+				document.getElementById( 'container' ).appendChild(stats.domElement);
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				var vector = new THREE.Vector3( event.clientX - SCREEN_WIDTH_HALF, - event.clientY + SCREEN_HEIGHT_HALF, 0 );
+
+				for ( var i = 0, il = boids.length; i < il; i++ ) {
+
+					boid = boids[ i ];
+
+					vector.z = boid.position.z;
+
+					boid.repulse( vector );
+
+				}
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				for ( var i = 0, il = birds.length; i < il && true; i++ ) {
+
+					boid = boids[ i ];
+					boid.run( boids );
+
+					bird = birds[ i ];
+					
+					// handle fog for birds
+					color = bird.material.color;
+					color.r = color.g = color.b = ( 500 - bird.position.z ) / 1000;
+					// set bird rotation depending on boid.velocity
+					bird.rotation.y = Math.atan2( - boid.velocity.z, boid.velocity.x );
+					bird.rotation.z = Math.asin( boid.velocity.y / boid.velocity.length() );
+
+					bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
+					bird.geometry.vertices[ 5 ].y = 
+					bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 5;
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>
