@@ -16,7 +16,9 @@ var tQuery	= function(object, root)
 {
 	// support for tQuery(geometry, material)
 	if( arguments.length === 2 && 
-			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
+			(arguments[0] instanceof THREE.Geometry
+				|| arguments[0] instanceof THREE.BufferGeometry
+				|| arguments[0] instanceof tQuery.Geometry)
 			&& 
 			(arguments[1] instanceof THREE.Material || arguments[1] instanceof tQuery.Material)
 			){
@@ -146,30 +148,19 @@ tQuery.each	= function(arr, callback){
 };
 
 /**
- * precise timer based on window.performance.now() when available, fall back on Date.now()
+ * precise version of Date.now() -
+ * It provide submillisecond precision based on window.performance.now() when 
+ * available, fall back on Date.now()
  * see http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision 
- * code based on http://gent.ilcore.com/2012/06/better-timer-for-javascript.html
 */
 tQuery.now	= (function(){
-	var fallbackFn	= function(){ return Date.now(); };
-	var performance	= window.performance;
-	if( performance.now ){
-		return function(){
-			return performance.timing.navigationStart + performance.now();
-		}
-	}else if( performance.mozNow ){
-		return function(){
-			return performance.timing.navigationStart + performance.mozNow();		
-		}
-	}else if( performance.webkitNow ){
-		return function(){
-			return performance.timing.navigationStart + performance.webkitNow()
-		}
-	}else{
-		return function(){
-			return Date.now;
-		};	
-	}	
+	var p			= window.performance	|| {};
+	if( p.now )		return function(){ return p.timing.navigationStart + p.now();		};
+	else if( p.mozNow )	return function(){ return p.timing.navigationStart + p.mozNow();	};
+	else if( p.webkitNow)	return function(){ return p.timing.navigationStart + p.webkitNow()	};
+	else if( p.mskitNow)	return function(){ return p.timing.navigationStart + p.msNow()		};
+	else if( p.okitNow)	return function(){ return p.timing.navigationStart + p.oNow()		};
+	else			return function(){ return Date.now;					};	
 })();
 
 

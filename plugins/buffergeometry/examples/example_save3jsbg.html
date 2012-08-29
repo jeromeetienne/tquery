@@ -1,6 +1,7 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../tquery.createbuffergeometry.js"></script>
+<script src="../tquery.createbuffergeometryDisjoint.js"></script>
 <script src="../tquery.geometryto3jsbg.js"></script>
 <script src="../tquery.loader3jsbg.js">		</script>
 <script src="../tquery.hexdump.js">		</script>
@@ -10,7 +11,7 @@
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	
 
-	if( true ){
+	if( false ){
 		var geometry	= new THREE.Geometry();
 		geometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
 		geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
@@ -28,10 +29,10 @@
 		geometry.computeMorphNormals();
 		//geometry.computeTangents();
 		geometry.computeBoundingSphere();		
-	}	
+	}
 	
 	// var geometry	= new THREE.CircleGeometry(0.5);
-	// var geometry	= new THREE.PlaneGeometry(1,1);
+	var geometry	= new THREE.PlaneGeometry(1,1);
 	// var geometry	= new THREE.TorusKnotGeometry(1-0.15, 0.15)
 	// var geometry	= new THREE.CubeGeometry();
 
@@ -42,7 +43,8 @@
 	//var tMaterial	= new THREE.MeshNormalMaterial();
 	var mesh	= tQuery(geometry, tMaterial).addTo(world);
 
-	var dataView	= tQuery.geometryTo3jsbg(geometry);
+	var tBgGeometry	= tQuery.createBufferGeometryDisjoint(geometry);
+	var dataView	= tQuery.geometryTo3jsbg(tBgGeometry);
 	tQuery.hexDump(dataView)
 
 	var blob	= new Blob([dataView], {

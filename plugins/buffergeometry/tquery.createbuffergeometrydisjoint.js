@@ -70,15 +70,54 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 			numItems: vUvsArray.length
 		}
 	};
+
+if( false ){
 	bgGeometry.offsets	= [{
 		start	: 0,
 		count	: fIdxArray.length,
 		index	: 0
 	}];
+}else{
+	// comes from THREE.CTMLoader.js
+	// - https://github.com/mrdoob/three.js/blob/master/examples/js/loaders/ctm/CTMLoader.js
+	var scope	= bgGeometry;
+	// compute offsets
+	scope.offsets	= [];
+	var indices	= fIdxArray;
+
+	var start	= 0;
+	var min		= vPosArray.length;
+	var max		= 0;
+	var minPrev	= min;
+	for ( var i = 0; i < indices.length; ) {
+		for ( var j = 0; j < 3; ++ j ) {
+			var idx = indices[ i ++ ];
+			if ( idx < min ) min = idx;
+			if ( idx > max ) max = idx;
+		}
+		if( max - min > 1000 ){
+		//if( max - min > 65535 ){
+			i -= 3;
+			for ( var k = start; k < i; ++ k ) {
+				indices[ k ] -= minPrev;
+			}
+			scope.offsets.push( { start: start, count: i - start, index: minPrev } );
+			start = i;
+			min = vPosArray.length;
+			max = 0;
+		}
+		minPrev = min;
+	}
+	for ( var k = start; k < i; ++ k ) {
+		indices[ k ] -= minPrev;
+	}
+	scope.offsets.push( { start: start, count: i - start, index: minPrev } );
+}
 
 	bgGeometry.computeBoundingBox();
 	bgGeometry.computeBoundingSphere();
 	bgGeometry.computeVertexNormals();
 	bgGeometry.computeTangents();
+
 	return bgGeometry;
 })

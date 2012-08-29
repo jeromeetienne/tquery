@@ -1,7 +1,7 @@
 tQuery.register('geometryTo3jsbg', function(tBgGeometry){
 	// parameter polymorphism
 	if( tBgGeometry instanceof THREE.Geometry ){
-		tBgGeometry	= tQuery.createBufferGeometry(tBgGeometry);		
+		tBgGeometry	= tQuery.createBufferGeometryDisjoint(tBgGeometry);		
 	}	
 	// sanity check
 	console.assert(tBgGeometry instanceof THREE.BufferGeometry );

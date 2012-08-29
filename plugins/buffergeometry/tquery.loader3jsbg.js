@@ -13,17 +13,18 @@ tQuery.register('convert3jsbgToGeometry', function(arraybuffer){
 	};
 	var offset	= 0;
 
-	// tQuery.hexDump(dataView)
+	tQuery.hexDump(dataView)
 	// console.log('dataView', dataView)
 
 	while( true ){
 		// skip padding
 		for(; offset < dataView.byteLength && dataView.getUint8(offset) === chunkTypes.padding; offset++ );
-		//console.log('offset', offset)
+		console.log('offset', offset)
 		// detect the end of dataView
 		if( offset >= dataView.byteLength )	break;
 		// get chunkType
 		var chunkType	= dataView.getUint8(offset);
+		console.log('chunkType', chunkType, offset)
 		offset++;
 		//console.log('chunkType', chunkType)
 		if( chunkType === chunkTypes.vertPos ){
