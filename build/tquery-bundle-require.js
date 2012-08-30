@@ -1898,7 +1898,9 @@ var tQuery	= function(object, root)
 {
 	// support for tQuery(geometry, material)
 	if( arguments.length === 2 && 
-			(arguments[0] instanceof THREE.Geometry || arguments[0] instanceof tQuery.Geometry)
+			(arguments[0] instanceof THREE.Geometry
+				|| arguments[0] instanceof THREE.BufferGeometry
+				|| arguments[0] instanceof tQuery.Geometry)
 			&& 
 			(arguments[1] instanceof THREE.Material || arguments[1] instanceof tQuery.Material)
 			){
@@ -2028,15 +2030,19 @@ tQuery.each	= function(arr, callback){
 };
 
 /**
- * precise timer based on window.performance.now() when available, fall back on Date.now()
+ * precise version of Date.now() -
+ * It provide submillisecond precision based on window.performance.now() when 
+ * available, fall back on Date.now()
  * see http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision 
- * code based on http://gent.ilcore.com/2012/06/better-timer-for-javascript.html
 */
 tQuery.now	= (function(){
-	var perf 	= window.performance || {};
-	var fnNow	= perf.now || perf.mozNow || perf.webkitNow || perf.msNow || perf.oNow;
-	// fn.bind will be available in all the browsers that support the advanced window.performance... ;-)
-	return fnNow ? fnNow.bind(perf) : function() { return Date.now(); };
+	var p			= window.performance	|| {};
+	if( p.now )		return function(){ return p.timing.navigationStart + p.now();		};
+	else if( p.mozNow )	return function(){ return p.timing.navigationStart + p.mozNow();	};
+	else if( p.webkitNow)	return function(){ return p.timing.navigationStart + p.webkitNow()	};
+	else if( p.mskitNow)	return function(){ return p.timing.navigationStart + p.msNow()		};
+	else if( p.okitNow)	return function(){ return p.timing.navigationStart + p.oNow()		};
+	else			return function(){ return Date.now;					};	
 })();
 
 
@@ -3289,7 +3295,7 @@ tQuery.Loop.prototype.stop	= function()
 	return this;
 }
 
-tQuery.Loop.prototype._onAnimationFrame	= function(time)
+tQuery.Loop.prototype._onAnimationFrame	= function()
 {
 	// loop on request animation loop
 	// - it has to be at the begining of the function
@@ -3297,7 +3303,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function(time)
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
 	// update time values
-	var now		= time/1000;
+	var now		= tQuery.now()/1000;
 	if( !this._lastTime )	this._lastTime = now - 1/60;
 	var delta	= now - this._lastTime;
 	this._lastTime	= now;
@@ -4099,7 +4105,7 @@ tQuery.World.register('pageTitle', function(element){
 		var element	= document.querySelector(element);
 	}
 	// sanity check
-	console.assert( element instanceof HTMLElement);
+	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
 	// set element.style
 	element.style.position	= "absolute";
 	element.style.width	= "100%";

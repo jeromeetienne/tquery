@@ -1,13 +1,16 @@
 // Based on http://www.openprocessing.org/visuals/?visualID=6910
+// #### TODO pass in tQuery plugins
+// * tQuery.extends for all parameters
+// * .prototype function
+// * bind it automatically 
 
 var Boid = function() {
-
-	var vector		= new THREE.Vector3();
-	var _acceleration; 
+	var vector	= new THREE.Vector3();
 	var _width	= 500;
 	var _height	= 500; 
 	var _depth	= 200; 
 	var _goal;
+	var _acceleration; 
 	var _neighborhoodRadius = 100;
 	var _maxSpeed		= 4;
 	var _maxSteerForce	= 0.1;
@@ -17,16 +20,23 @@ var Boid = function() {
 	this.velocity = new THREE.Vector3();
 	_acceleration = new THREE.Vector3();
 
-	this.setGoal = function ( target ) {
-
+	/**
+	 * Set the goal of the boid - if any
+	*/
+	this.setGoal = function( target ){
 		_goal = target;
-
 	}
-
-	this.setAvoidWalls = function ( value ) {
+	/**
+	 * getter/setter on the walls
+	*/
+	this.avoidWalls = function( value ){
+		if( value === undefined )	return _avoidWalls;
 		_avoidWalls = value;
-	}
-
+		return this;
+	};
+	/**
+	 * Setter on world size
+	*/
 	this.setWorldSize = function ( width, height, depth ) {
 		_width	= width;
 		_height = height;
@@ -111,6 +121,9 @@ var Boid = function() {
 		_acceleration.set( 0, 0, 0 );
 	}
 
+	/**
+	 * if the boid is out of the world - warp it around
+	*/
 	this.checkBounds = function () {
 		if ( this.position.x >   _width )	this.position.x = - _width;
 		if ( this.position.x < - _width )	this.position.x =   _width;
@@ -136,20 +149,16 @@ var Boid = function() {
 	}
 
 	this.repulse = function ( target ) {
-
-		var distance = this.position.distanceTo( target );
-
-		if ( distance < 150 ) {
-
-			var steer = new THREE.Vector3();
-
-			steer.sub( this.position, target );
-			steer.multiplyScalar( 0.5 / distance );
-
-			_acceleration.addSelf( steer );
-
-		}
-
+		// compute distance to the target
+		var distance	= this.position.distanceTo( target );
+		// if too far, do nothing
+		if ( distance >= 150 )	return;
+		// compute vector to steer away
+		var steer	= new THREE.Vector3();
+		steer.sub( this.position, target );
+		steer.multiplyScalar( 0.5 / distance );
+		// add steer vector
+		_acceleration.addSelf( steer );
 	}
 
 	this.reach = function ( target, amount ) {
@@ -185,67 +194,52 @@ var Boid = function() {
 
 		}
 
-		if ( count > 0 ) {
-
+		if( count > 0 ){
 			velSum.divideScalar( count );
-
 			var l = velSum.length();
-
 			if ( l > _maxSteerForce ) {
-
 				velSum.divideScalar( l / _maxSteerForce );
-
 			}
-
 		}
-
 		return velSum;
-
 	}
 
 	this.cohesion = function ( boids ) {
-
-		var boid, distance,
-		posSum = new THREE.Vector3(),
-		steer = new THREE.Vector3(),
-		count = 0;
+		var posSum	= new THREE.Vector3();
+		var steer	= new THREE.Vector3();
+		var count	= 0;
 
 		for( var i = 0, il = boids.length; i < il; i ++ ){
 			if ( Math.random() > 0.6 ) continue;
 
-			boid = boids[ i ];
-			distance = boid.position.distanceTo( this.position );
+			var boid	= boids[ i ];
+			var distance	= boid.position.distanceTo( this.position );
 
-			if ( distance > 0 && distance <= _neighborhoodRadius ) {
+			if( distance > 0 && distance <= _neighborhoodRadius ){
 				posSum.addSelf( boid.position );
 				count++;
 			}
-
 		}
 
-		if ( count > 0 ) {
-			posSum.divideScalar( count );
-		}
+		if( count > 0 )	posSum.divideScalar( count );
 
 		steer.sub( posSum, this.position );
 
-		var l = steer.length();
-
-		if ( l > _maxSteerForce ) {
-			steer.divideScalar( l / _maxSteerForce );
+		var steerLen	= steer.length();
+		if( steerLen > _maxSteerForce ) {
+			steer.divideScalar( steerLen / _maxSteerForce );
 		}
 		return steer;
 	}
 
 	this.separation = function ( boids ) {
-		var boid, distance,
-		posSum = new THREE.Vector3(),
-		repulse = new THREE.Vector3();
+		var posSum	= new THREE.Vector3();
+		var repulse	= new THREE.Vector3();
 
 		for ( var i = 0, il = boids.length; i < il; i ++ ) {
 			if( Math.random() > 0.6 )	continue;
-			boid = boids[ i ];
-			distance = boid.position.distanceTo( this.position );
+			var boid	= boids[ i ];
+			var distance	= boid.position.distanceTo( this.position );
 
 			if( distance > 0 && distance <= _neighborhoodRadius ){
 				repulse.sub( this.position, boid.position );
@@ -256,5 +250,4 @@ var Boid = function() {
 		}
 		return posSum;
 	}
-
 }

@@ -7,20 +7,29 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 	}else	console.assert('bogus paramters');
 
 	console.log('tGeometry', tGeometry)
-	
+
+console.time('triangulateQuads')
 	// make the geometry with only THREE.Face3
 	tGeometry	= THREE.GeometryUtils.clone(tGeometry);
 	THREE.GeometryUtils.triangulateQuads(tGeometry);
+console.timeEnd('triangulateQuads')	
 	
+	console.log('post triangulation geometry vertices', tGeometry.vertices.length)
+	console.log('post triangulation geometry vertices', tGeometry.faces.length)
+
 	// sanity check
 	console.assert(tGeometry instanceof THREE.Geometry);
 	
 	var nFace3	= tGeometry.faces.length;
 
+console.time('allocate TypedArray')
 	var vPosArray	= new Float32Array(nFace3 * 3 /* vertices */ * 3 /* xyz */);
 	var fIdxArray	= new Int16Array  (nFace3 * 3 /* vertices */);
+	var fIdxArrayL	= new Int32Array  (nFace3 * 3 /* vertices */);
 	var vUvsArray	= new Float32Array(nFace3 * 3 /* vertices */ * 2 /* xy */);
+console.timeEnd('allocate TypedArray')
 
+console.time('Filling TypedArray')
 	tGeometry.faces.forEach(function(tFace, faceIdx){
 		console.assert( tFace instanceof THREE.Face3 );
 
@@ -37,9 +46,9 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 		// set vIdxArray
 		var i		= faceIdx * 3 /* vertices */;
 		var vIdxOff	= faceIdx * 3 /* vertices */;
-		fIdxArray[i+0]	= vIdxOff + 0;
-		fIdxArray[i+1]	= vIdxOff + 1;
-		fIdxArray[i+2]	= vIdxOff + 2;
+		fIdxArray[i+0]	= fIdxArrayL[i+0]	= vIdxOff + 0;
+		fIdxArray[i+1]	= fIdxArrayL[i+1]	= vIdxOff + 1;
+		fIdxArray[i+2]	= fIdxArrayL[i+2]	= vIdxOff + 2;
 
 		// set vUvsArray
 		var i		= faceIdx * 3 /* vertices */ * 2 /* xy */;
@@ -51,6 +60,7 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 		vUvsArray[i+4]	= faceUvs[2].u;
 		vUvsArray[i+5]	= faceUvs[2].v;
 	});
+console.timeEnd('Filling TypedArray')
 
 	var bgGeometry		= new THREE.BufferGeometry();
 	bgGeometry.attributes	= {
@@ -71,6 +81,7 @@ tQuery.register('createBufferGeometryDisjoint', function(geometry){
 		}
 	};
 
+console.time('Generating Offsets')
 if( false ){
 	bgGeometry.offsets	= [{
 		start	: 0,
@@ -83,10 +94,10 @@ if( false ){
 	var scope	= bgGeometry;
 	// compute offsets
 	scope.offsets	= [];
-	var indices	= fIdxArray;
+	var indices	= fIdxArrayL;
 
 	var start	= 0;
-	var min		= vPosArray.length;
+	var min		= Number.MAX_VALUE;
 	var max		= 0;
 	var minPrev	= min;
 	for ( var i = 0; i < indices.length; ) {
@@ -95,7 +106,9 @@ if( false ){
 			if ( idx < min ) min = idx;
 			if ( idx > max ) max = idx;
 		}
-		if( max - min > 1000 ){
+		if( max - min > 65535 ){
+		//if( max - min > 655000 ){
+console.log('new offset at', i, max - min, max, min)
 		//if( max - min > 65535 ){
 			i -= 3;
 			for ( var k = start; k < i; ++ k ) {
@@ -103,7 +116,7 @@ if( false ){
 			}
 			scope.offsets.push( { start: start, count: i - start, index: minPrev } );
 			start = i;
-			min = vPosArray.length;
+			min = Number.MAX_VALUE;
 			max = 0;
 		}
 		minPrev = min;
@@ -113,11 +126,14 @@ if( false ){
 	}
 	scope.offsets.push( { start: start, count: i - start, index: minPrev } );
 }
+console.timeEnd('Generating Offsets')
 
+console.time('Computing Meta')
 	bgGeometry.computeBoundingBox();
 	bgGeometry.computeBoundingSphere();
 	bgGeometry.computeVertexNormals();
-	bgGeometry.computeTangents();
+//	bgGeometry.computeTangents();
+console.timeEnd('Computing Meta')
 
 	return bgGeometry;
 })

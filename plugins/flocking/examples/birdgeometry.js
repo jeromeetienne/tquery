@@ -1,8 +1,12 @@
-var Bird = function () {
+/**
+ * Define a bird on top of THREE.Geometry 
+ * see http://github.com/mrdoob/three.js/examples/object/bird.js
+*/
+var BirdGeometry = function(){
+	// call the parent constructor
+	THREE.Geometry.call( this );
 
 	var scope = this;
-
-	THREE.Geometry.call( this );
 
 	v(   5,   0,   0 );
 	v( - 5, - 2,   1 );
@@ -23,18 +27,18 @@ var Bird = function () {
 	this.computeCentroids();
 	this.computeFaceNormals();
 
+	/**
+	 * Add a THREE.Vector3
+	*/
 	function v( x, y, z ) {
-
 		scope.vertices.push( new THREE.Vector3( x, y, z ) );
-
 	}
-
+	/**
+	 * Add a THREE.Face3
+	*/
 	function f3( a, b, c ) {
-
 		scope.faces.push( new THREE.Face3( a, b, c ) );
-
 	}
-
 }
 
-Bird.prototype = Object.create( THREE.Geometry.prototype );
+BirdGeometry.prototype = Object.create( THREE.Geometry.prototype );

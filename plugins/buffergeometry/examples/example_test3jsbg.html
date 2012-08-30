@@ -13,11 +13,12 @@
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 
+	console.time('generate three.js object')
 	// build the geometry
 	//var tGeometry	= new THREE.CircleGeometry(0.5);
 	//var tGeometry	= new THREE.PlaneGeometry(1,1);
 	//var tGeometry	= new THREE.PlaneGeometry(1,1, 256, 256);
-	var tGeometry	= new THREE.CubeGeometry(1,1,1, 30, 30);
+	var tGeometry	= new THREE.CubeGeometry(1,1,1, 150, 150);
 	//var tGeometry	= new THREE.TorusKnotGeometry(1-0.15, 0.15)
 
 	// tGeometry.computeBoundingBox();
@@ -35,13 +36,23 @@
 	});
 	//var tMaterial	= new THREE.MeshNormalMaterial();
 	var mesh	= tQuery(tGeometry, tMaterial).translateX(-1).addTo(world);
+	console.timeEnd('generate three.js object')
+
+	console.log('original geometry vertices', tGeometry.vertices.length)
+	console.log('original geometry vertices', tGeometry.faces.length)
 
 
 	// // convert tGeometry to 3jsbg
 	// //var tBgGeometry	= tQuery.createBufferGeometry(tGeometry);
+	console.time('Create BufferGeometry')
 	var tBgGeometry	= tQuery.createBufferGeometryDisjoint(tGeometry);
+	console.timeEnd('Create BufferGeometry')
+
+if(true){
+	console.time('Generating 3jsbg from THREE.BufferGeometry')
 	var dataView	= tQuery.geometryTo3jsbg(tBgGeometry);
-	tQuery.hexDump(dataView)
+	console.timeEnd('Generating 3jsbg from THREE.BufferGeometry')
+//	tQuery.hexDump(dataView)
 
 
 	var blob	= new Blob([dataView], {
@@ -55,4 +66,5 @@
 	var tGeometry	= tQuery.convert3jsbgToGeometry(dataView.buffer)
 	//var tMaterial	= new THREE.MeshNormalMaterial();
 	tQuery(tGeometry, tMaterial).addTo(world).translateX(1);
+}
 </script></body>
