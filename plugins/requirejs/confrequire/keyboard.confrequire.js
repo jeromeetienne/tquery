@@ -6,7 +6,6 @@ requirejs.config({
 	},
 	shim	: {
 		'plugins/keyboard/tquery.keyboard'	: [
-			//'tquery',
 			'threex/THREEx.KeyboardState',
 		]
 	}

@@ -7,6 +7,7 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.domevent": "plugins/domevent/tquery.domevent",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.materials": "plugins/materials/tquery.meshbasicmaterial",
@@ -14,10 +15,17 @@ requirejs.config({
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.createplanet": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
-			"tquery.shape": "plugins/shape/tquery.shape"
+			"tquery.shape": "plugins/shape/tquery.shape",
+			"tquery.skymap": "plugins/skymap/tquery.skymap",
+			"tquery.text": "plugins/text/tquery.text",
+			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_bold.typeface",
+			"tquery.videos": "plugins/videos/tquery.createvideotexture"
 		}
 	},
 	"shim": {
+		"plugins/domevent/tquery.domevent": [
+			"plugins/domevent/threex.domevent"
+		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
 		],
@@ -45,6 +53,27 @@ requirejs.config({
 		],
 		"plugins/shape/tquery.shape": [
 			"plugins/shape/tquery.shape.create"
+		],
+		"plugins/skymap/tquery.skymap": [
+			"plugins/skymap/tquery.cubetexture"
+		],
+		"plugins/text/tquery.text": [
+			"plugins/text/fonts/droid/droid_serif_bold.typeface"
+		],
+		"plugins/text/fonts/droid/droid_serif_bold.typeface": [
+			"plugins/text/fonts/gentilis_bold.typeface",
+			"plugins/text/fonts/gentilis_regular.typeface",
+			"plugins/text/fonts/optimer_bold.typeface",
+			"plugins/text/fonts/optimer_regular.typeface",
+			"plugins/text/fonts/helvetiker_bold.typeface",
+			"plugins/text/fonts/helvetiker_regular.typeface",
+			"plugins/text/fonts/droid/droid_sans_regular.typeface",
+			"plugins/text/fonts/droid/droid_sans_bold.typeface",
+			"plugins/text/fonts/droid/droid_serif_regular.typeface"
+		],
+		"plugins/videos/tquery.createvideotexture": [
+			"plugins/videos/tquery.createwebcamtexture",
+			"plugins/videos/tquery.createtvsnowtexture"
 		]
 	}
 });

@@ -3,28 +3,69 @@
 <script src="../../../plugins/requirejs/vendor/require.js"></script>
 <script src="../../../plugins/requirejs/build/all.confrequire.js"></script>
 <body><script>
-	require(['tquery.createplanet','tquery.keyboard', 'tquery.minecraft'], function(){
+	require([
+			'tquery.createplanet','tquery.keyboard',
+			'tquery.minecraft', 'tquery.skymap',
+			'tquery.videos',
+			'tquery.text', 
+			'tquery.text.allfonts',
+			'tquery.domevent'
+		], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
-		var planet	= tQuery.createPlanet().addTo(world);
-		
-		// add a minecraft character
-		var minecraft	= tQuery.createMinecraftChar().addTo(world);
-		minecraft.loadSkin(tQuery.MinecraftChar.baseUrl+'examples/images/agentsmith.png')
-		minecraft.model('root').translateY(-0.5)
-		
+
 		// setup light
 		tQuery.createDirectionalLight().addTo(world).position(1,1,1);
 		tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
 		tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
-		// make the object rotate
-		world.loop().hook(function(delta, now){
-			var angle	= 0.05 * now * Math.PI * 2;
-			planet.get(0).rotation.y	= angle;
+		var planet	= tQuery.createPlanet().addTo(world);
+		
+		// add a minecraft character
+		// var minecraft	= tQuery.createMinecraftChar().addTo(world);
+		// minecraft.loadSkin(tQuery.MinecraftChar.baseUrl+'examples/images/agentsmith.png')
+		// minecraft.object3D('root').translateY(-0.5)
+		
+		var text	= tQuery.createText("tQuery is Fun!", {
+			font	: "droid sans"
+		}).scaleBy(1/4).addTo(world);
+		
+		// // enable domEvent on this world
+		// world.enableDomEvent();	
+		// // create a cube
+		// var cube	= tQuery.createCube().addTo(world);
+		// // bind some event on it
+		// tQuery('cube').on('mouseover', function(event){
+		// 	console.log(event.type, "on cube", event)
+		// });	
+		// tQuery('cube').on('click', function(event){
+		// 	console.log("click on cube", event)
+		// });
+		// tQuery(world.tScene()).on('click', function(event){
+		// 	console.log("click on scene", event);
+		// });
 
-			var curScale	= planet.get(0).scale.x;
-			var dstScale	= tQuery.keyboard().pressed('a') ? 2 : 1;
-			planet.scale( curScale + (dstScale-curScale)*0.1 );
-		});
+
+
+		// make the object rotate
+		// world.loop().hook(function(delta, now){
+		// 	var angle	= 0.05 * now * Math.PI * 2;
+		// 	planet.get(0).rotation.y	= angle;
+
+		// 	var curScale	= planet.get(0).scale.x;
+		// 	var dstScale	= tQuery.keyboard().pressed('a') ? 2 : 1;
+		// 	planet.scale( curScale + (dstScale-curScale)*0.1 );
+		// });
+		
+		// var tMaterial	= new THREE.MeshBasicMaterial({
+		// 	envMap	: tQuery.createCubeTexture('skybox')
+		// });
+		// text.material(tMaterial)
+		// var tMaterial	= new THREE.MeshBasicMaterial({
+		// 	map	: tQuery.createVideoTexture('../../videos/examples/sintel.ogv'),
+		// 	//map	: tQuery.createWebcamTexture()
+		// });
+		// var object	= tQuery.createSphere(tMaterial).addTo(world).scaleBy(1);
+		
+		
 	});
 </script>
 
