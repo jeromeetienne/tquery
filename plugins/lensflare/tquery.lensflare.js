@@ -24,18 +24,20 @@ tQuery.register('createLensFlare', function(opts){
 		THREE.ColorUtils.adjustHSV( color, 0, -0.5, 0.5 );
 		
 		// init the textures
-		var texture0	= THREE.ImageUtils.loadTexture( "../../lensflare/examples/images/lensflare0.png" );
-		var texture2	= THREE.ImageUtils.loadTexture( "../../lensflare/examples/images/lensflare2.png" );
-		var texture3	= THREE.ImageUtils.loadTexture( "../../lensflare/examples/images/lensflare3.png" );
+		var baseUrl	= tQuery.createLensFlare.baseUrl;
+		var texture0	= THREE.ImageUtils.loadTexture( baseUrl+'images/lensflare0.png' );
+		var texture2	= THREE.ImageUtils.loadTexture( baseUrl+'images/lensflare2.png' );
+		var texture3	= THREE.ImageUtils.loadTexture( baseUrl+'images/lensflare3.png' );
 
 		opts.flareParams.push([ texture0, 700, 0.0, THREE.AdditiveBlending, color ]);
-
 		opts.flareParams.push([ texture2, 512, 0.0, THREE.AdditiveBlending ]);
-
 		opts.flareParams.push([ texture3,  60, 0.6, THREE.AdditiveBlending ]);
 		opts.flareParams.push([ texture3,  70, 0.7, THREE.AdditiveBlending ]);
 		opts.flareParams.push([ texture3, 120, 0.9, THREE.AdditiveBlending ]);
 		opts.flareParams.push([ texture3,  70, 1.0, THREE.AdditiveBlending ]);
 		return opts;
 	}
-})
+});
+
+tQuery.createLensFlare.baseUrl	= "../../../plugins/lensflare/";
+

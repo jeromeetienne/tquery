@@ -64,11 +64,11 @@ tQuery.inherit(tQuery.MeshBasicMaterial, tQuery.Material);
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
-	color		: tQuery.convert.toThreeColor,
-	ambient		: tQuery.convert.toThreeColor,
-	map		: tQuery.convert.toTexture,
-	envMap		: tQuery.convert.toTexture,
-	wireframe	: tQuery.convert.toBoolean,
+	color			: tQuery.convert.toThreeColor,
+	ambient			: tQuery.convert.toThreeColor,
+	map			: tQuery.convert.toTexture,
+	envMap			: tQuery.convert.toTexture,
+	wireframe		: tQuery.convert.toBoolean,
 	wireframeLinewidth	: tQuery.convert.toInteger,
 	wireframeLinecap	: tQuery.convert.toString
 });

@@ -3,10 +3,21 @@
 <script src="../tquery.fireballmaterial.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.removeCameraControls();
+
 	var object3d	= tQuery.createSphere().addTo(world);
 	// var object3d	= tQuery.createCube().addTo(world);
 	// var object3d	= tQuery.createPlane().addTo(world);
-	object3d.useFireballMaterial({
+	object3d.setFireballMaterial({
 		scale	: 2
 	});
+	
+	world.loop().hook(function(delta, now){
+		var angle	= now * Math.PI * 2;
+		object3d.get(0).rotation.x	= angle;
+		object3d.get(0).rotation.y	= angle;
+	});
+	
+	
 </script></body>

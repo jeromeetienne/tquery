@@ -9,15 +9,31 @@
 			'tquery.videos',
 			'tquery.text', 
 			'tquery.text.allfonts',
-			'tquery.domevent'
+			'tquery.domevent',
+			'tquery.tweenjs',
+			'tquery.lightsaber',
+			'tquery.lensflare',
+			'tquery.datguituner',
+			'tquery.csg'
 		], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
+
+		//world.removeCameraControls();
+		//tQuery.createLensFlare().addTo(world).position(0, 1, -3)
+
+		// create cube for csg
+		var cube	= tQuery.createCube().geometry().translateX(0.6).back();
+		var sphere	= tQuery.createSphere().geometry().translateX(1).back();	
+		world.add(cube.subtract(sphere).id('origCube').geometry().center().back());
 
 		// setup light
 		tQuery.createDirectionalLight().addTo(world).position(1,1,1);
 		tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
 		tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 		var planet	= tQuery.createPlanet().addTo(world);
+		
+		
+		tQuery.DatguiTuner('light')
 		
 		// add a minecraft character
 		// var minecraft	= tQuery.createMinecraftChar().addTo(world);
@@ -55,10 +71,10 @@
 		// 	planet.scale( curScale + (dstScale-curScale)*0.1 );
 		// });
 		
-		// var tMaterial	= new THREE.MeshBasicMaterial({
-		// 	envMap	: tQuery.createCubeTexture('skybox')
-		// });
-		// text.material(tMaterial)
+		var tMaterial	= new THREE.MeshBasicMaterial({
+			envMap	: tQuery.createCubeTexture('skybox')
+		});
+		text.material(tMaterial)
 		// var tMaterial	= new THREE.MeshBasicMaterial({
 		// 	map	: tQuery.createVideoTexture('../../videos/examples/sintel.ogv'),
 		// 	//map	: tQuery.createWebcamTexture()

@@ -4,7 +4,7 @@
  * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
  * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
 */
-tQuery.Object3D.register('useFireballMaterial', function(opts){
+tQuery.Object3D.register('setFireballMaterial', function(opts){
 	opts	= tQuery.extend(opts, {
 		scale	: 1,
 		speed	: 0.3, 
@@ -18,8 +18,8 @@ tQuery.Object3D.register('useFireballMaterial', function(opts){
 
 		var material	= new THREE.ShaderMaterial({
 			uniforms	: uniforms,
-			vertexShader	: tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText,
-			fragmentShader	: tQuery.Object3D.prototype.useFireballMaterial._fragmentShaderText
+			vertexShader	: tQuery.Object3D.prototype.setFireballMaterial._vertexShaderText,
+			fragmentShader	: tQuery.Object3D.prototype.setFireballMaterial._fragmentShaderText
 		});
 
 		object3d.material	= material;
@@ -32,7 +32,7 @@ tQuery.Object3D.register('useFireballMaterial', function(opts){
 });
 
 // converted by document.getElementById( 'vertexShader' ).textContent.split('\n').map(function(line){ return "\'"+line+"\',"; }).join('\n');
-tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText = [
+tQuery.Object3D.prototype.setFireballMaterial._vertexShaderText = [
 '		uniform float time;',
 '		uniform float scale;',
 '',
@@ -55,7 +55,7 @@ tQuery.Object3D.prototype.useFireballMaterial._vertexShaderText = [
 ].join('\n');
 
 // converted by document.getElementById( 'fragmentShader' ).textContent.split('\n').map(function(line){ return "\""+line+"\","; }).join('\n');
-tQuery.Object3D.prototype.useFireballMaterial._fragmentShaderText = [
+tQuery.Object3D.prototype.setFireballMaterial._fragmentShaderText = [
 "",
 "",
 "		//",
