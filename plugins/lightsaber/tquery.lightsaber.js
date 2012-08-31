@@ -39,6 +39,7 @@ tQuery.register('LightSaber', function(opts){
 		blending	: THREE.AdditiveBlending,
 		color		: 0xffaacc,
 		depthWrite	: false,
+		side		: THREE.DoubleSide,
 		transparent	: true
 	})
 	
@@ -46,7 +47,6 @@ tQuery.register('LightSaber', function(opts){
 	for(var i = 0; i < nPlanes; i++){
 		tQuery.createPlane().addTo(this._objLaser)
 			.material(material)
-			.doubleSided(true)
 			.scale(300, 3, 3)
 			.rotateX(i*Math.PI/nPlanes)
 	}

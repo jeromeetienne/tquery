@@ -59,7 +59,6 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 	bumpMap		: tQuery.convert.toTexture,
 	bumpScale	: tQuery.convert.toNumber,
 
-
 	metal		: tQuery.convert.toBoolean,
 	perPixel	: tQuery.convert.toBoolean
 });
