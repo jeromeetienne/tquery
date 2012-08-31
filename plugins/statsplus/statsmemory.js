@@ -2,10 +2,10 @@
  * @author mrdoob / http://mrdoob.com/
  * @author jetienne / http://jetienne.com/
  */
-var StatsMemory = function () {
+var StatsMemory = function (){
 
-	var startTime = Date.now(), prevTime = startTime;
-	var ms = 0, msMin = 1000, msMax = 0;
+	var msMin	= 100;
+	var msMax	= 0;
 
 	var container	= document.createElement( 'div' );
 	container.id	= 'stats';
@@ -19,7 +19,7 @@ var StatsMemory = function () {
 	var msText	= document.createElement( 'div' );
 	msText.id	= 'msText';
 	msText.style.cssText = 'color:#0f0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:bold;line-height:15px';
-	msText.innerHTML= 'MS';
+	msText.innerHTML= 'Memory';
 	msDiv.appendChild( msText );
 
 	var msGraph	= document.createElement( 'div' );
@@ -42,35 +42,34 @@ var StatsMemory = function () {
 
 	}
 
+	var lastTime	= Date.now();
 	return {
-
 		domElement: container,
-
-		begin: function () {
-
-			startTime = Date.now();
-
-		},
-
-		end: function () {
-
-			var time = Date.now();
-
-			ms	= time - startTime;
-			msMin	= Math.min( msMin, ms );
-			msMax	= Math.max( msMax, ms );
-
-			msText.textContent = ms + ' MS (' + msMin + '-' + msMax + ')';
-			updateGraph( msGraph, Math.min( 30, 30 - ( ms / 200 ) * 30 ) );
-
-			return time;
-
-		},
 
 		update: function () {
 
-			startTime = this.end();
+			// refresh only 30time per second
+			if( Date.now() - lastTime < 1000/30 )	return;
+			lastTime	= Date.now()
 			
+			var ms	= window.performance.memory.usedJSHeapSize
+
+			msMin	= Math.min( msMin, ms );
+			msMax	= Math.max( msMax, ms );
+			msText.textContent = "Mem: " + bytesToSize(ms);
+			
+			var normValue	= ms / (30*1024*1024);
+			updateGraph( msGraph, Math.min( 30, 30 - normValue * 30 ) );
+			
+			function bytesToSize(bytes) {
+				var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+				if (bytes == 0) return 'n/a';
+				
+				var precision	= 100;
+				bytes		*= precision;
+				var i 		= Math.floor(Math.log(bytes) / Math.log(1024));
+				return Math.round(bytes / Math.pow(1024, i))/precision + ' ' + sizes[i];
+			};
 		}
 
 	}
