@@ -24,7 +24,9 @@ requirejs.config({
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_bold.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
-			"tquery.videos": "plugins/videos/tquery.createvideotexture"
+			"tquery.videos": "plugins/videos/tquery.createvideotexture",
+			"webgl-inspector": "http://benvanik.github.com/WebGL-Inspector/core/embed.js",
+			"domReady": "https://raw.github.com/requirejs/domReady/latest/domReady.js"
 		}
 	},
 	"shim": {

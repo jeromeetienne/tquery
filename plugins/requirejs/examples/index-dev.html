@@ -3,20 +3,6 @@
 <script src="../../../plugins/requirejs/vendor/require.js"></script>
 <script src="../../../plugins/requirejs/build/all.confrequire.js"></script>
 <body><script>
-	requirejs.config({
-		map	: {
-			"*"	: {
-				'webgl-inspector'	: 'http://benvanik.github.com/WebGL-Inspector/core/embed.js',
-				'domReady'		: 'https://raw.github.com/requirejs/domReady/latest/domReady.js',
-			}
-		},
-		shim	: {
-			'http://benvanik.github.com/WebGL-Inspector/core/embed.js'	: [
-				//'domReady!',
-			]
-		}
-	});
-
 	require([
 			'tquery.createplanet','tquery.keyboard',
 			'tquery.minecraft', 'tquery.skymap',
@@ -29,8 +15,7 @@
 			'tquery.lensflare',
 			'tquery.datguituner',
 			'tquery.csg',
-			'webgl-inspector',
-			'domReady!'
+			'webgl-inspector'//, 'domReady!'
 		], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
 
