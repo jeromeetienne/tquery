@@ -147,6 +147,20 @@ tQuery.Object3D.prototype.removeFrom	= function(target)
 	return this;
 }
 
+/**
+ * remove an element from the parent to which it is attached
+ * 
+ * @returns {tQuery.Object3D} chained API
+*/
+tQuery.Object3D.prototype.detach	= function()
+{
+	this.each(function(object3D){
+		if( !object3D.parent )	return;
+		object3D.parent.remove(object3D)
+	}.bind(this));
+	return this;
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//
 //////////////////////////////////////////////////////////////////////////////////
@@ -189,6 +203,7 @@ tQuery.Object3D.prototype.remove	= function(tqObject3d)
 	}.bind(this));
 	return this;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Handle dom attribute						//
