@@ -16,11 +16,6 @@
 	controls.verticalMax	= 2.2;
 	world.setCameraControls(controls)
 
-
-	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position( 1,1, 1).color(0xFF4444);
-	tQuery.createDirectionalLight().addTo(world).position(-1,-1,1).color(0x4444FF);
-
 	var maze	= new tQuery.SimpleMaze({
 		map	: [
 			'*********',

@@ -10,34 +10,72 @@
 <script src="../tquery.animation.js"></script>
 <script src="../tquery.animations.js"></script>
 
+<script src="../tquery.spritesheet.js"></script>
+
 <script src="../tquery.minecraftcharanimations.js"></script>
 <script src="../tquery.minecraftcharheadanimations.js"></script>
 
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
 
-
-<script src="../../../../vendor/threex/THREEx.FullScreen.js"></script>
+<script src="../../simplemaze/tquery.simplemaze.js"></script>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var character	= tQuery.createMinecraftChar().addTo(world);
 
 	// create ground
-	tQuery.createCheckerboard({
-		segmentsW	: 40,
-		segmentsH	: 40
-	}).addTo(world).scaleBy(40);
-
 	if( true ){
+		tQuery.createCheckerboard({
+			segmentsW	: 40,
+			segmentsH	: 40
+		}).addTo(world).scaleBy(40);		
+	}
+
+	if( false ){
 		// init bodyAnims
 		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
-		bodyAnims.start('walk');
+		bodyAnims.start('run');
 		// init headAnims
 		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
 		headAnims.start('still');		
 	}
 	
+	// initiate a spritesheet
+	if( false ){
+		var items	= new tQuery.Spritesheet({
+			url	: 'images/items/items.png',
+			imgW	: 256,
+			imgH	: 256,
+			spriteW	: 16,
+			spriteH	: 16
+		});
+		// once the spritesheet is loaded, 
+		items.bind('load', function(){
+			var item	= items.createMesh(2, 4).scaleBy(1/2);
+			item.position(0,-10/35,8/35)
+				.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+			item.addTo(character.parts.armR);
+		});
+	}
+	
+	if( false ){
+		var maze	= tQuery.createSimpleMaze({
+			squareW	: 2,
+			squareH	: 2,
+			squareD	: 2,
+			map	: [
+				'*********',
+				'*   *   *',
+				'*  ** ***',
+				'*       *',
+				'***     *',
+				'*       *',
+				'*********'
+			],
+		}).addTo(world);		
+	}
+
 	// how to code a tracking camera
 	// - a tracked object
 	// - a target with a position relative to tracked object
@@ -50,23 +88,44 @@
 	// - go for the simple algo
 
 	// to enable a tracking camera
-if( true ){
+if( false ){
+	
+	var tCamera		= world.tCamera();
+	// var model	= character.object3D('root');
+	// var controls	= tQuery.createTrackingControls(model, tCamera);
+	// world.setCameraControls(controls);
+	
+	// controls.target()
+	// controls.camera()
+	
+	
 	var trackedObject	= character.object3D('root');
+	
+	
+	tCamera.position.set(0,0,0)
+	
 	var deltaTarget		= tQuery.createSphere().addTo(trackedObject)
 					.geometry().scaleBy(1/4).back()
 					.position(0, 0, +3);
 	var deltaCamera		= tQuery.createSphere().addTo(trackedObject)
 					.geometry().scaleBy(1/4).back()
-					//.position(0, 2, -3)
 					.position(0, 2, -3)
+					//.position(0, 1, 0)
+					//.position(0, 0.7, -0.07)
+	
+	// this will be done when the cameraControl is set in world
 	world.removeCameraControls()
 
-	world.remove(world.tCamera());
-	deltaCamera.add(world.tCamera());
+	// this has to be done
+	tQuery(tCamera).detach().addTo(deltaCamera);
 
-	world.tCamera().position.set(0,0,0)
-	var vector	= deltaTarget.get(0).position.clone().subSelf(deltaCamera.get(0).position);
-	world.tCamera().lookAt(vector)		
+	
+	// in .update()
+	world.loop().hook(function(delta, now){
+		var delta	= deltaTarget.get(0).position.clone()
+		delta.subSelf(deltaCamera.get(0).position);
+		tCamera.lookAt(delta);
+	});
 }
 	
 	
@@ -84,14 +143,14 @@ if(true){
 		var keyboard	= tQuery.keyboard();
 		var model	= character.object3D('root').get(0);
 		var action	= {
-			left	: keyboard.pressed("left")	|| keyboard.pressed("a"),
+			left	: keyboard.pressed("left")	|| keyboard.pressed("a")	|| keyboard.pressed("a"),
 			right	: keyboard.pressed("right")	|| keyboard.pressed("d"),
-			up	: keyboard.pressed("up")	|| keyboard.pressed("w"),
+			up	: keyboard.pressed("up")	|| keyboard.pressed("w")	|| keyboard.pressed("z"),
 			down	: keyboard.pressed("down")	|| keyboard.pressed("s"),
 		}
 		// keyboard handling
 		
-		if( false ){
+		if( true ){
 			// lateral => rotation Y
 			if( action.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;
 			if( action.right )	model.rotation.y -= 0.3 * delta * Math.PI * 2;			
@@ -120,6 +179,10 @@ if(true){
 	});	
 }
 
+
+
+
+if( false ){
 	// some compatibility layer for firefox/webkit
 	navigator.pointer		= navigator.pointer || navigator.webkitPointer;
 	navigator.pointer.islocked	= navigator.pointer.islocked || function(){ return navigator.pointer.isLocked; };
@@ -129,6 +192,7 @@ if(true){
 
 		var domElement	= world.tRenderer().domElement;
 		domElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+		
 
 		document.addEventListener('webkitfullscreenchange', function(){
 			navigator.pointer.lock(document.body, function(){
@@ -143,18 +207,27 @@ if(true){
 
 					var model	= character.object3D('root').get(0);
 
-					var speed	= 1 / 1024;	// nPixPerPI;
+					var speed	= 1 / 2028;	// nPixPerPI;
 					var deltaAngle	= movementX * speed * Math.PI * 2;
 					model.rotation.y-= deltaAngle;
 					model.rotation.y%= 2*Math.PI;
+					
+					// change deltaTarget based on mouse movementY
+					deltaTarget.get(0).position.y	-= movementY * 1/256;
+					if( deltaTarget.get(0).position.y < 0 ){
+						deltaTarget.get(0).position.y	= 0;
+					}
+					if( deltaTarget.get(0).position.y > 3 ){
+						deltaTarget.get(0).position.y	= 3;
+					}
 
 				}, false);
 			},function(){
 				console.log("navigator.pointer.lock() failled")
 			});
 		}, false);
-
 	});
+}
 
 
 </script></body>

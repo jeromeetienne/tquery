@@ -14,4 +14,4 @@ tQuery.register('createPlanet', function(opts){
 	return object;
 });
 
-tQuery.createPlanet.baseUrl	= "../../plugins/planets/";
+tQuery.createPlanet.baseUrl	= "../../../plugins/planets/";

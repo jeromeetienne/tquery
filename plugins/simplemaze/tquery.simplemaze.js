@@ -1,3 +1,7 @@
+tQuery.register('createSimpleMaze', function(opts){
+	return new tQuery.SimpleMaze(opts);
+});
+
 tQuery.register('SimpleMaze', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
@@ -16,43 +20,40 @@ tQuery.register('SimpleMaze', function(opts){
 	// - opts.map especially
 	
 	this._container	= tQuery.createObject3D();
-	
+	var textureUrl	= tQuery.SimpleMaze.baseUrl+"../assets/images/water.jpg";
 	// GROUND
 	if( opts.enableGround ){
-		var material	= new THREE.MeshLambertMaterial({
-			ambient	: 0x444444,
+		var material	= new THREE.MeshBasicMaterial({
 			color	: 0xFF5588,
-			map	: THREE.ImageUtils.loadTexture( "../../assets/images/water.jpg" )
+			map	: THREE.ImageUtils.loadTexture( textureUrl )
 		});
 		this._ground	= tQuery.createPlane(material)
 			.geometry()
 				.rotateX(-Math.PI/2)
-				.scaleBy(mapW, 1, mapD)
+				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
 				.back()
 			.addTo(this._container);		
 	}
 
 	// ceiling
 	if( opts.enableCeiling ){
-		var material	= new THREE.MeshLambertMaterial({
-			ambient	: 0x444444,
+		var material	= new THREE.MeshBasicMaterial({
 			color	: 0x8855FF,
-			map	: THREE.ImageUtils.loadTexture( "../../assets/images/water.jpg" )
+			map	: THREE.ImageUtils.loadTexture( textureUrl )
 		});
 		this._ceiling	= tQuery.createPlane(material)
 			.geometry()
-				.rotateX(-Math.PI)
-				.scaleBy(mapW, 1, mapD)
+				.rotateX(Math.PI/2)
+				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
 				.translateY(opts.squareH)
 				.back()
 			.addTo(this._container)
 	}
 	
-	// CUBES	
-	var material	= new THREE.MeshLambertMaterial({
-		ambient	: 0x444444,
+	// CUBES
+	var material	= new THREE.MeshBasicMaterial({
 		color	: 0x88FF55,
-		map	: THREE.ImageUtils.loadTexture( "../../assets/images/water.jpg" )
+		map	: THREE.ImageUtils.loadTexture( textureUrl )
 	});
 	// TODO one should merge all those cubes
 	for(var z = 0; z < mapD; z++){
@@ -73,6 +74,29 @@ tQuery.register('SimpleMaze', function(opts){
 	}
 });
 
+tQuery.SimpleMaze.baseUrl	= "../../../plugins/simplemaze/";
+
 tQuery.SimpleMaze.prototype.container	= function(){
 	return this._container;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Emulate tQuery.Object3D.addTo
+*/
+tQuery.SimpleMaze.prototype.addTo	= function(object3D){
+	this.container().addTo(object3D);
+	return this;
+}
+
+/**
+ * Emulate tQuery.Object3D.removeFrom
+*/
+tQuery.SimpleMaze.prototype.removeFrom	= function(object3D){
+	this.container().removeFrom(object3D);
+	return this;
+};
