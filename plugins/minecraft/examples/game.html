@@ -1,0 +1,160 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src='../../checkerboard/tquery.checkerboard.js'></script>
+
+<script src="../tquery.midikeytween.js"></script>
+
+<script src="../tquery.minecraftchar.js"></script>
+
+<script src="../tquery.animation.js"></script>
+<script src="../tquery.animations.js"></script>
+
+<script src="../tquery.minecraftcharanimations.js"></script>
+<script src="../tquery.minecraftcharheadanimations.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+
+<script src="../../../../vendor/threex/THREEx.FullScreen.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var character	= tQuery.createMinecraftChar().addTo(world);
+
+	// create ground
+	tQuery.createCheckerboard({
+		segmentsW	: 40,
+		segmentsH	: 40
+	}).addTo(world).scaleBy(40);
+
+	if( true ){
+		// init bodyAnims
+		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+		bodyAnims.start('walk');
+		// init headAnims
+		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
+		headAnims.start('still');		
+	}
+	
+	// how to code a tracking camera
+	// - a tracked object
+	// - a target with a position relative to tracked object
+	// - a camera position relative to tracker object
+	
+	// how to code keyboard controls
+	// - related to camera position because it is was the user sees, 
+	//   so what the user intend
+	// - good algo is currently unknown
+	// - go for the simple algo
+
+	// to enable a tracking camera
+if( true ){
+	var trackedObject	= character.object3D('root');
+	var deltaTarget		= tQuery.createSphere().addTo(trackedObject)
+					.geometry().scaleBy(1/4).back()
+					.position(0, 0, +3);
+	var deltaCamera		= tQuery.createSphere().addTo(trackedObject)
+					.geometry().scaleBy(1/4).back()
+					//.position(0, 2, -3)
+					.position(0, 2, -3)
+	world.removeCameraControls()
+
+	world.remove(world.tCamera());
+	deltaCamera.add(world.tCamera());
+
+	world.tCamera().position.set(0,0,0)
+	var vector	= deltaTarget.get(0).position.clone().subSelf(deltaCamera.get(0).position);
+	world.tCamera().lookAt(vector)		
+}
+	
+	
+	//////////////////////////////////////////////////////////////////////////
+	// user controls on keyboard						//
+	//////////////////////////////////////////////////////////////////////////
+if(true){
+	var midiKey	= new tQuery.MidiKeyTween();
+	// just debug
+	// world.loop().hook(function(delta, now){
+	// 	console.log("state", midiKey.state(), 'value', midiKey.value())
+	// });
+	// user control
+	world.loop().hook(function(delta, now){
+		var keyboard	= tQuery.keyboard();
+		var model	= character.object3D('root').get(0);
+		var action	= {
+			left	: keyboard.pressed("left")	|| keyboard.pressed("a"),
+			right	: keyboard.pressed("right")	|| keyboard.pressed("d"),
+			up	: keyboard.pressed("up")	|| keyboard.pressed("w"),
+			down	: keyboard.pressed("down")	|| keyboard.pressed("s"),
+		}
+		// keyboard handling
+		
+		if( false ){
+			// lateral => rotation Y
+			if( action.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;
+			if( action.right )	model.rotation.y -= 0.3 * delta * Math.PI * 2;			
+		}else{
+			// lateral => stafe
+			var distance	= 0;
+			if( action.left )	distance	= +2 * delta;
+			if( action.right )	distance	= -2 * delta;
+			if( distance ){
+				var speed	= new THREE.Vector3(distance, 0, 0);
+				var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
+				matrix.multiplyVector3(speed);
+				model.position.addSelf(speed);
+			}			
+		}
+
+		var distance	= 0;
+		if( action.up )		distance	= +2 * delta;
+		if( action.down )	distance	= -2 * delta;
+		if( distance ){
+			var speed	= new THREE.Vector3(0, 0, distance);
+			var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
+			matrix.multiplyVector3(speed);
+			model.position.addSelf(speed);
+		}
+	});	
+}
+
+	// some compatibility layer for firefox/webkit
+	navigator.pointer		= navigator.pointer || navigator.webkitPointer;
+	navigator.pointer.islocked	= navigator.pointer.islocked || function(){ return navigator.pointer.isLocked; };
+
+	document.addEventListener('keypress', function(event){
+		if( event.charCode !== 'v'.charCodeAt(0) )	return;
+
+		var domElement	= world.tRenderer().domElement;
+		domElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+
+		document.addEventListener('webkitfullscreenchange', function(){
+			navigator.pointer.lock(document.body, function(){
+				console.log("navigator.pointer.lock() succeed", navigator.pointer.islocked())
+				document.addEventListener('mousemove', function(domEvent){
+					var movementX	= domEvent.movementX !== undefined ? domEvent.movementX : domEvent.webkitMovementX;
+					var movementY	= domEvent.movementY !== undefined ? domEvent.movementY : domEvent.webkitMovementY;
+					console.assert( movementX !== undefined );
+					console.assert( movementY !== undefined );
+
+					//console.log("_onMouseMove", movementX, movementY);console.dir(domEvent);
+
+					var model	= character.object3D('root').get(0);
+
+					var speed	= 1 / 1024;	// nPixPerPI;
+					var deltaAngle	= movementX * speed * Math.PI * 2;
+					model.rotation.y-= deltaAngle;
+					model.rotation.y%= 2*Math.PI;
+
+				}, false);
+			},function(){
+				console.log("navigator.pointer.lock() failled")
+			});
+		}, false);
+
+	});
+
+
+</script></body>
