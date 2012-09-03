@@ -52,7 +52,7 @@
 
 			.CodeMirror {
 				font-family: inconsolata;
-				background-color: rgba(255,255,255,0.75);
+				background-color: rgba(255,255,255,0.5);
 			}
 
 			.CodeMirror-scroll {
@@ -292,7 +292,7 @@
 
 			document.addEventListener( 'keydown', function ( event ) {
 
-				if ( event.keyCode === 83  && event.ctrlKey === true ) {
+				if ( event.keyCode === 'S'.charCodeAt(0)  && event.ctrlKey === true ) {
 
 					event.preventDefault();
 					save();
