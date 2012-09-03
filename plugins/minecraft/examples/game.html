@@ -60,6 +60,9 @@
 	}
 	
 	if( false ){
+		// TODO  handle collision
+		// - walls vs aabb
+		// - with computation of rebound
 		var maze	= tQuery.createSimpleMaze({
 			squareW	: 2,
 			squareH	: 2,
@@ -89,7 +92,8 @@
 
 	// to enable a tracking camera
 if( false ){
-	
+// trackingobjectcontrols
+// used to controls the camera to track the player	
 	var tCamera		= world.tCamera();
 	// var model	= character.object3D('root');
 	// var controls	= tQuery.createTrackingControls(model, tCamera);
@@ -133,6 +137,8 @@ if( false ){
 	// user controls on keyboard						//
 	//////////////////////////////////////////////////////////////////////////
 if(true){
+// playermovecontrols
+// used to move the player based on keyboard input
 	var midiKey	= new tQuery.MidiKeyTween();
 	// just debug
 	// world.loop().hook(function(delta, now){

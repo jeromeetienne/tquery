@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html manifest="editor.appcache">
+	<head>
+		<title>code editor</title>
+		<link rel="stylesheet" href="js/codemirror/codemirror.css">
+		<script src="js/codemirror/codemirror.js"></script>
+		<script src="js/codemirror/mode/xml.js"></script>
+		<script src="js/codemirror/mode/javascript.js"></script>
+		<script src="js/codemirror/mode/css.js"></script>
+		<script src="js/codemirror/mode/htmlmixed.js"></script>
+		<script src="js/rawinflate.js"></script>
+		<script src="js/rawdeflate.js"></script>
+		<style>
+			@font-face {
+				font-family: 'inconsolata';
+				src: url('files/inconsolata.woff') format('woff');
+				font-weight: normal;
+				font-style: normal;
+			}
+
+			body {
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			.button {
+				font-family: Arial;
+				font-size: 10px;
+				text-transform: uppercase;
+				text-decoration: none;
+
+				color: rgba(0,0,0,0.5);
+				border: 1px solid rgba(0,0,0,0.25);
+				background-color: rgba(0,0,0,0);
+
+				margin: 2px;
+				padding: 8px 10px;
+
+				cursor: pointer;
+			}
+
+			.button:hover {
+				color: rgba(255,255,255,0.75);
+				background-color: rgba(0,0,0,0.75);
+			}
+
+			input {
+				cursor: pointer;
+			}
+
+			/**/
+
+			.CodeMirror {
+				font-family: inconsolata;
+				background-color: rgba(255,255,255,0.75);
+			}
+
+			.CodeMirror-scroll {
+				height: 100%;
+			}
+
+			div.CodeMirror-selected {
+				background: rgba(0,0,0,0.1);
+			}
+			.CodeMirror-focused div.CodeMirror-selected {
+				background: rgba(0,0,255,0.1);
+			}
+
+		</style>
+	</head>
+	<body>
+		<script>
+
+			window.URL = window.URL || window.webkitURL;
+
+			// deflate
+
+			var decode = function ( string ) {
+
+				return RawDeflate.inflate( window.atob( string ) );
+
+			};
+
+			var encode = function ( string ) {
+
+				return window.btoa( RawDeflate.deflate( string ) );
+
+			};
+
+			//
+
+			var documents = [ {
+				filename: 'Untitled',
+				filetype: 'text/plain',
+				autoupdate: true,
+				code: decode('XY5NDoIwEIXXeIrKCha2B7BwAxNNSFz3Z6IlheJ00HB7C1UXJrN5b9438+TeBkPLBOxOg28lOfLQntzoBuUZXWbAhZ3VDaTIq52MBt1ELKJpSs5FHj07bwU91vxBz6P1wPtYtlLkeOJ0sEsrv7J4KmSvgN4WzecPNwiK4LqaVc11cB5w8slKKpJCqupjBoPuwdA/2QWcY8oqa7tQbccT8KsgxVbhDQ==')
+//					bVRdb5swFH2mv+IuT0xjhlaqViUk0pZl60u1qq007dHBN8ET2Mw2SdMq/322wSi0QQjMPcf33C+Tf/j+a/n0534FpamrxUXevaK8RMrsO8prNBSKkiqNZj5pzebzzcQD2hwqdKtoLdkBXt0qkjtUm0rup1ByxlDMnPXo6Gng52nvO3f7OleF4o0BrYr5pDSm0dM03XJTtmtSyDqtFZNynZpSIZK/OlV0n9ZUG1TpuuUV65GaC4tOFlbK+ztxvbhwceyogoLWqGgCukCBCSgUDBWqWcC3KG3G6pBATa0Ap5VdoS5n3gMX3MQfPZkK7hjuy31uWlEYLgV0FFsOX49ODuYgcA9Ptw+rFblHpRu05B0uPRrDl+sE9lwwuSdcCFS/OTMlpCPbLfJtaRK4tHeWZdBF0QuQRmru5MmL1brOsi6oyGc5Un90lhB0FLIdUZbtGn/2QAxXWZYMj6AaajPad2fL9I1qXtz1aAyvUMhKqilkz5m/XJ4KN8pGPQWjWoQjhGBcmd85jM90ZNjh0yOUsdj3aLCHro7TomJH9UMP9V0cqMSO9yN/wfh9I5IzfRikmCzaGoUhbpgJbRrrb1naoYyH2SJM1qsKHStsO45nZpilMDYK/7WozVdvt4wfrmBx4I0qRpQ0nkOe4dMcMpJdzs6Ahx68elMi0i3icCD6gT2N8+Q85Wl3Zu0Zdv+J/w==' )
+			} ];
+
+			if ( localStorage.codeeditor !== undefined ) {
+
+				documents = JSON.parse( localStorage.codeeditor );
+
+			}
+
+			if ( window.location.hash ) {
+
+				var hash = window.location.hash.substr( 1 );
+				var version = hash.substr( 0, 2 );
+
+				if ( version == 'A/' ) {
+
+					alert( 'That shared link format is no longer supported.' );
+
+				} else if ( version == 'B/' ) {
+
+					documents[ 0 ].code = decode( hash.substr( 2 ) );
+
+				}
+
+			}
+
+			// preview
+
+			var preview = document.createElement( 'div' );
+			preview.style.position = 'absolute';
+			preview.style.left = '0px';
+			preview.style.top = '0px';
+			preview.style.width = window.innerWidth + 'px';
+			preview.style.height = window.innerHeight + 'px';
+			document.body.appendChild( preview );
+
+			// editor
+
+			var interval;
+
+			var code = CodeMirror( document.body, {
+
+				mode: "text/html",
+				lineNumbers: true,
+				matchBrackets: true,
+				indentWithTabs: true,
+				tabSize: 4,
+				indentUnit: 4,
+
+				onChange: function () {
+
+					buttonSave.style.display = '';
+					buttonDownload.style.display = 'none';
+
+					if ( documents[ 0 ].autoupdate === false ) return;
+
+					clearTimeout( interval );
+					interval = setTimeout( update, 300 );
+
+				}
+
+			} );
+
+			var codeElement = code.getWrapperElement();
+			codeElement.style.position = 'absolute';
+			codeElement.style.width = window.innerWidth + 'px';
+			codeElement.style.height = window.innerHeight + 'px';
+			document.body.appendChild( codeElement );
+
+			// toolbar
+
+			var pad = function ( number, length ) {
+
+				var string = number.toString();
+
+				while ( string.length < length ) string = '0' + string;
+				return string;
+
+			}
+
+			var toolbar = document.createElement( 'div' );
+			toolbar.style.position = 'absolute';
+			toolbar.style.right = '15px';
+			toolbar.style.top = '15px';
+			document.body.appendChild( toolbar );
+
+			var buttonUpdate = document.createElement( 'button' );
+			buttonUpdate.className = 'button';
+
+			var checkbox = document.createElement( 'input' );
+			checkbox.type = 'checkbox';
+
+			if ( documents[ 0 ].autoupdate === true ) checkbox.checked = true;
+
+			checkbox.style.margin = '-4px 4px -4px 0px';
+			checkbox.addEventListener( 'click', function ( event ) {
+
+				event.stopPropagation();
+
+				documents[ 0 ].autoupdate = documents[ 0 ].autoupdate === false;
+
+				localStorage.codeeditor = JSON.stringify( documents );
+
+			}, false );
+			buttonUpdate.appendChild( checkbox );
+			buttonUpdate.appendChild( document.createTextNode( 'update' ) );
+
+			buttonUpdate.addEventListener( 'click', function ( event ) {
+
+				update();
+
+			}, false );
+			toolbar.appendChild( buttonUpdate );
+
+			var buttonIO = document.createElement( 'span' );
+			toolbar.appendChild( buttonIO );
+
+			var buttonSave = document.createElement( 'button' );
+			buttonSave.className = 'button';
+			buttonSave.textContent = 'save';
+			buttonSave.addEventListener( 'click', function ( event ) {
+
+				save();
+
+			}, false );
+			buttonIO.appendChild( buttonSave );
+
+			var buttonDownload = document.createElement( 'a' );
+			buttonDownload.className = 'button';
+			buttonDownload.style.display = 'none';
+			buttonDownload.download = 'index.html';
+			buttonDownload.textContent = 'download';
+			buttonIO.appendChild( buttonDownload );
+
+			var buttonShare = document.createElement( 'button' );
+			buttonShare.className = 'button';
+			buttonShare.textContent = 'share';
+			buttonShare.addEventListener( 'click', function ( event ) {
+
+				window.location.replace( '#B/' + encode( code.getValue() ) );
+
+			}, false );
+			buttonIO.appendChild( buttonShare );
+
+			var buttonHide = document.createElement( 'button' );
+			buttonHide.className = 'button';
+			buttonHide.textContent = 'hide code';
+			buttonHide.addEventListener( 'click', function ( event ) {
+
+				if ( codeElement.style.display === '' ) {
+
+					this.textContent = 'show code';
+
+					codeElement.style.display = 'none';
+					buttonUpdate.style.display = 'none';
+					buttonIO.style.display = 'none';
+					buttonShare.display = 'none';
+
+				} else {
+
+					this.textContent = 'hide code';
+
+					codeElement.style.display = '';
+					buttonUpdate.style.display = '';
+					buttonIO.style.display = '';
+					buttonShare.display = '';
+
+				}
+
+			}, false );
+			toolbar.appendChild( buttonHide );
+
+			// events
+
+			document.addEventListener( 'drop', function ( event ) {
+
+				event.preventDefault();
+				event.stopPropagation();
+
+				var file = event.dataTransfer.files[ 0 ];
+
+				documents[ 0 ].filename = file.name;
+				documents[ 0 ].filetype = file.type;
+
+				var reader = new FileReader();
+
+				reader.onload = function ( event ) {
+
+					code.setValue( event.target.result );
+
+				};
+
+				reader.readAsText( file );
+
+			}, false );
+
+			document.addEventListener( 'keydown', function ( event ) {
+
+				if ( event.keyCode === 83  && event.ctrlKey === true ) {
+
+					event.preventDefault();
+					save();
+
+				}
+
+				if ( event.keyCode === 13 && event.ctrlKey === true ) {
+
+					update();
+
+				}
+
+			}, false );
+
+			window.addEventListener( 'resize', function ( event ) {
+
+				codeElement.style.width = window.innerWidth + 'px';
+				codeElement.style.height = window.innerHeight + 'px';
+
+				preview.style.width = window.innerWidth + 'px';
+				preview.style.height = window.innerHeight + 'px';
+
+			} );
+
+			// actions
+
+			var update = function () {
+
+				while ( preview.children.length > 0 ) {
+
+					preview.removeChild( preview.firstChild );
+
+				}
+
+				var iframe = document.createElement( 'iframe' );
+				iframe.style.width = '100%';
+				iframe.style.height = '100%';
+				iframe.style.border = '0';
+				preview.appendChild( iframe );
+
+				var content = iframe.contentDocument || iframe.contentWindow.document;
+
+				content.open();
+				content.write( code.getValue() );
+				content.close();
+
+			}
+
+			var save = function () {
+
+				documents[ 0 ].code = code.getValue();
+
+				localStorage.codeeditor = JSON.stringify( documents );
+
+				var blob = new Blob( [ code.getValue() ], { type: documents[ 0 ].filetype } );
+				var objectURL = URL.createObjectURL( blob );
+
+				buttonDownload.href = objectURL;
+
+				var date = new Date();
+				buttonDownload.download = documents[ 0 ].filename;
+
+				buttonSave.style.display = 'none';
+				buttonDownload.style.display = '';
+
+			}
+
+			code.setValue( documents[ 0 ].code );
+			update();
+
+		</script>
+	</body>
+</html>
