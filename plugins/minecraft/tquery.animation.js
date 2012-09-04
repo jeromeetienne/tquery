@@ -1,5 +1,5 @@
-tQuery.register('createAnimation', function(){
-	return new tQuery.Animation();
+tQuery.register('createAnimation', function(opts){
+	return new tQuery.Animation(opts);
 });
 
 
@@ -14,7 +14,10 @@ tQuery.register('createAnimation', function(){
  * @name tQuery.Animation
  * @class
 */
-tQuery.register('Animation', function(){
+tQuery.register('Animation', function(opts){
+	opts	= this._opts	= tQuery.extend(opts, {
+		world	: tQuery.world
+	})
 	this._keyframes		= new Array;
 	this._totalTime		= null;
 	this._onUpdate		= null;
@@ -175,7 +178,7 @@ tQuery.Animation.prototype.start	= function(){
 	// init the loop callback
 	var startDate	= Date.now()/1000;
 	var duration	= this.duration();
-	this._$loopCb	= world.loop().hook(function(){
+	this._$loopCb	= this._opts.world.loop().hook(function(){
 		var age		= Date.now()/1000 - startDate;
 		var position	= this._buildPosition(age)
 		this._onUpdate(position)

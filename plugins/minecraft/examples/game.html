@@ -1,5 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
+<script src="../../../build/tquery-bundle-require.js"></script>
 
 <script src='../../checkerboard/tquery.checkerboard.js'></script>
 
@@ -8,6 +8,8 @@
 <script src="../tquery.midikeytween.js"></script>
 
 <script src="../tquery.minecraftchar.js"></script>
+<script src="../tquery.minecraftchar.keyboard2.js"></script>
+<script src="../tquery.minecraftcharfpscontrols.js"></script>
 
 <script src="../tquery.animation.js"></script>
 <script src="../tquery.animations.js"></script>
@@ -17,25 +19,29 @@
 <script src="../tquery.minecraftcharanimations.js"></script>
 <script src="../tquery.minecraftcharheadanimations.js"></script>
 
-<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
-<script src="../../keyboard/tquery.keyboard.js"></script>
-
 <script src="../../simplemaze/tquery.simplemaze.js"></script>
 
 <script src='../../fog/tquery.world.createfog.js'></script>
 <script src='../../light/tquery.light.shadow.js'></script>
 
-<script src="../../skymap/tquery.cubetexture.js"></script>
-<script src="../../skymap/tquery.skymap.js"></script>
-
 <body><script>
+require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.lensflare'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	
+	// add post processing
+	world.addEffectComposer()
+		.sepia()
+		.film(0.5, 0.25, 648, false)
+		.vignette()
+		.finish();
+
 	world.tRenderer().shadowMapEnabled	= true;
 	world.tRenderer().shadowMapSoft		= true;
-		
+
 	tQuery.createSkymap('skybox').addTo(world);
+	
+	//tQuery.createLensFlare().addTo(world).position(0, 1, -3)
+
 
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	tQuery('mesh', character.object3D('root')).castShadow(true)
@@ -49,10 +55,10 @@
 		.position(-1, 2, 3)
 		.color(0xffffff).intensity(4)
 		.castShadow(true)
-		.shadowDarkness(0.8)
-		.shadowMap(512*2,512*2)
+		.shadowDarkness(0.4)
+		.shadowMap(512,512)
 		.shadowCamera(2, -2, 2, -2, 0.1, 10)
-		.shadowCameraVisible(true)
+		//.shadowCameraVisible(true)
 	// for lightDir1 to follow character
 	world.loop().hook(function(){
 		var model	= character.object3D('root');
@@ -71,12 +77,13 @@
 		}).addTo(world).scaleBy(40);		
 	}
 	if( true ){
-		tQuery.createGrassGround({
+		var ground	= tQuery.createGrassGround({
 			textureRepeatX	: 20,
 			textureRepeatY	: 20,
 		}).addTo(world)
 		.receiveShadow(true)
 		.scale(40);
+		ground.get(0).material.map.anisotropy = 4
 	}	
 	
 	if( true ){
@@ -99,10 +106,12 @@
 		});
 		// once the spritesheet is loaded, 
 		items.bind('load', function(){
-			var item	= items.createMesh(2, 4).scaleBy(1/2);
-			item.position(0,-10/35,8/35)
+			var item	= 
+			items.createMesh(2, 4)
+				.addTo(character.parts.armR)
+				.scaleBy(1/2)
+				.position(0,-10/35,8/35)
 				.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
-			item.addTo(character.parts.armR)
 				.castShadow(true);
 		});
 	}
@@ -141,104 +150,27 @@
 	// - go for the simple algo
 
 	// to enable a tracking camera
-if( true ){
-// trackingobjectcontrols
-// used to controls the camera to track the player	
-	var tCamera		= world.tCamera();
-	// var model	= character.object3D('root');
-	// var controls	= tQuery.createTrackingControls(model, tCamera);
-	// world.setCameraControls(controls);
-	
-	// controls.target()
-	// controls.camera()
-
-
-	var trackedObject	= character.object3D('root');
-
-
-	tCamera.position.set(0,0,0)
-
-	var deltaTarget		= tQuery.createSphere().addTo(trackedObject)
-					.geometry().scaleBy(1/4).back()
-					.position(0, 0, +2);
-	var deltaCamera		= tQuery.createSphere().addTo(trackedObject)
-					.geometry().scaleBy(1/4).back()
-					//.position(0, 2, -3)
-					//.position(0, 1, 0)
-					.position(0, 0.7, -0.07)
-	
-	// this will be done when the cameraControl is set in world
-	world.removeCameraControls()
-
-	// this has to be done
-	tQuery(tCamera).detach().addTo(deltaCamera);
-
-	
-	// in .update()
-	world.loop().hook(function(delta, now){
-		var delta	= deltaTarget.get(0).position.clone()
-		delta.subSelf(deltaCamera.get(0).position);
-		tCamera.lookAt(delta);
-	});
-}
-	
+	if( true ){
+		var cameraControls	= tQuery.createCameraFpsControls({
+			trackedObject	: character.object3D('root').get(0),
+			tCamera		: world.tCamera(),
+			debug		: false
+		});
+		world.setCameraControls(cameraControls)
+		cameraControls.deltaCamera().position(0, 0.7, -0.07)
+	}
 	
 	//////////////////////////////////////////////////////////////////////////
 	// user controls on keyboard						//
 	//////////////////////////////////////////////////////////////////////////
-if(true){
-// playermovecontrols
-// used to move the player based on keyboard input
-	var midiKey	= new tQuery.MidiKeyTween();
-	// just debug
-	// world.loop().hook(function(delta, now){
-	// 	console.log("state", midiKey.state(), 'value', midiKey.value())
-	// });
-	// user control
-	world.loop().hook(function(delta, now){
-		var keyboard	= tQuery.keyboard();
-		var model	= character.object3D('root').get(0);
-		var action	= {
-			left	: keyboard.pressed("left")	|| keyboard.pressed("a")	|| keyboard.pressed("a"),
-			right	: keyboard.pressed("right")	|| keyboard.pressed("d"),
-			up	: keyboard.pressed("up")	|| keyboard.pressed("w")	|| keyboard.pressed("z"),
-			down	: keyboard.pressed("down")	|| keyboard.pressed("s"),
-		}
-		// keyboard handling
-		
-		if( false ){
-			// lateral => rotation Y
-			if( action.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;
-			if( action.right )	model.rotation.y -= 0.3 * delta * Math.PI * 2;			
-		}else{
-			// lateral => stafe
-			var distance	= 0;
-			if( action.left )	distance	= +2 * delta;
-			if( action.right )	distance	= -2 * delta;
-			if( distance ){
-				var speed	= new THREE.Vector3(distance, 0, 0);
-				var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
-				matrix.multiplyVector3(speed);
-				model.position.addSelf(speed);
-			}			
-		}
-
-		var distance	= 0;
-		if( action.up )		distance	= +2 * delta;
-		if( action.down )	distance	= -2 * delta;
-		if( distance ){
-			var speed	= new THREE.Vector3(0, 0, distance);
-			var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
-			matrix.multiplyVector3(speed);
-			model.position.addSelf(speed);
-		}
-	});	
-}
-
-
-
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character.object3D('root').get(0),
+		lateralMove	: 'rotationY',
+		lateralMove	: 'strafe'
+	})
 
 if( true ){
+// tquery.minecraftFpsControlsPlock
 	// some compatibility layer for firefox/webkit
 	navigator.pointer		= navigator.pointer || navigator.webkitPointer;
 	navigator.pointer.islocked	= navigator.pointer.islocked || function(){ return navigator.pointer.isLocked; };
@@ -269,6 +201,7 @@ if( true ){
 					model.rotation.y%= 2*Math.PI;
 					
 					// change deltaTarget based on mouse movementY
+					var deltaTarget	= cameraControls.deltaTarget();
 					deltaTarget.get(0).position.y	-= movementY * 1/256;
 					if( deltaTarget.get(0).position.y < 0 ){
 						deltaTarget.get(0).position.y	= 0;
@@ -286,4 +219,6 @@ if( true ){
 }
 
 
+	
+})
 </script></body>

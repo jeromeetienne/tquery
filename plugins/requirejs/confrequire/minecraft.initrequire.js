@@ -1,4 +1,4 @@
-define(['module', 'plugins/minecraft/tquery.minecraftchar'], function(module){
+define(['module'], function(module){
 	// compute the absoute baseUrl for this file.js
 	// TODO put baseUrl computation in a function shared by all
 	var baseUrl	= location.pathname.replace(/[^/]*$/, '')
