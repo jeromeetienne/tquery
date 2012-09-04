@@ -65,6 +65,7 @@ buildCore:
 	cat js/tquery.loop.js		>> build/tquery.js
 	cat js/tquery.core.create.js	>> build/tquery.js
 	cat js/plugins/lights/*.js	>> build/tquery.js
+	cat js/plugins/materials/*.js	>> build/tquery.js
 	cat js/plugins/*.js		>> build/tquery.js
 
 minifyCore: buildCore

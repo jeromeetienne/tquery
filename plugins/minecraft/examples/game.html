@@ -22,7 +22,6 @@
 
 <script src="../../simplemaze/tquery.simplemaze.js"></script>
 
-
 <script src='../../fog/tquery.world.createfog.js'></script>
 <script src='../../light/tquery.light.shadow.js'></script>
 
@@ -152,13 +151,13 @@ if( true ){
 	
 	// controls.target()
 	// controls.camera()
-	
-	
+
+
 	var trackedObject	= character.object3D('root');
-	
-	
+
+
 	tCamera.position.set(0,0,0)
-	
+
 	var deltaTarget		= tQuery.createSphere().addTo(trackedObject)
 					.geometry().scaleBy(1/4).back()
 					.position(0, 0, +2);
