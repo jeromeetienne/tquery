@@ -3,6 +3,8 @@
 
 <script src='../../checkerboard/tquery.checkerboard.js'></script>
 
+<script src='../../grassground/tquery.grassground.js'></script>
+
 <script src="../tquery.midikeytween.js"></script>
 
 <script src="../tquery.minecraftchar.js"></script>
@@ -20,19 +22,65 @@
 
 <script src="../../simplemaze/tquery.simplemaze.js"></script>
 
+
+<script src='../../fog/tquery.world.createfog.js'></script>
+<script src='../../light/tquery.light.shadow.js'></script>
+
+<script src="../../skymap/tquery.cubetexture.js"></script>
+<script src="../../skymap/tquery.skymap.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+
+	
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+		
+	tQuery.createSkymap('skybox').addTo(world);
+
 	var character	= tQuery.createMinecraftChar().addTo(world);
+	tQuery('mesh', character.object3D('root')).castShadow(true)
+
+	tQuery.createAmbientLight().addTo(world)
+		.color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,-1).color(0xffffff).intensity(2);
+
+	var lightDir1	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.color(0xffffff).intensity(4)
+		.castShadow(true)
+		.shadowDarkness(0.8)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(2, -2, 2, -2, 0.1, 10)
+		.shadowCameraVisible(true)
+	// for lightDir1 to follow character
+	world.loop().hook(function(){
+		var model	= character.object3D('root');
+		var position	= model.get(0).position;
+		lightDir1.get(0).target.position.copy(model.get(0).position)
+		var delta	= tQuery.createVector3(-1,2,3);
+		var position	= model.get(0).position.clone().addSelf(delta);
+		lightDir1.position(position)
+	})
 
 	// create ground
-	if( true ){
+	if( false ){
 		tQuery.createCheckerboard({
 			segmentsW	: 40,
 			segmentsH	: 40
 		}).addTo(world).scaleBy(40);		
 	}
-
-	if( false ){
+	if( true ){
+		tQuery.createGrassGround({
+			textureRepeatX	: 20,
+			textureRepeatY	: 20,
+		}).addTo(world)
+		.receiveShadow(true)
+		.scale(40);
+	}	
+	
+	if( true ){
 		// init bodyAnims
 		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
 		bodyAnims.start('run');
@@ -42,7 +90,7 @@
 	}
 	
 	// initiate a spritesheet
-	if( false ){
+	if( true ){
 		var items	= new tQuery.Spritesheet({
 			url	: 'images/items/items.png',
 			imgW	: 256,
@@ -55,7 +103,8 @@
 			var item	= items.createMesh(2, 4).scaleBy(1/2);
 			item.position(0,-10/35,8/35)
 				.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
-			item.addTo(character.parts.armR);
+			item.addTo(character.parts.armR)
+				.castShadow(true);
 		});
 	}
 	
@@ -79,6 +128,8 @@
 		}).addTo(world);		
 	}
 
+
+
 	// how to code a tracking camera
 	// - a tracked object
 	// - a target with a position relative to tracked object
@@ -91,7 +142,7 @@
 	// - go for the simple algo
 
 	// to enable a tracking camera
-if( false ){
+if( true ){
 // trackingobjectcontrols
 // used to controls the camera to track the player	
 	var tCamera		= world.tCamera();
@@ -110,12 +161,12 @@ if( false ){
 	
 	var deltaTarget		= tQuery.createSphere().addTo(trackedObject)
 					.geometry().scaleBy(1/4).back()
-					.position(0, 0, +3);
+					.position(0, 0, +2);
 	var deltaCamera		= tQuery.createSphere().addTo(trackedObject)
 					.geometry().scaleBy(1/4).back()
-					.position(0, 2, -3)
+					//.position(0, 2, -3)
 					//.position(0, 1, 0)
-					//.position(0, 0.7, -0.07)
+					.position(0, 0.7, -0.07)
 	
 	// this will be done when the cameraControl is set in world
 	world.removeCameraControls()
@@ -156,7 +207,7 @@ if(true){
 		}
 		// keyboard handling
 		
-		if( true ){
+		if( false ){
 			// lateral => rotation Y
 			if( action.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;
 			if( action.right )	model.rotation.y -= 0.3 * delta * Math.PI * 2;			
@@ -188,7 +239,7 @@ if(true){
 
 
 
-if( false ){
+if( true ){
 	// some compatibility layer for firefox/webkit
 	navigator.pointer		= navigator.pointer || navigator.webkitPointer;
 	navigator.pointer.islocked	= navigator.pointer.islocked || function(){ return navigator.pointer.isLocked; };

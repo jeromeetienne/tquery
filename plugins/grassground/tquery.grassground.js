@@ -10,7 +10,7 @@ tQuery.register('createGrassGround', function(opts){
 		segmentsH	: 1,
 		textureRepeatX	: 1,
 		textureRepeatY	: 1,
-		textureUrl	: '../images/grasslight-big.jpg'
+		textureUrl	: tQuery.createGrassGround.baseUrl + 'images/grasslight-big.jpg'
 	});
 
 	var texture	= THREE.ImageUtils.loadTexture(opts.textureUrl);
@@ -31,3 +31,5 @@ tQuery.register('createGrassGround', function(opts){
 	// return the tQuery
 	return tQuery(mesh);
 });
+
+tQuery.createGrassGround.baseUrl	= "../../../plugins/grassground/";
