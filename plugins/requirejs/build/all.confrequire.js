@@ -14,7 +14,6 @@ requirejs.config({
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
-			"tquery.materials": "plugins/materials/tquery.meshbasicmaterial",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.createplanet": "plugins/requirejs/confrequire/planets.initrequire",
@@ -44,10 +43,6 @@ requirejs.config({
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
-		],
-		"plugins/materials/tquery.meshbasicmaterial": [
-			"plugins/materials/tquery.meshlambertmaterial",
-			"plugins/materials/tquery.meshphongmaterial"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
 			"plugins/minecraft/tquery.minecraftchar"

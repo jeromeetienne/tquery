@@ -40,15 +40,6 @@ tQuery.register('createBufferGeometry', function(geometry){
 	// build face UVs array  - compatible to THREE.BufferGeometry
 	var fUvsArray	= new Float32Array(numTriangles * 3 * 2);
 	var i		= 0;
-if( false ){
-	tGeometry.faceVertexUvs[0].forEach(function(faceUvs, index){
-		console.assert( faceUvs.length === 3 );
-		fUvsArray[i+0]	= faceUvs[0].u;	fUvsArray[i+1]	= faceUvs[0].v;
-		fUvsArray[i+2]	= faceUvs[1].u;	fUvsArray[i+3]	= faceUvs[1].v;
-		fUvsArray[i+4]	= faceUvs[2].u;	fUvsArray[i+5]	= faceUvs[2].v;
-		i	+= 6;
-	});
-}else{
 	tGeometry.faceVertexUvs[0].forEach(function(faceUvs, index){
 		var tFace	= tGeometry.faces[index];
 		console.assert( faceUvs.length === 3 );
@@ -61,7 +52,6 @@ if( false ){
 		fUvsArray[tFace.b*2+0]	= faceUvs[1].u;	fUvsArray[tFace.b*2+1]	= faceUvs[1].v
 		fUvsArray[tFace.c*2+0]	= faceUvs[2].u;	fUvsArray[tFace.c*2+1]	= faceUvs[2].v
 	});
-}
 
 	// console.log('vPosArray', vPosArray)
 	// console.log('fIdxArray', fIdxArray)

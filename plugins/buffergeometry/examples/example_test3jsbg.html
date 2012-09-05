@@ -15,10 +15,13 @@
 
 	console.time('generate three.js object')
 	// build the geometry
-	//var tGeometry	= new THREE.CircleGeometry(0.5);
+	var tGeometry	= new THREE.CircleGeometry(0.5, 100);
+	
+	console.time('Generate Original Geometry')
 	//var tGeometry	= new THREE.PlaneGeometry(1,1);
-	//var tGeometry	= new THREE.PlaneGeometry(1,1, 256, 256);
-	var tGeometry	= new THREE.CubeGeometry(1,1,1, 150, 150);
+	//var tGeometry	= new THREE.PlaneGeometry(1,1, 10, 10);
+	//var tGeometry	= new THREE.PlaneGeometry(1,1, 128, 128);
+	var tGeometry	= new THREE.CubeGeometry(1,1,1, 200, 200);
 	//var tGeometry	= new THREE.TorusKnotGeometry(1-0.15, 0.15)
 
 	// tGeometry.computeBoundingBox();
@@ -29,26 +32,51 @@
 	// //geometry.computeTangents();
 	// tGeometry.computeBoundingSphere();		
 
+	// build a geometry manually
+	if( false ){
+		var tGeometry	= new THREE.Geometry();
+		tGeometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
+		tGeometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
+		tGeometry.vertices.push( new THREE.Vector3( 1, 0, 0 ) );
+		tGeometry.faces.push( new THREE.Face3(0,1,2) );	
+		tGeometry.faceVertexUvs[0].push([
+			new THREE.UV(0, 1),
+			new THREE.UV(0, 0),
+			new THREE.UV(1, 0)
+		]);
+		tGeometry.computeBoundingBox();
+		tGeometry.computeBoundingSphere();		
+		tGeometry.computeVertexNormals();
+
+		// tGeometry.computeFaceNormals();
+		// tGeometry.computeCentroids();
+		// tGeometry.computeMorphNormals();
+		// //tGeometry.computeTangents();
+		console.log('MANUAL GEOMETRY', tGeometry)
+	}
+	console.timeEnd('Generate Original Geometry')
 	// build the mesh
 	var url		= "../../assets/images/ash_uvgrid01.jpg";
 	var tMaterial	= new THREE.MeshBasicMaterial({
-		map	: THREE.ImageUtils.loadTexture( url )
+		map		: THREE.ImageUtils.loadTexture( url ),
+		//wireframe	: true,
 	});
 	//var tMaterial	= new THREE.MeshNormalMaterial();
 	var mesh	= tQuery(tGeometry, tMaterial).translateX(-1).addTo(world);
 	console.timeEnd('generate three.js object')
+	
+	//world.loop().hook(function(delta, now){ mesh.rotateX(0.01)	});
 
 	console.log('original geometry vertices', tGeometry.vertices.length)
 	console.log('original geometry vertices', tGeometry.faces.length)
 
 
 	// // convert tGeometry to 3jsbg
-	// //var tBgGeometry	= tQuery.createBufferGeometry(tGeometry);
 	console.time('Create BufferGeometry')
 	var tBgGeometry	= tQuery.createBufferGeometryDisjoint(tGeometry);
 	console.timeEnd('Create BufferGeometry')
 
-if(true){
+if( true ){
 	console.time('Generating 3jsbg from THREE.BufferGeometry')
 	var dataView	= tQuery.geometryTo3jsbg(tBgGeometry);
 	console.timeEnd('Generating 3jsbg from THREE.BufferGeometry')
@@ -62,9 +90,15 @@ if(true){
 	document.querySelector('#info a').href	= objectURL;
 
 
+	var url		= "../../assets/images/ash_uvgrid01.jpg";
+	var tMaterial	= new THREE.MeshBasicMaterial({
+		map		: THREE.ImageUtils.loadTexture( url ),
+		wireframe	: true,
+	});
+
 	// convert 3jsbg to tGeometry
-	var tGeometry	= tQuery.convert3jsbgToGeometry(dataView.buffer)
+	var tGeometryTmp= tQuery.convert3jsbgToGeometry(dataView.buffer)
 	//var tMaterial	= new THREE.MeshNormalMaterial();
-	tQuery(tGeometry, tMaterial).addTo(world).translateX(1);
+	var dMesh	= tQuery(tGeometryTmp, tMaterial).addTo(world).translateX(1);
 }
 </script></body>

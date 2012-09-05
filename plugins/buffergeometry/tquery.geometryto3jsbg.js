@@ -13,7 +13,7 @@ tQuery.register('geometryTo3jsbg', function(tBgGeometry){
 	
 	// convert offsets to json
 	var offsetsJSON	= JSON.stringify(offsets);
-console.log('offsets', offsets, offsetsJSON)
+console.log('offsets', JSON.stringify(offsets))
 	
 	// compute the buffer length
 	var bufferLen	= 0;
