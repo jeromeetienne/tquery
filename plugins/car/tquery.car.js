@@ -1,7 +1,13 @@
-
+//////////////////////////////////////////////////////////////////////////////////
+//		Create funciton							//
+//////////////////////////////////////////////////////////////////////////////////
 tQuery.register('createCar', function(opts){
 	return new tQuery.Car(opts)
 });
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Class								//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Plugins for sport car
@@ -10,7 +16,8 @@ tQuery.register('Car', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
 		type	: "veyron",
-		scale	: 1.5 
+		scale	: 1.5,
+		world	: tQuery.world 
 	});
 	this._opts.scale	/= 400;
 
@@ -48,11 +55,17 @@ tQuery.register('Car', function(opts){
 		this.trigger('load');
 	}.bind(this);
 
+	// determine urls
+	var baseUrl	= tQuery.Car.baseUrl;
 	if( this._opts.type === "gallardo" ){
-		car.loadPartsBinary( "obj/gallardo/parts/gallardo_body_bin.js", "obj/gallardo/parts/gallardo_wheel_bin.js" );	
+		var bodyUrl	= baseUrl + '/examples/obj/gallardo/parts/gallardo_body_bin.js'
+		var wheelUrl	= baseUrl + '/examples/obj/gallardo/parts/gallardo_wheel_bin.js'
 	}else if( this._opts.type === "veyron" ){
-		car.loadPartsBinary( "obj/veyron/parts/veyron_body_bin.js", "obj/veyron/parts/veyron_wheel_bin.js" );
+		var bodyUrl	= baseUrl + '/examples/obj/veyron/parts/veyron_body_bin.js'
+		var wheelUrl	= baseUrl + '/examples/obj/veyron/parts/veyron_wheel_bin.js'
 	}else	console.assert(false);
+	// start loading
+	car.loadPartsBinary(bodyUrl, wheelUrl);	
 
 	// the controls of the car
 	this._controlsCar	= {
@@ -66,7 +79,7 @@ tQuery.register('Car', function(opts){
 	this._loopCb	= function(delta){
 		this._car.updateCarModel(delta, this._controlsCar);
 	}.bind(this);
-	world.loop().hook(this._loopCb);
+	this._opts.world.loop().hook(this._loopCb);
 
 	// to contains the flares sprite
 	this._flareSprites	= {}
@@ -79,9 +92,11 @@ tQuery.pluginsStaticOn(tQuery.Car);
 // make it eventable
 tQuery.MicroeventMixin(tQuery.Car.prototype);
 
+tQuery.Car.baseUrl	= "../../../plugins/car/";
+
 
 tQuery.Car.prototype.destroy	= function(){
-	world.loop().unhook(this._loopCb);
+	this._opts.world.loop().unhook(this._loopCb);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

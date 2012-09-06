@@ -7,6 +7,7 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
@@ -32,6 +33,22 @@ requirejs.config({
 		}
 	},
 	"shim": {
+		"plugins/requirejs/confrequire/car.initrequire": [
+			"plugins/car/tquery.car",
+			"plugins/car/Car",
+			"plugins/car/tquery.car.keyboard",
+			"plugins/car/tquery.car.cameracontrols",
+			"plugins/car/tquery.car.deviceorientation"
+		],
+		"plugins/car/tquery.car.deviceorientation": [
+			"plugins/car/tquery.car"
+		],
+		"plugins/car/tquery.car.cameracontrols": [
+			"plugins/car/tquery.car"
+		],
+		"plugins/car/tquery.car.keyboard": [
+			"plugins/car/tquery.car"
+		],
 		"plugins/csg/tquery.geometry.csg": [
 			"plugins/csg/csg",
 			"plugins/csg/ThreeCSG",

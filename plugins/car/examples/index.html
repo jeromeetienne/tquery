@@ -13,10 +13,7 @@
 <!-- -->
 
 <!doctype html><title>tQuery Car Example</title>
-<script src="../../../build/tquery-bundle.js"></script>
-
-<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
-<script src="../../keyboard/tquery.keyboard.js"></script>
+<script src="../../../build/tquery-bundle-require.js"></script>
 
 <script src="../../../vendor/threex/THREEx.DeviceOrientationState.js"></script>
 <script src="../../deviceorientation/tquery.deviceorientation.js"></script>
@@ -25,31 +22,12 @@
 <script src='../../fog/tquery.world.createfog.js'></script>
 <script src='../../light/tquery.light.shadow.js'></script>
 
-<script src="../../skymap/tquery.cubetexture.js"></script>
-<script src="../../skymap/tquery.skymap.js"></script>
-
-<script src="../Car.js"></script>
-<script src="../tquery.car.js"></script>
-<script src="../tquery.car.keyboard.js"></script>
-<script src="../tquery.car.deviceorientation.js"></script>
-<script src="../tquery.car.cameracontrols.js"></script>
-
-<script src="../../../vendor/three.js/ShaderExtras.js"></script>
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
-<script src="../../pproc/tquery.effectcomposer.js"></script>
 <!-- Add a body and add a title -->
 <body style="margin:0;padding:0;overflow:'hidden';"><div id="info" style="z-index: 2">
 	Example of tQuery.car plugins<br/>
 	<a href="../../../www/vendor/doccoviewer/index.html#../../../plugins/car/examples/index.html" target="_blank">Annotated Source</a>
 </div><script>
+require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.car'], function(){
 	// ## Let's start coding
 
 	// We start to create our world as usual. We enable the
@@ -177,4 +155,5 @@
 	// for 40 lines of javascripts.
 	
 	// TODO here put the iframe of the demo
+})
 </script></body>

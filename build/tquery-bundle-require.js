@@ -2985,6 +2985,48 @@ tQuery.Mesh.prototype.material	= function(value){
 	return this;	// for the chained API
 }
 
+/**
+ * Create a tQuery.Sprite
+ * 
+ * @returns {tQuery.Sprite} the create object
+*/
+tQuery.register('createSprite', function(opts){
+	opts		= tQuery.extend(opts, {
+		useScreenCoordinates	: false
+	});
+	var sprite	= new THREE.Sprite(opts);
+	return new tQuery.Sprite(sprite)
+})
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Wrapper on top of THREE.Sprite
+*/
+tQuery.register('Sprite', function(elements){
+	// call parent ctor
+	tQuery.Sprite.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Material
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Sprite); });
+});
+
+/**
+ * inherit from tQuery.Node
+*/
+tQuery.inherit(tQuery.Sprite, tQuery.Object3D);
+
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Sprite, {
+	color			: tQuery.convert.toThreeColor,
+	map			: tQuery.convert.toTexture,
+	useScreenCoordinates	: tQuery.convert.toBoolean
+});
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -4764,7 +4806,6 @@ THREEx.DragPanControls.prototype.destroy	= function()
 
 THREEx.DragPanControls.prototype.update	= function(event)
 {
-console.log('DragPanControls.update()')
 	this._object.position.x += ( this._mouseX * this.rangeX - this._object.position.x ) * this.speedX;
 	this._object.position.y += ( this._mouseY * this.rangeY - this._object.position.y ) * this.speedY;
 	this._object.lookAt( this.target );
@@ -4846,6 +4887,7 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
@@ -4871,6 +4913,22 @@ requirejs.config({
 		}
 	},
 	"shim": {
+		"plugins/requirejs/confrequire/car.initrequire": [
+			"plugins/car/tquery.car",
+			"plugins/car/Car",
+			"plugins/car/tquery.car.keyboard",
+			"plugins/car/tquery.car.cameracontrols",
+			"plugins/car/tquery.car.deviceorientation"
+		],
+		"plugins/car/tquery.car.deviceorientation": [
+			"plugins/car/tquery.car"
+		],
+		"plugins/car/tquery.car.cameracontrols": [
+			"plugins/car/tquery.car"
+		],
+		"plugins/car/tquery.car.keyboard": [
+			"plugins/car/tquery.car"
+		],
 		"plugins/csg/tquery.geometry.csg": [
 			"plugins/csg/csg",
 			"plugins/csg/ThreeCSG",

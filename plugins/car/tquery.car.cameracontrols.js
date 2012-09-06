@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////////////////////
+//		Create funciton							//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.Car.registerStatic('createCameraControls', function(opts, world){
 	// handle parameters
 	world	= world	|| tQuery.world;
@@ -7,6 +11,10 @@ tQuery.Car.registerStatic('createCameraControls', function(opts, world){
 	return controls;
 });
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Class								//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.Car.registerStatic('CameraControls', function(opts){
 	// handle parameters polymorphism
 	if( opts instanceof tQuery.Car ){
@@ -14,6 +22,7 @@ tQuery.Car.registerStatic('CameraControls', function(opts){
 	}
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
+		world	: tQuery.world
 	});
 	// sanity check
 	console.assert(this._opts.car instanceof tQuery.Car);
@@ -50,14 +59,16 @@ tQuery.Car.CameraControls.prototype.update	= function()
 	this._prevPosition	= tObject3d.position.clone();
 
 	// set camera position
+	var tCamera	= this._opts.world.tCamera();
 	var position	= new THREE.Vector3(0, 0.35, -0.4+0.3*this._curDistance);
 	var matrix	= new THREE.Matrix4().makeRotationY(this._curAngle);
 	matrix.multiplyVector3(position).addSelf(tObject3d.position);
-	world.tCamera().position.copy(position);
+	tCamera.position.copy(position);
 	
 	// set set camera target
+	var tCamera	= this._opts.world.tCamera();
 	var target	= new THREE.Vector3(0, 0, -2*this._curDistance);
 	var matrix	= new THREE.Matrix4().makeRotationY(this._curAngle);
 	matrix.multiplyVector3(target).addSelf(tObject3d.position);
-	world.tCamera().lookAt(target);
+	tCamera.lookAt(target);
 }
