@@ -1,5 +1,7 @@
 /**
  * implement Ratamahatta character.
+ * TODO seems to have issue with multilple characters. it may be about material 
+ * caching. seems typically a microcache issue.
  *
  * @name	tQuery.RatamahattaMD2Character
  * @augments	tQuery.MD2Character
