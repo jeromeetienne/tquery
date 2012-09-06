@@ -18,7 +18,8 @@
 			'tquery.csg',
 			//'webgl-inspector'//, 'domReady!'	// TODO find a way to install it
 			'tquery.grassground',
-			'tquery.md2character'
+			'tquery.md2character',
+			'tquery.statsplus'
 		], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
 
@@ -28,22 +29,30 @@
 		}).addTo(world)
 			.scale(30)
 
+		world.enableStatsPlus();
 
 		// add a md2character
 		var character	= new tQuery.RatamahattaMD2Character().attach(world).hookKeyboard();
 		character.bind("loaded", function(){
 			console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
 		});
+		for(var i = 0; i < 3; i++){
+			var character	= new tQuery.RatamahattaMD2Character()
+				.attach(world);			
+			character.container().translateZ(i*1 + 2)
+		}
 
 		// create the saber	
-		var saber	= tQuery.createLightSaber().addTo(world);
-		// change the material of the hilt
-		var material	= new THREE.MeshBasicMaterial({
-			color	: 0x44aaFF,
-			envMap	: tQuery.createCubeTexture('skybox')
-		})
-		saber.object3D('hiltIn').material(material)
-		saber.object3D('hiltOut').material(material)
+		if( false ){
+			var saber	= tQuery.createLightSaber().addTo(world);
+			// change the material of the hilt
+			var material	= new THREE.MeshBasicMaterial({
+				color	: 0x44aaFF,
+				envMap	: tQuery.createCubeTexture('skybox')
+			})
+			saber.object3D('hiltIn').material(material)
+			saber.object3D('hiltOut').material(material)
+		}
 	
 		// world.removeCameraControls();
 		// tQuery.createLensFlare().addTo(world).position(0, 1, -3)
@@ -59,18 +68,18 @@
 		tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 		var planet	= tQuery.createPlanet().addTo(world)
 					.translateX(-1);
+
+		//tQuery.DatguiTuner('light');
 		
-		
-		tQuery.DatguiTuner('light')
-		
-		// add a minecraft character
+		// // add a minecraft character
 		// var minecraft	= tQuery.createMinecraftChar().addTo(world);
 		// minecraft.loadSkin(tQuery.MinecraftChar.baseUrl+'examples/images/agentsmith.png')
 		// minecraft.object3D('root').translateY(-0.5)
 		
-		var text	= tQuery.createText("tQuery is Fun!", {
-			font	: "droid sans"
-		}).scaleBy(1/4).addTo(world).translateX(2).translateY(0.3).translateZ(-0.2);
+		// // add text
+		// var text	= tQuery.createText("tQuery is Fun!", {
+		// 	font	: "droid sans"
+		// }).scaleBy(1/4).addTo(world).translateX(2).translateY(0.3).translateZ(-0.2);
 		
 		// // enable domEvent on this world
 		// world.enableDomEvent();	
