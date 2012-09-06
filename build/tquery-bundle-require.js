@@ -4861,6 +4861,7 @@ requirejs.config({
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
+			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_bold.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
@@ -4923,6 +4924,11 @@ requirejs.config({
 		],
 		"plugins/skymap/tquery.skymap": [
 			"plugins/skymap/tquery.cubetexture"
+		],
+		"plugins/statsplus/tquery.statsplus": [
+			"plugins/statsplus/statsdelay",
+			"plugins/statsplus/statsmemory",
+			"plugins/statsplus/statsthreejswebgl"
 		],
 		"plugins/text/tquery.text": [
 			"plugins/text/fonts/droid/droid_serif_bold.typeface"
