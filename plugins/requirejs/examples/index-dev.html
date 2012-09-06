@@ -10,18 +10,34 @@
 			'tquery.text', 
 			//'tquery.text.allfonts',
 			'tquery.domevent',
+			'tquery.pproc',
 			'tquery.tweenjs',
 			'tquery.lightsaber',
 			'tquery.lensflare',
 			'tquery.datguituner',
 			'tquery.csg',
-			'webgl-inspector'//, 'domReady!'
+			//'webgl-inspector'//, 'domReady!'	// TODO find a way to install it
+			'tquery.grassground',
+			'tquery.md2character'
 		], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
 
+		tQuery.createGrassGround({
+			textureRepeatX	: 10,
+			textureRepeatY	: 10,
+		}).addTo(world)
+			.scale(30)
+
+
+		// add a md2character
+		var character	= new tQuery.RatamahattaMD2Character().attach(world).hookKeyboard();
+		character.bind("loaded", function(){
+			console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
+		});
+
 		// create the saber	
 		var saber	= tQuery.createLightSaber().addTo(world);
-	// change the material of the hilt
+		// change the material of the hilt
 		var material	= new THREE.MeshBasicMaterial({
 			color	: 0x44aaFF,
 			envMap	: tQuery.createCubeTexture('skybox')

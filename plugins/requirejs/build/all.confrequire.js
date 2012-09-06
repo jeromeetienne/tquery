@@ -10,10 +10,12 @@ requirejs.config({
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
+			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
+			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.createplanet": "plugins/requirejs/confrequire/planets.initrequire",
@@ -43,6 +45,21 @@ requirejs.config({
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
+		],
+		"plugins/requirejs/confrequire/md2character.initrequire": [
+			"plugins/md2character/tquery.md2character",
+			"plugins/md2character/tquery.md2character.cameracontrols",
+			"plugins/md2character/tquery.md2character.ratamahatta",
+			"plugins/md2character/tquery.md2character.ratamahatta.keyboard"
+		],
+		"plugins/md2character/tquery.md2character.cameracontrols": [
+			"plugins/md2character/tquery.md2character"
+		],
+		"plugins/md2character/tquery.md2character.ratamahatta": [
+			"plugins/md2character/tquery.md2character"
+		],
+		"plugins/md2character/tquery.md2character.ratamahatta.keyboard": [
+			"plugins/md2character/tquery.md2character.ratamahatta"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
 			"plugins/minecraft/tquery.minecraftchar"
