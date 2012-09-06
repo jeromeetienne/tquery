@@ -10,6 +10,7 @@ requirejs.config({
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
+			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
@@ -57,6 +58,9 @@ requirejs.config({
 		"plugins/datguituner/tquery.datguituner": [
 			"plugins/assets/vendor/dat.gui/dat.gui",
 			"plugins/assets/vendor/dat.gui/dat.color"
+		],
+		"plugins/deviceorientation/tquery.deviceorientation": [
+			"threex/threex.DeviceOrientationState"
 		],
 		"plugins/domevent/tquery.domevent": [
 			"plugins/domevent/threex.domevent"

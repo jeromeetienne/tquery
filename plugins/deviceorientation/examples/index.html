@@ -1,9 +1,7 @@
-<!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
-
-<script src="../../../vendor/threex/THREEx.DeviceOrientationState.js"></script>
-<script src="../tquery.deviceorientation.js"></script>
+<!doctype html><title>tQuery Example</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
+require(['tquery.deviceorientation'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 	tQuery.createAxis().addTo(object);
@@ -14,11 +12,12 @@
 		var orientation	= tQuery.deviceOrientation();
 		// for macbook
 		//object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
-		//object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
+		object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
 
 		// for ipad
-		object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
+		// object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
 		
 		// no idea why it is different, nor what is the theorical value
-	})
+	})	
+});
 </script></body>
