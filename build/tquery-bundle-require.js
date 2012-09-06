@@ -4764,6 +4764,7 @@ THREEx.DragPanControls.prototype.destroy	= function()
 
 THREEx.DragPanControls.prototype.update	= function(event)
 {
+console.log('DragPanControls.update()')
 	this._object.position.x += ( this._mouseX * this.rangeX - this._object.position.x ) * this.speedX;
 	this._object.position.y += ( this._mouseY * this.rangeY - this._object.position.y ) * this.speedY;
 	this._object.lookAt( this.target );
@@ -4848,10 +4849,12 @@ requirejs.config({
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
+			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
+			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.createplanet": "plugins/requirejs/confrequire/planets.initrequire",
@@ -4881,6 +4884,21 @@ requirejs.config({
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
+		],
+		"plugins/requirejs/confrequire/md2character.initrequire": [
+			"plugins/md2character/tquery.md2character",
+			"plugins/md2character/tquery.md2character.cameracontrols",
+			"plugins/md2character/tquery.md2character.ratamahatta",
+			"plugins/md2character/tquery.md2character.ratamahatta.keyboard"
+		],
+		"plugins/md2character/tquery.md2character.cameracontrols": [
+			"plugins/md2character/tquery.md2character"
+		],
+		"plugins/md2character/tquery.md2character.ratamahatta": [
+			"plugins/md2character/tquery.md2character"
+		],
+		"plugins/md2character/tquery.md2character.ratamahatta.keyboard": [
+			"plugins/md2character/tquery.md2character.ratamahatta"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
 			"plugins/minecraft/tquery.minecraftchar"
