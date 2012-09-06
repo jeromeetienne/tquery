@@ -61,6 +61,7 @@ buildCore:
 	cat js/tquery.material.js	>> build/tquery.js
 	cat js/tquery.light.js		>> build/tquery.js
 	cat js/tquery.mesh.js		>> build/tquery.js
+	cat js/tquery.sprite.js		>> build/tquery.js
 	cat js/tquery.world.js		>> build/tquery.js
 	cat js/tquery.loop.js		>> build/tquery.js
 	cat js/tquery.core.create.js	>> build/tquery.js
