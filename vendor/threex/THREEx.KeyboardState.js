@@ -85,7 +85,7 @@ THREEx.KeyboardState.prototype._onKeyChange	= function(event, pressed)
 	this.keyCodes[keyCode]	= pressed;
 
 	// update this.modifiers
-	this.modifiers['shift']= event.shiftKey;
+	this.modifiers['shift']	= event.shiftKey;
 	this.modifiers['ctrl']	= event.ctrlKey;
 	this.modifiers['alt']	= event.altKey;
 	this.modifiers['meta']	= event.metaKey;

@@ -66,4 +66,7 @@ tQuery.MinecraftCharKeyboard2.prototype.destroy	= function(){
 	opts.world.loop().unhook(this._$onLoop);
 }
 
+tQuery.MinecraftCharKeyboard2.prototype.opts	= function(){
+	return this._opts;
+}
 

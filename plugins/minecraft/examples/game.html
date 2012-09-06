@@ -116,7 +116,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.lensflare']
 		});
 	}
 	
-	if( false ){
+	if( true ){
 		// TODO  handle collision
 		// - walls vs aabb
 		// - with computation of rebound
@@ -150,7 +150,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.lensflare']
 	// - go for the simple algo
 
 	// to enable a tracking camera
-	if( true ){
+	if( false ){
 		var cameraControls	= tQuery.createCameraFpsControls({
 			trackedObject	: character.object3D('root').get(0),
 			tCamera		: world.tCamera(),
@@ -163,12 +163,66 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.lensflare']
 	//////////////////////////////////////////////////////////////////////////
 	// user controls on keyboard						//
 	//////////////////////////////////////////////////////////////////////////
-	tQuery.createMinecraftCharKeyboard2({
+	var charKeyboard	= tQuery.createMinecraftCharKeyboard2({
 		object3D	: character.object3D('root').get(0),
 		lateralMove	: 'rotationY',
-		lateralMove	: 'strafe'
+		//lateralMove	: 'strafe'
 	})
-
+/**
+ * - a camera view does a tweening to the next
+ * 
+ * Do a basic state transition
+ * - which state getter
+ * - enter state fn to enter
+ * - leave state fn to leave
+ * - setup state setter
+*/
+/*
+ * How to handle camera tweening
+ * - do a control which is control the camera relative to another Object3D
+ * - target is the absolute position where the camera should be
+ * - and there is a tweening between both
+*/
+	document.addEventListener('keyup', function(event){
+		var tCamera	= world.tCamera();
+		if( event.which === '1'.charCodeAt(0) ){
+			// destroy existing one if needed
+			var controls	= world.getCameraControls();
+			controls.destroy && controls.destroy();	
+			// create new one
+			var controls	= new THREEx.DragPanControls(tCamera);
+			world.setCameraControls(controls);
+			tCamera.position.z	= 3;
+		}
+		if( event.which === '2'.charCodeAt(0) ){
+			// destroy existing one if needed
+			var controls	= world.getCameraControls();
+			controls.destroy && controls.destroy();	
+			// create new one
+			var controls	= tQuery.createCameraFpsControls({
+				trackedObject	: character.object3D('root').get(0),
+				tCamera		: world.tCamera(),
+				debug		: false
+			});
+			world.setCameraControls(controls)
+			controls.deltaCamera().position(0, 0.7, -0.07)
+			charKeyboard.opts().lateralMove	= 'strafe';
+		}
+		if( event.which === '3'.charCodeAt(0) ){
+			// destroy existing one if needed
+			var controls	= world.getCameraControls();
+			controls.destroy && controls.destroy();	
+			// create new one
+			var controls	= tQuery.createCameraFpsControls({
+				trackedObject	: character.object3D('root').get(0),
+				tCamera		: world.tCamera(),
+				debug		: false
+			});
+			world.setCameraControls(controls)
+			charKeyboard.opts().lateralMove	= 'rotationY';
+		}
+	});
+	
 if( true ){
 // tquery.minecraftFpsControlsPlock
 	// some compatibility layer for firefox/webkit
