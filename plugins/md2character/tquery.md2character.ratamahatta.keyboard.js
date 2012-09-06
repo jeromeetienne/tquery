@@ -51,6 +51,7 @@ tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
 */
 tQuery.RatamahattaMD2Character.register('hookKeyboardLoopCb', function(){
 	var keyboard	= tQuery.keyboard();
+	var character	= this;
 	// keyboard handling
 	if( keyboard.pressed("left") )	character.turnLeft();
 	if( keyboard.pressed("right") )	character.turnRight();

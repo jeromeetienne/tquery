@@ -5,7 +5,7 @@ tQuery.MD2Character.registerStatic('CameraControls', function(opts){
 	}
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
-		camera		: tQuery.world.camera(),
+		camera		: tQuery.world.tCamera(),
 		deltaPosition	: new THREE.Vector3(5,2,5).normalize().multiplyScalar(3),
 		deltaLookAt	: new THREE.Vector3(0,0.3,0)
 	});

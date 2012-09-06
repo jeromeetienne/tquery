@@ -11,13 +11,13 @@ tQuery.register('RatamahattaMD2Character', function(opts){
 	parent.constructor.call(this)
 	// handle parameters
 	opts	= tQuery.extend(opts, {
-		baseUrl		: 'ratamahatta/'
+		baseUrl		: tQuery.RatamahattaMD2Character.baseUrl+'/models/ratamahatta/'
 	});
 
 	// handle the attachedWorld
 	this._attachedWorld	= null;
 	this._$loopCb		= this._loopCb.bind(this);
-	
+
 	// change the scale
 	this.scale(0.03);
 
@@ -42,6 +42,8 @@ tQuery.register('RatamahattaMD2Character', function(opts){
 		]
 	});
 });
+
+tQuery.RatamahattaMD2Character.baseUrl	= "../../../plugins/md2character/";
 
 /**
  * inherit from tQuery.MD2Character
@@ -110,6 +112,7 @@ tQuery.RatamahattaMD2Character.prototype.turnRight	= function(angle){
  * @param {Number} angle angle to turn to in radian 
 */
 tQuery.RatamahattaMD2Character.prototype.turn	= function(angle){
+	var character	= this;
 	if( angle === undefined, "angle MUST be defined" );
 	if( this.isLoaded() === false )	return this;
 	var container	= character.container();
