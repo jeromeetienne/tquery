@@ -4892,6 +4892,7 @@ requirejs.config({
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
+			"tquery.fog": "plugins/fog/tquery.world.createfog",
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
