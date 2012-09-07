@@ -1,7 +1,7 @@
 requirejs.config({
 	map	: {
 		"*"	: {
-			'tquery.createplanet'	: 'plugins/requirejs/confrequire/planets.initrequire',
+			'tquery.planets'	: 'plugins/requirejs/confrequire/planets.initrequire',
 		}
 	},
 });

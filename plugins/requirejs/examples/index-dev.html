@@ -36,11 +36,6 @@
 		character.bind("loaded", function(){
 			console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
 		});
-		for(var i = 0; i < 3; i++){
-			var character	= new tQuery.RatamahattaMD2Character()
-				.attach(world);			
-			character.container().translateZ(i*1 + 2)
-		}
 
 		// create the saber	
 		if( false ){
@@ -108,10 +103,10 @@
 		// 	planet.scale( curScale + (dstScale-curScale)*0.1 );
 		// });
 		
-		var tMaterial	= new THREE.MeshBasicMaterial({
-			envMap	: tQuery.createCubeTexture('skybox')
-		});
-		text.material(tMaterial)
+		// text.setBasicMaterial({
+		// 	envMap	: tQuery.createCubeTexture('skybox')
+		// })
+
 		// var tMaterial	= new THREE.MeshBasicMaterial({
 		// 	map	: tQuery.createVideoTexture('../../videos/examples/sintel.ogv'),
 		// 	//map	: tQuery.createWebcamTexture()

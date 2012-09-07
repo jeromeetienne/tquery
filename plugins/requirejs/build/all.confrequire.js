@@ -21,7 +21,7 @@ requirejs.config({
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.physics": "plugins/physics/tquery.physijs",
-			"tquery.createplanet": "plugins/requirejs/confrequire/planets.initrequire",
+			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",

@@ -1,11 +1,14 @@
 define(['module', 'plugins/planets/tquery.createplanet'], function(module){
-console.log('planets.initrequire.js')
+console.log('planets.initrequire.js', this)
 console.dir(module)
+
 	// compute the absoute baseUrl for this file.js
 // 	var baseUrl	= module.uri.replace(/[^/]*$/, '');
-// console.log('baseUrl', baseUrl)
+// 	console.log('baseUrl', baseUrl)
+
 // 	// set baseUrl for this plugin
 // 	tQuery.createPlanet.baseUrl	= baseUrl+'../../planets/';
+
 	tQuery.createPlanet.baseUrl	= module.uri+'/../../../planets/';
 console.log('tQuery.createPlanet.baseUrl', tQuery.createPlanet.baseUrl)
 });
