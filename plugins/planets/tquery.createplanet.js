@@ -6,7 +6,7 @@ tQuery.register('createPlanet', function(opts){
 	var baseUrl	= tQuery.createPlanet.baseUrl;
 console.log('baseUrl planets', baseUrl)
 	var url		= baseUrl + 'images/moon_1024.jpg';
-console.log('Url planets', baseUrl)
+console.log('Url planets', url)
 	var object	= tQuery.createSphere();
 	object.material(new THREE.MeshBasicMaterial({
 		ambient	: 0x888888,

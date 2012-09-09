@@ -1,3 +1,6 @@
+/**
+ * it seems more like debug.js than tquery thing
+*/
 tQuery.register('hexDump', function(buffer, noConsole){
 	//////////////////////////////////////////////////////////////////////////
 	// from http://javascript0.org/wiki/Hexdump				//

@@ -20,8 +20,9 @@
 	console.time('Generate Original Geometry')
 	//var tGeometry	= new THREE.PlaneGeometry(1,1);
 	//var tGeometry	= new THREE.PlaneGeometry(1,1, 10, 10);
-	var tGeometry	= new THREE.PlaneGeometry(1,1, 256, 256);
+	//var tGeometry	= new THREE.PlaneGeometry(1,1, 256, 256);
 	//var tGeometry	= new THREE.CubeGeometry(1,1,1, 200, 200);
+	var tGeometry	= new THREE.CubeGeometry(1,1,1, 2, 2);
 	//var tGeometry	= new THREE.TorusKnotGeometry(1-0.15, 0.15)
 
 	// tGeometry.computeBoundingBox();
@@ -98,7 +99,7 @@ if( true ){
 
 	// convert 3jsbg to tGeometry
 	var tGeometryTmp= tQuery.convert3jsbgToGeometry(dataView.buffer)
-	//var tMaterial	= new THREE.MeshNormalMaterial();
+	var tMaterial	= new THREE.MeshNormalMaterial();
 	var dMesh	= tQuery(tGeometryTmp, tMaterial).addTo(world).translateX(1);
 }
 </script></body>

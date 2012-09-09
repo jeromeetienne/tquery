@@ -20,7 +20,6 @@
 	<a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - port of birds demo
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
-//	var object	= tQuery.createTorus().addTo(world);
 
 	world.removeCameraControls();
 	
@@ -104,7 +103,7 @@
 	});
 
 	// repulse on mouse cursor position
-	document.addEventListener( 'mousemove', function(event){
+	document.addEventListener('mousemove', function(event){
 		var positionX	= event.clientX - window.innerWidth/2;
 		var positionY	= event.clientY - window.innerHeight/2;
 		var vector	= new THREE.Vector3(positionX, positionY, 0);
@@ -113,5 +112,5 @@
 			vector.z	= boid.position.z;
 			boid.repulse( vector );
 		}
-	}, false );
+	}, false);
 </script></body>

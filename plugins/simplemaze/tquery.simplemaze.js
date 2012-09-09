@@ -31,6 +31,7 @@ tQuery.register('SimpleMaze', function(opts){
 			.geometry()
 				.rotateX(-Math.PI/2)
 				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
+				.computeAll()
 				.back()
 			.addTo(this._container);		
 	}
@@ -46,6 +47,7 @@ tQuery.register('SimpleMaze', function(opts){
 				.rotateX(Math.PI/2)
 				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
 				.translateY(opts.squareH)
+				.computeAll()
 				.back()
 			.addTo(this._container)
 	}
@@ -67,6 +69,7 @@ tQuery.register('SimpleMaze', function(opts){
 				.geometry()
 					.scaleBy(opts.squareW, opts.squareH, opts.squareD)
 					.translateY(opts.squareH/2)
+					.computeAll()
 					.back()
 				.translateX((x-mapW/2 + 0.5) * opts.squareW)
 				.translateZ((z-mapD/2 + 0.5) * opts.squareW);

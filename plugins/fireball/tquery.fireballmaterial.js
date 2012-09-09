@@ -7,7 +7,7 @@
 tQuery.Object3D.register('setFireballMaterial', function(opts){
 	opts	= tQuery.extend(opts, {
 		scale	: 1,
-		speed	: 0.3, 
+		speed	: 0.3,
 		world	: tQuery.world
 	});
 	this.each(function(object3d){
@@ -42,7 +42,7 @@ tQuery.Object3D.prototype.setFireballMaterial._vertexShaderText = [
 '',
 '		void main( void ) {',
 '',
-'			vec4 mPosition = objectMatrix * vec4( position, 1.0 );',
+'			vec4 mPosition = modelMatrix * vec4( position, 1.0 );',
 '			vNormal = normalize( normalMatrix * normal );',
 '			vViewPosition = cameraPosition - mPosition.xyz;',
 '',
