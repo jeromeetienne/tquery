@@ -1,0 +1,8 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createCube().addTo(world);	
+})
+</script></body>

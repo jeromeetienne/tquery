@@ -1,0 +1,98 @@
+FRAGMENT
+--------
+
+uniform float time;
+varying vec2 vUv;
+varying vec3 vPosition ;
+uniform sampler2D texture_grass;
+uniform sampler2D texture_rock;
+uniform sampler2D texture_dirt ;
+uniform sampler2D texture_splat ;
+
+uniform vec3 diffuse;
+uniform float opacity;
+
+//R THREE.ShaderChunk[ "color_pars_fragment" ]
+//R THREE.ShaderChunk[ "map_pars_fragment" ]
+//R THREE.ShaderChunk[ "lightmap_pars_fragment" ]
+//R THREE.ShaderChunk[ "envmap_pars_fragment" ]
+//R THREE.ShaderChunk[ "fog_pars_fragment" ]
+//R THREE.ShaderChunk[ "shadowmap_pars_fragment" ]
+
+void main()
+{
+
+//R THREE.ShaderChunk[ "map_fragment" ]
+//R THREE.ShaderChunk[ "alphatest_fragment" ]
+
+    vec3  tGrass = texture2D( texture_grass, vUv ).rgb;
+    vec3  tRock = texture2D( texture_rock, vUv ).rgb;
+    vec3  tDirt = texture2D( texture_dirt, vUv ).rgb;
+
+    float fRock = texture2D( texture_splat, vUv ).r ;
+    float fDirt = texture2D( texture_splat, vUv ).g ;
+
+    vec3 mergedRockGrass     = mix(tGrass, tRock, fRock) ;
+    vec3 mergedRockGrassDirt = mix(mergedRockGrass, tDirt, fDirt) ;
+
+    gl_FragColor = vec4( mergedRockGrassDirt,  1.0) ;
+
+//R THREE.ShaderChunk[ "lightmap_fragment" ]
+//R THREE.ShaderChunk[ "color_fragment" ]
+//R THREE.ShaderChunk[ "envmap_fragment" ]
+//R THREE.ShaderChunk[ "shadowmap_fragment" ]
+
+//R THREE.ShaderChunk[ "linear_to_gamma_fragment" ]
+
+//R THREE.ShaderChunk[ "fog_fragment" ]
+
+
+
+}
+
+
+//    float fBlend = vPosition.y / 10.0;
+
+//
+//    color = vec3(1.0, 1.0, 1.0) ;
+
+//    color *= vPosition.y ;
+
+    //color2 = texture2D( texture_rock, vUv ).rgb;
+//    color2 *= abs(1.0-vPosition.y);
+
+//    color3 = color+color2 ;
+//    gl_FragColor = vec4(color, 1.0 );
+
+
+VERTEX
+------
+varying vec2 vUv;
+varying vec3 vPosition;
+
+//R THREE.ShaderChunk[ "map_pars_vertex" ]
+//R THREE.ShaderChunk[ "lightmap_pars_vertex" ]
+//R THREE.ShaderChunk[ "envmap_pars_vertex" ]
+//R THREE.ShaderChunk[ "color_pars_vertex" ]
+//R THREE.ShaderChunk[ "skinning_pars_vertex" ]
+//R THREE.ShaderChunk[ "morphtarget_pars_vertex" ]
+//R THREE.ShaderChunk[ "shadowmap_pars_vertex" ]
+
+void main()
+{
+    vUv = uv;
+    vPosition = position ;
+
+    vec4 mvPosition = modelViewMatrix * vec4( vPosition, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+
+//R	THREE.ShaderChunk[ "map_vertex" ]
+//R	THREE.ShaderChunk[ "lightmap_vertex" ]
+//R	THREE.ShaderChunk[ "envmap_vertex" ]
+//R	THREE.ShaderChunk[ "color_vertex" ]
+//R	THREE.ShaderChunk[ "skinning_vertex" ]
+//R	THREE.ShaderChunk[ "morphtarget_vertex" ]
+//R	THREE.ShaderChunk[ "default_vertex" ]
+//R	THREE.ShaderChunk[ "shadowmap_vertex" ]
+
+}
