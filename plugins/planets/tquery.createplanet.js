@@ -1,18 +1,33 @@
 tQuery.register('createPlanet', function(opts){
 	opts	= tQuery.extend(opts, {
-		type	: "moon"
+		type	: 'moon'
+		//type	: 'earth'
 	});
 	
 	var baseUrl	= tQuery.createPlanet.baseUrl;
-console.log('baseUrl planets', baseUrl)
-	var url		= baseUrl + 'images/moon_1024.jpg';
-console.log('Url planets', url)
-	var object	= tQuery.createSphere();
-	object.material(new THREE.MeshBasicMaterial({
-		ambient	: 0x888888,
-		color	: 0x888888,
-		map	: THREE.ImageUtils.loadTexture(url)
-	}));
+	if( opts.type === 'moon' ){
+		var url		= baseUrl + 'images/moon_1024.jpg';	
+		var object	= tQuery.createSphere();
+		object.material(new THREE.MeshBasicMaterial({
+			map	: THREE.ImageUtils.loadTexture(url)
+		}));
+	}else if( opts.type === 'earth' ){
+		var object	= tQuery.createObject3D()
+
+		var earth	= tQuery.createSphere().addTo(object);
+		var url		= baseUrl + 'images/earth_atmos_2048.jpg';
+		earth.material(new THREE.MeshBasicMaterial({
+			map	: THREE.ImageUtils.loadTexture(url)
+		}));
+
+		var cloud	= tQuery.createSphere(0.52).addTo(object);
+		var url		= baseUrl + 'images/earth_clouds_1024.png';
+		cloud.material(new THREE.MeshBasicMaterial({
+			map		: THREE.ImageUtils.loadTexture(url),
+			transparent	: true
+		}));
+	}else	console.assert(false, 'unknown opts.type: '+opts.type)
+
 	return object;
 });
 
