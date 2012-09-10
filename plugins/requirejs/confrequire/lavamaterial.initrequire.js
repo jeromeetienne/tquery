@@ -1,7 +1,4 @@
 define(['module', 'plugins/lavamaterial/tquery.lavamaterial'], function(module){
-	// compute the absoute baseUrl for this file.js
-	var baseUrl	= location.href.replace(/[^/]*$/, '')
-			+ module.uri.replace(/[^/]*$/, '');
 	// set baseUrl for this plugin
-	tQuery.Object3D.prototype.setLavaMaterial.baseUrl	= baseUrl+'../../lavamaterial/';
+	tQuery.Object3D.prototype.setLavaMaterial.baseUrl	= module.url+'/../../../lavamaterial/';
 });
