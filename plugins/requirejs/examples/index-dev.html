@@ -4,7 +4,7 @@
 <script src="../../../plugins/requirejs/build/all.confrequire.js"></script>
 <body><script>
 	require([
-			'tquery.createplanet','tquery.keyboard',
+			'tquery.planets','tquery.keyboard',
 			'tquery.minecraft', 'tquery.skymap',
 			'tquery.videos',
 			'tquery.text', 
@@ -23,19 +23,24 @@
 		], function(){
 		var world	= tQuery.createWorld().boilerplate().start();
 
-		tQuery.createGrassGround({
-			textureRepeatX	: 10,
-			textureRepeatY	: 10,
-		}).addTo(world)
-			.scale(30)
+		// add a graddground
+		if( false ){
+			tQuery.createGrassGround({
+				textureRepeatX	: 10,
+				textureRepeatY	: 10,
+			}).addTo(world)
+				.scale(30)
+		}
 
 		world.enableStatsPlus();
 
 		// add a md2character
-		var character	= new tQuery.RatamahattaMD2Character().attach(world).hookKeyboard();
-		character.bind("loaded", function(){
-			console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
-		});
+		if( false ){
+			var character	= new tQuery.RatamahattaMD2Character().attach(world).hookKeyboard();
+			character.bind("loaded", function(){
+				console.log("list animmation", Object.keys(character._meshBody.geometry.animations))
+			});			
+		}
 
 		// create the saber	
 		if( false ){
@@ -58,19 +63,27 @@
 		// world.add(cube.subtract(sphere).id('origCube').geometry().center().back());
 
 		// setup light
-		tQuery.createDirectionalLight().addTo(world).position(1,1,1);
-		tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
-		tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
-		var planet	= tQuery.createPlanet().addTo(world)
-					.translateX(-1);
+		// tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+		// tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+		// tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+		
+		if( true ){
+			var planet	= tQuery.createPlanet().addTo(world)
+			 			.translateX(-1);			
+		}
 
 		//tQuery.DatguiTuner('light');
 		
-		// // add a minecraft character
-		// var minecraft	= tQuery.createMinecraftChar().addTo(world);
-		// minecraft.loadSkin(tQuery.MinecraftChar.baseUrl+'examples/images/agentsmith.png')
-		// minecraft.object3D('root').translateY(-0.5)
-		
+		// add a minecraft character
+		if( true ){
+			var minecraft	= tQuery.createMinecraftChar().addTo(world);
+			minecraft.loadSkin(tQuery.MinecraftChar.baseUrl+'examples/images/agentsmith.png')
+			minecraft.object3D('root').translateY(-0.5)
+			// init bodyAnims
+			var bodyAnims	= new tQuery.MinecraftCharAnimations(minecraft);
+			bodyAnims.start('walk');
+		}
+	
 		// // add text
 		// var text	= tQuery.createText("tQuery is Fun!", {
 		// 	font	: "droid sans"

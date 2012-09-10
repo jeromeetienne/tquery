@@ -85,10 +85,17 @@ requirejs.config({
 			"plugins/md2character/tquery.md2character.ratamahatta"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
-			"plugins/minecraft/tquery.minecraftchar"
+			"plugins/minecraft/tquery.minecraftchar",
+			"plugins/minecraft/tquery.animation",
+			"plugins/minecraft/tquery.animations",
+			"plugins/minecraft/tquery.minecraftcharanimations",
+			"plugins/minecraft/tquery.minecraftcharheadanimations"
 		],
 		"plugins/physics/tquery.physijs": [
 			"plugins/physics/vendor/physijs/physi"
+		],
+		"plugins/requirejs/confrequire/planets.initrequire": [
+			"plugins/planets/tquery.createplanet"
 		],
 		"plugins/pproc/tquery.effectcomposer": [
 			"three.js/ShaderExtras",
