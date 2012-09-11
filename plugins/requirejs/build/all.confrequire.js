@@ -14,6 +14,7 @@ requirejs.config({
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
 			"tquery.fog": "plugins/fog/tquery.world.createfog",
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
+			"tquery.gsvpano": "plugins/gsvpano/tquery.gsvpano",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
@@ -65,6 +66,9 @@ requirejs.config({
 		],
 		"plugins/domevent/tquery.domevent": [
 			"plugins/domevent/threex.domevent"
+		],
+		"plugins/gsvpano/tquery.gsvpano": [
+			"plugins/gsvpano/vendor/GSVPano"
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"

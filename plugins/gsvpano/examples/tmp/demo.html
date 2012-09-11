@@ -1,0 +1,178 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../../build/tquery-bundle-require.js"></script>
+
+<script src="../../vendor/GSVPano.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+
+<script src="../../../text/fonts/droid/droid_serif_bold.typeface.js"></script>
+<script src="../../../text/tquery.text.js"></script>
+
+<body>
+	
+	
+
+<script type="x-shader/x-vertex" id="vertexShader">
+	varying vec3 vReflect;
+	varying vec3 vRefract;
+
+	void main() {
+		// setup varying
+		vec4 mPosition	= modelMatrix * vec4( position, 1.0 );
+		vec3 nWorld	= normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
+		vReflect	= normalize( reflect( normalize( mPosition.xyz - cameraPosition ), nWorld ) );
+		vRefract	= normalize( refract( normalize( mPosition.xyz - cameraPosition ), nWorld, 0.9 ) );
+		// set the vertex at the classical position
+		gl_Position	= projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+	}
+</script>
+<script type="x-shader/x-vertex" id="fragmentShader">
+	// heavily based on http://www.clicktorelease.com/code/streetViewReflectionMapping/
+	uniform sampler2D refractTexture;
+	uniform sampler2D reflectTexture;
+
+	uniform float rAmount;
+
+	varying vec3 vReflect;
+	varying vec3 vRefract;
+
+	const float PI	= 3.14159265358979323846264;
+
+	void main(void) {
+		// compute reflection color
+		float yaw	= 0.5 - atan( vReflect.z, - vReflect.x ) / ( 2.0 * PI );
+		float pitch	= 0.5 - asin( vReflect.y ) / PI;
+		vec3 color	= texture2D( reflectTexture, vec2( yaw, pitch ) ).rgb * (1.0 - rAmount);
+		// compute refraction color
+		yaw		= 0.5 - atan( vRefract.z, - vRefract.x ) / ( 2.0 * PI );
+		pitch		= 0.5 - asin( vRefract.y ) / PI;
+		color		+=texture2D( refractTexture, vec2( yaw, pitch ) ).rgb * rAmount;
+		// set final color
+		gl_FragColor	= vec4( color, 1.0 );
+	}
+</script>
+<script>
+require(['tquery.pproc', 'tquery.minecraft'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// tQuery.createTorus().addTo(world).translateY(1)
+	world.tCamera().position.z	= +4;
+	
+
+	// add post processing
+	world.addEffectComposer()
+		//.sepia()
+		//.film(0.5, 0.25, 648, false)
+		.vignette()
+		.finish();
+
+	// setup a FirstPersonControls for camera
+	if( false ){
+		var controls	= new THREE.FirstPersonControls( world.tCamera() );
+		controls.movementSpeed	= 2;
+		controls.lookSpeed	= 0.06;
+		controls.lookVertical	= true;
+		controls.constrainVertical	= true;
+		controls.verticalMin	= 1.1;
+		controls.verticalMax	= 2.2;
+		world.setCameraControls(controls)		
+	}
+
+	if( true ){
+		var character	= tQuery.createMinecraftChar({
+			skinUrl	: tQuery.MinecraftChar.baseUrl+'/examples/images/Mario.png'
+		}).addTo(world);
+		var model	= character.object3D('root');
+		model.rotateY(Math.PI/2)
+			.scaleBy(6)
+			.translateX(-80)
+			.translateY(-5)
+			.translateZ(-2)
+		// init bodyAnims
+		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+		bodyAnims.start('run');
+		world.loop().hook(function(delta, now){
+			model.translateX(delta*5)
+		})		
+	}
+	// https://github.com/vorg/timeline.js/blob/master/src/timeline.js
+	var loader	= new GSVPANO.PanoLoader({
+		zoom	: 2
+	});
+	
+	loader.onPanoramaLoad	= function(){
+		document.body.appendChild( this.canvas );
+
+		var texture	= new THREE.Texture(this.canvas);
+		texture.needsUpdate = true;
+
+
+		var geometry	= new THREE.SphereGeometry( 500, 60, 40 );
+		var material	= new THREE.MeshBasicMaterial({
+			map	: texture,
+			side	: THREE.BackSide
+		});
+		var mesh	= new THREE.Mesh( geometry, material );
+		tQuery(mesh).addTo(world);
+
+
+
+		var texture	= new THREE.Texture(this.canvas);
+		texture.needsUpdate = true;
+		
+		var canvas = document.createElement( 'canvas' );
+		var s = 10;
+		canvas.width = this.canvas.width / s;
+		canvas.height = this.canvas.height / s;
+		var ctx = canvas.getContext( '2d' );
+		ctx.drawImage( this.canvas, 0, 0, this.canvas.width, this.canvas.height, 0, 0, canvas.width, canvas.height );
+		var scaledTexture	= new THREE.Texture(canvas);
+		scaledTexture.needsUpdate = true;
+
+		var material	= new THREE.ShaderMaterial({
+			uniforms	: {
+				refractTexture	: { type: 't', value: 0.0, texture: texture },
+				reflectTexture	: { type: 't', value: 1.0, texture: scaledTexture },
+				rAmount		: { type: 'f', value: 0.0 }	// 0.0 for reflect - 0.8 for refract
+			},
+			vertexShader	: document.getElementById( 'vertexShader' ).textContent,
+			fragmentShader	: document.getElementById( 'fragmentShader' ).textContent
+		});
+
+		var geometry	= new THREE.TorusGeometry(3*(0.5-0.15), 3*0.15, 3*8, 3*6);
+		var geometry	= new THREE.PlaneGeometry(3,3, 4, 4);
+		//var geometry	= new THREE.CubeGeometry(3,3,3);
+		// var mesh	= new THREE.Mesh( geometry, material );
+		// tQuery(mesh).addTo(world);
+		
+		var text	= tQuery.createText("onGameStart !")
+					.addTo(world)
+					.material(material)
+	};
+	
+	
+	var pos		= { lat: 51.50700703827454, lng: -0.12791916931155356 };
+	var pos		= { lat: 52.2520807, lng: 21.03625260000001 };
+	var pos		= { lat: 48.813055, lng: 2.3882200000000466 };
+	//52.2520807,21.03625260000001
+	var location	= new google.maps.LatLng( pos.lat, pos.lng );
+	console.log('location', location)
+	console.dir(location)
+	//loader.load( location );
+	
+	var geocoder	= new google.maps.Geocoder();	
+	geocoder.geocode({
+		address	: 'ul. Zielna 37, warsaw'
+	}, function(results, status){
+		//console.log('geocoder', arguments)
+		if( status === google.maps.GeocoderStatus.OK ){
+			//console.log('found Location', results[0].geometry.location );
+			var location	= results[0].geometry.location;
+			loader.load( location );
+		} else {
+			console.error("Geocode was not successful for the following reason: " + status);
+		}
+	});
+
+});
+</script></body>
