@@ -1,0 +1,5 @@
+{
+	"name"		: "tQuery",
+	"version"	: "1.0.0",
+	"main"		: "./build/tquery-bundle-require.js",
+}
