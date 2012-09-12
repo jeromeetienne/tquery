@@ -11,9 +11,9 @@
 tQuery.Geometry.register('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingBox();
-		tGeometry.computeCentroids();
+		//tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
-		tGeometry.computeVertexNormals();
+		//tGeometry.computeVertexNormals();
 		//tGeometry.computeTangents();
 	});
 

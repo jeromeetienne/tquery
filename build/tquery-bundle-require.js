@@ -3984,9 +3984,9 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 tQuery.Geometry.register('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingBox();
-		tGeometry.computeCentroids();
+		//tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
-		tGeometry.computeVertexNormals();
+		//tGeometry.computeVertexNormals();
 		//tGeometry.computeTangents();
 	});
 
@@ -4899,6 +4899,7 @@ requirejs.config({
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
+			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.physics": "plugins/physics/tquery.physijs",
@@ -4948,10 +4949,14 @@ requirejs.config({
 			"plugins/domevent/threex.domevent"
 		],
 		"plugins/gsvpano/tquery.gsvpano": [
+			"http://maps.google.com/maps/api/js?sensor=false",
 			"plugins/gsvpano/vendor/GSVPano"
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
+		],
+		"plugins/linkify/tquery.mesh.linkify": [
+			"tquery.domevent"
 		],
 		"plugins/requirejs/confrequire/md2character.initrequire": [
 			"plugins/md2character/tquery.md2character",

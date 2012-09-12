@@ -17,18 +17,72 @@ tQuery.register('createPlanet', function(opts){
 	}else if( opts.type === 'earth' ){
 		var object	= tQuery.createObject3D()
 
-		var earth	= tQuery.createSphere().addTo(object);
+		var earth	= tQuery.createSphere(0.5, 100, 50).addTo(object);
 		var url		= baseUrl + 'images/earth_atmos_2048.jpg';
 		earth.material(new THREE.MeshBasicMaterial({
 			map	: THREE.ImageUtils.loadTexture(url)
 		}));
 
-		var cloud	= tQuery.createSphere(0.52).addTo(object);
+		var cloud	= tQuery.createSphere(0.52, 100, 50).addTo(object);
 		var url		= baseUrl + 'images/earth_clouds_1024.png';
 		cloud.material(new THREE.MeshBasicMaterial({
 			map		: THREE.ImageUtils.loadTexture(url),
 			transparent	: true
 		}));
+	}else if( opts.type === 'earthNormal' ){
+		var object	= tQuery.createObject3D()
+
+		var planetTexture	= THREE.ImageUtils.loadTexture( baseUrl+"images/earth_atmos_2048.jpg" );
+		var cloudsTexture	= THREE.ImageUtils.loadTexture( baseUrl+"images/earth_clouds_1024.png" );
+		var normalTexture	= THREE.ImageUtils.loadTexture( baseUrl+"images/earth_normal_2048.jpg" );
+		var specularTexture	= THREE.ImageUtils.loadTexture( baseUrl+"images/earth_specular_2048.jpg" );
+
+		var shader	= THREE.ShaderUtils.lib[ "normal" ];
+		var uniforms	= THREE.UniformsUtils.clone( shader.uniforms );
+
+		uniforms[ "tNormal" ].texture	= normalTexture;
+		uniforms[ "uNormalScale" ].value= 0.85;
+
+		uniforms[ "tDiffuse" ].texture	= planetTexture;
+		uniforms[ "tSpecular" ].texture = specularTexture;
+
+		uniforms[ "enableAO" ].value		= false;
+		uniforms[ "enableDiffuse" ].value	= true;
+		uniforms[ "enableSpecular" ].value	= true;
+
+		uniforms[ "uDiffuseColor" ].value.setHex( 0xffffff );
+		uniforms[ "uSpecularColor" ].value.setHex( 0x666666 );
+		uniforms[ "uAmbientColor" ].value.setHex( 0x000000 );
+
+		uniforms[ "uShininess" ].value		= 20;
+
+		uniforms[ "uDiffuseColor" ].value.convertGammaToLinear();
+		uniforms[ "uSpecularColor" ].value.convertGammaToLinear();
+		uniforms[ "uAmbientColor" ].value.convertGammaToLinear();
+
+		var materialNormalMap = new THREE.ShaderMaterial({
+			fragmentShader	: shader.fragmentShader,
+			vertexShader	: shader.vertexShader,
+			uniforms	: uniforms,
+			lights		: true
+		});
+
+		var geometry	= new THREE.SphereGeometry(0.5, 30, 15 );
+		geometry.computeTangents();
+
+		tQuery(geometry, materialNormalMap).addTo(object);
+
+		// clouds
+		var url		= baseUrl + 'images/earth_clouds_1024.png';
+		var texture	= THREE.ImageUtils.loadTexture(url)
+		var materialClouds = new THREE.MeshLambertMaterial({
+			color		: 0xffffff,
+			map		: texture,
+			transparent	: true
+		});
+
+		tQuery( geometry, materialClouds ).addTo(object)
+			.scaleBy(1.005)
 	}else	console.assert(false, 'unknown opts.type: '+opts.type)
 
 	return object;
