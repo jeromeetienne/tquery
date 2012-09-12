@@ -6,19 +6,20 @@ require(['tquery.skymap', 'tquery.text', 'tquery.planets', 'tquery.domevent',
 	'tquery.pproc'
 	], function(){
 		
-
+	// create the world
 	var world	= tQuery.createWorld().boilerplate().start();
 
+	// add the post processing
 	world.addEffectComposer()
 		//.sepia()
-		.film(0.25, 0.25, 648, false)
+		.film(0.5, 0.25, 648, false)
 		.vignette()
 		.finish();
 
 	// setup light
 	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
 	tQuery.createDirectionalLight().addTo(world).position(-1,0,1);
-	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF); 
 
 	//////////////////////////////////////////////////////////////////////////
 	//		Handle planet						//
@@ -29,18 +30,25 @@ require(['tquery.skymap', 'tquery.text', 'tquery.planets', 'tquery.domevent',
 	//var planet	= tQuery.createPlanet('earth').addTo(world);
 	planet.get(0).eulerOrder = 'XZY';
 
+	var cloud	= tQuery('#planet .cloud');
 	// make the object rotate
 	world.loop().hook(function(delta, now){
 		// handle planet rotation
 		var angle	= 0.1 * now * Math.PI * 2;
+		//var angle	= 0.0 * now * Math.PI * 2;
 		planet.get(0).rotation.y	= -angle;
 		planet.get(0).rotation.z	= 23.1 * Math.PI/180;
 
 		// handle planet revolution
 		var angle	= 0.05 * now * Math.PI * 2;
+		//var angle	= 0.0 * now * Math.PI * 2;
 		planet.get(0).position.x = 2.0 * Math.cos(angle);
 		planet.get(0).position.y = 0.5 * Math.cos(angle+Math.PI/2);
 		planet.get(0).position.z = 1.0 * Math.sin(angle);
+		
+		// handle rotation cloud
+		var angle	= 0.01 * now * Math.PI * 2;
+		cloud.get(0).rotation.y	= angle; 
 	});
 
 	//////////////////////////////////////////////////////////////////////////
