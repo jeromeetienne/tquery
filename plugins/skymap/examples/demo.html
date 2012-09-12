@@ -1,0 +1,102 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../linkify/tquery.mesh.linkify.js"></script>
+<body><script>
+require(['tquery.skymap', 'tquery.text', 'tquery.planets', 'tquery.domevent'
+	], function(){
+
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	//////////////////////////////////////////////////////////////////////////
+	//		Handle 'preregister' button				//
+	//////////////////////////////////////////////////////////////////////////
+	
+	// enable domEvent on this world
+	world.enableDomEvent();
+	var button	= tQuery.createText("Github").addTo(world)
+		.scaleBy(1/8)
+		.translateY(-0.3)
+
+// TODO make linkify in require.js
+// make the bounding box part of the linkify. it is more natural
+	var size	= button.geometry().computeAll().size();
+	tQuery.createCube(size.x, size.y, size.z)
+		.scaleBy(1.2)
+		.addTo(button)
+		.setBasicMaterial({
+			wireframe	: true
+		}).back()
+		.linkify('https://github.com/jeromeetienne/tquery/');
+
+	//////////////////////////////////////////////////////////////////////////
+	//		Handle planet						//
+	//////////////////////////////////////////////////////////////////////////	
+	
+	// add planets
+	var planet	= tQuery.createPlanet('earth').id('planet').addTo(world);
+	planet.get(0).eulerOrder = 'XZY';
+
+	// make the object rotate
+	world.loop().hook(function(delta, now){
+		// handle planet rotation
+		var angle	= 0.1 * now * Math.PI * 2;
+		planet.get(0).rotation.y	= -angle;
+		planet.get(0).rotation.z	= 23.1 * Math.PI/180;
+
+		// handle planet revolution
+		var radiusX	= 2;
+		var radiusY	= 0.5;
+		var radiusZ	= 1;
+
+		var angle	= 0.1 * now * Math.PI * 2;
+		planet.get(0).position.x = radiusX * Math.cos(angle);
+		planet.get(0).position.z = radiusZ * Math.sin(angle);
+		planet.get(0).position.y = radiusY * Math.cos(angle+Math.PI/2);
+	});
+
+	//////////////////////////////////////////////////////////////////////////
+	//		Handle camera control						//
+	//////////////////////////////////////////////////////////////////////////	
+
+
+	// make camera controls go smoother
+	var controls	= tQuery.world.getCameraControls();
+	controls.rangeX	*= 0.05;
+	controls.rangeY	*= 0.05;
+	
+	//////////////////////////////////////////////////////////////////////////
+	//		Handle skymap						//
+	//////////////////////////////////////////////////////////////////////////	
+	
+	// add a skymap
+	var skymap	= tQuery.createSkymap('swedishRoyalCastle').addTo(world);
+
+	//////////////////////////////////////////////////////////////////////////
+	//		Handle text						//
+	//////////////////////////////////////////////////////////////////////////	
+
+	// create the text
+	var text	= tQuery.createObject3D().addTo(world)
+				.translateY(0.3)
+	var textEnvMap	= tQuery.createCubeTexture('skybox');
+	tQuery.createText("tQuery is Fun!", {
+		// font	: "gentilis",
+		// weight	: "regular",
+	}).addTo(text)
+		.scaleBy(1/4)
+		.setBasicMaterial({
+			color	: 0xffffff,
+			envMap	: textEnvMap
+		})
+	tQuery.createText("Super Fun", {
+		// font	: "gentilis",
+		// weight	: "regular",
+	}).addTo(text)
+		.scaleBy(1/8)
+		.translateY(-0.25)
+		.translateX(0.8)
+		.setBasicMaterial({
+			envMap	: textEnvMap
+		})
+});
+</script></body>

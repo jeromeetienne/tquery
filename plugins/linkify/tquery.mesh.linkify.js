@@ -11,7 +11,7 @@ tQuery.Mesh.register('linkify', function(url){
 	// make it invisible by default
 	underline.get(0).visible	= false;
 	// add it to the mesh
-	mesh.add(underline);
+	underline.addTo(mesh)
 	
 	// bind the click
 	mesh.on('click', function(event){

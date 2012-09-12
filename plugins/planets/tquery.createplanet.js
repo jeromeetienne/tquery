@@ -1,4 +1,7 @@
 tQuery.register('createPlanet', function(opts){
+	// handle parameters polymorphism
+	if( typeof(opts) === 'string' )	opts	= { type: opts };
+	// handle options default
 	opts	= tQuery.extend(opts, {
 		type	: 'moon'
 		//type	: 'earth'
