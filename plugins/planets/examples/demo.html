@@ -1,0 +1,67 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><div id='info' style='color:white'>
+	Examples of tQuery.planets plugin
+	<br/>
+	Largely copied on
+	<a href="http://mrdoob.github.com/three.js/examples/webgl_trackballcamera_earth.html">three's trackballcamera example</a>
+	-
+	WebGL with <a href='http://mrdoob.github.com/three.js/' target='_blank'>three.js</a> thru
+	<a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a>
+</div><script>
+require(['tquery.planets', 'tquery.pproc'], function(){
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	// set the world background in black
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+
+	// make camera controls go smoother
+	var controls	= world.getCameraControls();
+	controls.rangeX	*= 0.03;
+	controls.rangeY	*= 0.03;
+	
+	world.tCamera().position.z	= 2;
+	
+	// add post processing
+	world.addEffectComposer()
+		//.bloom(0.6)
+		.motionBlur(0.6)
+		.screen()
+		//.film(0.25, 0.25, 648, false)
+		.finish();
+
+	// setup light
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
+	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
+
+	// create the moon
+	var moon	= tQuery.createPlanet('moon').addTo(world).scale(1/4)
+	// make the object rotate
+	world.loop().hook(function(delta, now){
+		// handle rotation
+		var angle	= 0.1 * now * Math.PI * 2;
+		moon.get(0).rotation.y	= -angle;
+		// handle revolution
+		var angle	= 0.1 * now * Math.PI * 2;
+		moon.get(0).position.x = 0.7 * Math.cos(angle);
+		moon.get(0).position.z = 0.7 * Math.sin(angle);
+	});
+	
+	// add planets
+	var planet	= tQuery.createPlanet('earthNormal').id('planet').addTo(world)
+	var cloud	= tQuery('.cloud', planet);
+	planet.get(0).eulerOrder = 'XZY';
+	// make the object rotate
+	world.loop().hook(function(delta, now){
+		// handle planet rotation
+		var angle	= 0.05 * now * Math.PI * 2;
+		//var angle	= 0.0 * now * Math.PI * 2;
+		planet.get(0).rotation.y	= angle;
+		planet.get(0).rotation.z	= 23.1 * Math.PI/180;
+
+		// handle rotation cloud
+		var angle	= 0.01 * now * Math.PI * 2;
+		cloud.get(0).rotation.y	= -angle; 
+	});
+});
+</script></body>
