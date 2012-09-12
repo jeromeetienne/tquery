@@ -51,7 +51,7 @@ tQuery.Object3D.register('on', function(eventType, callback, world){
 	// parameter polymorphism
 	world	= world	|| tQuery.world;
 	// sanity check
-	console.assert(world.hasDomEvent() === true);
+	console.assert(world.hasDomEvent() === true, 'world has no domEvents. have you done world.enableDomEvent() ?');
 	// get THREEx.DomEvent
 	var domEvent	= tQuery.data(world, '_DomEvent').domEvent;
 	// set the camera in domEvent
@@ -68,7 +68,7 @@ tQuery.Object3D.register('off', function(eventType, callback, world){
 	// parameter polymorphism
 	world	= world	|| tQuery.world;
 	// sanity check
-	console.assert(world.hasDomEvent() === true);
+	console.assert(world.hasDomEvent() === true, 'world has no domEvents. have you done world.enableDomEvent() ?');
 	// get THREEx.DomEvent
 	var domEvent	= tQuery.data(world, '_DomEvent').domEvent;
 	// set the camera
