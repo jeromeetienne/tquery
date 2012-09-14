@@ -35,6 +35,7 @@ looks like the code below... Quite short.
 
 
 #### Current
+* added require.js for webgl-inspector
 
 #### Release - r50.1
 
@@ -48,6 +49,7 @@ looks like the code below... Quite short.
 * added nice looking earth in tquery.planets 
 * added tquery.statsplus - like stats.js but report memory and renderer stats
 * added tquery.flocking - early version
+* much better require.js support
 
 #### Release - r50.0
 

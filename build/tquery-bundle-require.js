@@ -4909,7 +4909,7 @@ requirejs.config({
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
 			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
-			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_bold.typeface",
+			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
@@ -5011,7 +5011,7 @@ requirejs.config({
 		"plugins/text/tquery.text": [
 			"plugins/text/fonts/droid/droid_serif_bold.typeface"
 		],
-		"plugins/text/fonts/droid/droid_serif_bold.typeface": [
+		"plugins/text/fonts/droid/droid_serif_regular.typeface": [
 			"plugins/text/fonts/gentilis_bold.typeface",
 			"plugins/text/fonts/gentilis_regular.typeface",
 			"plugins/text/fonts/optimer_bold.typeface",
@@ -5020,7 +5020,7 @@ requirejs.config({
 			"plugins/text/fonts/helvetiker_regular.typeface",
 			"plugins/text/fonts/droid/droid_sans_regular.typeface",
 			"plugins/text/fonts/droid/droid_sans_bold.typeface",
-			"plugins/text/fonts/droid/droid_serif_regular.typeface"
+			"plugins/text/fonts/droid/droid_serif_bold.typeface"
 		],
 		"plugins/tweenjs/tquery.tween": [
 			"plugins/tweenjs/vendor/Tween"
