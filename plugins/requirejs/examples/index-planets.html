@@ -3,9 +3,14 @@
 <script src="../../../plugins/requirejs/vendor/require.js"></script>
 <script src="../../../plugins/requirejs/build/all.confrequire.js"></script>
 <body><script>
-require([], function(){
+require(['tquery.text', 'tquery.text.allfonts'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-	tQuery.createTorus().addTo(world)
+	//tQuery.createTorus().addTo(world)
+	tQuery.createText('tQuery', {
+		bevelThickness	: 0.1,
+		bevelSize	: 0.03,
+		bevelEnabled	: true,		
+	}).addTo(world)
 });
 </script></body>
 
