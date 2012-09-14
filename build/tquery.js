@@ -228,10 +228,13 @@ tQuery.extend = function(obj, base, deep){
 tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 	dest		= dest	|| object.prototype || object;
 	fnNameSuffix	= fnNameSuffix || '';
+	// sanity check 
+	console.assert(object['register'+fnNameSuffix] === undefined);
+	console.assert(object['unregister'+fnNameSuffix] === undefined);
+	console.assert(object['registered'+fnNameSuffix] === undefined);
+
 	object['register'+fnNameSuffix]		= function(name, funct) {
-		if( dest[name] ){
-			throw new Error('Conflict! Already method called: ' + name);
-		}
+		console.assert(dest[name] === undefined, 'Conflict! Already method called: ' + name);
 		dest[name]	= funct;
 	};
 	object['unregister'+fnNameSuffix]	= function(name){
@@ -245,17 +248,24 @@ tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 	}
 };
 
-tQuery.pluginsInstanceOn= function(klass){ return tQuery._pluginsOn(klass);			};
-tQuery.pluginsStaticOn	= function(klass){ return tQuery._pluginsOn(klass, klass, 'Static');	};
+tQuery.pluginsInstanceOn= function(klass){
+	tQuery._pluginsOn(klass);
+//	tQuery._pluginsOn(klass, undefined, 'Instance');
+};
+tQuery.pluginsStaticOn	= function(klass){
+	tQuery._pluginsOn(klass, klass, 'Static');
+	// by default obj.register('property') === obj.registerStatic('property')
+	tQuery._pluginsOn(klass, klass, '');
+};
 
 /** for backward compatibility only */
-tQuery.pluginsOn	= function(object, dest){
-	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
-	console.trace();
-	return tQuery._pluginsOn(object, dest)
-}
+// tQuery.pluginsOn	= function(object, dest){
+// 	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
+// 	console.trace();
+// 	return tQuery._pluginsOn(object, dest)
+// }
 // make it pluginable
-tQuery.pluginsOn(tQuery, tQuery);
+tQuery.pluginsStaticOn(tQuery, tQuery);
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -2318,96 +2328,166 @@ tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio
  * @fileOverview Plugins for tQuery.Object3D to play with .position/.rotation/.scale
 */
 
-(function(){	// TODO why is there a closure here ?
-
 //////////////////////////////////////////////////////////////////////////////////
-//		set function							//
+//		position 							//
 //////////////////////////////////////////////////////////////////////////////////
-
-tQuery.Object3D.register('scale', function(scale){
-	// handle parameters
-	if( typeof scale === "number" && arguments.length === 1 ){
-		scale	= new THREE.Vector3(scale, scale, scale);
-	}else if( typeof scale === "number" && arguments.length === 3 ){
-		scale	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-	}
-	console.assert(scale instanceof THREE.Vector3, "Geometry.scale parameter error");
-
-	// do the operation on each node
-	this.each(function(object3d){
-		object3d.scale.copy(scale);
-	});
-
-	// return this, to get chained API	
-	return this;
-});
 
 tQuery.Object3D.register('position', function(vector3){
+	// handle the getter
+	if( vector3 === undefined )	return this.get(0).position;
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 3 ){
 		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
 	console.assert(vector3 instanceof THREE.Vector3, "Object3D.position parameter error");
-
 	// do the operation on each node
 	this.each(function(object3d){
 		object3d.position.copy(vector3);
-	})
-
+	});
 	// return this, to get chained API	
 	return this;
 });
 
-tQuery.Object3D.register('rotation', function(vector3){
-	// handle parameters
-	if( typeof vector3 === "number" && arguments.length === 3 ){
-		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-	}
-	console.assert(vector3 instanceof THREE.Vector3, "Object3D.rotation parameter error");
-
-	// do the operation on each node
-	this.each(function(object3d){
-		object3d.rotation.copy(vector3);
-	})
-
-	// return this, to get chained API	
+tQuery.Object3D.register('positionX', function(scalar){
+	if( scalar === undefined )	return object.get(0).position.x;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.position.x = scalar;	});
 	return this;
 });
-
-//////////////////////////////////////////////////////////////////////////////////
-//		add function							//
-//////////////////////////////////////////////////////////////////////////////////
+tQuery.Object3D.register('positionY', function(scalar){
+	if( scalar === undefined )	return object.get(0).position.y;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.position.y = scalar;	});
+	return this;
+});
+tQuery.Object3D.register('positionZ', function(scalar){
+	if( scalar === undefined )	return object.get(0).position.z;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.position.z = scalar;	});
+	return this;
+});
 
 tQuery.Object3D.register('translate', function(delta){
 	// handle parameters
 	if( typeof delta === "number" && arguments.length === 3 ){
 		delta	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
+	// sanity check
 	console.assert(delta instanceof THREE.Vector3, "Object3D.translate parameter error");
-
 	// do the operation on each node
 	this.each(function(object3d){
 		object3d.position.addSelf(delta);
-	})
+	});
+	// return this, to get chained API	
+	return this;
+});
 
+// some shortcuts
+tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		rotation							//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Object3D.register('rotation', function(vector3){
+	// handle the getter
+	if( vector3 === undefined )	return this.get(0).rotation;
+	// handle parameters polymorphism
+	if( typeof vector3 === "number" && arguments.length === 3 ){
+		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}
+	// sanity check
+	console.assert(vector3 instanceof THREE.Vector3, "Object3D.rotation parameter error");
+	// do the operation on each node
+	this.each(function(object3d){
+		object3d.rotation.copy(vector3);
+	})
+	// return this, to get chained API	
+	return this;
+});
+
+tQuery.Object3D.register('rotationX', function(scalar){
+	if( scalar === undefined )	return object.get(0).rotation.x;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.rotation.x = scalar;	});
+	return this;
+});
+tQuery.Object3D.register('rotationY', function(scalar){
+	if( scalar === undefined )	return object.get(0).rotation.y;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.rotation.y = scalar;	});
+	return this;
+});
+tQuery.Object3D.register('rotationZ', function(scalar){
+	if( scalar === undefined )	return object.get(0).rotation.z;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.rotation.z = scalar;	});
+	return this;
+});
+
+tQuery.Object3D.register('rotate', function(angles){
+	// handle parameter polymorphism
+	if( typeof angles === "number" && arguments.length === 3 ){
+		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}
+	// sanity check
+	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
+	// do the operation on each node
+	this.each(function(object3d){
+		object3d.rotation.addSelf(angles);
+	})
 	// return this, to get chained API	
 	return this;
 });
 
 
-tQuery.Object3D.register('rotate', function(angles){
-	// handle parameters
-	if( typeof angles === "number" && arguments.length === 3 ){
-		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-	}
-	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
+// some shortcuts
+tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
 
+//////////////////////////////////////////////////////////////////////////////////
+//		scale								//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Object3D.register('scale', function(vector3){
+	// handle the getter
+	if( vector3 === undefined )	return this.get(0).scale;
+	// handle parameters
+	if( typeof vector3 === "number" && arguments.length === 1 ){
+		vector3	= new THREE.Vector3(vector3, vector3, vector3);
+	}else if( typeof vector3 === "number" && arguments.length === 3 ){
+		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}
+	// sanity check
+	console.assert(vector3 instanceof THREE.Vector3, "Object3D.scale parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.addSelf(angles);
-	})
-
+		object3d.scale.copy(vector3);
+	});
 	// return this, to get chained API	
+	return this;
+});
+
+tQuery.Object3D.register('scaleX', function(scalar){
+	if( scalar === undefined )	return object.get(0).scale.x;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.scale.x = scalar;	});
+	return this;
+});
+tQuery.Object3D.register('scaleY', function(scalar){
+	if( scalar === undefined )	return object.get(0).scale.y;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.scale.y = scalar;	});
+	return this;
+});
+tQuery.Object3D.register('scaleZ', function(scalar){
+	if( scalar === undefined )	return object.get(0).scale.z;
+	console.assert(typeof scalar === "number" && arguments.length === 1);
+	this.each(function(object3d){ object3d.scale.z = scalar;	});
 	return this;
 });
 
@@ -2418,33 +2498,17 @@ tQuery.Object3D.register('scaleBy', function(ratio){
 	}else if( typeof ratio === "number" && arguments.length === 3 ){
 		ratio	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
+	// sanity check
 	console.assert(ratio instanceof THREE.Vector3, "Object3D.rotate parameter error");
-
 	// do the operation on each node
 	this.each(function(object3d){
 		object3d.scale.multiplySelf(ratio);
 	})
-
 	// return this, to get chained API	
 	return this;
 });
 
-
 // some shortcuts
-tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
-tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
-tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
-tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
-tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
-tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
 tQuery.Object3D.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
 tQuery.Object3D.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
 tQuery.Object3D.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
-
-// backward compatibility
-tQuery.Object3D.register('zoom'		, function(value){ return this.scaleBy(value);		});
-tQuery.Object3D.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
-tQuery.Object3D.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
-tQuery.Object3D.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
-
-})();	// closure function end

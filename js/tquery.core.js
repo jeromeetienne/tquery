@@ -227,10 +227,13 @@ tQuery.extend = function(obj, base, deep){
 tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 	dest		= dest	|| object.prototype || object;
 	fnNameSuffix	= fnNameSuffix || '';
+	// sanity check 
+	console.assert(object['register'+fnNameSuffix] === undefined);
+	console.assert(object['unregister'+fnNameSuffix] === undefined);
+	console.assert(object['registered'+fnNameSuffix] === undefined);
+
 	object['register'+fnNameSuffix]		= function(name, funct) {
-		if( dest[name] ){
-			throw new Error('Conflict! Already method called: ' + name);
-		}
+		console.assert(dest[name] === undefined, 'Conflict! Already method called: ' + name);
 		dest[name]	= funct;
 	};
 	object['unregister'+fnNameSuffix]	= function(name){
@@ -244,17 +247,24 @@ tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 	}
 };
 
-tQuery.pluginsInstanceOn= function(klass){ tQuery._pluginsOn(klass);			};
-tQuery.pluginsStaticOn	= function(klass){ tQuery._pluginsOn(klass, klass, 'Static');	};
+tQuery.pluginsInstanceOn= function(klass){
+	tQuery._pluginsOn(klass);
+//	tQuery._pluginsOn(klass, undefined, 'Instance');
+};
+tQuery.pluginsStaticOn	= function(klass){
+	tQuery._pluginsOn(klass, klass, 'Static');
+	// by default obj.register('property') === obj.registerStatic('property')
+	tQuery._pluginsOn(klass, klass, '');
+};
 
 /** for backward compatibility only */
-tQuery.pluginsOn	= function(object, dest){
-	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
-	console.trace();
-	return tQuery._pluginsOn(object, dest)
-}
+// tQuery.pluginsOn	= function(object, dest){
+// 	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
+// 	console.trace();
+// 	return tQuery._pluginsOn(object, dest)
+// }
 // make it pluginable
-tQuery.pluginsOn(tQuery, tQuery);
+tQuery.pluginsStaticOn(tQuery, tQuery);
 
 
 //////////////////////////////////////////////////////////////////////////////////

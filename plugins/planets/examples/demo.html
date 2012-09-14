@@ -32,11 +32,10 @@ require(['tquery.planets'], function(){
 	world.loop().hook(function(delta, now){
 		// handle rotation
 		var angle	= 0.1 * now * Math.PI * 2;
-		moon.get(0).rotation.y	= -angle;
+		moon.rotationY(-angle)
 		// handle revolution
 		var angle	= 0.1 * now * Math.PI * 2;
-		moon.get(0).position.x = 0.7 * Math.cos(angle);
-		moon.get(0).position.z = 0.7 * Math.sin(angle);
+		moon.positionX( 0.7 * Math.cos(angle) ).positionZ( 0.7 * Math.sin(angle) )
 	});
 	
 	// add planets
@@ -47,13 +46,10 @@ require(['tquery.planets'], function(){
 	world.loop().hook(function(delta, now){
 		// handle planet rotation
 		var angle	= 0.05 * now * Math.PI * 2;
-		//var angle	= 0.0 * now * Math.PI * 2;
-		planet.get(0).rotation.y	= angle;
-		planet.get(0).rotation.z	= 23.1 * Math.PI/180;
-
+		planet.rotationY(angle).rotationZ(23.1 * Math.PI/180);
 		// handle rotation cloud
 		var angle	= 0.01 * now * Math.PI * 2;
-		cloud.get(0).rotation.y	= -angle; 
+		cloud.rotationY(-angle); 
 	});
 });
 </script></body>
