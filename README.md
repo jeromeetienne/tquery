@@ -36,12 +36,18 @@ looks like the code below... Quite short.
 
 #### Current
 
+#### Release - r50.1
+
 * implemented tQuery.now() - act as Date.now() with Performance.now() performance
 * notify tQuery.Loop hooks with Performance.now() precision
 * tQuery.extend() now support deep copy
 * renamed tQuery.convert.toBool to tQuery.convert.toBoolean
 * tquery.datguituner plugin - build a Dat.GUI on existing Scene Graph
   * Very usefull to fine tune parameters
+* added tQuery.gsvpano - easy interface with gsvpano.js
+* added nice looking earth in tquery.planets 
+* added tquery.statsplus - like stats.js but report memory and renderer stats
+* added tquery.flocking - early version
 
 #### Release - r50.0
 
