@@ -249,21 +249,11 @@ tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 
 tQuery.pluginsInstanceOn= function(klass){
 	tQuery._pluginsOn(klass, undefined, 'Instance');
-	
-	tQuery._pluginsOn(klass);
 };
 tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
-	// by default obj.register('property') === obj.registerStatic('property')
-	tQuery._pluginsOn(klass, klass, '');
 };
 
-/** for backward compatibility only */
-// tQuery.pluginsOn	= function(object, dest){
-// 	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
-// 	console.trace();
-// 	return tQuery._pluginsOn(object, dest)
-// }
 // make it pluginable
 tQuery.pluginsStaticOn(tQuery, tQuery);
 

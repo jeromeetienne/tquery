@@ -2132,21 +2132,11 @@ tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 
 tQuery.pluginsInstanceOn= function(klass){
 	tQuery._pluginsOn(klass, undefined, 'Instance');
-	
-	tQuery._pluginsOn(klass);
 };
 tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
-	// by default obj.register('property') === obj.registerStatic('property')
-	tQuery._pluginsOn(klass, klass, '');
 };
 
-/** for backward compatibility only */
-// tQuery.pluginsOn	= function(object, dest){
-// 	console.warn("tQuery.pluginsOn is obsolete. prefere .pluginsInstanceOn, .pluginsStaticOn");
-// 	console.trace();
-// 	return tQuery._pluginsOn(object, dest)
-// }
 // make it pluginable
 tQuery.pluginsStaticOn(tQuery, tQuery);
 
@@ -4396,12 +4386,12 @@ tQuery.Object3D.registerInstance('scaleXBy'	, function(ratio){ return this.scale
 tQuery.Object3D.registerInstance('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
 tQuery.Object3D.registerInstance('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
 // backward compatibility only
-tQuery.World.register('fullpage', function(){
+tQuery.World.registerInstance('fullpage', function(){
 	console.log("world.fullpage() is obsolete. use world.boilerplate() instead.");
 	return this.boilerplate();
 });
 
-tQuery.World.register('boilerplate', function(opts){
+tQuery.World.registerInstance('boilerplate', function(opts){
 	// put renderer fullpage
 	var domElement	= document.body;
 	domElement.style.margin		= "0";
@@ -4420,7 +4410,7 @@ tQuery.World.register('boilerplate', function(opts){
 /**
  * Define a page title
 */
-tQuery.World.register('pageTitle', function(element){
+tQuery.World.registerInstance('pageTitle', function(element){
 	// handle parameters polymorphism
 	if( typeof(element) === 'string' ){
 		var element	= document.querySelector(element);
@@ -4439,7 +4429,7 @@ tQuery.World.register('pageTitle', function(element){
 	return this;
 });
 
-tQuery.World.register('addBoilerplate', function(opts){
+tQuery.World.registerInstance('addBoilerplate', function(opts){
 	var _this	= this;
 	// sanity check - no boilerplate is already installed
 	console.assert( this.hasBoilerplate() !== true );
@@ -4506,14 +4496,14 @@ tQuery.World.register('addBoilerplate', function(opts){
 	return this;
 });
 
-tQuery.World.register('hasBoilerplate', function(){
+tQuery.World.registerInstance('hasBoilerplate', function(){
 	// get the context
 	var ctx	= tQuery.data(this, "_boilerplateCtx")
 	// return true if ctx if defined, false otherwise
 	return ctx === undefined ? false : true;
 });
 
-tQuery.World.register('removeBoilerplate', function(){
+tQuery.World.registerInstance('removeBoilerplate', function(){
 	// get context
 	var ctx	= tQuery.data(this, '_boilerplateCtx');
 	// if not present, return now
