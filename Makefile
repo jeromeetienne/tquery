@@ -37,8 +37,9 @@ help:
 	@echo "make boilerplateBuild	<- generate a boilerplate in ~/Downloads"
 
 release:
-	@echo "How to release"
 	@echo ""
+	@echo "How to release"
+	@echo "=============="
 	@echo "1. Go on 'dev' branch"
 	@echo "   1.1 use ```git checkout dev```"
 	@echo "   1.2 check with ```git branch```"
@@ -48,7 +49,15 @@ release:
 	@echo "   2.3 update VERSION file in / directory"
 	@echo "3. On 'dev', commit changes"
 	@echo "   3.1 use ```git commit -a -m 'releasing version r99.9'```"
-	@echo "4. Switch to 'master', commit changes with -m 'releasing version r50.1'"
+	@echo "4. Switch to 'master' branch"
+	@echo "   4.1 use ```git checkout master```"
+	@echo "5. Merge 'dev' branch into 'master' branch"
+	@echo "   5.1 use ```git merge dev``` WHILE being on 'master'"
+	@echo "6. Tag the version"
+	@echo "   6.1 use ```git tags r99.9``` WHILE being on 'master'"
+	@echo "7. Push the version on github"
+	@echo "   .1 use ```git tags r99.9``` WHILE being on 'master'"
+	@echo ""
 
 
 
