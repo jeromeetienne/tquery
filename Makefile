@@ -36,6 +36,23 @@ help:
 	@echo "make deploy		<- deploy tquery to his gh-pages"
 	@echo "make boilerplateBuild	<- generate a boilerplate in ~/Downloads"
 
+release:
+	@echo "How to release"
+	@echo ""
+	@echo "1. Go on 'dev' branch"
+	@echo "   1.1 use ```git checkout dev```"
+	@echo "   1.2 check with ```git branch```"
+	@echo "2. On 'dev' branch, bumpup version number"
+	@echo "   2.1 update changelog in README.md"
+	@echo "   2.2 update tQuery.VERSION variable in js/tquery.core.js"
+	@echo "   2.3 update VERSION file in / directory"
+	@echo "3. On 'dev', commit changes"
+	@echo "   3.1 use ```git commit -a -m 'releasing version r99.9'```"
+	@echo "4. Switch to 'master', commit changes with -m 'releasing version r50.1'"
+
+
+
+
 #################################################################################
 #		misc to sort							#
 #################################################################################
