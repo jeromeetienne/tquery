@@ -1,4 +1,4 @@
-tQuery.Object3D.register('csg', function(operation, tqObject){
+tQuery.Object3D.registerInstance('csg', function(operation, tqObject){
 	var objects3d	= [];
 	this.each(function(object3d){
 		var tqGeometry	= tQuery(object3d).geometry().csg(operation, tqObject.geometry());
@@ -12,6 +12,6 @@ tQuery.Object3D.register('csg', function(operation, tqObject){
 });
 
 // some shortcut
-tQuery.Object3D.register('union'	, function(tqObject){ return this.csg('union'	 , tqObject);	});
-tQuery.Object3D.register('subtract'	, function(tqObject){ return this.csg('subtract' , tqObject);	});
-tQuery.Object3D.register('intersect'	, function(tqObject){ return this.csg('intersect', tqObject);	});
+tQuery.Object3D.registerInstance('union'	, function(tqObject){ return this.csg('union'	 , tqObject);	});
+tQuery.Object3D.registerInstance('subtract'	, function(tqObject){ return this.csg('subtract' , tqObject);	});
+tQuery.Object3D.registerInstance('intersect'	, function(tqObject){ return this.csg('intersect', tqObject);	});

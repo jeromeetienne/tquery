@@ -1,4 +1,4 @@
-tQuery.Geometry.register('vertexAnimation', function(options){
+tQuery.Geometry.registerInstance('vertexAnimation', function(options){
 	// handle parameters
 	options	= tQuery.extend(options, {
 		transform	: function(o, v, time){

@@ -2,7 +2,7 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.World.register('enableTweenUpdater', function(){
+tQuery.World.registerInstance('enableTweenUpdater', function(){
 	// if it is already enabled, do nothing
 	if( this.hasTweenUpdater() )	return this;
 	// init context
@@ -16,13 +16,13 @@ tQuery.World.register('enableTweenUpdater', function(){
 	return this;	// for chained API
 });
 
-tQuery.World.register('hasTweenUpdater', function(){
+tQuery.World.registerInstance('hasTweenUpdater', function(){
 	var context	= tQuery.data(this, 'tweenUpdaterCtx');
 	if( !context )	return false;
 	return context.loopCb ? true : false;
 });
 
-tQuery.World.register('disableTweenUpdater', function(){
+tQuery.World.registerInstance('disableTweenUpdater', function(){
 	// if it is already enabled, do nothing
 	if( !this.hasTweenUpdater() )	return this;
 	// get context

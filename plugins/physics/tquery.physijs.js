@@ -14,7 +14,7 @@
 //		tQuery.World							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.World.register('enablePhysics', function(opts){
+tQuery.World.registerInstance('enablePhysics', function(opts){
 	var world	= this;
 	var tScene	= world.tScene();
 	opts		= opts	|| {};
@@ -35,12 +35,12 @@ tQuery.World.register('enablePhysics', function(opts){
 	}); 
 })
 
-tQuery.World.register('physics', function(){
+tQuery.World.registerInstance('physics', function(){
 	console.assert( this.hasPhysics() );
 	return world.tScene()._xScene;
 });
 
-tQuery.World.register('hasPhysics', function(){
+tQuery.World.registerInstance('hasPhysics', function(){
 	return world.tScene()._xScene ? true : false;
 });
 
@@ -48,7 +48,7 @@ tQuery.World.register('hasPhysics', function(){
 //		tQuery.Mesh							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.register('enablePhysics', function(opts){
+tQuery.Mesh.registerInstance('enablePhysics', function(opts){
 	opts		= opts	|| {};
 	var mesh	= this;
 	var tMesh	= mesh.get(0);
@@ -97,11 +97,11 @@ tQuery.Mesh.register('enablePhysics', function(opts){
 	return this;	// for chained API
 })
 
-tQuery.Mesh.register('hasPhysics', function(){
+tQuery.Mesh.registerInstance('hasPhysics', function(){
 	return this.get(0)._xMesh ? true : false;
 });
 
-tQuery.Mesh.register('physics', function(){
+tQuery.Mesh.registerInstance('physics', function(){
 	return this.get(0)._xMesh;
 });
 

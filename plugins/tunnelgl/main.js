@@ -124,8 +124,8 @@ true && world.loop().hook(function(deltaTime, time){
 	};
 	vertexTransform(origin, world.camera().position, time)
 	
-	world.camera().position.z	= tunnelH;
-	world.camera().rotation.z	= playerAz+Math.PI/2;
+	world.tCamera().position.z	= tunnelH;
+	world.tCamera().rotation.z	= playerAz+Math.PI/2;
 });
 
 // move the player 

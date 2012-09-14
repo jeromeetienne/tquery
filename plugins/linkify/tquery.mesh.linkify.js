@@ -1,4 +1,4 @@
-tQuery.Mesh.register('linkify', function(url){
+tQuery.Mesh.registerInstance('linkify', function(url){
 	var mesh	= tQuery(this.get(0));
 	// measure mesh size
 	var size	= mesh.geometry().computeAll().size();

@@ -11,7 +11,7 @@
 		return domEvent
 	}
 	
-	tQuery.Object3D.register('on', function(eventType, callback){
+	tQuery.Object3D.registerInstance('on', function(eventType, callback){
 		var domEvent	= getInstance();
 		// yuk!!!! workaround a bug
 		// ugly kludge to automatically set the camera in threex.domevent
@@ -26,7 +26,7 @@
 		return this;	// for chained API
 	});
 	
-	tQuery.Object3D.register('off', function(eventType, callback){
+	tQuery.Object3D.registerInstance('off', function(eventType, callback){
 		var domEvent	= getInstance();
 		// yuk!!!! workaround a bug
 		// ugly kludge to automatically set the camera in threex.domevent

@@ -4,7 +4,7 @@
  * All hard work by @alteredq - http://alteredqualia.com/three/examples/webgl_shader_fireball.html
  * and Ian McEwan(Ashima Arts) - https://github.com/ashima/webgl-noise
 */
-tQuery.Object3D.register('setFireballMaterial', function(opts){
+tQuery.Object3D.registerInstance('setFireballMaterial', function(opts){
 	opts	= tQuery.extend(opts, {
 		scale	: 1,
 		speed	: 0.3,

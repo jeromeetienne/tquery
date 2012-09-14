@@ -1,7 +1,7 @@
 /**
  * lava shader by TheGameMaker - http://irrlicht.sourceforge.net/forum/viewtopic.php?t=21057
 */
-tQuery.Object3D.register('setLavaMaterial', function(opts){
+tQuery.Object3D.registerInstance('setLavaMaterial', function(opts){
 	opts	= tQuery.extend(opts, {
 		fogDensity	: 0.45,
 		fogColor	: new THREE.Vector3( 0, 0, 0 ),

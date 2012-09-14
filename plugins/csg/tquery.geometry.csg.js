@@ -1,4 +1,4 @@
-tQuery.Geometry.register('csg', function(operation, geometry){
+tQuery.Geometry.registerInstance('csg', function(operation, geometry){
 	// sanity check - check parameters
 	var operations	= ['subtract', 'union', 'intersect'];
 	console.assert( operations.indexOf(operation) !== -1 );

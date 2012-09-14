@@ -1,4 +1,4 @@
-tQuery.Material.register('textureScrolling', function(options){
+tQuery.Material.registerInstance('textureScrolling', function(options){
 	// handle parameters
 	options	= tQuery.extend(options, {
 		transform	: function(tTexture){

@@ -5,7 +5,7 @@
 /**
  * enable DomEvent on this world
 */
-tQuery.World.register('enableDomEvent', function(){
+tQuery.World.registerInstance('enableDomEvent', function(){
 	// sanity check
 	console.assert(this.hasDomEvent() === false);
 	// create THREEx.DomEvent
@@ -25,7 +25,7 @@ tQuery.World.register('enableDomEvent', function(){
 /**
  * disable DomEvent on this world
 */
-tQuery.World.register('disableDomEvent', function(){
+tQuery.World.registerInstance('disableDomEvent', function(){
 	// sanity check
 	console.assert(this.hasDomEvent() === true);
 	// destroy
@@ -39,7 +39,7 @@ tQuery.World.register('disableDomEvent', function(){
 /**
  * @returns {boolean} true if the world has DomEvent enabled, false otherwise
 */
-tQuery.World.register('hasDomEvent', function(){
+tQuery.World.registerInstance('hasDomEvent', function(){
 	return tQuery.data(this, '_DomEvent') ? true : false;
 });
 
@@ -47,7 +47,7 @@ tQuery.World.register('hasDomEvent', function(){
 //		tQuery.Object3D.*						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Object3D.register('on', function(eventType, callback, world){
+tQuery.Object3D.registerInstance('on', function(eventType, callback, world){
 	// parameter polymorphism
 	world	= world	|| tQuery.world;
 	// sanity check
@@ -64,7 +64,7 @@ tQuery.Object3D.register('on', function(eventType, callback, world){
 	return this;	
 });
 
-tQuery.Object3D.register('off', function(eventType, callback, world){
+tQuery.Object3D.registerInstance('off', function(eventType, callback, world){
 	// parameter polymorphism
 	world	= world	|| tQuery.world;
 	// sanity check

@@ -12,7 +12,7 @@
  * @param opts.colorHex the hexa value of the fog color
  * @param opts.density the density of the fog
 */
-tQuery.World.register('addFogExp2', function(opts){
+tQuery.World.registerInstance('addFogExp2', function(opts){
 	// handle parameter
 	opts	= tQuery.extend(opts, {
 		colorHex	: this.tRenderer().getClearColor().getHex(),
@@ -32,7 +32,7 @@ tQuery.World.register('addFogExp2', function(opts){
  * @param opts.near how far away from camera, the fog starts
  * @param opts.far how far away from camera, the fog ends
 */
-tQuery.World.register('addFog', function(opts){
+tQuery.World.registerInstance('addFog', function(opts){
 	// handle parameter
 	opts	= tQuery.extend(opts, {
 		colorHex	: this.tRenderer().getClearColor().getHex(),
