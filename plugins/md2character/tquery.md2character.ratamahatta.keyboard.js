@@ -6,7 +6,7 @@
  * @name	hookKeyboard
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.RatamahattaMD2Character.register('hookKeyboard', function(opts){
+tQuery.RatamahattaMD2Character.registerInstance('hookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
@@ -27,7 +27,7 @@ tQuery.RatamahattaMD2Character.register('hookKeyboard', function(opts){
  * @name	unhookKeyboard
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
+tQuery.RatamahattaMD2Character.registerInstance('unhookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
@@ -49,7 +49,7 @@ tQuery.RatamahattaMD2Character.register('unhookKeyboard', function(opts){
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.RatamahattaMD2Character.register('hookKeyboardLoopCb', function(){
+tQuery.RatamahattaMD2Character.registerInstance('hookKeyboardLoopCb', function(){
 	var keyboard	= tQuery.keyboard();
 	var character	= this;
 	// keyboard handling

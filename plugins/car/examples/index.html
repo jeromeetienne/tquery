@@ -108,7 +108,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.car'], func
 	// But we need the camera to follow this car. We create a camera controls specific
 	// to mimic the usual camera in car game. The camera is placed a bit behind the car and look forward.
 	// The faster you go, the further you look. This is always nice to see what is coming at you :)
-	tQuery.Car.createCameraControls(car, world);
+	tQuery.createCarCameraControls(car, world);
 
 	// ## Car Controls
 

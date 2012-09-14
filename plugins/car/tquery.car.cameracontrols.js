@@ -2,11 +2,11 @@
 //		Create funciton							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Car.registerStatic('createCameraControls', function(opts, world){
+tQuery.registerStatic('createCarCameraControls', function(opts, world){
 	// handle parameters
 	world	= world	|| tQuery.world;
 	
-	var controls	= new tQuery.Car.CameraControls(opts);
+	var controls	= new tQuery.CarCameraControls(opts);
 	world.setCameraControls(controls);
 	return controls;
 });
@@ -15,7 +15,7 @@ tQuery.Car.registerStatic('createCameraControls', function(opts, world){
 //		Class								//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Car.registerStatic('CameraControls', function(opts){
+tQuery.registerStatic('CarCameraControls', function(opts){
 	// handle parameters polymorphism
 	if( opts instanceof tQuery.Car ){
 		opts	= { car : opts };
@@ -32,7 +32,7 @@ tQuery.Car.registerStatic('CameraControls', function(opts){
 	this._curDistance	= 0;
 });
 
-tQuery.Car.CameraControls.prototype.update	= function()
+tQuery.CarCameraControls.prototype.update	= function()
 {
 	// attempts at camera control
 	var spdDistance	= 0.95;

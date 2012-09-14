@@ -4,7 +4,7 @@
  * @name	hookDeviceOrientation
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('hookDeviceOrientation', function(opts){
+tQuery.Car.registerInstance('hookDeviceOrientation', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop		: tQuery.world.loop()
@@ -27,7 +27,7 @@ tQuery.Car.register('hookDeviceOrientation', function(opts){
  * @name	unhookDeviceOrientation
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('unhookDeviceOrientation', function(opts){
+tQuery.Car.registerInstance('unhookDeviceOrientation', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
@@ -49,7 +49,7 @@ tQuery.Car.register('unhookDeviceOrientation', function(opts){
  * @name	hookDeviceOrientationLoopCb
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('hookDeviceOrientationLoopCb', function(deltaTime, present){
+tQuery.Car.registerInstance('hookDeviceOrientationLoopCb', function(deltaTime, present){
 	var data	= tQuery.data(this, 'deviceOrientation');
 	var opts	= data.opts;
 	var dOrientation= tQuery.deviceOrientation();

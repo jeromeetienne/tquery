@@ -4,7 +4,7 @@
  * @name	hookKeyboard
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('hookKeyboard', function(opts){
+tQuery.Car.registerInstance('hookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop		: tQuery.world.loop(),
@@ -32,7 +32,7 @@ tQuery.Car.register('hookKeyboard', function(opts){
  * @name	unhookKeyboard
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('unhookKeyboard', function(opts){
+tQuery.Car.registerInstance('unhookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
@@ -54,7 +54,7 @@ tQuery.Car.register('unhookKeyboard', function(opts){
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.Car
 */
-tQuery.Car.register('hookKeyboardLoopCb', function(delta, now){
+tQuery.Car.registerInstance('hookKeyboardLoopCb', function(delta, now){
 	var data	= tQuery.data(this, 'keyboard');
 	var opts	= data.opts;
 	var keyboard	= tQuery.keyboard();

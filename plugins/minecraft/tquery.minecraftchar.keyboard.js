@@ -6,7 +6,7 @@
  * @name	hookKeyboard
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.MinecraftChar.register('hookKeyboard', function(opts){
+tQuery.MinecraftChar.registerInstance('hookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
@@ -31,7 +31,7 @@ tQuery.MinecraftChar.register('hookKeyboard', function(opts){
  * @name	unhookKeyboard
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.MinecraftChar.register('unhookKeyboard', function(opts){
+tQuery.MinecraftChar.registerInstance('unhookKeyboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
@@ -53,7 +53,7 @@ tQuery.MinecraftChar.register('unhookKeyboard', function(opts){
  * @name	hookKeyboardLoopCb
  * @memberOf	tQuery.RatamahattaMD2Character
 */
-tQuery.MinecraftChar.register('hookKeyboardLoopCb', function(delta, now){
+tQuery.MinecraftChar.registerInstance('hookKeyboardLoopCb', function(delta, now){
 	var keyboard	= tQuery.keyboard();
 	var model	= this.model;
 	// keyboard handling

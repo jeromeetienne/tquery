@@ -87,8 +87,7 @@ tQuery.registerStatic('Car', function(opts){
 
 // make it pluginable at instance level
 tQuery.pluginsInstanceOn(tQuery.Car);
-// Make it pluginable at class level
-tQuery.pluginsStaticOn(tQuery.Car);
+
 // make it eventable
 tQuery.MicroeventMixin(tQuery.Car.prototype);
 
