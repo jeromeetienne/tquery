@@ -38,6 +38,7 @@ looks like the code below... Quite short.
 * added require.js for webgl-inspector
 * support for object3d.positionX(2) getter/setter (for x,y,z and position/rotation/scale)
 * support for object3d.position() getter
+* remove ambiguous .register() - now .registerInstance() and .registerStatic() - see #117
 
 #### Release - r50.1
 
