@@ -6,8 +6,6 @@ tQuery.register('createText', function(text, options){
 	options	= tQuery.extend(options, {
 		size		: 1,
 		height		: 0.4,
-		curveSegments	: 4,
-
 		weight		: "bold",
 		font		: "droid serif",
 	});

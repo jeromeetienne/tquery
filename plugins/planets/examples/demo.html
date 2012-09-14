@@ -9,7 +9,7 @@
 	WebGL with <a href='http://mrdoob.github.com/three.js/' target='_blank'>three.js</a> thru
 	<a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a>
 </div><script>
-require(['tquery.planets', 'tquery.pproc'], function(){
+require(['tquery.planets'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	// set the world background in black
 	world.tRenderer().setClearColorHex( 0x000000, 1 );
@@ -21,14 +21,6 @@ require(['tquery.planets', 'tquery.pproc'], function(){
 	
 	world.tCamera().position.z	= 2;
 	
-	// add post processing
-	world.addEffectComposer()
-		//.bloom(0.6)
-		.motionBlur(0.6)
-		.screen()
-		//.film(0.25, 0.25, 648, false)
-		.finish();
-
 	// setup light
 	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
 	tQuery.createDirectionalLight().addTo(world).position(-1,1,1);
