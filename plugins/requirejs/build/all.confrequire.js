@@ -32,8 +32,8 @@ requirejs.config({
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_bold.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
-			"webgl-inspector": "http://benvanik.github.com/WebGL-Inspector/core/embed.js",
-			"domReady": "https://raw.github.com/requirejs/domReady/latest/domReady.js"
+			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
+			"domReady": "plugins/requirejs/vendor/domReady"
 		}
 	},
 	"shim": {
@@ -69,7 +69,6 @@ requirejs.config({
 			"plugins/domevent/threex.domevent"
 		],
 		"plugins/gsvpano/tquery.gsvpano": [
-			"http://maps.google.com/maps/api/js?sensor=false",
 			"plugins/gsvpano/vendor/GSVPano"
 		],
 		"plugins/keyboard/tquery.keyboard": [

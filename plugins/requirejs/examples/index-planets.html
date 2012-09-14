@@ -3,11 +3,9 @@
 <script src="../../../plugins/requirejs/vendor/require.js"></script>
 <script src="../../../plugins/requirejs/build/all.confrequire.js"></script>
 <body><script>
-require(['tquery.linkify'], function(){
+require([], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-	world.enableDomEvent();
 	tQuery.createTorus().addTo(world)
-		.linkify('http://jetienne.com')
 });
 </script></body>
 
