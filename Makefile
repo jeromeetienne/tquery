@@ -56,7 +56,7 @@ release:
 	@echo "6. Tag the version"
 	@echo "   6.1 use ```git tags r99.9``` WHILE being on 'master'"
 	@echo "7. Push the version on github"
-	@echo "   .1 use ```git tags r99.9``` WHILE being on 'master'"
+	@echo "   7.1 use ```git tags r99.9``` WHILE being on 'master'"
 	@echo ""
 
 
