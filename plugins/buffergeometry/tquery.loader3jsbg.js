@@ -1,6 +1,6 @@
 
 
-tQuery.register('convert3jsbgToGeometry', function(arraybuffer){
+tQuery.registerStatic('convert3jsbgToGeometry', function(arraybuffer){
 	var dataView	= new DataView(arraybuffer);
 	
 	// define constant
@@ -99,7 +99,7 @@ tQuery.register('convert3jsbgToGeometry', function(arraybuffer){
 	return tGeometry;
 });
 
-tQuery.register('Loader3jsbg', function(url, onComplete){
+tQuery.registerStatic('Loader3jsbg', function(url, onComplete){
 	// parameter polymorphism
 	onComplete	= onComplete	|| function(tGeometry){};
 	// launch the xhr

@@ -8,7 +8,7 @@
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Geometry.register('computeAll', function(){
+tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingBox();
 		//tGeometry.computeCentroids();
@@ -27,7 +27,7 @@ tQuery.Geometry.register('computeAll', function(){
  * @name zoom
  * @methodOf tQuery.Geometry
 */
-tQuery.Geometry.register('scaleBy', function(vector3){
+tQuery.Geometry.registerInstance('scaleBy', function(vector3){
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 1 ){
 		vector3	= new THREE.Vector3(vector3, vector3, vector3);
@@ -51,7 +51,7 @@ tQuery.Geometry.register('scaleBy', function(vector3){
 	return this;
 });
 
-tQuery.Geometry.register('size', function(){
+tQuery.Geometry.registerInstance('size', function(){
 	// only on zero-or-one element
 	console.assert(this.length <= 1)
 	// if no element, return undefined
@@ -71,7 +71,7 @@ tQuery.Geometry.register('size', function(){
 
 /**
 */
-tQuery.Geometry.register('normalize', function(){
+tQuery.Geometry.registerInstance('normalize', function(){
 	// change all geometry.vertices
 	this.each(function(geometry){
 		var node	= tQuery(geometry);
@@ -94,7 +94,7 @@ tQuery.Geometry.register('normalize', function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 
-tQuery.Geometry.register('middlePoint', function(){
+tQuery.Geometry.registerInstance('middlePoint', function(){
 	// only on zero-or-one element
 	console.assert(this.length <= 1)
 	// if no element, return undegined
@@ -115,7 +115,7 @@ tQuery.Geometry.register('middlePoint', function(){
 //		move functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Geometry.register('translate', function(delta){
+tQuery.Geometry.registerInstance('translate', function(delta){
 	// handle parameters
 	if( typeof delta === "number" && arguments.length === 3 ){
 		delta	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -138,7 +138,7 @@ tQuery.Geometry.register('translate', function(delta){
 	return this;
 });
 
-tQuery.Geometry.register('rotate', function(angles, order){
+tQuery.Geometry.registerInstance('rotate', function(angles, order){
 	// handle parameters
 	if( typeof angles === "number" && arguments.length === 3 ){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -167,7 +167,7 @@ tQuery.Geometry.register('rotate', function(angles, order){
 
 /**
 */
-tQuery.Geometry.register('center', function(noX, noY, noZ){
+tQuery.Geometry.registerInstance('center', function(noX, noY, noZ){
 	// change all geometry.vertices
 	this.each(function(tGeometry){
 		var geometry	= tQuery(tGeometry);
@@ -188,7 +188,7 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
  *
  * @param {Number} subdivision the number of subdivision to do
 */
-tQuery.Geometry.register('smooth', function(subdivision){
+tQuery.Geometry.registerInstance('smooth', function(subdivision){
 	// init the modifier
 	var modifier	= new THREE.SubdivisionModifier( subdivision );
 	// apply it to each geometry
@@ -205,21 +205,21 @@ tQuery.Geometry.register('smooth', function(subdivision){
 });
 
 // some shortcuts
-tQuery.Geometry.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
-tQuery.Geometry.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
-tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
-tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
-tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
-tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
-tQuery.Geometry.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
-tQuery.Geometry.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
-tQuery.Geometry.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+tQuery.Geometry.registerInstance('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Geometry.registerInstance('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Geometry.registerInstance('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+tQuery.Geometry.registerInstance('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Geometry.registerInstance('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Geometry.registerInstance('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Geometry.registerInstance('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Geometry.registerInstance('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Geometry.registerInstance('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
 
 // backward compatibility
-tQuery.Geometry.register('zoom'		, function(value){return this.scaleBy(value);		});
-tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
-tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
-tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
+tQuery.Geometry.registerInstance('zoom'		, function(value){return this.scaleBy(value);		});
+tQuery.Geometry.registerInstance('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
+tQuery.Geometry.registerInstance('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
+tQuery.Geometry.registerInstance('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
 
 
 })();	// closure function end

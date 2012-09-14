@@ -2,7 +2,7 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createLightSaber', function(opts){
+tQuery.registerStatic('createLightSaber', function(opts){
 	return new tQuery.LightSaber(opts);
 });
 
@@ -13,7 +13,7 @@ tQuery.register('createLightSaber', function(opts){
 /**
  * TODO make it more flexible
 */
-tQuery.register('LightSaber', function(opts){
+tQuery.registerStatic('LightSaber', function(opts){
 	
 	this._objRoot	= tQuery.createObject3D();
 	this._objHilt	= tQuery.createObject3D().addTo(this._objRoot);

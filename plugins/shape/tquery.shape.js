@@ -1,4 +1,4 @@
-tQuery.register('Shape', function(tShape){
+tQuery.registerStatic('Shape', function(tShape){
 	this._tShape	= tShape	|| new THREE.Shape();
 });
 

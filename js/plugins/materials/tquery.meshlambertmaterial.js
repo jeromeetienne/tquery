@@ -2,13 +2,13 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.register('setLambertMaterial', function(opts){
+tQuery.Mesh.registerInstance('setLambertMaterial', function(opts){
 	var material	= tQuery.createMeshLambertMaterial(opts);
 	this.material( material.get(0) );
 	return material.back(this);
 })
 
-tQuery.register('createMeshLambertMaterial', function(opts){
+tQuery.registerStatic('createMeshLambertMaterial', function(opts){
 	var tMaterial	= new THREE.MeshLambertMaterial(opts);
 	var material	= new tQuery.MeshLambertMaterial(tMaterial);
 	return material;

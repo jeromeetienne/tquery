@@ -1,7 +1,7 @@
 /**
  * Create tQuery.Scene
 */
-tQuery.register('createWebcamTexture', function(opts){
+tQuery.registerStatic('createWebcamTexture', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()

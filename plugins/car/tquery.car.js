@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 //		Create funciton							//
 //////////////////////////////////////////////////////////////////////////////////
-tQuery.register('createCar', function(opts){
+tQuery.registerStatic('createCar', function(opts){
 	return new tQuery.Car(opts)
 });
 
@@ -12,7 +12,7 @@ tQuery.register('createCar', function(opts){
 /**
  * Plugins for sport car
 */
-tQuery.register('Car', function(opts){
+tQuery.registerStatic('Car', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
 		type	: "veyron",

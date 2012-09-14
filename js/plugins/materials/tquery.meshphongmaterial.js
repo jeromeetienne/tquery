@@ -2,13 +2,13 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.register('setPhongMaterial', function(opts){
+tQuery.Mesh.registerInstance('setPhongMaterial', function(opts){
 	var material	= tQuery.createMeshPhongMaterial(opts);
 	this.material( material.get(0) );
 	return material.back(this);
 })
 
-tQuery.register('createMeshPhongMaterial', function(opts){
+tQuery.registerStatic('createMeshPhongMaterial', function(opts){
 	var tMaterial	= new THREE.MeshPhongMaterial(opts);
 	var material	= new tQuery.MeshPhongMaterial(tMaterial);
 	return material;

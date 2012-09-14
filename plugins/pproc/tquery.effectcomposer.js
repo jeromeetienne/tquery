@@ -2,7 +2,7 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createEffectComposer', function(opts){
+tQuery.registerStatic('createEffectComposer', function(opts){
 	return new tQuery.EffectComposer(opts);
 });
 
@@ -23,7 +23,7 @@ tQuery.World.prototype.removeEffectComposer	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('EffectComposer', function(opts){
+tQuery.registerStatic('EffectComposer', function(opts){
 	// handle parameters
 	this._opts	= opts	= tQuery.extend(opts, {
 		world	: tQuery.world,

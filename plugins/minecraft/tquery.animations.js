@@ -4,7 +4,7 @@
  * @name tQuery.createAnimations
  * @class
 */
-tQuery.register('createAnimations', function(){
+tQuery.registerStatic('createAnimations', function(){
 	return new tQuery.Animations();
 });
 
@@ -14,7 +14,7 @@ tQuery.register('createAnimations', function(){
  * @name tQuery.Animations
  * @class
 */
-tQuery.register('Animations', function(){
+tQuery.registerStatic('Animations', function(){
 	this._animations	= {};
 	this._currentAnim	= null;
 });

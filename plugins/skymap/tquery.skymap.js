@@ -1,4 +1,4 @@
-tQuery.register('createSkymap', function(opts){
+tQuery.registerStatic('createSkymap', function(opts){
 	// handle parameters polymorphisms
 	if( typeof(opts) === 'string' )	opts	= {textureCube: opts};
 	// handle parameters

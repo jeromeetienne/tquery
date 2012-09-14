@@ -14,7 +14,7 @@
  * * may be a very nice bookmarklet
  * * add shaddow parameters in lights
 */
-tQuery.register('DatguiTuner', function(opts){
+tQuery.registerStatic('DatguiTuner', function(opts){
 	// handle parameters polymorphism
 	if( typeof(opts) === 'string' )	opts	= { selector: opts };
 	// copy parameters

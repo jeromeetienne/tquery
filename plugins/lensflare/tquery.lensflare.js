@@ -1,7 +1,7 @@
 /**
  * Create a lens flare
 */
-tQuery.register('createLensFlare', function(opts){
+tQuery.registerStatic('createLensFlare', function(opts){
 	// handle polymorphism
 	opts		= opts	|| defaultOpts();
 	// create the object

@@ -1,7 +1,7 @@
 /**
  * Create a checkerboard tQuery.Mesh
 */
-tQuery.register('createCheckerboard', function(opts){
+tQuery.registerStatic('createCheckerboard', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		width		: 1,		

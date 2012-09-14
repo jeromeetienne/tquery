@@ -1,12 +1,12 @@
 
-tQuery.register('defaultExtrudeSettings', {
+tQuery.registerStatic('defaultExtrudeSettings', {
 	amount		: 5,
 	bevelEnabled	: true,
 	bevelSegments	: 2,
 	steps		: 2
 });
 
-tQuery.register('createShape', function(tShape){
+tQuery.registerStatic('createShape', function(tShape){
 	return new tQuery.Shape(tShape);
 });
 
@@ -15,28 +15,28 @@ tQuery.register('createShape', function(tShape){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createFish', function(material){
+tQuery.registerStatic('createFish', function(material){
 	return tQuery.createFishShape().extrude()
 		.computeAll().center()
 		.normalize().rotateY(-Math.PI)
 		.toMesh(material);	
 });
 
-tQuery.register('createHeart', function(material){
+tQuery.registerStatic('createHeart', function(material){
 	return tQuery.createHeartShape().extrude()
 		.computeAll().center()
 		.normalize().rotateZ(Math.PI)
 		.toMesh(material);	
 });
 
-tQuery.register('createSmiley', function(material){
+tQuery.registerStatic('createSmiley', function(material){
 	return tQuery.createSmileyShape().extrude()
 		.computeAll().center()
 		.normalize().rotateZ(Math.PI)
 		.toMesh(material);	
 });
 
-tQuery.register('createTriangle', function(material){
+tQuery.registerStatic('createTriangle', function(material){
 	return tQuery.createTriangleShape().extrude()
 		.computeAll().center()
 		.normalize()
@@ -47,7 +47,7 @@ tQuery.register('createTriangle', function(material){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createHeartShape', function(){
+tQuery.registerStatic('createHeartShape', function(){
 	var x	= 0, y	= 0;
 	// TODO put it upsidedown and normalize it
 	var shape	= tQuery.createShape()
@@ -61,7 +61,7 @@ tQuery.register('createHeartShape', function(){
 	return shape;
 });
 
-tQuery.register('createTriangleShape', function(){
+tQuery.registerStatic('createTriangleShape', function(){
 	// TODO normalize it
 	var shape	= tQuery.createShape()
 		.moveTo(  80, 20 )
@@ -71,11 +71,11 @@ tQuery.register('createTriangleShape', function(){
 	return shape;
 });
 
-tQuery.register('createSquareShape', function(width){
+tQuery.registerStatic('createSquareShape', function(width){
 	return tQuery.createRectangleShape(width, width);
 });
 
-tQuery.register('createRectangleShape', function(width, height){
+tQuery.registerStatic('createRectangleShape', function(width, height){
 	var w		= width !== undefined ? width : 80;
 	var h		= height!== undefined ? height: 80;
 	var shape	= tQuery.createShape()
@@ -87,7 +87,7 @@ tQuery.register('createRectangleShape', function(width, height){
 	return shape;
 });
 
-tQuery.register('createCircleShape', function(radius){
+tQuery.registerStatic('createCircleShape', function(radius){
 	radius	= radius !== undefined ? radius	: 40;
 	// TODO normalize it
 	var shape	= tQuery.createShape()
@@ -99,7 +99,7 @@ tQuery.register('createCircleShape', function(radius){
 	return shape;
 });
 
-tQuery.register('createFishShape', function(radius){
+tQuery.registerStatic('createFishShape', function(radius){
 	// TODO normalize it
 	var x	= 0, y	= 0;
 	var shape	= tQuery.createShape()
@@ -112,7 +112,7 @@ tQuery.register('createFishShape', function(radius){
 	return shape;
 });
 
-tQuery.register('createWheelShape', function(){
+tQuery.registerStatic('createWheelShape', function(){
 	var arcShape	= new THREE.Shape();
 	arcShape.moveTo( 0, 0 );
 	arcShape.arc( 10, 10, 30, 0, Math.PI*2, false );
@@ -126,7 +126,7 @@ tQuery.register('createWheelShape', function(){
 	return new tQuery.Shape(arcShape);
 });
 
-tQuery.register('createSmileyShape', function(radius){
+tQuery.registerStatic('createSmileyShape', function(radius){
 	var smileyShape = new THREE.Shape();
 	smileyShape.moveTo( 80, 40 );
 	smileyShape.arc( 40, 40, 40, 0, Math.PI*2, false );

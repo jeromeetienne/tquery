@@ -3393,14 +3393,14 @@ tQuery.Loop.prototype.unhookPostRender	= function(callback){ return this.unhook(
 /**
  * Create tQuery.World
 */
-tQuery.register('createWorld', function(opts){
+tQuery.registerStatic('createWorld', function(opts){
 	return new tQuery.World(opts);
 });
 
 /**
  * Create tQuery.World
 */
-tQuery.register('createObject3D', function(){
+tQuery.registerStatic('createObject3D', function(){
 	var object3d	= new THREE.Object3D();
 	return tQuery(object3d);
 });
@@ -3412,27 +3412,27 @@ tQuery.register('createObject3D', function(){
  * @param {tQuery.World} world the world to display (optional)
  * @function
 */
-tQuery.register('createLoop', function(world){
+tQuery.registerStatic('createLoop', function(world){
 	return new tQuery.Loop(world);
 });
 
 
-tQuery.register('createDirectionalLight', function(){
+tQuery.registerStatic('createDirectionalLight', function(){
 	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);
 });
 
-tQuery.register('createSpotLight', function(){
+tQuery.registerStatic('createSpotLight', function(){
 	var tLight	= new THREE.SpotLight();
 	return new tQuery.SpotLight([tLight]);
 });
 
-tQuery.register('createPointLight', function(){
+tQuery.registerStatic('createPointLight', function(){
 	var tLight	= new THREE.PointLight();
 	return new tQuery.PointLight([tLight]);
 });
 
-tQuery.register('createAmbientLight', function(){
+tQuery.registerStatic('createAmbientLight', function(){
 	var tLight	= new THREE.AmbientLight();
 	return new tQuery.AmbientLight([tLight]);
 });
@@ -3448,7 +3448,7 @@ tQuery.register('createAmbientLight', function(){
  * @fieldOf tQuery
  * @name defaultObject3DMaterial
 */
-tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
+tQuery.registerStatic('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
 
 tQuery.Geometry.prototype.toMesh	= function(material){
 	var meshes	= [];
@@ -3469,41 +3469,41 @@ tQuery.Geometry.prototype.toMesh	= function(material){
  * 
  * @returns {tQuery.Object3D} a tQuery.Object3D containing it
 */
-tQuery.register('createCube', function(){
+tQuery.registerStatic('createCube', function(){
 	var ctor	= THREE.CubeGeometry;
 	var dflGeometry	= [1, 1, 1];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createTorus', function(){
+tQuery.registerStatic('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var dflGeometry	= [0.5-0.15, 0.15];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createVector3', function(){
+tQuery.registerStatic('createVector3', function(){
 	return new THREE.Vector3();
 });
 
-tQuery.register('createSphere', function(){
+tQuery.registerStatic('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
 	var dflGeometry	= [0.5, 32, 16];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createPlane', function(){
+tQuery.registerStatic('createPlane', function(){
 	var ctor	= THREE.PlaneGeometry;
 	var dflGeometry	= [1, 1, 16, 16];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createCylinder', function(){
+tQuery.registerStatic('createCylinder', function(){
 	var ctor	= THREE.CylinderGeometry;
 	var dflGeometry	= [0.5, 0.5, 1, 16, 4];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('_createMesh', function(ctor, dflGeometry, args)
+tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 {
 	// convert args to array if it is instanceof Arguments
 	// FIXME if( args instanceof Arguments )
@@ -3538,7 +3538,7 @@ tQuery.register('_createMesh', function(ctor, dflGeometry, args)
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createAxis', function(){
+tQuery.registerStatic('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
 	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);

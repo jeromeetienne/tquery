@@ -1,4 +1,4 @@
-tQuery.register('createAnimation', function(opts){
+tQuery.registerStatic('createAnimation', function(opts){
 	return new tQuery.Animation(opts);
 });
 
@@ -14,7 +14,7 @@ tQuery.register('createAnimation', function(opts){
  * @name tQuery.Animation
  * @class
 */
-tQuery.register('Animation', function(opts){
+tQuery.registerStatic('Animation', function(opts){
 	opts	= this._opts	= tQuery.extend(opts, {
 		world	: tQuery.world
 	})

@@ -2,7 +2,7 @@
  * <audio> tag management. Super dirty
  * There is a timeout 1sec
 */
-tQuery.register('playSoundtrack', function(url){
+tQuery.registerStatic('playSoundtrack', function(url){
 	var playSoundtrack= function(){
 		var audio	= document.createElement('audio');
 		audio.setAttribute('src', url);

@@ -38,7 +38,7 @@ tQuery.World.register('disableTweenUpdater', function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createTween', function(properties, delay){
+tQuery.registerStatic('createTween', function(properties, delay){
 	return new tQuery.Tween(properties);
 });
 
@@ -46,7 +46,7 @@ tQuery.register('createTween', function(properties, delay){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('Tween', function(properties){
+tQuery.registerStatic('Tween', function(properties){
 	// call parent ctor
 	TWEEN.Tween.call(this, properties)
 

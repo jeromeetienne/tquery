@@ -1,4 +1,4 @@
-tQuery.register('createSpritesheet', function(opts){
+tQuery.registerStatic('createSpritesheet', function(opts){
 	return new tQuery.Spritesheet(opts)
 });
 /**
@@ -15,7 +15,7 @@ tQuery.register('createSpritesheet', function(opts){
  * @param {Number} opts.spriteW the width of each sprite in the image
  * @param {Number} opts.spriteH the height of each sprite in the image
 */
-tQuery.register('Spritesheet', function(opts){
+tQuery.registerStatic('Spritesheet', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
 		url	: 'images/items/items.png',

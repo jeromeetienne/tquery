@@ -249,8 +249,9 @@ tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 };
 
 tQuery.pluginsInstanceOn= function(klass){
+	tQuery._pluginsOn(klass, undefined, 'Instance');
+	
 	tQuery._pluginsOn(klass);
-//	tQuery._pluginsOn(klass, undefined, 'Instance');
 };
 tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
@@ -1118,7 +1119,7 @@ tQuery.Mesh.prototype.material	= function(value){
  * 
  * @returns {tQuery.Sprite} the create object
 */
-tQuery.register('createSprite', function(opts){
+tQuery.registerStatic('createSprite', function(opts){
 	opts		= tQuery.extend(opts, {
 		useScreenCoordinates	: false
 	});
@@ -1133,7 +1134,7 @@ tQuery.register('createSprite', function(opts){
 /**
  * Wrapper on top of THREE.Sprite
 */
-tQuery.register('Sprite', function(elements){
+tQuery.registerStatic('Sprite', function(elements){
 	// call parent ctor
 	tQuery.Sprite.parent.constructor.call(this, elements)
 
@@ -1578,14 +1579,14 @@ tQuery.Loop.prototype.unhookPostRender	= function(callback){ return this.unhook(
 /**
  * Create tQuery.World
 */
-tQuery.register('createWorld', function(opts){
+tQuery.registerStatic('createWorld', function(opts){
 	return new tQuery.World(opts);
 });
 
 /**
  * Create tQuery.World
 */
-tQuery.register('createObject3D', function(){
+tQuery.registerStatic('createObject3D', function(){
 	var object3d	= new THREE.Object3D();
 	return tQuery(object3d);
 });
@@ -1597,27 +1598,27 @@ tQuery.register('createObject3D', function(){
  * @param {tQuery.World} world the world to display (optional)
  * @function
 */
-tQuery.register('createLoop', function(world){
+tQuery.registerStatic('createLoop', function(world){
 	return new tQuery.Loop(world);
 });
 
 
-tQuery.register('createDirectionalLight', function(){
+tQuery.registerStatic('createDirectionalLight', function(){
 	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);
 });
 
-tQuery.register('createSpotLight', function(){
+tQuery.registerStatic('createSpotLight', function(){
 	var tLight	= new THREE.SpotLight();
 	return new tQuery.SpotLight([tLight]);
 });
 
-tQuery.register('createPointLight', function(){
+tQuery.registerStatic('createPointLight', function(){
 	var tLight	= new THREE.PointLight();
 	return new tQuery.PointLight([tLight]);
 });
 
-tQuery.register('createAmbientLight', function(){
+tQuery.registerStatic('createAmbientLight', function(){
 	var tLight	= new THREE.AmbientLight();
 	return new tQuery.AmbientLight([tLight]);
 });
@@ -1633,7 +1634,7 @@ tQuery.register('createAmbientLight', function(){
  * @fieldOf tQuery
  * @name defaultObject3DMaterial
 */
-tQuery.register('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
+tQuery.registerStatic('defaultObject3DMaterial', new THREE.MeshNormalMaterial());
 
 tQuery.Geometry.prototype.toMesh	= function(material){
 	var meshes	= [];
@@ -1654,41 +1655,41 @@ tQuery.Geometry.prototype.toMesh	= function(material){
  * 
  * @returns {tQuery.Object3D} a tQuery.Object3D containing it
 */
-tQuery.register('createCube', function(){
+tQuery.registerStatic('createCube', function(){
 	var ctor	= THREE.CubeGeometry;
 	var dflGeometry	= [1, 1, 1];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createTorus', function(){
+tQuery.registerStatic('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var dflGeometry	= [0.5-0.15, 0.15];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createVector3', function(x, y, z){
+tQuery.registerStatic('createVector3', function(x, y, z){
 	return new THREE.Vector3(x, y, z);
 });
 
-tQuery.register('createSphere', function(){
+tQuery.registerStatic('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
 	var dflGeometry	= [0.5, 32, 16];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createPlane', function(){
+tQuery.registerStatic('createPlane', function(){
 	var ctor	= THREE.PlaneGeometry;
 	var dflGeometry	= [1, 1, 16, 16];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('createCylinder', function(){
+tQuery.registerStatic('createCylinder', function(){
 	var ctor	= THREE.CylinderGeometry;
 	var dflGeometry	= [0.5, 0.5, 1, 16, 4];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
-tQuery.register('_createMesh', function(ctor, dflGeometry, args)
+tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 {
 	// convert args to array if it is instanceof Arguments
 	// FIXME if( args instanceof Arguments )
@@ -1723,7 +1724,7 @@ tQuery.register('_createMesh', function(ctor, dflGeometry, args)
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createAxis', function(){
+tQuery.registerStatic('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
 	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
@@ -1904,13 +1905,13 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.register('setBasicMaterial', function(opts){
+tQuery.Mesh.registerInstance('setBasicMaterial', function(opts){
 	var material	= tQuery.createMeshBasicMaterial(opts);
 	this.material( material.get(0) );
 	return material.back(this);
 })
 
-tQuery.register('createMeshBasicMaterial', function(opts){
+tQuery.registerStatic('createMeshBasicMaterial', function(opts){
 	var tMaterial	= new THREE.MeshBasicMaterial(opts);
 	var material	= new tQuery.MeshBasicMaterial(tMaterial);
 	return material;
@@ -1980,13 +1981,13 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.register('setLambertMaterial', function(opts){
+tQuery.Mesh.registerInstance('setLambertMaterial', function(opts){
 	var material	= tQuery.createMeshLambertMaterial(opts);
 	this.material( material.get(0) );
 	return material.back(this);
 })
 
-tQuery.register('createMeshLambertMaterial', function(opts){
+tQuery.registerStatic('createMeshLambertMaterial', function(opts){
 	var tMaterial	= new THREE.MeshLambertMaterial(opts);
 	var material	= new tQuery.MeshLambertMaterial(tMaterial);
 	return material;
@@ -2037,13 +2038,13 @@ tQuery.mixinAttributes(tQuery.MeshLambertMaterial, {
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.register('setPhongMaterial', function(opts){
+tQuery.Mesh.registerInstance('setPhongMaterial', function(opts){
 	var material	= tQuery.createMeshPhongMaterial(opts);
 	this.material( material.get(0) );
 	return material.back(this);
 })
 
-tQuery.register('createMeshPhongMaterial', function(opts){
+tQuery.registerStatic('createMeshPhongMaterial', function(opts){
 	var tMaterial	= new THREE.MeshPhongMaterial(opts);
 	var material	= new tQuery.MeshPhongMaterial(tMaterial);
 	return material;
@@ -2109,7 +2110,7 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 //		Size functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Geometry.register('computeAll', function(){
+tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingBox();
 		//tGeometry.computeCentroids();
@@ -2128,7 +2129,7 @@ tQuery.Geometry.register('computeAll', function(){
  * @name zoom
  * @methodOf tQuery.Geometry
 */
-tQuery.Geometry.register('scaleBy', function(vector3){
+tQuery.Geometry.registerInstance('scaleBy', function(vector3){
 	// handle parameters
 	if( typeof vector3 === "number" && arguments.length === 1 ){
 		vector3	= new THREE.Vector3(vector3, vector3, vector3);
@@ -2152,7 +2153,7 @@ tQuery.Geometry.register('scaleBy', function(vector3){
 	return this;
 });
 
-tQuery.Geometry.register('size', function(){
+tQuery.Geometry.registerInstance('size', function(){
 	// only on zero-or-one element
 	console.assert(this.length <= 1)
 	// if no element, return undefined
@@ -2172,7 +2173,7 @@ tQuery.Geometry.register('size', function(){
 
 /**
 */
-tQuery.Geometry.register('normalize', function(){
+tQuery.Geometry.registerInstance('normalize', function(){
 	// change all geometry.vertices
 	this.each(function(geometry){
 		var node	= tQuery(geometry);
@@ -2195,7 +2196,7 @@ tQuery.Geometry.register('normalize', function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 
-tQuery.Geometry.register('middlePoint', function(){
+tQuery.Geometry.registerInstance('middlePoint', function(){
 	// only on zero-or-one element
 	console.assert(this.length <= 1)
 	// if no element, return undegined
@@ -2216,7 +2217,7 @@ tQuery.Geometry.register('middlePoint', function(){
 //		move functions							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Geometry.register('translate', function(delta){
+tQuery.Geometry.registerInstance('translate', function(delta){
 	// handle parameters
 	if( typeof delta === "number" && arguments.length === 3 ){
 		delta	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -2239,7 +2240,7 @@ tQuery.Geometry.register('translate', function(delta){
 	return this;
 });
 
-tQuery.Geometry.register('rotate', function(angles, order){
+tQuery.Geometry.registerInstance('rotate', function(angles, order){
 	// handle parameters
 	if( typeof angles === "number" && arguments.length === 3 ){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -2268,7 +2269,7 @@ tQuery.Geometry.register('rotate', function(angles, order){
 
 /**
 */
-tQuery.Geometry.register('center', function(noX, noY, noZ){
+tQuery.Geometry.registerInstance('center', function(noX, noY, noZ){
 	// change all geometry.vertices
 	this.each(function(tGeometry){
 		var geometry	= tQuery(tGeometry);
@@ -2289,7 +2290,7 @@ tQuery.Geometry.register('center', function(noX, noY, noZ){
  *
  * @param {Number} subdivision the number of subdivision to do
 */
-tQuery.Geometry.register('smooth', function(subdivision){
+tQuery.Geometry.registerInstance('smooth', function(subdivision){
 	// init the modifier
 	var modifier	= new THREE.SubdivisionModifier( subdivision );
 	// apply it to each geometry
@@ -2306,21 +2307,21 @@ tQuery.Geometry.register('smooth', function(subdivision){
 });
 
 // some shortcuts
-tQuery.Geometry.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
-tQuery.Geometry.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
-tQuery.Geometry.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
-tQuery.Geometry.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
-tQuery.Geometry.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
-tQuery.Geometry.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
-tQuery.Geometry.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
-tQuery.Geometry.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
-tQuery.Geometry.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+tQuery.Geometry.registerInstance('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Geometry.registerInstance('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Geometry.registerInstance('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+tQuery.Geometry.registerInstance('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Geometry.registerInstance('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Geometry.registerInstance('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Geometry.registerInstance('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Geometry.registerInstance('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Geometry.registerInstance('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
 
 // backward compatibility
-tQuery.Geometry.register('zoom'		, function(value){return this.scaleBy(value);		});
-tQuery.Geometry.register('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
-tQuery.Geometry.register('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
-tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
+tQuery.Geometry.registerInstance('zoom'		, function(value){return this.scaleBy(value);		});
+tQuery.Geometry.registerInstance('zoomX'	, function(ratio){ return this.zoom(ratio, 1, 1);	});
+tQuery.Geometry.registerInstance('zoomY'	, function(ratio){ return this.zoom(1, ratio, 1);	});
+tQuery.Geometry.registerInstance('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio);	});
 
 
 })();	// closure function end
@@ -2332,7 +2333,7 @@ tQuery.Geometry.register('zoomZ'	, function(ratio){ return this.zoom(1, 1, ratio
 //		position 							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Object3D.register('position', function(vector3){
+tQuery.Object3D.registerInstance('position', function(vector3){
 	// handle the getter
 	if( vector3 === undefined )	return this.get(0).position;
 	// handle parameters
@@ -2348,26 +2349,26 @@ tQuery.Object3D.register('position', function(vector3){
 	return this;
 });
 
-tQuery.Object3D.register('positionX', function(scalar){
+tQuery.Object3D.registerInstance('positionX', function(scalar){
 	if( scalar === undefined )	return object.get(0).position.x;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.position.x = scalar;	});
 	return this;
 });
-tQuery.Object3D.register('positionY', function(scalar){
+tQuery.Object3D.registerInstance('positionY', function(scalar){
 	if( scalar === undefined )	return object.get(0).position.y;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.position.y = scalar;	});
 	return this;
 });
-tQuery.Object3D.register('positionZ', function(scalar){
+tQuery.Object3D.registerInstance('positionZ', function(scalar){
 	if( scalar === undefined )	return object.get(0).position.z;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.position.z = scalar;	});
 	return this;
 });
 
-tQuery.Object3D.register('translate', function(delta){
+tQuery.Object3D.registerInstance('translate', function(delta){
 	// handle parameters
 	if( typeof delta === "number" && arguments.length === 3 ){
 		delta	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -2383,16 +2384,16 @@ tQuery.Object3D.register('translate', function(delta){
 });
 
 // some shortcuts
-tQuery.Object3D.register('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
-tQuery.Object3D.register('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
-tQuery.Object3D.register('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
+tQuery.Object3D.registerInstance('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
+tQuery.Object3D.registerInstance('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
+tQuery.Object3D.registerInstance('translateZ'	, function(delta){ return this.translate(0, 0, delta);	});
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //		rotation							//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Object3D.register('rotation', function(vector3){
+tQuery.Object3D.registerInstance('rotation', function(vector3){
 	// handle the getter
 	if( vector3 === undefined )	return this.get(0).rotation;
 	// handle parameters polymorphism
@@ -2409,26 +2410,26 @@ tQuery.Object3D.register('rotation', function(vector3){
 	return this;
 });
 
-tQuery.Object3D.register('rotationX', function(scalar){
+tQuery.Object3D.registerInstance('rotationX', function(scalar){
 	if( scalar === undefined )	return object.get(0).rotation.x;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.rotation.x = scalar;	});
 	return this;
 });
-tQuery.Object3D.register('rotationY', function(scalar){
+tQuery.Object3D.registerInstance('rotationY', function(scalar){
 	if( scalar === undefined )	return object.get(0).rotation.y;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.rotation.y = scalar;	});
 	return this;
 });
-tQuery.Object3D.register('rotationZ', function(scalar){
+tQuery.Object3D.registerInstance('rotationZ', function(scalar){
 	if( scalar === undefined )	return object.get(0).rotation.z;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.rotation.z = scalar;	});
 	return this;
 });
 
-tQuery.Object3D.register('rotate', function(angles){
+tQuery.Object3D.registerInstance('rotate', function(angles){
 	// handle parameter polymorphism
 	if( typeof angles === "number" && arguments.length === 3 ){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -2445,15 +2446,15 @@ tQuery.Object3D.register('rotate', function(angles){
 
 
 // some shortcuts
-tQuery.Object3D.register('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
-tQuery.Object3D.register('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
-tQuery.Object3D.register('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
+tQuery.Object3D.registerInstance('rotateX'	, function(angle){ return this.rotate(angle, 0, 0);	});
+tQuery.Object3D.registerInstance('rotateY'	, function(angle){ return this.rotate(0, angle, 0);	});
+tQuery.Object3D.registerInstance('rotateZ'	, function(angle){ return this.rotate(0, 0, angle);	});
 
 //////////////////////////////////////////////////////////////////////////////////
 //		scale								//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Object3D.register('scale', function(vector3){
+tQuery.Object3D.registerInstance('scale', function(vector3){
 	// handle the getter
 	if( vector3 === undefined )	return this.get(0).scale;
 	// handle parameters
@@ -2472,26 +2473,26 @@ tQuery.Object3D.register('scale', function(vector3){
 	return this;
 });
 
-tQuery.Object3D.register('scaleX', function(scalar){
+tQuery.Object3D.registerInstance('scaleX', function(scalar){
 	if( scalar === undefined )	return object.get(0).scale.x;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.scale.x = scalar;	});
 	return this;
 });
-tQuery.Object3D.register('scaleY', function(scalar){
+tQuery.Object3D.registerInstance('scaleY', function(scalar){
 	if( scalar === undefined )	return object.get(0).scale.y;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.scale.y = scalar;	});
 	return this;
 });
-tQuery.Object3D.register('scaleZ', function(scalar){
+tQuery.Object3D.registerInstance('scaleZ', function(scalar){
 	if( scalar === undefined )	return object.get(0).scale.z;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.scale.z = scalar;	});
 	return this;
 });
 
-tQuery.Object3D.register('scaleBy', function(ratio){
+tQuery.Object3D.registerInstance('scaleBy', function(ratio){
 	// handle parameters
 	if( typeof ratio === "number" && arguments.length === 1 ){
 		ratio	= new THREE.Vector3(ratio, ratio, ratio);
@@ -2509,6 +2510,6 @@ tQuery.Object3D.register('scaleBy', function(ratio){
 });
 
 // some shortcuts
-tQuery.Object3D.register('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
-tQuery.Object3D.register('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
-tQuery.Object3D.register('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+tQuery.Object3D.registerInstance('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
+tQuery.Object3D.registerInstance('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
+tQuery.Object3D.registerInstance('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});

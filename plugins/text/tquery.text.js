@@ -1,7 +1,7 @@
 /**
  * tQuery.createText('foobar')
 */
-tQuery.register('createText', function(text, options){
+tQuery.registerStatic('createText', function(text, options){
 	// handle parameters
 	options	= tQuery.extend(options, {
 		font		: "droid serif",

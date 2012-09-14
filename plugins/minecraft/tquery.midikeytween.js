@@ -1,4 +1,4 @@
-tQuery.register('MidiKeyTween', function(opts){
+tQuery.registerStatic('MidiKeyTween', function(opts){
 	opts	= this._opts	= tQuery.extend(opts, {
 		attackTime	: 2,
 		releaseTime	: 2

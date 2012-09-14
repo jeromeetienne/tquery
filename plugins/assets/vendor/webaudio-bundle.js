@@ -726,7 +726,7 @@ tQuery.World.register('supportWebAudio', function(){
 	return WebAudio.isAvailable;
 });
 
-tQuery.register('createSound', function(world, nodeChain){
+tQuery.registerStatic('createSound', function(world, nodeChain){
 	world	= world || tQuery.world;
 	return new WebAudio.Sound(world.getWebAudio(), nodeChain);
 });

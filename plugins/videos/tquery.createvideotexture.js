@@ -1,7 +1,7 @@
 /**
  * Create tQuery.Scene
 */
-tQuery.register('createVideoTexture', function(opts){
+tQuery.registerStatic('createVideoTexture', function(opts){
 	// handle parameters
 	if( arguments.length === 1 && typeof opts === 'string' ){
 		opts	= { url : arguments[0] };

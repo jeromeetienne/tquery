@@ -1,4 +1,4 @@
-tQuery.register('createPlanet', function(opts){
+tQuery.registerStatic('createPlanet', function(opts){
 	// handle parameters polymorphism
 	if( typeof(opts) === 'string' )	opts	= { type: opts };
 	// handle options default

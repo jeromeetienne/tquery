@@ -1,4 +1,4 @@
-tQuery.register('createBufferGeometryDisjoint', function(geometry){
+tQuery.registerStatic('createBufferGeometryDisjoint', function(geometry){
 	// parameter polymorphism
 	if( geometry instanceof THREE.Geometry ){
 		var tGeometry	= geometry;

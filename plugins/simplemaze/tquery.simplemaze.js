@@ -1,8 +1,8 @@
-tQuery.register('createSimpleMaze', function(opts){
+tQuery.registerStatic('createSimpleMaze', function(opts){
 	return new tQuery.SimpleMaze(opts);
 });
 
-tQuery.register('SimpleMaze', function(opts){
+tQuery.registerStatic('SimpleMaze', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		squareW		: 1,

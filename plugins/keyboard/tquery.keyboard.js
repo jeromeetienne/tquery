@@ -3,7 +3,7 @@
 */
 (function(){
 	var instance	= null;
-	tQuery.register('keyboard', function(){
+	tQuery.registerStatic('keyboard', function(){
 		if( !instance )	instance = new THREEx.KeyboardState();
 		return instance;
 	});			

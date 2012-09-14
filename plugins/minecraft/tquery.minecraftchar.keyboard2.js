@@ -1,8 +1,8 @@
-tQuery.register('createMinecraftCharKeyboard2', function(opts){
+tQuery.registerStatic('createMinecraftCharKeyboard2', function(opts){
 	return new tQuery.MinecraftCharKeyboard2(opts)
 });
 
-tQuery.register('MinecraftCharKeyboard2', function(opts){
+tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 	// handle polymorphism
 	if( opts instanceof THREE.Object3D )	opts	= { object3D: opts };
 	if( opts instanceof tQuery.Object3D )	opts	= { object3D: opts.get(0) };

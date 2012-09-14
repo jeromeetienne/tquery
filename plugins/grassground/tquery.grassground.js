@@ -1,7 +1,7 @@
 /**
  * Create a checkerboard tQuery.Mesh
 */
-tQuery.register('createGrassGround', function(opts){
+tQuery.registerStatic('createGrassGround', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		width		: 1,

@@ -1,8 +1,8 @@
-tQuery.register('createGSVPano', function(opts){
+tQuery.registerStatic('createGSVPano', function(opts){
 	return new tQuery.GSVPano(opts);
 });
 
-tQuery.register('GSVPano', function(opts){
+tQuery.registerStatic('GSVPano', function(opts){
 	// parameter polymorphism
 	if( typeof(opts) === 'string' )	opts	= {location: opts};
 

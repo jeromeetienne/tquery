@@ -7,7 +7,7 @@
  * @augments	tQuery.MD2Character
  * @constructor
 */
-tQuery.register('RatamahattaMD2Character', function(opts){
+tQuery.registerStatic('RatamahattaMD2Character', function(opts){
 	// call parent ctor
 	var parent	= tQuery.RatamahattaMD2Character.parent;
 	parent.constructor.call(this)

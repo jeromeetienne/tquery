@@ -2,7 +2,7 @@
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('createCameraFpsControls', function(opts){
+tQuery.registerStatic('createCameraFpsControls', function(opts){
 	return new tQuery.CameraFpsControls(opts)
 });
 
@@ -10,7 +10,7 @@ tQuery.register('createCameraFpsControls', function(opts){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.register('CameraFpsControls', function(opts){
+tQuery.registerStatic('CameraFpsControls', function(opts){
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
 		world	: tQuery.world,

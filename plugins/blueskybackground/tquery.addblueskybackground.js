@@ -1,4 +1,4 @@
-tQuery.register('addBlueSkyBackground', function(){
+tQuery.registerStatic('addBlueSkyBackground', function(){
 	// directly from @mrdoob in http://mrdoob.com/lab/javascript/webgl/clouds/
 	var canvas	= document.createElement( 'canvas' );
 	var context	= canvas.getContext( '2d' );

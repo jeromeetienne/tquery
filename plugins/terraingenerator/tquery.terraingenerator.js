@@ -108,7 +108,7 @@ function generateHeight( width, height )
  *
  * all hard work in http://mrdoob.github.com/three.js/examples/webgl_geometry_terrain.html
 */
-tQuery.register('generateTerrainGeometry', function(opts){
+tQuery.registerStatic('generateTerrainGeometry', function(opts){
 	
 	opts	= tQuery.extend(opts, {
 		width		: 10,

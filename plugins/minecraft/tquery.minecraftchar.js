@@ -1,4 +1,4 @@
-tQuery.register('createMinecraftChar', function(opts){
+tQuery.registerStatic('createMinecraftChar', function(opts){
 	return new tQuery.MinecraftChar(opts);
 });
 
@@ -12,7 +12,7 @@ tQuery.register('createMinecraftChar', function(opts){
  * http://www.minecraftwiki.net/wiki/File:Skintemplate.png
  * http://www.minershoes.com/
 */
-tQuery.register('MinecraftChar', function(opts){
+tQuery.registerStatic('MinecraftChar', function(opts){
 	opts	= tQuery.extend(opts, {
 		skinUrl	: tQuery.MinecraftChar.baseUrl + "examples/images/char.png"
 	});

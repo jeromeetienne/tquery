@@ -1,7 +1,7 @@
 /**
  * it seems more like debug.js than tquery thing
 */
-tQuery.register('hexDump', function(buffer, noConsole){
+tQuery.registerStatic('hexDump', function(buffer, noConsole){
 	//////////////////////////////////////////////////////////////////////////
 	// from http://javascript0.org/wiki/Hexdump				//
 	function hexify(num) {

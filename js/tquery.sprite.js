@@ -3,7 +3,7 @@
  * 
  * @returns {tQuery.Sprite} the create object
 */
-tQuery.register('createSprite', function(opts){
+tQuery.registerStatic('createSprite', function(opts){
 	opts		= tQuery.extend(opts, {
 		useScreenCoordinates	: false
 	});
@@ -18,7 +18,7 @@ tQuery.register('createSprite', function(opts){
 /**
  * Wrapper on top of THREE.Sprite
 */
-tQuery.register('Sprite', function(elements){
+tQuery.registerStatic('Sprite', function(elements){
 	// call parent ctor
 	tQuery.Sprite.parent.constructor.call(this, elements)
 

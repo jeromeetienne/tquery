@@ -1,4 +1,4 @@
-tQuery.register('createEnemy', function(opts){
+tQuery.registerStatic('createEnemy', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {		
 		id		: undefined,

@@ -13,7 +13,7 @@
  * @name tQuery.MD2Character
  * @class
 */
-tQuery.register('MD2Character', function(){
+tQuery.registerStatic('MD2Character', function(){
 	this._scale		= 1;
 	this.animationFPS	= 6;
 

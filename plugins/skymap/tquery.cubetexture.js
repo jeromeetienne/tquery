@@ -3,7 +3,7 @@
  * 
  * @returns {THREE.Texture} the just-built texture 
 */
-tQuery.register('createCubeTexture', function(opts){
+tQuery.registerStatic('createCubeTexture', function(opts){
 	// handle parameters polymorphisms
 	if( arguments.length === 2  ){
 		var path	= arguments[0];
@@ -39,7 +39,7 @@ tQuery.register('createCubeTexture', function(opts){
 });
 
 /** @namespace */
-tQuery.register('TextureCube', {});
+tQuery.registerStatic('TextureCube', {});
 
 /**
  * To create urls compatible with THREE.ImageUtils.loadTextureCube
