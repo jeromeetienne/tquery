@@ -244,8 +244,8 @@ tQuery._pluginsOn	= function(object, dest, fnNameSuffix){
 	}
 };
 
-tQuery.pluginsInstanceOn= function(klass){ return tQuery._pluginsOn(klass);			};
-tQuery.pluginsStaticOn	= function(klass){ return tQuery._pluginsOn(klass, klass, 'Static');	};
+tQuery.pluginsInstanceOn= function(klass){ tQuery._pluginsOn(klass);			};
+tQuery.pluginsStaticOn	= function(klass){ tQuery._pluginsOn(klass, klass, 'Static');	};
 
 /** for backward compatibility only */
 tQuery.pluginsOn	= function(object, dest){
