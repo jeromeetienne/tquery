@@ -39,6 +39,7 @@ looks like the code below... Quite short.
 * support for object3d.positionX(2) getter/setter (for x,y,z and position/rotation/scale)
 * support for object3d.position() getter
 * remove ambiguous .register() - now .registerInstance() and .registerStatic() - see #117
+* support dev branch on github - master being the last stable release
 
 #### Release - r50.1
 
