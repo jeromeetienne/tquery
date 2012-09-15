@@ -26,13 +26,12 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 		var keyboard	= tQuery.keyboard();
 		var model	= opts.object3D;
 		var action	= {
-			left	: keyboard.pressed("left")	|| keyboard.pressed("a")	|| keyboard.pressed("a"),
-			right	: keyboard.pressed("right")	|| keyboard.pressed("d"),
-			up	: keyboard.pressed("up")	|| keyboard.pressed("w")	|| keyboard.pressed("z"),
-			down	: keyboard.pressed("down")	|| keyboard.pressed("s"),
-		}
-		// keyboard handling
-		
+			left	: keyboard.pressed("left")  || keyboard.pressed("a") || keyboard.pressed("a"),
+			right	: keyboard.pressed("right") || keyboard.pressed("d"),
+			up	: keyboard.pressed("up")    || keyboard.pressed("w") || keyboard.pressed("z"),
+			down	: keyboard.pressed("down")  || keyboard.pressed("s"),
+		};
+		// keyboard handling		
 		if( opts.lateralMove === 'rotationY' ){
 			// lateral => rotation Y
 			if( action.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;

@@ -92,6 +92,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.car'], func
 		textureRepeatX	: 30,
 		textureRepeatY	: 30,		
 	}).addTo(world).receiveShadow(true).scaleBy(100);
+	ground.get(0).material.map.anisotropy = 16
 
 	// ## The Car
 
