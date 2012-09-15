@@ -35,6 +35,9 @@ looks like the code below... Quite short.
 
 
 #### Current
+
+#### Release - r50.2
+
 * added require.js for webgl-inspector
 * support for object3d.positionX(2) getter/setter (for x,y,z and position/rotation/scale)
 * support for object3d.position() getter

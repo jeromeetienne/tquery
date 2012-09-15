@@ -47,6 +47,7 @@ release:
 	@echo "   2.1 update changelog in README.md"
 	@echo "   2.2 update tQuery.VERSION variable in js/tquery.core.js"
 	@echo "   2.3 update VERSION file in / directory"
+	@echo "   2.4 make a build 'make build'"
 	@echo "3. On 'dev', commit changes"
 	@echo "   3.1 use 'git commit -a -m 'releasing version r99.9''"
 	@echo "4. Switch to 'master' branch"
