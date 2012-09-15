@@ -9,7 +9,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 		squareH		: 1,
 		squareD		: 1,
 		enableCeiling	: true,
-		enableGround	: true
+		enableFloor	: true
 	});
 
 	var mazeMap	= opts.map;
@@ -21,13 +21,13 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 	
 	this._container	= tQuery.createObject3D();
 	var textureUrl	= tQuery.SimpleMaze.baseUrl+"../assets/images/water.jpg";
-	// GROUND
-	if( opts.enableGround ){
+	// FLOOR
+	if( opts.enableFloor ){
 		var material	= new THREE.MeshBasicMaterial({
 			color	: 0xFF5588,
 			map	: THREE.ImageUtils.loadTexture( textureUrl )
 		});
-		this._ground	= tQuery.createPlane(material)
+		this._floor	= tQuery.createPlane(material)
 			.geometry()
 				.rotateX(-Math.PI/2)
 				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
