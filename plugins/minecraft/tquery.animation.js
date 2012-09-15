@@ -198,6 +198,6 @@ tQuery.Animation.prototype.isRunning	= function(){
  * Stop the animation
 */
 tQuery.Animation.prototype.stop	= function(){
-	this._$loopCb	&& world.loop().unhook(this._$loopCb);
+	this._$loopCb	&& this._opts.world.loop().unhook(this._$loopCb);
 	this._$loopCb	= null;
 }
