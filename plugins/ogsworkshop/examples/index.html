@@ -58,10 +58,7 @@ require([
 	// enable shaddow in the renderer
 	world.tRenderer().shadowMapEnabled	= true;
 	world.tRenderer().shadowMapSoft		= true;
-	
-	world.getCameraControls().rangeX	*= 0.3;
-	world.getCameraControls().rangeY	*= 0.3;
-	
+		
 	// enable sound
 	var sounds	= {};
 	if( WebAudio.isAvailable ){
@@ -73,9 +70,6 @@ require([
 		sounds.userLeft		= tQuery.createSound().load('../sounds/gearwhine.wav');
 	}
 
-	// add the fog
-	//world.addFogExp2({density: 0.05});
-
 	// add a skybox
 	tQuery.createSkymap('skybox').addTo(world);
 
@@ -85,275 +79,26 @@ require([
 			.finish();		
 	}
 
-	
-	// disable because incompatible with pproc
-	//tQuery.createLensFlare().addTo(world).position(0, 1, -3)
-
-
-	//////////////////////////////////////////////////////////////////////////
-	//		add minecraft						//
-	//////////////////////////////////////////////////////////////////////////
-	var character	= tQuery.createMinecraftChar().addTo(world);
-	tQuery('mesh', character.object3D('root')).castShadow(true)
-
-	
-	tQuery.createSprite().addTo(character.object3D('root')).addClass('cartouche')
-		.scaleBy(1/200)
-		.positionY(1.1)
-		.map(buildNickCartouche('You'))
-
-	if( false ){
-		// init bodyAnims
-		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
-		bodyAnims.start('stand');
-		// init headAnims
-		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
-		headAnims.start('still');		
-		world.loop().hook(function(){
-			var keyboard	= tQuery.keyboard();
-			var action	= {
-				left	: keyboard.pressed("left")	|| keyboard.pressed("a") || keyboard.pressed("a"),
-				right	: keyboard.pressed("right")	|| keyboard.pressed("d"),
-				up	: keyboard.pressed("up")	|| keyboard.pressed("w") || keyboard.pressed("z"),
-				down	: keyboard.pressed("down")	|| keyboard.pressed("s"),
-			};
-			if( action.up || action.down ){
-				bodyAnims.start('run')
-			}else{
-				bodyAnims.start('stand')
-			}	
-		})
-	}
-
 
 	// initiate a spritesheet
+	var items	= new tQuery.Spritesheet({
+		url	: '../../minecraft/examples/images/items/items.png',
+		imgW	: 256,
+		imgH	: 256,
+		spriteW	: 16,
+		spriteH	: 16
+	});
+	
+	// create ground
 	if( true ){
-		var items	= new tQuery.Spritesheet({
-			url	: '../../minecraft/examples/images/items/items.png',
-			imgW	: 256,
-			imgH	: 256,
-			spriteW	: 16,
-			spriteH	: 16
-		});
-// TODO unify it with otherifno
-// all players got the same stt
-		// once the spritesheet is loaded, 
-		items.addEventListener('load', function(){
-			var sword	= items.createMesh(2, 4)
-				.addTo(character.parts.armR)
-				.scaleBy(1/2)
-				.position(0,-10/35,8/35)
-				.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
-				.castShadow(true);
-		});
-		items.addEventListener('load', function(){
-			return;
-			for( var i = 0; i < 40; i++ ){
-				var itemX	= THREE.Math.randInt(6, 14);
-				var itemY	= THREE.Math.randInt(0, 5);
-				var item	= items.createMesh(itemX, itemY).addTo(world)
-				item.scaleBy(1/2).positionY(0.5);			
-				item.positionX(THREE.Math.randFloatSpread(20));
-				item.positionZ(THREE.Math.randFloatSpread(20));
-
-				item.rotationY(THREE.Math.randFloat(0, Math.PI*2))
-			}
-		});
+		var ground	= tQuery.createGrassGround({
+			textureRepeatX	: 20,
+			textureRepeatY	: 20,
+		}).addTo(world)
+		.receiveShadow(true)
+		.scale(80);
+		ground.get(0).material.map.anisotropy = 16;
 	}
-
-	if( false ){
-		// sound on chat reception, nick change, skin change
-		var url		= '../sounds/techno.mp3'
-		var sound	= tQuery.createSound().load(url, function(sound){
-			sound.loop(true).play();
-		});
-		sound.follow(character.object3D('root'), world);		
-	}
-	
-	//////////////////////////////////////////////////////////////////////////
-	//		network							//
-	//////////////////////////////////////////////////////////////////////////
-	// init the gameServer
-	var serverUrl	= 'http://localhost:4000';
-	var mySourceId	= null;
-	var myUserInfo	= {
-		humanName	: 'player'+Math.floor(Math.random()*10000).toString(16),
-		skinBasename	: 'char.png',
-	};
-
-	var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
-	texture.image	= buildNickCartouche(myUserInfo.humanName)
-	texture.needsUpdate	= true;
-
-	var gameServer	= new SimpleMMOServer(myUserInfo, serverUrl);
-	var othersInfo	= {};
-	function createOtherInfo(sourceId, userInfo){
-		console.assert(othersInfo[sourceId] === undefined);
-		var skinUrl	= '../../minecraft/examples/images/'+userInfo.skinBasename;
-
-		var character	= tQuery.createMinecraftChar({
-			skinUrl	: skinUrl
-		}).addTo(world);
-		tQuery('mesh', character.object3D('root')).castShadow(true)
-
-		tQuery.createSprite().addTo(character.object3D('root'))	.addClass('cartouche')
-			.scaleBy(1/200).positionY(1.1)
-			.map(buildNickCartouche(userInfo.humanName))
-		
-		var sword	= items.createMesh(2, 4)
-			.addTo(character.parts.armR)
-			.scaleBy(1/2)
-			.position(0,-10/35,8/35)
-			.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
-			.castShadow(true)
-
-		othersInfo[sourceId]	= {
-			character	: character
-		};		
-	}
-	function updateOtherInfo(sourceId, curUserInfo, oldUserInfo){
-		console.assert(othersInfo[sourceId] !== undefined);
-		var otherInfo	= othersInfo[sourceId];
-		var character	= otherInfo.character;
-		if( !oldUserInfo || curUserInfo.skinBasename !== oldUserInfo.skinBasename ){
-			var skinUrl	= '../../minecraft/examples/images/'+curUserInfo.skinBasename;
-			character.loadSkin(skinUrl)
-			sounds.skinChange	&& sounds.skinChange.play()
-		}
-		if( !oldUserInfo || curUserInfo.humanName !== oldUserInfo.humanName ){		
-			var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
-			texture.image	= buildNickCartouche(curUserInfo.humanName)
-			texture.needsUpdate	= true;
-			sounds.nickChange	&& sounds.nickChange.play()
-		}
-	}
-
-	gameServer.addEventListener('connected', function(sourceId, usersInfo){
-		console.log('connected', sourceId, usersInfo, gameServer.usersInfo())
-		mySourceId	= sourceId;
-		Object.keys(usersInfo).forEach(function(sourceId){
-			var userInfo	= usersInfo[sourceId];
-			if( mySourceId === sourceId )	return;
-			console.log('otherSourceId', sourceId)
-			createOtherInfo(sourceId, userInfo)
-		});
-	});
-	gameServer.addEventListener('userJoin', function(data){
-		console.log('userJoin', arguments)
-		createOtherInfo(data.sourceId, data.userInfo);
-	});
-	gameServer.addEventListener('userLeft', function(data){
-		console.log('userLeft', data)
-		otherInfo	= othersInfo[data.sourceId];
-		delete othersInfo[data.sourceId]
-		otherInfo.character.removeFrom(world)
-	});
-	gameServer.addEventListener('userInfo', function(sourceId, curUserInfo, oldUserInfo){
-		console.log('userInfo', arguments)
-		if( mySourceId === sourceId )	return;
-		updateOtherInfo(sourceId, curUserInfo, oldUserInfo)
-	});
-	gameServer.addEventListener('clientBroadcast', function(data){
-		// console.log('positionChange', data)
-		
-		var sourceId	= data.sourceId;
-		var message	= data.message;
-		var otherInfo	= othersInfo[sourceId];
-
-		console.assert( othersInfo[sourceId] );
-
-		if( message.type === 'positionChange' ){
-			var mesh	= otherInfo.character.object3D('root')
-			mesh.positionX( message.position.x )
-			mesh.positionY( message.position.y )
-			mesh.positionZ( message.position.z )
-			mesh.rotationX( message.rotation.x )
-			mesh.rotationY( message.rotation.y )
-			mesh.rotationZ( message.rotation.z )
-		}else if( message.type === 'chatText' ){
-			var mesh	= otherInfo.character.object3D('root')
-			var character	= otherInfo.character;
-			// remove previous message if any
-			tQuery('#'+sourceId+'_chatMessage').removeFrom(world)
-			// add text
-			var text	= tQuery.createSprite().addTo(world)
-				.position( mesh.position() ).translateY(1.4).scaleBy(1/200)
-				.id(sourceId+'_chatMessage')
-				.map(buildChatBubble(message.text))
-			// remove the text after a while
-			setTimeout(function(){
-				text.removeFrom(world)
-			}, 10*1000);
-		}else{
-			console.log('unknown broadcast message.type', message.type)
-		}
-	});
-	setInterval(function(){
-		var mesh	= character.object3D('root');
-		var position	= mesh.position();
-		var rotation	= mesh.rotation();
-		gameServer.clientBroadcast({
-			type	: 'positionChange',
-			position: {
-				x	: position.x,
-				y	: position.y,
-				z	: position.z,
-			},
-			rotation: {
-				x	: rotation.x,
-				y	: rotation.y,
-				z	: rotation.z,
-			},
-		})
-	}, 1000/60)
-
-
-
-	document.body.setAttribute("tabIndex", "0");	// make body focusable
-	// handle nicknameForm
-	var nicknameForm	= document.getElementById('nicknameForm')
-	nicknameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
-
-	nicknameForm[0].value	= gameServer.userInfo().humanName;
-	nicknameForm.addEventListener('submit', function(){
-		myUserInfo.humanName	= nicknameForm[0].value;
-		// update local character
-		var texture		= tQuery('.cartouche', character.object3D('root')).get(0).map;
-		texture.image		= buildNickCartouche(myUserInfo.humanName)
-		texture.needsUpdate	= true;
-		// notify the server
-		gameServer.userInfo(myUserInfo);
-		// put back the focus on body
-		document.body.focus();		
-	});
-
-	var skinSelectEl	= document.getElementById('skinSelect')
-	skinSelectEl.addEventListener('change', function(){
-		myUserInfo.skinBasename	= skinSelectEl.value;
-		// update local character
-		var skinUrl	= '../../minecraft/examples/images/'+myUserInfo.skinBasename;
-		character.loadSkin(skinUrl)	
-		// notify the server
-		gameServer.userInfo(myUserInfo);
-		// put back the focus on body
-		document.body.focus();		
-	});
-
-	var chatInputForm	= document.getElementById('chatInputForm')
-	chatInputForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
-	chatInputForm.addEventListener('change', function(){
-		// send chat input to the server
-		gameServer.clientBroadcast({
-			type	: 'chatText',
-			text	: chatInputForm[0].value
-		});
-		// zero the chat input
-		chatInputForm[0].value	= null;
-		// put back the focus on body
-		document.body.focus();		
-	});
-
-	
 	//////////////////////////////////////////////////////////////////////////
 	//		lights							//
 	//////////////////////////////////////////////////////////////////////////
@@ -371,98 +116,254 @@ require([
 		//.shadowCameraVisible(true)
 	// for lightDir1 to follow character
 	world.loop().hook(function(){
-		var model	= character.object3D('root');
+		if( !players[mySourceId] )	return;
+		var player	= players[mySourceId];
+		var model	= player.character.object3D('root');
 		var position	= model.get(0).position;
-		lightDir1.get(0).target.position.copy(model.get(0).position)
+		lightDir1.get(0).target.position.copy(model.get(0).position);
 		var delta	= tQuery.createVector3(-1,2,3);
 		var position	= model.get(0).position.clone().addSelf(delta);
 		lightDir1.position(position)
 	})
 
 	//////////////////////////////////////////////////////////////////////////
-	//		put a world around it					//
+	//		network							//
 	//////////////////////////////////////////////////////////////////////////
-	
-	// create ground
-	if( true ){
-		var ground	= tQuery.createGrassGround({
-			textureRepeatX	: 20,
-			textureRepeatY	: 20,
-		}).addTo(world)
-		.receiveShadow(true)
-		.scale(80);
-		ground.get(0).material.map.anisotropy = 16;
-	}
-	
-	if( false ){
-		// TODO  handle collision
-		// - walls vs aabb
-		// - with computation of rebound
-		var maze	= tQuery.createSimpleMaze({
-			squareW		: 1,
-			squareH		: 1,
-			squareD		: 1,
-			enableCeiling	: false,
-			enableFloor	: false,
-			map	: [
-				'*********',
-				'*   *   *',
-				'*  ** ***',
-				'*       *',
-				'***     *',
-				'*       *',
-				'*********'
-			],
-		}).addTo(world);		
-	}
+	// init the gameServer
+	var mySourceId	= null;
+	var players	= {};
+
+	// initiate connect with server
+	var serverUrl	= 'http://localhost:4000';
+	var userInfo	= {
+		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
+		skinBasename	: 'char.png',
+	};
+	var gameServer	= new SimpleMMOServer(userInfo, serverUrl);
+
+	gameServer.addEventListener('connected', function(sourceId, usersInfo){
+		console.log('connected', sourceId, usersInfo, gameServer.usersInfo())
+		onConnect(sourceId, usersInfo)
+	});
+	gameServer.addEventListener('userJoin', function(data){
+		console.log('userJoin', arguments)
+		createPlayer(data.sourceId, data.userInfo);
+	});
+	gameServer.addEventListener('userLeft', function(data){
+		//console.log('userLeft', data)
+		destroyPlayer(data.sourceId);
+	});
+	gameServer.addEventListener('userInfo', function(sourceId, curUserInfo, oldUserInfo){
+		//console.log('userInfo', arguments)
+		updatePlayer(sourceId, curUserInfo, oldUserInfo)
+	});
+
+	gameServer.addEventListener('clientEcho', function(data){
+		console.assert( players[data.sourceId] );
+		if( data.message.type === 'positionChange' ){
+			var player	= players[data.sourceId];
+			var mesh	= player.character.object3D('root')
+			player.prevPosition.copy( mesh.position() )
+			player.prevRotation.copy( mesh.rotation() )
+			if( data.sourceId !== mySourceId ){
+				mesh.positionX( data.message.position.x )
+				mesh.positionY( data.message.position.y )
+				mesh.positionZ( data.message.position.z )
+				mesh.rotationX( data.message.rotation.x )
+				mesh.rotationY( data.message.rotation.y )
+				mesh.rotationZ( data.message.rotation.z )				
+			}
+
+			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
+			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
+			console.log('velocity', data.sourceId, velocity.length());
+		}else if( data.message.type === 'chatText' ){
+			var player	= players[data.sourceId];
+			var mesh	= player.character.object3D('root')
+			var character	= player.character;
+			// remove previous message if any
+			tQuery('#'+data.sourceId+'_chatMessage').removeFrom(world)
+			// add text
+			var text	= tQuery.createSprite().addTo(world)
+				.position( mesh.position() ).translateY(1.4).scaleBy(1/200)
+				.id(data.sourceId+'_chatMessage')
+				.map(buildChatBubble(data.message.text))
+			// remove the text after a while
+			setTimeout(function(){ text.removeFrom(world);	}, 10*1000);
+		}else{
+			console.log('unknown echo message.type', message.type)
+		}
+	});
+
+	world.loop().hook(function(){
+		Object.keys(players).forEach(function(sourceId){
+			var player	= players[sourceId];
+			var bodyAnims	= player.bodyAnims;
+			var mesh	= player.character.object3D('root')
+			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
+			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
+			console.log('velocity', sourceId, velocity.length());
+			if( velocity.length() ){
+				bodyAnims.start('run')
+			}else{
+				bodyAnims.start('stand')
+			}	
+		})
+	});
 
 
+	//////////////////////////////////////////////////////////////////////////
+	//		UI							//
+	//////////////////////////////////////////////////////////////////////////
 
-	// how to code a tracking camera
-	// - a tracked object
-	// - a target with a position relative to tracked object
-	// - a camera position relative to tracker object
-	
-	// how to code keyboard controls
-	// - related to camera position because it is was the user sees, 
-	//   so what the user intend
-	// - good algo is currently unknown
-	// - go for the simple algo
 
-	// to enable a tracking camera
-	if( true ){
+	document.body.setAttribute("tabIndex", "0");	// make body focusable
+	// handle nicknameForm
+	var nicknameForm	= document.getElementById('nicknameForm')
+	nicknameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+
+	nicknameForm[0].value	= gameServer.userInfo().nickName;
+	nicknameForm.addEventListener('submit', function(){
+		var myUserInfo		= gameServer.userInfo();
+		// update myUserInfo
+		myUserInfo.nickName	= nicknameForm[0].value;
+		// notify the server
+		gameServer.userInfo(myUserInfo);
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	var skinSelectEl	= document.getElementById('skinSelect')
+	skinSelectEl.addEventListener('change', function(){
+		var myUserInfo		= gameServer.userInfo();
+		// update myUserInfo
+		myUserInfo.skinBasename	= skinSelectEl.value;
+		// notify the server
+		gameServer.userInfo(myUserInfo);
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	var chatInputForm	= document.getElementById('chatInputForm')
+	chatInputForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+	chatInputForm.addEventListener('change', function(){
+		// send chat input to the server
+		gameServer.clientEcho({
+			type	: 'chatText',
+			text	: chatInputForm[0].value
+		});
+		// zero the chat input
+		chatInputForm[0].value	= null;
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//									//
+	//////////////////////////////////////////////////////////////////////////
+
+	function onConnect(sourceId, usersInfo){
+		mySourceId	= sourceId;
+		Object.keys(usersInfo).forEach(function(sourceId){
+			var userInfo	= usersInfo[sourceId];
+			createPlayer(sourceId, userInfo)
+		});
+
+		var character	= players[mySourceId].character;
+		// to enable a tracking camera
 		var cameraControls	= tQuery.createCameraFpsControls({
 			trackedObject	: character.object3D('root').get(0),
-			tCamera		: world.tCamera(),
-			debug		: false
+			tCamera		: world.tCamera()
 		});
 		world.setCameraControls(cameraControls)
 		//cameraControls.deltaCamera().position(0, 0.7, -0.07)
+
+		
+		//////////////////////////////////////////////////////////////////////////
+		// user controls on keyboard						//
+		//////////////////////////////////////////////////////////////////////////
+		tQuery.createMinecraftCharKeyboard2({
+			object3D	: character.object3D('root').get(0),
+			lateralMove	: 'rotationY',
+			//lateralMove	: 'strafe'
+		});
+
+		// periodically send the position of the character
+		// - NOTE: not done on requestAnimationFrame as it has to be done even if page isnt visible
+		setInterval(function(){
+			var mesh	= character.object3D('root');
+			var position	= mesh.position();
+			var rotation	= mesh.rotation();
+			gameServer.clientEcho({
+				type	: 'positionChange',
+				position: { x : position.x, y : position.y, z : position.z },
+				rotation: { x : rotation.x, y : rotation.y, z : rotation.z },
+			});
+		}, 1000/60);
 	}
-	
-	//////////////////////////////////////////////////////////////////////////
-	// user controls on keyboard						//
-	//////////////////////////////////////////////////////////////////////////
-	var charKeyboard	= tQuery.createMinecraftCharKeyboard2({
-		object3D	: character.object3D('root').get(0),
-		lateralMove	: 'rotationY',
-		//lateralMove	: 'strafe'
-	})
-/**
- * - a camera view does a tweening to the next
- * 
- * Do a basic state transition
- * - which state getter
- * - enter state fn to enter
- * - leave state fn to leave
- * - setup state setter
-*/
-/*
- * How to handle camera tweening
- * - do a control which is control the camera relative to another Object3D
- * - target is the absolute position where the camera should be
- * - and there is a tweening between both
-*/
+
+	function createPlayer(sourceId, userInfo){
+		console.assert(players[sourceId] === undefined);
+		players[sourceId]	= {}
+		// create the minecraft character
+		var skinUrl	= '../../minecraft/examples/images/'+userInfo.skinBasename;
+		var character	= tQuery.createMinecraftChar({
+			skinUrl	: skinUrl
+		}).addTo(world);
+		tQuery('mesh', character.object3D('root')).castShadow(true)
+		// store it
+		players[sourceId].character	= character;
+		// add a nickname cartouche
+		tQuery.createSprite().addTo(character.object3D('root'))	.addClass('cartouche')
+			.scaleBy(1/200).positionY(1.1)
+			.map(buildNickCartouche(userInfo.nickName))
+		// add a sword to his arm
+// TODO Make it such as it work even if texture nore loaded ?
+		// var sword	= items.createMesh(2, 4)
+		// 	.addTo(character.parts.armR)
+		// 	.scaleBy(1/2)
+		// 	.position(0,-10/35,8/35)
+		// 	.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+		// 	.castShadow(true)
+
+		// init bodyAnims
+		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+		bodyAnims.start('run');
+		players[sourceId].bodyAnims	= bodyAnims;	
+		// init headAnims
+		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
+		headAnims.start('still');
+		players[sourceId].headAnims	= headAnims;
+		
+		players[sourceId].prevPosition	= tQuery.createVector3()
+		players[sourceId].prevRotation	= tQuery.createVector3()
+	}
+	function destroyPlayer(sourceId){
+		var player	= players[sourceId];
+		player.character.removeFrom(world)
+		player.bodyAnims.stop()
+		player.headAnims.stop()
+		delete players[sourceId]		
+	}
+	function updatePlayer(sourceId, curUserInfo, oldUserInfo){
+		console.assert(players[sourceId] !== undefined);
+		var otherInfo	= players[sourceId];
+		var character	= otherInfo.character;
+		// update the skin if needed
+		if( !oldUserInfo || curUserInfo.skinBasename !== oldUserInfo.skinBasename ){
+			var skinUrl	= '../../minecraft/examples/images/'+curUserInfo.skinBasename;
+			character.loadSkin(skinUrl)
+			sounds.skinChange	&& sounds.skinChange.play()
+		}
+		// update the nickname cartouche if needed
+		if( !oldUserInfo || curUserInfo.nickName !== oldUserInfo.nickName ){		
+			var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
+			texture.image	= buildNickCartouche(curUserInfo.nickName)
+			texture.needsUpdate	= true;
+			sounds.nickChange	&& sounds.nickChange.play()
+		}
+	}
 
 	function buildChatBubble(text){
 		// create the canvas
