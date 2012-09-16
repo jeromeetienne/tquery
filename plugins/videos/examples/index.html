@@ -2,16 +2,16 @@
 <script src="../../../build/tquery-bundle.js"></script>
 
 
-<script src="../tquery.createVideoTexture.js"></script>
-<script src="../tquery.createWebcamTexture.js"></script>
-<script src="../tquery.createTVSnowTexture.js"></script>
+<script src="../../videos/tquery.createVideoTexture.js"></script>
+<script src="../../videos/tquery.createWebcamTexture.js"></script>
+<script src="../../videos/tquery.createTVSnowTexture.js"></script>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	//var texture	= tQuery.createWebcamTexture();
+	var texture	= tQuery.createWebcamTexture();
 	//var texture	= tQuery.createTVSnowTexture();
-	var texture	= tQuery.createVideoTexture('sintel.ogv');
+	//var texture	= tQuery.createVideoTexture('sintel.ogv');
 
 	var material	= new THREE.MeshBasicMaterial({
 		map	: texture

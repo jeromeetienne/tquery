@@ -17,12 +17,12 @@ tQuery.Object3D.registerInstance('setLavaMaterial', function(opts){
 			time		: { type: "f"	, value: 1.0 },
 			resolution	: { type: "v2"	, value: new THREE.Vector2( window.innerWidth, window.innerHeight ) },
 			uvScale		: { type: "v2"	, value: opts.uvScale },
-			texture1	: { type: "t"	, value: 0, texture: THREE.ImageUtils.loadTexture( opts.texture1Url ) },
-			texture2	: { type: "t"	, value: 1, texture: THREE.ImageUtils.loadTexture( opts.texture2Url ) }
+			texture1	: { type: "t"	, value: THREE.ImageUtils.loadTexture( opts.texture1Url ) },
+			texture2	: { type: "t"	, value: THREE.ImageUtils.loadTexture( opts.texture2Url ) }
 		};
 		
-		uniforms.texture1.texture.wrapS = uniforms.texture1.texture.wrapT = THREE.RepeatWrapping;
-		uniforms.texture2.texture.wrapS = uniforms.texture2.texture.wrapT = THREE.RepeatWrapping;
+		uniforms.texture1.value.wrapS = uniforms.texture1.value.wrapT = THREE.RepeatWrapping;
+		uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;
 		
 		var material	= new THREE.ShaderMaterial({
 			uniforms	: uniforms,

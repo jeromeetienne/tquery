@@ -27,8 +27,11 @@ require(['tquery.gsvpano', 'tquery.minecraft', 'tquery.text', 'tquery.pproc'], f
 		// create a sphere mapped with the streetview images
 		gsvpano.buildSkySphere().addTo(world);
 		// create the text
-		var text	= tQuery.createText("onGameStart!").addTo(world)
-			.scaleBy(1/3).translateY(0.5)
+		var text	= tQuery.createText("onGameStart!", {
+			bevelThickness	: 0.1,
+			bevelSize	: 0.03,
+			bevelEnabled	: true,
+		}).addTo(world).scaleBy(1/3).translateY(0.5)
 		// set the material
 		var material	= gsvpano.buildMaterial();
 		text.material(material);

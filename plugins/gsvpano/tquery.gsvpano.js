@@ -89,8 +89,8 @@ tQuery.GSVPano.prototype.buildMaterial	= function(scale, rAmount){
 
 	var tMaterial	= new THREE.ShaderMaterial({
 		uniforms	: {
-			refractTexture	: { type: 't', value: 0.0, texture: this.texture() },
-			reflectTexture	: { type: 't', value: 1.0, texture: scaledTexture },
+			refractTexture	: { type: 't', value: this.texture()	},
+			reflectTexture	: { type: 't', value: scaledTexture	},
 			rAmount		: { type: 'f', value: 0.0 }	// 0.0 for reflect - 0.8 for refract
 		},
 		vertexShader	: tQuery.GSVPano._vertexShaderText,

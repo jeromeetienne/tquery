@@ -2,17 +2,11 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.DotScreenPass = function ( center, angle, scale ) {
+THREE.FilmPass = function ( noiseIntensity, scanlinesIntensity, scanlinesCount, grayscale ) {
 
-	var shader = THREE.ShaderExtras[ "dotscreen" ];
+	var shader = THREE.ShaderExtras[ "film" ];
 
 	this.uniforms = THREE.UniformsUtils.clone( shader.uniforms );
-
-	if ( center !== undefined )
-		this.uniforms[ "center" ].value.copy( center );
-
-	if ( angle !== undefined )	this.uniforms[ "angle"].value = angle;
-	if ( scale !== undefined )	this.uniforms[ "scale"].value = scale;
 
 	this.material = new THREE.ShaderMaterial( {
 
@@ -22,18 +16,23 @@ THREE.DotScreenPass = function ( center, angle, scale ) {
 
 	} );
 
+	if ( grayscale !== undefined )	this.uniforms.grayscale.value = grayscale;
+	if ( noiseIntensity !== undefined ) this.uniforms.nIntensity.value = noiseIntensity;
+	if ( scanlinesIntensity !== undefined ) this.uniforms.sIntensity.value = scanlinesIntensity;
+	if ( scanlinesCount !== undefined ) this.uniforms.sCount.value = scanlinesCount;
+
 	this.enabled = true;
 	this.renderToScreen = false;
 	this.needsSwap = true;
 
 };
 
-THREE.DotScreenPass.prototype = {
+THREE.FilmPass.prototype = {
 
 	render: function ( renderer, writeBuffer, readBuffer, delta ) {
 
-		this.uniforms[ "tDiffuse" ].value = readBuffer;
-		this.uniforms[ "tSize" ].value.set( readBuffer.width, readBuffer.height );
+		this.uniforms[ "tDiffuse" ].texture = readBuffer;
+		this.uniforms[ "time" ].value += delta;
 
 		THREE.EffectComposer.quad.material = this.material;
 

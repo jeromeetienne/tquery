@@ -175,7 +175,7 @@ require([
 			}
 			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
 			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
-			console.log('velocity', data.sourceId, velocity.length());
+			//console.log('velocity', data.sourceId, velocity.length());
 		}else if( data.message.type === 'chatText' ){
 			var player	= players[data.sourceId];
 			var mesh	= player.character.object3D('root')
@@ -201,7 +201,7 @@ require([
 			var mesh	= player.character.object3D('root')
 			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
 			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
-			console.log('velocity', sourceId, velocity.length());
+			//console.log('velocity', sourceId, velocity.length());
 			if( velocity.length() ){
 				bodyAnims.start('run')
 			}else{

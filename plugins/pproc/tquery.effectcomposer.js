@@ -215,7 +215,7 @@ tQuery.EffectComposer.prototype.motionBlur	= function(mixRatio){
 	});
 	var effectSave	= new THREE.SavePass( renderTarget );
 	var effectBlend	= new THREE.ShaderPass( THREE.ShaderExtras["blend"], "tDiffuse1" );
-	effectBlend.uniforms[ 'tDiffuse2' ].texture	= effectSave.renderTarget;
+	effectBlend.uniforms[ 'tDiffuse2' ].value	= effectSave.renderTarget;
 	effectBlend.uniforms[ 'mixRatio' ].value	= mixRatio;
 	this._tComposer.addPass( effectBlend );
 	this._tComposer.addPass( effectSave );

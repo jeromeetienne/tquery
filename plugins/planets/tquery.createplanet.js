@@ -42,11 +42,11 @@ tQuery.registerStatic('createPlanet', function(opts){
 		var shader	= THREE.ShaderUtils.lib[ "normal" ];
 		var uniforms	= THREE.UniformsUtils.clone( shader.uniforms );
 
-		uniforms[ "tNormal" ].texture	= normalTex;
-		uniforms[ "uNormalScale" ].value= 0.85;
+		uniforms[ "tNormal" ].value	= normalTex;
+		uniforms[ "uNormalScale" ].value.set(0.85, 0.85);
 
-		uniforms[ "tDiffuse" ].texture	= planetTex;
-		uniforms[ "tSpecular" ].texture = specularTex;
+		uniforms[ "tDiffuse" ].value	= planetTex;
+		uniforms[ "tSpecular" ].value	= specularTex;
 
 		uniforms[ "enableAO" ].value		= false;
 		uniforms[ "enableDiffuse" ].value	= true;
