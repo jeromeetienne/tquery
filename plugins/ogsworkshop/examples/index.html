@@ -63,7 +63,15 @@ require([
 	world.getCameraControls().rangeY	*= 0.3;
 	
 	// enable sound
-	world.enableWebAudio();
+	var sounds	= {};
+	if( WebAudio.isAvailable ){
+		world.enableWebAudio();
+		sounds.chatReceived	= tQuery.createSound().load('../sounds/checkpoint.wav');
+		sounds.skinChange	= tQuery.createSound().load('../sounds/eatpill.mp3');
+		sounds.nickChange	= tQuery.createSound().load('../sounds/gearwhine.wav');
+		sounds.userJoin		= tQuery.createSound().load('../sounds/gearwhine.wav');
+		sounds.userLeft		= tQuery.createSound().load('../sounds/gearwhine.wav');
+	}
 
 	// add the fog
 	//world.addFogExp2({density: 0.05});
@@ -88,7 +96,13 @@ require([
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	tQuery('mesh', character.object3D('root')).castShadow(true)
 
-	if( true ){
+	
+	tQuery.createSprite().addTo(character.object3D('root')).addClass('cartouche')
+		.scaleBy(1/200)
+		.positionY(1.1)
+		.map(buildNickCartouche('You'))
+
+	if( false ){
 		// init bodyAnims
 		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
 		bodyAnims.start('stand');
@@ -110,7 +124,7 @@ require([
 			}	
 		})
 	}
-	
+
 
 	// initiate a spritesheet
 	if( true ){
@@ -146,11 +160,6 @@ require([
 			}
 		});
 	}
-
-	tQuery.createSprite().addTo(character.object3D('root')).addClass('cartouche')
-		.scaleBy(1/200)
-		.positionY(1.1)
-		.map(buildNickCartouche('You'))
 
 	if( false ){
 		// sound on chat reception, nick change, skin change
@@ -208,12 +217,14 @@ require([
 		var character	= otherInfo.character;
 		if( !oldUserInfo || curUserInfo.skinBasename !== oldUserInfo.skinBasename ){
 			var skinUrl	= '../../minecraft/examples/images/'+curUserInfo.skinBasename;
-			character.loadSkin(skinUrl)	
+			character.loadSkin(skinUrl)
+			sounds.skinChange	&& sounds.skinChange.play()
 		}
 		if( !oldUserInfo || curUserInfo.humanName !== oldUserInfo.humanName ){		
 			var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
 			texture.image	= buildNickCartouche(curUserInfo.humanName)
 			texture.needsUpdate	= true;
+			sounds.nickChange	&& sounds.nickChange.play()
 		}
 	}
 
@@ -265,15 +276,13 @@ require([
 			// remove previous message if any
 			tQuery('#'+sourceId+'_chatMessage').removeFrom(world)
 			// add text
-			tQuery.createSprite().addTo(world)
+			var text	= tQuery.createSprite().addTo(world)
+				.position( mesh.position() ).translateY(1.4).scaleBy(1/200)
 				.id(sourceId+'_chatMessage')
-				.scaleBy(1/200)
-				.position( mesh.position() )
-				.translateY(1.4)
 				.map(buildChatBubble(message.text))
 			// remove the text after a while
 			setTimeout(function(){
-				tQuery('#'+sourceId+'_chatMessage').removeFrom(world)
+				text.removeFrom(world)
 			}, 10*1000);
 		}else{
 			console.log('unknown broadcast message.type', message.type)
@@ -357,8 +366,8 @@ require([
 		.color(0xffffff).intensity(4)
 		.castShadow(true)
 		.shadowDarkness(0.4)
-		.shadowMap(512,512)
-		.shadowCamera(2, -2, 2, -2, 0.1, 10)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 		//.shadowCameraVisible(true)
 	// for lightDir1 to follow character
 	world.loop().hook(function(){
@@ -459,8 +468,8 @@ require([
 		// create the canvas
 		var canvas  = document.createElement("canvas");
 		var context = canvas.getContext("2d");
-		canvas.width	= 256;
-		canvas.height	= 128;
+		canvas.width	= 1024;
+		canvas.height	= 512;
 		// center the origin
 		context.translate( canvas.width/2, canvas.height/2 );
 		// measure text

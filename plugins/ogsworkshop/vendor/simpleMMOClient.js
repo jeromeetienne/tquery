@@ -1,1 +1,0 @@
-../../../../SimpleMMOServer/examples/client.js
