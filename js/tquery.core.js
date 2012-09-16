@@ -63,7 +63,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r50.2";
+tQuery.VERSION	= "r51.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//

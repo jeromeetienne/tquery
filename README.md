@@ -36,6 +36,9 @@ looks like the code below... Quite short.
 
 #### Current
 
+#### Release - r51.0
+* ported to three.js r51
+
 #### Release - r50.2
 
 * added require.js for webgl-inspector
