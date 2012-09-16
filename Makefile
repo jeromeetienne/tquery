@@ -135,6 +135,7 @@ buildBundleRequire: buildBundle
 	cat plugins/requirejs/build/all.confrequire.js	>> build/tquery-bundle-require.js
 
 minifyBundleRequire: buildBundleRequire
+	echo $(BANNER)	>  build/tquery-bundle-require.min.js
 	curl --data-urlencode "js_code@build/tquery-bundle-require.js" 	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile	\
