@@ -1,0 +1,503 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+
+<script src="../../minecraft/tquery.midikeytween.js"></script>
+
+<script src="../../minecraft/tquery.minecraftchar.js"></script>
+<script src="../../minecraft/tquery.minecraftchar.keyboard2.js"></script>
+<script src="../../minecraft/tquery.camerafpscontrols.js"></script>
+
+<script src="../../minecraft/tquery.animation.js"></script>
+<script src="../../minecraft/tquery.animations.js"></script>
+
+<script src="../../minecraft/tquery.spritesheet.js"></script>
+
+<script src="../../minecraft/tquery.minecraftcharanimations.js"></script>
+<script src="../../minecraft/tquery.minecraftcharheadanimations.js"></script>
+
+<script src="../vendor/webaudio-bundle.js"></script>
+
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+<script src="http://localhost:4000/examples/client.js"></script>
+
+<body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1; text-align: right;">
+	<form action="javascript:void(0)" id='chatInputForm'>
+		<input size=100 type="text" placeholder='Chat here'/>
+	</form>
+	<select id="skinSelect">
+		<option value="char.png">char</option>
+		<option value="3djesus.png">3djesus</option>
+		<option value="agentsmith.png">agentsmith</option>
+		<option value="batman.png">batman</option>
+		<option value="god.png">god</option>
+		<option value="joker.png">Joker</option>
+		<option value="Mario.png">Mario</option>
+		<option value="martialartist.png">martialartist</option>
+		<option value="robocop.png">robocop</option>
+		<option value="Sonicthehedgehog.png">Sonic the hedgehog</option>
+		<option value="Spiderman.png">Spiderman</option>
+		<option value="Superman.png">Superman</option>
+		<option value="theflash.png">theflash</option>
+		<option value="woody.png">woody</option>
+		<option value="Iron-Man-Minecraft-Skin.png">ironman</option>
+	</select>
+	<form action="javascript:void(0)" id='nicknameForm' style='display: inline-block'>
+		<input type="text"/>
+	</form>
+</div><script>
+require([
+	'tquery.pproc', 'tquery.skymap', 'tquery.fog'
+	, 'tquery.keyboard', 'tquery.lensflare'
+	, 'tquery.grassground', 'tquery.simplemaze'
+	, 'tquery.light'], function(){
+	var world	= tQuery.createWorld().boilerplate({
+		fullscreen	: false,
+		screenshot	: false
+	}).start();
+
+	// enable shaddow in the renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+	
+	world.getCameraControls().rangeX	*= 0.3;
+	world.getCameraControls().rangeY	*= 0.3;
+	
+	// enable sound
+	world.enableWebAudio();
+
+	// add the fog
+	//world.addFogExp2({density: 0.05});
+
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+
+	// add post processing
+	if( false ){
+		world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette()
+			.finish();		
+	}
+
+	
+	// disable because incompatible with pproc
+	//tQuery.createLensFlare().addTo(world).position(0, 1, -3)
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		add minecraft						//
+	//////////////////////////////////////////////////////////////////////////
+	var character	= tQuery.createMinecraftChar().addTo(world);
+	tQuery('mesh', character.object3D('root')).castShadow(true)
+
+	if( false ){
+		// init bodyAnims
+		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+		bodyAnims.start('stand');
+		// init headAnims
+		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
+		headAnims.start('still');		
+		world.loop().hook(function(){
+			var keyboard	= tQuery.keyboard();
+			var action	= {
+				left	: keyboard.pressed("left")	|| keyboard.pressed("a") || keyboard.pressed("a"),
+				right	: keyboard.pressed("right")	|| keyboard.pressed("d"),
+				up	: keyboard.pressed("up")	|| keyboard.pressed("w") || keyboard.pressed("z"),
+				down	: keyboard.pressed("down")	|| keyboard.pressed("s"),
+			};
+			if( action.up || action.down ){
+				bodyAnims.start('run')
+			}else{
+				bodyAnims.start('stand')
+			}	
+		})
+	}
+	
+
+	// initiate a spritesheet
+	if( true ){
+		var items	= new tQuery.Spritesheet({
+			url	: '../../minecraft/examples/images/items/items.png',
+			imgW	: 256,
+			imgH	: 256,
+			spriteW	: 16,
+			spriteH	: 16
+		});
+// TODO unify it with otherifno
+// all players got the same stt
+		// once the spritesheet is loaded, 
+		items.addEventListener('load', function(){
+			var sword	= items.createMesh(2, 4)
+				.addTo(character.parts.armR)
+				.scaleBy(1/2)
+				.position(0,-10/35,8/35)
+				.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+				.castShadow(true);
+		});
+		items.addEventListener('load', function(){
+			return;
+			for( var i = 0; i < 40; i++ ){
+				var itemX	= THREE.Math.randInt(6, 14);
+				var itemY	= THREE.Math.randInt(0, 5);
+				var item	= items.createMesh(itemX, itemY).addTo(world)
+				item.scaleBy(1/2).positionY(0.5);			
+				item.positionX(THREE.Math.randFloatSpread(20));
+				item.positionZ(THREE.Math.randFloatSpread(20));
+
+				item.rotationY(THREE.Math.randFloat(0, Math.PI*2))
+			}
+		});
+	}
+
+	tQuery.createSprite().addTo(character.object3D('root')).addClass('cartouche')
+		.scaleBy(1/200)
+		.positionY(1.1)
+		.map(buildNickCartouche('You'))
+
+	if( false ){
+		// sound on chat reception, nick change, skin change
+		var url		= '../sounds/techno.mp3'
+		var sound	= tQuery.createSound().load(url, function(sound){
+			sound.loop(true).play();
+		});
+		sound.follow(character.object3D('root'), world);		
+	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	//		network							//
+	//////////////////////////////////////////////////////////////////////////
+	// init the gameServer
+	var serverUrl	= 'http://localhost:4000';
+	var mySourceId	= null;
+	var myUserInfo	= {
+		humanName	: 'player'+Math.floor(Math.random()*10000).toString(16),
+		skinBasename	: 'char.png',
+	};
+
+	var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
+	texture.image	= buildNickCartouche(myUserInfo.humanName)
+	texture.needsUpdate	= true;
+
+	var gameServer	= new SimpleMMOServer(myUserInfo, serverUrl);
+	var othersInfo	= {};
+	function createOtherInfo(sourceId, userInfo){
+		console.assert(othersInfo[sourceId] === undefined);
+		var skinUrl	= '../../minecraft/examples/images/'+userInfo.skinBasename;
+
+		var character	= tQuery.createMinecraftChar({
+			skinUrl	: skinUrl
+		}).addTo(world);
+		tQuery('mesh', character.object3D('root')).castShadow(true)
+
+		tQuery.createSprite().addTo(character.object3D('root'))	.addClass('cartouche')
+			.scaleBy(1/200).positionY(1.1)
+			.map(buildNickCartouche(userInfo.humanName))
+		
+		var sword	= items.createMesh(2, 4)
+			.addTo(character.parts.armR)
+			.scaleBy(1/2)
+			.position(0,-10/35,8/35)
+			.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+			.castShadow(true)
+
+		othersInfo[sourceId]	= {
+			character	: character
+		};		
+	}
+	function updateOtherInfo(sourceId, curUserInfo, oldUserInfo){
+		console.assert(othersInfo[sourceId] !== undefined);
+		var otherInfo	= othersInfo[sourceId];
+		var character	= otherInfo.character;
+		if( !oldUserInfo || curUserInfo.skinBasename !== oldUserInfo.skinBasename ){
+			var skinUrl	= '../../minecraft/examples/images/'+curUserInfo.skinBasename;
+			character.loadSkin(skinUrl)	
+		}
+		if( !oldUserInfo || curUserInfo.humanName !== oldUserInfo.humanName ){		
+			var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
+			texture.image	= buildNickCartouche(curUserInfo.humanName)
+			texture.needsUpdate	= true;
+		}
+	}
+
+	gameServer.addEventListener('connected', function(sourceId, usersInfo){
+		console.log('connected', sourceId, usersInfo, gameServer.usersInfo())
+		mySourceId	= sourceId;
+		Object.keys(usersInfo).forEach(function(sourceId){
+			var userInfo	= usersInfo[sourceId];
+			if( mySourceId === sourceId )	return;
+			console.log('otherSourceId', sourceId)
+			createOtherInfo(sourceId, userInfo)
+		});
+	});
+	gameServer.addEventListener('userJoin', function(data){
+		console.log('userJoin', arguments)
+		createOtherInfo(data.sourceId, data.userInfo);
+	});
+	gameServer.addEventListener('userLeft', function(data){
+		console.log('userLeft', data)
+		otherInfo	= othersInfo[data.sourceId];
+		delete othersInfo[data.sourceId]
+		otherInfo.character.removeFrom(world)
+	});
+	gameServer.addEventListener('userInfo', function(sourceId, curUserInfo, oldUserInfo){
+		console.log('userInfo', arguments)
+		if( mySourceId === sourceId )	return;
+		updateOtherInfo(sourceId, curUserInfo, oldUserInfo)
+	});
+	gameServer.addEventListener('clientBroadcast', function(data){
+		// console.log('positionChange', data)
+		
+		var sourceId	= data.sourceId;
+		var message	= data.message;
+		var otherInfo	= othersInfo[sourceId];
+
+		console.assert( othersInfo[sourceId] );
+
+		if( message.type === 'positionChange' ){
+			var mesh	= otherInfo.character.object3D('root')
+			mesh.positionX( message.position.x )
+			mesh.positionY( message.position.y )
+			mesh.positionZ( message.position.z )
+			mesh.rotationX( message.rotation.x )
+			mesh.rotationY( message.rotation.y )
+			mesh.rotationZ( message.rotation.z )
+		}else if( message.type === 'chatText' ){
+			var mesh	= otherInfo.character.object3D('root')
+			var character	= otherInfo.character;
+			// remove previous message if any
+			tQuery('#'+sourceId+'_chatMessage').removeFrom(world)
+			// add text
+			var text	= tQuery.createSprite().addTo(world)
+				.position( mesh.position() ).translateY(1.4).scaleBy(1/200)
+				.id(sourceId+'_chatMessage')
+				.map(buildChatBubble(message.text))
+			// remove the text after a while
+			setTimeout(function(){
+				text.removeFrom(world)
+			}, 10*1000);
+		}else{
+			console.log('unknown broadcast message.type', message.type)
+		}
+	});
+	setInterval(function(){
+		var mesh	= character.object3D('root');
+		var position	= mesh.position();
+		var rotation	= mesh.rotation();
+		gameServer.clientBroadcast({
+			type	: 'positionChange',
+			position: {
+				x	: position.x,
+				y	: position.y,
+				z	: position.z,
+			},
+			rotation: {
+				x	: rotation.x,
+				y	: rotation.y,
+				z	: rotation.z,
+			},
+		})
+	}, 1000/60)
+
+
+
+	document.body.setAttribute("tabIndex", "0");	// make body focusable
+	// handle nicknameForm
+	var nicknameForm	= document.getElementById('nicknameForm')
+	nicknameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+
+	nicknameForm[0].value	= gameServer.userInfo().humanName;
+	nicknameForm.addEventListener('submit', function(){
+		myUserInfo.humanName	= nicknameForm[0].value;
+		// update local character
+		var texture		= tQuery('.cartouche', character.object3D('root')).get(0).map;
+		texture.image		= buildNickCartouche(myUserInfo.humanName)
+		texture.needsUpdate	= true;
+		// notify the server
+		gameServer.userInfo(myUserInfo);
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	var skinSelectEl	= document.getElementById('skinSelect')
+	skinSelectEl.addEventListener('change', function(){
+		myUserInfo.skinBasename	= skinSelectEl.value;
+		// update local character
+		var skinUrl	= '../../minecraft/examples/images/'+myUserInfo.skinBasename;
+		character.loadSkin(skinUrl)	
+		// notify the server
+		gameServer.userInfo(myUserInfo);
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	var chatInputForm	= document.getElementById('chatInputForm')
+	chatInputForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+	chatInputForm.addEventListener('change', function(){
+		// send chat input to the server
+		gameServer.clientBroadcast({
+			type	: 'chatText',
+			text	: chatInputForm[0].value
+		});
+		// zero the chat input
+		chatInputForm[0].value	= null;
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	
+	//////////////////////////////////////////////////////////////////////////
+	//		lights							//
+	//////////////////////////////////////////////////////////////////////////
+	tQuery.createAmbientLight().addTo(world)
+		.color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,-1).color(0xffffff).intensity(2);
+	var lightDir1	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.color(0xffffff).intensity(4)
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 10)
+		//.shadowCameraVisible(true)
+	// for lightDir1 to follow character
+	world.loop().hook(function(){
+		var model	= character.object3D('root');
+		var position	= model.get(0).position;
+		lightDir1.get(0).target.position.copy(model.get(0).position)
+		var delta	= tQuery.createVector3(-1,2,3);
+		var position	= model.get(0).position.clone().addSelf(delta);
+		lightDir1.position(position)
+	})
+
+	//////////////////////////////////////////////////////////////////////////
+	//		put a world around it					//
+	//////////////////////////////////////////////////////////////////////////
+	
+	// create ground
+	if( true ){
+		var ground	= tQuery.createGrassGround({
+			textureRepeatX	: 20,
+			textureRepeatY	: 20,
+		}).addTo(world)
+		.receiveShadow(true)
+		.scale(80);
+		ground.get(0).material.map.anisotropy = 16;
+	}
+	
+	if( false ){
+		// TODO  handle collision
+		// - walls vs aabb
+		// - with computation of rebound
+		var maze	= tQuery.createSimpleMaze({
+			squareW		: 1,
+			squareH		: 1,
+			squareD		: 1,
+			enableCeiling	: false,
+			enableFloor	: false,
+			map	: [
+				'*********',
+				'*   *   *',
+				'*  ** ***',
+				'*       *',
+				'***     *',
+				'*       *',
+				'*********'
+			],
+		}).addTo(world);		
+	}
+
+
+
+	// how to code a tracking camera
+	// - a tracked object
+	// - a target with a position relative to tracked object
+	// - a camera position relative to tracker object
+	
+	// how to code keyboard controls
+	// - related to camera position because it is was the user sees, 
+	//   so what the user intend
+	// - good algo is currently unknown
+	// - go for the simple algo
+
+	// to enable a tracking camera
+	if( true ){
+		var cameraControls	= tQuery.createCameraFpsControls({
+			trackedObject	: character.object3D('root').get(0),
+			tCamera		: world.tCamera(),
+			debug		: false
+		});
+		world.setCameraControls(cameraControls)
+		//cameraControls.deltaCamera().position(0, 0.7, -0.07)
+	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	// user controls on keyboard						//
+	//////////////////////////////////////////////////////////////////////////
+	var charKeyboard	= tQuery.createMinecraftCharKeyboard2({
+		object3D	: character.object3D('root').get(0),
+		lateralMove	: 'rotationY',
+		//lateralMove	: 'strafe'
+	})
+/**
+ * - a camera view does a tweening to the next
+ * 
+ * Do a basic state transition
+ * - which state getter
+ * - enter state fn to enter
+ * - leave state fn to leave
+ * - setup state setter
+*/
+/*
+ * How to handle camera tweening
+ * - do a control which is control the camera relative to another Object3D
+ * - target is the absolute position where the camera should be
+ * - and there is a tweening between both
+*/
+
+	function buildChatBubble(text){
+		// create the canvas
+		var canvas  = document.createElement("canvas");
+		var context = canvas.getContext("2d");
+		canvas.width	= 1024;
+		canvas.height	= 512;
+		// center the origin
+		context.translate( canvas.width/2, canvas.height/2 );
+		// measure text
+		var fontSize	= 24;
+		context.font	= "bolder "+fontSize+"px Verdana";
+		var fontH	= fontSize;
+		var fontW	= context.measureText(text).width;
+		// build the background
+		context.fillStyle = "rgba(255,255,255,0.3)";
+		var scale	= 1.2;
+		context.fillRect(-fontW*scale/2,-fontH*scale/1.3,fontW*scale,fontH*scale)
+		// display the text
+		context.fillStyle = "rgba(0,0,0,0.7)";
+		context.fillText(text, -fontW/2, 0);
+		// return the canvas element
+		return canvas;
+	}
+	function buildNickCartouche(text){
+		// create the canvas
+		var canvas  = document.createElement("canvas");
+		var context = canvas.getContext("2d");
+		canvas.width	= 256;
+		canvas.height	= 128;
+		// center the origin
+		context.translate( canvas.width/2, canvas.height/2 );
+		// measure text
+		var fontSize	= 36;
+		context.font	= "bolder "+fontSize+"px Verdana";
+		var fontH	= fontSize;
+		var fontW	= context.measureText(text).width;
+		// build the background
+		context.fillStyle = "rgba(0,0,255,0.3)";
+		var scale	= 1.2;
+		context.fillRect(-fontW*scale/2,-fontH*scale/1.3,fontW*scale,fontH*scale)
+		// display the text
+		context.fillStyle = "rgba(0,0,0,0.7)";
+		context.fillText(text, -fontW/2, 0);
+		// return the canvas element
+		return canvas;
+	}
+})
+</script></body>
