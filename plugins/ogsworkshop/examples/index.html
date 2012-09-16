@@ -173,7 +173,6 @@ require([
 				mesh.rotationY( data.message.rotation.y )
 				mesh.rotationZ( data.message.rotation.z )				
 			}
-
 			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
 			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
 			console.log('velocity', data.sourceId, velocity.length());
