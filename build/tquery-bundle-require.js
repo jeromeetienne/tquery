@@ -2590,8 +2590,8 @@ tQuery.Object3D.prototype.addTo	= function(target)
 tQuery.Object3D.prototype.removeFrom	= function(target)
 {
 	console.assert( target instanceof tQuery.World || target instanceof tQuery.Object3D )
-	this.each(function(object3d){
-		target.remove(object3d)
+	this.each(function(tObject3d){
+		target.remove(tObject3d)
 	}.bind(this));
 	return this;
 }
@@ -2620,17 +2620,17 @@ tQuery.Object3D.prototype.detach	= function()
  * @param {tQuery.Object3D} target object to which add it
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.add	= function(object3d)
+tQuery.Object3D.prototype.add	= function(object3D)
 {
-	if( object3d instanceof tQuery.Object3D ){
+	if( object3D instanceof tQuery.Object3D ){
 		this.each(function(object1){
-			object3d.each(function(object2){
+			object3D.each(function(object2){
 				object1.add(object2);
 			})
 		}.bind(this));
-	}else if( object3d instanceof THREE.Object3D ){
+	}else if( object3D instanceof THREE.Object3D ){
 		this.each(function(object1){
-			object1.add(object3d);
+			object1.add(object3D);
 		});
 	}else	console.assert(false, "invalid parameter");
 	return this;
@@ -2642,14 +2642,19 @@ tQuery.Object3D.prototype.add	= function(object3d)
  * @param {tQuery.Object3D} object3d the object to add in this object
  * @returns {tQuery.Object3D} chained API
 */
-tQuery.Object3D.prototype.remove	= function(tqObject3d)
+tQuery.Object3D.prototype.remove	= function(object3D)
 {
-	console.assert( tqObject3d instanceof tQuery.Object3D )
-	this.each(function(object1){
-		tqObject3d.each(function(object2){
-			object1.remove(object2);
-		})
-	}.bind(this));
+	if( object3D instanceof tQuery.Object3D ){
+		this.each(function(object1){
+			object3D.each(function(object2){
+				object1.remove(object2);
+			})
+		}.bind(this));
+	}else if( object3D instanceof THREE.Object3D ){
+		this.each(function(object1){
+			object1.remove(object3D);
+		});
+	}else	console.assert(false, "invalid parameter");		
 	return this;
 }
 

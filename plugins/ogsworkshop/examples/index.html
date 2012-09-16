@@ -17,8 +17,8 @@
 
 <script src="../vendor/webaudio-bundle.js"></script>
 
-<script src="http://localhost:4000/socket.io/socket.io.js"></script>
-<script src="http://localhost:4000/examples/client.js"></script>
+<script src="http://jetienne.tquery-multiplayerserver.jit.su:80/socket.io/socket.io.js"></script>
+<script src="http://jetienne.tquery-multiplayerserver.jit.su:80/examples/client.js"></script>
 
 <body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1; text-align: right;">
 	<form action="javascript:void(0)" id='chatInputForm'>
@@ -30,7 +30,7 @@
 		<option value="agentsmith.png">agentsmith</option>
 		<option value="batman.png">batman</option>
 		<option value="god.png">god</option>
-		<option value="joker.png">Joker</option>
+		<option value="Joker.png">Joker</option>
 		<option value="Mario.png">Mario</option>
 		<option value="martialartist.png">martialartist</option>
 		<option value="robocop.png">robocop</option>
@@ -134,7 +134,7 @@ require([
 	var players	= {};
 
 	// initiate connect with server
-	var serverUrl	= 'http://localhost:4000';
+	var serverUrl	= 'http://jetienne.tquery-multiplayerserver.jit.su:80';
 	var userInfo	= {
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 		skinBasename	: 'char.png',
@@ -143,16 +143,25 @@ require([
 
 	gameServer.addEventListener('connected', function(sourceId, usersInfo){
 		console.log('connected', sourceId, usersInfo, gameServer.usersInfo())
-		onConnect(sourceId, usersInfo)
+
+		Object.keys(usersInfo).forEach(function(sourceId){
+			var userInfo	= usersInfo[sourceId];
+			createPlayer(sourceId, userInfo)
+		});
+
+		createMyPlayer(sourceId, gameServer.userInfo())
 	});
+
 	gameServer.addEventListener('userJoin', function(data){
 		console.log('userJoin', arguments)
 		createPlayer(data.sourceId, data.userInfo);
 	});
+
 	gameServer.addEventListener('userLeft', function(data){
 		//console.log('userLeft', data)
 		destroyPlayer(data.sourceId);
 	});
+
 	gameServer.addEventListener('userInfo', function(sourceId, curUserInfo, oldUserInfo){
 		//console.log('userInfo', arguments)
 		updatePlayer(sourceId, curUserInfo, oldUserInfo)
@@ -161,54 +170,48 @@ require([
 	gameServer.addEventListener('clientEcho', function(data){
 		console.assert( players[data.sourceId] );
 		if( data.message.type === 'positionChange' ){
+			if( data.sourceId === mySourceId )	return;
 			var player	= players[data.sourceId];
 			var mesh	= player.character.object3D('root')
-			player.prevPosition.copy( mesh.position() )
-			player.prevRotation.copy( mesh.rotation() )
-			if( data.sourceId !== mySourceId ){
-				mesh.positionX( data.message.position.x )
-				mesh.positionY( data.message.position.y )
-				mesh.positionZ( data.message.position.z )
-				mesh.rotationX( data.message.rotation.x )
-				mesh.rotationY( data.message.rotation.y )
-				mesh.rotationZ( data.message.rotation.z )				
-			}
-			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
-			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
-			//console.log('velocity', data.sourceId, velocity.length());
+			mesh.positionX( data.message.position.x )
+			mesh.positionY( data.message.position.y )
+			mesh.positionZ( data.message.position.z )
+			mesh.rotationX( data.message.rotation.x )
+			mesh.rotationY( data.message.rotation.y )
+			mesh.rotationZ( data.message.rotation.z )
 		}else if( data.message.type === 'chatText' ){
 			var player	= players[data.sourceId];
 			var mesh	= player.character.object3D('root')
 			var character	= player.character;
 			// remove previous message if any
-			tQuery('#'+data.sourceId+'_chatMessage').removeFrom(world)
+			tQuery('.chatMessage', mesh).detach()
 			// add text
-			var text	= tQuery.createSprite().addTo(world)
-				.position( mesh.position() ).translateY(1.4).scaleBy(1/200)
-				.id(data.sourceId+'_chatMessage')
+			var text	= tQuery.createSprite().addTo(mesh)
+				.translateY(1.4).scaleBy(1/200)
+				.addClass('chatMessage')
 				.map(buildChatBubble(data.message.text))
 			// remove the text after a while
-			setTimeout(function(){ text.removeFrom(world);	}, 10*1000);
+			setTimeout(function(){ text.detach();	}, 10*1000);
 		}else{
 			console.log('unknown echo message.type', message.type)
 		}
 	});
 
-	world.loop().hook(function(){
+	setInterval(function(){
 		Object.keys(players).forEach(function(sourceId){
 			var player	= players[sourceId];
-			var bodyAnims	= player.bodyAnims;
 			var mesh	= player.character.object3D('root')
 			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
-			//console.log('velocity', sourceId, velocity, player.prevPosition, mesh.position().clone());
-			//console.log('velocity', sourceId, velocity.length());
 			if( velocity.length() ){
-				bodyAnims.start('run')
+				player.bodyAnims.start('run')
 			}else{
-				bodyAnims.start('stand')
-			}	
+				player.bodyAnims.start('stand')
+			}
+			// update player.prevPosition/player.prevRotation
+			player.prevPosition.copy( mesh.position() )
+			player.prevRotation.copy( mesh.rotation() )
 		})
-	});
+	}, 1000/5);	// Important to be less than framerate - thus you dont misdetect still 
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -262,12 +265,11 @@ require([
 	//									//
 	//////////////////////////////////////////////////////////////////////////
 
-	function onConnect(sourceId, usersInfo){
+	function createMyPlayer(sourceId, userInfo){
+		console.assert(mySourceId === null)
 		mySourceId	= sourceId;
-		Object.keys(usersInfo).forEach(function(sourceId){
-			var userInfo	= usersInfo[sourceId];
-			createPlayer(sourceId, userInfo)
-		});
+
+		createPlayer(mySourceId, userInfo)
 
 		var character	= players[mySourceId].character;
 		// to enable a tracking camera
@@ -278,7 +280,6 @@ require([
 		world.setCameraControls(cameraControls)
 		//cameraControls.deltaCamera().position(0, 0.7, -0.07)
 
-		
 		//////////////////////////////////////////////////////////////////////////
 		// user controls on keyboard						//
 		//////////////////////////////////////////////////////////////////////////
@@ -329,12 +330,12 @@ require([
 		// init bodyAnims
 		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
 		bodyAnims.start('run');
-		players[sourceId].bodyAnims	= bodyAnims;	
+		players[sourceId].bodyAnims	= bodyAnims;
 		// init headAnims
 		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
 		headAnims.start('still');
 		players[sourceId].headAnims	= headAnims;
-		
+		// init prevPosition/prevRotation to estimate velocity later
 		players[sourceId].prevPosition	= tQuery.createVector3()
 		players[sourceId].prevRotation	= tQuery.createVector3()
 	}
