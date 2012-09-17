@@ -46,9 +46,9 @@
 		* [tquery's repo](http://jeromeetienne.github.com/tquery)
 		
 		#### info on distribs
-		* tquery.js : core aka tquery only
-		* tquery-bundle.js : tquery core + three.js + boilerplate
-		* tquery-bundle-require.js : tquery bundle + require.js
+		* *tquery.js* : core aka tquery only
+		* *tquery-bundle.js* : tquery core + three.js + boilerplate
+		* *tquery-bundle-require.js* : tquery bundle + require.js
 		  * usefull to easily get plugins 
 	</article>
 
@@ -187,11 +187,143 @@
 	<article data-markdown>
 		### Use minecraft plugin
 
+		#### Add default character [See More](../../minecraft/examples/char.html)
 		```
+		tQuery.createMinecraftChar().addTo(world);
+		```
+		
+
+		#### Add Agent smith
+		* skin compatible with minecraft ones
+		* 15 available already. [See more](../../minecraft/examples/index.html)
+
+		```
+		tQuery.createMinecraftChar({
+			skinUrl	: '../../minecraft/examples/images/agentsmith.png'
+		}).addTo(world);
 		```
 	</article>
+	<article data-markdown>
+		### Make it move baby
+		
+		#### animating of the character
+		* use generic system based on keyframe
+		* tweening from one to another
+		
+		#### what is an animation
+		* succession of keyframes with a name
+		* move properties, any property
+		  * position, rotation, scale whatever
+		  * generic
+	</article>
+	<article data-markdown>
+		### Move your body miner
+		
+		* *rigging:* can move head/arms/legs/body
+		* several animations already done
+		
+		#### 5 for the body
+		* run/walk/stand
+		* wave/hiwave
 
+		#### 3 for the head
+		* yes/no/still
+	</article>
+<!-- ****************************************************************************
+		Put a world around it
+********************************************************************************* -->
+	<article data-markdown>
+		# Stage 3
+	</article>
+	<article data-markdown>
+		# Put a world around
+		## no more flying in ether :)
+	</article>
+	<article data-markdown>
+		### First the sky
+		
+		* define skymap
+		* create a infinitly huge square
+		* appears as sphere via gpu tricks
 
+		#### Several maps already available
+		* 7 of them
+		* list with following line in jsconsole
+
+		```
+		Object.keys(tQuery.TextureCube.WellKnownUrls)
+		```
+	</article>
+	<article data-markdown>
+		### skymap for sky
+		
+		```
+		tQuery.createSkymap('skybox').addTo(world);
+		```
+	</article>
+	<article data-markdown>
+		### skymap for reflection
+		
+		* define [reflection](http://en.wikipedia.org/wiki/Reflection_mapping)
+		
+		```
+		var material = tQuery.createMaterial({	
+			envMap	: tQuery.createCubeTexture('skybox')
+		});
+		tQuery.createCube().material(material).addTo(world)
+		```
+
+		* good trick for a material
+		  * examples of [car](../../car/examples/)
+		  * look at the arches
+		  * look at the engines (swedish castle :)
+	</article>
+	<article data-markdown>
+		### skymap for refraction
+		
+		* TODO link to definition
+		* TODO get code
+		* link to gello drop
+	</article>
+	<article data-markdown>
+		# a ground to stand on
+		## light on your feet
+	</article>
+	<article data-markdown>
+		### Notes on designing scenes
+		
+		#### Principle *Make the space visible*
+		* or "anti-matiere via nutra sweet"!
+		* reveal the void
+		  
+		#### Techniques
+		* lights good
+		  * moving ones better
+		* shadows casting
+		* skymap cool
+		* fog, god ray		
+	</article>
+	<article data-markdown>
+		### Grass on the ground
+		
+		* Nature is healthy. [See More](../../grassground/examples)
+		* similar a checkerboard [See More](../../checkerboard/examples)
+		
+		```
+		require(['tquery.grassground'], function(){
+			// ...
+			var ground	= tQuery.createGrassGround({
+				textureRepeatX	: 20,
+				textureRepeatY	: 20,
+			}).addTo(world)
+		})
+		```
+		#### anisotropy is funny - looks cool even at a distance
+
+		```
+		ground.get(0).material.map.anisotropy = 16;
+		```
+	</article>
 <!-- ****************************************************************************
 		Admin Script
 ********************************************************************************* -->
