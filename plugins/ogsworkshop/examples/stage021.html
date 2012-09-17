@@ -1,0 +1,10 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft'], function(){
+	// create the world, add the boilerplate and start
+	var world	= tQuery.createWorld().boilerplate().start();
+	// create the minecraft character
+	tQuery.createMinecraftChar().addTo(world);
+});
+</script></body>

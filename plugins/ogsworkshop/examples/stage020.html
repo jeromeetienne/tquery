@@ -1,0 +1,10 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+	// create the world, add the boilerplate and start
+	var world	= tQuery.createWorld().boilerplate().start();
+	// create a torus and add it to the world
+	tQuery.createTorus().addTo(world)	
+});
+</script></body>

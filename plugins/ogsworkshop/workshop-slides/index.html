@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Three.js workshop</title>
+	<base target=”_blank” />
+	<meta charset='utf-8'/>
+	<script src="vendor/jquery-1.7.2.min.js"></script>
+	<script src='slides.js'></script>
+</head>
+
+<body style='display: none'> 
+	<style>
+		article[data-markdown] em {
+			color		: orange;
+			font-style	: normal;
+			font-weight	: bolder;
+			
+		}
+		article[data-markdown] h3 {
+			font-size	: 180%;
+		}
+		span.orange {
+			color		: orange;
+		}
+		span.larger {
+			font-weight	: bolder;
+			font-size	: 120%;
+		}
+	</style>
+	<section class='slides layout-regular template-default'>
+
+<!-- *****************************************************************************
+		STAGE 0
+****************************************************************************** -->
+	<article data-markdown>
+		# Stage 0
+	</article>
+	<article data-markdown>
+		# Install three.js + tQuery		
+		## Have to start somewhere
+	</article>
+	<article data-markdown>
+		### Links
+		
+		* three.js in tQuery repo
+		* [tquery's repo](http://jeromeetienne.github.com/tquery)
+		
+		#### info on distribs
+		* tquery.js : core aka tquery only
+		* tquery-bundle.js : tquery core + three.js + boilerplate
+		* tquery-bundle-require.js : tquery bundle + require.js
+		  * usefull to easily get plugins 
+	</article>
+
+<!-- *****************************************************************************
+		STAGE 1
+****************************************************************************** -->
+	<article data-markdown>
+		# Stage 1
+	</article>
+	<article data-markdown>
+		# Boilerplate		
+		## What is the boilerplate
+	</article>
+	<article data-markdown>
+		### First the code
+		
+		<pre>
+&lt;!doctype html&gt;&lt;title&gt;Minimal tQuery Page&lt;/title&gt;
+&lt;script src=&quot;../../build/tquery-bundle.js&quot;&gt;&lt;/script&gt;
+&lt;body&gt;&lt;script&gt;
+    var world	= tQuery.createWorld().boilerplate().start();
+    var object	= tQuery.createTorus().addTo(world);
+&lt;/script&gt;&lt;/body&gt;
+		</pre>
+		
+		* Only *6 lines*
+		* Valid html5 page
+		
+		#### Web can be nice !
+	</article>
+	<article data-markdown>
+		### Second the show
+		
+		<iframe src='../examples/stage010.html'></iframe>
+	</article>
+	<article data-markdown>
+		### What is the world
+		
+		```
+		var world = tQuery.createWorld().boilerplate().start();
+		```
+		
+		* scene
+		* renderer
+		* camera + its controls
+		* rendering loop
+	</article>
+	<article data-markdown>
+		### What is the boilerplate
+		
+		```
+		var world	= tQuery.createWorld().boilerplate().start();
+		```
+		
+		* include three.js boilerplate
+		* easy way to get you started
+		
+		#### includes
+		* full screen view
+		* window resize
+		* press 'p' for screenshot
+		* press 'f' for fullscreen
+	</article>
+	<article data-markdown>
+		## Nice blank screen!
+	</article>
+	<article data-markdown>
+		### Lets add an object
+		
+		```
+		var object	= tQuery.createTorus().addTo(world);
+		```
+		
+		* Create an object torus
+		  * creator for each included geometry
+		  * Sphere, Cube, cylinder and others
+		* Objects creators use 'normalMaterial'
+		  * weird blueish thing
+		  * nice to debug
+		* Then add it to the world
+	</article>
+	<article data-markdown>
+		### So end up with that
+		
+		<iframe src='../examples/stage010.html'></iframe>
+	</article>
+	<article data-markdown>
+		## So only a torus in the middle of the screen ?
+	</article>
+<!-- *****************************************************************************
+		STAGE 2
+****************************************************************************** -->
+	<article data-markdown>
+		# Stage 2
+	</article>
+	<article data-markdown>
+		# Minecraft character
+		## Lets add that :)
+	</article>
+	<article data-markdown>
+		### First require.js
+
+		```
+		require([], function(){
+			// create the world, add the boilerplate and start
+			var world	= tQuery.createWorld().boilerplate().start();
+			// create a torus and add it to the world
+			tQuery.createTorus().addTo(world);
+		});
+		```
+		
+		#### Why require.js
+		* easy download of plugins
+		  * load files in proper orders
+		* May pack+minify with r.js for prod
+		* Load only what is needed
+	</article>
+	<article data-markdown>
+		### Include minecraft plugin
+
+		```
+		require(['tquery.minecraft'], function(){
+			// create the world, add the boilerplate and start
+			var world	= tQuery.createWorld().boilerplate().start();
+			// create a torus and add it to the world
+			tQuery.createTorus().addTo(world);
+		});
+		```
+		
+		#### Possibilities
+		* multiple skins
+		* create characters
+		* animate them
+		* control them with keyboard
+	</article>
+	<article data-markdown>
+		### Use minecraft plugin
+
+		```
+		```
+	</article>
+
+
+<!-- ****************************************************************************
+		Admin Script
+********************************************************************************* -->
+	<script>
+	// ==UserScript==
+	// @name Use Markdown, sometimes, in your HTML.
+	// @author Paul Irish <http://paulirish.com/>
+	// @link http://git.io/data-markdown
+	// @match *
+	// ==/UserScript==
+	
+	
+	// If you're not using this as a userscript just delete from this line up. It's cool, homey.
+	
+	(function markdownSlideToHtml(){
+		if (!window.Showdown){
+			var scr		= document.createElement('script');
+			scr.onload	= markdownSlideToHtml;
+			scr.src		= 'vendor/showdown.js';
+			document.body.appendChild(scr);
+			return;
+		}
+		[].forEach.call(document.querySelectorAll('[data-markdown]'), function fn(elem){
+			// strip leading whitespace so it isn't evaluated as code
+			//var text      = elem.textContent.replace(/\n\s*\n/g,'\n');
+			// jerome- to have better support of html within markdown
+			var text      = elem.innerHTML;
+			//console.log("origin innerHTML", text.split('\n'));
+			// remove all blanks lines
+			//text		= text.replace(/\n\s*\n/g,'\n');
+			//console.log("step text", text)
+			// set indentation level so your markdown can be indented within your HTML
+			var matches	= text.match(/^\n([ \t]*)/);
+			var leadingws	= matches[1].length;
+			//console.log("first line", matches)
+			//console.log("leadingws", leadingws)
+			var regex	= new RegExp('\\n[ \\t]{' + leadingws + '}','g');
+			var md		= text.replace(regex,'\n');
+			//console.log("pre md", md);
+			html      = (new Showdown.converter()).makeHtml(md);
+			//console.log("post html", html);
+	
+			// to support prettyprint
+			html		= html.replace(/<code><br \/>/g,'<pre class="prettyprint">');
+			html		= html.replace(/<br \/><\/code>/g,'</pre>');
+			// unescape [><]
+			html		= html.replace(/&amp;gt;/g,'>');
+			html		= html.replace(/&amp;lt;/g,'<');
+			//console.log("escaped html", html);
+		  
+			// here, have sum HTML
+			elem.innerHTML = html;
+		});
+		// callback prettyprint to highlight code found in markdown
+		prettyPrint();
+	}());
+	</script> 
+	<script>
+		//////////////////////////////////////////////////////////////////
+		// scan the whole webpage and replace url to their local location
+		// - usefull to have local copy of the slides in conference when internet is unavailable
+		// - and still have slides which works when internet is available
+		// $ open -a "/Applications/Google Chrome.app" --args --disable-web-security --allow-file-access-from-file
+		setTimeout(function(){
+			location.href.match(/^file:/) && jQuery('a').add('iframe').each(function(index, element){
+				var attrNames	= {
+					'A'	: 'href',
+					'IFRAME': 'src'
+				};
+				var attrName	= attrNames[element.nodeName];
+				var url		= jQuery(element).attr(attrName);
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/tquery\//			, 'file://localhost/Users/jerome/webwork/tquery/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/augmentedgesture.js\//	, 'file://localhost/Users/jerome/webwork/augmentedgesture.js/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/webaudio.js\//		, 'file://localhost/Users/jerome/webwork/webaudio.js/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/pongGL\//, 'file://localhost/Users/jerome/webwork/pongGL/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/threex\//, 'file://localhost/Users/jerome/webwork/threex/')
+				url	= url.replace(/^http:\/\/learningthreejs.com\//, 'file://localhost/Users/jerome/webwork/learningthreejs.com/')
+				url	= url.replace(/\/$/, '/index.html')
+				jQuery(element).attr(attrName, url);
+			})
+		}, 100);
+	</script>
+</body>
+</html>
