@@ -203,32 +203,6 @@
 		}).addTo(world);
 		```
 	</article>
-	<article data-markdown>
-		### Make it move baby
-		
-		#### animating of the character
-		* use generic system based on keyframe
-		* tweening from one to another
-		
-		#### what is an animation
-		* succession of keyframes with a name
-		* move properties, any property
-		  * position, rotation, scale whatever
-		  * generic
-	</article>
-	<article data-markdown>
-		### Move your body miner
-		
-		* *rigging:* can move head/arms/legs/body
-		* several animations already done
-		
-		#### 5 for the body
-		* run/walk/stand
-		* wave/hiwave
-
-		#### 3 for the head
-		* yes/no/still
-	</article>
 <!-- ****************************************************************************
 		Put a world around it
 ********************************************************************************* -->
@@ -238,6 +212,20 @@
 	<article data-markdown>
 		# Put a world around
 		## no more flying in ether :)
+	</article>
+	<article data-markdown>
+		### Notes on designing scenes
+		
+		#### Principle *Make the space visible*
+		* or "anti-matiere via nutra sweet"!
+		* reveal the void
+		  
+		#### Techniques
+		* lights good
+		  * moving ones better
+		* shadows casting
+		* skymap cool
+		* fog, god ray		
 	</article>
 	<article data-markdown>
 		### First the sky
@@ -290,20 +278,6 @@
 		## light on your feet
 	</article>
 	<article data-markdown>
-		### Notes on designing scenes
-		
-		#### Principle *Make the space visible*
-		* or "anti-matiere via nutra sweet"!
-		* reveal the void
-		  
-		#### Techniques
-		* lights good
-		  * moving ones better
-		* shadows casting
-		* skymap cool
-		* fog, god ray		
-	</article>
-	<article data-markdown>
 		### Grass on the ground
 		
 		* Nature is healthy. [See More](../../grassground/examples)
@@ -324,6 +298,171 @@
 		ground.get(0).material.map.anisotropy = 16;
 		```
 	</article>
+<!-- ****************************************************************************
+		Put a world around it
+********************************************************************************* -->
+	<article data-markdown>
+		# Stage 4
+	</article>
+	<article data-markdown>
+		# Make it move
+	</article>
+	<article data-markdown>
+		### Rendering loop
+		
+		#### What is it ?
+		* part of the tQuery.World
+		* use requestanimationframe()
+		  * called only when anims are ok
+		  * visible
+		* use submillisecond timer
+		  * ms time unsuitable at 60fps
+		  
+		#### Notify 2 times
+		* *delta* aka nb seconds since last iteration
+		* *now* aka nb seconds in absolute time
+	</article>
+	<article data-markdown>
+		### Rendering loop
+		
+		#### how to hook it
+
+		```
+		world.loop().hook(function(delta, now){
+			// your stuff here
+		});
+		```
+		
+		#### in action
+		```
+		world.loop().hook(function(delta, now){
+			var mesh	= character.object3D('root');
+			mesh.rotateY(delta * Math.PI*2)
+		});
+		```
+
+		* [See More](../examples/stage040.html)
+	</article>
+	<article data-markdown>
+		### keyboard controls
+		
+		#### What is it ?
+		
+		* read and store keyboard state
+		* Must be available during rendering loop
+		* cant be done via event
+	</article>
+	<article data-markdown>
+		### keyboard controls
+		
+		#### How to code it
+		
+		```
+		world.loop().hook(function(delta, now){
+			var mesh	= character.object3D('root');
+			var keyboard	= tQuery.keyboard();
+			if( keyboard.pressed('left') )	mesh.translateX(-1 * delta)
+			if( keyboard.pressed('right') )	mesh.translateX(+1 * delta)
+			if( keyboard.pressed('up') )	mesh.translateZ(-1 * delta)
+			if( keyboard.pressed('down') )	mesh.translateZ(+1 * delta)
+		});
+		```
+
+		* depends on **delta**
+		   * Thus same move no matter the fps
+		* [See It](../examples/stage041.html)
+	</article>
+	<article data-markdown>
+		### character animation
+
+		#### Pick a body part
+		
+		* armR/armL/legR/legL/body/head
+		* say right arm
+		
+		```
+		var mesh	= character.object3D('armR');
+		```
+		
+		#### Make it move [action](../examples/stage042.html)
+		
+		```
+		world.loop().hook(function(delta, now){
+			var mesh	= character.object3D('armR');
+			var angle	= now * Math.PI * 2;
+			mesh.rotationX(Math.sin(angle));
+		});
+		```
+	</article>
+	<article data-markdown>
+		### Make it move baby
+		
+		#### animating of the character
+		* use generic system based on keyframe
+		* tweening from one to another
+		
+		#### what is an animation
+		* succession of keyframes with a name
+		* move properties, any property
+		  * position, rotation, scale whatever
+		  * generic
+	</article>
+	<article data-markdown>
+		### Move your body miner
+		
+		* *rigging:* can move head/arms/legs/body
+		* several animations already done
+		
+		#### 5 for the body
+		* run/walk/stand
+		* wave/hiwave
+
+		#### 3 for the head
+		* yes/no/still
+	</article>
+<!-- ****************************************************************************
+		Lets give it a weapon
+********************************************************************************* -->
+	<article data-markdown>
+		# Stage 5
+	</article>
+	<article data-markdown>
+		# Lets give a weapon
+		## fighting time!
+	</article>
+	<article data-markdown>
+		### Get the weapon
+		
+		#### extruding spritesheet
+		* what does this means
+		* show it [here](../../minecraft/examples/items.html)
+		
+		#### One can even animate it
+		* show it [here](../../minecraft/examples/spritesheet.html)
+	</article>
+	<article data-markdown>
+		### Extruding Spritsheet
+		
+		#### Initiation
+		
+		```
+		var spritesheet	= tQuery.createSpritesheet({
+			url	: 'images/items/items.png',
+			imgW	: 256,
+			imgH	: 256,
+			spriteW	: 16,
+			spriteH	: 16
+		});
+		```
+		
+		#### Usage
+		
+		```
+		spritesheet.createMesh(10,2).addTo(world);
+		```
+		
+	</article>
+
 <!-- ****************************************************************************
 		Admin Script
 ********************************************************************************* -->
