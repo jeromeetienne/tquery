@@ -1,0 +1,78 @@
+<!--
+	Lets put some shaddow
+-->
+
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyboard'
+	, 'tquery.light'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// enable shaddow in the renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+
+	// add a ground	
+	var ground  = tQuery.createGrassGround({
+		textureRepeatX  : 20,
+		textureRepeatY  : 20,
+	}).addTo(world)
+		.scale(80)
+		.receiveShadow(true)
+	
+	ground.get(0).material.map.anisotropy = 16;
+
+	// add minecraft char
+	var character	= tQuery.createMinecraftChar().addTo(world);	
+	tQuery('mesh', character.object3D('root')).castShadow(true);
+	// ads a keyboard control
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character.object3D('root'),
+		lateralMove	: 'rotationY'
+	});	
+
+	// make it run only if it move
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);	
+	var mesh	= character.object3D('root')
+	var prevPosition= tQuery.createVector3()
+	world.loop().hook(function(){
+		// compute velocity
+		var velocity	= mesh.position().clone().subSelf(prevPosition);
+		// pick animation based
+		if( velocity.length() ){
+			bodyAnims.start('run')
+		}else{
+			bodyAnims.start('stand')
+		}
+		// update player.prevPosition/player.prevRotation
+		prevPosition.copy( mesh.position() )		
+	})
+
+	//////////////////////////////////////////////////////////////////////////
+	//		lights							//
+	//////////////////////////////////////////////////////////////////////////	
+
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.color(0xffffff).intensity(4)
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 10)
+		.shadowCameraVisible(true)
+	// for light to follow character
+	world.loop().hook(function(){
+		var model	= character.object3D('root');
+		light.get(0).target.position.copy(model.position());
+		var delta	= tQuery.createVector3(-1,2,3);
+		var position	= model.position().clone().addSelf(delta);
+		light.position(position)
+	})
+
+})
+</script></body>

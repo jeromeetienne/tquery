@@ -1,0 +1,34 @@
+<!--
+	Make character run all the time
+-->
+
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyboard'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+
+	// add a ground	
+	var ground  = tQuery.createGrassGround({
+		textureRepeatX  : 20,
+		textureRepeatY  : 20,
+	}).addTo(world)
+	.scale(80);
+	ground.get(0).material.map.anisotropy = 16;
+
+	// add minecraft char
+	var character	= tQuery.createMinecraftChar().addTo(world);	
+	// ad a keyboard control
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character.object3D('root'),
+		lateralMove	: 'rotationY'
+	});	
+
+	// make it run all the time
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	bodyAnims.start('run');
+})
+</script></body>

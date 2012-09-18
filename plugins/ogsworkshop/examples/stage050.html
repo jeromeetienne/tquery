@@ -1,0 +1,29 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft'], function(){
+	// create the world, add the boilerplate and start
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// Create the spritesheet
+	var items	= tQuery.createSpritesheet({
+		url	: '../../../plugins/minecraft/examples/images/items/items.png',
+		imgW	: 256,
+		imgH	: 256,
+		spriteW	: 16,
+		spriteH	: 16
+	});
+	// wait until it load
+	items.addEventListener('load', function(){
+		// create the minecraft character
+		var character	= tQuery.createMinecraftChar().addTo(world);
+		character.object3D('root').translateY(-0.5);
+		// create the sword
+		var sword	= items.createMesh(2, 4)
+			.addTo(character.parts.armR)
+		 	.scaleBy(1/2)
+		 	.position(0,-10/35,8/35)
+		 	.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+	})
+});
+</script></body>

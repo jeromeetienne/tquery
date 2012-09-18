@@ -217,7 +217,7 @@
 		### Notes on designing scenes
 		
 		#### Principle *Make the space visible*
-		* or "anti-matiere via nutra sweet"!
+		* or "antimatter via nutra sweet"!
 		* reveal the void
 		  
 		#### Techniques
@@ -411,7 +411,7 @@
 		### Move your body miner
 		
 		* *rigging:* can move head/arms/legs/body
-		* several animations already done
+		* several animations already done [see here](../../minecraft/examples/animation.html)
 		
 		#### 5 for the body
 		* run/walk/stand
@@ -434,14 +434,16 @@
 		### Get the weapon
 		
 		#### extruding spritesheet
+		* scary words
 		* what does this means
 		* show it [here](../../minecraft/examples/items.html)
+		* from [that](../../minecraft/examples/images/items/items.png)
 		
 		#### One can even animate it
 		* show it [here](../../minecraft/examples/spritesheet.html)
 	</article>
 	<article data-markdown>
-		### Extruding Spritsheet
+		### Create a sword
 		
 		#### Initiation
 		
@@ -458,11 +460,238 @@
 		#### Usage
 		
 		```
-		spritesheet.createMesh(10,2).addTo(world);
+		spritesheet.createMesh(2,4).addTo(world);
+		```
+	</article>
+	<article data-markdown>
+		### Sword in minecraft hand
+		
+		```
+		var sword	= items.createMesh(2, 4)
+			.addTo(character.parts.armR)
+		 	.position(0,-10/35,8/35)
+		 	.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+		 	.scaleBy(1/2)
 		```
 		
+		* what is ```.scaleBy()``` ?
+		* what is ```.position()``` ?
+		* what is ```.rotation()``` ?
+		
+		#### noticed ```.addTo(armR)``` ?
 	</article>
+	<article data-markdown>
+		### A word on scenegraph
+		
+		#### principles
+		* 3d objects are in a scene
+		* scene is a tree
+		* features are inherited from parents
+		
+		#### consequences
+		* change parent scale =>
+		* it change children scale
+	</article>
+	<article data-markdown>
+		### Lets play with that		
 
+		* see [running code](../examples/stage050.html)
+		* copy that in live editor
+		* change scale
+	</article>
+<!-- ****************************************************************************
+		Stage 6
+********************************************************************************* -->
+	<article data-markdown>
+		# Stage 6
+	</article>
+	<article data-markdown>
+		# Sound with WebAudioAPI
+		## Crack boom hue
+	</article>
+	<article data-markdown>
+		### Web Audio API
+		
+		#### What is it
+		* new audio api
+		* efficient, flexible
+		* based on OpenAL
+		* my [slidedeck on webaudio](http://jeromeetienne.github.com/slides/webaudioapi)
+		
+		#### Availability
+		* chrome, safari and iOS
+		* firefox implementing it
+	</article>
+	<article data-markdown>
+		# Sound in modern browsers !
+		## First time in history!!
+	</article>
+	<article data-markdown>
+		### Web Audio API
+		
+		#### Super cool for 3d
+		* directional sound
+		* sound for 3d position/velocity 
+		  * dopler!
+		* listener follows camera!!!
+	</article>
+	<article data-markdown>
+		### Webaudio.js
+
+		#### motivation		
+		* web audio api is verbose
+		* kinda like webgl
+		* little lib to make it easier to use
+		
+		#### Info
+		* mit license
+		* [homepage](http://jeromeetienne.github.com/webaudio.js)
+		* [github](https://github.com/jeromeetienne/webaudio.js/)
+	</article>
+	<article data-markdown>
+		### Webaudio.js
+
+		#### some Examples
+		* real time sound analysis [here](http://jeromeetienne.github.com/webaudio.js/examples/histotquery.html)
+		* directional sound [here](http://jeromeetienne.github.com/webaudio.js/examples/sample-tquery.html)
+		* procedural sound generation with jsfx
+		[here](http://jeromeetienne.github.com/webaudio.js/examples/jsfx/)
+		* playground to test [here](http://jeromeetienne.github.com/webaudio.js/examples/playground/)
+	</article>
+	<article data-markdown>
+		### Webaudio.js basic
+
+		#### enable it
+		```
+		world.enableWebAudio();	
+		```
+		
+		* setup a typical node chain
+		  * based on [html5rocks advices](http://www.html5rocks.com/en/tutorials/webaudio/games/)
+		* configure listener on camera
+	</article>
+	<article data-markdown>
+		### Webaudio.js basic
+
+		#### load a sound
+		```
+		var sound	= tQuery.createSound().load('../sounds/checkpoint.wav');
+		```
+
+		#### play it
+		```
+		sound.play()
+		```
+
+		#### What about the 3d ?
+		```
+		sound.follow(mesh)
+		```
+
+		* blah!! got localisation + dopler!
+		* not too hard hey ? :)
+	</article>
+<!-- ****************************************************************************
+		Stage 7
+********************************************************************************* -->
+	<article data-markdown>
+		# Stage 7
+	</article>
+	<article data-markdown>
+		# Multiplayer!!
+	</article>
+	<article data-markdown>
+		### Intro
+		
+		* not an easy problem
+		* fighting latency is hard
+		* various strategy are possible
+		  * [good intro](http://buildnewgames.com/real-time-multiplayer/)
+	</article>
+	<article data-markdown>
+		### Could that be easy ?
+		
+		#### tried with [easywebsocket](http://easywebsocket.org)
+		* service which only echo packets
+		* up to the users to define protocols
+		
+		#### above and beyond with [simplemmoserver](https://github.com/jeromeetienne/SimpleMMOServer)
+		* the brand new attempt :)
+		* less raw/more cooked
+	</article>
+	<article data-markdown>
+		### SimpleMMOServer
+		
+		#### Feature
+		* handle userlist for you
+		* measure latency
+		* allow echo/broadcast
+		  * broadcast = send to all others
+		  * echo = send to everybody (even me)
+
+		#### info
+		* mit license
+		* repo [here](https://github.com/jeromeetienne/SimpleMMOServer)
+	</article>
+	<article data-markdown>
+		### more cooked ?
+		
+		#### not so cooked
+		* server: 60lines + node.js
+		* client: 130lines
+		
+		#### Still rawish :)
+		
+		## *very naive* tho :)
+	</article>
+	<article data-markdown>
+		### on the server
+		
+		```
+		$ node server.js
+		```
+	</article>
+	<article data-markdown>
+		### on the client
+		
+		#### initialisation
+		* userinfo == info shared in the userlist
+
+		```
+		var userInfo	= {
+			humanName	: "chater-"+Math.floor(Math.random()*100000)
+		};
+		var gameServer	= new SimpleMMOServer(userInfo);
+		```
+		
+		#### update user info
+		```
+		gameServer.userInfo(userInfo);
+		```
+	</article>
+	<article data-markdown>
+		### on the client
+		
+		#### send message
+		* format is up to you
+		```
+		gameServer.clientEcho('foo');
+		gameServer.clientBroadcast('bar');
+		```
+		
+		#### measure latency
+		```
+		gameServer.latency()
+		```
+	</article>
+<!-- ****************************************************************************
+		The End
+********************************************************************************* -->
+	<article data-markdown>	
+		# *Questions ?*
+				
+		Jerome Etienne
+	</article>
 <!-- ****************************************************************************
 		Admin Script
 ********************************************************************************* -->

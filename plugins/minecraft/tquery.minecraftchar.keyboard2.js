@@ -6,6 +6,7 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 	// handle polymorphism
 	if( opts instanceof THREE.Object3D )	opts	= { object3D: opts };
 	if( opts instanceof tQuery.Object3D )	opts	= { object3D: opts.get(0) };
+	if( opts.object3D instanceof tQuery.Object3D )	opts.object3D	= opts.object3D.get(0)
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
