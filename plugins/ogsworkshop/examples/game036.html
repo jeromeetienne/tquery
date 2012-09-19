@@ -34,7 +34,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 	tQuery.createMinecraftCharKeyboard2({
 		object3D	: character.object3D('root'),
 		lateralMove	: 'rotationY'
-	});	
+	});
 
 	// make it run only if it move
 	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);	
@@ -75,5 +75,11 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 		light.position(position)
 	})
 
-})
+	// to enable a tracking camera
+	var cameraControls	= tQuery.createCameraFpsControls({
+		trackedObject	: character.object3D('root'),
+		tCamera		: world.tCamera()
+	});
+	world.setCameraControls(cameraControls)
+});
 </script></body>
