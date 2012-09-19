@@ -3,8 +3,8 @@
 
 <script src="../vendor/webaudio-bundle.js"></script>
 
-<script src="http://localhost:4000/socket.io/socket.io.js"></script>
-<script src="http://localhost:4000/examples/client.js"></script>
+<script src="http://jetienne.tquery-multiplayerserver.jit.su:80/socket.io/socket.io.js"></script>
+<script src="http://jetienne.tquery-multiplayerserver.jit.su:80/examples/client.js"></script>
 
 <body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1; text-align: right;">
 	<form action="javascript:void(0)" id='chatInputForm'>
@@ -120,6 +120,7 @@ require([
 
 	// initiate connect with server
 	var serverUrl	= 'http://localhost:4000';
+	var serverUrl	= 'http://jetienne.tquery-multiplayerserver.jit.su:80'
 	var userInfo	= {
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 		skinBasename	: 'char.png',
