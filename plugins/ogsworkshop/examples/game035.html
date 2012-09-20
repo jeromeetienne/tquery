@@ -72,7 +72,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 		light.get(0).target.position.copy(model.position());
 		var delta	= tQuery.createVector3(-1,2,3);
 		var position	= model.position().clone().addSelf(delta);
-		light.position(position)
+		light.position(position);
 	})
 
 })

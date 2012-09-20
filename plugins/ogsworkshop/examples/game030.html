@@ -5,7 +5,8 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
-require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyboard'
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
+	, 'tquery.keyboard'
 	, 'tquery.light'], function(){
 	// create world
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -55,10 +56,10 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 
 	tQuery.createDirectionalLight().addTo(world)
 		.position(-1, 2, 3)
-		.color(0xffffff).intensity(4)
+		.color(0xff00ff).intensity(4)
 		.castShadow(true)
-		.shadowDarkness(0.4)
-		.shadowMap(512*2,512*2)
+		.shadowDarkness(1)
+		.shadowMap(1024,1024)
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 		.shadowCameraVisible(true)
 

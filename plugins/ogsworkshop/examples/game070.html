@@ -189,8 +189,10 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 		// store it
 		players[sourceId].character	= character;
 		// add a nickname cartouche
-		tQuery.createSprite().addTo(character.object3D('root'))	.addClass('cartouche')
-			.scaleBy(1/200).positionY(1.1)
+		tQuery.createSprite().addTo(character.object3D('root'))
+			.addClass('cartouche')
+			.scaleBy(1/200)
+			.positionY(1.1)
 			.map(buildNickCartouche(userInfo.nickName))
 		// init bodyAnims
 		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
