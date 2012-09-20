@@ -44,10 +44,6 @@
 
 <script src="../../minecraft/tquery.spritesheet.js"></script>
 
-<script src="../../materials/tquery.meshlambertmaterial.js"></script>
-<script src="../../materials/tquery.meshphongmaterial.js"></script>
-<script src="../../materials/tquery.meshbasicmaterial.js"></script>
-
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	// no camera controls is needed
@@ -85,7 +81,7 @@
 		skinUrl	: "../../minecraft/examples/images/agentsmith.png"
 	});
 	character.model.addTo(world)
-
+	character.model.translateY(-0.5)
 	tQuery('mesh', character.model).castShadow(true)
 // TODO
 // - shadow casting
@@ -126,7 +122,7 @@
 		spriteH	: 16
 	});
 	items.bind('load', function(){
-		var item	= items.createMesh(10+2*16).addTo(world);
+		var item	= items.createMesh(10,2).addTo(world);
 		//var item	= items.createMesh(0+0*16).addTo(world);
 		
 		//item.translateX(-0.5)
@@ -143,14 +139,14 @@
 			context.fillText(text, 8+(16*x), 28+(28*y));
 		}
 		print(1,1, "Hello")
-		print(2,3, "WebGL Camp!") 
+		print(2,3, "onGameStart!") 
 		
 		
 		
 		var url		= '../../grassground/images/grasslight-big.jpg';
 		var mesh	= tQuery.createPlane().addTo(item)
 			.geometry()
-				.rotateX(Math.PI/2)
+				//.rotateX(Math.PI/2)
 				.translateX(1/16-0.5/16)
 				.translateY(3/16 + 0.5/16)
 				.translateZ(1/16+0.0002)

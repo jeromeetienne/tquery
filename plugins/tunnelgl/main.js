@@ -16,6 +16,7 @@ tQuery.createDirectionalLight().position(0,-1,0).addTo(world)
 
 
 var waterTexture	= THREE.ImageUtils.loadTexture( "images/water.jpg" );
+//var waterTexture	= THREE.ImageUtils.loadTexture( "ash_uvgrid01.jpg" );
 
 for(var i = 0; i < 10; i++ ){
 	tQuery.createEnemy({
@@ -28,8 +29,8 @@ var material	= new THREE.MeshLambertMaterial({
 	color		: 0xFFAA88,
 	specular	: 0xCC88ff,
 	shininess	: 400,
+	side		: THREE.BackSide,
 	map		: THREE.ImageUtils.loadTexture( "images/water.jpg" )
-	//map	: THREE.ImageUtils.loadTexture('ash_uvgrid01.jpg'),
 });
 //material	= new THREE.MeshNormalMaterial();
 
@@ -38,7 +39,7 @@ var material	= new THREE.MeshLambertMaterial({
 var object	= tQuery.createSphere(0.5, 32, 16, new THREE.MeshLambertMaterial({
 	ambient	: 0x444444,
 	color	: 0x44FF44,
-	map	: waterTexture
+	map	: waterTexture,
 }));
 
 object.id('player').addTo(world)
@@ -61,11 +62,11 @@ var tunnel	= tQuery.createCylinder(0.5, 0.5, tunnelH, 32, 20, true, material)
 
 tunnel.material().textureScrolling({
 	transform	: function(tTexture){
-		tTexture.offset.y	= playerZ / 10;
+		tTexture.offset.y	= -playerZ / 10;
 	}
 });
 // TODO this would be better to flip the geometry. put it in tquery.geometry.toolbox.js
-tunnel.get(0).flipSided	= true;
+//tunnel.get(0).flipSided	= true;
 
 var playerZ		= 0;
 var playerAz		= 0;
@@ -122,7 +123,7 @@ true && world.loop().hook(function(deltaTime, time){
 		y	: Math.sin(playerAz)*radius,
 		z	: 0
 	};
-	vertexTransform(origin, world.camera().position, time)
+	vertexTransform(origin, world.tCamera().position, time)
 	
 	world.tCamera().position.z	= tunnelH;
 	world.tCamera().rotation.z	= playerAz+Math.PI/2;
@@ -145,7 +146,7 @@ true && world.loop().hook(function(deltaTime, time){
 // TODO make all this happen at the geometry level
 
 // set clearColor
-world.renderer().setClearColorHex( 0x000000, 1 );
+world.tRenderer().setClearColorHex( 0x000000, 1 );
 
 // add a fog
 world.addFogExp2({ density : 0.15 });
