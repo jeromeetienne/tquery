@@ -1,24 +1,65 @@
-<!doctype html><title>Minimal tQuery Page</title>
+<!doctype html><title>WebGL Meeting</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src='vendor/ColladaLoader.js'></script>
+<base target='_blank'/>
 <script src="../vendor/webrtc.io-client/webrtc.io.js"></script>
-<body>
+<body><div id='info' style='color: #aaa;'>
+	<span style='font-size: 140%'>WebGL Meeting - Chat with friends in 3D</span>
+	<br/>
+	Video conference with <a href='http://www.webrtc.org' style='color: inherit;'>WebRTC</a>
+	<br/>
+	3D with <a href='http://mrdoob.github.com/three.js/' style='color: inherit;'>three.js</a> thru
+	<a href='http://jeromeetienne.github.com/tquery/' style='color: inherit;'>tQuery API</a>
+	-
+	WebRTC with <a href='https://github.com/webRTC/webRTC.io' style='color: inherit;'>WebRTC.io library</a>
+</div>
+<!-- footer -->
+<div id='footer' style="position: absolute; bottom: 0px; left: 0;border: 0; z-index:1; color: #aaa; width: 100%;text-align: center; background-color: #444; font-weight: bold; height: 28px; font-size: 16px; line-height: 28px; font-family: Verdana, Arial, Helvetica, sans-serif;">
+	<div style='float: right; border-left:thick solid #aaa; padding-left:1em; padding-right: 1em;'>
+		<a href='#' style='color: inherit;'>New Room</a>
+	</div>
+	<span class='joinhere'>
+		Waiting for someone to join: <a href='javascript:void(0)' style='color: inherit;'>n/a</a>
+	</span>
+</div>
 <script>
-require(['tquery.pproc'], function(){
-	var world	= tQuery.createWorld().boilerplate().start();
-	
+require(['tquery.pproc', 'tquery.checkerboard', 'tquery.fog', 'tquery.light'], function(){
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	document.getElementById('stats').style.bottom = '28px';
 	world.tRenderer().setClearColorHex( 0x000000, 1 );
-	world.tCamera().position.z	+= 8;
+	world.getCameraControls().rangeX	*= 0.3;
+	world.getCameraControls().rangeY	*= 0.05;
 
-	world.addEffectComposer().film(0.25, 0.25, 648, false).finish();
+	// enable shaddow in the renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+
+	// add the fog
+	world.addFogExp2({density: 0.05});
+
+
+	tQuery.createCheckerboard({
+		segmentsW	: 20,
+		segmentsH	: 20
+	}).addTo(world).scaleBy(40).translateY(-2).receiveShadow(true);
+	
+	world.addEffectComposer().film(0.25, 0.25, 2*648, false).vignette().finish();
 
 	tQuery.createAmbientLight().addTo(world).color(0x444444);	
 	tQuery.createDirectionalLight().addTo(world)
-		.position(-1, 1, 1)
-		.color(0x888888).intensity(2)
+		.position( 4, 0, 1)
+		.color(0x0080ff).intensity(1)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-4, 0, 1)
+		.color(0x008080).intensity(1)
 	 tQuery.createDirectionalLight().addTo(world)
-	 	.position(+1, 1, 1)
-		.color(0x888888).intensity(2)
+	 	.position( 0, 5, 10)
+		.color(0xffffff).intensity(1)
+		.castShadow(true)
+		.shadowDarkness(0.8)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 30)
+		//.shadowCameraVisible(true)
 
 	var loadedModel	= null;
 	tQuery.Flow().seq(function(next){
@@ -29,14 +70,18 @@ require(['tquery.pproc'], function(){
 	}).seq(function(next, collada){
 		console.log('ObjectLoaded');
 		loadedModel	= collada.scene;
-		var tvSet	= createTvSet().addTo(world)
-					.translateX(-2)
-					.rotateY(Math.PI/6)
+		var tvSet	= createTvSet('local');
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
 		next(tvSet);
 	}).seq(function(next, tvSet){
 		// start
 		rtc.createStream({"video": true, "audio": true}, function(stream){
-console.log('stream created', arguments)
 			var screenPlane	= tQuery('.screen', tvSet);
 			var texture	= screenPlane.get(0).material.map;
 			var videoEl	= texture.image;
@@ -51,6 +96,16 @@ console.log('stream created', arguments)
 			console.log('createStream failed', arguments)
 		});
 		
+		
+		// if there are no room, pick one at random
+		if( window.location.hash === '' ){			
+			window.location.hash = Math.floor(Math.random()*10000).toString(16);
+		}
+		// update footer
+		var element	= document.querySelector('#footer .joinhere a');
+		element.href	= element.innerText	= window.location;
+		
+		// connect the server
 		var room	= window.location.hash.slice(1);
 		var serverUrl	= "ws://localhost:8000/";
 		rtc.connect(serverUrl, room);
@@ -61,15 +116,11 @@ console.log('stream created', arguments)
 			var loopCb	= tvSet.data('loopCb', loopCb);
 			world.loop().unhook(loopCb);
 			tvSet.detach();
+			reflowTvSets();
 		});
 
 	        rtc.on('add remote stream', function(stream, socketId) {
-			var tvSet	= createTvSet().addTo(world)
-					.translateX(2)
-					.rotateY(-Math.PI/6)
-					.id('tvSet-'+socketId)
-console.log('addremotestream', arguments)
-
+			var tvSet	= createTvSet(socketId)
 			var screenPlane	= tQuery('.screen', tvSet);
 			var texture	= screenPlane.get(0).material.map;
 			var videoEl	= texture.image;
@@ -83,12 +134,34 @@ console.log('addremotestream', arguments)
 	        });
 	});
 	
+	function reflowTvSets(){
+		var tvSets	= tQuery('.tvSet').get();
+		var radiusX	= 5;
+		var radiusZ	= 5;
+		var camPosZ	= 4;
+		var totRange	= 0.5*Math.PI;
+		world.tCamera().position.z	= camPosZ;		
+		tvSets.forEach(function(object3D, index){
+			var base	= 3*Math.PI/2;
+			var oneRange	= totRange/tvSets.length;
+			var angle	= base - totRange/2 + oneRange*index + oneRange/2;
+
+			tQuery(object3D)
+				.positionX(Math.cos(angle) * radiusX)
+				.positionZ(Math.sin(angle) * radiusZ)
+				.rotationY(-angle-Math.PI/2)
+		});
+	}
+
 	
-	function createTvSet(){
+	function createTvSet(socketId){
 		var scale	= 200;
 		var tvSet	= tQuery(loadedModel).clone()
-					.translateY(-2)
+					.translateY(-3.5)
 					.scaleBy(1/scale)
+					.id('tvSet-'+socketId)
+					.addClass('tvSet')
+					.addTo(world)
 
 			
 		var videoEl	= document.createElement('video');
@@ -104,10 +177,20 @@ console.log('addremotestream', arguments)
 			.scale(2.1*scale, 1.6*scale, 1*scale)
 			.addClass('screen')
 			.setLambertMaterial()
-				.color(0xE1A95F).ambient(0x444444)
+				.color(0xE1A95F).ambient(0xFFFFFF)
 				.map(texture)
 				.back()
+
+		tQuery('mesh', tvSet).castShadow(true)
+
+		reflowTvSets();
+
 		return tvSet;
 	}
 });
-</script></body>
+</script>
+<!-- webrtc logo -->
+<a href="http://www.webrtc.org" style="position: absolute; top: 10px; left: 10px; border: 0; z-index:1;"><img id="logo" alt="WebRTC" src="images/webrtc_black_20p.png"></a>
+<!-- github ribbon -->
+<a href="https://github.com/jeromeetienne/tquery"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:1;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+</body>

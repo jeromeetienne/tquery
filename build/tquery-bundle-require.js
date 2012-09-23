@@ -4962,6 +4962,7 @@ requirejs.config({
 	"map": {
 		"*": {
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
+			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
