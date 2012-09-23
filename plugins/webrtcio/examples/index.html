@@ -1,0 +1,113 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='vendor/ColladaLoader.js'></script>
+<script src="../vendor/webrtc.io-client/webrtc.io.js"></script>
+<body>
+<script>
+require(['tquery.pproc'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	world.tCamera().position.z	+= 8;
+
+	world.addEffectComposer().film(0.25, 0.25, 648, false).finish();
+
+	tQuery.createAmbientLight().addTo(world).color(0x444444);	
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 1, 1)
+		.color(0x888888).intensity(2)
+	 tQuery.createDirectionalLight().addTo(world)
+	 	.position(+1, 1, 1)
+		.color(0x888888).intensity(2)
+
+	var loadedModel	= null;
+	tQuery.Flow().seq(function(next){
+		var loader	= new THREE.ColladaLoader();
+		loader.options.convertUpAxis = true;
+		var modelUrl	= 'models/OldTelevisionSet01/models/Old Television Set 01.dae';
+		loader.load(modelUrl, next);
+	}).seq(function(next, collada){
+		console.log('ObjectLoaded');
+		loadedModel	= collada.scene;
+		var tvSet	= createTvSet().addTo(world)
+					.translateX(-2)
+					.rotateY(Math.PI/6)
+		next(tvSet);
+	}).seq(function(next, tvSet){
+		// start
+		rtc.createStream({"video": true, "audio": true}, function(stream){
+console.log('stream created', arguments)
+			var screenPlane	= tQuery('.screen', tvSet);
+			var texture	= screenPlane.get(0).material.map;
+			var videoEl	= texture.image;
+			videoEl.src	= URL.createObjectURL(stream);
+			var loopCb	= world.loop().hook(function(){
+				if( videoEl.readyState === videoEl.HAVE_ENOUGH_DATA ){
+					texture.needsUpdate	= true;
+				}
+			});
+			tvSet.data('loopCb', loopCb)
+		}, function(){
+			console.log('createStream failed', arguments)
+		});
+		
+		var room	= window.location.hash.slice(1);
+		var serverUrl	= "ws://localhost:8000/";
+		rtc.connect(serverUrl, room);
+
+		rtc.on('disconnect stream', function(socketId) {
+			console.log('remove ' + socketId);
+			var tvSet	= tQuery('#tvSet-'+socketId)
+			var loopCb	= tvSet.data('loopCb', loopCb);
+			world.loop().unhook(loopCb);
+			tvSet.detach();
+		});
+
+	        rtc.on('add remote stream', function(stream, socketId) {
+			var tvSet	= createTvSet().addTo(world)
+					.translateX(2)
+					.rotateY(-Math.PI/6)
+					.id('tvSet-'+socketId)
+console.log('addremotestream', arguments)
+
+			var screenPlane	= tQuery('.screen', tvSet);
+			var texture	= screenPlane.get(0).material.map;
+			var videoEl	= texture.image;
+			videoEl.src	= URL.createObjectURL(stream);
+			var loopCb	= world.loop().hook(function(){
+				if( videoEl.readyState === videoEl.HAVE_ENOUGH_DATA ){
+					texture.needsUpdate	= true;
+				}
+			});
+			tvSet.data('loopCb', loopCb)
+	        });
+	});
+	
+	
+	function createTvSet(){
+		var scale	= 200;
+		var tvSet	= tQuery(loadedModel).clone()
+					.translateY(-2)
+					.scaleBy(1/scale)
+
+			
+		var videoEl	= document.createElement('video');
+		videoEl.width	= 320;
+		videoEl.height	= 240;
+		videoEl.autoplay= true;
+		var texture	= new THREE.Texture(videoEl);
+		// do a flipX in the video1Texture
+		texture.repeat.set(-1, 1);
+		texture.offset.set( 1, 0);
+		tQuery.createPlane().addTo(tvSet)
+			.position(0, 3.55*scale, 0.8*scale)
+			.scale(2.1*scale, 1.6*scale, 1*scale)
+			.addClass('screen')
+			.setLambertMaterial()
+				.color(0xE1A95F).ambient(0x444444)
+				.map(texture)
+				.back()
+		return tvSet;
+	}
+});
+</script></body>

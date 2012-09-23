@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns='http://earth.google.com/kml/2.1'>
+<Folder>
+    <name>Old Television Set 01</name>
+    <description><![CDATA[Created with <a href="http://sketchup.google.com/">Google SketchUp 7.0.8657</a>]]></description>
+    <DocumentSource>SketchUp</DocumentSource>
+<visibility>1</visibility>
+<LookAt>
+<heading>29.5425</heading>
+<tilt>69.5454</tilt>
+<latitude>53.48298719662231</latitude>
+<longitude>-2.250012226700597</longitude>
+<range>2.834899368965995</range>
+<altitude>1.034892153507135</altitude>
+</LookAt>
+<Folder>
+<name>Tour</name>
+<Placemark>
+<name><![CDATA[Camera]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>29.5425</heading>
+<tilt>69.5454</tilt>
+<latitude>53.48298719662231</latitude>
+<longitude>-2.250012226700597</longitude>
+<range>2.834899368965995</range>
+<altitude>1.034892153507135</altitude>
+</LookAt>
+</Placemark>
+</Folder>
+  <Placemark>
+    <name>Model</name>
+    <description><![CDATA[A 1950s television set. By IDW]]></description>
+    <Style id='default'>
+    </Style>
+    <Model>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <Location>
+            <longitude>-2.250000000000</longitude>
+            <latitude>53.483000000000</latitude>
+            <altitude>0.000000000000</altitude>
+        </Location>
+        <Orientation>
+            <heading>0</heading>
+            <tilt>0</tilt>
+            <roll>0</roll>
+        </Orientation>
+        <Scale>
+            <x>1.0</x>
+            <y>1.0</y>
+            <z>1.0</z>
+        </Scale>
+        <Link>
+            <href>models/Old Television Set 01.dae</href>
+        </Link>
+    </Model>
+  </Placemark></Folder>
+</kml>
