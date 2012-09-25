@@ -17,6 +17,7 @@ tQuery.registerStatic('createGrassGround', function(opts){
 	texture.wrapS	= THREE.RepeatWrapping;
 	texture.wrapT	= THREE.RepeatWrapping;
 	texture.repeat.set(opts.textureRepeatX, opts.textureRepeatY);
+	texture.anisotropy = 16;
 
 	var material	= new THREE.MeshBasicMaterial({
 		map	: texture,
