@@ -1,0 +1,19 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.grassground', 'tquery.skymap', 'tquery.statsplus', 'tquery.montainarena'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	world.enableStatsPlus();
+	
+	var arena	= tQuery.MontainArena.createBasicArena().addTo(world)
+				.scale(10)
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(10);
+	
+	tQuery.createSkymap('skybox').addTo(world);
+});
+</script></body>
