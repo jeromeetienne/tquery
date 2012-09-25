@@ -24,6 +24,7 @@ requirejs.config({
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
+			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
