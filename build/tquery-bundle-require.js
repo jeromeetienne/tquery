@@ -3929,6 +3929,39 @@ tQuery.mixinAttributes(tQuery.MeshLambertMaterial, {
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.Mesh.registerInstance('setNormalMaterial', function(opts){
+	var material	= tQuery.createMeshNormalMaterial(opts);
+	this.material( material.get(0) );
+	return material.back(this);
+})
+
+tQuery.registerStatic('createMeshNormalMaterial', function(opts){
+	var tMaterial	= new THREE.MeshNormalMaterial(opts);
+	var material	= new tQuery.MeshNormalMaterial(tMaterial);
+	return material;
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.MeshNormalMaterial	= function(elements)
+{
+	// call parent ctor
+	tQuery.MeshNormalMaterial.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Material
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.MeshNormalMaterial); });
+};
+
+/**
+ * inherit from tQuery.Material
+*/
+tQuery.inherit(tQuery.MeshNormalMaterial, tQuery.Material);
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.Mesh.registerInstance('setPhongMaterial', function(opts){
 	var material	= tQuery.createMeshPhongMaterial(opts);
 	this.material( material.get(0) );
@@ -4978,6 +5011,7 @@ requirejs.config({
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
+			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",

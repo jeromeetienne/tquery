@@ -3,8 +3,21 @@
 
 <script src="../vendor/webaudio-bundle.js"></script>
 
-<script src="http://localhost:4000/socket.io/socket.io.js"></script>
-<script src="http://localhost:4000/examples/client.js"></script>
+<script>
+(function(){
+	var onLocalhost	= window.location.hostname === 'localhost'
+        			||  window.location.hostname === '127.0.0.1';
+	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://jetienne.tquery-multiplayerserver.jit.su:80/';
+
+	var script	= document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+	script.src	= serverUrl+'socket.io/socket.io.js';
+	var tmp		= document.getElementsByTagName('script')[0]; tmp.parentNode.insertBefore(script, tmp);
+
+	var script	= document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+	script.src	= serverUrl+'examples/client.js';
+	var tmp		= document.getElementsByTagName('script')[0]; tmp.parentNode.insertBefore(script, tmp);
+})();	
+</script>
 
 <body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1; text-align: right;">
 	<form action="javascript:void(0)" id='chatInputForm'>
@@ -30,12 +43,16 @@
 	<form action="javascript:void(0)" id='nicknameForm' style='display: inline-block'>
 		<input type="text"/>
 	</form>
+	<form action="javascript:void(0)" id='roomNameForm' style='display: inline-block'>
+		<input type="text"/>
+	</form>
 </div><script>
 require([
 	'tquery.pproc', 'tquery.skymap', 'tquery.fog'
 	, 'tquery.keyboard', 'tquery.lensflare'
 	, 'tquery.grassground', 'tquery.simplemaze'
-	, 'tquery.light', 'tquery.minecraft'], function(){
+	, 'tquery.light', 'tquery.minecraft'
+	, 'tquery.montainarena'], function(){
 	var world	= tQuery.createWorld().boilerplate({
 		fullscreen	: false,
 		screenshot	: false
@@ -74,17 +91,20 @@ require([
 		spriteW	: 16,
 		spriteH	: 16
 	});
-	
+
 	// create ground
 	if( true ){
 		var ground	= tQuery.createGrassGround({
 			textureRepeatX	: 20,
 			textureRepeatY	: 20,
 		}).addTo(world)
-		.receiveShadow(true)
-		.scale(80);
-		ground.get(0).material.map.anisotropy = 16;
+			.receiveShadow(true)
+			.scale(40)
+
+		tQuery.MontainArena.createBasicArena().addTo(world)
+			.scale(40)
 	}
+
 	//////////////////////////////////////////////////////////////////////////
 	//		lights							//
 	//////////////////////////////////////////////////////////////////////////
@@ -92,7 +112,7 @@ require([
 		.color(0xFFFFFF);
 	tQuery.createDirectionalLight().addTo(world)
 		.position(1,1,-1).color(0xffffff).intensity(2);
-	var lightDir1	= tQuery.createDirectionalLight().addTo(world)
+	var light	= tQuery.createDirectionalLight().addTo(world)
 		.position(-1, 2, 3)
 		.color(0xffffff).intensity(4)
 		.castShadow(true)
@@ -100,16 +120,16 @@ require([
 		.shadowMap(512*2,512*2)
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 		//.shadowCameraVisible(true)
-	// for lightDir1 to follow character
+	// for light to follow character
 	world.loop().hook(function(){
 		if( !players[mySourceId] )	return;
 		var player	= players[mySourceId];
 		var model	= player.character.object3D('root');
-		lightDir1.get(0).target.position.copy(model.position());
+		light.get(0).target.position.copy(model.position());
 		var delta	= tQuery.createVector3(-1,2,3);
 		var position	= model.position().clone().addSelf(delta);
-		lightDir1.position(position)
-	})
+		light.position(position)
+	});
 
 	//////////////////////////////////////////////////////////////////////////
 	//		network							//
@@ -118,24 +138,29 @@ require([
 	var mySourceId	= null;
 	var players	= {};
 
+	// determine room
+	window.location.hash	= window.location.hash	|| 'Public';
+	var roomName	= window.location.hash.slice(1);
 	// initiate connect with server
-	var serverUrl	= 'http://localhost:4000';
-	//var serverUrl	= 'http://jetienne.tquery-multiplayerserver.jit.su:80'
+	var onLocalhost	= window.location.hostname === 'localhost'
+        			||  window.location.hostname === '127.0.0.1';
+	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://jetienne.tquery-multiplayerserver.jit.su:80';
 	var userInfo	= {
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 		skinBasename	: 'char.png',
 	};
-	var gameServer	= new SimpleMMOServer(userInfo, serverUrl);
+	var gameServer	= new SimpleMMOServer(roomName, userInfo, serverUrl);
 
-	gameServer.addEventListener('connected', function(sourceId, usersInfo){
-		console.log('connected', sourceId, usersInfo, gameServer.usersInfo())
+	gameServer.addEventListener('roomJoined', function(sourceId, usersInfo){
+		console.log('roomJoined', sourceId, usersInfo, gameServer.usersInfo())
+
+		createMyPlayer(sourceId, gameServer.userInfo())
 
 		Object.keys(usersInfo).forEach(function(sourceId){
+			if( sourceId === mySourceId )	return;
 			var userInfo	= usersInfo[sourceId];
 			createPlayer(sourceId, userInfo)
 		});
-
-		createMyPlayer(sourceId, gameServer.userInfo())
 	});
 
 	gameServer.addEventListener('userJoin', function(data){
@@ -144,12 +169,12 @@ require([
 	});
 
 	gameServer.addEventListener('userLeft', function(data){
-		//console.log('userLeft', data)
+		console.log('userLeft', data)
 		destroyPlayer(data.sourceId);
 	});
 
 	gameServer.addEventListener('userInfo', function(sourceId, curUserInfo, oldUserInfo){
-		//console.log('userInfo', arguments)
+		console.log('userInfo', arguments)
 		updatePlayer(sourceId, curUserInfo, oldUserInfo)
 	});
 
@@ -189,9 +214,9 @@ require([
 			var mesh	= player.character.object3D('root')
 			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
 			if( velocity.length() ){
-				player.bodyAnims.start('run')
+				player.bodyAnims.start('run');
 			}else{
-				player.bodyAnims.start('stand')
+				player.bodyAnims.start('stand');
 			}
 			// update player.prevPosition/player.prevRotation
 			player.prevPosition.copy( mesh.position() )
@@ -206,10 +231,19 @@ require([
 
 
 	document.body.setAttribute("tabIndex", "0");	// make body focusable
+
+	// handle roomNameForm
+	var roomNameForm	= document.getElementById('roomNameForm')
+	roomNameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+	roomNameForm[0].value	= roomName;
+	roomNameForm.addEventListener('submit', function(){
+		window.location.hash	= roomNameForm[0].value;
+		window.location.reload();
+	});
+
 	// handle nicknameForm
 	var nicknameForm	= document.getElementById('nicknameForm')
 	nicknameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
-
 	nicknameForm[0].value	= gameServer.userInfo().nickName;
 	nicknameForm.addEventListener('submit', function(){
 		var myUserInfo		= gameServer.userInfo();
@@ -221,6 +255,7 @@ require([
 		document.body.focus();		
 	});
 
+	// handle skinSelection
 	var skinSelectEl	= document.getElementById('skinSelect')
 	skinSelectEl.addEventListener('change', function(){
 		var myUserInfo		= gameServer.userInfo();
@@ -232,6 +267,7 @@ require([
 		document.body.focus();		
 	});
 
+	// handle chatInputForm
 	var chatInputForm	= document.getElementById('chatInputForm')
 	chatInputForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
 	chatInputForm.addEventListener('change', function(){
@@ -261,7 +297,7 @@ require([
 		// to enable a tracking camera
 		var cameraControls	= tQuery.createCameraFpsControls({
 			trackedObject	: character.object3D('root').get(0),
-			tCamera		: world.tCamera()
+			tCamera		: world.tCamera(),
 		});
 		world.setCameraControls(cameraControls)
 		//cameraControls.deltaCamera().position(0, 0.7, -0.07)
@@ -273,6 +309,15 @@ require([
 			object3D	: character.object3D('root').get(0),
 			lateralMove	: 'rotationY',
 			//lateralMove	: 'strafe'
+		});
+		
+		world.loop().hook(function(){
+			var mesh	= character.object3D('root');
+			var position	= mesh.position();
+			var maxLength	= 16;
+			if( position.length() > maxLength ){
+				position.setLength(maxLength)				
+			}
 		});
 
 		// periodically send the position of the character
@@ -352,8 +397,8 @@ require([
 
 	function buildChatBubble(text){
 		// create the canvas
-		var canvas  = document.createElement("canvas");
-		var context = canvas.getContext("2d");
+		var canvas	= document.createElement("canvas");
+		var context	= canvas.getContext("2d");
 		canvas.width	= 1024;
 		canvas.height	= 512;
 		// center the origin
@@ -375,8 +420,8 @@ require([
 	}
 	function buildNickCartouche(text){
 		// create the canvas
-		var canvas  = document.createElement("canvas");
-		var context = canvas.getContext("2d");
+		var canvas	= document.createElement("canvas");
+		var context	= canvas.getContext("2d");
 		canvas.width	= 256;
 		canvas.height	= 128;
 		// center the origin

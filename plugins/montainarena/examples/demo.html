@@ -3,17 +3,41 @@
 <body><script>
 require(['tquery.grassground', 'tquery.skymap', 'tquery.statsplus', 'tquery.montainarena'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-	
-	world.enableStatsPlus();
-	
-	var arena	= tQuery.MontainArena.createBasicArena().addTo(world)
-				.scale(10)
 
-	tQuery.createGrassGround({
+	world.enableStatsPlus();
+
+	var arena	= tQuery.MontainArena.createBasicArena().scale(10);
+	arena.addTo(world);
+		
+	// try to merge the whole arena
+	// var tGeometry	= new THREE.Geometry;
+	// THREE.SceneUtils.traverseHierarchy(arena.get(0), function(object3D){
+	// 	console.log('add', object3D, tGeometry);
+	// 	if( object3D.geometry === undefined )	return;
+	// 	THREE.GeometryUtils.merge( tGeometry, object3D );
+	// });
+	// var tMesh	= new THREE.Mesh(tGeometry, new THREE.MeshFaceMaterial())
+	// world.add(tMesh);
+	
+
+	var ground	= tQuery.createGrassGround({
 		textureRepeatX	: 10,
 		textureRepeatY	: 10,
-	}).addTo(world).scale(10);
+		segmentsW	: 100,
+		segmentsH	: 100,
+	}).addTo(world).scale(10)
+		.setNormalMaterial()
+			.back();
 	
+	var tGeometry	= ground.get(0).geometry;
+	for(var i = 0; i < tGeometry.vertices.length; i++){
+		var vertice	= tGeometry.vertices[i];
+		vertice.z	= 0.01 * Math.abs(Math.sin(vertice.y*40) + Math.sin(vertice.x*80));
+	}
+	tGeometry.computeBoundingSphere();
+	tGeometry.computeFaceNormals();
+
+
 	tQuery.createSkymap('skybox').addTo(world);
 });
 </script></body>

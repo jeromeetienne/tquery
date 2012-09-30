@@ -13,8 +13,10 @@ tQuery.registerStatic('createCameraFpsControls', function(opts){
 tQuery.registerStatic('CameraFpsControls', function(opts){
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
-		world	: tQuery.world,
-		debug	: false 
+		world		: tQuery.world,
+		deltaTarget	: tQuery.createVector3(0, 0, +3),
+		deltaCamera	: tQuery.createVector3(0, 2, -3),
+		debug		: false 
 	});
 	// sanity check
 	console.assert( opts.trackedObject instanceof THREE.Object3D )
@@ -26,7 +28,7 @@ tQuery.registerStatic('CameraFpsControls', function(opts){
 					.geometry().scaleBy(1/4).back()
 	this._deltaTarget	= deltaTarget;
 	deltaTarget.addTo(opts.trackedObject)
-		.position(0, 0, +3);
+		.position(opts.deltaTarget);
 
 	// create camera
 	var deltaCamera	= !opts.debug ? tQuery.createObject3D() : tQuery.createSphere()
@@ -34,7 +36,8 @@ tQuery.registerStatic('CameraFpsControls', function(opts){
 					.geometry().scaleBy(1/4).back()
 	this._deltaCamera	= deltaCamera;
 	deltaCamera.addTo(opts.trackedObject)
-		.position(0, 2, -3)
+		.position(opts.deltaCamera);
+		// .position(0, 2, -3)
 		//.position(0, 1, 0)
 		//.position(0, 0.7, -0.07)
 

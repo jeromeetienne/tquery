@@ -38,6 +38,9 @@ looks like the code below... Quite short.
 
 #### Release - r51.0
 * ported to three.js r51
+* added tQuery.montainarena plugins
+* added ogsworkshop
+* added webrtc.io
 
 #### Release - r50.2
 

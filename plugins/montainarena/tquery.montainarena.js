@@ -22,6 +22,7 @@ tQuery.MontainArena.createBasicArena	= function(){
 		radiusBottomMin	: 0.5/20,
 		radiusBottomMax	: 1.0/20,
 	}).addTo(arena);
+
 	return arena;
 }
 
@@ -45,7 +46,11 @@ tQuery.MontainArena.build	= function(opts){
 			tQuery.createCylinder(0.0, radiusBottom, height).addTo(opts.container)
 				.translateY(height/2)
 				.positionX(opts.radius * Math.cos(angle + deltaAngle))
-				.positionZ(opts.radius * Math.sin(angle + deltaAngle));
+				.positionZ(opts.radius * Math.sin(angle + deltaAngle))
+				// .setBasicMaterial()
+				// 	//.map('../../assets/images/ash_uvgrid01.jpg')
+				// 	//.color(0x000000)
+				// 	.back();
 		}
 	}
 	return opts.container;
