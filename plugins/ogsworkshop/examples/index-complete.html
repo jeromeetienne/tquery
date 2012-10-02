@@ -5,9 +5,8 @@
 
 <script>
 (function(){
-	var onLocalhost	= window.location.hostname === 'localhost'
-        			||  window.location.hostname === '127.0.0.1';
-	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://jetienne.tquery-multiplayerserver.jit.su:80/';
+	var onLocalhost	= window.location.hostname === 'localhost' ||  window.location.hostname === '127.0.0.1';
+	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://simplemmoserver.jit.su:80/';
 
 	var script	= document.createElement('script'); script.type = 'text/javascript'; script.async = true;
 	script.src	= serverUrl+'socket.io/socket.io.js';
@@ -23,6 +22,14 @@
 	<form action="javascript:void(0)" id='chatInputForm'>
 		<input size=100 type="text" placeholder='Chat here'/>
 	</form>
+	<form action="javascript:void(0)" id='nicknameForm' style='display: inline-block'>
+		<input type="text"/>
+	</form>
+	<span style='font-size: 50%; font-weight: bolder;'>IN</span>
+	<form action="javascript:void(0)" id='roomNameForm' style='display: inline-block'>
+		<input type="text"/>
+	</form>
+	<span style='font-size: 50%; font-weight: bolder;'>AS</span>
 	<select id="skinSelect">
 		<option value="char.png">char</option>
 		<option value="3djesus.png">3djesus</option>
@@ -40,19 +47,14 @@
 		<option value="woody.png">woody</option>
 		<option value="Iron-Man-Minecraft-Skin.png">ironman</option>
 	</select>
-	<form action="javascript:void(0)" id='nicknameForm' style='display: inline-block'>
-		<input type="text"/>
-	</form>
-	<form action="javascript:void(0)" id='roomNameForm' style='display: inline-block'>
-		<input type="text"/>
-	</form>
 </div><script>
 require([
 	'tquery.pproc', 'tquery.skymap', 'tquery.fog'
 	, 'tquery.keyboard', 'tquery.lensflare'
 	, 'tquery.grassground', 'tquery.simplemaze'
 	, 'tquery.light', 'tquery.minecraft'
-	, 'tquery.montainarena'], function(){
+	, 'tquery.montainarena'
+	, 'tquery.text'], function(){
 	var world	= tQuery.createWorld().boilerplate({
 		fullscreen	: false,
 		screenshot	: false
@@ -61,7 +63,11 @@ require([
 	// enable shaddow in the renderer
 	world.tRenderer().shadowMapEnabled	= true;
 	world.tRenderer().shadowMapSoft		= true;
-		
+
+	// determine room
+	window.location.hash	= window.location.hash	|| 'Public';
+	var roomName	= window.location.hash.slice(1);
+			
 	// enable sound
 	var sounds	= {};
 	if( WebAudio.isAvailable ){
@@ -73,15 +79,35 @@ require([
 		sounds.userLeft		= tQuery.createSound().load('../sounds/gearwhine.wav');
 	}
 
-	// add a skybox
-	tQuery.createSkymap('skybox').addTo(world);
-
 	// add post processing
 	if( false ){
 		world.addEffectComposer().sepia().film(0.5, 0.25, 648, false).vignette()
 			.finish();		
 	}
 
+	// add a skybox
+	var textureCube	= tQuery.createCubeTexture('skybox')
+	tQuery.createSkymap({
+		textureCube	: textureCube
+	}).addTo(world);
+
+	if( true ){
+		// create the text
+		var text	= tQuery.createText(roomName, {
+			bevelThickness	: 0.1,
+			bevelSize	: 0.03,
+			bevelEnabled	: true,
+		}).addTo(world).scaleBy(1).translateY(2)
+			.setLambertMaterial({
+				ambient	: 0x444444,
+				color	: 0x888888,
+				envMap	: textureCube
+			}).back()
+			.castShadow(true)
+		world.loop().hook(function(delta, now){
+			text.rotateY(0.05 * delta * Math.PI * 2)
+		})
+	}
 
 	// initiate a spritesheet
 	var items	= new tQuery.Spritesheet({
@@ -138,13 +164,11 @@ require([
 	var mySourceId	= null;
 	var players	= {};
 
-	// determine room
-	window.location.hash	= window.location.hash	|| 'Public';
-	var roomName	= window.location.hash.slice(1);
+
 	// initiate connect with server
 	var onLocalhost	= window.location.hostname === 'localhost'
         			||  window.location.hostname === '127.0.0.1';
-	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://jetienne.tquery-multiplayerserver.jit.su:80';
+	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://simplemmoserver.jit.su:80';
 	var userInfo	= {
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 		skinBasename	: 'char.png',
