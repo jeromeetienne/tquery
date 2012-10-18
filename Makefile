@@ -26,8 +26,8 @@ help:
 	@echo "make server		<- launch a minimal webserver"
 	@echo "make docs		<- generate jsdocs"
 	@echo "make buildCore		<- generate tquery.js"
-	@echo "make minifyCore	<- generate tquery.min.js"
-	@echo "make buildBundle	<- generate tquery-bundle.js"
+	@echo "make minifyCore		<- generate tquery.min.js"
+	@echo "make buildBundle		<- generate tquery-bundle.js"
 	@echo "make minifyBundle	<- generate tquery-bundle.min.js"
 	@echo "make buildAll		<- generate tquery-all.js"
 	@echo "make minifyAll		<- generate tquery-all.min.js"
@@ -55,7 +55,7 @@ release:
 	@echo "5. Merge 'dev' branch into 'master' branch"
 	@echo "   5.1 use 'git merge dev' WHILE being on 'master'"
 	@echo "6. Tag the version"
-	@echo "   6.1 use 'git tag r99.9' WHILE being on 'master'"
+	@echo "   6.1 use 'git tag r99.9 -a' WHILE being on 'master'"
 	@echo "7. Push the version on github"
 	@echo "   7.1 push content with 'git push' WHILE being on 'master'"
 	@echo "   7.2 push tags with 'git push --tags' WHILE being on 'master'"
@@ -110,7 +110,7 @@ minifyCore: buildCore
 buildBundle: buildCore
 	echo $(BANNER)			>  build/tquery-bundle.js
 	cat vendor/es5-shim.js		>> build/tquery-bundle.js
-	cat vendor/three.js/Three.js	>> build/tquery-bundle.js
+	cat vendor/three.js/three.js	>> build/tquery-bundle.js
 	cat build/tquery.js		>> build/tquery-bundle.js
 	# include boilerplate
 	cat plugins/boilerplate/*.js			>> build/tquery-bundle.js

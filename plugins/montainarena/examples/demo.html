@@ -10,34 +10,59 @@ require(['tquery.grassground', 'tquery.skymap', 'tquery.statsplus', 'tquery.mont
 	arena.addTo(world);
 		
 	// try to merge the whole arena
-	// var tGeometry	= new THREE.Geometry;
-	// THREE.SceneUtils.traverseHierarchy(arena.get(0), function(object3D){
-	// 	console.log('add', object3D, tGeometry);
-	// 	if( object3D.geometry === undefined )	return;
-	// 	THREE.GeometryUtils.merge( tGeometry, object3D );
-	// });
-	// var tMesh	= new THREE.Mesh(tGeometry, new THREE.MeshFaceMaterial())
-	// world.add(tMesh);
+	var tGeometry	= new THREE.Geometry();
+	THREE.SceneUtils.traverseHierarchy(arena.get(0), function(object3D){
+		console.log('add', object3D, tGeometry);
+		if( object3D.geometry === undefined )	return;
+		if( object3D.material instanceof THREE.MeshFaceMaterial === false ){
+			console.log(object3D)	
+			object3D	= THREE.SceneUtils.cloneObject(object3D);
+			console.log(object3D)
+			object3D.geometry.materials.push(object3D.material); 
+			object3D.geometry.materials.push(object3D.material); 
+			object3D.geometry.materials.push(object3D.material); 
+			object3D.geometry.materials.push(object3D.material); 
+			object3D.geometry.faces.forEach(function(face){
+				face.materialIndex	= 2;
+				console.log('face materialIndex', 'materialIndex' in face, face)
+			});
+			object3D.material	= new THREE.MeshFaceMaterial();
+		}
+		THREE.GeometryUtils.merge( tGeometry, object3D );
+	});
+	var tMesh	= new THREE.Mesh(tGeometry, new THREE.MeshFaceMaterial())
+	world.tScene().add(tMesh);
 	
-
-	var ground	= tQuery.createGrassGround({
-		textureRepeatX	: 10,
-		textureRepeatY	: 10,
-		segmentsW	: 100,
-		segmentsH	: 100,
-	}).addTo(world).scale(10)
-		.setNormalMaterial()
-			.back();
-	
-	var tGeometry	= ground.get(0).geometry;
-	for(var i = 0; i < tGeometry.vertices.length; i++){
-		var vertice	= tGeometry.vertices[i];
-		vertice.z	= 0.01 * Math.abs(Math.sin(vertice.y*40) + Math.sin(vertice.x*80));
+	var tGeometry	= new THREE.Geometry();
+	for(var i = 0; i < 10; i++){
+		var tMesh	= new THREE.Mesh(new THREE.CubeGeometry(1,1,1), new THREE.MeshBasicMaterial())
+		tMesh.position.x= Math.random() * 4 - 2;
+		tMesh.position.y= Math.random() * 4 - 2;
+		tMesh.position.z= Math.random() * 4 - 2;
+	 	THREE.GeometryUtils.merge( tGeometry, tMesh );
 	}
-	tGeometry.computeBoundingSphere();
-	tGeometry.computeFaceNormals();
+	var tMesh	= new THREE.Mesh(tGeometry, new THREE.MeshFaceMaterial())
+	world.tScene().add(tMesh);
+	
+
+	// var ground	= tQuery.createGrassGround({
+	// 	textureRepeatX	: 10,
+	// 	textureRepeatY	: 10,
+	// 	segmentsW	: 100,
+	// 	segmentsH	: 100,
+	// }).addTo(world).scale(10)
+	// 	.setNormalMaterial()
+	// 		.back();
+	
+	// var tGeometry	= ground.get(0).geometry;
+	// for(var i = 0; i < tGeometry.vertices.length; i++){
+	// 	var vertice	= tGeometry.vertices[i];
+	// 	vertice.z	= 0.01 * Math.abs(Math.sin(vertice.y*40) + Math.sin(vertice.x*80));
+	// }
+	// tGeometry.computeBoundingSphere();
+	// tGeometry.computeFaceNormals();
 
 
-	tQuery.createSkymap('skybox').addTo(world);
+	// tQuery.createSkymap('skybox').addTo(world);
 });
 </script></body>

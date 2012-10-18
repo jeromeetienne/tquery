@@ -57,10 +57,13 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
 	tQuery.createDirectionalLight().addTo(world)
 		.position(-1, 2, 3)
 		.color(0xff00ff).intensity(4)
+		
 		.castShadow(true)
+
 		.shadowDarkness(1)
-		.shadowMap(1024,1024)
-		.shadowCamera(8, -8, 8, -8, 0.1, 10)
+		.shadowMap(256,256)
+		//.shadowCamera(8, -8, 8, -8, 0.1, 10)
+		.shadowCamera(2, -2, 8, -8, 0.1, 10)
 		.shadowCameraVisible(true)
 
 	tQuery('mesh', character.object3D('root')).castShadow(true);

@@ -10,6 +10,7 @@ tQuery.registerStatic('createGrassGround', function(opts){
 		segmentsH	: 1,
 		textureRepeatX	: 1,
 		textureRepeatY	: 1,
+		anisotropy	: 16,
 		textureUrl	: tQuery.createGrassGround.baseUrl + 'images/grasslight-big.jpg'
 	});
 
@@ -17,7 +18,7 @@ tQuery.registerStatic('createGrassGround', function(opts){
 	texture.wrapS	= THREE.RepeatWrapping;
 	texture.wrapT	= THREE.RepeatWrapping;
 	texture.repeat.set(opts.textureRepeatX, opts.textureRepeatY);
-	texture.anisotropy = 16;
+	texture.anisotropy = opts.anisotropy;
 
 	var material	= new THREE.MeshBasicMaterial({
 		map	: texture,

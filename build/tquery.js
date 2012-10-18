@@ -1158,7 +1158,7 @@ tQuery.mixinAttributes(tQuery.Sprite, {
 /**
  * Handle world (aka scene+camera+renderer)
  *
- * @class youpla
+ * @class tQuery.World
  * 
  * @param {THREE.Material} object an instance or an array of instance
 */
@@ -1230,7 +1230,9 @@ tQuery.pluginsInstanceOn(tQuery.World);
 // make it eventable
 tQuery.MicroeventMixin(tQuery.World.prototype)
 
-
+/**
+ * destructor
+ */
 tQuery.World.prototype.destroy	= function(){
 	// microevent.js notification
 	this.trigger('destroy');
@@ -1269,7 +1271,10 @@ tQuery.World.hasWebGL	= function(){
 };
 
 /**
-*/
+ * display 'add webgl message' - taken from detector.js
+ * @param   {DOMElement?} parent dom element to which we hook it
+ * @private
+ */
 tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 {
 	parent	= parent || document.body;
@@ -1310,13 +1315,20 @@ tQuery.World.prototype.getCameraControls	= function(){
 	return this._cameraControls;
 };
 
-
+/**
+ * remove the camera controls
+ * @return {tQuery.World} for chained API
+ */
 tQuery.World.prototype.removeCameraControls	= function(){
 	if( this.hasCameraControls() === false )	return this;
 	this._cameraControls	= undefined;
 	return this;	// for chained API
 };
 
+/**
+ * test if there is a camera controls
+ * @return {Boolean} true if there is, false otherwise
+ */
 tQuery.World.prototype.hasCameraControls	= function(){
 	return this._cameraControls !== undefined ? true : false;
 };
@@ -1361,6 +1373,11 @@ tQuery.World.prototype.remove	= function(object3d)
 	return this;
 }
 
+/**
+ * append renderer domElement
+ * @param  {DOMElement} domElement the domelement which will be parent
+ * @return {tQuery.World} for chained API
+ */
 tQuery.World.prototype.appendTo	= function(domElement)
 {
 	domElement.appendChild(this._renderer.domElement)

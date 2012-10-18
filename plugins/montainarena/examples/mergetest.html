@@ -1,0 +1,30 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.statsplus'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.enableStatsPlus();
+
+	var tGeometry	= new THREE.Geometry();
+
+	var cubeGeometry= new THREE.PlaneGeometry(1,1,1);
+	var tMesh	= new THREE.Mesh(cubeGeometry, new THREE.MeshBasicMaterial());
+	tMesh.position.x= -1;
+	THREE.GeometryUtils.merge( tGeometry, tMesh );
+//	world.tScene().add(tMesh);
+
+	console.log('BUG ??? no geometry.materials. see how it happen in the merge of minecraft ao')
+	console.log('cubeGeometry'	, cubeGeometry);
+	console.log('geometry'		, tGeometry);
+
+	// var cubeGeometry= new THREE.CubeGeometry(1,1,1);
+	// var tMesh	= new THREE.Mesh(cubeGeometry, tMaterial);
+	// tMesh.position.x= -1;
+	// THREE.GeometryUtils.merge( tGeometry, tMesh );
+
+	var tMesh	= new THREE.Mesh(tGeometry, new THREE.MeshFaceMaterial())
+	world.tScene().add(tMesh);
+	
+});
+</script></body>

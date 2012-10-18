@@ -297,7 +297,8 @@ require([
 		var character	= tQuery.createMinecraftChar({
 			skinUrl	: skinUrl
 		}).addTo(world);
-		tQuery('mesh', character.object3D('root')).castShadow(true);
+		tQuery('mesh', character.object3D('root'))
+			.castShadow(true)
 		// store it
 		players[sourceId].character	= character;
 		// add a nickname cartouche
