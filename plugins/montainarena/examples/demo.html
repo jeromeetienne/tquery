@@ -11,12 +11,13 @@ require(['tquery.grassground', 'tquery.skymap', 'tquery.statsplus', 'tquery.mont
 		
 	// try to merge the whole arena
 	var tGeometry	= new THREE.Geometry();
-	THREE.SceneUtils.traverseHierarchy(arena.get(0), function(object3D){
+	//THREE.SceneUtils.traverseHierarchy(arena.get(0), function(object3D){
+	arena.get(0).traverse(function(object3D){
 		console.log('add', object3D, tGeometry);
 		if( object3D.geometry === undefined )	return;
 		if( object3D.material instanceof THREE.MeshFaceMaterial === false ){
 			console.log(object3D)	
-			object3D	= THREE.SceneUtils.cloneObject(object3D);
+			object3D	= object3D.clone();
 			console.log(object3D)
 			object3D.geometry.materials.push(object3D.material); 
 			object3D.geometry.materials.push(object3D.material); 
