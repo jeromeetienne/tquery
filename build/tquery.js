@@ -157,9 +157,9 @@ tQuery.now	= (function(){
 	var p			= window.performance	|| {};
 	if( p.now )		return function(){ return p.timing.navigationStart + p.now();		};
 	else if( p.mozNow )	return function(){ return p.timing.navigationStart + p.mozNow();	};
-	else if( p.webkitNow)	return function(){ return p.timing.navigationStart + p.webkitNow()	};
-	else if( p.mskitNow)	return function(){ return p.timing.navigationStart + p.msNow()		};
-	else if( p.okitNow)	return function(){ return p.timing.navigationStart + p.oNow()		};
+	else if( p.webkitNow )	return function(){ return p.timing.navigationStart + p.webkitNow()	};
+	else if( p.mskitNow )	return function(){ return p.timing.navigationStart + p.msNow()		};
+	else if( p.okitNow )	return function(){ return p.timing.navigationStart + p.oNow()		};
 	else			return function(){ return Date.now;					};	
 })();
 

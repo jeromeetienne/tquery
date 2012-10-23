@@ -88,7 +88,7 @@ tQuery.EffectComposer.prototype.vignette	= function(offset, darkness){
 	offset	= offset 	!== undefined ? offset	: 1.05;
 	darkness= darkness	!== undefined ? darkness: 1.5;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] );
+	var effect	= new THREE.ShaderPass( THREE.VignetteShader );
 	// setup the effect
 	effect.uniforms[ "offset"	].value	= offset;
 	effect.uniforms[ "darkness"	].value = darkness;
@@ -102,7 +102,7 @@ tQuery.EffectComposer.prototype.fxaa	= function(resolutionX, resolutionY){
 	resolutionX	= resolutionX 	!== undefined ? resolutionX	: 1;
 	resolutionY	= resolutionY 	!== undefined ? resolutionY	: 1;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
+	var effect	= new THREE.ShaderPass( THREE.FXAAShader );
 	// setup the effect
 	effect.uniforms[ "resolution"	].value.x	= resolutionX / window.innerWidth;
 	effect.uniforms[ "resolution"	].value.y	= resolutionX / window.innerHeight;
@@ -133,7 +133,7 @@ tQuery.EffectComposer.prototype.colorify	= function(color){
 	// handle parameters default values
 	color	= color	|| new THREE.Color(0xffdddd);
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "colorify" ] );
+	var effect	= new THREE.ShaderPass( THREE.ColorifyShader );
 	// setup the effect
 	effect.uniforms[ 'color' ].value.copy(color);
 	// add the effect
@@ -145,7 +145,7 @@ tQuery.EffectComposer.prototype.sepia	= function(amount){
 	// handle parameters default values
 	amount	= amount !== undefined ? amount	: 0.9;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "sepia" ] );
+	var effect	= new THREE.ShaderPass( THREE.SepiaShader );
 	// setup the effect
 	effect.uniforms[ "amount" ].value = amount;
 	// add the effect
@@ -157,7 +157,7 @@ tQuery.EffectComposer.prototype.bleachbypass	= function(opacity){
 	// handle parameters default values
 	opacity	= opacity !== undefined ? opacity	: 0.95;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "bleachbypass" ] );
+	var effect	= new THREE.ShaderPass( THREE.BleachBypassShader );
 	// setup the effect
 	effect.uniforms[ "opacity" ].value = opacity;
 	// add the effect
@@ -181,7 +181,7 @@ tQuery.EffectComposer.prototype.horizontalBlur	= function(h){
 	// handle parameters default values
 	h	= h !== undefined ? h	: 1.1;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "horizontalBlur" ] );
+	var effect	= new THREE.ShaderPass( THREE.HorizontalBlurShader );
 	// setup the effect
 	// TODO how to handle this renderer size thing
 	effect.uniforms[ 'h' ].value		= h / ( window.innerWidth/2 );
@@ -194,7 +194,7 @@ tQuery.EffectComposer.prototype.verticalBlur	= function(v){
 	// handle parameters default values
 	v	= v !== undefined ? v	: 1.1;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "verticalBlur" ] );
+	var effect	= new THREE.ShaderPass( THREE.VerticalBlurShader );
 	// setup the effect
 	// TODO how to handle this renderer size thing
 	effect.uniforms[ 'v' ].value	= v / ( window.innerHeight/2 );
@@ -214,7 +214,7 @@ tQuery.EffectComposer.prototype.motionBlur	= function(mixRatio){
 		stencilBuffer	: false
 	});
 	var effectSave	= new THREE.SavePass( renderTarget );
-	var effectBlend	= new THREE.ShaderPass( THREE.ShaderExtras["blend"], "tDiffuse1" );
+	var effectBlend	= new THREE.ShaderPass( THREE.BlendShader, "tDiffuse1" );
 	effectBlend.uniforms[ 'tDiffuse2' ].value	= effectSave.renderTarget;
 	effectBlend.uniforms[ 'mixRatio' ].value	= mixRatio;
 	this._tComposer.addPass( effectBlend );

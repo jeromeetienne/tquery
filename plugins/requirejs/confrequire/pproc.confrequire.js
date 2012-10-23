@@ -6,7 +6,17 @@ requirejs.config({
 	},
 	shim	: {
 		'plugins/pproc/tquery.effectcomposer'	: [
-			'three.js/ShaderExtras'			,
+			'three.js/shaders/BleachBypassShader'	,
+			'three.js/shaders/BlendShader'		,
+			'three.js/shaders/CopyShader'		,
+			'three.js/shaders/ColorifyShader'	,
+			'three.js/shaders/FilmShader'		,
+			'three.js/shaders/FXAAShader'		,
+			'three.js/shaders/HorizontalBlurShader'	,
+			'three.js/shaders/SepiaShader'		,
+			'three.js/shaders/VerticalBlurShader'	,
+			'three.js/shaders/VignetteShader'	,
+
 			'three.js/postprocessing/EffectComposer',
 			'three.js/postprocessing/BloomPass'	,
 			'three.js/postprocessing/DotScreenPass'	,
