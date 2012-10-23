@@ -11,7 +11,7 @@ require(['tquery.statsplus'], function(){
 	var cubeGeometry= new THREE.PlaneGeometry(1,1,1);
 	var tMesh	= new THREE.Mesh(cubeGeometry, new THREE.MeshBasicMaterial());
 	tMesh.position.x= -1;
-	THREE.GeometryUtils.merge( tGeometry, tMesh );
+	THREE.GeometryUtils.merge( tGeometry, tMesh.geometry );
 	// world.tScene().add(tMesh);
 
 	console.log('BUG ??? no geometry.materials. see how it happen in the merge of minecraft ao');

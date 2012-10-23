@@ -7,6 +7,13 @@
 	// create the planet
 	var planet	= tQuery.createPlanet('earthNormal').addTo(world);
 
+	tQuery.createAmbientLight().addTo(world).color(0xffffff);	
+	tQuery.createDirectionalLight().addTo(world).position(-1, 1, 1)
+		.intensity(2)
+		.color(0xff8888)
+	tQuery.createDirectionalLight().addTo(world).position(+1, -1, 1)
+		.intensity(1)
+		.color(0x8888ff)
 	// make the object rotate
 	world.loop().hook(function(delta, now){
 		var angle	= 0.05 * now * Math.PI * 2;
