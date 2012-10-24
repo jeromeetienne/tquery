@@ -4,6 +4,7 @@
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
 	// create the planet
 	var planet	= tQuery.createPlanet('earthNormal').addTo(world);
 

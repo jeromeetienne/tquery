@@ -36,6 +36,9 @@ looks like the code below... Quite short.
 
 #### Current
 
+#### Release - r52.0
+* ported to three.js r52
+
 #### Release - r51.0
 * ported to three.js r51
 * added tQuery.montainarena plugin - usefull for arena
