@@ -75,7 +75,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-6-25' pubdate>2012-6-25 19:19</time>
+			<time datetime='2012-9-23' pubdate>2012-9-23 18:39</time>
 		</footer>
 	</div>
 </div>
@@ -168,6 +168,19 @@
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
 													<div class="fixedFont">
+													tQuery.<b><a href="../symbols/tQuery.html#.now">now</a></b>
+													</div>
+													<div class="description">precise version of Date.now() -
+It provide submillisecond precision based on window.performance.now() when 
+available, fall back on Date.now()
+see http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
 													tQuery.<b><a href="../symbols/tQuery.html#.VERSION">VERSION</a></b>
 													</div>
 													<div class="description">The version of tQuery</div>
@@ -233,7 +246,7 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.extend">extend</a></b>(obj, base)
+													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.extend">extend</a></b>(obj, base, deep)
 													</div>
 													<div class="description">extend function.</div>
 												</td>
@@ -274,17 +287,6 @@
 										
 											<tr
 												 class='item6'
-											>
-												<td class="attributes">&lt;static&gt; &nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont">tQuery.<b><a href="../symbols/tQuery.html#.pluginsOn">pluginsOn</a></b>(object, dest)
-													</div>
-													<div class="description">for backward compatibility only</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item7'
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
@@ -400,6 +402,31 @@
 									
 										<br />
 										<i>Defined in: </i> <a href="../symbols/src/js_tquery.core.create.js.html">tquery.core.create.js</a>.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id=".now">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tQuery.</span><b>now</b>							
+								</div>
+								
+								<div class="description">
+									precise version of Date.now() -
+It provide submillisecond precision based on window.performance.now() when 
+available, fall back on Date.now()
+see http://updates.html5rocks.com/2012/05/requestAnimationFrame-API-now-with-sub-millisecond-precision
 									
 									
 									
@@ -607,7 +634,7 @@
 											
 											
 											
-											<span class="light">tQuery.</span><b>extend</b>(obj, base)
+											<span class="light">tQuery.</span><b>extend</b>(obj, base, deep)
 										</div>
 										
 										<div class="description">
@@ -634,6 +661,12 @@ similar to jquery one but much smaller
 												
 													<dt>
 														<b>base</b>
+														
+													</dt>
+													<dd></dd>
+												
+													<dt>
+														<b>deep</b>
 														
 													</dt>
 													<dd></dd>
@@ -762,52 +795,6 @@ similar to jquery one but much smaller
 								
 									<li 
 										 class='item6'
-									>
-										<div class="fixedFont heading" id=".pluginsOn">
-											<span class='lighter'>
-											&lt;static&gt; 
-											</span>
-											
-											
-											
-											<span class="light">tQuery.</span><b>pluginsOn</b>(object, dest)
-										</div>
-										
-										<div class="description">
-											for backward compatibility only
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
-												
-													<dt>
-														<b>object</b>
-														
-													</dt>
-													<dd></dd>
-												
-													<dt>
-														<b>dest</b>
-														
-													</dt>
-													<dd></dd>
-												
-											</dl>
-										
-										
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item7'
 									>
 										<div class="fixedFont heading" id=".removeData">
 											<span class='lighter'>
