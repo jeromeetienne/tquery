@@ -41,8 +41,8 @@ tQuery.registerStatic('LightSaber', function(opts){
 		map		: texture,
 		blending	: THREE.AdditiveBlending,
 		color		: 0xffaacc,
-		depthWrite	: false,
 		side		: THREE.DoubleSide,
+		depthWrite	: false,
 		transparent	: true
 	})
 	
