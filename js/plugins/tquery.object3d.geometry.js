@@ -23,19 +23,19 @@ tQuery.Object3D.registerInstance('position', function(vector3){
 });
 
 tQuery.Object3D.registerInstance('positionX', function(scalar){
-	if( scalar === undefined )	return object.get(0).position.x;
+	if( scalar === undefined )	return this.get(0).position.x;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.position.x = scalar;	});
 	return this;
 });
 tQuery.Object3D.registerInstance('positionY', function(scalar){
-	if( scalar === undefined )	return object.get(0).position.y;
+	if( scalar === undefined )	return this.get(0).position.y;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.position.y = scalar;	});
 	return this;
 });
 tQuery.Object3D.registerInstance('positionZ', function(scalar){
-	if( scalar === undefined )	return object.get(0).position.z;
+	if( scalar === undefined )	return this.get(0).position.z;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.position.z = scalar;	});
 	return this;
@@ -84,19 +84,19 @@ tQuery.Object3D.registerInstance('rotation', function(vector3){
 });
 
 tQuery.Object3D.registerInstance('rotationX', function(scalar){
-	if( scalar === undefined )	return object.get(0).rotation.x;
+	if( scalar === undefined )	return this.get(0).rotation.x;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.rotation.x = scalar;	});
 	return this;
 });
 tQuery.Object3D.registerInstance('rotationY', function(scalar){
-	if( scalar === undefined )	return object.get(0).rotation.y;
+	if( scalar === undefined )	return this.get(0).rotation.y;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.rotation.y = scalar;	});
 	return this;
 });
 tQuery.Object3D.registerInstance('rotationZ', function(scalar){
-	if( scalar === undefined )	return object.get(0).rotation.z;
+	if( scalar === undefined )	return this.get(0).rotation.z;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.rotation.z = scalar;	});
 	return this;
@@ -147,19 +147,19 @@ tQuery.Object3D.registerInstance('scale', function(vector3){
 });
 
 tQuery.Object3D.registerInstance('scaleX', function(scalar){
-	if( scalar === undefined )	return object.get(0).scale.x;
+	if( scalar === undefined )	return this.get(0).scale.x;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.scale.x = scalar;	});
 	return this;
 });
 tQuery.Object3D.registerInstance('scaleY', function(scalar){
-	if( scalar === undefined )	return object.get(0).scale.y;
+	if( scalar === undefined )	return this.get(0).scale.y;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.scale.y = scalar;	});
 	return this;
 });
 tQuery.Object3D.registerInstance('scaleZ', function(scalar){
-	if( scalar === undefined )	return object.get(0).scale.z;
+	if( scalar === undefined )	return this.get(0).scale.z;
 	console.assert(typeof scalar === "number" && arguments.length === 1);
 	this.each(function(object3d){ object3d.scale.z = scalar;	});
 	return this;
