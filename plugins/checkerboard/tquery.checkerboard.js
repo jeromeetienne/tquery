@@ -11,6 +11,9 @@ tQuery.registerStatic('createCheckerboard', function(opts){
 		materialEven	: new THREE.MeshBasicMaterial({ color: 0xcccccc }),
 		materialOdd	: new THREE.MeshBasicMaterial({ color: 0x444444 })
 	});
+	// handle polymorphism
+	if( opts.materialEven instanceof tQuery.Material )	opts.materialEven= opts.materialEven.get(0)
+	if( opts.materialOdd instanceof tQuery.Material )	opts.materialOdd = opts.materialOdd.get(0)
 	// create the geometry	
 	var geometry		= new THREE.PlaneGeometry( opts.width, opts.height, opts.segmentsW, opts.segmentsH );
 	// set materials per faces
