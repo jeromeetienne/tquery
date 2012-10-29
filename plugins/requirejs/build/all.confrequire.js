@@ -118,6 +118,7 @@ requirejs.config({
 			"three.js/shaders/BlendShader",
 			"three.js/shaders/CopyShader",
 			"three.js/shaders/ColorifyShader",
+			"three.js/shaders/ConvolutionShader",
 			"three.js/shaders/FilmShader",
 			"three.js/shaders/FXAAShader",
 			"three.js/shaders/HorizontalBlurShader",

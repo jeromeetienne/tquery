@@ -1,0 +1,24 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<body><script>
+	var url	= 'models/appart_hiphop/heightmap134.raw';
+	loadBinary(url, function(response, xhr){
+		console.log(heightmap)
+	});	
+	
+	
+	function loadBinary(url, onSuccess){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange	= function(){
+			if( xhr.readyState == 4 ){
+				if( xhr.status == 200 || xhr.status == 0 ){
+					onSuccess(xhr.response, xhr)
+				}else{
+					console.error("Couldn't load [" + url + "] status: [" + xhr.status + "]");
+				}
+			}
+		};
+		xhr.open( "GET", url, true );
+		xhr.responseType	= "arraybuffer";
+		xhr.send( null );
+	}
+</script></body>

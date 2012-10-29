@@ -37526,6 +37526,11 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 	intensity	: tQuery.convert.toNumber,
 	distance	: tQuery.convert.toNumber,
 
+	angle		: tQuery.convert.toNumber,
+	exponent	: tQuery.convert.toNumber,
+
+	onlyShadow	: tQuery.convert.toBoolean,
+
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
 	shadowBias		: tQuery.convert.toNumber,
 	shadowMapWidth		: tQuery.convert.toInteger,
@@ -38851,6 +38856,7 @@ requirejs.config({
 			"three.js/shaders/BlendShader",
 			"three.js/shaders/CopyShader",
 			"three.js/shaders/ColorifyShader",
+			"three.js/shaders/ConvolutionShader",
 			"three.js/shaders/FilmShader",
 			"three.js/shaders/FXAAShader",
 			"three.js/shaders/HorizontalBlurShader",

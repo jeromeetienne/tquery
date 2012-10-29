@@ -35,6 +35,11 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 	intensity	: tQuery.convert.toNumber,
 	distance	: tQuery.convert.toNumber,
 
+	angle		: tQuery.convert.toNumber,
+	exponent	: tQuery.convert.toNumber,
+
+	onlyShadow	: tQuery.convert.toBoolean,
+
 	shadowDarkness		: tQuery.convert.toNumberZeroToOne,
 	shadowBias		: tQuery.convert.toNumber,
 	shadowMapWidth		: tQuery.convert.toInteger,

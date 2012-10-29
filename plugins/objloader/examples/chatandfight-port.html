@@ -1,0 +1,492 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+
+<script src="../../ogsworkshop/vendor/webaudio-bundle.js"></script>
+
+<script src="../vendor/MTLLoader.js">	</script>
+<script src="../vendor/OBJMTLLoader.js"></script>
+
+<script>
+(function(){
+	var onLocalhost	= window.location.hostname === 'localhost' ||  window.location.hostname === '127.0.0.1';
+	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://simplemmoserver.jit.su:80/';
+
+	var script	= document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+	script.src	= serverUrl+'socket.io/socket.io.js';
+	var tmp		= document.getElementsByTagName('script')[0]; tmp.parentNode.insertBefore(script, tmp);
+
+	var script	= document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+	script.src	= serverUrl+'examples/client.js';
+	var tmp		= document.getElementsByTagName('script')[0]; tmp.parentNode.insertBefore(script, tmp);
+})();	
+</script>
+
+<body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1; text-align: right;">
+	<form action="javascript:void(0)" id='chatInputForm'>
+		<input size=100 type="text" placeholder='Chat here'/>
+	</form>
+	<form action="javascript:void(0)" id='nicknameForm' style='display: inline-block'>
+		<input type="text"/>
+	</form>
+	<span style='font-size: 50%; font-weight: bolder;'>IN</span>
+	<form action="javascript:void(0)" id='roomNameForm' style='display: inline-block'>
+		<input type="text"/>
+	</form>
+	<span style='font-size: 50%; font-weight: bolder;'>AS</span>
+	<select id="skinSelect">
+		<option value="char.png">char</option>
+		<option value="3djesus.png">3djesus</option>
+		<option value="agentsmith.png">agentsmith</option>
+		<option value="batman.png">batman</option>
+		<option value="god.png">god</option>
+		<option value="Joker.png">Joker</option>
+		<option value="Mario.png">Mario</option>
+		<option value="martialartist.png">martialartist</option>
+		<option value="robocop.png">robocop</option>
+		<option value="Sonicthehedgehog.png">Sonic the hedgehog</option>
+		<option value="Spiderman.png">Spiderman</option>
+		<option value="Superman.png">Superman</option>
+		<option value="theflash.png">theflash</option>
+		<option value="woody.png">woody</option>
+		<option value="Iron-Man-Minecraft-Skin.png">ironman</option>
+	</select>
+</div><script>
+require([
+	'tquery.pproc', 'tquery.skymap', 'tquery.fog'
+	, 'tquery.keyboard', 'tquery.lensflare'
+	, 'tquery.grassground', 'tquery.simplemaze'
+	, 'tquery.light', 'tquery.minecraft'
+	, 'tquery.montainarena'
+	, 'tquery.text'], function(){
+	var world	= tQuery.createWorld().boilerplate({
+		fullscreen	: false,
+		screenshot	: false
+	}).start();
+
+	// enable shaddow in the renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+
+	// determine room
+	window.location.hash	= window.location.hash	|| 'Public';
+	var roomName	= window.location.hash.slice(1);
+			
+	// enable sound
+	var sounds	= {};
+	if( WebAudio.isAvailable ){
+		world.enableWebAudio();
+		sounds.chatReceived	= tQuery.createSound().load('../../ogsworkshop/sounds/checkpoint.wav');
+		sounds.skinChange	= tQuery.createSound().load('../../ogsworkshop/sounds/eatpill.mp3');
+		sounds.nickChange	= tQuery.createSound().load('../../ogsworkshop/sounds/gearwhine.wav');
+		sounds.userJoin		= tQuery.createSound().load('../../ogsworkshop/sounds/gearwhine.wav');
+		sounds.userLeft		= tQuery.createSound().load('../../ogsworkshop/sounds/gearwhine.wav');
+	}
+
+	// add post processing
+	if( true ){
+		world.addEffectComposer()
+			// .sepia()
+			// .film(0.5, 0.25, 648, false)
+			.vignette()
+			.finish();		
+	}
+	
+	// add obj world
+	if( true ){
+		var urlObj	= 'models/appart_hiphop/world134_1.obj';
+		var urlMtl	= 'models/appart_hiphop/world134_1.mtl';
+		var loader	= new THREE.OBJMTLLoader();
+		loader.load(urlObj, urlMtl);
+		loader.addEventListener('load', function(event){
+			tQuery(event.content).addTo(world)
+				.position(-16, -8, 4)
+		});		
+	}
+
+
+	// add a skybox
+	var textureCube	= tQuery.createCubeTexture('skybox')
+	if( true ){
+		tQuery.createSkymap({
+			textureCube	: textureCube
+		}).addTo(world);		
+	}
+
+	// create the text for the room
+	if( true ){
+		var text	= tQuery.createText(roomName, {
+			bevelThickness	: 0.1,
+			bevelSize	: 0.03,
+			bevelEnabled	: true,
+		}).addTo(world).scaleBy(1/3).translateY(1.5)
+			.setLambertMaterial({
+				ambient	: 0x444444,
+				color	: 0x888888,
+				envMap	: textureCube
+			}).back()
+			.castShadow(true)
+		world.loop().hook(function(delta, now){
+			text.rotateY(0.05 * delta * Math.PI * 2)
+		})
+	}
+
+	// initiate a spritesheet
+	var items	= new tQuery.Spritesheet({
+		url	: '../../minecraft/examples/images/items/items.png',
+		imgW	: 256,
+		imgH	: 256,
+		spriteW	: 16,
+		spriteH	: 16
+	});
+
+	// create ground
+	if( false ){
+		var ground	= tQuery.createGrassGround({
+			textureRepeatX	: 20,
+			textureRepeatY	: 20,
+		}).addTo(world)
+			.receiveShadow(true)
+			.scale(40)
+
+		tQuery.MontainArena.createBasicArena().addTo(world)
+			.scale(40)
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//		lights							//
+	//////////////////////////////////////////////////////////////////////////
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444);
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,-1).color(0xffffff).intensity(1);
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.color(0xffffff).intensity(1)
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 10)
+		//.shadowCameraVisible(true)
+	// for light to follow character
+	world.loop().hook(function(){
+		if( !players[mySourceId] )	return;
+		var player	= players[mySourceId];
+		var model	= player.character.object3D('root');
+		light.get(0).target.position.copy(model.position());
+		var delta	= tQuery.createVector3(-1,2,3);
+		var position	= model.position().clone().addSelf(delta);
+		light.position(position)
+	});
+
+	//////////////////////////////////////////////////////////////////////////
+	//		network							//
+	//////////////////////////////////////////////////////////////////////////
+	// init the gameServer
+	var mySourceId	= null;
+	var players	= {};
+
+
+	// initiate connect with server
+	var onLocalhost	= window.location.hostname === 'localhost'
+        			||  window.location.hostname === '127.0.0.1';
+	var serverUrl	= onLocalhost ? 'http://localhost:4000/' : 'http://simplemmoserver.jit.su:80';
+	var userInfo	= {
+		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
+		skinBasename	: 'char.png',
+	};
+	var gameServer	= new SimpleMMOServer(roomName, userInfo, serverUrl);
+
+	gameServer.addEventListener('roomJoined', function(sourceId, usersInfo){
+		console.log('roomJoined', sourceId, usersInfo, gameServer.usersInfo())
+
+		createMyPlayer(sourceId, gameServer.userInfo())
+
+		Object.keys(usersInfo).forEach(function(sourceId){
+			if( sourceId === mySourceId )	return;
+			var userInfo	= usersInfo[sourceId];
+			createPlayer(sourceId, userInfo)
+		});
+	});
+
+	gameServer.addEventListener('userJoin', function(data){
+		console.log('userJoin', arguments)
+		createPlayer(data.sourceId, data.userInfo);
+	});
+
+	gameServer.addEventListener('userLeft', function(data){
+		console.log('userLeft', data)
+		destroyPlayer(data.sourceId);
+	});
+
+	gameServer.addEventListener('userInfo', function(sourceId, curUserInfo, oldUserInfo){
+		console.log('userInfo', arguments)
+		updatePlayer(sourceId, curUserInfo, oldUserInfo)
+	});
+
+	gameServer.addEventListener('clientEcho', function(data){
+		console.assert( players[data.sourceId] );
+		if( data.message.type === 'positionChange' ){
+			if( data.sourceId === mySourceId )	return;
+			var player	= players[data.sourceId];
+			var mesh	= player.character.object3D('root')
+			mesh.positionX( data.message.position.x )
+			mesh.positionY( data.message.position.y )
+			mesh.positionZ( data.message.position.z )
+			mesh.rotationX( data.message.rotation.x )
+			mesh.rotationY( data.message.rotation.y )
+			mesh.rotationZ( data.message.rotation.z )
+		}else if( data.message.type === 'chatText' ){
+			var player	= players[data.sourceId];
+			var mesh	= player.character.object3D('root')
+			var character	= player.character;
+			// remove previous message if any
+			tQuery('.chatMessage', mesh).detach()
+			// add text
+			var text	= tQuery.createSprite().addTo(mesh)
+				.translateY(1.4).scaleBy(1/200)
+				.addClass('chatMessage')
+				.map(buildChatBubble(data.message.text))
+			// remove the text after a while
+			setTimeout(function(){ text.detach();	}, 10*1000);
+		}else{
+			console.log('unknown echo message.type', message.type)
+		}
+	});
+
+	setInterval(function(){
+		Object.keys(players).forEach(function(sourceId){
+			var player	= players[sourceId];
+			var mesh	= player.character.object3D('root')
+			var velocity	= mesh.position().clone().subSelf(player.prevPosition);
+			if( velocity.length() ){
+				player.bodyAnims.start('run');
+			}else{
+				player.bodyAnims.start('stand');
+			}
+			// update player.prevPosition/player.prevRotation
+			player.prevPosition.copy( mesh.position() )
+			player.prevRotation.copy( mesh.rotation() )
+		})
+	}, 1000/5);	// Important to be less than framerate - thus you dont misdetect still 
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		UI							//
+	//////////////////////////////////////////////////////////////////////////
+
+
+	document.body.setAttribute("tabIndex", "0");	// make body focusable
+
+	// handle roomNameForm
+	var roomNameForm	= document.getElementById('roomNameForm')
+	roomNameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+	roomNameForm[0].value	= roomName;
+	roomNameForm.addEventListener('submit', function(){
+		window.location.hash	= roomNameForm[0].value;
+		window.location.reload();
+	});
+
+	// handle nicknameForm
+	var nicknameForm	= document.getElementById('nicknameForm')
+	nicknameForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+	nicknameForm[0].value	= gameServer.userInfo().nickName;
+	nicknameForm.addEventListener('submit', function(){
+		var myUserInfo		= gameServer.userInfo();
+		// update myUserInfo
+		myUserInfo.nickName	= nicknameForm[0].value;
+		// notify the server
+		gameServer.userInfo(myUserInfo);
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	// handle skinSelection
+	var skinSelectEl	= document.getElementById('skinSelect')
+	skinSelectEl.addEventListener('change', function(){
+		var myUserInfo		= gameServer.userInfo();
+		// update myUserInfo
+		myUserInfo.skinBasename	= skinSelectEl.value;
+		// notify the server
+		gameServer.userInfo(myUserInfo);
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	// handle chatInputForm
+	var chatInputForm	= document.getElementById('chatInputForm')
+	chatInputForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+	chatInputForm.addEventListener('change', function(){
+		// send chat input to the server
+		gameServer.clientEcho({
+			type	: 'chatText',
+			text	: chatInputForm[0].value
+		});
+		// zero the chat input
+		chatInputForm[0].value	= null;
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//									//
+	//////////////////////////////////////////////////////////////////////////
+
+	function createMyPlayer(sourceId, userInfo){
+		console.assert(mySourceId === null)
+		mySourceId	= sourceId;
+
+		createPlayer(mySourceId, userInfo)
+
+		var character	= players[mySourceId].character;
+		// to enable a tracking camera
+		var cameraControls	= tQuery.createCameraFpsControls({
+			trackedObject	: character.object3D('root').get(0),
+			tCamera		: world.tCamera(),
+		});
+		world.setCameraControls(cameraControls)
+		//cameraControls.deltaCamera().position(0, 0.7, -0.07)
+
+		//////////////////////////////////////////////////////////////////////////
+		// user controls on keyboard						//
+		//////////////////////////////////////////////////////////////////////////
+		tQuery.createMinecraftCharKeyboard2({
+			object3D	: character.object3D('root').get(0),
+			lateralMove	: 'rotationY',
+			//lateralMove	: 'strafe'
+		});
+		
+		world.loop().hook(function(){
+			var mesh	= character.object3D('root');
+			var position	= mesh.position();
+			var maxLength	= 16;
+			if( position.length() > maxLength ){
+				position.setLength(maxLength)				
+			}
+		});
+
+		// periodically send the position of the character
+		// - NOTE: not done on requestAnimationFrame as it has to be done even if page isnt visible
+		setInterval(function(){
+			var mesh	= character.object3D('root');
+			var position	= mesh.position();
+			var rotation	= mesh.rotation();
+			gameServer.clientEcho({
+				type	: 'positionChange',
+				position: { x : position.x, y : position.y, z : position.z },
+				rotation: { x : rotation.x, y : rotation.y, z : rotation.z },
+			});
+		}, 1000/60);
+	}
+
+	function createPlayer(sourceId, userInfo){
+		console.assert(players[sourceId] === undefined);
+		players[sourceId]	= {}
+		// create the minecraft character
+		var skinUrl	= '../../minecraft/examples/images/'+userInfo.skinBasename;
+		var character	= tQuery.createMinecraftChar({
+			skinUrl	: skinUrl
+		}).addTo(world);
+		tQuery('mesh', character.object3D('root'))
+			//.receiveShadow(true)
+			.castShadow(true)
+		// store it
+		players[sourceId].character	= character;
+		// add a nickname cartouche
+		tQuery.createSprite().addTo(character.object3D('root'))	.addClass('cartouche')
+			.scaleBy(1/200).positionY(1.1)
+			.map(buildNickCartouche(userInfo.nickName))
+		// add a sword to his arm
+// TODO Make it such as it work even if texture nore loaded ?
+		// var sword	= items.createMesh(2, 4)
+		// 	.addTo(character.parts.armR)
+		// 	.scaleBy(1/2)
+		// 	.position(0,-10/35,8/35)
+		// 	.rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+		// 	.castShadow(true)
+
+		// init bodyAnims
+		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+		bodyAnims.start('run');
+		players[sourceId].bodyAnims	= bodyAnims;
+		// init headAnims
+		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
+		headAnims.start('still');
+		players[sourceId].headAnims	= headAnims;
+		// init prevPosition/prevRotation to estimate velocity later
+		players[sourceId].prevPosition	= tQuery.createVector3()
+		players[sourceId].prevRotation	= tQuery.createVector3()
+	}
+	function destroyPlayer(sourceId){
+		var player	= players[sourceId];
+		player.character.removeFrom(world)
+		player.bodyAnims.stop()
+		delete players[sourceId]		
+	}
+	function updatePlayer(sourceId, curUserInfo, oldUserInfo){
+		console.assert(players[sourceId] !== undefined);
+		var otherInfo	= players[sourceId];
+		var character	= otherInfo.character;
+		// update the skin if needed
+		if( !oldUserInfo || curUserInfo.skinBasename !== oldUserInfo.skinBasename ){
+			var skinUrl	= '../../minecraft/examples/images/'+curUserInfo.skinBasename;
+			character.loadSkin(skinUrl)
+			sounds.skinChange	&& sounds.skinChange.play()
+		}
+		// update the nickname cartouche if needed
+		if( !oldUserInfo || curUserInfo.nickName !== oldUserInfo.nickName ){		
+			var texture	= tQuery('.cartouche', character.object3D('root')).get(0).map;
+			texture.image	= buildNickCartouche(curUserInfo.nickName)
+			texture.needsUpdate	= true;
+			sounds.nickChange	&& sounds.nickChange.play()
+		}
+	}
+
+	function buildChatBubble(text){
+		// create the canvas
+		var canvas	= document.createElement("canvas");
+		var context	= canvas.getContext("2d");
+		canvas.width	= 1024;
+		canvas.height	= 512;
+		// center the origin
+		context.translate( canvas.width/2, canvas.height/2 );
+		// measure text
+		var fontSize	= 24;
+		context.font	= "bolder "+fontSize+"px Verdana";
+		var fontH	= fontSize;
+		var fontW	= context.measureText(text).width;
+		// build the background
+		context.fillStyle = "rgba(255,255,255,0.5)";
+		var scale	= 1.2;
+		context.fillRect(-fontW*scale/2,-fontH*scale/1.3,fontW*scale,fontH*scale)
+		// display the text
+		context.fillStyle = "rgba(0,0,0,0.9)";
+		context.fillText(text, -fontW/2, 0);
+		// return the canvas element
+		return canvas;
+	}
+	function buildNickCartouche(text){
+		// create the canvas
+		var canvas	= document.createElement("canvas");
+		var context	= canvas.getContext("2d");
+		canvas.width	= 256;
+		canvas.height	= 128;
+		// center the origin
+		context.translate( canvas.width/2, canvas.height/2 );
+		// measure text
+		var fontSize	= 36;
+		context.font	= "bolder "+fontSize+"px Verdana";
+		var fontH	= fontSize;
+		var fontW	= context.measureText(text).width;
+		// build the background
+		context.fillStyle = "rgba(0,0,255,0.5)";
+		var scale	= 1.2;
+		context.fillRect(-fontW*scale/2,-fontH*scale/1.3,fontW*scale,fontH*scale)
+		// display the text
+		context.fillStyle = "rgba(0,0,0,0.9)";
+		context.fillText(text, -fontW/2, 0);
+		// return the canvas element
+		return canvas;
+	}
+})
+</script></body>

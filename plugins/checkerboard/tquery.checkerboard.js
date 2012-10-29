@@ -13,7 +13,7 @@ tQuery.registerStatic('createCheckerboard', function(opts){
 	});
 	// handle polymorphism
 	if( opts.materialEven instanceof tQuery.Material )	opts.materialEven= opts.materialEven.get(0)
-	if( opts.materialOdd instanceof tQuery.Material )	opts.materialOdd = opts.materialOdd.get(0)
+	if( opts.materialOdd  instanceof tQuery.Material )	opts.materialOdd = opts.materialOdd.get(0)
 	// create the geometry	
 	var geometry		= new THREE.PlaneGeometry( opts.width, opts.height, opts.segmentsW, opts.segmentsH );
 	// set materials per faces

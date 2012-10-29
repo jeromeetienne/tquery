@@ -1,0 +1,66 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+
+<script src="../vendor/MTLLoader.js">	</script>
+<script src="../vendor/OBJMTLLoader.js"></script>
+		
+<body><script>
+require(['tquery.pproc', 'tquery.minecraft'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	//var object	= tQuery.createTorus().addTo(world);
+
+
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../minecraft/examples/images/agentsmith.png'
+	}).addTo(world);
+
+	world.addEffectComposer()
+		//.bloom(0.9)
+		//.sepia()
+		//.motionBlur(0.6)
+		//.film(0.5, 0.25, 648, false)
+		.vignette()
+		//.screen()
+		.finish();
+		
+	// setup some lights
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xffffff)
+		.position(-1,1,1)
+		.intensity(0.4)
+	// tQuery.createDirectionalLight().addTo(world)
+	// 	.color(0xffffff)
+	// 	.position( 1,1,1)
+	
+
+	character.object3D('root').rotateY(-Math.PI/8)
+		.translateX(2).translateZ(1.5)
+	world.loop().hook(function(delta, now){
+		character.object3D('root').rotateY(delta * Math.PI * 2 * 0.1)
+	})
+
+	var spotLight	= tQuery.createSpotLight().addTo(character.object3D('root'))
+		.distance(10)
+		.angle(Math.PI/3).exponent(5)
+		.color( 0xffffff )
+		.position(0,1,0)
+		.intensity(10)
+	// TODO find a better way to get target
+	spotLight.get(0).target.position.set( 0, 0, 3 );
+
+
+	// set the url of the model to load
+	var urlObj	= 'models/appart_hiphop/world134_1.obj';
+	var urlMtl	= 'models/appart_hiphop/world134_1.mtl';
+
+	// load the model
+	var loader	= new THREE.OBJMTLLoader();
+	loader.load(urlObj, urlMtl);
+	loader.addEventListener('load', function(event){
+		tQuery(event.content).addTo(world)
+			.position(-16, -8, 4)
+	});
+});
+</script></body>
