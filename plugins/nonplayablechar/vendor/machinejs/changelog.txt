@@ -1,0 +1,9 @@
+[2011-08-22: v1.1]
+
+[ADDED] warp() function that allows behaviour tree to be brute-forced into a specified state.
+Use sparingly.
+
+[CHANGED] Machine.generateTree() has a new optional (but recommended) "states" parameter.  If an argument is passed for this parameter, it should be an object that contains action and can functions for each state.  If such an object is not passed, these functions are assumed to be on the actor itself, as in prior versions.  Thank you to Brett Fattori and Max Williams for suggesting this functionality, and to Brett for implementing it.
+
+
+[2011-05-26: v1.0]

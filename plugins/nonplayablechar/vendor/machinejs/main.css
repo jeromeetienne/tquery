@@ -1,0 +1,22 @@
+body {
+	font-family:verdana, Helvetica;
+	font-size:11px;
+    width: 500px;
+    margin-left:auto;
+    margin-right:auto;
+    text-align: justify;
+}
+
+a { color:black; }
+a:visited { color:black; }
+
+h1 { font-size: 30px; font-weight:normal; margin-top:0; margin-left:-2px; padding:0; display:inline; }
+h2 { font-size: 20px; font-weight:normal; margin:0; margin-top:16px; margin-bottom:2px; }
+h3 { font-size: 16px; font-weight:normal;  }
+h4 { font-size: 13px; font-weight:normal;  }
+
+hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
+
+.footer { width:100px; margin-left: auto; margin-right: auto; }
+
+div.gist { padding: 8px 0 0 0; margin-bottom:18px; }

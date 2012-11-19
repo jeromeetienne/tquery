@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Machine.js</title>
+
+    <script type="text/javascript" src="base.js"></script>
+    <script type="text/javascript" src="machine.js"></script>
+    <script type="text/javascript" src="demo.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="shortcut icon" type="image/x-png" href="favicon.png" />
+
+    <script type="text/javascript">
+      // the json that defines the trees that control the actors
+      var oakJson = {
+          identifier: "idle", strategy: "prioritised",
+          children: [
+              {
+                  identifier: "photosynthesise", strategy: "sequential",
+                  children: [
+                      { identifier: "makeEnergy" },
+                      { identifier: "grow" },
+                      { identifier: "emitOxygen" },
+                  ]
+              },
+              { identifier: "gatherSun" },
+              { identifier: "gatherWater" },
+          ]
+      };
+
+      var landscapeJson = {
+          identifier: "idle", strategy: "sequential",
+          children: [
+              { identifier: "shine" },
+              { identifier: "rain" },
+          ]
+      };
+
+      // set up the actors
+      var landscape = new Landscape(); // one actor
+      var oak = new Oak(landscape); // the other actor in this drama
+
+      // make instance of Machine and get the root nodes for each actor
+      var machine = new Machine();
+      oak.state = machine.generateTree(oakJson, oak, Oak.states);
+      landscape.state = machine.generateTree(landscapeJson, landscape, Landscape.states);
+
+      // every second, something happens in the ecosystem
+      setTimeout("step()", 1000);
+      var step = function() {
+          // trigger the next state transitions
+          oak.state = oak.state.tick();
+          landscape.state = landscape.state.tick();
+
+          console.log("Oak:       ", oak.state.identifier, "|", oak.height, "m tall |", oak.water, "water |", oak.sun, "sun");
+          console.log("Landscape: ", landscape.state.identifier, "|", landscape.groundwater, "groundwater");
+          console.log("")
+
+          setTimeout("step()", 1000);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Machine.js</h1>
+    &nbsp;by <a href='http://maryrosecook.com'>mary rose cook</a><br/>
+    Make behaviour trees in JavaScript<br/>
+    v1.1 <a href="/changelog.txt">changelog</a><br/>
+
+    <h2>What is this library?</h2>
+    <p>
+      Machine.js lets you use a hierarchical state machine to control a JavaScript object.
+    </p>
+
+    <p>
+      1. Define a behaviour tree as JSON.
+    </p>
+
+    <pre><code>{
+    identifier: "idle", strategy: "prioritised",
+    children: [
+        {
+            identifier: "photosynthesise", strategy: "sequential",
+            children: [
+                { identifier: "makeEnergy" },
+                { identifier: "grow" },
+                { identifier: "emitOxygen" },
+            ]
+        },
+        { identifier: "gatherSun" },
+        { identifier: "gatherWater" },
+    ]
+};    </code></pre>
+
+    <p>
+      2. For each leaf state, define a function that enacts the behaviour for that state.
+      So, for the <code>gatherSun</code> state, define a function that gathers sun.
+    </p>
+
+    <p>
+      3. For each state, define a can function that returns true if the
+      actor may move to that state.  So, for the <code>gatherSun</code> state,
+      define a function <code>canGatherSun</code> that returns true if the sun is out.
+    </p>
+
+    <h2>Licence</h2>
+
+    <p>
+      The <a href='http://github.com/maryrosecook/machinejs'>code</a> is open source, under the MIT licence.
+      It uses <a href='http://dean.edwards.name/weblog/2006/03/base/'>Base.js</a> by Dean Edwards.
+    </p>
+
+    <h2>Demo</h2>
+    <p>
+      A tiny ecosystem is living right now in your browser debug console.  Rain falls, the sun shines.
+      An oak tree absorbs water and sunlight, makes energy and grows.
+      Open your console and see.  View source to see the code.
+    </p>
+
+    <h2>Tutorial</h2>
+
+    <h3>1. A primer on behaviour trees</h3>
+
+    <p>
+      A behaviour tree is a normal state machine, except the states are connected in
+      a hierarchical structure.  At fork states, the actor controlled by the tree does
+      nothing.  A fork state simply leads into one of a set of subsequent states (its
+      children).  At leaf states - states with no children - action is taken by the actor.
+    </p>
+
+    <p>
+      Movement from state to state is controlled by two mechanisms: strategies
+      and can functions.
+      Each fork state has a strategy that determines which child state to move to.
+      Each state has a can function that returns true if the actor is allowed to move to
+      that state.
+    </p>
+
+    <h3>2. Import libraries</h3>
+    <p>
+      You will need to import machine.js and base.js.  If you are running your behaviour tree in
+      a web page, you might do that like this:
+
+      <script src="https://gist.github.com/991347.js?file=import.js"></script>
+    </p>
+
+    <h3>3. Define an actor</h3>
+    <p>
+      This is the object that will be controlled by the behaviour tree.
+      Any normal JavaScript object will do.
+    </p>
+
+    <script src="https://gist.github.com/991347.js?file=landscape.js"></script>
+
+    <h3>4. Write a behaviour tree</h3>
+
+    <p>
+      Write some JSON that defines your actor's behaviour tree.
+    </p>
+
+    <script src="https://gist.github.com/991347.js?file=landscapebehaviour.js"></script>
+
+    <h3>5. Define can and action functions</h3>
+    <p>
+      For each leaf state in your behaviour tree, define a synonymous function.
+      This will be run once when the actor moves to the corresponding state.  For each state
+      (leaf or fork),
+      also define a function called <code>canNameOfState</code>.  This should return true if
+      the actor is allowed to move to the corresponding state.
+    </p>
+
+    <p>
+      For example, if your leaf state is called <code>kiss</code>, you would define a
+      function
+      called <code>kiss</code> that does the kissing, and a function called
+      <code>canKiss</code>
+      that returns true if kissing is allowed.  Put all these functions into an object:
+    </p>
+
+    <script src="https://gist.github.com/991347.js?file=landscapestates.js"></script>
+
+    <h3>6. Put it all together</h3>
+    <p>
+      Instantiate your actor.  Make an instance of Machine.  Use the instance of machine
+      to generate a behaviour tree, passing in the tree JSON, your actor and the object with all the state functions.  Repeatedly
+      call <code>tick()</code> on the current state to get the next state.
+    </p>
+
+    <script src="https://gist.github.com/991347.js?file=alltogether.js"></script>
+
+    <h2>Reference</h2>
+
+    <h3>Syntax of the JSON</h3>
+    <p>
+      States are defined as JSON hashes.  All must have an <code>identifier</code>
+      property that is
+      set to the name of the state.  Fork states also have a <code>strategy</code>
+      property and a <code>children</code>
+      property that is set to a list of subsequent states.
+    </p>
+
+    <h3>Can functions</h3>
+    <p>
+      Each state in the machine has a corresponding can function
+      called <code>canNameOfState</code>.
+      This returns true if the actor can move to this state.  You can omit
+      this function if the state is always permissable.
+    </p>
+
+    <h3>Strategies</h3>
+    <p>
+      Fork states are those that have children.  A fork state has a strategy
+      assigned to it that determines which state the machine should subsequently move
+      to.  Machine.js supports two strategies:
+    </p>
+
+    <h4>Prioritised</h4>
+
+    <p>
+      Call the can function of the first child.  If it
+      returns true, move to that child state.  If it does not, try the
+      next child, and so on.  Once a child has been run, or the final
+      child has been tested and returns false, go back to the parent fork state.
+    </p>
+
+    <h4>Sequential</h4>
+
+    <p>
+      Go through all the child states, executing each one
+      for which the corresponding can function returns true.  Once all
+      the children have been processed, move back to the parent fork state.
+    </p>
+
+    <h3>Warping</h3>
+    <p>
+      Sometimes, you want the actor being controlled by the behaviour tree
+      to respond to events.  For example, the player might give a soldier
+      orders to return to base.
+    </p>
+    <p>
+      You can do this with <code>warp()</code>.  First, define your
+      behaviour tree so that it has a special return to base branch that
+      is a direct descendent of the root node:
+    </p>
+
+    <script src="https://gist.github.com/991347.js?file=warpbehaviourtree.js"></script>
+
+    <p>
+      Next, define a function on the actor that can be called to invoke the
+      return to base order.
+      In it, instead of using the <code>tick()</code> function to get the next
+      state, you use <code>warp()</code> and pass in the identifier of the
+      return to base state:
+    </p>
+
+    <script src="https://gist.github.com/991347.js?file=warpusage.js"></script>
+
+    <p>
+      A word of warning.  The <code>warp()</code> function is a violation
+      of the deterministic beauty of a behaviour tree.  Use it sparingly.
+    </p>
+
+    <br/>
+    <hr/>
+    <div class="footer">
+      <a href="http://maryrosecook.com">maryrosecook.com</a>
+    </div>
+   </body>
+ </html>
