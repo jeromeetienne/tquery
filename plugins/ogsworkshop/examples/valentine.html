@@ -1,0 +1,45 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.shape', 'tquery.text', 'tquery.pproc'], function(){
+	var world = tQuery.createWorld().boilerplate().start();
+
+	// add some post processing
+	world.addEffectComposer()
+		.film(0.5, 0.25, 648, false)
+		.vignette()
+		.finish();
+
+	// create some lights
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xffffff)
+		.position(1,1,1)
+
+	// add some text
+	tQuery.createText('Valentine').addTo(world)
+		.scaleBy(1/4).translateY(0.6)
+		.setLambertMaterial()
+			.color(0x00ffff)
+			.back()
+	tQuery.createText('Love').addTo(world)
+		.scaleBy(1/4).translateY(-0.6)
+		.setLambertMaterial()
+			.color(0x00ffff)
+			.back()
+	
+	// create a heart
+	tQuery.createHeart().id('heart').addTo(world)
+		.setLambertMaterial()
+			.color(0xff00ff)
+			.back()
+
+	// animate all that
+	world.loop().hook(function(deltaTime, present){
+		var angle	= present * 2 * Math.PI;
+		tQuery('#heart').scale( 0.8 + 0.4 * Math.abs(Math.sin(angle)))
+		tQuery('text').rotation( 0, Math.PI/6 * Math.sin(angle), 0 )
+	});
+});
+</script></body>

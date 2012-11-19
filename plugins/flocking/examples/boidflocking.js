@@ -12,7 +12,7 @@ var Boid = function() {
 	var _goal;
 	var _acceleration; 
 	var _neighborhoodRadius = 100;
-	var _maxSpeed		= 4;
+	var _maxSpeed		= 2;
 	var _maxSteerForce	= 0.1;
 	var _avoidWalls		= false;
 
@@ -105,20 +105,20 @@ var Boid = function() {
 		_acceleration.addSelf( this.separation( boids ) );
 	}
 
+	/**
+	 * move this boid
+	 */
 	this.move = function () {
-
+		// update velocity with _acceleration
 		this.velocity.addSelf( _acceleration );
-
-		var l = this.velocity.length();
-
-		if ( l > _maxSpeed ) {
-
-			this.velocity.divideScalar( l / _maxSpeed );
-
-		}
-
-		this.position.addSelf( this.velocity );
 		_acceleration.set( 0, 0, 0 );
+		// keep speed <= _maxSpeed
+		var speed = this.velocity.length();
+		if( speed > _maxSpeed ){
+			this.velocity.divideScalar( speed / _maxSpeed );
+		}
+		// update position with velocity
+		this.position.addSelf( this.velocity );
 	}
 
 	/**
@@ -148,11 +148,20 @@ var Boid = function() {
 
 	}
 
-	this.repulse = function ( target ) {
+	/**
+	 * will steer away from the target
+	 * @param  {[type]} target      [description]
+	 * @param  {[type]} maxDistance [description]
+	 * @return {[type]}             [description]
+	 */
+	this.repulse = function( target, maxDistance ){
+		// sanity check
+		console.assert( target !== undefined );
+		console.assert( maxDistance !== undefined );
 		// compute distance to the target
 		var distance	= this.position.distanceTo( target );
 		// if too far, do nothing
-		if ( distance >= 150 )	return;
+		if ( distance >= maxDistance )	return;
 		// compute vector to steer away
 		var steer	= new THREE.Vector3();
 		steer.sub( this.position, target );

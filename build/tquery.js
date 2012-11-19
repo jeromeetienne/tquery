@@ -2047,7 +2047,8 @@ tQuery.mixinAttributes(tQuery.MeshLambertMaterial, {
 	ambient		: tQuery.convert.toThreeColor,
 	map		: tQuery.convert.toTexture,
 	bumpMap		: tQuery.convert.toTexture,
-	bumpScale	: tQuery.convert.toNumber
+	bumpScale	: tQuery.convert.toNumber,
+	side		: tQuery.convert.identity
 });
 
 

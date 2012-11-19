@@ -1,126 +1,156 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle.js"></script>
-
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
-<script src="../../../vendor/three.js/shaders/BleachBypassShader.js"></script>
-<script src="../../../vendor/three.js/shaders/BlendShader.js"></script>
-<script src="../../../vendor/three.js/shaders/CopyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FilmShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FXAAShader.js"></script>
-<script src="../../../vendor/three.js/shaders/HorizontalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/SepiaShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VerticalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VignetteShader.js"></script>
-<script src="../../pproc/tquery.effectcomposer.js"></script>
-
+<script src="../../../build/tquery-bundle-require.js"></script>
 <script src="birdgeometry.js"></script>
 <script src="boidflocking.js"></script>
 
 <body><div id="info">
 	<a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - port of birds demo
+	<br/>
+	Camera: B on bird - N for normal
 </div><script>
+require(['tquery.grassground', 'tquery.light', 'tquery.skymap'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	var object	= tQuery.createTorus().addTo(world);
 
-	world.removeCameraControls();
+
+	/**
+	 * tquery.flocking.js
+	 * - it is in fact a massive controller
+	 * - you give it many object3d and they move
+	 * - var flockingControls	= new tQuery.FlockingControls(object3d[])
+	 *   - create proper amount of boids
+	 * - flockingControl.update()
+	 * - .start()/.stop()
+	 */
+
+	world.tCamera().position.z	= 2;
+
+	// enable shadow casting in world renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	//world.tRenderer().shadowMapSoft	= false;
 	
-	world.addEffectComposer()
-		//.bloom(0.1)
-		//.sepia()
-		.motionBlur(0.9)
-		.film(0.5, 0.25, 648, false)
-		.vignette()
-		//.screen()
-		.finish();
+	tQuery.createSkymap('skybox').addTo(world);
 
-	world.tCamera().position.z	= 700;
-	world.tRenderer().setClearColorHex( 0xffffff, 1 );
-/**
- * TODO
- * * add post processing
- *   * motionblur
- * * add a trail per boid ?
- * * add additiveBlending ?
- * * currently flocking is rather slow
- *   * at 400 birds it is very slow
- *   * do GPU flocking ?
- *   * do flocking in webworker ?
-*/
+	// add a light with shadow casting
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444);
+		
+	tQuery.createDirectionalLight().addTo(world)
+		.position(20, 20, 20)
+		.color(0xffffff)
+		.castShadow(true)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(15, -15, 15, -15, 0.01, 400)
+		//.shadowCameraVisible(true)
+
+	tQuery.createDirectionalLight().addTo(world)
+		.position(20, 20, -20)
+		.color(0xffffff)
+		.castShadow(true)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(15, -15, 15, -15, 0.01, 400)
+		//.shadowCameraVisible(true)
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(30).receiveShadow(true);
+
+
 	var birds	= [];
 	var boids	= [];
-	var boidBoxW	= 400;
-	var boidBoxH	= 250;
-	var boidBoxD	= 300;
+	var boidBoxW	= 500;
+	var boidBoxH	= 50;
+	var boidBoxD	= 500;
+
+	var container	= tQuery.createObject3D().addTo(world)
+		.scale(10 * 1/boidBoxW);
+
+	container.translateY(2 * 0.5 * boidBoxH * container.scaleX());
+
 	for( var i = 0; i < 150; i ++ ){
 		// build boid
 		boids[ i ]	= new Boid();
 		var boid	= boids[i];
-		boid.position.x = Math.random() * boidBoxW - boidBoxW/2;
-		boid.position.y = Math.random() * boidBoxH - boidBoxH/2;
-		boid.position.z = Math.random() * boidBoxD - boidBoxD/2;
-		boid.velocity.x = Math.random() * 2 - 1;
-		boid.velocity.y = Math.random() * 2 - 1;
-		boid.velocity.z = Math.random() * 2 - 1;
+		boid.position.x = boidBoxW * (Math.random()-0.5);
+		boid.position.y = boidBoxH * (Math.random()-0.5);
+		boid.position.z = boidBoxD * (Math.random()-0.5);
+		boid.velocity.x = 2/30 * (Math.random()-0.5);
+		boid.velocity.y = 2/30 * (Math.random()-0.5);
+		boid.velocity.z = 2/30 * (Math.random()-0.5);
 		boid.avoidWalls( true );
 		boid.setWorldSize( boidBoxW, boidBoxH, boidBoxD );
 
-		// build bird mesh
-		var tMaterial	= new THREE.MeshBasicMaterial({
-			color	: 0x000000,
-			side	: THREE.DoubleSide
-		});
-		birds[ i ]	= new THREE.Mesh( new BirdGeometry(), tMaterial );
-		var bird	= birds[ i ];
-		bird.scale.set(3,3,3)
-		bird.geometry.dynamic	= false;
-		
+		//var bird	= tQuery(new BirdGeometry(), new THREE.Material()).scale(1)
+		var bird	= tQuery.createCube(2,0.4,0.4).scale(10)
+			.castShadow(true)
+			.setLambertMaterial()
+				.ambient(0x444444)
+				.color(0xaa00aa)
+				.side(THREE.DoubleSide)
+				.back()
+			.addTo(container);
+			
+		birds.push( bird.get(0) )
 		// setup bird mesh
-		bird.phase	= Math.floor( Math.random() * 62.83 );
-		bird.position	= boids[ i ].position;
-		world.add( bird );
+		bird.get(0).phase	= Math.floor( Math.random() * 62.83 );
+		bird.get(0).position	= boids[ i ].position;
 	}
+	
+	window.addEventListener('keydown', function(event){
+		if( event.keyCode === 'B'.charCodeAt(0) ){
+			world.getCameraControls() && world.getCameraControls().destroy();
+			world.removeCameraControls();
+			var idx	= Math.floor( birds.length * Math.random() );
+			tQuery(world.tCamera())
+				.position(-1.5,0.4,0)
+				.rotation(0,-Math.PI/2,0)
+				.addTo(birds[idx])
+		}else if( event.keyCode === 'N'.charCodeAt(0) ){
+			world.getCameraControls() && world.getCameraControls().destroy();
+			world.removeCameraControls();
+			world.setCameraControls(new THREEx.DragPanControls(world.tCamera()));
+			tQuery(world.tCamera())
+				.position(0,0,-3)
+				.rotation(0,0,0)
+				.addTo(world)		
+		}
+	})
+	
+	
+
 	// make boid move
 	world.loop().hook(function(delta, now){
+
+		var vector = new THREE.Vector3(0,0,0)
+		for( var i = 0; i < boids.length; i++ ){
+			var boid	= boids[ i ];
+			boid.repulse( vector, 100 );
+		}
+
 		for( var i = 0, il = birds.length; i < il; i++ ){
 			var boid	= boids[ i ];
+			var bird	= birds[ i ];
+
 			// run this boids
 			boid.run( boids );
 
-			
-			var bird	= birds[ i ];
-			// handle fog for birds
-			//var color	= bird.material.color;
-			//color.r = color.g = color.b = ( 500 - bird.position.z ) / 1000;
-
 			// set bird rotation depending on boid.velocity
-			bird.rotation.y = Math.atan2( - boid.velocity.z, boid.velocity.x );
-			bird.rotation.z = Math.asin( boid.velocity.y / boid.velocity.length() );
-
+			bird.rotation.y	= Math.atan2( - boid.velocity.z, boid.velocity.x );
+			bird.rotation.z	= Math.asin( boid.velocity.y / boid.velocity.length() );
+//bird.position.y	= 5;
+//bird.rotation.y	= 0;
 			// make the wings moves
-			bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
-			bird.geometry.vertices[ 5 ].y = 
-			bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 5;
+			bird.phase	= ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
+			//bird.geometry.vertices[ 5 ].y = 
+			//bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 5;
+
+			var angle	= now;
+			bird.geometry.dynamic	= true
+			// bird.geometry.vertices[ 5 ].y	= 
+			// bird.geometry.vertices[ 4 ].y	= Math.sin( angle ) * 5;
 		}
 	});
-
-	// repulse on mouse cursor position
-	document.addEventListener('mousemove', function(event){
-		var positionX	= event.clientX - window.innerWidth/2;
-		var positionY	= event.clientY - window.innerHeight/2;
-		var vector	= new THREE.Vector3(positionX, positionY, 0);
-		for( var i = 0, il = boids.length; i < il; i++ ){
-			var boid	= boids[ i ];
-			vector.z	= boid.position.z;
-			boid.repulse( vector );
-		}
-	}, false);
+	
+})
 </script></body>
