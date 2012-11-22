@@ -2163,6 +2163,7 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 
 tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
+		tGeometry.computeBoundingSphere();
 		tGeometry.computeBoundingBox();
 		//tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
