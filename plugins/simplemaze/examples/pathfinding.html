@@ -1,0 +1,63 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.simplemaze.js"></script>
+<script src="pathfinding-browser.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	var maze	= new tQuery.SimpleMaze({
+		map	: [
+			'*********',
+			'*   *   *',
+			'*  ** ***',
+			'*       *',
+			'***     *',
+			'*       *',
+			'*********'
+		]
+	});
+	maze.addTo(world);
+	
+	// get maze dimension
+	var mazeMap	= maze.map();
+	var mapD	= mazeMap.length;
+	var mapW	= mazeMap[0].length;
+	
+	var startX	= 7, startZ	= 1;
+	var endX	= 3, endZ	= 1;
+	var endX	= 1, endZ	= 5;
+
+	// build the grid for pathfinding
+	var grid	= new PF.Grid(mapW, mapD);
+	for(var z = 0; z < mapD; z++){
+		for(var x = 0; x < mapW; x++){
+			var value	= mazeMap[z].charCodeAt(x);
+			var isWall	= value === '*'.charCodeAt(0);
+			grid.setWalkableAt(x, z, isWall ? false : true);
+		}
+	}
+	// create a path finder
+	var finder	= new PF.AStarFinder();
+	// find a path between start/end thru the grid	
+	var path	= finder.findPath(startX, startZ, endX, endZ, grid.clone());
+	console.log('path', path)
+
+	// draw the path on the screen
+	for(var i = 0; i < path.length; i++){
+		var mark	= tQuery.createCube().addTo(world)
+			.scaleBy(0.5)
+			.translate(path[i][0] - Math.floor(mapW/2), 0.25, path[i][1] - Math.floor(mapD/2));		
+		if( i === 0 ){
+			mark.setBasicMaterial({
+				color	: 0xFF8080
+			});
+		}else if( i === path.length-1 ){
+			mark.setBasicMaterial({
+				color	: 0x80FF80
+			});			
+		}
+	}
+	
+	
+</script></body>

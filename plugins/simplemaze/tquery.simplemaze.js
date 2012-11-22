@@ -4,7 +4,7 @@ tQuery.registerStatic('createSimpleMaze', function(opts){
 
 tQuery.registerStatic('SimpleMaze', function(opts){
 	// handle parameters
-	opts	= tQuery.extend(opts, {
+	this._opts	= opts	= tQuery.extend(opts, {
 		squareW		: 1,
 		squareH		: 1,
 		squareD		: 1,
@@ -21,7 +21,8 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 	
 	this._container	= tQuery.createObject3D();
 	var textureUrl	= tQuery.SimpleMaze.baseUrl+"../assets/images/water.jpg";
-	// FLOOR
+
+	// opts.enableFloor
 	if( opts.enableFloor ){
 		var material	= new THREE.MeshBasicMaterial({
 			color	: 0xFF5588,
@@ -36,7 +37,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 			.addTo(this._container);		
 	}
 
-	// ceiling
+	// opts.enableCeiling
 	if( opts.enableCeiling ){
 		var material	= new THREE.MeshBasicMaterial({
 			color	: 0x8855FF,
@@ -57,6 +58,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 		color	: 0x88FF55,
 		map	: THREE.ImageUtils.loadTexture( textureUrl )
 	});
+
 	// TODO one should merge all those cubes
 	for(var z = 0; z < mapD; z++){
 		for(var x = 0; x < mapW; x++){
@@ -73,7 +75,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 					.back()
 				.translateX((x-mapW/2 + 0.5) * opts.squareW)
 				.translateZ((z-mapD/2 + 0.5) * opts.squareW);
-		}	
+		}
 	}
 });
 
@@ -83,6 +85,9 @@ tQuery.SimpleMaze.prototype.container	= function(){
 	return this._container;
 }
 
+tQuery.SimpleMaze.prototype.map = function(){
+	return this._opts.map;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
