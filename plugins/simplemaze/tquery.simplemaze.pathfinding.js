@@ -1,11 +1,12 @@
 tQuery.registerStatic('SimpleMazePathFinding', function(opts){
 	// sanity check
 	console.assert(opts.maze instanceof tQuery.SimpleMaze);
-	
+
+	// copy the parameters	
 	this._maze	= opts.maze;
 	
 	// get maze dimension
-	var mazeMap	= maze.map();
+	var mazeMap	= this._maze.map();
 	var mapD	= mazeMap.length;
 	var mapW	= mazeMap[0].length; 
 	// build the grid for pathfinding
@@ -29,27 +30,22 @@ tQuery.registerStatic('SimpleMazePathFinding', function(opts){
  */
 tQuery.SimpleMazePathFinding.prototype.computePath = function(source, destination){
 	// use PathFinding.js to get the path on the grid
-	var path	= this._finder.findPath(source.x, source.y, destination.x, destination.y, this._grid.clone());
-
+	var pfPath	= this._finder.findPath(source.x, source.y, destination.x, destination.y, this._grid.clone());
+	
 	// get maze dimension
-	var mazeMap	= maze.map();
+	var mazeMap	= this._maze.map();
 	var mapD	= mazeMap.length;
 	var mapW	= mazeMap[0].length; 
-	// build a THREE.Path from the path - it is the canonical version of it
-	this._tPath	= new THREE.Path();
-	console.assert(path.length > 0)
-	this._tPath.moveTo(path[0][0] - Math.floor(mapW/2),path[0][1] - Math.floor(mapD/2));	
-	for(var i = 1; i < path.length; i++){
-		this._tPath.lineTo(path[i][0]  - Math.floor(mapW/2),path[i][1] - Math.floor(mapD/2));
+	// convert pathfinding.js coordinate into three.js one
+	this._path	= [];
+	for(var i = 0; i < pfPath.length; i++){
+		var position	= tQuery.createVector3();
+		position.x	= pfPath[i][0] - Math.floor(mapW/2);
+		position.z	= pfPath[i][1] - Math.floor(mapD/2)
+		this._path.push(position)
 	}
-	// get the length of the whole path
-	this._tPathLength	= this._tPath.getLength();
 };
 
-/**
- * getter for the last path computed
- * @return {THREE.Path} the last path computed
- */
-tQuery.SimpleMazePathFinding.prototype.tPath = function(){
-	return this._tPath;
+tQuery.SimpleMazePathFinding.prototype.path = function() {
+	return this._path;
 };

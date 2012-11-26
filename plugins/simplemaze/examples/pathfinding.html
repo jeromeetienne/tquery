@@ -1,6 +1,8 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
+
 <script src="../tquery.simplemaze.js"></script>
+
 <script src="../tquery.simplemaze.pathfinding.js"></script>
 <script src="../vendor/pathfinding-browser.js"></script>
 <body><script>
@@ -20,52 +22,6 @@
 	});
 	maze.addTo(world);
 
-/**
- * * make that a plugin
- * * tquery.simplemaze.pathfinding.js
- *   * generation of the grid from simplemaze
- *   * generation of the path from the maze and the grid
- * * a controller which move from point to point
- *   * is that possible to do in a generic manner ?
- *   * can i use a THREE.Path ?
- *   * it would be best as it would be generic
- */
-	
-	// get maze dimension
-	var mazeMap	= maze.map();
-	var mapD	= mazeMap.length;
-	var mapW	= mazeMap[0].length; 
-	
-	var startX	= 7, startZ	= 1;
-	var startX	= 3, startZ	= 1;
-	var endX	= 3, endZ	= 1;
-	var endX	= 1, endZ	= 5;
-
-	// build the grid for pathfinding
-	var grid	= new PF.Grid(mapW, mapD);
-	for(var z = 0; z < mapD; z++){
-		for(var x = 0; x < mapW; x++){
-			var value	= mazeMap[z].charCodeAt(x);
-			var isWall	= value === '*'.charCodeAt(0);
-			grid.setWalkableAt(x, z, isWall ? false : true);
-		}
-	}
-	// create a path finder
-	var finder	= new PF.AStarFinder();
-	// find a path between start/end thru the grid	
-	var path	= finder.findPath(startX, startZ, endX, endZ, grid.clone());
-	console.log('path', path)
-	
-	// build a THREE.Path from it - it is the canonical version of it
-	var tPath	= new THREE.Path();
-	console.assert(path.length > 0)
-	tPath.moveTo(path[0][0] - Math.floor(mapW/2),path[0][1] - Math.floor(mapD/2));	
-	for(var i = 1; i < path.length; i++){
-		tPath.lineTo(path[i][0]  - Math.floor(mapW/2),path[i][1] - Math.floor(mapD/2));
-	}
-	// get the length of the whole path
-	var pathLength	= tPath.getLength();
-
 	// setup the path finding
 	var pathFinding	= new tQuery.SimpleMazePathFinding({
 		maze	: maze
@@ -73,26 +29,24 @@
 
 	// establish some source/destination	
 	var startX	= 7, startZ	= 1;
-	var startX	= 3, startZ	= 1;
+	//var startX	= 3, startZ	= 1;
 	var endX	= 3, endZ	= 1;
-	var endX	= 1, endZ	= 5;
+	//var endX	= 1, endZ	= 5;
 
 	// compute a path
 	var source	= tQuery.createVector2(startX, startZ);
 	var destination	= tQuery.createVector2(endX, endZ);
 	pathFinding.computePath(source, destination);
-	
-	
 
-	// draw the path on the screen
-	var tPath	= pathFinding.tPath();
+	// draw the path on the screen - good for debug
+	var path	= pathFinding.path();
 	for(var i = 0; i < path.length; i++){
-		var position	= tPath.getPointAt(i / (path.length-1));
+		var position	= path[i];
 		var cube	= tQuery.createCube().addTo(world)
 			.scaleBy(0.5)
-			.translate(position.x, 0.25, position.y);
+			.translate(position.x, 0.25, position.z);
 		// set color of begining/end of the path
 		if( i === 0 )			cube.setBasicMaterial().color(0xFF8080);
 		if( i === path.length-1 )	cube.setBasicMaterial().color(0x80FF80);
-	}
+	}	
 </script></body>
