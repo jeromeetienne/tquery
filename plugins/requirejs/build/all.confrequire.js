@@ -138,6 +138,10 @@ requirejs.config({
 		"plugins/shape/tquery.shape": [
 			"plugins/shape/tquery.shape.create"
 		],
+		"plugins/simplemaze/tquery.simplemaze": [
+			"plugins/simplemaze/tquery.simplemaze.pathfinding",
+			"plugins/simplemaze/vendor/pathfinding-browser"
+		],
 		"plugins/skymap/tquery.skymap": [
 			"plugins/skymap/tquery.cubetexture"
 		],
