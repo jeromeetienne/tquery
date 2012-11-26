@@ -3,25 +3,15 @@
 
 <script src="../vendor/MTLLoader.js">	</script>
 <script src="../vendor/OBJMTLLoader.js"></script>
+<script src="tquery.heightmap.js">	</script>
 		
 <body><script>
-require(['tquery.pproc', 'tquery.minecraft'], function(){
+require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-	//var object	= tQuery.createTorus().addTo(world);
-
 
 	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/agentsmith.png'
+		//skinUrl	: '../../minecraft/examples/images/agentsmith.png'
 	}).addTo(world);
-
-	world.addEffectComposer()
-		//.bloom(0.9)
-		//.sepia()
-		//.motionBlur(0.6)
-		//.film(0.5, 0.25, 648, false)
-		.vignette()
-		//.screen()
-		.finish();
 		
 	// setup some lights
 	tQuery.createAmbientLight().addTo(world)
@@ -29,26 +19,43 @@ require(['tquery.pproc', 'tquery.minecraft'], function(){
 	tQuery.createDirectionalLight().addTo(world)
 		.color(0xffffff)
 		.position(-1,1,1)
-		.intensity(0.4)
-	// tQuery.createDirectionalLight().addTo(world)
-	// 	.color(0xffffff)
-	// 	.position( 1,1,1)
-	
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xffffff)
+		.position( 1,1,1)
 
-	character.object3D('root').rotateY(-Math.PI/8)
-		.translateX(2).translateZ(1.5)
-	world.loop().hook(function(delta, now){
-		character.object3D('root').rotateY(delta * Math.PI * 2 * 0.1)
+	// init the heightmap
+	var heightMap	= new tQuery.HeightMap({
+		url	: 'models/appart_hiphop/heightmap134.png',
+		bboxMin	: tQuery.createVector3(0, 0.03, -8.2),
+		bboxMax	: tQuery.createVector3(23, 16.03, 0),
 	})
 
-	var spotLight	= tQuery.createSpotLight().addTo(character.object3D('root'))
-		.distance(10)
-		.angle(Math.PI/3).exponent(5)
-		.color( 0xffffff )
-		.position(0,1,0)
-		.intensity(10)
-	// TODO find a better way to get target
-	spotLight.get(0).target.position.set( 0, 0, 3 );
+/**
+ * # about heightmap
+ * * make a class for it
+ * * heightmap.heightAt(THREE.Vector3)
+ * * heightmap.debug(true)
+ */
+
+	var mapScale	= 1/45
+	var mapObject3D	= tQuery.createPlane().addTo(world)
+		.scaleX(1024 * mapScale)
+		.scaleY( 365 * mapScale)
+		.rotateX(-Math.PI/2)
+		.translateX(-4.5)
+		.translateZ(-0.07)
+		.setBasicMaterial()
+			.map('models/appart_hiphop/heightmap134.png')
+			.back()
+
+	world.loop().hook(function(){
+		var positionY	= character.object3D().positionY();
+		mapObject3D.positionY(positionY + 0.5);
+		
+		var visible	= tQuery.keyboard().pressed('m') ? false : true;
+		mapObject3D.visible(visible)
+	})
+
 
 
 	// set the url of the model to load
@@ -62,5 +69,10 @@ require(['tquery.pproc', 'tquery.minecraft'], function(){
 		tQuery(event.content).addTo(world)
 			.position(-16, -8, 4)
 	});
+
+
+	world.loop().hook(function(delta, now){
+		character.object3D('root').rotateY(delta * Math.PI * 2 * 0.1)
+	})
 });
 </script></body>

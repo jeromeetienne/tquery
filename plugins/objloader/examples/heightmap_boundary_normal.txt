@@ -1,0 +1,39 @@
+heightmap boundary normal
+=========================
+* sometime it is interesting to establish a collision with a heightmap.
+  * it is simple to build
+  * it uses standard tool 
+* how to establish collision ?
+  * with nomanland zones (with reachable zones)
+  * those zones are encoded with special wellknown numbers in the height
+======================================
+* how to compute the normal of the boundaries on this height map
+* a boundary is a map with only 2 values, the nomanlands and the reachable zone
+  * so it may be considered as a pure monochrome image with nomanlands coded as 1, 
+    and reachable zones coded as 0.
+======================================
+# how to detect a boundary point
+* it is a point which is set touching a clear point
+======================================
+# how to compute the normal of the boundary at one of his points
+* so we aim to compute the normal on each boundary point of the heightmap
+* it is precomputed, so no hard requirement on the generation time
+* the normal is approximated in a square/kernel/window... e.g. 7x7 pixels
+* we track the boundary edge pixel by pixel starting from our boundary point
+* we do this tracking in both directions until we leave the analysis window
+  * to handle the border of the heighmap, assume the tangent on the border go on
+* we obtain 2 exit points. those 2 points are a segment.
+  * the rotation of this segment it the rotation of the tangent at the boundary point
+* the wider is the analysis window, the smoothiest is the normal estimation
+======================================
+# how to spread the normals of the boundary inside the nomanland
+* important to be able to compute the physical reaction (rebound) at a contact point
+* the boundary is the contact point
+* is that actually needed to know that inside ? what about the following
+  1. the potential move of an object is computed
+  2. the potential resulting position is detected as being inside the nomanland
+  3. from the previous position to the potential resulting position, we cast a ray
+     and find the contact point (which is a boundary point)
+  4. we read the normal at this boundary point
+  5. so we got the impact point and the normal of the surface at this point. All what is
+     needed to get 
