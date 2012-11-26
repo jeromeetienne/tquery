@@ -1683,6 +1683,10 @@ tQuery.registerStatic('createVector3', function(x, y, z){
 	return new THREE.Vector3(x, y, z);
 });
 
+tQuery.registerStatic('createVector2', function(x, y){
+	return new THREE.Vector2(x, y);
+});
+
 tQuery.registerStatic('createSphere', function(){
 	var ctor	= THREE.SphereGeometry;
 	var dflGeometry	= [0.5, 32, 16];
