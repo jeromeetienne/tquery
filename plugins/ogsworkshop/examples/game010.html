@@ -1,3 +1,8 @@
+<!--
+	* now we add a ground with tquery.grassground plugin
+	* this a simple one which create a plane with a texture mapped on it
+	* 
+-->
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
@@ -12,9 +17,10 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'], function(){
 	// add a ground	
 	var ground  = tQuery.createGrassGround({
 		textureRepeatX  : 20,
-		textureRepeatY  : 20,
-	}).addTo(world)
-	.scale(80)
+		textureRepeatY  : 20
+	})
+		.addTo(world)
+		.scale(80)
 
 	ground.get(0).material.map.anisotropy = 16;
 })

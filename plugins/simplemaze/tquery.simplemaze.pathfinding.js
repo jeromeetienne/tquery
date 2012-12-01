@@ -25,8 +25,11 @@ tQuery.registerStatic('SimpleMazePathFinding', function(opts){
 /**
  * set a new path from source to destination on the simplemaze
  * 
+ * @todo make polymorphism. especially srcX, srcY, dstX, dstY
+ * 
  * @param {THREE.Vector2} source      the source of the path
  * @param {THREE.Vector2} destination the destination of the path
+ * @return {tQuery.SimpleMazePathFinding} for chained API
  */
 tQuery.SimpleMazePathFinding.prototype.computePath = function(source, destination){
 	// use PathFinding.js to get the path on the grid
@@ -44,6 +47,8 @@ tQuery.SimpleMazePathFinding.prototype.computePath = function(source, destinatio
 		position.z	= pfPath[i][1] - Math.floor(mapD/2)
 		this._path.push(position)
 	}
+	// for chained API
+	return this;
 };
 
 tQuery.SimpleMazePathFinding.prototype.path = function() {

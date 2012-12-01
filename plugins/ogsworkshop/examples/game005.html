@@ -1,3 +1,8 @@
+<!--
+	* now we add a skymap
+	* link to the previous post on skymap
+	* link to gsvpano
+-->
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
@@ -5,9 +10,8 @@ require(['tquery.minecraft', 'tquery.skymap'], function(){
 	// create world
 	var world	= tQuery.createWorld().boilerplate().start();
 	// add minecraft char
-	tQuery.createMinecraftChar().addTo(world);	
+	tQuery.createMinecraftChar().addTo(world);
 	// add a skybox
-	tQuery.createSkymap('skybox').addTo(world);
-	
+	tQuery.createSkymap('skybox').addTo(world);	
 })
 </script></body>

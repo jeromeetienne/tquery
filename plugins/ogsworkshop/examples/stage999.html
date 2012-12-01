@@ -85,6 +85,7 @@ require([
 		.scale(80);
 		ground.get(0).material.map.anisotropy = 16;
 	}
+
 	//////////////////////////////////////////////////////////////////////////
 	//		lights							//
 	//////////////////////////////////////////////////////////////////////////
@@ -125,7 +126,7 @@ require([
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 		skinBasename	: 'char.png',
 	};
-	var gameServer	= new SimpleMMOServer(userInfo, serverUrl);
+	var gameServer	= new SimpleMMOServer('public', userInfo, serverUrl);
 
 	gameServer.addEventListener('connected', function(sourceId, usersInfo){
 		console.log('connected', sourceId, usersInfo, gameServer.usersInfo())

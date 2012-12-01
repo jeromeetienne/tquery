@@ -1,5 +1,5 @@
 <!--
-	Make character run only if it moves
+	Make character run only when he moves
 -->
 
 <!doctype html><title>Minimal tQuery Page</title>
@@ -30,7 +30,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 	// make it run only if it move
 	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);	
 	var mesh	= character.object3D('root')
-	var prevPosition= tQuery.createVector3()
+	var prevPosition= tQuery.createVector3();
 	world.loop().hook(function(){
 		// compute velocity
 		var velocity	= mesh.position().clone().subSelf(prevPosition);

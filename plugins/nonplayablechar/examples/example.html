@@ -18,11 +18,11 @@ require(['tquery.grassground', 'tquery.minecraft'], function(){
 		.scale(20);
 
 
-	var npc	= new NonPlayableChar();
-	npc.character().addTo(world);
+	var bot	= new NonPlayableChar();
+	bot.character().addTo(world);
 	
 	world.loop().hook(function(delta, now){
-		npc.update();
+		bot.update();
 	})
 });
 </script></body>

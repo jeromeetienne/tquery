@@ -9,10 +9,67 @@
 require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	var character	= tQuery.createMinecraftChar({
-		//skinUrl	: '../../minecraft/examples/images/agentsmith.png'
-	}).addTo(world);
-		
+	// world.tCamera.z	= -2;
+	// world.getCameraControls().target.set(16, 8, -4)
+
+	// apartement center
+	var origin	= tQuery.createVector3(16, 8, -4);
+
+	var character	= tQuery.createMinecraftChar().addTo(world);
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character.object3D('root').get(0),
+		lateralMove	: 'rotationY',
+	});		
+
+	character.object3D().position(origin);
+
+	// if the player moved in a nomansland, go back to the previous position
+	(function(){
+		var prevPosition= tQuery.createVector3(character.object3D().position());
+		world.loop().hook(function(){
+			// if heightmap not loaded, do nothing
+			if( heightMap.isLoaded() === false )	return;
+			// set some local variables
+			var position	= character.object3D().position();
+			// get the height at this point
+			var heights3D	= heightMap.heightAt(position);
+			var height	= heights3D[0];
+			// if the height is Infinity, it is in a nomansland
+			if( height === Infinity ){
+				character.object3D().position(prevPosition)		
+			}
+			// update prevPosition
+			prevPosition.copy( position )
+		});
+	})();
+
+	// init bodyAnims
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	bodyAnims.start('stand');
+
+	// run when moving
+	(function(){
+		var prevPosition= tQuery.createVector3(character.object3D().position());
+		world.loop().hook(function(){
+			var position	= character.object3D().position();
+			// compute velocity
+			var velocity	= position.clone().subSelf(prevPosition);
+			// update player.prevPosition/player.prevRotation
+			prevPosition.copy( position )		
+			// pick animation based on velocity
+			var animName	= velocity.length() ? 'walk' : 'stand';
+			bodyAnims.start(animName)
+		});	
+	})();
+	
+	// to enable a tracking camera
+	var cameraControls	= tQuery.createCameraFpsControls({
+		trackedObject	: character.object3D().get(0),
+		tCamera		: world.tCamera()
+	});
+	world.setCameraControls(cameraControls)
+	
+
 	// setup some lights
 	tQuery.createAmbientLight().addTo(world)
 		.color(0x444444)
@@ -30,20 +87,22 @@ require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
 		bboxMax	: tQuery.createVector3(23, 16.03, 0),
 	})
 
-/**
- * # about heightmap
- * * make a class for it
- * * heightmap.heightAt(THREE.Vector3)
- * * heightmap.debug(true)
- */
+	world.loop().hook(function(){
+		if( heightMap.isLoaded() === false )	return;
+		var position	= character.object3D().position();
+		var heights	= heightMap.heightAt(position);
+		var height	= heights[0];
+		character.object3D().positionY( height )
+	});
+
 
 	var mapScale	= 1/45
 	var mapObject3D	= tQuery.createPlane().addTo(world)
 		.scaleX(1024 * mapScale)
 		.scaleY( 365 * mapScale)
 		.rotateX(-Math.PI/2)
-		.translateX(-4.5)
-		.translateZ(-0.07)
+		.position(origin)
+		.translate(-4.5, 0, -0.07)
 		.setBasicMaterial()
 			.map('models/appart_hiphop/heightmap134.png')
 			.back()
@@ -54,9 +113,7 @@ require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
 		
 		var visible	= tQuery.keyboard().pressed('m') ? false : true;
 		mapObject3D.visible(visible)
-	})
-
-
+	});
 
 	// set the url of the model to load
 	var urlObj	= 'models/appart_hiphop/world134_1.obj';
@@ -67,12 +124,7 @@ require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
 	loader.load(urlObj, urlMtl);
 	loader.addEventListener('load', function(event){
 		tQuery(event.content).addTo(world)
-			.position(-16, -8, 4)
 	});
-
-
-	world.loop().hook(function(delta, now){
-		character.object3D('root').rotateY(delta * Math.PI * 2 * 0.1)
-	})
 });
 </script></body>
+/

@@ -1,0 +1,41 @@
+<!doctype html><title>Minimal tQuery Page</title> 
+<script src="../../../build/tquery-bundle-require.js"></script>
+
+<script src="tquery.heightmap.js">		</script>
+<script src="tquery.heightmap.pathfinding.js">	</script>
+<script src="../../simplemaze/vendor/pathfinding-browser.js"></script>
+
+<body><script>
+	// init the heightmap
+	var heightMap	= new tQuery.HeightMap({
+		url	: 'models/appart_hiphop/heightmap134.png',
+		bboxMin	: tQuery.createVector3(0, 0.03, -8.2),
+		bboxMax	: tQuery.createVector3(23, 16.03, 0),
+	})
+	
+	heightMap.addEventListener('load', function(){
+		var debugCanvas	= heightMap.buildDebugCanvas();
+		// put the canvas in the body - debug only
+		document.body.appendChild(debugCanvas);
+
+		var heightMapPath	= new tQuery.HeightMapPathFinding({
+			heightMap	: heightMap,
+			tileW		: 8,
+			tileH		: 8
+		});
+		var gridCanvas		= heightMapPath.gridCanvas();
+		document.body.appendChild(gridCanvas)
+		gridCanvas.style.zoom	= (8 * 100)+'%';
+		gridCanvas.style.opacity= 0.7;
+		// gridCanvas.style.position	= 'absolute';
+		// gridCanvas.style.left	= '0px';
+/**
+ * - example to code
+ *   - pick source and destination
+ *   - compute a path
+ *   - display the path in the gridCanvas
+ * - clean up the plugin which is dirty
+ */
+	});
+</script></body>
+

@@ -1,0 +1,65 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+
+<script src="../vendor/machinejs/base.js"></script>
+<script src="../vendor/machinejs/machine.js"></script>
+<script src="../vendor/machinejs/demo.js"></script>
+
+<body><script>
+require(['tquery.keyboard'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	
+	var Actor	= function(){
+	};
+	
+	Actor.states = {
+		idle	: function() {
+			console.log('enter state', this.state.identifier)
+		},
+		canIdle	: function(){ return true;	},
+
+
+		grow	: function() {
+			console.log('enter state', this.state.identifier)
+		},
+		canGrow	: function() {
+			var keyboard	= tQuery.keyboard();
+			return keyboard.pressed('1') ? true : false;
+		},
+
+		makeEnergy	: function() {
+			console.log('enter state', this.state.identifier)
+		},
+		canMakeEnergy	: function() {
+			var keyboard	= tQuery.keyboard();
+			return keyboard.pressed('2') ? true : false;
+		},
+	};	
+	var treeJson	= {
+		identifier	: "idle", 
+		strategy	: "sequential",
+		//strategy	: "prioritised",
+		children	: [
+			{ identifier	: "grow" },
+			{ identifier	: "makeEnergy" },
+		]
+	};
+	
+	var aActor	= new Actor();
+
+	var machine	= new Machine();
+	aActor.state	= machine.generateTree(treeJson, aActor, Actor.states);
+window.aActor	= aActor;
+
+	world.loop().hook(function(delta, now){
+		var previous	= aActor.state.identifier;
+		aActor.state	= aActor.state.tick();
+		var current	= aActor.state.identifier;
+		
+		if( previous === current )	return;
+		
+		console.log('state change from', previous, 'to', current);
+	})
+});
+</script></body>

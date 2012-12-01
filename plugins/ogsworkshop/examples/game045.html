@@ -93,7 +93,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 	var userInfo	= {
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 	};
-	var gameServer	= new SimpleMMOServer(userInfo, serverUrl);
+	var gameServer	= new SimpleMMOServer('public', userInfo, serverUrl);
 	// handle event
 	gameServer.addEventListener('connected', function(sourceId, usersInfo){
 		console.log('connected', arguments)

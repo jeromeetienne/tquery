@@ -78,7 +78,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
 		skinBasename	: 'char.png',
 	};
-	var gameServer	= new SimpleMMOServer(userInfo, serverUrl);
+	var gameServer	= new SimpleMMOServer('public', userInfo, serverUrl);
 	// handle event
 	gameServer.addEventListener('connected', function(sourceId, usersInfo){
 		console.log('connected', arguments)

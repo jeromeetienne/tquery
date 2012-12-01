@@ -1,3 +1,7 @@
+<!--
+	* now we add a keyboard control to our character.
+	* This is another part of the tQuery minecraft plugins
+-->
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
@@ -17,7 +21,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 
 	// add minecraft char
 	var character	= tQuery.createMinecraftChar().addTo(world);	
-	// ad a keyboard control
+	// add a keyboard control
 	tQuery.createMinecraftCharKeyboard2({
 		object3D	: character.object3D('root'),
 		lateralMove	: 'rotationY'
