@@ -107,7 +107,7 @@ tQuery.Object3D.prototype.material	= function(){
 tQuery.Object3D.prototype.clone	= function(){
 	var clones	= [];
 	this._lists.forEach(function(object3d){
-		var clone	= THREE.SceneUtils.cloneObject(object3d)
+		var clone	= object3d.clone();
 		clones.push(clone);
 	})  
 	return tQuery(clones)
