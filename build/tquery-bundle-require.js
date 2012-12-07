@@ -36285,7 +36285,7 @@ tQuery.Object3D.prototype.material	= function(){
 tQuery.Object3D.prototype.clone	= function(){
 	var clones	= [];
 	this._lists.forEach(function(object3d){
-		var clone	= THREE.SceneUtils.cloneObject(object3d)
+		var clone	= object3d.clone();
 		clones.push(clone);
 	})  
 	return tQuery(clones)
@@ -38760,6 +38760,7 @@ requirejs.config({
 			"tquery.fog": "plugins/fog/tquery.world.createfog",
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.gsvpano": "plugins/gsvpano/tquery.gsvpano",
+			"tquery.headtrackr": "plugins/headtrackr/tquery.headtrackr",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
@@ -38818,6 +38819,9 @@ requirejs.config({
 		],
 		"plugins/gsvpano/tquery.gsvpano": [
 			"plugins/gsvpano/vendor/GSVPano"
+		],
+		"plugins/headtrackr/tquery.headtrackr": [
+			"plugins/headtrackr/vendor/headtrackr"
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"

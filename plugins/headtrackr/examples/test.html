@@ -2,7 +2,7 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src="../vendor/headtrackr.js"></script>
 <style>
-#overlay {
+#htrackerView {
         transform: scaleX(-1);
         -moz-transform: scaleX(-1);
         -o-transform: scaleX(-1);
@@ -10,14 +10,18 @@
 }
 </style>
 <body><div id="info">
-	Example of tQuery.headtrackr plugin<br/>
-	press space to reset head tracking
+	Example of tQuery.headtrackr plugin
+	-
+	<a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a>
+	+
+	<a href='http://jeromeetienne.github.com/tquery/'>tQuery API</a>
+	for 3D
+	/
+	<a href='https://github.com/auduno/headtrackr' target='_blank'>headtrackr.js</a> for headtracking
+	<br/>
+	press [space] to reset head tracking
 </div>
-<canvas id="overlay" width="320" height="240"  style='position: absolute; top: 0; left: 0; z-index:1'></canvas>
-
-<video id="vid" autoplay loop width="320" height="240" style='display:none'></video>
-
-<canvas id="compare" width="320" height="240"  style='display:none'></canvas>
+<canvas id="htrackerView" width="320" height="240"  style='position: absolute; top: 0; left: 0; z-index:1'></canvas>
 <script>
 require(['tquery.skymap', 'tquery.lensflare'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
@@ -32,22 +36,19 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 
 	// add some lensflare 
 	tQuery.createLensFlare().addTo(world)
-		.position(+1.5, 1, -3)
+		.position(+1.4, 1, -3)
 	tQuery.createLensFlare().addTo(world)
-		.position(-1.5, 1, -3)
+		.position(-1.4, 1, -3)
 		
 	var loader	= new THREE.BinaryLoader( true );
-	loader.load( "walt/WaltHead_bin.js", function( tGeometry ){
-		//createScene( tGeometry, cubeMaterial1, cubeMaterial2, cubeMaterial3 )
-		console.log('tGeometry', tGeometry)
+	loader.load("../../assets/obj/walt/WaltHead_bin.js", function(tGeometry){
 		// normalize the geometry
 		var geometry	= tQuery(tGeometry)
-			.computeAll().normalize().computeAll();
+					.computeAll().normalize()
+					.computeAll();
 		// create the material
-		var tMaterial	= new THREE.MeshBasicMaterial({
-			color	: 0xB93B8F,
-			envMap	: tQuery.createCubeTexture('skybox')
-		});
+		var cubeTexture	= tQuery.createCubeTexture('swedishRoyalCastle');
+		var material	= tQuery.createMeshBasicMaterial().envMap(cubeTexture);
 		
 		
 		tQuery(geometry, tMaterial).addTo(world)
@@ -60,6 +61,7 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 				.positionZ(-i * 0.5)
 		}
 	});
+	
 	document.addEventListener("facetrackingEvent", function( event ) {
 		if( event.detection !== 'CS' )	return;
 		
@@ -75,12 +77,25 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 	});	
 
 
-	var videoInput	= document.getElementById('vid');
-	var canvasInput = document.getElementById('compare');
+	// create videoInput element to read the webcam
+	var videoInput	= document.createElement('video');
+	videoInput.setAttribute('autoplay');
+	videoInput.setAttribute('loop');
+	videoInput.setAttribute('width'	, '320');
+	videoInput.setAttribute('height', '240');
+	videoInput.style.display	= 'none';
+
+	// create canvasInput element to read the webcam
+	var canvasInput	= document.createElement('canvas');
+	canvasInput.setAttribute('width', '320');
+	canvasInput.setAttribute('height', '240');
+	canvasInput.style.display	= 'none';
+
+	
 	var htracker	= new headtrackr.Tracker();
 	htracker.init(videoInput, canvasInput);
 	htracker.start();
-	
+
 	// reset if space is pressed
 	document.addEventListener('keydown', function(event){
 		// only if the key is space
@@ -90,7 +105,7 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 		htracker.start();		
 	})
 	
-	var canvasView	= document.getElementById('overlay');	
+	var canvasView	= document.getElementById('htrackerView');
 	document.addEventListener("facetrackingEvent", function( event ) {
 		// clear canvas
 		var context = canvasView.getContext('2d');
@@ -100,7 +115,6 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 			context.save();
 			context.translate(event.x, event.y)
 			context.rotate(event.angle - Math.PI/2);
-
 
 			context.strokeStyle	= '#00CC00';
 			context.strokeRect(Math.floor(-event.width/2), Math.floor(-event.height/2)
