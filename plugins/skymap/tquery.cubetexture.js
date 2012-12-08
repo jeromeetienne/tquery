@@ -61,11 +61,11 @@ tQuery.TextureCube.createUrls	= function(basename, format, rootUrl, posPrefix, n
  * They points toward the cube maps in plugins/assets
 */
 tQuery.TextureCube.WellKnownUrls	= {
-	bridge2			: tQuery.TextureCube.createUrls('Bridge2'		, '.jpg', '../../assets/images/textures/cube', 'pos', 'neg'),
-	escher			: tQuery.TextureCube.createUrls('Escher'		, '.jpg', '../../assets/images/textures/cube'),
-	park2			: tQuery.TextureCube.createUrls('Park2'			, '.jpg', '../../assets/images/textures/cube', 'pos', 'neg'),
-	park3Med		: tQuery.TextureCube.createUrls('Park3Med'		, '.jpg', '../../assets/images/textures/cube'),
-	pisa			: tQuery.TextureCube.createUrls('pisa'			, '.png', '../../assets/images/textures/cube'),
-	skybox			: tQuery.TextureCube.createUrls('skybox'		, '.jpg', '../../assets/images/textures/cube'),
-	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../assets/images/textures/cube')
+	bridge2			: tQuery.TextureCube.createUrls('Bridge2'		, '.jpg', '../../../plugins/assets/images/textures/cube', 'pos', 'neg'),
+	escher			: tQuery.TextureCube.createUrls('Escher'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
+	park2			: tQuery.TextureCube.createUrls('Park2'			, '.jpg', '../../../plugins/assets/images/textures/cube', 'pos', 'neg'),
+	park3Med		: tQuery.TextureCube.createUrls('Park3Med'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
+	pisa			: tQuery.TextureCube.createUrls('pisa'			, '.png', '../../../plugins/assets/images/textures/cube'),
+	skybox			: tQuery.TextureCube.createUrls('skybox'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
+	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../../plugins/assets/images/textures/cube')
 };
