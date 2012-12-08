@@ -2,11 +2,10 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src="../vendor/headtrackr.js"></script>
 <script src="../tquery.headtrackr.js"></script>
-
 <body><div id="info">
 	Example of tQuery.headtrackr plugin -
 	<a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a> +
-	<a href='http://jeromeetienne.github.com/tquery/'>tQuery API</a> for 3D /
+	<a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a> for 3D /
 	<a href='https://github.com/auduno/headtrackr' target='_blank'>headtrackr.js</a> for headtracking
 	<br/>
 	press [space] to reset head tracking
@@ -28,12 +27,12 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 		
 	// load the head of walt
 	var loader	= new THREE.BinaryLoader( true );
-	loader.load( "walt/WaltHead_bin.js", function( tGeometry ){
+	loader.load("../../assets/obj/walt/WaltHead_bin.js", function(tGeometry){
 		// normalize the geometry
 		var geometry	= tQuery(tGeometry).computeAll().normalize().computeAll();
 		// create the material
-		var cubeTexture	= tQuery.createCubeTexture('swedishRoyalCastle');
-		var material	= tQuery.createMeshBasicMaterial().envMap(cubeTexture);
+		var cubeTexture	= tQuery.createCubeTexture('skybox');
+		var material	= tQuery.createMeshBasicMaterial().envMap(cubeTexture).color(0xcccccc);
 		// add all the heads
 		var object3D	= tQuery(geometry, material).addTo(world)
 		for(var i = 0; i < 5; i++){
@@ -45,28 +44,24 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 	// create the headTracker
 	var headTracker	= tQuery.createHeadtrackr().debugView(true).start();
 
+	// make the camera move depending on facetrackingEvent
+	headTracker.addEventListener("facetrackingEvent", function(event){
+		// get a normalized coord [-1, +1]
+		var normalized	= event.normalizedCoords;
+		// set the position of the camera
+		var angleY	= Math.PI/3 * normalized.x + Math.PI/2;
+		world.tCamera().position.x	= Math.cos(angleY)*cameraZ;
+		world.tCamera().position.z	= Math.sin(angleY)*cameraZ;
+		// update the target
+		world.tCamera().lookAt(world.tScene().position);
+	});	
+
 	// reset headTracker if space is pressed
 	document.addEventListener('keydown', function(event){
 		// only if the key is space
 		if( event.keyCode !== ' '.charCodeAt(0) )	return;
 		// reset the head tracker
 		headTracker.reset();
-	})
-
-	// make the camera move depending on facetrackingEvent
-	document.addEventListener("facetrackingEvent", function(event){
-		// get a normalizedX [-1, +1]
-		var canvasInput	= headTracker.canvasInput();
-		var canvasHalfW	= canvasInput.width/2;
-		var normalizedX	= (event.x-canvasHalfW)/canvasHalfW;
-		// set the position of the camera
-		var angleY	= Math.PI/3 * normalizedX + Math.PI/2;
-		var tCamera	= world.tCamera();
-		tCamera.position.x	= Math.cos(angleY)*cameraZ;
-		tCamera.position.z	= Math.sin(angleY)*cameraZ;
-		// update the target
-		var target	= tQuery.createVector3(0,0,0);
-		tCamera.lookAt(target);
-	});	
+	});
 });
 </script></body>

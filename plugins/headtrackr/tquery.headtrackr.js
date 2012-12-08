@@ -17,19 +17,24 @@ tQuery.registerStatic('Headtrackr', function(opts){
 		headtrackrOpts	: {}
 	});
 	
+	// bind facetrackingEvent
+	this._$facetrackingEventCb	= this._facetrackingEventCb.bind(this);
+	document.addEventListener("facetrackingEvent", this._$facetrackingEventCb);
+
+	
 	// create videoInput element to read the webcam
 	var videoInput	= document.createElement('video');
 	videoInput.setAttribute('autoplay');
 	videoInput.setAttribute('loop');
-	videoInput.setAttribute('width'	, '320');
-	videoInput.setAttribute('height', '240');
+	videoInput.setAttribute('width'	, this._opts.width.toString());
+	videoInput.setAttribute('height', this._opts.height.toString());
 	videoInput.style.display	= 'none';
 	this._videoInput	= videoInput;
 
 	// create canvasInput element to read the webcam
 	var canvasInput	= document.createElement('canvas');
-	canvasInput.setAttribute('width', '320');
-	canvasInput.setAttribute('height', '240');
+	canvasInput.setAttribute('width' , this._opts.width.toString());
+	canvasInput.setAttribute('height', this._opts.height.toString());
 	canvasInput.style.display	= 'none';
 	this._canvasInput	= canvasInput;
 
@@ -45,6 +50,7 @@ tQuery.MicroeventMixin(tQuery.Headtrackr.prototype);
  * detructor
  */
 tQuery.Headtrackr.prototype.destroy = function() {
+	document.removeEventListener("facetrackingEvent", this._$facetrackingEventCb);
 	this.stop();
 };
 
@@ -79,6 +85,21 @@ tQuery.Headtrackr.prototype.reset = function() {
 	htracker.stop();
 	htracker.start();
 	return this;
+};
+
+tQuery.Headtrackr.prototype._facetrackingEventCb = function(event){
+	var normalized	= event.normalizedCoords	= {};
+	
+	var canvasHalfW	= this._opts.width/2;
+	var canvasHalfH	= this._opts.width/2;
+
+	normalized.x		= - (event.x-canvasHalfW)/canvasHalfW;
+	normalized.y		= - (event.y-canvasHalfH)/canvasHalfH;
+	normalized.width	= event.width  / canvasHalfW;
+	normalized.height	= event.height / canvasHalfH;
+	normalized.angle	= event.angle + Math.PI/2;
+
+	this.dispatchEvent('facetrackingEvent', event);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -145,21 +166,21 @@ tQuery.Headtrackr.prototype._debugViewCallback = function(event){
 //		Some getter							//
 //////////////////////////////////////////////////////////////////////////////////
 
-/**
- * getter for the videoInput
- * @return {HTMLVideoElement} the video element which read the webcam
- */
-tQuery.Headtrackr.prototype.videoInput = function() {
-	return this._videoInput;
-};
+// /**
+//  * getter for the videoInput
+//  * @return {HTMLVideoElement} the video element which read the webcam
+//  */
+// tQuery.Headtrackr.prototype.videoInput = function() {
+// 	return this._videoInput;
+// };
 
-/**
- * getter for the canvasInput
- * @return {HTMLCanvasElement} the canvas input
- */
-tQuery.Headtrackr.prototype.canvasInput = function() {
-	return this._canvasInput;
-};
+// /**
+//  * getter for the canvasInput
+//  * @return {HTMLCanvasElement} the canvas input
+//  */
+// tQuery.Headtrackr.prototype.canvasInput = function() {
+// 	return this._canvasInput;
+// };
 
 
 
