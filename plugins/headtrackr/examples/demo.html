@@ -1,7 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src="../vendor/headtrackr.js"></script>
-<script src="../tquery.headtrackr.js"></script>
 <body><div id="info">
 	Example of tQuery.headtrackr plugin -
 	<a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a> +
@@ -10,7 +8,7 @@
 	<br/>
 	press [space] to reset head tracking
 </div><script>
-require(['tquery.skymap', 'tquery.lensflare'], function(){
+require(['tquery.skymap', 'tquery.lensflare', 'tquery.headtrackr'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 
 	// tune initial camera position
@@ -27,7 +25,7 @@ require(['tquery.skymap', 'tquery.lensflare'], function(){
 		
 	// load the head of walt
 	var loader	= new THREE.BinaryLoader( true );
-	loader.load("../../assets/obj/walt/WaltHead_bin.js", function(tGeometry){
+	loader.load("../../../plugins/assets/obj/walt/WaltHead_bin.js", function(tGeometry){
 		// normalize the geometry
 		var geometry	= tQuery(tGeometry).computeAll().normalize().computeAll();
 		// create the material
