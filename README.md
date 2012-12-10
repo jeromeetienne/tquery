@@ -36,6 +36,9 @@ looks like the code below... Quite short.
 
 #### Current
 
+#### Release - r53.0
+* ported to three.js r53
+
 #### Release - r52.0
 * ported to three.js r52
 
