@@ -1,0 +1,30 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="../threex.domevent.js"></script>
+<script src="../tquery.domevent.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.removeCameraControls();
+	// enable domEvent on this world
+	world.enableDomEvent();
+
+	// create a cube
+	var object	= tQuery.createTorus().addTo(world);
+	
+	var boundaryObj	= object.clone().addTo(object)
+		.setBasicMaterial({
+			color	: 0x306EFF,
+			side	: THREE.BackSide
+		}).back()
+		.scaleBy(1.05)
+		.visible(false);
+
+	// bind some event on it
+	object.on('mouseover', function(event){
+		boundaryObj.visible(true)
+	});
+	object.on('mouseout', function(event){
+		boundaryObj.visible(false)
+	});
+</script></body>

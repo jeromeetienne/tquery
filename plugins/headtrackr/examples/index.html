@@ -18,15 +18,10 @@
 		.start();
 
 	// make the camera move depending on facetrackingEvent
-	headTracker.addEventListener("facetrackingEvent", function(event){
-		// get a normalized coord [-1, +1]
-		var normalized	= event.normalizedCoords;
-		// pass normalized coord
-		object.positionX(normalized.x);
-		object.positionY(normalized.y);
-		object.scaleX(normalized.width);
-		object.scaleY(normalized.height);
-		object.rotationZ(normalized.angle);
+	headTracker.addEventListener("found", function(event){
+		object.rotationZ(event.angle)
+			.positionX(event.x).positionY(event.y)
+			.scaleX(event.width).scaleY(event.height);
 	});
 
 	// reset headTracker if space is pressed

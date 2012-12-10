@@ -1,0 +1,26 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var object	= tQuery.createCube(1,2,1)
+		// .setBasicMaterial({
+		// 	map	: '../../assets/images/water.jpg'
+		// }).back()
+		.addTo(world);
+		
+	object.geometry()
+			.normalize()
+		.back();
+	// console.log('object', object)
+
+	object.clone()
+		.setBasicMaterial({
+			color	: 0xff0000,
+			side	: THREE.BackSide
+		}).back()
+		.scaleBy(1.1)
+		.addTo(world)
+});
+</script></body>

@@ -17,14 +17,13 @@ tQuery.registerStatic('createCheckerboard', function(opts){
 	// create the geometry	
 	var geometry		= new THREE.PlaneGeometry( opts.width, opts.height, opts.segmentsW, opts.segmentsH );
 	// set materials per faces
-	geometry.materials	= [opts.materialEven, opts.materialOdd];
 	geometry.faces.forEach(function(face, idx){
 		var y	= Math.floor(idx / opts.segmentsW);
 		var x	= idx - (y*opts.segmentsW);
 		face.materialIndex	= (y % 2 + x%2 ) %2;
 	});
 	// create the mesh
-	var material	= new THREE.MeshFaceMaterial();
+	var material	= new THREE.MeshFaceMaterial([opts.materialEven, opts.materialOdd]);
 	var mesh	= new THREE.Mesh(geometry, material);
 	mesh.rotation.x	= -Math.PI/2;
 	// return the tQuery

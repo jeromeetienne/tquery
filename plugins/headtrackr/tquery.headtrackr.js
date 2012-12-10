@@ -50,13 +50,21 @@ tQuery.MicroeventMixin(tQuery.Headtrackr.prototype);
  * detructor
  */
 tQuery.Headtrackr.prototype.destroy = function() {
+	// stop converting headtrackr.js event to normalized one 
 	document.removeEventListener("facetrackingEvent", this._$facetrackingEventCb);
+	// stop head tracking
 	this.stop();
+	// disable debug view
+	this.debugView(false);
 };
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * start head tracking
- * 
  * @return {tQuery.Headtrackr} for chained API
  */
 tQuery.Headtrackr.prototype.start = function(){
@@ -66,17 +74,15 @@ tQuery.Headtrackr.prototype.start = function(){
 
 /**
  * stop head tracking
- * 
  * @return {tQuery.Headtrackr} for chained API
  */
 tQuery.Headtrackr.prototype.stop = function(){
-	this._htracker.start();
+	this._htracker.stop();
 	return this;
 };
 
 /**
  * Reset the headtracker
- * 
  * @return {tQuery.Headtrackr} for chained API
  */
 tQuery.Headtrackr.prototype.reset = function() {
@@ -87,28 +93,40 @@ tQuery.Headtrackr.prototype.reset = function() {
 	return this;
 };
 
-tQuery.Headtrackr.prototype._facetrackingEventCb = function(event){
-	var normalized	= event.normalizedCoords	= {};
-	
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Headtrackr.prototype._facetrackingEventCb = function(headtrackrEvent){
 	var canvasHalfW	= this._opts.width/2;
 	var canvasHalfH	= this._opts.width/2;
-
-	normalized.x		= - (event.x-canvasHalfW)/canvasHalfW;
-	normalized.y		= - (event.y-canvasHalfH)/canvasHalfH;
-	normalized.width	= event.width  / canvasHalfW;
-	normalized.height	= event.height / canvasHalfH;
-	normalized.angle	= event.angle + Math.PI/2;
-
-	this.dispatchEvent('facetrackingEvent', event);
+	// build the event to notify
+	var event	= {};	
+	event.x		= - (headtrackrEvent.x-canvasHalfW)/canvasHalfW;
+	event.y		= - (headtrackrEvent.y-canvasHalfH)/canvasHalfH;
+	event.width	= headtrackrEvent.width  / canvasHalfW;
+	event.height	= headtrackrEvent.height / canvasHalfH;
+	event.angle	= headtrackrEvent.angle + Math.PI/2;
+	event.headtrackrEvent	= headtrackrEvent;
+	// dispatch the event
+	this.dispatchEvent('found', event);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Handle debugView						//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * enable/disable the debug view
+ * @param  {Boolean|undefined} onOff if true, enable it, if false disable it, if undefined, getter
+ * @return {tQuery.Headtrackr} for chained API
+ */
 tQuery.Headtrackr.prototype.debugView = function(onOff){
 	if( onOff === undefined )	return this._$debugViewCallback	? true : false;
 	if( onOff === true ){
+		// if already on, do nothing
+		if( this.debugView() === true )	return;
 		// create the element
 		var canvasView		= document.createElement('canvas');
 		this._canvasView	= canvasView;
@@ -122,7 +140,7 @@ tQuery.Headtrackr.prototype.debugView = function(onOff){
 		canvasView.style.position	= 'absolute';
 		canvasView.style.top		= '0px';
 		canvasView.style.left		= '0px';
-		// mirror horizontal		
+		// mirror horizontal - needed as it is from the webcam	
         	canvasView.style.transform	= 'scaleX(-1)'
         	canvasView.style.webkitTransform= 'scaleX(-1)'
         	canvasView.style.mozTransform	= 'scaleX(-1)'
@@ -131,6 +149,8 @@ tQuery.Headtrackr.prototype.debugView = function(onOff){
 		canvasView.style.zIndex		= '1';
 		document.body.appendChild(canvasView);
 	}else if( onOff === false ){
+		// if already on, do nothing
+		if( this.debugView() === false )	return;
 		// removeEventListener
 		document.removeEventListener("facetrackingEvent", this._$debugViewCallback);
 		this._$debugViewCallback= null;
@@ -143,44 +163,28 @@ tQuery.Headtrackr.prototype.debugView = function(onOff){
 	return this;	// for chained API
 };
 
+/**
+ * [_debugViewCallback description]
+ * @param  {[type]} event [description]
+ * @return {[type]}       [description]
+ */
 tQuery.Headtrackr.prototype._debugViewCallback = function(event){
 	// sanity check
 	console.assert( this.debugView() === true );
-	// clear canvas
+	// clear canvas with videoInput
 	var context = this._canvasView.getContext('2d');
 	context.drawImage(this._videoInput, 0, 0, this._opts.width, this._opts.height);
+
 	// once we have stable tracking, draw rectangle
-	if( event.detection === 'CS' ){
-		context.save();
-		context.translate(event.x, event.y)
-		context.rotate(event.angle - Math.PI/2);
+	context.save();
+	context.translate(event.x, event.y)
+	context.rotate(event.angle - Math.PI/2);
 
-		context.strokeStyle	= '#00CC00';
-		context.strokeRect(Math.floor(-event.width/2), Math.floor(-event.height/2)
-				, event.width, event.height);
-		context.restore();
-	}
+	context.strokeStyle	= '#00CC00';
+	context.strokeRect(-Math.floor(event.width/2), -Math.floor(event.height/2)
+			, event.width, event.height);
+	context.restore();
 };
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Some getter							//
-//////////////////////////////////////////////////////////////////////////////////
-
-// /**
-//  * getter for the videoInput
-//  * @return {HTMLVideoElement} the video element which read the webcam
-//  */
-// tQuery.Headtrackr.prototype.videoInput = function() {
-// 	return this._videoInput;
-// };
-
-// /**
-//  * getter for the canvasInput
-//  * @return {HTMLCanvasElement} the canvas input
-//  */
-// tQuery.Headtrackr.prototype.canvasInput = function() {
-// 	return this._canvasInput;
-// };
 
 
 

@@ -208,12 +208,12 @@ tQuery.Car.prototype._addFlare	= function(){
 
 tQuery.Car.prototype._setNormalMaterial	= function()
 {
-	var car	= this._car;
-	var materials	= car.bodyGeometry.materials;
+	var car		= this._car;
+	var materials	= car.bodyMaterials;
 	materials[ 0 ]	= new THREE.MeshNormalMaterial();	// body
 	materials[ 1 ]	= new THREE.MeshNormalMaterial();	// front under lights, back
 
-	materials	= car.wheelGeometry.materials;
+	var materials	= car.wheelMaterials;
 	materials[ 0 ]	= new THREE.MeshNormalMaterial();	// insides
 	materials[ 1 ]	= new THREE.MeshNormalMaterial();	// tire
 }
@@ -252,14 +252,14 @@ tQuery.Car.prototype._setNiceMaterial	= function(){
 	var car	= this._car;
 	if( this._opts.type === 'gallardo' ){
 		// BODY
-		var materials = car.bodyGeometry.materials;
-		materials[ 0 ] = mlib.body[ 0 ][ 1 ]; 		// body
-		materials[ 1 ] = mlib[ "Dark chrome" ]; 	// front under lights, back
+		var materials	= car.bodyMaterials;
+		materials[ 0 ]	= mlib.body[ 0 ][ 1 ]; 		// body
+		materials[ 1 ]	= mlib[ "Dark chrome" ]; 	// front under lights, back
 
 		// WHEELS
-		materials = car.wheelGeometry.materials;
-		materials[ 0 ] = mlib[ "Chrome" ];		// insides
-		materials[ 1 ] = mlib[ "Black rough" ];		// tire
+		var materials	= car.wheelMaterials;
+		materials[ 0 ]	= mlib[ "Chrome" ];		// insides
+		materials[ 1 ]	= mlib[ "Black rough" ];		// tire
 	}else if( this._opts.type === 'veyron' ){
 		// 0 - top, front center, back sides
 		// 1 - front sides
@@ -271,20 +271,20 @@ tQuery.Car.prototype._setNiceMaterial	= function(){
 		// 7 - windshield
 		
 		// BODY
-		var materials = car.bodyGeometry.materials;
-		materials[ 0 ] = mlib[ "Black metal" ];		// top, front center, back sides
-		materials[ 1 ] = mlib[ "Chrome" ];		// front sides
-		materials[ 2 ] = mlib[ "Chrome" ];		// engine
-		materials[ 3 ] = mlib[ "Dark chrome" ];		// small chrome things
-		materials[ 4 ] = mlib[ "Red glass" ];		// backlights
-		materials[ 5 ] = mlib[ "Orange glass" ];	// back signals
-		materials[ 6 ] = mlib[ "Black rough" ];		// bottom, interior
-		materials[ 7 ] = mlib[ "Dark glass" ];		// windshield
+		var materials	= car.bodyMaterials;
+		materials[ 0 ]	= mlib[ "Black metal" ];		// top, front center, back sides
+		materials[ 1 ]	= mlib[ "Chrome" ];		// front sides
+		materials[ 2 ]	= mlib[ "Chrome" ];		// engine
+		materials[ 3 ]	= mlib[ "Dark chrome" ];		// small chrome things
+		materials[ 4 ]	= mlib[ "Red glass" ];		// backlights
+		materials[ 5 ]	= mlib[ "Orange glass" ];	// back signals
+		materials[ 6 ]	= mlib[ "Black rough" ];		// bottom, interior
+		materials[ 7 ]	= mlib[ "Dark glass" ];		// windshield
 		
 		// WHEELS		
-		materials = car.wheelGeometry.materials;
-		materials[ 0 ] = mlib[ "Chrome" ];		// insides
-		materials[ 1 ] = mlib[ "Black rough" ];		// tire
+		var materials	= car.wheelMaterials;
+		materials[ 0 ]	= mlib[ "Chrome" ];		// insides
+		materials[ 1 ]	= mlib[ "Black rough" ];		// tire
 	}else	console.assert( false );
 }
 
