@@ -26,6 +26,7 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 	this._$onLoop	= opts.world.loop().hook(function(delta, now){
 		var keyboard	= tQuery.keyboard();
 		var model	= opts.object3D;
+		var prevPosition= model.position.clone();
 		var action	= {
 			left	: keyboard.pressed("left")  || keyboard.pressed("a") || keyboard.pressed("a"),
 			right	: keyboard.pressed("right") || keyboard.pressed("d"),
@@ -59,8 +60,13 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 			matrix.multiplyVector3(speed);
 			model.position.addSelf(speed);
 		}
-	});	
+		// notify an event of the update
+		this.dispatchEvent('postUpdate', model.position, prevPosition);
+	}.bind(this));
 });
+
+// make it eventable
+tQuery.MicroeventMixin(tQuery.MinecraftCharKeyboard2.prototype);
 
 tQuery.MinecraftCharKeyboard2.prototype.destroy	= function(){
 	opts.world.loop().unhook(this._$onLoop);
