@@ -3,20 +3,15 @@
 <script src="../vendor/headtrackr.js"></script>
 <script src="../tquery.headtrackr.js"></script>
 <body><script>
+	// init the world
 	var world	= tQuery.createWorld().boilerplate().start();
 	world.removeCameraControls();
-
-	var object	= tQuery.createCube().addTo(world);
 	
 	// create the headTracker
-	var headTracker	= tQuery.createHeadtrackr({
-			headtrackrOpts	: {
-				calcAngles : true
-			}
-		})
-		.debugView(true)
-		.start();
+	var headTracker	= tQuery.createHeadtrackr().debugView(true).start();
 
+	// add a cube in the world scene
+	var object	= tQuery.createCube().addTo(world);
 	// make the camera move depending on facetrackingEvent
 	headTracker.addEventListener("found", function(event){
 		object.rotationZ(event.angle)
