@@ -39499,7 +39499,7 @@ requirejs.config({
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
-			"tquery.light": "plugins/light/tquery.light.shadow",
+			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
@@ -39508,7 +39508,6 @@ requirejs.config({
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
-			"tquery.shadow": "plugins/shadow/tquery.light.shadow",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
@@ -39619,8 +39618,8 @@ requirejs.config({
 			"three.js/postprocessing/ShaderPass",
 			"three.js/postprocessing/TexturePass"
 		],
-		"plugins/shadow/tquery.light.shadow": [
-			"plugins/shadow/tquery.world.shadow"
+		"plugins/shadowmap/tquery.light.shadowmap": [
+			"plugins/shadowmap/tquery.world.shadowmap"
 		],
 		"plugins/shape/tquery.shape": [
 			"plugins/shape/tquery.shape.create"

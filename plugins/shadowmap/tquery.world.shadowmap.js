@@ -1,4 +1,4 @@
-tQuery.World.registerInstance('shadowEnabled', function(value){
+tQuery.World.registerInstance('shadowMapEnabled', function(value){
 	this.tRenderer().shadowMapEnabled	= value;
 	return this;
 });

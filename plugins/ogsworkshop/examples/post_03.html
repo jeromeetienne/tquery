@@ -6,7 +6,7 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
 require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
-	, 'tquery.keyboard', 'tquery.shadow'], function(){
+	, 'tquery.keyboard', 'tquery.shadowmap'], function(){
 	// create world
 	var world	= tQuery.createWorld().boilerplate().start();
 	// add a skybox
@@ -47,7 +47,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
 	})
 
 	//////////////////////////////////////////////////////////////////////////
-	//		lights							//
+	//		shadowMap						//
 	//////////////////////////////////////////////////////////////////////////	
 	// enable shadow in the world renderer
 	world.shadowMapEnabled(true);
@@ -55,14 +55,14 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
 	character.castShadow(true);
 	// make ground receive shadow
 	ground.receiveShadow(true);
-
+	// create a light and make it cast shadow
 	tQuery.createDirectionalLight().addTo(world)
 		.position(-1, 2, 3)
-				
+
 		.castShadow(true)
 
 		.shadowCameraVisible(true)
-		.shadowDarkness(1)
+		.shadowDarkness(0.6)
 		.shadowMap(1024,1024)
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 })
