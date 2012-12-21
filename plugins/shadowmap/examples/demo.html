@@ -1,0 +1,87 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([
+		'tquery.text', 'tquery.skymap',
+		'tquery.pproc', 'tquery.datguituner',
+	], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	// world.getCameraControls().rangeX	= 1/2;
+	// world.getCameraControls().rangeY	= 1/2;
+	
+	tQuery.createAmbientLight().addTo(world).color(0x444444);	
+	tQuery.createDirectionalLight().addTo(world).position(-1, 1, 1)
+		.intensity(2)
+		.color(0x888888)
+//	tQuery.createDirectionalLight().addTo(world).position( 1,-1, 1).color(0x4444aa);
+
+
+	// create the spot
+	var spot	= tQuery.createCylinder(0.3, 0.0001, 0.8).addTo(world)
+		.geometry()
+			.rotateX(Math.PI/2)
+			.scaleBy(1/2)
+			.smooth(1.3)
+			.back()
+		.setPhongMaterial({
+			ambient		: 0xffffff,
+			color		: 0xffffFF,
+			shininess	: 80,
+			envMap		: tQuery.createCubeTexture('pisa')
+		}).back();
+
+	world.loop().hook(function(delta, now){
+		var angle	= 0.15 * now * Math.PI * 2;	
+		var positionX	= Math.cos(angle*1.0)*3;
+		var positionY	= Math.cos(angle*1/4)*1.3;
+		var positionZ	= Math.sin(angle*1.0)*1.1;
+		spot.position(positionX, positionY, positionZ)
+
+
+		spot.get(0).lookAt( world.tScene().position );
+	});
+
+	var pointLight	= tQuery.createPointLight().addTo(spot)
+		.color(0xFF8844).intensity(3);
+
+
+	
+	world.addEffectComposer()
+		.bleachbypass()
+		.motionBlur(0.5)
+		.film(0.5, 0.25, 648, false)
+		.vignette()
+		.finish();
+
+	// // init dat.gui
+	// var gui	= new dat.GUI();
+	// // add all lights
+	// tQuery.DatguiTuner({
+	// 	selector: 'light',
+	// 	gui	: gui
+	// });
+	// // add the materialss
+	// tQuery.DatguiTuner({
+	// 	selector: tQuery('mesh').material().get(),
+	// 	gui	: gui
+	// });
+	
+	//var text	= tQuery.createSphere(1, 32, 32).addTo(world)
+	var text	= tQuery.createText('LIGHT').addTo(world)
+		.scaleBy(1)
+		.setPhongMaterial({
+			map		: THREE.ImageUtils.loadTexture('../../assets/images/wood.jpg'),	
+			//reflectivity	: 0.8,
+			ambient		: 0x808080,
+			//color		: 0xAA8800,
+			//color		: 0x6688FF,
+			shininess	: 120,
+			//envMap		: tQuery.createCubeTexture('swedishRoyalCastle')
+		}).back();
+
+	tQuery.createSkymap('skybox').addTo(world);
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+})
+</script></body>
+
