@@ -1,5 +1,4 @@
-tQuery.registerStatic('createMinecraftChar', function(opts){
-	return new tQuery.MinecraftChar(opts);
+tQuery.registerStatic('createMinecraftChar', function(opts){return new tQuery.MinecraftChar(opts);
 });
 
 /**
@@ -247,7 +246,7 @@ tQuery.MinecraftChar.prototype.object3D	= function(name){
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		Interface addTo/removeTo					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -266,3 +265,26 @@ tQuery.MinecraftChar.prototype.removeFrom	= function(object3D){
 	return this;
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Interface ShadowCasting						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * castShaddow setter
+ * @param  {Boolean} value if true, this object will cast shadow, if false, it wont
+ * @return {tQuery.MinecraftChar}	for chained API
+ */
+tQuery.MinecraftChar.prototype.castShadow	= function(value){
+	tQuery('mesh', this.object3D()).castShadow(value);
+	return this;
+};
+
+/**
+ * receiveShaddow setter
+ * @param  {Boolean} value if true, this object will cast shadow, if false, it wont
+ * @return {tQuery.MinecraftChar}	for chained API
+ */
+tQuery.MinecraftChar.prototype.receiveShadow	= function(value){
+	tQuery('mesh', this.object3D()).receiveShaddow(value);
+	return this;	
+};

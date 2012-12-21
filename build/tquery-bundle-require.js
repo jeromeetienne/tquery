@@ -38351,6 +38351,7 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	ambient			: tQuery.convert.toThreeColor,
 	map			: tQuery.convert.toTexture,
 	envMap			: tQuery.convert.toTexture,
+	side			: tQuery.convert.identity,
 	wireframe		: tQuery.convert.toBoolean,
 	wireframeLinewidth	: tQuery.convert.toInteger,
 	wireframeLinecap	: tQuery.convert.toString
@@ -39507,6 +39508,7 @@ requirejs.config({
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
+			"tquery.shadow": "plugins/shadow/tquery.light.shadow",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
@@ -39616,6 +39618,9 @@ requirejs.config({
 			"three.js/postprocessing/SavePass",
 			"three.js/postprocessing/ShaderPass",
 			"three.js/postprocessing/TexturePass"
+		],
+		"plugins/shadow/tquery.light.shadow": [
+			"plugins/shadow/tquery.world.shadow"
 		],
 		"plugins/shape/tquery.shape": [
 			"plugins/shape/tquery.shape.create"

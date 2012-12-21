@@ -10,7 +10,7 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
-		lateralMove	: 'strafe'
+		lateralMove	: 'rotationY'
 	});
 	// sanity check
 	console.assert( opts.object3D instanceof THREE.Object3D )
