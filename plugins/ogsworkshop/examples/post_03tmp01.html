@@ -6,7 +6,6 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
 require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
-	, 'tquery.keyboard'
 	, 'tquery.shadowmap'], function(){
 	// create world
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -53,8 +52,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
 	world.tRenderer().shadowMapEnabled	= true;
 	tQuery('mesh', character.object3D('root')).castShadow(true);
 
-if( true ){
-console.log('ss')
+if( false ){
 	tQuery('mesh', character3D).each(function(tObject3D){
 		var tMaterialSrc= tObject3D.material;
 		var tMaterialDst= THREE.MeshLambertMaterial.prototype.clone.apply(tMaterialSrc)
@@ -63,13 +61,13 @@ console.log('ss')
 	});
 }
 
-if(false){
+if(true){
 	tQuery('mesh', character3D).each(function(tObject3D){
 		var tMaterial	= tObject3D.material;
 		var object3D	= new tQuery.Mesh(tObject3D)
 			.setLambertMaterial()
-				.ambient(0x444444)
-				.color(0xFFffff)
+				.ambient(0x888888)
+				.color(0xcccccc)
 				.map(tMaterial.map.image.src)
 				.transparent(tMaterial.transparent)
 				.side(tMaterial.side)
@@ -83,11 +81,14 @@ if(false){
 
 	ground.receiveShadow(true);
 
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x888888);
+		
 	tQuery.createDirectionalLight().addTo(world)
 		.position(-1, 2, 3)
 		.castShadow(true)
 		.shadowCameraVisible(true)
-		.shadowDarkness(1)
+		.shadowDarkness(0.8)
 		.shadowMap(1024,1024)
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 })
