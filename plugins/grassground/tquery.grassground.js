@@ -13,7 +13,7 @@ tQuery.registerStatic('createGrassGround', function(opts){
 		anisotropy	: 16,
 		textureUrl	: tQuery.createGrassGround.baseUrl + 'images/grasslight-big.jpg'
 	});
-
+	
 	var texture	= THREE.ImageUtils.loadTexture(opts.textureUrl);
 	texture.wrapS	= THREE.RepeatWrapping;
 	texture.wrapT	= THREE.RepeatWrapping;
