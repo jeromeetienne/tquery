@@ -41,11 +41,13 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shad
 		prevPosition.copy( character3D.position() );		
 	})
 
+
 	//////////////////////////////////////////////////////////////////////////
 	//		shadowMap						//
 	//////////////////////////////////////////////////////////////////////////	
 	// enable shadow in the world renderer
-	world.shadowMapEnabled(true);
+	world.shadowMapEnabled(true)
+		.shadowMapSoft(true)
 	// make minecraft character cast shadow
 	character.castShadow(true);
 	// make ground receive shadow
@@ -53,8 +55,10 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shad
 	// create a light and make it cast shadow
 	var light	= tQuery.createDirectionalLight().addTo(world)
 		.position(-1, 2, 3)
-		.castShadow(true).shadowCameraVisible(true)
-		.shadowDarkness(0.6).shadowMap(1024,1024)
+		.castShadow(true)
+		.shadowCameraVisible(true)
+		.shadowDarkness(0.8)
+		.shadowMap(1024,1024)
 		.shadowCamera(4, -4, 4, -4, 0.1, 10);
 	// light to follow character
 	world.loop().hook(function(){

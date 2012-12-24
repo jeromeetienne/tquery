@@ -1,5 +1,8 @@
 <!doctype html><title>Chat And Fight 03 - Lights and Shadows</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
+<!-- all network scripts -->
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+<script src="http://localhost:4000/examples/client.js"></script>
 <body><script>
 require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
 	// create world
@@ -64,5 +67,49 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shad
 	})
 	// point the light target to character3D
 	light.get(0).target.position	= character3D.position();
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		network							//
+	//////////////////////////////////////////////////////////////////////////
+	// init the gameServer
+	var mySourceId	= null;
+	var players	= {};
+
+	// initiate connect with server
+	var serverUrl	= 'http://localhost:4000';
+	var userInfo	= {
+		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
+	};
+	var gameServer	= new SimpleMMOServer('public', userInfo, serverUrl);
+	// handle event
+	gameServer.addEventListener('connected', function(sourceId, usersInfo){
+		console.log('connected', arguments)
+	});
+
+	gameServer.addEventListener('userJoin', function(data){
+		console.log('userJoin', arguments)
+	});
+
+	gameServer.addEventListener('userLeft', function(data){
+		console.log('userLeft', data)
+	});
+
+	// periodically send the position of the character
+	// - NOTE: not done on requestAnimationFrame as it has to be done even if page isnt visible
+	setInterval(function(){
+		var mesh	= character.object3D('root');
+		var position	= mesh.position();
+		var rotation	= mesh.rotation();
+		gameServer.clientEcho({
+			type	: 'positionChange',
+			position: { x : position.x, y : position.y, z : position.z },
+			rotation: { x : rotation.x, y : rotation.y, z : rotation.z },
+		});
+	}, 0.2 * 1000);
+
+	gameServer.addEventListener('clientEcho', function(data){
+		console.log('clientEcho', JSON.stringify(data, null, '\t'));
+	});
 })
 </script></body>
