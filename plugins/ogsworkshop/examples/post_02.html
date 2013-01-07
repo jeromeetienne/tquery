@@ -3,15 +3,15 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
 // load tQuery plugins with require.js
-require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyboard'], function(){
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'], function(){
 	// create world
 	var world	= tQuery.createWorld().boilerplate().start();
 	// add a skybox
 	tQuery.createSkymap('skybox').addTo(world);
 	// add a ground	
 	var ground  = tQuery.createGrassGround({
-		textureRepeatX  : 10,
-		textureRepeatY  : 10,
+		textureRepeatX  : 5,
+		textureRepeatY  : 5,
 	}).addTo(world).scale(80);
 
 	// add minecraft char

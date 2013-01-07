@@ -8,13 +8,13 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 	// add a human on it, well a minecraft character
 	tQuery.createMinecraftChar().addTo(world);	
-	// // add a skybox
-	// tQuery.createSkymap('skybox').addTo(world);
-	// // add a ground
-	// tQuery.createGrassGround({
-	// 	textureRepeatX  : 5,
-	// 	textureRepeatY  : 5
-	// }).addTo(world).scaleBy(80);
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+	// add a ground
+	tQuery.createGrassGround({
+		textureRepeatX  : 5,
+		textureRepeatY  : 5
+	}).addTo(world).scaleBy(80);
 	// quite easy now ?
 })
 </script></body>
