@@ -56,10 +56,10 @@ tQuery.mixinAttributes(tQuery.Object3D, {
  * 
  * @returns {tQuery.Object3D} return the tQuery.Object3D itself
 */
-tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
-	this.each(function(object3d){
-		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
-			callback(object3d);
+tQuery.Object3D.prototype.traverse	= function(callback){
+	this.each(function(tObject3d){
+		tObject3d.traverse(function(childObject3D){
+			callback(childObject3D, this);
 		});
 	});
 	return this;	// for chained API
