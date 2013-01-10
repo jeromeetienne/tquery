@@ -6,7 +6,7 @@
 <script src="tquery.heightmap.js">	</script>
 		
 <body><script>
-require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
+require(['tquery.pproc', 'tquery.minecraft'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
 	// world.tCamera.z	= -2;
@@ -17,9 +17,8 @@ require(['tquery.pproc', 'tquery.minecraft', 'tquery.keyboard'], function(){
 
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	tQuery.createMinecraftCharKeyboard2({
-		object3D	: character.object3D('root').get(0),
-		lateralMove	: 'rotationY',
-	});		
+		object3D	: character.object3D(),
+	});
 
 	character.object3D().position(origin);
 

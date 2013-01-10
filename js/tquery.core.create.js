@@ -34,6 +34,11 @@ tQuery.registerStatic('createLoop', function(world){
 });
 
 
+tQuery.registerStatic('createHemisphereLight', function(){
+	var tLight	= new THREE.HemisphereLight();
+	return new tQuery.HemisphereLight([tLight]);
+});
+
 tQuery.registerStatic('createDirectionalLight', function(){
 	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);

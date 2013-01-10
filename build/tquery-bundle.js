@@ -36968,15 +36968,14 @@ tQuery.mixinAttributes(tQuery.Object3D, {
  * 
  * @returns {tQuery.Object3D} return the tQuery.Object3D itself
 */
-tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
-	this.each(function(object3d){
-		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
-			callback(object3d);
+tQuery.Object3D.prototype.traverse	= function(callback){
+	this.each(function(tObject3d){
+		tObject3d.traverse(function(childObject3D){
+			callback(childObject3D, this);
 		});
 	});
 	return this;	// for chained API
 };
-
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -37974,6 +37973,11 @@ tQuery.registerStatic('createLoop', function(world){
 });
 
 
+tQuery.registerStatic('createHemisphereLight', function(){
+	var tLight	= new THREE.HemisphereLight();
+	return new tQuery.HemisphereLight([tLight]);
+});
+
 tQuery.registerStatic('createDirectionalLight', function(){
 	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);
@@ -38186,6 +38190,46 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	shadowCameraFar		: tQuery.convert.toNumber
 });
 
+
+
+/**
+ * Handle directional light
+ *
+ * @class include THREE.HemisphereLight. It inherit from {@link tQuery.Light}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.HemisphereLight} element an instance or array of instance
+*/
+tQuery.HemisphereLight	= function(elements)
+{
+	// call parent ctor
+	tQuery.HemisphereLight.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Light
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.HemisphereLight); });
+};
+
+/**
+ * inherit from tQuery.Light
+*/
+tQuery.inherit(tQuery.HemisphereLight, tQuery.Light);
+
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.HemisphereLight);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.HemisphereLight, {
+	intensity	: tQuery.convert.toNumber,
+	distance	: tQuery.convert.toNumber,
+	groundColor	: tQuery.convert.toThreeColor
+});
 
 
 /**

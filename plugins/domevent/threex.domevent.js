@@ -136,7 +136,7 @@ THREEx.DomEvent.prototype._getRelativeMouseXY	= function(domEvent){
 	var elPosition	= { x : 0 , y : 0};
 	var tmpElement	= element;
 	//store padding
-	var style	= getComputedStyle(e, null);
+	var style	= getComputedStyle(tmpElement, null);
 	elPosition.y += parseInt(style.getPropertyValue("padding-top"), 10);
 	elPosition.x += parseInt(style.getPropertyValue("padding-left"), 10);
 	//add positions

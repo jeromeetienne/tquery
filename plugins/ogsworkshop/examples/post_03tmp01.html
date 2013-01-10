@@ -62,20 +62,16 @@ if( false ){
 }
 
 if( true ){
-	tQuery('mesh', character3D).each(function(tObject3D){
+	tQuery('mesh', character3D).traverse(function(tObject3D){
 		var tMaterial	= tObject3D.material;
 		var object3D	= new tQuery.Mesh(tObject3D)
 			.setLambertMaterial()
 				.ambient(0x888888)
 				.color(0xcccccc)
-				.map(tMaterial.map.image.src)
+				.map(tMaterial.map)
 				.transparent(tMaterial.transparent)
 				.side(tMaterial.side)
 			.back()
-
-		var tTexture	= object3D.material().get(0).map;
-		tTexture.magFilter	= THREE.NearestFilter;
-		tTexture.minFilter	= THREE.NearestFilter;
 	});
 }
 
@@ -89,7 +85,7 @@ if( true ){
 		.castShadow(true)
 		.shadowCameraVisible(true)
 		.shadowDarkness(0.8)
-		.shadowMap(1024,1024)
+		.shadowMap(1024*2,1024*2)
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 })
 </script></body>

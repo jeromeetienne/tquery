@@ -11,6 +11,8 @@ tQuery.registerStatic('createCameraFpsControls', function(opts){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.registerStatic('CameraFpsControls', function(opts){
+	// handle parameters polymorphism
+	if( opts.trackedObject instanceof tQuery.Object3D )	opts.trackedObject	= opts.trackedObject.get(0);
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
