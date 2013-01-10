@@ -1,0 +1,2653 @@
+[0.000][INFO]:      ChromeDriver 23.0.1240.0 /opt/local/bin/chromedriver
+[0.569][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome"
+}
+
+[0.569][INFO]:      Launching chrome: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome --enable-logging --log-level=1 --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --disable-background-networking --disable-sync --disable-translate --disable-web-resources --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --use-mock-keychain --ignore-certificate-errors about:blank
+[0.950][INFO]:      Connected to Chrome successfully. Version: 23.0.1271.101
+[0.959][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79)
+[0.959][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "23.0.1240.0",
+      "chrome.nativeEvents": false,
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "mac",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "23.0.1271.101",
+      "webStorageEnabled": true
+   }
+}
+
+[0.999][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/blueskybackground/examples/index.html"
+}
+
+[0.999][FINER]:     Waiting for all views to stop loading...
+[0.999][FINER]:     Done waiting for all views to stop loading
+[1.279][FINER]:     Waiting for all views to stop loading...
+[1.302][FINER]:     Done waiting for all views to stop loading
+[1.302][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[2.308][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[2.308][FINER]:     Waiting for all views to stop loading...
+[2.308][FINER]:     Done waiting for all views to stop loading
+[2.349][FINER]:     Waiting for all views to stop loading...
+[2.349][FINER]:     Done waiting for all views to stop loading
+[2.350][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAOtklEQVR4nO3dwU0EQRAEwWlUdmAPHuE+NpAfhBRhwX1T1bN3n..."
+}
+
+[2.360][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/example_load3jsbg.html"
+}
+
+[2.360][FINER]:     Waiting for all views to stop loading...
+[2.360][FINER]:     Done waiting for all views to stop loading
+[2.504][FINER]:     Waiting for all views to stop loading...
+[2.506][FINER]:     Done waiting for all views to stop loading
+[2.506][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[3.511][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[3.511][FINER]:     Waiting for all views to stop loading...
+[3.526][FINER]:     Done waiting for all views to stop loading
+[3.692][FINER]:     Waiting for all views to stop loading...
+[3.693][FINER]:     Done waiting for all views to stop loading
+[3.693][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdeZRk130f9u/v3rfW0tt09+z7YGYwAAgMCIokS..."
+}
+
+[3.767][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/example_save3jsbg.html"
+}
+
+[3.767][FINER]:     Waiting for all views to stop loading...
+[3.781][FINER]:     Done waiting for all views to stop loading
+[3.932][FINER]:     Waiting for all views to stop loading...
+[3.935][FINER]:     Done waiting for all views to stop loading
+[3.935][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[4.941][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[4.941][FINER]:     Waiting for all views to stop loading...
+[4.945][FINER]:     Done waiting for all views to stop loading
+[5.060][FINER]:     Waiting for all views to stop loading...
+[5.061][FINER]:     Done waiting for all views to stop loading
+[5.061][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALQCAIAAACxHYTgAAAgAElEQVR4nOzdd3Rd130n+t9vn3b7RScKQRJglUgVUt2qLrESx..."
+}
+
+[5.080][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/example_test3jsbg.html"
+}
+
+[5.080][FINER]:     Waiting for all views to stop loading...
+[5.095][FINER]:     Done waiting for all views to stop loading
+[5.185][FINER]:     Waiting for all views to stop loading...
+[5.200][FINER]:     Done waiting for all views to stop loading
+[5.200][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[6.206][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[6.206][FINER]:     Waiting for all views to stop loading...
+[6.214][FINER]:     Done waiting for all views to stop loading
+[6.312][FINER]:     Waiting for all views to stop loading...
+[6.312][FINER]:     Done waiting for all views to stop loading
+[6.312][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALQCAIAAACxHYTgAAAgAElEQVR4nOzdeZQc130f+u/v3qrq7umeHTtBgAQJgptIiiIty..."
+}
+
+[6.329][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/experiment.html"
+}
+
+[6.330][FINER]:     Waiting for all views to stop loading...
+[6.340][FINER]:     Done waiting for all views to stop loading
+[6.440][FINER]:     Waiting for all views to stop loading...
+[6.441][FINER]:     Done waiting for all views to stop loading
+[6.441][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[7.446][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[7.446][FINER]:     Waiting for all views to stop loading...
+[7.461][FINER]:     Done waiting for all views to stop loading
+[7.559][FINER]:     Waiting for all views to stop loading...
+[7.560][FINER]:     Done waiting for all views to stop loading
+[7.560][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdaZAk93km9jczK486uvqc+57BDEAABASAFEhQJ..."
+}
+
+[7.571][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/genericloader.html"
+}
+
+[7.571][FINER]:     Waiting for all views to stop loading...
+[7.583][FINER]:     Done waiting for all views to stop loading
+[7.699][FINER]:     Waiting for all views to stop loading...
+[7.717][FINER]:     Done waiting for all views to stop loading
+[7.717][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[8.721][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[8.721][FINER]:     Waiting for all views to stop loading...
+[8.730][FINER]:     Done waiting for all views to stop loading
+[8.814][FINER]:     Waiting for all views to stop loading...
+[8.814][FINER]:     Done waiting for all views to stop loading
+[8.814][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdeZBcyX0n9t8vM9+rs+8bQOOeGczJ4XAunkNyK..."
+}
+
+[8.822][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/genericloader0.html"
+}
+
+[8.822][FINER]:     Waiting for all views to stop loading...
+[8.834][FINER]:     Done waiting for all views to stop loading
+[8.916][FINER]:     Waiting for all views to stop loading...
+[8.919][FINER]:     Done waiting for all views to stop loading
+[8.919][FINE]:      Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[9.932][FINE]:      Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[9.932][FINER]:     Waiting for all views to stop loading...
+[9.949][FINER]:     Done waiting for all views to stop loading
+[10.030][FINER]:    Waiting for all views to stop loading...
+[10.030][FINER]:    Done waiting for all views to stop loading
+[10.030][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3df6yd910f8K9/pMi2Fjt26AjLzbXbOjX9EWMPu..."
+}
+
+[10.035][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/manual_particlesystem.html"
+}
+
+[10.035][FINER]:    Waiting for all views to stop loading...
+[10.036][FINER]:    Done waiting for all views to stop loading
+[10.124][FINER]:    Waiting for all views to stop loading...
+[10.127][FINER]:    Done waiting for all views to stop loading
+[10.127][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[11.133][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[11.133][FINER]:    Waiting for all views to stop loading...
+[11.135][FINER]:    Done waiting for all views to stop loading
+[11.222][FINER]:    Waiting for all views to stop loading...
+[11.222][FINER]:    Done waiting for all views to stop loading
+[11.222][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3df5Cc930f9u8B/DEAYgALHClRInTAiZBISyJNn..."
+}
+
+[11.228][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/manual_square.html"
+}
+
+[11.228][FINER]:    Waiting for all views to stop loading...
+[11.239][FINER]:    Done waiting for all views to stop loading
+[11.339][FINER]:    Waiting for all views to stop loading...
+[11.340][FINER]:    Done waiting for all views to stop loading
+[11.340][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[12.344][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[12.344][FINER]:    Waiting for all views to stop loading...
+[12.348][FINER]:    Done waiting for all views to stop loading
+[12.442][FINER]:    Waiting for all views to stop loading...
+[12.442][FINER]:    Done waiting for all views to stop loading
+[12.442][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9d5Dkx3Xn+X2Z+XPl2013j/cYwoMgHB1AI4qUS..."
+}
+
+[12.453][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/manual_squareoptim.html"
+}
+
+[12.453][FINER]:    Waiting for all views to stop loading...
+[12.465][FINER]:    Done waiting for all views to stop loading
+[12.558][FINER]:    Waiting for all views to stop loading...
+[12.559][FINER]:    Done waiting for all views to stop loading
+[12.559][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[13.564][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[13.564][FINER]:    Waiting for all views to stop loading...
+[13.568][FINER]:    Done waiting for all views to stop loading
+[13.679][FINER]:    Waiting for all views to stop loading...
+[13.680][FINER]:    Done waiting for all views to stop loading
+[13.680][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdd7Qc2X0n9u/vVujcr/tl4AEPOWMGk2cwwxFJk..."
+}
+
+[13.700][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/manual_triangle.html"
+}
+
+[13.700][FINER]:    Waiting for all views to stop loading...
+[13.701][FINER]:    Done waiting for all views to stop loading
+[13.790][FINER]:    Waiting for all views to stop loading...
+[13.793][FINER]:    Done waiting for all views to stop loading
+[13.793][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[14.798][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[14.798][FINER]:    Waiting for all views to stop loading...
+[14.803][FINER]:    Done waiting for all views to stop loading
+[14.893][FINER]:    Waiting for all views to stop loading...
+[14.893][FINER]:    Done waiting for all views to stop loading
+[14.893][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdeZBd130n9t/vnHPvW3vfATR2kuAqirsWipIoy..."
+}
+
+[14.902][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/original.html"
+}
+
+[14.902][FINER]:    Waiting for all views to stop loading...
+[14.906][FINER]:    Done waiting for all views to stop loading
+[15.008][FINER]:    Waiting for all views to stop loading...
+[15.009][FINER]:    Done waiting for all views to stop loading
+[15.009][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[16.014][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[16.014][FINER]:    Waiting for all views to stop loading...
+[16.021][FINER]:    Done waiting for all views to stop loading
+[16.126][FINER]:    Waiting for all views to stop loading...
+[16.126][FINER]:    Done waiting for all views to stop loading
+[16.126][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9yZPcRpL974HcM4tVpIqLFmppqSW1Wj2XOczf/..."
+}
+
+[16.136][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/squareloader.html"
+}
+
+[16.136][FINER]:    Waiting for all views to stop loading...
+[16.143][FINER]:    Done waiting for all views to stop loading
+[16.230][FINER]:    Waiting for all views to stop loading...
+[16.233][FINER]:    Done waiting for all views to stop loading
+[16.233][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[17.237][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[17.237][FINER]:    Waiting for all views to stop loading...
+[17.252][FINER]:    Done waiting for all views to stop loading
+[17.349][FINER]:    Waiting for all views to stop loading...
+[17.349][FINER]:    Done waiting for all views to stop loading
+[17.349][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9d5Dkx3Xn+X2Z+XPl2013j/cYwoMgHB1AI4qUS..."
+}
+
+[17.360][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/buffergeometry/examples/triangleloader.html"
+}
+
+[17.360][FINER]:    Waiting for all views to stop loading...
+[17.369][FINER]:    Done waiting for all views to stop loading
+[17.460][FINER]:    Waiting for all views to stop loading...
+[17.463][FINER]:    Done waiting for all views to stop loading
+[17.463][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[18.468][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[18.468][FINER]:    Waiting for all views to stop loading...
+[18.471][FINER]:    Done waiting for all views to stop loading
+[18.560][FINER]:    Waiting for all views to stop loading...
+[18.560][FINER]:    Done waiting for all views to stop loading
+[18.560][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdeZBcyX0n9t8vM9+rs+8bQOOeGczJ4XAunkNyK..."
+}
+
+[18.570][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/car/examples/index.html"
+}
+
+[18.570][FINER]:    Waiting for all views to stop loading...
+[18.575][FINER]:    Done waiting for all views to stop loading
+[18.693][FINER]:    Waiting for all views to stop loading...
+[18.713][FINER]:    Done waiting for all views to stop loading
+[18.713][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[19.720][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[19.720][FINER]:    Waiting for all views to stop loading...
+[19.728][FINER]:    Done waiting for all views to stop loading
+[20.068][FINER]:    Waiting for all views to stop loading...
+[20.069][FINER]:    Done waiting for all views to stop loading
+[20.069][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nOy9edCmyVEf+Mus53m/q7u/vo+Z7umee0ZzHxoJM..."
+}
+
+[20.148][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/car/examples/index2.html"
+}
+
+[20.148][FINER]:    Waiting for all views to stop loading...
+[20.163][FINER]:    Done waiting for all views to stop loading
+[20.361][FINER]:    Waiting for all views to stop loading...
+[20.366][FINER]:    Done waiting for all views to stop loading
+[20.366][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[21.372][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[21.372][FINER]:    Waiting for all views to stop loading...
+[21.375][FINER]:    Done waiting for all views to stop loading
+[21.472][FINER]:    Waiting for all views to stop loading...
+[21.472][FINER]:    Done waiting for all views to stop loading
+[21.472][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAMGCAIAAADTDXBmAAAgAElEQVR4nOzdfXQd52Hf+d/zzL0XFyRIghRfQL2CegUpUYBiJ..."
+}
+
+[21.479][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/checkerboard/examples/index.html"
+}
+
+[21.479][FINER]:    Waiting for all views to stop loading...
+[21.480][FINER]:    Done waiting for all views to stop loading
+[21.583][FINER]:    Waiting for all views to stop loading...
+[21.584][FINER]:    Done waiting for all views to stop loading
+[21.584][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[22.589][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[22.589][FINER]:    Waiting for all views to stop loading...
+[22.590][FINER]:    Done waiting for all views to stop loading
+[22.677][FINER]:    Waiting for all views to stop loading...
+[22.677][FINER]:    Done waiting for all views to stop loading
+[22.677][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAASRklEQVR4nO3da8yfZX3A8d8DFRQjB+upiFjmYaBhCMENB2bhU..."
+}
+
+[22.681][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/csg/examples/index.html"
+}
+
+[22.682][FINER]:    Waiting for all views to stop loading...
+[22.682][FINER]:    Done waiting for all views to stop loading
+[23.035][FINER]:    Waiting for all views to stop loading...
+[23.036][FINER]:    Done waiting for all views to stop loading
+[23.036][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[24.040][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[24.040][FINER]:    Waiting for all views to stop loading...
+[24.043][FINER]:    Done waiting for all views to stop loading
+[24.137][FINER]:    Waiting for all views to stop loading...
+[24.147][FINER]:    Done waiting for all views to stop loading
+[24.147][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3dfYzk933Y98887dM98VkUaVK2jjFPokTbqaIoF..."
+}
+
+[24.155][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/datguituner/examples/index.html"
+}
+
+[24.155][FINER]:    Waiting for all views to stop loading...
+[24.160][FINER]:    Done waiting for all views to stop loading
+[24.344][FINER]:    Waiting for all views to stop loading...
+[24.345][FINER]:    Done waiting for all views to stop loading
+[24.345][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[25.350][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[25.350][FINER]:    Waiting for all views to stop loading...
+[25.362][FINER]:    Done waiting for all views to stop loading
+[25.462][FINER]:    Waiting for all views to stop loading...
+[25.463][FINER]:    Done waiting for all views to stop loading
+[25.463][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOyde5QcZZn/n7eqL5OZySSdhIQEAqS5GCZBwAmii..."
+}
+
+[25.472][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/deviceorientation/examples/index.html"
+}
+
+[25.472][FINER]:    Waiting for all views to stop loading...
+[25.482][FINER]:    Done waiting for all views to stop loading
+[25.637][FINER]:    Waiting for all views to stop loading...
+[25.650][FINER]:    Done waiting for all views to stop loading
+[25.651][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[26.654][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[26.654][FINER]:    Waiting for all views to stop loading...
+[26.664][FINER]:    Done waiting for all views to stop loading
+[26.752][FINER]:    Waiting for all views to stop loading...
+[26.752][FINER]:    Done waiting for all views to stop loading
+[26.752][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3dfYxl91kf8N/si8OuhXc3s3G64PGuDV4voHidF..."
+}
+
+[26.757][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/dollar3d/examples/index.html"
+}
+
+[26.757][FINER]:    Waiting for all views to stop loading...
+[26.768][FINER]:    Done waiting for all views to stop loading
+[26.902][FINER]:    Waiting for all views to stop loading...
+[26.904][FINER]:    Done waiting for all views to stop loading
+[26.904][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[27.908][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[27.909][FINER]:    Waiting for all views to stop loading...
+[27.911][FINER]:    Done waiting for all views to stop loading
+[27.996][FINER]:    Waiting for all views to stop loading...
+[27.997][FINER]:    Done waiting for all views to stop loading
+[27.997][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3db4xdd14e8J//7cp2Gzu2STdLJmMv68TssjG2K..."
+}
+
+[28.002][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/domevent/examples/hover.html"
+}
+
+[28.002][FINER]:    Waiting for all views to stop loading...
+[28.015][FINER]:    Done waiting for all views to stop loading
+[28.149][FINER]:    Waiting for all views to stop loading...
+[28.149][FINER]:    Done waiting for all views to stop loading
+[28.149][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[29.154][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[29.154][FINER]:    Waiting for all views to stop loading...
+[29.163][FINER]:    Done waiting for all views to stop loading
+[29.250][FINER]:    Waiting for all views to stop loading...
+[29.250][FINER]:    Done waiting for all views to stop loading
+[29.250][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3df6yd910f8O+1nTDbInbsEDDkxg40qWlpgi3YT..."
+}
+
+[29.258][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/domevent/examples/index.html"
+}
+
+[29.258][FINER]:    Waiting for all views to stop loading...
+[29.267][FINER]:    Done waiting for all views to stop loading
+[29.356][FINER]:    Waiting for all views to stop loading...
+[29.357][FINER]:    Done waiting for all views to stop loading
+[29.357][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[30.362][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[30.362][FINER]:    Waiting for all views to stop loading...
+[30.365][FINER]:    Done waiting for all views to stop loading
+[30.452][FINER]:    Waiting for all views to stop loading...
+[30.452][FINER]:    Done waiting for all views to stop loading
+[30.452][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAASeUlEQVR4nO3dXYymZ12A8f9Ot20E7WRtQVpw221326XaLDSmr..."
+}
+
+[30.456][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/domevent/examples/testcameratype.html"
+}
+
+[30.456][FINER]:    Waiting for all views to stop loading...
+[30.456][FINER]:    Done waiting for all views to stop loading
+[30.540][FINER]:    Waiting for all views to stop loading...
+[30.575][FINER]:    Done waiting for all views to stop loading
+[30.575][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[31.580][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[31.580][FINER]:    Waiting for all views to stop loading...
+[31.581][FINER]:    Done waiting for all views to stop loading
+[31.620][FINER]:    Waiting for all views to stop loading...
+[31.621][FINER]:    Done waiting for all views to stop loading
+[31.621][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAOGUlEQVR4nO3XwQ3AIBDAsNL9dz5mIB+EZE+Qb9bMfAAAAOf+2..."
+}
+
+[31.624][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/fireball/examples/index.html"
+}
+
+[31.624][FINER]:    Waiting for all views to stop loading...
+[31.625][FINER]:    Done waiting for all views to stop loading
+[31.719][FINER]:    Waiting for all views to stop loading...
+[31.721][FINER]:    Done waiting for all views to stop loading
+[31.721][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[32.726][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[32.726][FINER]:    Waiting for all views to stop loading...
+[32.732][FINER]:    Done waiting for all views to stop loading
+[32.860][FINER]:    Waiting for all views to stop loading...
+[32.860][FINER]:    Done waiting for all views to stop loading
+[32.860][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzd6ZNl93kf9u/z2845997unp4dwAAkMABIgCSGp..."
+}
+
+[32.883][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/flocking/examples/demo.html"
+}
+
+[32.883][FINER]:    Waiting for all views to stop loading...
+[32.899][FINER]:    Done waiting for all views to stop loading
+[33.006][FINER]:    Waiting for all views to stop loading...
+[33.019][FINER]:    Done waiting for all views to stop loading
+[33.019][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[34.023][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[34.023][FINER]:    Waiting for all views to stop loading...
+[34.033][FINER]:    Done waiting for all views to stop loading
+[34.272][FINER]:    Waiting for all views to stop loading...
+[34.272][FINER]:    Done waiting for all views to stop loading
+[34.272][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALQCAIAAACxHYTgAAAgAElEQVR4nNS9abAlx1Un/ju13Hvfe90t9WKpZeFFra2t1m6BL..."
+}
+
+[34.343][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/flocking/examples/index.html"
+}
+
+[34.343][FINER]:    Waiting for all views to stop loading...
+[34.351][FINER]:    Done waiting for all views to stop loading
+[34.438][FINER]:    Waiting for all views to stop loading...
+[34.458][FINER]:    Done waiting for all views to stop loading
+[34.459][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[35.463][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[35.463][FINER]:    Waiting for all views to stop loading...
+[35.468][FINER]:    Done waiting for all views to stop loading
+[35.740][FINER]:    Waiting for all views to stop loading...
+[35.740][FINER]:    Done waiting for all views to stop loading
+[35.740][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nOy9d3wU953//5rVCtQlJCQhUXZXSKKYjgBjjATCB..."
+}
+
+[35.772][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/fog/examples/index.html"
+}
+
+[35.772][FINER]:    Waiting for all views to stop loading...
+[35.787][FINER]:    Done waiting for all views to stop loading
+[35.945][FINER]:    Waiting for all views to stop loading...
+[35.946][FINER]:    Done waiting for all views to stop loading
+[35.946][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[36.950][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[36.950][FINER]:    Waiting for all views to stop loading...
+[36.950][FINER]:    Done waiting for all views to stop loading
+[37.036][FINER]:    Waiting for all views to stop loading...
+[37.036][FINER]:    Done waiting for all views to stop loading
+[37.036][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3de4xk6X0e5u9UV19mZndmudRytTscziomE5G0u..."
+}
+
+[37.044][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/glfx/examples/index.html"
+}
+
+[37.044][FINER]:    Waiting for all views to stop loading...
+[37.055][FINER]:    Done waiting for all views to stop loading
+[37.179][FINER]:    Waiting for all views to stop loading...
+[37.180][FINER]:    Done waiting for all views to stop loading
+[37.180][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[38.185][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[38.185][FINER]:    Waiting for all views to stop loading...
+[38.186][FINER]:    Done waiting for all views to stop loading
+[38.468][FINER]:    Waiting for all views to stop loading...
+[38.468][FINER]:    Done waiting for all views to stop loading
+[38.468][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAgAElEQVR4nOy9a5vlNo4mCFDSOZFpu2Zn92Pfu///D5tnp7vLd..."
+}
+
+[38.509][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/grassground/examples/index.html"
+}
+
+[38.509][FINER]:    Waiting for all views to stop loading...
+[38.520][FINER]:    Done waiting for all views to stop loading
+[38.657][FINER]:    Waiting for all views to stop loading...
+[38.658][FINER]:    Done waiting for all views to stop loading
+[38.658][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[39.662][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[39.662][FINER]:    Waiting for all views to stop loading...
+[39.672][FINER]:    Done waiting for all views to stop loading
+[39.761][FINER]:    Waiting for all views to stop loading...
+[39.762][FINER]:    Done waiting for all views to stop loading
+[39.762][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALQCAIAAACxHYTgAAAgAElEQVR4nO3daZhU5Z3w4aehodmURRZZZQ+4hMQFjHEiccFtN..."
+}
+
+[39.768][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/gsvpano/examples/index-require.html"
+}
+
+[39.768][FINER]:    Waiting for all views to stop loading...
+[39.769][FINER]:    Done waiting for all views to stop loading
+[43.164][FINER]:    Waiting for all views to stop loading...
+[43.165][FINER]:    Done waiting for all views to stop loading
+[43.165][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[44.169][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[44.169][FINER]:    Waiting for all views to stop loading...
+[44.175][FINER]:    Done waiting for all views to stop loading
+[44.264][FINER]:    Waiting for all views to stop loading...
+[44.264][FINER]:    Done waiting for all views to stop loading
+[44.264][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAKg0lEQVR4nO3dTYhVdRzG8UcZbSHO4FYjZ3yZlBbTamojMi3Ci..."
+}
+
+[44.268][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/gsvpano/examples/index.html"
+}
+
+[44.268][FINER]:    Waiting for all views to stop loading...
+[44.269][FINER]:    Done waiting for all views to stop loading
+[44.398][FINER]:    Waiting for all views to stop loading...
+[44.399][FINER]:    Done waiting for all views to stop loading
+[44.399][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[45.402][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[45.402][FINER]:    Waiting for all views to stop loading...
+[45.411][FINER]:    Done waiting for all views to stop loading
+[45.516][FINER]:    Waiting for all views to stop loading...
+[45.516][FINER]:    Done waiting for all views to stop loading
+[45.516][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAMrElEQVR4nO3daYydVRkH8P/tDC1gukBBKNYuLNpSapcA1lA1E..."
+}
+
+[45.520][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/gsvpano/examples/ongamestartdemo.html"
+}
+
+[45.520][FINER]:    Waiting for all views to stop loading...
+[45.520][FINER]:    Done waiting for all views to stop loading
+[45.607][FINER]:    Waiting for all views to stop loading...
+[45.615][FINER]:    Done waiting for all views to stop loading
+[45.615][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[46.619][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[46.619][FINER]:    Waiting for all views to stop loading...
+[46.629][FINER]:    Done waiting for all views to stop loading
+[46.775][FINER]:    Waiting for all views to stop loading...
+[46.775][FINER]:    Done waiting for all views to stop loading
+[46.775][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nOy9d3xb1fk//hwNa1ke8pD3drxn7MR29nASMiCBh..."
+}
+
+[46.794][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/headtrackr/examples/demo.html"
+}
+
+[46.794][FINER]:    Waiting for all views to stop loading...
+[46.800][FINER]:    Done waiting for all views to stop loading
+[46.930][FINER]:    Waiting for all views to stop loading...
+[46.931][FINER]:    Done waiting for all views to stop loading
+[46.931][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[47.935][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[47.935][FINER]:    Waiting for all views to stop loading...
+[48.037][FINER]:    Done waiting for all views to stop loading
+[48.500][FINER]:    Waiting for all views to stop loading...
+[48.514][FINER]:    Done waiting for all views to stop loading
+[48.514][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAKWCAIAAABoHG2RAAAgAElEQVR4nLR9dYBVxff4OffFdneywNId0i0hCAoSCoKBioKtG..."
+}
+
+[48.593][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/headtrackr/examples/index.html"
+}
+
+[48.593][FINER]:    Waiting for all views to stop loading...
+[48.598][FINER]:    Done waiting for all views to stop loading
+[48.762][FINER]:    Waiting for all views to stop loading...
+[48.786][FINER]:    Done waiting for all views to stop loading
+[48.786][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[49.791][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[49.791][FINER]:    Waiting for all views to stop loading...
+[49.796][FINER]:    Done waiting for all views to stop loading
+[49.879][FINER]:    Waiting for all views to stop loading...
+[49.879][FINER]:    Done waiting for all views to stop loading
+[49.879][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAKWCAIAAABoHG2RAAARi0lEQVR4nO3dX6zedX3A8U9PC42YQRBko2GFQguVSYqEgBtdN..."
+}
+
+[49.883][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/iim3dcharacter/examples/index.html"
+}
+
+[49.883][FINER]:    Waiting for all views to stop loading...
+[49.883][FINER]:    Done waiting for all views to stop loading
+[50.292][FINER]:    Waiting for all views to stop loading...
+[50.293][FINER]:    Done waiting for all views to stop loading
+[50.293][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[51.298][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[51.298][FINER]:    Waiting for all views to stop loading...
+[51.299][FINER]:    Done waiting for all views to stop loading
+[51.570][FINER]:    Waiting for all views to stop loading...
+[51.570][FINER]:    Done waiting for all views to stop loading
+[51.570][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAgAElEQVR4nOy96bosu24kBh5Jdx5b8yy5bfVky3L7/V9twz8yS..."
+}
+
+[51.627][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/iimdesignparam/examples/index.html"
+}
+
+[51.627][FINER]:    Waiting for all views to stop loading...
+[51.632][FINER]:    Done waiting for all views to stop loading
+[51.952][FINER]:    Waiting for all views to stop loading...
+[51.955][FINER]:    Done waiting for all views to stop loading
+[51.955][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[52.960][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[52.960][FINER]:    Waiting for all views to stop loading...
+[52.964][FINER]:    Done waiting for all views to stop loading
+[53.052][FINER]:    Waiting for all views to stop loading...
+[53.053][FINER]:    Done waiting for all views to stop loading
+[53.053][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzde4xkV37Y99+5VdXz6nnxPRxy+FpylkMtqdU+L..."
+}
+
+[53.058][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/iimminigame/examples/index.html"
+}
+
+[53.058][FINER]:    Waiting for all views to stop loading...
+[53.068][FINER]:    Done waiting for all views to stop loading
+[53.239][FINER]:    Waiting for all views to stop loading...
+[53.242][FINER]:    Done waiting for all views to stop loading
+[53.242][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[54.247][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[54.247][FINER]:    Waiting for all views to stop loading...
+[54.251][FINER]:    Done waiting for all views to stop loading
+[54.525][FINER]:    Waiting for all views to stop loading...
+[54.526][FINER]:    Done waiting for all views to stop loading
+[54.526][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nJy9S7N12XIdNEauXdaVZQUmbFlGEo8mEQRBBHTgf..."
+}
+
+[54.561][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/keyboard/examples/index.html"
+}
+
+[54.561][FINER]:    Waiting for all views to stop loading...
+[54.567][FINER]:    Done waiting for all views to stop loading
+[54.657][FINER]:    Waiting for all views to stop loading...
+[54.658][FINER]:    Done waiting for all views to stop loading
+[54.658][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[55.663][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[55.663][FINER]:    Waiting for all views to stop loading...
+[55.668][FINER]:    Done waiting for all views to stop loading
+[55.755][FINER]:    Waiting for all views to stop loading...
+[55.756][FINER]:    Done waiting for all views to stop loading
+[55.756][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3dbYxdd14f8L+fFtlWY8cOgWwzGXtZZ80CMbYQm..."
+}
+
+[55.761][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/lavamaterial/examples/index.html"
+}
+
+[55.761][FINER]:    Waiting for all views to stop loading...
+[55.773][FINER]:    Done waiting for all views to stop loading
+[55.980][FINER]:    Waiting for all views to stop loading...
+[55.980][FINER]:    Done waiting for all views to stop loading
+[55.980][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[56.985][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[56.985][FINER]:    Waiting for all views to stop loading...
+[57.001][FINER]:    Done waiting for all views to stop loading
+[57.141][FINER]:    Waiting for all views to stop loading...
+[57.142][FINER]:    Done waiting for all views to stop loading
+[57.142][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALQCAIAAACxHYTgAAAgAElEQVR4nOzdeZgdV3ng/+97qu7ae7da+2ZZkndjvLDZ4IXBM..."
+}
+
+[57.187][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/lensflare/examples/index.html"
+}
+
+[57.187][FINER]:    Waiting for all views to stop loading...
+[57.200][FINER]:    Done waiting for all views to stop loading
+[57.338][FINER]:    Waiting for all views to stop loading...
+[57.339][FINER]:    Done waiting for all views to stop loading
+[57.339][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[58.343][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[58.343][FINER]:    Waiting for all views to stop loading...
+[58.352][FINER]:    Done waiting for all views to stop loading
+[58.491][FINER]:    Waiting for all views to stop loading...
+[58.492][FINER]:    Done waiting for all views to stop loading
+[58.492][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOx9aYLkKs6t5Oy3/wV9ayvr/QCERsAOR0RWXdS3s..."
+}
+
+[58.507][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/lightsaber/examples/index.html"
+}
+
+[58.507][FINER]:    Waiting for all views to stop loading...
+[58.519][FINER]:    Done waiting for all views to stop loading
+[58.642][FINER]:    Waiting for all views to stop loading...
+[58.642][FINER]:    Done waiting for all views to stop loading
+[58.642][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[59.647][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[59.647][FINER]:    Waiting for all views to stop loading...
+[59.657][FINER]:    Done waiting for all views to stop loading
+[59.854][FINER]:    Waiting for all views to stop loading...
+[59.854][FINER]:    Done waiting for all views to stop loading
+[59.854][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nOydeZweRZ3/v9/qZyYzuSBADiAQEgiXRECCHLIkB..."
+}
+
+[59.876][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/linkify/examples/index.html"
+}
+
+[59.876][FINER]:    Waiting for all views to stop loading...
+[59.888][FINER]:    Done waiting for all views to stop loading
+[60.164][FINER]:    Waiting for all views to stop loading...
+[60.165][FINER]:    Done waiting for all views to stop loading
+[60.165][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[61.169][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[61.169][FINER]:    Waiting for all views to stop loading...
+[61.173][FINER]:    Done waiting for all views to stop loading
+[61.260][FINER]:    Waiting for all views to stop loading...
+[61.261][FINER]:    Done waiting for all views to stop loading
+[61.261][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdaXAk52Hm+SePOtBXAt0km30Vkq2LlIhuURxSE..."
+}
+
+[61.267][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/materials/examples/bumpmap.html"
+}
+
+[61.267][FINER]:    Waiting for all views to stop loading...
+[61.278][FINER]:    Done waiting for all views to stop loading
+[61.477][FINER]:    Waiting for all views to stop loading...
+[61.483][FINER]:    Done waiting for all views to stop loading
+[61.483][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[62.488][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[62.488][FINER]:    Waiting for all views to stop loading...
+[62.488][FINER]:    Done waiting for all views to stop loading
+[62.651][FINER]:    Waiting for all views to stop loading...
+[62.655][FINER]:    Done waiting for all views to stop loading
+[62.655][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdaZgkd33g+f8ZV0beV2Xd1VVdXd3Vp7pbLaELB..."
+}
+
+[63.012][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/materials/examples/index.html"
+}
+
+[63.012][FINER]:    Waiting for all views to stop loading...
+[63.022][FINER]:    Done waiting for all views to stop loading
+[63.153][FINER]:    Waiting for all views to stop loading...
+[63.155][FINER]:    Done waiting for all views to stop loading
+[63.155][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[64.160][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[64.160][FINER]:    Waiting for all views to stop loading...
+[64.174][FINER]:    Done waiting for all views to stop loading
+[64.267][FINER]:    Waiting for all views to stop loading...
+[64.267][FINER]:    Done waiting for all views to stop loading
+[64.267][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdy45kyV3H8chLVXW3u1pMz8jjMYiL7UFCiErZK..."
+}
+
+[64.273][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/md2character/examples/index.html"
+}
+
+[64.273][FINER]:    Waiting for all views to stop loading...
+[64.278][FINER]:    Done waiting for all views to stop loading
+[66.171][FINER]:    Waiting for all views to stop loading...
+[66.172][FINER]:    Done waiting for all views to stop loading
+[66.172][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[67.178][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[67.178][FINER]:    Waiting for all views to stop loading...
+[67.192][FINER]:    Done waiting for all views to stop loading
+[67.408][FINER]:    Waiting for all views to stop loading...
+[67.409][FINER]:    Done waiting for all views to stop loading
+[67.409][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9Tc9tW3Ye9Iy53lNOnMhJbCOXcRyCIZYtlfMdC..."
+}
+
+[67.449][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/animation.html"
+}
+
+[67.449][FINER]:    Waiting for all views to stop loading...
+[67.458][FINER]:    Done waiting for all views to stop loading
+[67.643][FINER]:    Waiting for all views to stop loading...
+[67.644][FINER]:    Done waiting for all views to stop loading
+[67.644][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[68.648][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[68.648][FINER]:    Waiting for all views to stop loading...
+[68.660][FINER]:    Done waiting for all views to stop loading
+[68.752][FINER]:    Waiting for all views to stop loading...
+[68.752][FINER]:    Done waiting for all views to stop loading
+[68.752][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdd3hUdd7//89kEgIhIUKAgEAQCEXAjBQRXFAQW..."
+}
+
+[68.758][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/bubble.html"
+}
+
+[68.758][FINER]:    Waiting for all views to stop loading...
+[68.764][FINER]:    Done waiting for all views to stop loading
+[69.179][FINER]:    Waiting for all views to stop loading...
+[69.180][FINER]:    Done waiting for all views to stop loading
+[69.180][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[70.184][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[70.184][FINER]:    Waiting for all views to stop loading...
+[70.196][FINER]:    Done waiting for all views to stop loading
+[70.285][FINER]:    Waiting for all views to stop loading...
+[70.285][FINER]:    Done waiting for all views to stop loading
+[70.285][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdeZQc92HY+V9Vd899YAAMboAkSFEADwwpkiJF8..."
+}
+
+[70.291][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/char.html"
+}
+
+[70.291][FINER]:    Waiting for all views to stop loading...
+[70.301][FINER]:    Done waiting for all views to stop loading
+[70.418][FINER]:    Waiting for all views to stop loading...
+[70.420][FINER]:    Done waiting for all views to stop loading
+[70.420][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[71.425][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[71.425][FINER]:    Waiting for all views to stop loading...
+[71.431][FINER]:    Done waiting for all views to stop loading
+[71.518][FINER]:    Waiting for all views to stop loading...
+[71.518][FINER]:    Done waiting for all views to stop loading
+[71.518][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAXWElEQVR4nO3df6zddX3H8fftPeWmLd7rpbWVrlILFFFnCk5lE..."
+}
+
+[71.523][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/flyer.html"
+}
+
+[71.523][FINER]:    Waiting for all views to stop loading...
+[71.523][FINER]:    Done waiting for all views to stop loading
+[71.663][FINER]:    Waiting for all views to stop loading...
+[71.665][FINER]:    Done waiting for all views to stop loading
+[71.665][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[72.670][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[72.670][FINER]:    Waiting for all views to stop loading...
+[72.679][FINER]:    Done waiting for all views to stop loading
+[72.919][FINER]:    Waiting for all views to stop loading...
+[72.930][FINER]:    Done waiting for all views to stop loading
+[72.930][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nDzWV7Ylx5lg6d+Em5trfdSVEYEAQLKy5j+IWlmZS..."
+}
+
+[73.095][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/index.html"
+}
+
+[73.095][FINER]:    Waiting for all views to stop loading...
+[73.095][FINER]:    Done waiting for all views to stop loading
+[73.307][FINER]:    Waiting for all views to stop loading...
+[73.308][FINER]:    Done waiting for all views to stop loading
+[73.308][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[74.312][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[74.312][FINER]:    Waiting for all views to stop loading...
+[74.315][FINER]:    Done waiting for all views to stop loading
+[74.547][FINER]:    Waiting for all views to stop loading...
+[74.549][FINER]:    Done waiting for all views to stop loading
+[74.549][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9bdS121UWttZ7nnNiIAZwOKRiFCF8icVP1BBoa..."
+}
+
+[74.575][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/items.html"
+}
+
+[74.575][FINER]:    Waiting for all views to stop loading...
+[74.583][FINER]:    Done waiting for all views to stop loading
+[74.690][FINER]:    Waiting for all views to stop loading...
+[74.690][FINER]:    Done waiting for all views to stop loading
+[74.690][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[75.695][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[75.695][FINER]:    Waiting for all views to stop loading...
+[75.701][FINER]:    Done waiting for all views to stop loading
+[75.788][FINER]:    Waiting for all views to stop loading...
+[75.788][FINER]:    Done waiting for all views to stop loading
+[75.788][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAd10lEQVR4nO3df4zfd33Y8ZedS+K4+TGD08WUHcSxc2ka/CloB..."
+}
+
+[75.793][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/post.html"
+}
+
+[75.793][FINER]:    Waiting for all views to stop loading...
+[75.805][FINER]:    Done waiting for all views to stop loading
+[75.905][FINER]:    Waiting for all views to stop loading...
+[75.906][FINER]:    Done waiting for all views to stop loading
+[75.906][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[76.911][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[76.911][FINER]:    Waiting for all views to stop loading...
+[76.920][FINER]:    Done waiting for all views to stop loading
+[77.008][FINER]:    Waiting for all views to stop loading...
+[77.008][FINER]:    Done waiting for all views to stop loading
+[77.008][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nO3deZzVdb348c+ZGWbYdwZZBEQQMBVFRcXS3HBBL..."
+}
+
+[77.014][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/spritesheet.html"
+}
+
+[77.015][FINER]:    Waiting for all views to stop loading...
+[77.020][FINER]:    Done waiting for all views to stop loading
+[77.778][FINER]:    Waiting for all views to stop loading...
+[77.778][FINER]:    Done waiting for all views to stop loading
+[77.778][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[78.783][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[78.783][FINER]:    Waiting for all views to stop loading...
+[78.785][FINER]:    Done waiting for all views to stop loading
+[78.870][FINER]:    Waiting for all views to stop loading...
+[78.870][FINER]:    Done waiting for all views to stop loading
+[78.870][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAY+0lEQVR4nO3de4yldX3H8d/CCKwW8THGCygsD7BuUUAdXC4uA..."
+}
+
+[78.874][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minimal/examples/index-requirejs.html"
+}
+
+[78.874][FINER]:    Waiting for all views to stop loading...
+[78.875][FINER]:    Done waiting for all views to stop loading
+[79.018][FINER]:    Waiting for all views to stop loading...
+[79.023][FINER]:    Done waiting for all views to stop loading
+[79.023][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[80.028][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[80.028][FINER]:    Waiting for all views to stop loading...
+[80.037][FINER]:    Done waiting for all views to stop loading
+[80.147][FINER]:    Waiting for all views to stop loading...
+[80.153][FINER]:    Done waiting for all views to stop loading
+[80.153][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3db4xdd14e8J//7cp2Gzu2STdLJmMv68TssjG2K..."
+}
+
+[80.158][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minimal/examples/index.html"
+}
+
+[80.158][FINER]:    Waiting for all views to stop loading...
+[80.171][FINER]:    Done waiting for all views to stop loading
+[80.349][FINER]:    Waiting for all views to stop loading...
+[80.353][FINER]:    Done waiting for all views to stop loading
+[80.353][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[81.358][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[81.358][FINER]:    Waiting for all views to stop loading...
+[81.372][FINER]:    Done waiting for all views to stop loading
+[81.463][FINER]:    Waiting for all views to stop loading...
+[81.463][FINER]:    Done waiting for all views to stop loading
+[81.463][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3db4xdd14e8J//7cp2Gzu2STdLJmMv68TssjG2K..."
+}
+
+[81.468][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/montainarena/examples/demo.html"
+}
+
+[81.468][FINER]:    Waiting for all views to stop loading...
+[81.477][FINER]:    Done waiting for all views to stop loading
+[81.594][FINER]:    Waiting for all views to stop loading...
+[81.615][FINER]:    Done waiting for all views to stop loading
+[81.615][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[82.620][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[82.620][FINER]:    Waiting for all views to stop loading...
+[82.621][FINER]:    Done waiting for all views to stop loading
+[82.730][FINER]:    Waiting for all views to stop loading...
+[82.730][FINER]:    Done waiting for all views to stop loading
+[82.730][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9zY9cV5rm90YkmUlSjMzIaokSPySRhiUK1Wq07..."
+}
+
+[82.738][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/montainarena/examples/index.html"
+}
+
+[82.738][FINER]:    Waiting for all views to stop loading...
+[82.742][FINER]:    Done waiting for all views to stop loading
+[82.912][FINER]:    Waiting for all views to stop loading...
+[82.914][FINER]:    Done waiting for all views to stop loading
+[82.914][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[83.919][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[83.919][FINER]:    Waiting for all views to stop loading...
+[83.923][FINER]:    Done waiting for all views to stop loading
+[84.011][FINER]:    Waiting for all views to stop loading...
+[84.011][FINER]:    Done waiting for all views to stop loading
+[84.011][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdXYxcZ5of9qe6SYpk2MNT3rVEcWek7jEwErzZt..."
+}
+
+[84.016][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/montainarena/examples/mergetest.html"
+}
+
+[84.016][FINER]:    Waiting for all views to stop loading...
+[84.016][FINER]:    Done waiting for all views to stop loading
+[84.127][FINER]:    Waiting for all views to stop loading...
+[84.160][FINER]:    Done waiting for all views to stop loading
+[84.160][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[85.165][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[85.165][FINER]:    Waiting for all views to stop loading...
+[85.165][FINER]:    Done waiting for all views to stop loading
+[85.220][FINER]:    Waiting for all views to stop loading...
+[85.220][FINER]:    Done waiting for all views to stop loading
+[85.220][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzde7xld0Hf/e/aa5/7mUwSuSQZciGZRCQBIgQwE..."
+}
+
+[85.225][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/nonplayablechar/examples/example.html"
+}
+
+[85.225][FINER]:    Waiting for all views to stop loading...
+[85.225][FINER]:    Done waiting for all views to stop loading
+[85.317][FINER]:    Waiting for all views to stop loading...
+[85.332][FINER]:    Done waiting for all views to stop loading
+[85.332][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[86.337][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[86.337][FINER]:    Waiting for all views to stop loading...
+[86.343][FINER]:    Done waiting for all views to stop loading
+[86.430][FINER]:    Waiting for all views to stop loading...
+[86.430][FINER]:    Done waiting for all views to stop loading
+[86.430][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3dfXBd530f+AcESJqgRJAEQ1UyKZCOKTGxLYWc2..."
+}
+
+[86.435][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/nonplayablechar/examples/machinejstest.html"
+}
+
+[86.435][FINER]:    Waiting for all views to stop loading...
+[86.435][FINER]:    Done waiting for all views to stop loading
+[86.519][FINER]:    Waiting for all views to stop loading...
+[86.520][FINER]:    Done waiting for all views to stop loading
+[86.520][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[87.525][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[87.525][FINER]:    Waiting for all views to stop loading...
+[87.540][FINER]:    Done waiting for all views to stop loading
+[87.626][FINER]:    Waiting for all views to stop loading...
+[87.626][FINER]:    Done waiting for all views to stop loading
+[87.626][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAR0klEQVR4nO3dW4jmZR3A8d+OJzJSxMrcbHXNtTWKtQiNLDraE..."
+}
+
+[87.632][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/objloader/examples/chatandfight-port.html"
+}
+
+[87.632][FINER]:    Waiting for all views to stop loading...
+[87.646][FINER]:    Done waiting for all views to stop loading
+[87.764][FINER]:    Waiting for all views to stop loading...
+[87.782][FINER]:    Done waiting for all views to stop loading
+[87.782][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[88.786][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[88.786][FINER]:    Waiting for all views to stop loading...
+[88.786][FINER]:    Done waiting for all views to stop loading
+[89.519][FINER]:    Waiting for all views to stop loading...
+[89.519][FINER]:    Done waiting for all views to stop loading
+[89.519][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9V9NlOXIglpkAjrnm++or09VVbcauVuSSDIqxQ..."
+}
+
+[89.600][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/objloader/examples/example.html"
+}
+
+[89.600][FINER]:    Waiting for all views to stop loading...
+[89.612][FINER]:    Done waiting for all views to stop loading
+[89.756][FINER]:    Waiting for all views to stop loading...
+[89.771][FINER]:    Done waiting for all views to stop loading
+[89.771][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[90.776][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[90.776][FINER]:    Waiting for all views to stop loading...
+[90.779][FINER]:    Done waiting for all views to stop loading
+[90.945][FINER]:    Waiting for all views to stop loading...
+[90.946][FINER]:    Done waiting for all views to stop loading
+[90.946][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nOy9S9MkyZUdds51j8jvUc9+oIEGMOSQMyRHMkkUV..."
+}
+
+[90.971][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/objloader/examples/loader.html"
+}
+
+[90.971][FINER]:    Waiting for all views to stop loading...
+[90.980][FINER]:    Done waiting for all views to stop loading
+[91.085][FINER]:    Waiting for all views to stop loading...
+[91.085][FINER]:    Done waiting for all views to stop loading
+[91.085][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[92.090][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[92.090][FINER]:    Waiting for all views to stop loading...
+[92.094][FINER]:    Done waiting for all views to stop loading
+[92.202][FINER]:    Waiting for all views to stop loading...
+[92.203][FINER]:    Done waiting for all views to stop loading
+[92.203][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdW6wlV34e9u+MOUnkNC9ngIB9qLmQTc4NiiGle..."
+}
+
+[92.214][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/objloader/examples/pathfinding.html"
+}
+
+[92.215][FINER]:    Waiting for all views to stop loading...
+[92.227][FINER]:    Done waiting for all views to stop loading
+[92.372][FINER]:    Waiting for all views to stop loading...
+[92.384][FINER]:    Done waiting for all views to stop loading
+[92.384][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[93.389][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[93.389][FINER]:    Waiting for all views to stop loading...
+[93.389][FINER]:    Done waiting for all views to stop loading
+[93.542][FINER]:    Waiting for all views to stop loading...
+[93.543][FINER]:    Done waiting for all views to stop loading
+[93.543][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAL1CAIAAADmfBBlAAAgAElEQVR4nO3dTXIj15om6JcgARIAaQzjNQ1rF3cBvYKc9ioqa..."
+}
+
+[93.549][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/physics/examples/body.html"
+}
+
+[93.549][FINER]:    Waiting for all views to stop loading...
+[93.549][FINER]:    Done waiting for all views to stop loading
+[93.816][FINER]:    Waiting for all views to stop loading...
+[93.825][FINER]:    Done waiting for all views to stop loading
+[93.825][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[94.830][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[94.830][FINER]:    Waiting for all views to stop loading...
+[94.831][FINER]:    Done waiting for all views to stop loading
+[95.029][FINER]:    Waiting for all views to stop loading...
+[95.037][FINER]:    Done waiting for all views to stop loading
+[95.037][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9eZydVZXu/zxrv5UQVKYwE2SQBBGxsZvJOfSgt..."
+}
+
+[95.129][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/physics/examples/collisions.html"
+}
+
+[95.129][FINER]:    Waiting for all views to stop loading...
+[95.133][FINER]:    Done waiting for all views to stop loading
+[95.232][FINER]:    Waiting for all views to stop loading...
+[95.233][FINER]:    Done waiting for all views to stop loading
+[95.233][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[96.237][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[96.237][FINER]:    Waiting for all views to stop loading...
+[96.251][FINER]:    Done waiting for all views to stop loading
+[96.457][FINER]:    Waiting for all views to stop loading...
+[96.472][FINER]:    Done waiting for all views to stop loading
+[96.472][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAMGCAIAAADTDXBmAAAgAElEQVR4nOzdTXRcZ37n99//eW4BBZKSQMkvlO1WU223BzppC..."
+}
+
+[96.569][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/physics/examples/domino.html"
+}
+
+[96.569][FINER]:    Waiting for all views to stop loading...
+[96.585][FINER]:    Done waiting for all views to stop loading
+[96.718][FINER]:    Waiting for all views to stop loading...
+[96.718][FINER]:    Done waiting for all views to stop loading
+[96.718][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[97.722][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[97.722][FINER]:    Waiting for all views to stop loading...
+[97.732][FINER]:    Done waiting for all views to stop loading
+[97.952][FINER]:    Waiting for all views to stop loading...
+[97.953][FINER]:    Done waiting for all views to stop loading
+[97.953][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALQCAIAAACxHYTgAAAgAElEQVR4nOzdeZhU1Z038N8599bSC92szdKAyKLiEiYqmjGO4..."
+}
+
+[97.993][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/physics/examples/index.html"
+}
+
+[97.993][FINER]:    Waiting for all views to stop loading...
+[97.999][FINER]:    Done waiting for all views to stop loading
+[98.114][FINER]:    Waiting for all views to stop loading...
+[98.116][FINER]:    Done waiting for all views to stop loading
+[98.116][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[99.122][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[99.122][FINER]:    Waiting for all views to stop loading...
+[99.135][FINER]:    Done waiting for all views to stop loading
+[99.291][FINER]:    Waiting for all views to stop loading...
+[99.291][FINER]:    Done waiting for all views to stop loading
+[99.291][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzd27IkV3KgZ/eVuasKICkaMLRpzJ2IFot3Qms4z..."
+}
+
+[99.311][FINE]:     Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/physics/examples/index.sos.html"
+}
+
+[99.311][FINER]:    Waiting for all views to stop loading...
+[99.318][FINER]:    Done waiting for all views to stop loading
+[99.407][FINER]:    Waiting for all views to stop loading...
+[99.447][FINER]:    Done waiting for all views to stop loading
+[99.447][FINE]:     Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[100.452][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[100.452][FINER]:   Waiting for all views to stop loading...
+[100.452][FINER]:   Done waiting for all views to stop loading
+[100.490][FINER]:   Waiting for all views to stop loading...
+[100.490][FINER]:   Done waiting for all views to stop loading
+[100.490][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAOGUlEQVR4nO3XwQ3AIBDAsNL9dz5mIB+EZE+Qb9bMfAAAAOf+2..."
+}
+
+[100.494][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/physics/examples/labyrinth.html"
+}
+
+[100.494][FINER]:   Waiting for all views to stop loading...
+[100.494][FINER]:   Done waiting for all views to stop loading
+[100.559][FINER]:   Waiting for all views to stop loading...
+[100.560][FINER]:   Done waiting for all views to stop loading
+[100.560][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[101.565][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[101.565][FINER]:   Waiting for all views to stop loading...
+[101.572][FINER]:   Done waiting for all views to stop loading
+[101.656][FINER]:   Waiting for all views to stop loading...
+[101.657][FINER]:   Done waiting for all views to stop loading
+[101.657][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAR0klEQVR4nO3dW4jmZR3A8d+OJzJSxMrcbHXNtTWKtQiNLDraE..."
+}
+
+[101.661][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/planets/examples/demo.html"
+}
+
+[101.661][FINER]:   Waiting for all views to stop loading...
+[101.661][FINER]:   Done waiting for all views to stop loading
+[101.742][FINER]:   Waiting for all views to stop loading...
+[101.764][FINER]:   Done waiting for all views to stop loading
+[101.765][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[102.769][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[102.769][FINER]:   Waiting for all views to stop loading...
+[102.770][FINER]:   Done waiting for all views to stop loading
+[102.963][FINER]:   Waiting for all views to stop loading...
+[102.964][FINER]:   Done waiting for all views to stop loading
+[102.964][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAALiCAIAAAD4ryJGAAAgAElEQVR4nOydeZxU1bXvf3vvU9UTNN3MAjJPIaKIoIQQQUQka..."
+}
+
+[103.006][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/planets/examples/index.html"
+}
+
+[103.006][FINER]:   Waiting for all views to stop loading...
+[103.020][FINER]:   Done waiting for all views to stop loading
+[103.151][FINER]:   Waiting for all views to stop loading...
+[103.154][FINER]:   Done waiting for all views to stop loading
+[103.154][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[104.159][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[104.159][FINER]:   Waiting for all views to stop loading...
+[104.174][FINER]:   Done waiting for all views to stop loading
+[104.300][FINER]:   Waiting for all views to stop loading...
+[104.300][FINER]:   Done waiting for all views to stop loading
+[104.300][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzd6Y9ed3Yf+HN+27332Z9ayOIiStTSrV7SHbs78..."
+}
+
+[104.318][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/pointcloud/examples/index.html"
+}
+
+[104.318][FINER]:   Waiting for all views to stop loading...
+[104.323][FINER]:   Done waiting for all views to stop loading
+[104.427][FINER]:   Waiting for all views to stop loading...
+[104.429][FINER]:   Done waiting for all views to stop loading
+[104.429][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[105.434][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[105.434][FINER]:   Waiting for all views to stop loading...
+[105.446][FINER]:   Done waiting for all views to stop loading
+[105.552][FINER]:   Waiting for all views to stop loading...
+[105.562][FINER]:   Done waiting for all views to stop loading
+[105.562][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdf2jbd77v+VeVb1VVV8fS8fp6dLxGNjleX5PtS..."
+}
+
+[105.571][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/pproc/examples/index.html"
+}
+
+[105.571][FINER]:   Waiting for all views to stop loading...
+[105.574][FINER]:   Done waiting for all views to stop loading
+[105.730][FINER]:   Waiting for all views to stop loading...
+[105.731][FINER]:   Done waiting for all views to stop loading
+[105.731][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[106.735][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[106.735][FINER]:   Waiting for all views to stop loading...
+[106.743][FINER]:   Done waiting for all views to stop loading
+[107.028][FINER]:   Waiting for all views to stop loading...
+[107.043][FINER]:   Done waiting for all views to stop loading
+[107.043][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nES7R5YjybIsKKJqxClIRGRm1X0971Hvf0P/1a3KD..."
+}
+
+[107.186][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/rollercoster/examples/index-dev.html"
+}
+
+[107.186][FINER]:   Waiting for all views to stop loading...
+[107.189][FINER]:   Done waiting for all views to stop loading
+[107.317][FINER]:   Waiting for all views to stop loading...
+[107.318][FINER]:   Done waiting for all views to stop loading
+[107.318][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[108.322][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[108.322][FINER]:   Waiting for all views to stop loading...
+[108.324][FINER]:   Done waiting for all views to stop loading
+[108.414][FINER]:   Waiting for all views to stop loading...
+[108.415][FINER]:   Done waiting for all views to stop loading
+[108.415][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdbZAd133n9zN9b+NhdAeokWDenvBJGpCe0opBt..."
+}
+
+[108.421][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/rollercoster/examples/index-extrude.html"
+}
+
+[108.421][FINER]:   Waiting for all views to stop loading...
+[108.422][FINER]:   Done waiting for all views to stop loading
+[108.520][FINER]:   Waiting for all views to stop loading...
+[108.521][FINER]:   Done waiting for all views to stop loading
+[108.521][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[109.527][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[109.527][FINER]:   Waiting for all views to stop loading...
+[109.543][FINER]:   Done waiting for all views to stop loading
+[109.628][FINER]:   Waiting for all views to stop loading...
+[109.628][FINER]:   Done waiting for all views to stop loading
+[109.628][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAdXUlEQVR4nO3de4yld33f8e9z5sxlZ9d7wbvexfaubbCNsSHG5..."
+}
+
+[109.633][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/rollercoster/examples/index-tube.html"
+}
+
+[109.633][FINER]:   Waiting for all views to stop loading...
+[109.633][FINER]:   Done waiting for all views to stop loading
+[109.764][FINER]:   Waiting for all views to stop loading...
+[109.765][FINER]:   Done waiting for all views to stop loading
+[109.765][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[110.770][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[110.770][FINER]:   Waiting for all views to stop loading...
+[110.778][FINER]:   Done waiting for all views to stop loading
+[110.871][FINER]:   Waiting for all views to stop loading...
+[110.871][FINER]:   Done waiting for all views to stop loading
+[110.871][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdcWwc150n+Kdml0gxbHHa4qmLkpxkqXgYzRism..."
+}
+
+[110.879][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/rollercoster/examples/webgl_geometry_extrude_shapes.html"
+}
+
+[110.879][FINER]:   Waiting for all views to stop loading...
+[110.879][FINER]:   Done waiting for all views to stop loading
+[110.918][FINER]:   Waiting for all views to stop loading...
+[110.957][FINER]:   Done waiting for all views to stop loading
+[110.957][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[111.962][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[111.962][FINER]:   Waiting for all views to stop loading...
+[111.963][FINER]:   Done waiting for all views to stop loading
+[112.002][FINER]:   Waiting for all views to stop loading...
+[112.003][FINER]:   Done waiting for all views to stop loading
+[112.003][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAc9ElEQVR4nO3dL1gbadvw4ev5ju84iEtUicoq8qhUtVVElSpQd..."
+}
+
+[112.006][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/rollercoster/examples/webgl_geometry_extrude_splines.html"
+}
+
+[112.006][FINER]:   Waiting for all views to stop loading...
+[112.007][FINER]:   Done waiting for all views to stop loading
+[112.020][FINER]:   Waiting for all views to stop loading...
+[112.021][FINER]:   Done waiting for all views to stop loading
+[112.021][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[113.025][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[113.025][FINER]:   Waiting for all views to stop loading...
+[113.026][FINER]:   Done waiting for all views to stop loading
+[113.066][FINER]:   Waiting for all views to stop loading...
+[113.067][FINER]:   Done waiting for all views to stop loading
+[113.067][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAOGklEQVR4nO3XQQ0AIRDAwOP8i10JaKAfQjKjoN+umfkAAADO/..."
+}
+
+[113.070][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/shape/examples/index.html"
+}
+
+[113.070][FINER]:   Waiting for all views to stop loading...
+[113.070][FINER]:   Done waiting for all views to stop loading
+[113.150][FINER]:   Waiting for all views to stop loading...
+[113.153][FINER]:   Done waiting for all views to stop loading
+[113.153][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[114.157][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[114.157][FINER]:   Waiting for all views to stop loading...
+[114.163][FINER]:   Done waiting for all views to stop loading
+[114.246][FINER]:   Waiting for all views to stop loading...
+[114.247][FINER]:   Done waiting for all views to stop loading
+[114.247][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3daYys2VnY8eetql6mu2cxXmCGwZ7x2MQGOSyCh..."
+}
+
+[114.253][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/simplemaze/examples/index.html"
+}
+
+[114.253][FINER]:   Waiting for all views to stop loading...
+[114.267][FINER]:   Done waiting for all views to stop loading
+[114.428][FINER]:   Waiting for all views to stop loading...
+[114.430][FINER]:   Done waiting for all views to stop loading
+[114.430][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[115.434][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[115.434][FINER]:   Waiting for all views to stop loading...
+[115.449][FINER]:   Done waiting for all views to stop loading
+[115.697][FINER]:   Waiting for all views to stop loading...
+[115.697][FINER]:   Done waiting for all views to stop loading
+[115.697][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nKy9S64tu7IdNoI51zrnCnhwQ1wwVJFkVW0YUkmAa..."
+}
+
+[115.730][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/simplemaze/examples/pathfinding.html"
+}
+
+[115.730][FINER]:   Waiting for all views to stop loading...
+[115.732][FINER]:   Done waiting for all views to stop loading
+[115.862][FINER]:   Waiting for all views to stop loading...
+[115.862][FINER]:   Done waiting for all views to stop loading
+[115.862][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[116.866][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[116.866][FINER]:   Waiting for all views to stop loading...
+[116.867][FINER]:   Done waiting for all views to stop loading
+[117.061][FINER]:   Waiting for all views to stop loading...
+[117.064][FINER]:   Done waiting for all views to stop loading
+[117.064][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nKy9S64tu7IdNoI51zrnCnhwQ1wwVJFkVW0YUkmAa..."
+}
+
+[117.089][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/skymap/examples/basic.html"
+}
+
+[117.089][FINER]:   Waiting for all views to stop loading...
+[117.097][FINER]:   Done waiting for all views to stop loading
+[117.285][FINER]:   Waiting for all views to stop loading...
+[117.286][FINER]:   Done waiting for all views to stop loading
+[117.286][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[118.291][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[118.291][FINER]:   Waiting for all views to stop loading...
+[118.299][FINER]:   Done waiting for all views to stop loading
+[118.694][FINER]:   Waiting for all views to stop loading...
+[118.694][FINER]:   Done waiting for all views to stop loading
+[118.694][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nNS9W4IkOY4kKAKqeWT1zJ33InuKvV13hhH7AYAEX..."
+}
+
+[118.758][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/skymap/examples/index.html"
+}
+
+[118.758][FINER]:   Waiting for all views to stop loading...
+[118.767][FINER]:   Done waiting for all views to stop loading
+[118.971][FINER]:   Waiting for all views to stop loading...
+[118.971][FINER]:   Done waiting for all views to stop loading
+[118.971][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[119.976][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[119.976][FINER]:   Waiting for all views to stop loading...
+[119.990][FINER]:   Done waiting for all views to stop loading
+[120.388][FINER]:   Waiting for all views to stop loading...
+[120.388][FINER]:   Done waiting for all views to stop loading
+[120.388][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nNS9W4IkOY4kKAKqeWT1zJ33InuKvV13hhH7AYAEX..."
+}
+
+[120.444][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/sprite/examples/index.html"
+}
+
+[120.444][FINER]:   Waiting for all views to stop loading...
+[120.452][FINER]:   Done waiting for all views to stop loading
+[120.557][FINER]:   Waiting for all views to stop loading...
+[120.558][FINER]:   Done waiting for all views to stop loading
+[120.558][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[121.561][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[121.561][FINER]:   Waiting for all views to stop loading...
+[121.570][FINER]:   Done waiting for all views to stop loading
+[121.733][FINER]:   Waiting for all views to stop loading...
+[121.742][FINER]:   Done waiting for all views to stop loading
+[121.742][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzXya5sV4Le99WvtdvY0Z+IOM09tyWTl0ySSiqlK..."
+}
+
+[121.862][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/statsplus/examples/example-pause.html"
+}
+
+[121.862][FINER]:   Waiting for all views to stop loading...
+[121.872][FINER]:   Done waiting for all views to stop loading
+[121.958][FINER]:   Waiting for all views to stop loading...
+[121.959][FINER]:   Done waiting for all views to stop loading
+[121.960][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[122.965][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[122.965][FINER]:   Waiting for all views to stop loading...
+[122.969][FINER]:   Done waiting for all views to stop loading
+[123.076][FINER]:   Waiting for all views to stop loading...
+[123.076][FINER]:   Done waiting for all views to stop loading
+[123.076][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABEAAAAK6CAIAAAC2RL5dAAAgAElEQVR4nOzde3Tc5X0n/kcjaWRJY0vWxTddAAUbH2HjCynO0..."
+}
+
+[123.081][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/statsplus/examples/index.html"
+}
+
+[123.081][FINER]:   Waiting for all views to stop loading...
+[123.082][FINER]:   Done waiting for all views to stop loading
+[123.215][FINER]:   Waiting for all views to stop loading...
+[123.216][FINER]:   Done waiting for all views to stop loading
+[123.216][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[124.220][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[124.220][FINER]:   Waiting for all views to stop loading...
+[124.221][FINER]:   Done waiting for all views to stop loading
+[124.314][FINER]:   Waiting for all views to stop loading...
+[124.314][FINER]:   Done waiting for all views to stop loading
+[124.314][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9X28cWXrm+VIsSZUkLKZIdq05pawkq6cketUjj..."
+}
+
+[124.322][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/statsplus/examples/testwebglinspector.html"
+}
+
+[124.322][FINER]:   Waiting for all views to stop loading...
+[124.322][FINER]:   Done waiting for all views to stop loading
+[127.540][FINER]:   Waiting for all views to stop loading...
+[127.545][FINER]:   Done waiting for all views to stop loading
+[127.545][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[128.550][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[128.550][FINER]:   Waiting for all views to stop loading...
+[128.550][FINER]:   Done waiting for all views to stop loading
+[128.590][FINER]:   Waiting for all views to stop loading...
+[128.590][FINER]:   Done waiting for all views to stop loading
+[128.590][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAOGUlEQVR4nO3XwQ3AIBDAsNL9dz5mIB+EZE+Qb9bMfAAAAOf+2..."
+}
+
+[128.593][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/terraingenerator/examples/index.html"
+}
+
+[128.593][FINER]:   Waiting for all views to stop loading...
+[128.593][FINER]:   Done waiting for all views to stop loading
+[129.773][FINER]:   Waiting for all views to stop loading...
+[129.776][FINER]:   Done waiting for all views to stop loading
+[129.776][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[130.779][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[130.779][FINER]:   Waiting for all views to stop loading...
+[130.793][FINER]:   Done waiting for all views to stop loading
+[131.071][FINER]:   Waiting for all views to stop loading...
+[131.071][FINER]:   Done waiting for all views to stop loading
+[131.072][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9abBl13Ue9q2995nPufObekR3Y2gCBCACFEWQI..."
+}
+
+[131.128][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/tetris3d/examples/index-complete.html"
+}
+
+[131.128][FINER]:   Waiting for all views to stop loading...
+[131.147][FINER]:   Done waiting for all views to stop loading
+[131.353][FINER]:   Waiting for all views to stop loading...
+[131.367][FINER]:   Done waiting for all views to stop loading
+[131.367][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[132.370][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[132.370][FINER]:   Waiting for all views to stop loading...
+[132.376][FINER]:   Done waiting for all views to stop loading
+[132.464][FINER]:   Waiting for all views to stop loading...
+[132.464][FINER]:   Done waiting for all views to stop loading
+[132.464][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzda6yt233X9//4j2eutX0LiZyL7/E5Pjg4sRPbi..."
+}
+
+[132.471][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/tetris3d/examples/index.html"
+}
+
+[132.471][FINER]:   Waiting for all views to stop loading...
+[132.480][FINER]:   Done waiting for all views to stop loading
+[132.568][FINER]:   Waiting for all views to stop loading...
+[132.569][FINER]:   Done waiting for all views to stop loading
+[132.569][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[133.572][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[133.572][FINER]:   Waiting for all views to stop loading...
+[133.577][FINER]:   Done waiting for all views to stop loading
+[133.663][FINER]:   Waiting for all views to stop loading...
+[133.664][FINER]:   Done waiting for all views to stop loading
+[133.664][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3dT4ila37Q8Weac2MV0jOcrRGdOZoxEugSCkYRJ..."
+}
+
+[133.670][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/text/examples/index.html"
+}
+
+[133.670][FINER]:   Waiting for all views to stop loading...
+[133.670][FINER]:   Done waiting for all views to stop loading
+[133.929][FINER]:   Waiting for all views to stop loading...
+[133.930][FINER]:   Done waiting for all views to stop loading
+[133.930][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[134.934][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[134.934][FINER]:   Waiting for all views to stop loading...
+[134.947][FINER]:   Done waiting for all views to stop loading
+[135.035][FINER]:   Waiting for all views to stop loading...
+[135.035][FINER]:   Done waiting for all views to stop loading
+[135.035][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOzdfXAc54Hn91/PO97YAN/Fl0aLtmVbEkhTsla2T..."
+}
+
+[135.042][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/tweenjs/examples/index.html"
+}
+
+[135.042][FINER]:   Waiting for all views to stop loading...
+[135.051][FINER]:   Done waiting for all views to stop loading
+[135.184][FINER]:   Waiting for all views to stop loading...
+[135.184][FINER]:   Done waiting for all views to stop loading
+[135.184][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[136.189][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[136.189][FINER]:   Waiting for all views to stop loading...
+[136.199][FINER]:   Done waiting for all views to stop loading
+[136.287][FINER]:   Waiting for all views to stop loading...
+[136.287][FINER]:   Done waiting for all views to stop loading
+[136.287][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nO3db4xdZ34f9od/tIaGqUiRzNayRY24XkqMHYuhE..."
+}
+
+[136.293][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/videos/examples/index.html"
+}
+
+[136.293][FINER]:   Waiting for all views to stop loading...
+[136.303][FINER]:   Done waiting for all views to stop loading
+[136.419][FINER]:   Waiting for all views to stop loading...
+[136.423][FINER]:   Done waiting for all views to stop loading
+[136.423][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[137.428][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[137.428][FINER]:   Waiting for all views to stop loading...
+[137.430][FINER]:   Done waiting for all views to stop loading
+[137.509][FINER]:   Waiting for all views to stop loading...
+[137.510][FINER]:   Done waiting for all views to stop loading
+[137.510][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAKWCAIAAABoHG2RAAAa+0lEQVR4nO3da4xtZ13A4fe0FTVqG4qhJ4X0Bq2FhFlysRjAE..."
+}
+
+[137.513][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/webrtcio/examples/index.html"
+}
+
+[137.513][FINER]:   Waiting for all views to stop loading...
+[137.529][FINER]:   Done waiting for all views to stop loading
+[137.743][FINER]:   Waiting for all views to stop loading...
+[137.744][FINER]:   Done waiting for all views to stop loading
+[137.744][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[138.749][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[138.749][FINER]:   Waiting for all views to stop loading...
+[138.749][FINER]:   Done waiting for all views to stop loading
+[138.789][FINER]:   Waiting for all views to stop loading...
+[138.790][FINER]:   Done waiting for all views to stop loading
+[138.790][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK6CAIAAAAYcqjcAAAgAElEQVR4nOzdf5TVdZ348RfDvSAjzhgzG9fOTF9nLKYaS9qYs..."
+}
+
+[138.794][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/wobble/examples/index.html"
+}
+
+[138.794][FINER]:   Waiting for all views to stop loading...
+[138.794][FINER]:   Done waiting for all views to stop loading
+[138.886][FINER]:   Waiting for all views to stop loading...
+[138.887][FINER]:   Done waiting for all views to stop loading
+[138.887][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/url) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[139.891][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot)
+[139.891][FINER]:   Waiting for all views to stop loading...
+[139.900][FINER]:   Done waiting for all views to stop loading
+[139.994][FINER]:   Waiting for all views to stop loading...
+[139.994][FINER]:   Done waiting for all views to stop loading
+[139.994][FINE]:    Command finished (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79/screenshot) with response {
+   "sessionId": "ede42a0f8cd4c8c7ed3f1f2f6042fb79",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nOy9y5Isy3Wmt9zjkplVtQsHIJvdomEgM5pkxIv2u..."
+}
+
+[140.003][FINE]:    Command received (/session/ede42a0f8cd4c8c7ed3f1f2f6042fb79)
+[140.104][INFO]:    Chrome shutdown

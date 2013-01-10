@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var mesh	= tQuery.createTorus().addTo(world);
+
+	mesh.material(new THREE.MeshPhongMaterial({
+		ambient	: 0x888888,
+		color	: 0x888888,
+	}));
+	
+	tQuery.createAmbientLight().addTo(world).color(0x444444);	
+	//tQuery.createDirectionalLight().addTo(world).position(-1,1,1).intensity(5);
+	//tQuery.createDirectionalLight().addTo(world).id('myLight').position( 1,1,1).color(0xFF0000);
+	tQuery.createPointLight().addTo(world).color(0xFF0000).intensity(5)
+	tQuery.createHemisphereLight().addTo(world)
+		.position(2,2,2)
+		.color(0x444444)
+		.intensity(2)
+		.groundColor(0x008800)
+</script></body>
+

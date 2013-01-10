@@ -1,0 +1,72 @@
+[0.000][INFO]:      ChromeDriver 23.0.1240.0 /opt/local/bin/chromedriver
+[0.265][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "chrome.detach": true,
+   "chromeOptions": {
+      "detach": true
+   },
+   "cssSelectorsEnabled": true,
+   "javascriptEnabled": true,
+   "nativeEvents": false,
+   "platform": "ANY",
+   "rotatable": false,
+   "takesScreenshot": false,
+   "version": ""
+}
+
+[0.266][INFO]:      Using named testing interface
+[0.786][INFO]:      Connected to Chrome successfully. Version: 23.0.1271.101
+[0.789][FINE]:      Command received (/session/eebcd7a99aea9ff894e4017d8419a98b)
+[0.789][FINE]:      Command finished (/session/eebcd7a99aea9ff894e4017d8419a98b) with response {
+   "sessionId": "eebcd7a99aea9ff894e4017d8419a98b",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "23.0.1240.0",
+      "chrome.nativeEvents": false,
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "mac",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "23.0.1271.101",
+      "webStorageEnabled": true
+   }
+}
+
+[0.790][FINE]:      Command received (/session/eebcd7a99aea9ff894e4017d8419a98b/url) with params {
+   "url": "http://127.0.0.1:8000/plugins/minecraft/examples/flyer.html"
+}
+
+[0.791][FINER]:     Waiting for all views to stop loading...
+[0.791][FINER]:     Done waiting for all views to stop loading
+[1.360][FINER]:     Waiting for all views to stop loading...
+[1.361][FINER]:     Done waiting for all views to stop loading
+[1.361][FINE]:      Command finished (/session/eebcd7a99aea9ff894e4017d8419a98b/url) with response {
+   "sessionId": "eebcd7a99aea9ff894e4017d8419a98b",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[2.364][FINE]:      Command received (/session/eebcd7a99aea9ff894e4017d8419a98b/screenshot)
+[2.364][FINER]:     Waiting for all views to stop loading...
+[2.366][FINER]:     Done waiting for all views to stop loading
+[2.611][FINER]:     Waiting for all views to stop loading...
+[2.621][FINER]:     Done waiting for all views to stop loading
+[2.621][FINE]:      Command finished (/session/eebcd7a99aea9ff894e4017d8419a98b/screenshot) with response {
+   "sessionId": "eebcd7a99aea9ff894e4017d8419a98b",
+   "status": 0,
+   "value": "iVBORw0KGgoAAAANSUhEUgAABBoAAAK+CAIAAACD4+rKAAAgAElEQVR4nDTRZ7Yk2XVg6XOuXWFau3wyIlIBJKp6/kNoVJMsA..."
+}
+
+[2.700][FINE]:      Command received (/session/eebcd7a99aea9ff894e4017d8419a98b)
+[2.936][INFO]:      Chrome shutdown
