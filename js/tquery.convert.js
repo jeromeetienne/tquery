@@ -5,12 +5,11 @@ tQuery.convert	= {};
  * 
  * @return {THREE.Color} the resulting color
 */
-tQuery.convert.toThreeColor	= function(value){
-console.log('arguments', arguments)
-	if( arguments.length === 1 && typeof(value) === 'number'){
-		return new THREE.Color(value);
-	}else if( arguments.length === 1 && value instanceof THREE.Color ){
-		return value;
+tQuery.convert.toThreeColor	= function(/* arguments */){
+	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
+		return new THREE.Color(arguments[0]);
+	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
+		return arguments[0];
 	}else if( arguments.length === 3 && typeof(arguments[0]) === 'number'
 					&& typeof(arguments[1]) === 'number' 
 					&& typeof(arguments[2]) === 'number' ){

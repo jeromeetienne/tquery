@@ -27,4 +27,11 @@
 	object.on('mouseout', function(event){
 		boundaryObj.visible(false)
 	});
+	
+
+	// test pour le on/off
+	var callback	= object.on('click', function(){
+		console.assert(false)
+	})
+	object.off('click', callback)
 </script></body>

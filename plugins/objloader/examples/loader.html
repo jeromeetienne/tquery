@@ -28,11 +28,11 @@ if(true){
 			child.material	= material.get(0);
 		});
 
-		var objWire	= tQuery(tObject3D).clone().addTo(world);
-		var material	= tQuery.createMeshBasicMaterial().wireframe(true);
-		objWire.traverse(function(child){
-			child.material	= material.get(0);
-		});
+		// var objWire	= tQuery(tObject3D).clone().addTo(world);
+		// var material	= tQuery.createMeshBasicMaterial().wireframe(true);
+		// objWire.traverse(function(child){
+		// 	child.material	= material.get(0);
+		// });
 	});
 }
 	
@@ -70,46 +70,51 @@ if(true){
 
 
 	// change material for character3D
-	tQuery('mesh', character3D).each(function(tObject3D){
-		var tMaterial	= tObject3D.material;
-		new tQuery.Mesh(tObject3D)
-			.setLambertMaterial()
-				.ambient(0x888888)
-				.color(0xcccccc)
-				.map(tMaterial.map)
-				.transparent(tMaterial.transparent)
-				.side(tMaterial.side)
-			.back()
-	});
+	// tQuery('mesh', character3D).each(function(tObject3D){
+	// 	var tMaterial	= tObject3D.material;
+	// 	new tQuery.Mesh(tObject3D)
+	// 		.setLambertMaterial()
+	// 			.ambient(0x888888)
+	// 			.color(0xcccccc)
+	// 			.map(tMaterial.map)
+	// 			.transparent(tMaterial.transparent)
+	// 			.side(tMaterial.side)
+	// 		.back()
+	// });
 
 
 
-	//tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
 	// var lightDir	= tQuery.createDirectionalLight().addTo(world)
 	// 	.position(1,1,-1)
 	// 	.color(0xff00ff)
 	// var helper	= new THREE.DirectionalLightHelper(lightDir.get(0), 1, 1);
 	// tQuery(helper).addTo(world);
 		
-	// var pointLight	= tQuery.createPointLight().addTo(world)
-	// 	.position(1,1,-1)
-	// 	.color(0x0000ff)
-	// 	.intensity(1);
+	var pointLight	= tQuery.createPointLight().addTo(world)
+		.position(0,3,0)
+		.color(1,0,0)
+		.intensity(1);
 
-	// window.pointLight	= pointLight;
+	window.pointLight	= pointLight;
 
-	// tQuery.createSphere()
-	// 	.scale(0.5)
-	// 	.setBasicMaterial()
-	// 		.wireframe(true)
-	// 		.back()
-	// 	.addTo(pointLight);
+	tQuery.createSphere()
+		.scale(0.5)
+		.setBasicMaterial()
+			.wireframe(true)
+			.back()
+		.addTo(pointLight);
 
-	var lightHemi	= tQuery.createHemisphereLight().addTo(world)
-		.position(2,2,2)
-		.color(0x444444)
-		.intensity(2)
-		.groundColor(0x008800)
+	// world.loop().hook(function(delta, now){
+	// 	var y	= Math.cos(now)*4 + 8/2;
+	// 	pointLight.positionY(y);
+	// })
+
+	// var lightHemi	= tQuery.createHemisphereLight().addTo(world)
+	// 	.position(2,2,2)
+	// 	.color(0x444444)
+	// 	.intensity(2)
+	// 	.groundColor(0x008800)
 
 	// tQuery.createSphere()
 	// 	.scale(0.5)
@@ -117,5 +122,10 @@ if(true){
 	// 		.wireframe(true)
 	// 		.back()
 	// 	.addTo(lightHemi);
+
+	window.sprite	= tQuery.createSprite().addTo(pointLight)
+		.map('lensflare0_alpha_paul.png')
+		.scaleBy(9)
+
 });
 </script></body>

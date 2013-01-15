@@ -210,7 +210,7 @@ THREEx.DomEvent.prototype.bind	= function(object3d, eventName, callback, useCapt
 	this._boundObjs.push(object3d);
 }
 
-THREEx.DomEvent.prototype.unbind	= function(object3d, eventName, callback)
+THREEx.DomEvent.prototype.unbind	= function(object3d, eventName, callback, useCapture)
 {
 	console.assert( THREEx.DomEvent.eventNames.indexOf(eventName) !== -1, "not available events:"+eventName );
 
