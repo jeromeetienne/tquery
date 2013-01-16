@@ -1,0 +1,16 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../vendor/webaudio-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+	
+	if( WebAudio.isAvailable ){
+		tQuery.createSound().loop(true).load('sounds/techno.mp3', function(sound){
+			sound.play();
+		});
+	}
+</script></body>
