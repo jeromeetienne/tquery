@@ -1,0 +1,25 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.webaudio', 'tquery.lensflare', 'tquery.skymap'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	// if webaudio is available in your browser
+	if( WebAudio.isAvailable ){
+		// enable webaudio
+		world.enableWebAudio();
+		// load sound track
+		tQuery.createSound().loop(true).load('sounds/flymetothemoon.m4a', function(sound){
+			sound.volume(4).play();
+		});		
+	}
+	
+	// add lensflare in the sun
+	tQuery.createLensFlare().addTo(world) 
+//		.position(tQuery.createVector3().set(-15, 24, 30).setLength(500) )
+
+	var skymap	= tQuery.createSkymap('pisa').addTo(world);
+	
+});
+</script></body>
