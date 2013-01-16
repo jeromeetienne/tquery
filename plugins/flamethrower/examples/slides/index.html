@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>tQuery Workshop at WebGL Camp</title>
+	<base target=”_blank” />
+	<meta charset='utf-8'/>
+	<script src="vendor/jquery-1.7.2.min.js"></script>
+	<script src='slides.js'></script>
+</head>
+
+<body style='display: none'> 
+	<style>
+		article[data-markdown] em {
+			color		: orange;
+			font-style	: normal;
+			font-weight	: bolder;
+			
+		}
+		article[data-markdown] h3 {
+			font-size	: 180%;
+		}
+		span.orange {
+			color		: orange;
+		}
+		span.larger {
+			font-weight	: bolder;
+			font-size	: 120%;
+		}
+	</style>
+	<section class='slides layout-regular template-default'>
+
+<!-- ****************************************************************************
+		Talk Introduction
+********************************************************************************* -->
+	<article data-markdown>
+		# *A Little travel in tQuery*		
+
+		## Jerome Etienne
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article>
+		<h3>Who Am I</h3>
+		<img style="float:right" src='jetienne-avatar.jpg' />
+		<ul>
+			<li>coder, speaker, trainer</li>
+			<li>Javascript, Node.js, WebGL and other HTML5 games stuff</li>
+		</ul>
+		<h4>Learning Three.js</h4>
+		<ul>
+			<li>Author of <a href="http://learningthreejs.com">learningthreejs</a> blog</li>
+			<li>Lists of three.js tutorials or "WebGL for dummies"</li>
+		</ul>
+		<h4>Contacts</h4>
+		<ul>
+			<li>
+				<a href='https://twitter.com/jerome_etienne'>@jerome_etienne</a> on twitter,
+				<a href='http://github.com/jeromeetienne'>jeromeetienne</a> on github
+			</li>
+		</ul>
+	</article>
+	<article data-markdown>
+		### What We Gonna Talk About ?
+		
+		* very much hands on
+		* Just a teaser to see basics
+		* Let's make it fun
+		
+		#### All on top the playground
+		* [playground](http://jeromeetienne.github.com/tquery/www/playground/)
+		* no need for installation
+	</article>
+	<article data-markdown>
+		### First playground
+		
+		Let's find a place to play
+		
+		#### where to go ?
+		* link in tQuery home page (in navigation bar)
+		* [playground](http://jeromeetienne.github.com/tquery/www/playground/)
+	</article>
+	<article data-markdown>
+		### Let's add a ground
+		
+		#### a checkerboard to stand on 
+		
+		```
+		tQuery.createCheckerboard({
+			segmentsW	: 100,	// number of segment in width
+			segmentsH	: 100	// number of segment in Height
+		}).addTo(world).scaleBy(100);	
+		```
+	</article>
+	<article data-markdown>
+		## hmmm what about a living object ? 
+	</article>
+	<article data-markdown>
+		### Let's add a minecraft Char
+		
+		#### Create a minecraft char
+		
+		```
+		var character	= new tQuery.MinecraftChar({
+			skinUrl	: "../../plugins/minecraft/examples/images/agentsmith.png"
+		});
+		```
+		
+		Agent Smith is secret... dont tell anyone :)
+	</article>
+	<article data-markdown>
+		### Well lets see it
+		
+		#### Lets add it to our world
+		
+		```
+		character.model.addTo(world);
+		```
+		
+		#### Little too low... 
+		
+		```
+		.translateY(0.5)	
+		```
+		
+		#### Better :)
+	</article>
+	<article data-markdown>
+		## Torus is kind awkward now
+	</article>
+	<article data-markdown>
+		### ok lets remove it
+
+		```
+		var object = tQuery.createTorus().addTo(world);
+		```
+	</article>
+	<article data-markdown>
+		## Minecraft is too static
+	</article>
+	<article data-markdown>
+		### Animate the Character
+		
+		#### Move your Body
+		
+		```
+		var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+		bodyAnims.start('wave');
+		```
+		
+		#### Fun what other animations you got 
+		* run/walk/wave/hiwave
+		
+		*With Morphing between animation*
+	</article>
+	<article data-markdown>
+		### Positive Character
+		
+		#### Move your head
+		
+		```
+		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
+		headAnims.start('yes');
+		```
+		
+		#### Fun what other animations you got 
+		* still/yes/no
+	</article>
+	<article data-markdown>
+		## What about some lights
+	</article>
+	<article data-markdown>
+		### Let's add some lights
+	
+		```
+		var light	= tQuery.createDirectionalLight().addTo(world)
+					.position(2, 10, 10)
+					.color(0xffffff).intensity(0.6)
+		```
+	</article>
+	<article data-markdown>
+		### lights need shadow now ?
+
+		#### Tune the light
+		```
+		light.castShadow(true).shadowDarkness(0.6)
+			.shadowMap(512,512)
+			.shadowBias(0.01)
+			.shadowCamera(2, -2, 2, -2, 0.1, 50);
+		```
+
+		#### tell the renderer
+
+		```
+		world.tRenderer().shadowMapEnabled	= true;
+		world.tRenderer().shadowMapSoft		= true;
+		```
+	</article>
+	<article data-markdown>
+		### Where are the shadow
+		
+		#### For the ground
+
+		```
+		checkerboard.receiveShadow(true);
+		```
+
+		#### For the characters
+
+		```
+		tQuery('mesh', character.model).castShadow(true)
+		```
+	</article>
+	<article data-markdown>
+		### Boring... we need a tv!!!
+		
+		```
+		var url		= '../../videos/examples/sintel.ogv';
+		var texture	= tQuery.createVideoTexture(url);
+		tQuery.createCube(1.6,0.9,0.2).addTo(world)
+			.setBasicMaterial().map(texture).back()
+			.translate(-1.3, 0.5, -0.4)
+			.rotateY(Math.PI/4)
+		```		
+		
+	</article>
+	<article data-markdown>
+		# Youhou *we did it!!!!*
+		
+		## result is [here](http://jeromeetienne.github.com/tquery/www/playground/#j/%7B%22textValue%22%3A%22%3C!doctype%20html%3E%3Ctitle%3EWebGL%20Camp%20Workshop%3C%2Ftitle%3E%5Cn%3Cscript%20src%3D%5C%22..%2F..%2Fbuild%2Ftquery-all.js%5C%22%3E%3C%2Fscript%3E%5Cn%3Cbody%3E%3Cscript%3E%5Cn%5Ctvar%20world%20%3D%20tQuery.createWorld().boilerplate().start()%3B%5Ct%5Cn%5Ct%5Cn%5Ct%2F%2F%20enable%20shadow%20casting%20in%20world%20renderer%5Cn%5Ctworld.tRenderer().shadowMapEnabled%5Ct%3D%20true%3B%5Cn%5Ctworld.tRenderer().shadowMapSoft%5Ct%5Ct%3D%20true%3B%5Cn%5Cn%5Ct%2F%2F%20add%20a%20light%20with%20shadow%20casting%5Cn%5Ctvar%20light%5Ct%3D%20tQuery.createDirectionalLight().addTo(world)%5Cn%5Ct%5Ct.position(2%2C%2010%2C%2010).color(0xffffff).intensity(0.6)%5Cn%5Ct%5Ct.castShadow(true).shadowDarkness(0.6)%5Cn%5Ct%5Ct.shadowMap(512%2C512)%5Cn%5Ct%5Ct.shadowBias(0.01)%5Cn%5Ct%5Ct.shadowCamera(2%2C%20-2%2C%202%2C%20-2%2C%200.1%2C%2050)%3B%5Cn%5Cn%5Ct%2F%2F%20lets%20add%20a%20ground%5Cn%5CttQuery.createCheckerboard(%7B%5Cn%5Ct%5CtsegmentsW%5Ct%3A%20100%2C%5Ct%2F%2F%20number%20of%20segment%20in%20width%5Cn%5Ct%5CtsegmentsH%5Ct%3A%20100%5Ct%2F%2F%20number%20of%20segment%20in%20Height%5Cn%5Ct%7D).addTo(world).scaleBy(100).receiveShadow(true)%3B%5Ct%5Cn%5Ct%5Cn%5Ct%2F%2F%20Lets%20create%20a%20minecraft%20character%5Cn%5Ctvar%20character%5Ct%3D%20new%20tQuery.MinecraftChar(%7B%5Cn%5Ct%5CtskinUrl%5Ct%3A%20%5C%22..%2F..%2Fplugins%2Fminecraft%2Fexamples%2Fimages%2Fagentsmith.png%5C%22%5Cn%5Ct%7D)%3B%5Cn%5Ct%2F%2F%20Now%20that%20we%20add%20the%20model%20to%20the%20world%5Cn%5Ctcharacter.model.addTo(world).translateY(0.5)%3B%5Cn%5Cn%5Ct%2F%2F%20make%20the%20minecraft%20object%20to%20castShadow%5Cn%5CttQuery('mesh'%2C%20character.model).castShadow(true)%5Cn%5Cn%5Ct%2F%2F%20Move%20your%20body%5Ct%5Cn%5Ctvar%20bodyAnims%5Ct%3D%20new%20tQuery.MinecraftCharAnimations(character)%3B%5Cn%5CtbodyAnims.start('hiwave')%3B%5Cn%5Cn%5Ct%2F%2F%20Move%20your%20head%5Ct%5Cn%5Ctvar%20headAnims%5Ct%3D%20new%20tQuery.MinecraftCharHeadAnimations(character)%3B%5Cn%5CtheadAnims.start('yes')%3B%5Cn%5Ct%5Cn%5Ct%2F%2F%20Lets%20add%20a%20tv%20%3A)%5Cn%5Ctvar%20texture%5Ct%3D%20tQuery.createWebcamTexture()%3B%5Cn%5Ct%2F%2Fvar%20texture%5Ct%3D%20tQuery.createTVSnowTexture()%3B%5Cn%5Ct%2F%2Fvar%20texture%5Ct%3D%20tQuery.createVideoTexture('..%2F..%2Fplugins%2Fvideos%2Fexamples%2Fsintel.ogv')%3B%5Cn%5CttQuery.createCube(1.6%2C0.9%2C0.2).addTo(world)%5Cn%5Ct%5Ct.setBasicMaterial().map(texture).back()%5Cn%5Ct%5Ct.translate(-1.3%2C%200.5%2C%20-0.4)%5Cn%5Ct%5Ct.rotateY(Math.PI%2F4)%5Cn%5Cn%5Ct%5Cn%3C%2Fscript%3E%3C%2Fbody%3E%22%7D)
+	</article>
+	<article data-markdown>
+		### What about live TV
+		
+		#### WebRTC ftw 
+		```
+		var texture	= tQuery.createWebcamTexture();
+		```
+		
+		#### Snow for winter :)
+		
+		``` 
+		var texture	= tQuery.createTVSnowTexture();
+		```		
+	</article>
+	<article data-markdown>
+		## how much time remains ? 
+	</article>	 
+	<article data-markdown>
+		### Enougth for demo ?
+	
+		* [PongGL](http://jeromeetienne.github.com/pongGL/)
+		* [Pong in augmented reality](http://jeromeetienne.github.com/augmentedgesture.js/examples/augmentedpong/) (WebRTC required)
+		* [Punch a doom character](http://jeromeetienne.github.com/augmentedgesture.js/examples/punchquake2character/examples/)
+		* [webaudio playground](http://jeromeetienne.github.com/webaudio.js/examples/playground/)
+	</article>
+	<article data-markdown>
+		
+		# *Questions ?*
+				
+		Jerome Etienne
+	</article>
+	<script>
+	// ==UserScript==
+	// @name Use Markdown, sometimes, in your HTML.
+	// @author Paul Irish <http://paulirish.com/>
+	// @link http://git.io/data-markdown
+	// @match *
+	// ==/UserScript==
+	
+	
+	// If you're not using this as a userscript just delete from this line up. It's cool, homey.
+	
+	(function markdownSlideToHtml(){
+	  
+		if (!window.Showdown){
+			var scr		= document.createElement('script');
+			scr.onload	= markdownSlideToHtml;
+			scr.src		= 'vendor/showdown.js';
+			document.body.appendChild(scr);
+			return;
+		}
+	
+		[].forEach.call(document.querySelectorAll('[data-markdown]'), function fn(elem){
+			// strip leading whitespace so it isn't evaluated as code
+			//var text      = elem.textContent.replace(/\n\s*\n/g,'\n');
+			// jerome- to have better support of html within markdown
+			var text      = elem.innerHTML;
+			//console.log("origin innerHTML", text.split('\n'));
+			// remove all blanks lines
+			//text		= text.replace(/\n\s*\n/g,'\n');
+			//console.log("step text", text)
+			// set indentation level so your markdown can be indented within your HTML
+			var matches	= text.match(/^\n([ \t]*)/);
+			var leadingws	= matches[1].length;
+			//console.log("first line", matches)
+			//console.log("leadingws", leadingws)
+			var regex	= new RegExp('\\n[ \\t]{' + leadingws + '}','g');
+			var md		= text.replace(regex,'\n');
+			//console.log("pre md", md);
+			html      = (new Showdown.converter()).makeHtml(md);
+			//console.log("post html", html);
+	
+			// to support prettyprint
+			html		= html.replace(/<code><br \/>/g,'<pre class="prettyprint">');
+			html		= html.replace(/<br \/><\/code>/g,'</pre>');
+			// unescape [><]
+			html		= html.replace(/&amp;gt;/g,'>');
+			html		= html.replace(/&amp;lt;/g,'<');
+			//console.log("escaped html", html);
+		  
+			// here, have sum HTML
+			elem.innerHTML = html;
+		});
+		// callback prettyprint to highlight code found in markdown
+		prettyPrint();
+	}());
+	</script> 
+	<script>
+		//////////////////////////////////////////////////////////////////
+		// scan the whole webpage and replace url to their local location
+		// - usefull to have local copy of the slides in conference when internet is unavailable
+		// - and still have slides which works when internet is available
+		// $ open -a "/Applications/Google Chrome.app" --args --disable-web-security --allow-file-access-from-file
+		setTimeout(function(){
+			location.href.match(/^file:/) && jQuery('a').add('iframe').each(function(index, element){
+				var attrNames	= {
+					'A'	: 'href',
+					'IFRAME': 'src'
+				};
+				var attrName	= attrNames[element.nodeName];
+				var url		= jQuery(element).attr(attrName);
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/tquery\//			, 'file://localhost/Users/jerome/webwork/tquery/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/augmentedgesture.js\//	, 'file://localhost/Users/jerome/webwork/augmentedgesture.js/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/webaudio.js\//		, 'file://localhost/Users/jerome/webwork/webaudio.js/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/pongGL\//, 'file://localhost/Users/jerome/webwork/pongGL/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/threex\//, 'file://localhost/Users/jerome/webwork/threex/')
+				url	= url.replace(/^http:\/\/learningthreejs.com\//, 'file://localhost/Users/jerome/webwork/learningthreejs.com/')
+				url	= url.replace(/\/$/, '/index.html')
+				jQuery(element).attr(attrName, url);
+			})
+		}, 100);
+	</script>
+</body>
+</html>

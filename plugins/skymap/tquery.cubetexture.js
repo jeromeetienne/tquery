@@ -67,5 +67,7 @@ tQuery.TextureCube.WellKnownUrls	= {
 	park3Med		: tQuery.TextureCube.createUrls('Park3Med'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
 	pisa			: tQuery.TextureCube.createUrls('pisa'			, '.png', '../../../plugins/assets/images/textures/cube'),
 	skybox			: tQuery.TextureCube.createUrls('skybox'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
-	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../../plugins/assets/images/textures/cube')
+	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../../plugins/assets/images/textures/cube'),
+
+	mars			: tQuery.TextureCube.createUrls('mars'			, '.jpg', '../../../plugins/assets/images/textures/cube')
 };
