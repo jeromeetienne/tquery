@@ -39564,6 +39564,7 @@ requirejs.config({
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
+			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
 			"domReady": "plugins/requirejs/vendor/domReady"
 		}
@@ -39705,6 +39706,9 @@ requirejs.config({
 		"plugins/videos/tquery.createvideotexture": [
 			"plugins/videos/tquery.createwebcamtexture",
 			"plugins/videos/tquery.createtvsnowtexture"
+		],
+		"plugins/requirejs/confrequire/webaudio.initrequire": [
+			"plugins/webaudio/vendor/webaudio-bundle"
 		]
 	}
 });
