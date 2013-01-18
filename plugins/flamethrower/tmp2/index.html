@@ -1,0 +1,136 @@
+<!doctype html><title>Example of firework.js - Fly Me To The Moon</title>
+<script src="vendor/tquery/tquery-bundle.js"></script>
+<script src="vendor/tquery/tquery.textureutils.js"></script>
+
+<script src="vendor/tquery/tquery.cubetexture.js"></script>
+<script src="vendor/tquery/tquery.skymap.js"></script>
+
+<script src="vendor/tquery/tquery.lensflare.js"></script>
+<script src="vendor/tquery/ColladaLoader.js"></script>
+
+<!-- for webaudio.js sound -->
+<script src="vendor/webaudio-bundle.js"></script>
+
+
+<!-- for fireworks.js sound -->
+<script src="vendor/fireworks.js/fireworks-bundle.js"></script>
+<script src="comboemitter.js"></script>
+<script src="comboemitter_flamethrower.js"></script>
+
+
+<body><div id='info' style='color:white'>
+Fly Me To The Moon -
+<a href='https://github.com/jeromeetienne/fireworks.js/' target='_blank'>firework.js</a> particles engine
+<br/> 
+<a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a> thru 
+<a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a>
+-
+<a href='http://sketchup.google.com/3dwarehouse/details?mid=4d9028688f80fa1ba9ec59f156afb08e' target='_blank'>rocket</a> by
+<a href='http://sketchup.google.com/3dwarehouse/search?uq=0799768103760527374326456' target='_blank'>artkadet</a>
+</div><script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	//world.tRenderer().setClearColorHex( 0x00bbff, world.tRenderer().getClearAlpha() );
+	//world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
+//	world.removeCameraControls();
+	world.tCamera().position.z	= -30;
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+	
+	if( WebAudio.isAvailable ){
+		tQuery.createSound().loop(true).load('sounds/flymetothemoon.m4a', function(sound){
+			sound.volume(4).play();
+		});		
+	}
+
+	//world.getCameraControls().rangeY	*= 2;
+
+	world.getCameraControls().rangeX	*= 0.5;
+	world.getCameraControls().rangeY	*= 0.5;
+
+	// world.getCameraControls().rangeX	*= 10;
+	// world.getCameraControls().rangeY	*= 10;
+
+	world.add( new THREE.AmbientLight( 0x222222 ) );
+	
+	var directionalLight = new THREE.DirectionalLight( 0xcccccc );
+	directionalLight.position.set(1, 1, 1);
+	directionalLight.position.normalize();
+	world.add( directionalLight );
+	var directionalLight = new THREE.DirectionalLight( 0xcccccc );
+	directionalLight.position.set(-1, 1,-1);
+	directionalLight.position.normalize();
+	world.add( directionalLight );
+
+	var loader	= new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	var url		= "./models/TINTINROCKET/models/TIN TIN ROCKET.dae"
+	loader.load(url, function colladaReady( collada ){
+		tQuery(collada.scene).scale(0.2)
+			.rotateX(Math.PI/2).rotateY(Math.PI/3)
+			.translateZ(-2)
+			.addTo(container);
+	});
+	
+	
+	tQuery.createLensFlare().addTo(world) 
+		.position(tQuery.createVector3().set(-15, 24, 30).setLength(500) )
+
+	// create the container for the comboemitter
+	var container	= tQuery.createObject3D().addTo(world)
+	// container.rotateX(-Math.PI/2);
+	// container.rotateX(Math.PI/2).translateY(-10)
+	// container.rotateY(-Math.PI/2).translateX(-10)
+	
+	var flamethrower= new Fireworks.ComboEmitter.Flamethrower({
+		webaudio: world.getWebAudio(),
+		onReady	: function(){
+			flamethrower.start();
+		}
+	});
+	container.add( flamethrower.object3D() )
+
+	// make the sound follow this._container
+	WebAudio.isAvailable && flamethrower.sound().follow(container, world);
+	// make the object3d scale follow container one
+	flamethrower.object3D().scale	= container.get(0).scale;
+
+	world.loop().hook(function(delta, now){
+		var angle	= 0.2 * now * Math.PI/2;
+		container.get(0).position.x	= Math.cos(angle*2)*Math.cos(angle)*20;
+		container.get(0).position.z	= Math.sin(angle)*10;
+
+		world.tCamera().position.x	= 2 * (Math.sin(angle*2.45)*Math.sin(angle*1.3)*2 - 1);
+		world.tCamera().position.y	= -10 + Math.sin(angle*2.45)*Math.sin(angle*1.3)*25;
+		world.tCamera().position.z	= -30 + 5 + Math.sin(angle*2)*10;
+	})
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		cube map						//
+	//////////////////////////////////////////////////////////////////////////
+	var urlsRoot	= 'images/cubemap_mars/mars_';
+	var ext		= 'jpg';
+	var urls	= [
+		urlsRoot + 'positive_x.'+ext,
+		urlsRoot + 'negative_x.'+ext,
+		urlsRoot + 'positive_y.'+ext,
+		urlsRoot + 'negative_y.'+ext,
+		urlsRoot + 'positive_z.'+ext,
+		urlsRoot + 'negative_z.'+ext
+	];
+	var skymap	= tQuery.createSkymap({
+		textureCube	: tQuery.createCubeTexture(urls)
+	}).addTo(world);
+</script></body>
+
+
+
+
+
+
+
+
+
+
+

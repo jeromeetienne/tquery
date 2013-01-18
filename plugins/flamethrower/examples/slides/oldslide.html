@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>tQuery Workshop at WebGL Camp</title>
+	<base target=”_blank” />
+	<meta charset='utf-8'/>
+	<script src="vendor/jquery-1.7.2.min.js"></script>
+	<script src='slides.js'></script>
+</head>
+
+<body style='display: none'> 
+	<style>
+		article[data-markdown] em {
+			color		: orange;
+			font-style	: normal;
+			font-weight	: bolder;
+			
+		}
+		article[data-markdown] h3 {
+			font-size	: 180%;
+		}
+		span.orange {
+			color		: orange;
+		}
+		span.larger {
+			font-weight	: bolder;
+			font-size	: 120%;
+		}
+	</style>
+	<section class='slides layout-regular template-default'>
+
+<!-- ****************************************************************************
+		Talk Introduction
+********************************************************************************* -->
+	<article data-markdown>
+		# *A Little travel in Space*		
+
+		## with lots of code
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article>
+		<h3>Who Am I</h3>
+		<img style="float:right" src='jetienne-avatar.jpg' />
+		<ul>
+			<li>coder, speaker, trainer</li>
+			<li>Javascript, Node.js, WebGL and other HTML5 games stuff</li>
+		</ul>
+		<h4>Learning Three.js</h4>
+		<ul>
+			<li>Author of <a href="http://learningthreejs.com">learningthreejs</a> blog</li>
+			<li>Lists of three.js tutorials or "WebGL for dummies"</li>
+		</ul>
+		<h4>Contacts</h4>
+		<ul>
+			<li>
+				<a href='https://twitter.com/jerome_etienne'>@jerome_etienne</a> on twitter,
+				<a href='http://github.com/jeromeetienne'>jeromeetienne</a> on github
+			</li>
+		</ul>
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### intro
+		
+		* 2012 was the end of the world ?
+		* well no
+		* i went to the restaurant at the end of the world
+		* nothing there but a bored marvin
+		* a planet unable to predict its own end ???
+		* what a crap! 
+ 		* let's find a better one
+		* ok let's go to the moon
+		* via mars :)
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### init
+		
+		* get tquery
+		* various build
+		* get minimal page with require.js
+		
+		```
+		
+		```
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### rocket scientist
+		
+		* where to get the model
+		* download it
+		* load it
+		* scale it down
+	</article>
+	<article data-markdown>
+		## dark... switch on the lights
+	</article>
+	<article data-markdown>
+		### add lights
+	</article>
+	<article data-markdown>
+		## Size Me Up
+	</article>
+	<article data-markdown>
+		### put model in proper place
+		
+		* rotation
+		* translation
+	</article>
+	<article data-markdown>
+		## Add World Around
+	</article>
+	<article data-markdown>
+		### add skymap
+		
+		* add a skymap of mars
+		* show a reflextion/refraction too
+	</article>
+	<article data-markdown>
+		## Add Sound in Space
+	</article>
+	<article data-markdown>
+		### Add Soundtrack
+		
+		* present web audio API and webaudio.js
+		* pick the song appropriatly
+	</article>
+	<article data-markdown>
+		## A Little Bit Shinier
+	</article>
+	<article data-markdown>
+		### Add a Lens Flare
+		
+		* what is a lens flare
+		* add the plugin in require.js
+		* put proper position in x,y,z
+	</article>
+	<article data-markdown>
+		## hmm Let's Make It Move
+	</article>
+	<article data-markdown>
+		### Add Drunk Effect
+		
+		* disable camera control
+		* tquery rendering loop
+		* lots of sinusoid
+		
+		#### steps
+		* first empty loop
+		* second object
+		* third camera
+	</article>
+	<article data-markdown>
+		### Add a Reactor Flame
+		
+		* what is fireworks.js
+		  * render particles in various output
+		  * tquery, three.js, canvas2d
+		* emitter which emit particles
+		* combo emitter which emit particles
+	</article>
+	<article data-markdown>
+		
+		# *Questions ?*
+				
+		Jerome Etienne
+	</article>
+	<script>
+	// ==UserScript==
+	// @name Use Markdown, sometimes, in your HTML.
+	// @author Paul Irish <http://paulirish.com/>
+	// @link http://git.io/data-markdown
+	// @match *
+	// ==/UserScript==
+	
+	
+	// If you're not using this as a userscript just delete from this line up. It's cool, homey.
+	
+	(function markdownSlideToHtml(){
+	  
+		if (!window.Showdown){
+			var scr		= document.createElement('script');
+			scr.onload	= markdownSlideToHtml;
+			scr.src		= 'vendor/showdown.js';
+			document.body.appendChild(scr);
+			return;
+		}
+	
+		[].forEach.call(document.querySelectorAll('[data-markdown]'), function fn(elem){
+			// strip leading whitespace so it isn't evaluated as code
+			//var text      = elem.textContent.replace(/\n\s*\n/g,'\n');
+			// jerome- to have better support of html within markdown
+			var text      = elem.innerHTML;
+			//console.log("origin innerHTML", text.split('\n'));
+			// remove all blanks lines
+			//text		= text.replace(/\n\s*\n/g,'\n');
+			//console.log("step text", text)
+			// set indentation level so your markdown can be indented within your HTML
+			var matches	= text.match(/^\n([ \t]*)/);
+			var leadingws	= matches[1].length;
+			//console.log("first line", matches)
+			//console.log("leadingws", leadingws)
+			var regex	= new RegExp('\\n[ \\t]{' + leadingws + '}','g');
+			var md		= text.replace(regex,'\n');
+			//console.log("pre md", md);
+			html      = (new Showdown.converter()).makeHtml(md);
+			//console.log("post html", html);
+	
+			// to support prettyprint
+			html		= html.replace(/<code><br \/>/g,'<pre class="prettyprint">');
+			html		= html.replace(/<br \/><\/code>/g,'</pre>');
+			// unescape [><]
+			html		= html.replace(/&amp;gt;/g,'>');
+			html		= html.replace(/&amp;lt;/g,'<');
+			//console.log("escaped html", html);
+		  
+			// here, have sum HTML
+			elem.innerHTML = html;
+		});
+		// callback prettyprint to highlight code found in markdown
+		prettyPrint();
+	}());
+	</script> 
+	<script>
+		//////////////////////////////////////////////////////////////////
+		// scan the whole webpage and replace url to their local location
+		// - usefull to have local copy of the slides in conference when internet is unavailable
+		// - and still have slides which works when internet is available
+		// $ open -a "/Applications/Google Chrome.app" --args --disable-web-security --allow-file-access-from-file
+		setTimeout(function(){
+			location.href.match(/^file:/) && jQuery('a').add('iframe').each(function(index, element){
+				var attrNames	= {
+					'A'	: 'href',
+					'IFRAME': 'src'
+				};
+				var attrName	= attrNames[element.nodeName];
+				var url		= jQuery(element).attr(attrName);
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/tquery\//			, 'file://localhost/Users/jerome/webwork/tquery/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/augmentedgesture.js\//	, 'file://localhost/Users/jerome/webwork/augmentedgesture.js/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/webaudio.js\//		, 'file://localhost/Users/jerome/webwork/webaudio.js/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/pongGL\//, 'file://localhost/Users/jerome/webwork/pongGL/')
+				url	= url.replace(/^http:\/\/jeromeetienne.github.com\/threex\//, 'file://localhost/Users/jerome/webwork/threex/')
+				url	= url.replace(/^http:\/\/learningthreejs.com\//, 'file://localhost/Users/jerome/webwork/learningthreejs.com/')
+				url	= url.replace(/\/$/, '/index.html')
+				jQuery(element).attr(attrName, url);
+			})
+		}, 100);
+	</script>
+</body>
+</html>
