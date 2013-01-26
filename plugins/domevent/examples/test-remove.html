@@ -5,6 +5,7 @@
 <script src="../tquery.domevent.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
+	world.removeCameraControls();
 
 	// enable domEvent on this world
 	world.enableDomEvent();
@@ -13,15 +14,22 @@
 	var cube	= tQuery.createCube().addTo(world);
 
 	// bind some event on it
-	tQuery('cube').on('mouseover', function(event){
+	cube.on('mouseover', function(event){
+		console.log(event.type, "on cube", event)
+	});
+	cube.on('mouseout', function(event){
+		console.log(event.type, "on cube", event)
+	});
+	// cube.on('mousemove', function(event){
+	// 	console.log(event.type, "on cube", event)
+	// });
+
+	var callback	= cube.on('click', function(event){
 		console.log(event.type, "on cube", event)
 	});
 
-	tQuery('cube').on('click', function(event){
-		console.log("click on cube", event)
-	});
-
-	tQuery(world.tScene()).on('click', function(event){
-		console.log("click on scene", event);
-	});
+	setTimeout(function(){
+		console.log('removing click bind')
+		cube.off('click', callback);
+	}, 2000)
 </script></body>
