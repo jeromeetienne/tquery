@@ -40,10 +40,10 @@ tQuery.registerStatic('MinecraftCharHeadAnimations', function(character){
 	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 
 	// Setup 'yes' animation
-	animations.add('yes'	, tQuery.createAnimation().pushKeyframe(0.3, {
+	animations.add('yes'	, tQuery.createAnimation().pushKeyframe(0.4, {
 		headRotationY	: 0,
 		headRotationX	: +Math.PI/8
-	}).pushKeyframe(0.3, {
+	}).pushKeyframe(0.4, {
 		headRotationX	: -Math.PI/8,
 		headRotationY	: 0
 	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));

@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>test mouse</title>
+	</head>
+	<body tabindex='1'>
+		move: <div id="moveCoord"></div>
+		click: <div id="clickCoord"></div>
+		<script>
+		var nmove	= 0;
+		window.curMouseX	= null;
+		window.curMouseY	= null;
+		document.addEventListener('mousemove', function(event){
+			nmove		+= 1;
+			curMouseX	= event.clientX;
+			curMouseY	= event.clientY;
+			var text	= 'mousemove x='+event.clientX+' y='+event.clientY;
+			document.getElementById('moveCoord').innerHTML	= text;
+		})
+		// var nclick	= 0;
+		// document.addEventListener('click', function(event){
+		// 	nclick		+= 1;
+		// 	lastEventX	= event.clientX;
+		// 	var text	= 'mouseclick x='+event.clientX+' y='+event.clientY;
+		// 	document.getElementById('clickCoord').innerHTML	= text;
+		// })
+		</script>
+	</body>
+</html>

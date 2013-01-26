@@ -1,4 +1,5 @@
-tQuery.registerStatic('createMinecraftChar', function(opts){return new tQuery.MinecraftChar(opts);
+tQuery.registerStatic('createMinecraftChar', function(opts){
+	return new tQuery.MinecraftChar(opts);
 });
 
 /**
