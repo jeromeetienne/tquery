@@ -78,3 +78,5 @@ tQuery.Object3D.registerInstance('off', function(eventType, callback, world){
 	});
 	return callback;	
 });
+
+

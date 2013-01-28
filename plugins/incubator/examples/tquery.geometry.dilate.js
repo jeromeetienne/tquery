@@ -1,6 +1,6 @@
-tQuery.Geometry.registerInstance('dilate', function(delta){
+tQuery.Geometry.registerInstance('dilate', function(length){
 	// handle parameter polymorphism
-	console.assert(delta !== undefined)
+	console.assert(length !== undefined);
 	// go thru all geometry
 	this.each(function(tGeometry){
 		// gather vertexNormals from tGeometry.faces
@@ -20,12 +20,17 @@ tQuery.Geometry.registerInstance('dilate', function(delta){
 		// modify the vertices according to vertextNormal
 		tGeometry.vertices.forEach(function(vertex, idx){
 			var vertexNormal = vertexNormals[idx];
-			var length	= 0.05;
 			vertex.x	+= vertexNormal.x * length;
 			vertex.y	+= vertexNormal.y * length;
 			vertex.z	+= vertexNormal.z * length;
-			//addSelf(vertexNormal);
 		});		
 	})
 	return this;	// for chained API
+});
+
+tQuery.Geometry.registerInstance('erode', function(length){
+	// handle parameter polymorphism
+	console.assert(length !== undefined)
+	// forward to .dilate()
+	return this.dilate(-length);
 });
