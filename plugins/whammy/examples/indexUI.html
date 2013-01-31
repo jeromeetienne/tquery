@@ -1,0 +1,11 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tmp/whammy.js"></script>
+<script src="../tquery.whammy.js"></script>
+<script src="../tquery.whammyUI.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);	
+	
+	world.addWhammyUI();
+</script></body>

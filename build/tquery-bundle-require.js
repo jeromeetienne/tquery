@@ -36890,7 +36890,6 @@ tQuery.Node.prototype.back	= function(value)
 */
 tQuery.Node.prototype.data	= function(key, value)
 {
-console.log('data function', arguments)
 	// handle the setter case
 	if( value !== undefined ){
 		this.each(function(element){
@@ -39567,7 +39566,8 @@ requirejs.config({
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
 			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
-			"domReady": "plugins/requirejs/vendor/domReady"
+			"domReady": "plugins/requirejs/vendor/domReady",
+			"tquery.whammy": "plugins/requirejs/confrequire/whammy.initrequire"
 		}
 	},
 	"shim": {
@@ -39710,6 +39710,15 @@ requirejs.config({
 		],
 		"plugins/requirejs/confrequire/webaudio.initrequire": [
 			"plugins/webaudio/vendor/webaudio-bundle"
+		],
+		"plugins/requirejs/confrequire/whammy.initrequire": [
+			"plugins/whammy/vendor/whammy",
+			"plugins/whammy/tquery.whammy",
+			"plugins/whammy/tquery.whammy.bindkeyboard",
+			"plugins/whammy/tquery.whammyUI"
+		],
+		"plugins/whammy/tquery.whammy.bindkeyboard": [
+			"plugins/whammy/tquery.whammy"
 		]
 	}
 });

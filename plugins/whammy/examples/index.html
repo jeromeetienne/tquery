@@ -2,15 +2,15 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src="../tmp/whammy.js"></script>
 <script src="../tquery.whammy.js"></script>
+<script src="../tquery.whammy.bindkeyboard.js"></script>
 <body><div id="info">
-	Example of tQuery.whammy -
-	a plugin for <a href='https://github.com/antimatter15/whammy' target='_blank'>whammy.js</a>
-	<br/>
-	press 'r' to start/stop recording
-	<br/>
-	Recorder <a class='status'>idle</a> 
+	<div style='font-size:130%'>
+		Live Video Encoding *In-Browser*
+		with <a href='https://github.com/antimatter15/whammy' target='_blank'>whammy.js</a>
+	</div>
+	Press 'r' to start/stop recording a video<br/>
+	Recorder <span class='status'>idle</span> 
 	<a style="display:none"  target="_blank" class="download" download="movie.webm">Download</a>	
-
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	var object	= tQuery.createTorus().addTo(world);	
@@ -23,20 +23,16 @@
 	var container	= document.querySelector('#info');
 	var statusEl	= container.querySelector('.status');
 	var downloadEl	= container.querySelector('.download');
-
 	var timeBefore	= null;
 	var timeAfter	= null;
 	recorder.addEventListener('postStart', function(){
-		console.log('postStart')
-		statusEl.textContent	= 'processing';
+		statusEl.textContent	= 'processing...';
 	}.bind(this));
 	recorder.addEventListener('preStop', function(){
-		console.log('preStop')
 		// measure time *before* stop
 		timeBefore	= Date.now();
 	}.bind(this))
 	recorder.addEventListener('postStop', function(){
-		console.log('postStop')
 		// measure time *after* stop
 		timeAfter	= Date.now();
 		// init download link
