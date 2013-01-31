@@ -1,0 +1,34 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tmp/whammy.js"></script>
+<body><div id="info">
+	Example with whammy.js<br/>
+	press d to download
+	<a href="javascript:void(0)" class='download' style='display: none'>Download</a>
+</div><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	var object	= tQuery.createTorus().addTo(world);	
+	
+	var encoder	= new Whammy.Video(15);
+
+	world.loop().hook(function(){
+		var canvas	= world.tRenderer().domElement;
+		encoder.add(canvas);
+	});
+	
+	document.body.addEventListener('keypress', function(event){
+		console.log('keypress', event)
+		console.dir(event)
+		if( event.keyCode === "q".charCodeAt(0) ){
+			var output	= encoder.compile();
+			var url		= (window.webkitURL || window.URL).createObjectURL(output);
+			var element	= document.querySelector('#info .download');
+			element.href	= url;
+			element.style.display	= 'inline'
+			console.log('element', element, url)
+			console.dir(element)
+		}
+	})
+});
+</script></body>
