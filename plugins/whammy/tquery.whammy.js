@@ -1,10 +1,10 @@
-tQuery.registerStatic('createWhammyRecorder', function(opts){
-	return new tQuery.WhammyRecorder(opts);
+tQuery.registerStatic('createWhammy', function(opts){
+	return new tQuery.Whammy(opts);
 });
 /**
  * Create tQuery.Scene
 */
-tQuery.registerStatic('WhammyRecorder', function(opts){
+tQuery.registerStatic('Whammy', function(opts){
 	this._opts	= tQuery.extend(opts, {
 		world	: tQuery.world,
 		fps	: 15
@@ -17,14 +17,14 @@ tQuery.registerStatic('WhammyRecorder', function(opts){
 
 
 // make it eventable
-tQuery.MicroeventMixin(tQuery.WhammyRecorder.prototype);
+tQuery.MicroeventMixin(tQuery.Whammy.prototype);
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.WhammyRecorder.prototype.start	= function(){
+tQuery.Whammy.prototype.start	= function(){
 	var canvas	= this._opts.world.tRenderer().domElement;
 	this._callback	= function(){
 		this._encoder.add(canvas);
@@ -33,11 +33,11 @@ tQuery.WhammyRecorder.prototype.start	= function(){
 	return this;	// for chained API
 }
 
-tQuery.WhammyRecorder.prototype.isRecording	= function(){
+tQuery.Whammy.prototype.isRecording	= function(){
 	return this._callback ? true : false;
 }
 
-tQuery.WhammyRecorder.prototype.stop	= function(){
+tQuery.Whammy.prototype.stop	= function(){
 	if( this.isRecording() === false )	return;
 	this._output	= this._encoder.compile();
 	this._opts.world.loop().unhook(this._callback);
@@ -45,17 +45,17 @@ tQuery.WhammyRecorder.prototype.stop	= function(){
 	return this;	// for chained API
 }
 
-tQuery.WhammyRecorder.prototype.finalizedURL	= function(){
+tQuery.Whammy.prototype.finalizedURL	= function(){
 	var output	= this._output;
 	var url		= (window.webkitURL || window.URL).createObjectURL(output);
 	return url;
 };
 
-tQuery.WhammyRecorder.prototype.output	= function(){
+tQuery.Whammy.prototype.output	= function(){
 	return this._output;
 };
 
-tQuery.WhammyRecorder.prototype.pressSwitch	= function(){
+tQuery.Whammy.prototype.pressSwitch	= function(){
 	if( this.isRecording() === false ){
 		this.dispatchEvent('preStart');
 		this.start()		
@@ -72,7 +72,7 @@ tQuery.WhammyRecorder.prototype.pressSwitch	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.WhammyRecorder.prototype.bindKeyboard	= function(keyCode, element){
+tQuery.Whammy.prototype.bindKeyboard	= function(keyCode, element){
 	// handle parameters polymorphism
 	element	= element	|| document.body;
 	keyCode = keyCode !== undefined ? keyCode : "r".charCodeAt(0);
@@ -83,86 +83,8 @@ tQuery.WhammyRecorder.prototype.bindKeyboard	= function(keyCode, element){
 		// press switch
 		this.pressSwitch(element);
 	}.bind(this));
+	return this;	// for chained API
 }
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-tQuery.WhammyRecorder.prototype.pressSwitchUI	= function(container){
-	var commandEl	= container.querySelector('.command');
-	var statusEl	= container.querySelector('.status');
-	var downloadEl	= container.querySelector('.download');
-
-	if( this.isRecording() === false ){
-		this.start()		
-
-		commandEl.textContent	= 'Stop';
-		statusEl.textContent	= 'Recording';
-	}else{
-		var timeBefore	= Date.now();
-
-		this.stop();
-		var url		= recorder.finalizedURL();
-
-		var timeAfter	= Date.now();
-
-		downloadEl.href	= url;
-		downloadEl.style.display	= ''
-
-		commandEl.textContent	= 'Start';
-
-		var statusText	= "Compiled Video in " + (timeAfter - timeBefore) + "ms"
-		statusText	+= "- file size: " + Math.ceil(this._output.size / 1024) + "KB";
-		statusEl.innerHTML	= statusText;
-	}
-}
-
-tQuery.WhammyRecorder.prototype.bindKeyboardUI	= function(element, keyCode){
-	// handle parameters polymorphism
-	element	= element	|| document.body;
-	keyCode = keyCode !== undefined ? keyCode : "r".charCodeAt(0);
-	// bind event
-	element.addEventListener('keypress', function(event){
-		// if not our action key 
-		if( event.keyCode !== keyCode )	return;
-		// press switch
-		this.pressSwitchUI(element);
-	}.bind(this));
-}
-
-tQuery.WhammyRecorder.prototype.initDomControls	= function(container){
-	var commandEl	= container.querySelector('.command');
-	var statusEl	= container.querySelector('.status');
-	var downloadEl	= container.querySelector('.download');
-	commandEl.addEventListener('click', function(){
-		console.log('text', commandEl.textContent)
-		console.dir(commandEl)
-		if( commandEl.textContent === 'Start' ){
-			recorder.start();
-			commandEl.textContent	= 'Stop';
-			statusEl.textContent	= 'Recording';
-		}else if( commandEl.textContent === 'Stop' ){
-			var timeBefore	= Date.now();
-
-			recorder.stop();
-			var url		= recorder.finalizedURL();
-
-			var timeAfter	= Date.now();
-
-			downloadEl.href	= url;
-			downloadEl.style.display	= ''
-
-			commandEl.textContent	= 'Start';
-
-			var statusText	= "Compiled Video in " + (timeAfter - timeBefore) + "ms"
-			statusText	+= "- file size: " + Math.ceil(this._output.size / 1024) + "KB";
-			statusEl.innerHTML	= statusText;
-		}
-	}.bind(this));
-}
-
 
 
 

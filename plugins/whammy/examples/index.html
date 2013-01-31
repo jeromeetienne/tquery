@@ -3,40 +3,24 @@
 <script src="../tmp/whammy.js"></script>
 <script src="../tquery.whammy.js"></script>
 <body><div id="info">
-	Example with whammy.js<br/>
-	press 'r' to start/stop recording - currently idle 
-	<a style="display:none"  target="_blank" class="download" download="movie.webm">- Download Movie</a>
-</div>
-<div style='position: absolute; top: 0.5em; right: 0.5em;'>
-	<div style='width: 80px; font-weight: bolder; font-size: 14px; font-family: arial;'>
-		<span>RECORDER<br/></span>
-		<image class='play' src='images/play_noun_project_1541.svg'	width='80px' height='80px'>
-<!-- 		<image class='stop' src='images/stop_noun_project_2221.svg'	width='80px' height='80px'>
- -->
-<!--  		<a class="download" target="_blank" style="display2: none" download="movie.webm">DOWNLOAD</a>
- -->	</div>
-</div>
-<div id="whammyRecorderControls" style='position: absolute; width: 100%; bottom: 0.5em; text-align: center;'>
-	Movie Recorder:
-	<button class="command">Start</button>
-	<span class="status">Idle</span>
-	<a style="display:none"  target="_blank" class="download" download="movie.webm">Download</a>
-</div>
-	<script>
+	Example of tQuery.whammy -
+	a plugin for <a href='https://github.com/antimatter15/whammy' target='_blank'>whammy.js</a>
+	<br/>
+	press 'r' to start/stop recording
+	<br/>
+	Recorder <a class='status'>idle</a> 
+	<a style="display:none"  target="_blank" class="download" download="movie.webm">Download</a>	
+
+</div><script>
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	var object	= tQuery.createTorus().addTo(world);	
 	
 
-	var recorder	= tQuery.createWhammyRecorder();
-	recorder.bindKeyboard();
-
-//	recorder.initDomControls(container);
+	var recorder	= tQuery.createWhammy().bindKeyboard();
 
 
-
-	var container	= document.querySelector('#whammyRecorderControls');
-
-	var commandEl	= container.querySelector('.command');
+	// example of reporter
+	var container	= document.querySelector('#info');
 	var statusEl	= container.querySelector('.status');
 	var downloadEl	= container.querySelector('.download');
 
@@ -44,26 +28,23 @@
 	var timeAfter	= null;
 	recorder.addEventListener('postStart', function(){
 		console.log('postStart')
-		commandEl.textContent	= 'Stop';
-		statusEl.textContent	= 'Recording';
+		statusEl.textContent	= 'processing';
 	}.bind(this));
 	recorder.addEventListener('preStop', function(){
 		console.log('preStop')
+		// measure time *before* stop
 		timeBefore	= Date.now();
 	}.bind(this))
 	recorder.addEventListener('postStop', function(){
 		console.log('postStop')
-
-		var url		= recorder.finalizedURL();
-
-		downloadEl.href	= url;
-		downloadEl.style.display	= ''
-
-		commandEl.textContent	= 'Start';
-
+		// measure time *after* stop
 		timeAfter	= Date.now();
-		var statusText	= "Compiled Video in " + (timeAfter - timeBefore) + "ms"
-		statusText	+= "- file size: " + Math.ceil(recorder.output().size / 1024) + "KB";
+		// init download link
+		downloadEl.href	= recorder.finalizedURL();
+		downloadEl.style.display	= ''
+		// update status element
+		var statusText	= "compiled a " + Math.ceil(recorder.output().size / 1024) + "KB video";
+		statusText	+= " in " + (timeAfter - timeBefore) + "ms"
 		statusEl.innerHTML	= statusText;
 	}.bind(this))
 </script></body>
