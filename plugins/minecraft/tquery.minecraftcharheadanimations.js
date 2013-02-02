@@ -1,3 +1,7 @@
+tQuery.registerStatic('createMinecraftCharHeadAnimations', function(character){
+	return new tQuery.MinecraftCharHeadAnimations(character);
+});
+
 tQuery.registerStatic('MinecraftCharHeadAnimations', function(character){
 	var animations	= this;
 	// call parent ctor
