@@ -1,4 +1,4 @@
-### skymap
+### tquery.skymap
 * adding skymap
 * adding reflexion texture
 * adding refraction texture
@@ -11,6 +11,10 @@
 
 ### tquery.grassground
 * adding grassground
+
+### tquery.montainarea
+
+### tquery.checkerboard
 
 ### tquery.videos
 * adding webcam as texture
