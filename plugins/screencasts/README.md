@@ -4,6 +4,8 @@
 * inside another folder per video
 * video file stored too
 * each video got a src/dst source
+* local storage for videos
+* all the rest in a distinct repo tqueryTips
 
 ### tquery.skymap
 * adding skymap
