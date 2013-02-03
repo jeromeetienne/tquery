@@ -37,6 +37,12 @@
 ### tquery.grassground
 * adding grassground
 
+### how to get lights
+* ambient
+* point
+* directionnal
+* all the others
+
 ### tquery.montainarea
 
 ### tquery.checkerboard
