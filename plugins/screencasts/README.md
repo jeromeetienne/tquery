@@ -11,6 +11,8 @@
 * link later with jsfiddle for people to try
 * publication where?
   * hn, reddit, learningthreejs, dailyjs html5 news papar, game stuff
+  * seems well found examples for plugins... Keep them in /examples?
+  * jsfiddles for people to try
 
 ### tquery.skymap
 * adding skymap
