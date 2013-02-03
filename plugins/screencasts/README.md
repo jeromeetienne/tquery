@@ -31,3 +31,5 @@
 ### tquery.headtrackr
 
 ### tquery.whammy
+* with ui
+* without ui
