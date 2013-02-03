@@ -1,3 +1,10 @@
+### meta storage
+* do it by plugins at first
+* a folder per plugins
+* inside another folder per video
+* video file stored too
+* each video got a src/dst source
+
 ### tquery.skymap
 * adding skymap
 * adding reflexion texture
