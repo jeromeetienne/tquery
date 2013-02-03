@@ -16,6 +16,13 @@
 * adding film effect
 * adding multiple effects
 
+### ala jquery
+* add a class
+* add a data
+* add an id
+* css like selector
+* event bubling
+
 ### tquery.grassground
 * adding grassground
 
