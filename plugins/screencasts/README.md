@@ -7,3 +7,11 @@
 * how to add vignette effect
 * how to add motionblur
 * adding film effect
+
+### tquery.grassground
+* adding grassground
+
+### tquery.videos
+* adding webcam as texture
+* adding videos as texture
+* adding tv snow as texture
