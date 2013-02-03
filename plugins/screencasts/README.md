@@ -29,6 +29,9 @@
 * event bubling
 * make a link with a 3d object
 
+### tquery.text
+* add 3d text in your scene
+
 ### tquery.grassground
 * adding grassground
 
