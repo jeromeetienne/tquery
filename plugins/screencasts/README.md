@@ -8,7 +8,7 @@
 * all the rest in a distinct repo tqueryTips
   * what about same repo in /tips/skymap/adding-skymap/index-src.html
   * seems easier
-* link later with jsfiddle
+* link later with jsfiddle for people to try
 
 ### tquery.skymap
 * adding skymap
