@@ -46,8 +46,10 @@
 * sync sound with 3d effect
 
 ### tquery.gsvpano
+* put your 3d object in streetview
 
 ### tquery.headtrackr
+* make your head control a 3d object
 
 ### tquery.whammy
 * with ui
