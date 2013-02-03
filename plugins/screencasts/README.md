@@ -7,6 +7,7 @@
 * how to add vignette effect
 * how to add motionblur
 * adding film effect
+* adding multiple effects
 
 ### tquery.grassground
 * adding grassground
