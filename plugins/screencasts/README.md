@@ -1,7 +1,7 @@
 ### skymap
 * adding skymap
-* adding reflexion
-* adding refraction
+* adding reflexion texture
+* adding refraction texture
 
 ### tquery.pproc
 * how to add vignette effect
