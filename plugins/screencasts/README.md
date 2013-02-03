@@ -6,6 +6,8 @@
 * each video got a src/dst source
 * local storage for videos
 * all the rest in a distinct repo tqueryTips
+  * what about same repo in /tips/skymap/adding-skymap/index-src.html
+  * seems easier
 
 ### tquery.skymap
 * adding skymap
