@@ -22,6 +22,7 @@
 * add an id
 * css like selector
 * event bubling
+* make a link with a 3d object
 
 ### tquery.grassground
 * adding grassground
