@@ -9,7 +9,6 @@
   * what about same repo in /tips/skymap/adding-skymap/index-src.html
   * seems easier
 * link later with jsfiddle for people to try
-
 * publication where?
   * hn, reddit, learningthreejs, dailyjs html5 news papar, game stuff
 
