@@ -25,3 +25,9 @@
 * adding a sound fx to a 3d object
 * adding a procedural 8bit sound to a 3d object
 * sync sound with 3d effect
+
+### tquery.gsvpano
+
+### tquery.headtrackr
+
+### tquery.whammy
