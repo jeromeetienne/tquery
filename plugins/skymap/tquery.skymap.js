@@ -1,6 +1,7 @@
 tQuery.registerStatic('createSkymap', function(opts){
 	// handle parameters polymorphisms
-	if( typeof(opts) === 'string' )	opts	= {textureCube: opts};
+	if( typeof(opts) === 'string' )		opts	= {textureCube: opts};
+	if( opts instanceof THREE.Texture )	opts	= {textureCube: opts};
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		cubeW		: 1000,
