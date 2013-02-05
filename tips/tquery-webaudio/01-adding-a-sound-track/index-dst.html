@@ -1,0 +1,19 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.webaudio'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	// test if web audio API is available in this browser
+	if( WebAudio.isAvailable ){
+		// enable the web audio in our world
+		world.enableWebAudio();
+		// create a sound object, download it and start playing
+		var url	= '../assets/sound.mp3';
+		tQuery.createSound().load(url, function(sound){
+			sound.loop(true).play();
+		});
+	}
+});
+</script></body>

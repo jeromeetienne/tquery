@@ -10,8 +10,11 @@ require(['tquery.skymap'], function(){
 	var cubeTexture	= tQuery.createCubeTexture('skybox');
 	cubeTexture.mapping = new THREE.CubeRefractionMapping();
 
+	// add a skymap - reuse same texture to save gpu memory
+	tQuery.createSkymap(cubeTexture).addTo(world);
+
 	// use it in the envMap in a object material
-	tQuery.createSphere().addTo(world)
+	tQuery.createTorusKnot().addTo(world)
 		.setBasicMaterial()
 			.envMap(cubeTexture)
 			.refractionRatio(0.9)

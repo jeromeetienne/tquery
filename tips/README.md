@@ -55,8 +55,8 @@
 * adding tv snow as texture
 
 ### tquery.webaudio
-* adding a sound fx to a 3d object
-* adding a procedural 8bit sound to a 3d object
+* adding a sound track to your scene
+* make a sound follow a 3d object
 * sync sound with 3d effect
 
 ### tquery.gsvpano

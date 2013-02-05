@@ -1,0 +1,14 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+	// create a 3d world, use the boilerplate and start it
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add an object
+	var object	= tQuery.createTorusKnot().addTo(world)
+	// add a class
+	object.id('foobar');
+	// select with class ala css-selector
+	tQuery('#foobar').scaleXBy(2)
+});
+</script></body>
