@@ -74,6 +74,8 @@ Cat.prototype._meow	= function(age){
 ```
 
 handle polymorphism
+
+```
 Cat.prototype._meow	= function(age, name){
 	// polymorphism with variable type
 	if( age instanceof Cat ){
@@ -88,6 +90,7 @@ Cat.prototype._meow	= function(age, name){
 		age	= 0;
 	}
 }
+```
 
 ### make it eventable
 * TODO take it from microevent.js - exactly like in tQuery

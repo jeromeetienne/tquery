@@ -1687,6 +1687,13 @@ tQuery.registerStatic('createTorus', function(){
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
+tQuery.registerStatic('createTorusKnot', function(){
+	var ctor	= THREE.TorusKnotGeometry;
+	var dflGeometry	= [0.5-0.15, 0.15, 128, 32];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+
 tQuery.registerStatic('createVector3', function(x, y, z){
 	return new THREE.Vector3(x, y, z);
 });
