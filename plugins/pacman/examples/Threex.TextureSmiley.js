@@ -228,15 +228,15 @@ THREEx.Texture.Smiley	= {
 	 *
 	 * @param {canvasElement} the canvas where we draw
 	*/
-	textOnBack	: function(canvas, textData){
+	textOnBack	: function(canvas, textData, fontSize){
 		var w		= canvas.width;
 		var ctx		= canvas.getContext( '2d' );
 		
 		ctx.fillStyle	= "#000000";
 		
 		ctx.save();
-		ctx.translate(w/2, w/2-w/32)
-		ctx.font	= "bolder 20pt Arial";
+		ctx.translate(+3*w/4, w/2-w/32)
+		ctx.font	= "bolder "+fontSize+" Arial";
 		var textW	= ctx.measureText(textData).width;
 		ctx.strokeStyle	= "rgb(0,0,0)";
 		//console.log("measutreText", ctx.measureText(textData));

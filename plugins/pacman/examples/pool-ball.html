@@ -1,0 +1,55 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="excanvas.js"></script>
+<script src="threex.texturePoolBall.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// put some lights	
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444);
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,1);
+
+
+	var fillStylePerDesc	= {
+		'1'	: "#FDD017",	// Yellow
+		'2'	: "#2B65EC",	// Blue
+		'3'	: "#F62817",	// Red
+		'4'	: "#7A5DC7",	// Purple
+		'5'	: "#F87217",	// Orange
+		'6'	: "#348017",	// Green
+		'7'	: "#A52A2A",	// Brown or burgundy (tan in some ball sets)
+		'8'	: "#000000",	// Black
+		'9'	: "#FDD017",	// Yellow
+	};
+
+	// build the texture
+	var ballDesc	= '8';
+	var fillStyle	= fillStylePerDesc[ballDesc];
+	var stripped	= true;
+	var canvasW	= 512;
+
+	// var ballDesc	= '';
+	// var fillStyle	= '#000000';
+	// var fillStyle	= '#FFFFFF';
+	// var fillStyle	= '#AA0000';
+	// var stripped	= false;
+	// var canvasW	= 64;
+
+	var texture	= THREEx.Texture.PoolBall.ballTexture(ballDesc, stripped, fillStyle, canvasW);
+
+	var object	= tQuery.createSphere().addTo(world)
+		.scaleBy(3)
+		.setLambertMaterial()
+			.map(texture)
+			.back()
+
+	world.loop().hook(function(delta, now){
+		object.rotateY(2*0.02)
+		object.rotateX(2*0.015)
+		object.rotateZ(2*0.025)
+	})
+	
+</script></body> 
