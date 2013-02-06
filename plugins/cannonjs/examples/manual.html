@@ -1,0 +1,44 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/cannon.js/build/cannon.js"></script>
+<body><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	// world.enablePhysicsCannonjs();
+	// world.disablePhysicsCannonjs();
+	// world.getPhysicsCannonjs();
+	
+	
+	
+	// physics world init
+	var physWorld	= new CANNON.World();
+	physWorld.gravity.set(0,0,0);
+	physWorld.broadphase = new CANNON.NaiveBroadphase();
+	physWorld.solver.iterations = 10;
+
+	// init physics body
+	var shape	= new CANNON.Box(new CANNON.Vec3(1,1,1));
+	var mass	= 1;
+	var physObject	= new CANNON.RigidBody(mass,shape);
+	physWorld.add(physObject);
+
+	// make body move	
+	physObject.angularVelocity.set(0,10,0);
+
+	// create 3d object
+	var object	= tQuery.createCube().addTo(world)
+	object.get(0).useQuaternion	= true;
+
+	//object.addCannonjsPhysics(bodyCannonjs)
+	//object.removeCannonjsPhysics()
+
+	world.loop().hook(function(delta, now){
+		// Step the physics physWorld
+        	physWorld.step(delta);
+        	// update 3d object with physics data
+		physObject.position.copy(object.get(0).position);
+        	physObject.quaternion.copy(object.get(0).quaternion);
+	})
+});
+</script></body>

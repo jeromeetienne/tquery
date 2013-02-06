@@ -100,6 +100,21 @@ tQuery.data	= function(object, key, value, mustNotExist)
 };
 
 /**
+ * test if the data exist
+ * @param  {Object}  object the object which may or may not contain the data
+ * @param  {string}  key    the key of the data
+ * @return {Boolean}        true if the data exist, false otherwise
+ */
+tQuery.hasData	= function(object, key){
+	// if there is no data at all, return false
+	if( object['_tqData'] === undefined )		return false;
+	// if this data doesnt exist, return false
+	if( object['_tqData'][key] === undefined )	return false;
+	// if all previous test passed, return true
+	return true;
+}
+
+/**
  * Same as jQuery.removeData()
  *
  * @param {Boolean} mustExist if true, ensure the key does exist, default to false

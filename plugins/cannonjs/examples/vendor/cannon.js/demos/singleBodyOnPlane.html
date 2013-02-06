@@ -1,0 +1,59 @@
+<DOCTYPE html>
+<html>
+  <head>
+    <title>cannon.js - single body on plane demo</title>
+    <meta charset="utf-8">
+    <style>* {margin:0;padding:0}</style>
+  </head>
+  <body>
+    <script src="../build/cannon.js"></script>
+    <script src="../build/cannon.demo.js"></script>
+    <script src="../libs/dat.gui.js"></script>
+    <script src="../libs/Three.js"></script>
+    <script src="../libs/Detector.js"></script>
+    <script src="../libs/Stats.js"></script>
+    <script>
+
+      var demo = new CANNON.Demo({ stepFrequency:180 });
+      var size = 2;
+      
+      demo.addScene("Sphere",function(){
+          var sphereShape = new CANNON.Sphere(size);
+          createBodyOnPlane(demo,sphereShape);
+        });
+      
+      demo.addScene("Box",function(){
+          var boxShape = new CANNON.Box(new CANNON.Vec3(size,size,size));
+          createBodyOnPlane(demo,boxShape);
+        });
+      
+      demo.start();
+      
+      function createBodyOnPlane(demo,shape){
+      
+        // Create world
+        var world = demo.getWorld();
+        world.gravity.set(0,0,-40);
+        world.broadphase = new CANNON.NaiveBroadphase();
+        world.solver.iterations = 20;
+        world.solver.setSpookParams(10000,10);
+      
+        // ground plane
+        var groundShape = new CANNON.Plane();
+        var groundBody = new CANNON.RigidBody(0,groundShape);
+        world.add(groundBody);
+        demo.addVisual(groundBody);
+      
+        // Shape on plane
+        var shapeBody = new CANNON.RigidBody(30,shape);
+        var pos = new CANNON.Vec3(0,0,size);
+        shapeBody.position.set(0,0,size*2);
+        shapeBody.velocity.set(0,0,0);
+        shapeBody.angularVelocity.set(0,0,0);
+        world.add(shapeBody);
+        demo.addVisual(shapeBody);
+      }
+            
+    </script>
+  </body>
+</html>

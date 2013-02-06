@@ -28,6 +28,7 @@ requirejs.config({
 			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
+			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
@@ -108,11 +109,18 @@ requirejs.config({
 			"plugins/minecraft/tquery.minecraftchar.keyboard2",
 			"tquery.keyboard",
 			"plugins/minecraft/tquery.camerafpscontrols",
-			"plugins/minecraft/tquery.animation",
-			"plugins/minecraft/tquery.animations",
 			"plugins/minecraft/tquery.spritesheet",
 			"plugins/minecraft/tquery.minecraftcharanimations",
 			"plugins/minecraft/tquery.minecraftcharheadanimations"
+		],
+		"plugins/minecraft/tquery.minecraftcharanimations": [
+			"plugins/minecraft/tquery.animations"
+		],
+		"plugins/minecraft/tquery.minecraftcharheadanimations": [
+			"plugins/minecraft/tquery.animations"
+		],
+		"plugins/minecraft/tquery.animations": [
+			"plugins/minecraft/tquery.animation"
 		],
 		"plugins/physics/tquery.physijs": [
 			"plugins/physics/vendor/physijs/physi"

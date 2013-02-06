@@ -1,0 +1,164 @@
+<DOCTYPE html>
+<html>
+  <head>
+    <title>cannon.js - stacks demo</title>
+    <meta charset="utf-8">
+    <style>* {margin:0;padding:0}</style>
+  </head>
+  <body>
+    <script src="../build/cannon.js"></script>
+    <script src="../build/cannon.demo.js"></script>
+    <script src="../libs/dat.gui.js"></script>
+    <script src="../libs/Three.js"></script>
+    <script src="../libs/Detector.js"></script>
+    <script src="../libs/Stats.js"></script>
+    <script>
+
+      /**
+       * For debugging different kinds of stacks
+       */
+      var demo = new CANNON.Demo({ stepFrequency : 120 });
+      var size = 2;
+      
+      // Boxes
+      demo.addScene("Boxes",function(){
+          var world = setupWorld(demo);
+          
+          // Box 1
+          var boxShape = new CANNON.Box(new CANNON.Vec3(size*0.5,size*0.5,size*0.5));
+          var b1 = new CANNON.RigidBody(5,boxShape);
+          b1.position.set(0,0,3*size);
+          world.add(b1);
+          demo.addVisual(b1);
+      
+          // Box 2
+          var b2 = new CANNON.RigidBody(5,boxShape);
+          b2.position.set(0,0,1*size);
+          world.add(b2);
+          demo.addVisual(b2);
+        });
+      
+      
+      // Spheres
+      demo.addScene("Spheres",function(){
+          var world = setupWorld(demo);
+      
+          // Sphere 1
+          var sphereShape = new CANNON.Sphere(size);
+          var b1 = new CANNON.RigidBody(5,sphereShape);
+          b1.position.set(0,0,3*size);
+          world.add(b1);
+          demo.addVisual(b1);
+      
+          // Sphere 2
+          var b2 = new CANNON.RigidBody(5,sphereShape);
+          b2.position.set(0,0,1*size);
+          world.add(b2);
+          demo.addVisual(b2);
+        });
+      
+      // Sphere / box side
+      demo.addScene("Sphere/box",function(){
+          var world = setupWorld(demo);
+      
+          var boxShape = new CANNON.Box(new CANNON.Vec3(size,size,size));
+          var sphereShape = new CANNON.Sphere(size);
+      
+          // Box
+          var b1 = new CANNON.RigidBody(5,boxShape);
+          b1.position.set(0,0,1*size);
+          world.add(b1);
+          demo.addVisual(b1);
+      
+          // Sphere
+          var b2 = new CANNON.RigidBody(5,sphereShape);
+          b2.position.set(0,0,3*size);
+          world.add(b2);
+          demo.addVisual(b2);
+        });
+      
+      // ConvexPolyhedron and compound
+      demo.addScene("Hull/compound",function(){
+          var world = setupWorld(demo);
+          
+          var tetraShape = new CANNON.ConvexPolyhedron([new CANNON.Vec3(0,0,0),
+                                                        new CANNON.Vec3(2,0,0),
+                                                        new CANNON.Vec3(0,2,0),
+                                                        new CANNON.Vec3(0,0,2)],
+                                                       [
+                                                           [0,3,2], // -x
+                                                           [0,1,3], // -y
+                                                           [0,1,2], // -z
+                                                           [1,3,2], // +xyz
+                                                       ],
+                                                       [new CANNON.Vec3(-1, 0, 0),
+                                                        new CANNON.Vec3( 0,-1, 0),
+                                                        new CANNON.Vec3( 0, 0,-1),
+                                                        new CANNON.Vec3( 1, 1, 1)]);
+      
+          var b1 = new CANNON.RigidBody(5,tetraShape);
+          b1.position.set(0,0,3*size);
+          world.add(b1);
+          demo.addVisual(b1);
+      
+          // Box 2
+          var boxShape = new CANNON.Box(new CANNON.Vec3(size*0.5,size*0.5,size*0.5));
+          var compoundShape = new CANNON.Compound();
+          compoundShape.addChild(boxShape);
+          var b2 = new CANNON.RigidBody(5,compoundShape);
+          b2.position.set(0,0,1*size);
+          world.add(b2);
+          demo.addVisual(b2);
+        });
+      
+      // ConvexPolyhedron and box
+      demo.addScene("Hull/box",function(){
+          var world = setupWorld(demo);
+          
+          var tetraShape = new CANNON.ConvexPolyhedron([new CANNON.Vec3(0,0,0),
+                                                        new CANNON.Vec3(2,0,0),
+                                                        new CANNON.Vec3(0,2,0),
+                                                        new CANNON.Vec3(0,0,2)],
+                                                        [
+                                                            [0,3,2], // -x
+                                                            [0,1,3], // -y
+                                                            [0,1,2], // -z
+                                                            [1,3,2], // +xyz
+                                                        ],
+                                                        [new CANNON.Vec3(-1, 0, 0),
+                                                         new CANNON.Vec3( 0,-1, 0),
+                                                         new CANNON.Vec3( 0, 0,-1),
+                                                         new CANNON.Vec3( 1, 1, 1)]);
+          var b1 = new CANNON.RigidBody(5,tetraShape);
+          b1.position.set(0,0,3*size);
+          world.add(b1);
+          demo.addVisual(b1);
+      
+          // Box 2
+          var boxShape = new CANNON.Box(new CANNON.Vec3(size*0.5,size*0.5,size*0.5));
+          var b2 = new CANNON.RigidBody(5,boxShape);
+          b2.position.set(0,0,1*size);
+          world.add(b2);
+          demo.addVisual(b2);
+        });
+      
+      demo.start();
+      
+      function setupWorld(demo){
+        var world = demo.getWorld();
+        world.gravity.set(0,0,-40);
+        world.broadphase = new CANNON.NaiveBroadphase();
+        world.solver.iterations = 30;
+        world.solver.setSpookParams(5000,10);
+      
+        // ground plane
+        var groundShape = new CANNON.Plane();
+        var groundBody = new CANNON.RigidBody(0,groundShape);
+        world.add(groundBody);
+        demo.addVisual(groundBody);
+        return world;
+      }
+
+    </script>
+  </body>
+</html>

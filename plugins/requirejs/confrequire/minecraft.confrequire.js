@@ -14,7 +14,7 @@ requirejs.config({
 			'plugins/minecraft/tquery.spritesheet',
 			'plugins/minecraft/tquery.minecraftcharanimations',
 			'plugins/minecraft/tquery.minecraftcharheadanimations',
-		]
+		],
 		'plugins/minecraft/tquery.minecraftcharanimations'	: [
 			'plugins/minecraft/tquery.animations'
 		],
