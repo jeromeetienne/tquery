@@ -41,7 +41,7 @@ tQuery.registerStatic('createPoolBall', function(opts){
 // TODO it would be nice to cache the texture
 	
 	// create the sphere and use texture
-	var object	= tQuery.createSphere().addTo(world)
+	var object	= tQuery.createSphere()
 		.setPhongMaterial()
 			.map(texture)
 			.back()

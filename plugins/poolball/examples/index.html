@@ -1,0 +1,11 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.poolball.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	// put some lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+	// add a pool ball
+	tQuery.createPoolBall().addTo(world);
+</script></body> 
