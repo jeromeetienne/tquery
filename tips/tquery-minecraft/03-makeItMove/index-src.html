@@ -7,6 +7,6 @@ require(['tquery.minecraft'], function(){
 	
 	// load the minecraft character and add it to the world
 	var character	= tQuery.createMinecraftChar().addTo(world);	
-	var character3D	= character.object3D();
+	var character3D	= character.object3D().translate(-0.5);
 });
 </script></body>
