@@ -39621,7 +39621,7 @@ requirejs.config({
 			"plugins/assets/vendor/dat.gui/dat.color"
 		],
 		"plugins/deviceorientation/tquery.deviceorientation": [
-			"threex/threex.DeviceOrientationState"
+			"threex/THREEx.DeviceOrientationState"
 		],
 		"plugins/domevent/tquery.domevent": [
 			"plugins/domevent/threex.domevent"
