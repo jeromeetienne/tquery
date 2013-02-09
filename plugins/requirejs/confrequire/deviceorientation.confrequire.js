@@ -6,7 +6,7 @@ requirejs.config({
 	},
 	shim	: {
 		'plugins/deviceorientation/tquery.deviceorientation'	: [
-			'threex/threex.DeviceOrientationState',
+			'threex/THREEx.DeviceOrientationState',
 		]
 	}
 });

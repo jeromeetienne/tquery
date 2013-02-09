@@ -55,16 +55,10 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	
 	object3D.cannonjs().body().addEventListener("collide",function(event){
 		var body	= object3D.cannonjs().body();
-		// console.log("The sphere just collided with the ground!", this);
-		// console.dir(event)
-		// console.dir(object3D)
 		var speed	= body.velocity.norm();
-		console.log('speed', speed);
-		//body.velocity.set(0,0,0);
 		if( sounds ){
 			var sound	= sounds.impact.play();
 			sound.node.gain.value	= (speed*speed)/75;
-			console.log('node', sound.node.gain)
 		}
 	});
 })();
