@@ -173,6 +173,5 @@ tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 
 tQuery.registerStatic('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
 });

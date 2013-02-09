@@ -1,7 +1,6 @@
 tQuery.Object3D.registerInstance('setCannonjs', function(opts){
 	var object3D	= this;
 	var ctx		= new tQuery.Object3D.CannonjsCtx(object3D, opts)
-console.log('object3D', object3D)
 	ctx.back(object3D)
 	tQuery.data(object3D, 'cannonjsCtx', ctx, true);
 	return ctx;
@@ -88,8 +87,6 @@ tQuery.Object3D.registerInstance('enableCannonjs', function(opts){
 	body.position.y	= object3D.positionY();
 	body.position.z	= object3D.positionZ();
 
-	
-console.log('body', body, body.position)
 	// store it in world.tQuery.
 	tQuery.data(object3D, 'cannonjsBody', body, true);
 

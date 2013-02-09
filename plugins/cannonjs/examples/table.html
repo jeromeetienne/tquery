@@ -4,11 +4,21 @@
 <script src="../tquery.world.cannonjs.js"></script>
 <script src="../tquery.object3d.cannonjs.js"></script>
 <body><script>
-require(['tquery.poolball', 'tquery.shadowmap'], function(){
+require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tquery.webaudio'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 				.shadowMapEnabled(true)
 
 	world.tCamera().position.z	= 5;
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+	var sounds	= null;
+	if( WebAudio.isAvailable ){
+		world.getWebAudio().volume(3)
+		sounds	= {};
+		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
+	}
+	
 
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
@@ -45,13 +55,18 @@ require(['tquery.poolball', 'tquery.shadowmap'], function(){
 	
 	object3D.cannonjs().body().addEventListener("collide",function(event){
 		var body	= object3D.cannonjs().body();
-		console.log("The sphere just collided with the ground!", this);
-		console.dir(event)
-		console.dir(object3D)
+		// console.log("The sphere just collided with the ground!", this);
+		// console.dir(event)
+		// console.dir(object3D)
 		var speed	= body.velocity.norm();
 		console.log('speed', speed);
 		//body.velocity.set(0,0,0);
-	});	
+		if( sounds ){
+			var sound	= sounds.impact.play();
+			sound.node.gain.value	= (speed*speed)/75;
+			console.log('node', sound.node.gain)
+		}
+	});
 })();
 
 	tQuery.createPoolBall().addTo(world)
@@ -59,6 +74,14 @@ require(['tquery.poolball', 'tquery.shadowmap'], function(){
 			.position(0, 10, 1.3)
 			.back()
 		.castShadow(true)
+
+	// var object	= tQuery.createAxis().addTo(world)
+	// 	.translateY(1)
+	// world.loop().hook(function(){
+	// 	var orientation	= tQuery.deviceOrientation();
+	// 	object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
+	// })
+
 
 	var tileW	= 0.2;
 	var cursorX	= 0;

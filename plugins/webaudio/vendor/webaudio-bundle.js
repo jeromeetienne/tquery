@@ -407,6 +407,7 @@ WebAudio.Sound.prototype.play		= function(time){
 	var clonedNode	= this._chain.cloneBufferSource();
 	// set the noteOn
 	clonedNode.noteOn(time);
+console.log('clonedNode', clonedNode)
 	// create the source object
 	var source	= {
 		node	: clonedNode,
