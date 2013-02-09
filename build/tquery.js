@@ -602,6 +602,7 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Object3D);
+tQuery.pluginsStaticOn(tQuery.Object3D);
 
 /**
  * define all acceptable attributes for this class

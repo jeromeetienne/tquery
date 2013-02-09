@@ -1,0 +1,172 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/cannon.js/build/cannon.js"></script>
+<script src="../tquery.world.cannonjs.js"></script>
+<script src="../tquery.object3d.cannonjs.js"></script>
+<body><script>
+require(['tquery.poolball', 'tquery.shadowmap'], function(){
+	var world	= tQuery.createWorld().boilerplate().start()
+				.shadowMapEnabled(true)
+
+	world.tCamera().position.z	= 5;
+
+	// put some lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(3,3,3)
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(6, -6, 5, -5, 0.1, 20)
+		//.shadowCameraVisible(true)
+
+	world.enableCannonjs()
+	var physicsWorld= world.cannonjsWorld();
+	physicsWorld.gravity.set(0,-9.8,0);
+	physicsWorld.solver.iterations = 10;
+
+// sounds
+// * granular sound for rolling
+//   * depend on angularVelocity
+// * impact sound
+//   * volume depends on velocity
+// ## step
+// * draw maze on paper
+// * convert it in js
+// * sync chock with sound
+// * sync with macbook orientation
+	
+(function(){
+	var object3D	= tQuery.createPoolBall().addTo(world)
+				.setCannonjs()
+					.position(0,10,0.3)
+					.addTo(physicsWorld)
+					.back()
+				.castShadow(true)
+	
+	object3D.cannonjs().body().addEventListener("collide",function(event){
+		var body	= object3D.cannonjs().body();
+		console.log("The sphere just collided with the ground!", this);
+		console.dir(event)
+		console.dir(object3D)
+		var speed	= body.velocity.norm();
+		console.log('speed', speed);
+		//body.velocity.set(0,0,0);
+	});	
+})();
+
+	tQuery.createPoolBall().addTo(world)
+		.setCannonjs().addTo(physicsWorld)	
+			.position(0, 10, 1.3)
+			.back()
+		.castShadow(true)
+
+	var tileW	= 0.2;
+	var cursorX	= 0;
+	var cursorZ	= 0;
+	var cursor	= {
+		moveTo	: function(gridX, gridZ){
+			cursorX	= gridX;
+			cursorZ	= gridZ;
+			return this;
+		},
+		drawTo	: function(gridX, gridZ){
+			if( gridX === cursorX ){
+				addWallVert(gridX, cursorZ, gridZ)
+				cursorZ	= gridZ;	
+			}else if( gridZ === cursorZ ){
+				addWallHori(gridZ, cursorX, gridX)
+				cursorX	= gridX;
+			}else	console.assert(false);
+			return this;
+		}
+	}	
+
+	// add the ground
+	addGround(-15, -15, 15, 15)
+	
+	// TODO do an API moveTo(), drawTo()
+	//addBox(-1, -1, 1, 1)
+	addWallHori(0, -5, 5)
+	addWallVert(-5, -5, 5)
+	
+	// cursorMoveTo(-10, -10)
+	// cursorDrawTo(-10, -15)
+	//cursor.moveTo(-10,10).drawTo(3, 10)
+	
+	
+
+
+	function addWallHori(gridZ, gridX1, gridX2){
+		if( gridX1 > gridX2 ){
+			var tmp	= gridX2;
+			gridX2	= gridX1;
+			gridX1	= tmp;
+		}
+		var xMin	= gridX1*tileW - tileW/2;
+		var zMin	= gridZ *tileW - tileW/2;
+		var xMax	= gridX2*tileW + tileW/2;
+		var zMax	= gridZ *tileW + tileW/2;
+		return addBox(xMin, zMin, xMax, zMax)
+	}
+	function addWallVert(gridX, gridZ1, gridZ2){
+		if( gridZ1 > gridZ2 ){
+			var tmp	= gridZ2;
+			gridZ2	= gridZ1;
+			gridZ1	= temp;
+		}
+		var xMin	= gridX *tileW - tileW/2;
+		var zMin	= gridZ1*tileW - tileW/2;
+		var xMax	= gridX *tileW + tileW/2;
+		var zMax	= gridZ2*tileW + tileW/2;
+		return addBox(xMin, zMin, xMax, zMax)
+	}
+	
+	function addBox(x1, z1, x2, z2){
+		var width	= Math.abs(x2 - x1);
+		var depth	= Math.abs(z2 - z1);
+		var object3D	= tQuery.createCube(width,1,depth).addTo(world)
+					.translateY(0.5)
+					.translateX(x1 + width/2)
+					.translateZ(z1 + depth/2)
+					.setCannonjs({
+						mass	: 0
+					}).addTo(physicsWorld)
+						.back()
+					.setLambertMaterial()
+						.color(0xcccccc)
+						.map('../../assets/images/plywood.jpg')
+						.back()
+					.receiveShadow(true)
+					.castShadow(true)
+		object3D.get(0).material.map.repeat.x	= 10;
+		object3D.get(0).material.map.repeat.Y	= 10;
+		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
+		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
+		return object3D;
+	}
+
+	function addGround(x1, z1, x2, z2){
+		var width	= Math.abs(x2 - x1);
+		var depth	= Math.abs(z2 - z1);
+		var object3D	= tQuery.createCube(width,1,depth).addTo(world)
+					.translateY(-0.5)
+					.translateX(x1 + width/2)
+					.translateZ(z1 + depth/2)
+					.setCannonjs({
+						mass	: 0
+					}).addTo(physicsWorld)
+						.back()
+					.setLambertMaterial()
+						.color(0xffffff)
+						.map('../../assets/images/plywood.jpg')
+						.back()
+					.receiveShadow(true)
+					.castShadow(true)
+		object3D.get(0).material.map.repeat.x	= 10;
+		object3D.get(0).material.map.repeat.Y	= 10;
+		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
+		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
+		return object3D;
+	}
+});
+</script></body>

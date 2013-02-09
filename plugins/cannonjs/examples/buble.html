@@ -2,14 +2,18 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src="vendor/cannon.js/build/cannon.js"></script>
 <body><script>
-require([], function(){
+require(['tquery.poolball'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 	
+	// put some lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
+
 	// physics world init
 	var physWorld	= new CANNON.World();
 	physWorld.gravity.set(0,0,0);
 	physWorld.broadphase = new CANNON.NaiveBroadphase();
-	physWorld.solver.iterations = 10;
+	physWorld.solver.iterations = 25;
 
 	// init physics body
 	var shape	= new CANNON.Sphere(1);
@@ -19,10 +23,10 @@ require([], function(){
 	physWorld.add(body);
 
 	// make body move	
-	body.angularVelocity.set(0,10,0);
+	body.angularVelocity.set(0,0,10);
 
 	// create 3d object
-	var object	= tQuery.createTorusKnot().addTo(world)
+	var object	= tQuery.createPoolBall().addTo(world)
 	object.get(0).useQuaternion	= true;
 
 	//object.addCannonjsPhysics(bodyCannonjs)

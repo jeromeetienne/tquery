@@ -8,12 +8,6 @@ tQuery.createSkymap('pisa').addTo(world);
 
 to know the list of ones predefined in the examples, do ```Object.keys(tQuery.TextureCube.WellKnownUrls)``` in the js console.
 
-### how to add a skymap 
-```
-// add a skymap - one of the predefined one
-tQuery.createSkymap('pisa').addTo(world);
-```
-
 ### how to setup reflection
 ```
 // create the cube texture

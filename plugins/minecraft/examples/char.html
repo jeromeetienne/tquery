@@ -3,5 +3,7 @@
 <script src="../tquery.minecraftchar.js"></script>
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	tQuery.createMinecraftChar().addTo(world);
+	tQuery.createMinecraftChar({
+		skinUrl	: 'images/jetienne.png'
+	}).addTo(world);
 </script></body>

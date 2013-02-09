@@ -4,17 +4,20 @@
 <script src="../tquery.world.cannonjs.js"></script>
 <script src="../tquery.object3d.cannonjs.js"></script>
 <body><script>
-require([], function(){
+require(['tquery.poolball'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 				.enableCannonjs()
 
+	// put some lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(1,1,1);
 
 	var physicsWorld= world.cannonjsWorld();
 
 	physicsWorld.gravity.set(0,0,0);
 	physicsWorld.solver.iterations = 10;
-
-	var object3D	= tQuery.createCube().addTo(world)
+  
+	var object3D	= tQuery.createPoolBall().addTo(world)
 				.enableCannonjs()
 	var body	= object3D.cannonjsBody();
 

@@ -92,7 +92,7 @@
             
             var spherebody = new CANNON.RigidBody(mass,sphereShape);
             spherebody.position.set(0,0,size*3);
-            spherebody.velocity.set(5,0,0);
+            spherebody.velocity.set(10,0,0);
             spherebody.linearDamping=0;
             spherebody.angularDamping=0;
             world.add(spherebody);
@@ -111,7 +111,7 @@
       // Sphere chain
       demo.addScene("Sphere chain",function(){
           var size = 0.5;
-          var dist = size*2+0.12;
+          var dist = size*2+2;
           var world = setupWorld(demo);
           world.solver.setSpookParams(1000,2);
           var sphereShape = new CANNON.Sphere(size);
