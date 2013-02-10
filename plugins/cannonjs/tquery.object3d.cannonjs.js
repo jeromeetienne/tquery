@@ -1,4 +1,5 @@
 tQuery.Object3D.registerInstance('addCannonjs', function(opts){
+	console.assert( this.hasCannonjs() === false );
 	var object3D	= this;
 	var ctx		= new tQuery.Object3D.CannonjsCtx(object3D, opts)
 	ctx.back(object3D)
@@ -7,7 +8,17 @@ tQuery.Object3D.registerInstance('addCannonjs', function(opts){
 	
 });
 
+tQuery.Object3D.registerInstance('removeCannonjs', function(opts){
+});
+
+tQuery.Object3D.registerInstance('hasCannonjs', function(){
+	var object3D	= this;
+	var ctx		= tQuery.data(object3D, 'cannonjsCtx');
+	return ctx ? true : false;
+});
+
 tQuery.Object3D.registerInstance('cannonjs', function(){
+	console.assert( this.hasCannonjs() === true );
 	var object3D	= this;
 	var ctx	= tQuery.data(object3D, 'cannonjsCtx');
 	return ctx;
@@ -52,6 +63,26 @@ tQuery.Object3D.CannonjsCtx.prototype.position = function(x,y,z){
 	return this;
 };
 
+tQuery.Object3D.CannonjsCtx.prototype.positionX = function(value){
+	var body	= this._object3D.cannonjsBody();
+	if( value === undefined )	return body.position.x;
+	body.position.x	= value;
+	return this;
+};
+
+tQuery.Object3D.CannonjsCtx.prototype.positionY = function(value){
+	var body	= this._object3D.cannonjsBody();
+	if( value === undefined )	return body.position.y;
+	body.position.y	= value;
+	return this;
+};
+
+tQuery.Object3D.CannonjsCtx.prototype.positionZ = function(value){
+	var body	= this._object3D.cannonjsBody();
+	if( value === undefined )	return body.position.z;
+	body.position.z	= value;
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //	obsolet api ... put that in CannonjsCtx					//
@@ -64,16 +95,24 @@ tQuery.Object3D.registerInstance('enableCannonjs', function(opts){
 	opts	= tQuery.extend(opts, {
 		world	: tQuery.world,
 		mass	: 1,
+		shape	: null
 	});
 	var world	= opts.world;
 	
 	
 	tObject3D.useQuaternion	= true;
 
-	if( tObject3D.geometry instanceof THREE.SphereGeometry ){
+	if( opts.shape !== null ){
+		var shape	= opts.shape;
+	}else if( tObject3D.geometry instanceof THREE.SphereGeometry ){
 		var bboxSize	= object3D.geometry().computeAll().size();
 		var radius	= bboxSize.x/2;
 		var shape	= new CANNON.Sphere(radius);
+	}else if( tObject3D.geometry instanceof THREE.CylinderGeometry ){
+		var bboxSize	= object3D.geometry().computeAll().size();
+		var radius	= bboxSize.x/2;
+		var height	= bboxSize.y;
+		var shape	= new CANNON.Cylinder(radius, radius, height, 16);
 	}else{
 		var bboxSize	= object3D.geometry().computeAll().size();
 		var shapeSize	= new CANNON.Vec3(bboxSize.x/2, bboxSize.y/2, bboxSize.z/2)
@@ -105,11 +144,11 @@ tQuery.Object3D.registerInstance('cannonjsBody', function(){
 	return body;
 });
 
-tQuery.Object3D.registerInstance('hasCannonjs', function(){
-	var object3D	= this;
-	var body	= tQuery.data(object3D, 'cannonjsBody');
-	return body ? true : false;
-});
+// tQuery.Object3D.registerInstance('hasCannonjs', function(){
+// 	var object3D	= this;
+// 	var body	= tQuery.data(object3D, 'cannonjsBody');
+// 	return body ? true : false;
+// });
 
 tQuery.Object3D.registerInstance('disableCannonjs', function(){
 	console.assert(false, 'not yet implemented')

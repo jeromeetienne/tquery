@@ -12,9 +12,12 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	world.tCamera().position.z	= 15;
 
 	world.removeCameraControls();
-	world.tCamera().position.z	= 15;
-	world.tCamera().position.y	= 5;
+	world.tCamera().position.z	= 3;
+	world.tCamera().position.y	= 3;
 	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
+	
+	var cameraContainer	= tQuery.createObject3D().addTo(world)
+	cameraContainer.add(world.tCamera())
 
 	// enable webaudio
 	WebAudio.isAvailable && world.enableWebAudio();
@@ -28,19 +31,22 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position(3,3,3)
+	tQuery.createDirectionalLight().addTo(world).position(6,6,6)
 		.castShadow(true)
-		.shadowDarkness(0.4)
-		.shadowMap(512*2,512*2)
-		.shadowCamera(6, -6, 5, -5, 0.1, 20)
-		//.shadowCameraVisible(true)
+		.shadowDarkness(0.6)
+		.shadowMap(512*4,512*4)
+		.shadowCamera(12, -12, 8, -8, 0.1, 20)
+		.shadowCameraVisible(true)
 
 	world.enableCannonjs()
 	var physicsWorld= world.cannonjsWorld();
 	physicsWorld.gravity.set(0,-9.8,0);
 	physicsWorld.solver.iterations = 10;
 
+	var tileW	= 0.2;
 
+
+if(false){
 	var axis	= tQuery.createAxis().addTo(world)
 				.translateY(1)	
 	world.loop().hook(function(){
@@ -61,12 +67,10 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 		var matrix	= new THREE.Matrix4().setRotationFromEuler(rotation.clone().negate());
 		var vector	= tQuery.createVector3(0,-9.81, 0)
 		matrix.multiplyVector3(vector)
-window.matrix	= matrix;
-window.vector	= vector;
 		//vector.applyMatrix4( matrix );
 		physicsWorld.gravity.set(vector.x, vector.y, vector.z);
-
-	});
+	});	
+}
 
 
 // sounds
@@ -79,18 +83,45 @@ window.vector	= vector;
 // * convert it in js
 // * sync chock with sound
 // * sync with macbook orientation
-	
+
 (function(){
-	var object3D	= tQuery.createPoolBall().addTo(world)
+	var object3D	= tQuery.createSphere().addTo(world)
 				.geometry()
 					.scaleBy(0.8)
 					.back()
-				.addCannonjs()
-					.position(0,10,0.3)
+				.castShadow(true)
+				.receiveShadow(true)
+				.setLambertMaterial()
+					.map('../../assets/images/plywood.jpg')
+					.color(0xaa22aa)
+					.back()
+				.addCannonjs({
+						mass	: 0
+					})
 					.addTo(physicsWorld)
 					.back()
-				.castShadow(true)
+	var gridX	= 5;
+	var gridZ	= 5;
+	object3D.cannonjs().positionX(gridX * tileW)
+	object3D.cannonjs().positionZ(gridZ * tileW)
+
+	object3D.cannonjs().body().addEventListener("collide",function(event){
+		console.log('bumpercollide')
+		object3D.get(0).material.color.setHex(0xff2222);
+	});
+})();
 	
+var ball	= (function(){
+	var object3D	= tQuery.createPoolBall().addTo(world)
+				.position(-0.85,3,1)
+				.geometry()
+					.scaleBy(0.8)
+					.back()
+				.castShadow(true)
+				.receiveShadow(true)
+				.addCannonjs()
+					.addTo(physicsWorld)
+					.back()
 	object3D.cannonjs().body().addEventListener("collide",function(event){
 		var body	= object3D.cannonjs().body();
 		var speed	= body.velocity.norm();
@@ -99,14 +130,40 @@ window.vector	= vector;
 			sound.node.gain.value	= (speed*speed)/75;
 		}
 	});
-	console.log('body', object3D.cannonjs().body())
+	return object3D;
 })();
+if(true){
+	world.loop().hook(function(){
+		var ballPosition= ball.get(0).matrixWorld.getPosition();
+		var worldPoint	= new CANNON.Vec3(ballPosition.x, ballPosition.y, ballPosition.z);
+		var force	= new CANNON.Vec3(0,0,0);
+		var dt		= 1/100;
+		var length	= 10;
+		if( tQuery.keyboard().pressed('up') ){
+			force.z	= -length;
+		}else if( tQuery.keyboard().pressed('down') ){
+			force.z	= +length;
+		}
+		if( tQuery.keyboard().pressed('left') ){
+			force.x	= -length;
+		}else if( tQuery.keyboard().pressed('right') ){
+			force.x	= +length;
+		}
+		var body	= ball.cannonjs().body();
+		body.applyImpulse(worldPoint,force,dt);
+	});	
+}
 
-	tQuery.createPoolBall().addTo(world)
-		.addCannonjs().addTo(physicsWorld)	
-			.position(0, 10, 1.3)
-			.back()
-		.castShadow(true)
+
+	world.loop().hook(function(){
+		cameraContainer.position( ball.position() )
+	});
+
+	// tQuery.createPoolBall().addTo(world)
+	// 	.addCannonjs().addTo(physicsWorld)	
+	// 		.position(0, 10, 1.3)
+	// 		.back()
+	// 	.castShadow(true)
 
 	// var object	= tQuery.createAxis().addTo(world)
 	// 	.translateY(1)
@@ -115,7 +172,6 @@ window.vector	= vector;
 	// 	object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
 	// })
 
-	var tileW	= 0.2;
 	var cursorX	= 0;
 	var cursorZ	= 0;
 	var cursor	= {
