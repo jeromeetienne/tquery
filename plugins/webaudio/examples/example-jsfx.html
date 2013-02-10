@@ -1,0 +1,25 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../vendor/webaudio-bundle.js"></script>
+<!-- include webaudio.sound.jsfx.js. We made a plugin to make it easier. -->
+<!-- You can look at it. It is short and easily readable. -->
+<script src="../vendor/webaudio.sound.jsfx.js">	</script>
+<!-- include the .js files for jsfx.js -->
+<script src="../vendor/jsfx/audio.js">		</script>
+<script src="../vendor/jsfx/jsfx.js">		</script>
+<script src="../vendor/jsfx/jsfxlib.js">	</script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+	
+	if( WebAudio.isAvailable ){
+		// Here you get the parameters for jsfx.js. They are passed directly to jsfx.js.
+		// you can generate them with this [editor](http://www.egonelbre.com/js/jsfx/)
+		var lib		= ["saw",0.0000,0.4000,0.0000,0.1640,0.0000,0.1880,20.0000,594.0000,2400.0000,0.5440,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.5616,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+		tQuery.createSound().generateWithJsfx(lib).loop(true).play();
+	}
+</script></body>
