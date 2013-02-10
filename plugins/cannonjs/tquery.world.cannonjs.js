@@ -8,11 +8,15 @@ tQuery.World.registerInstance('addCannonjs', function(){
 	// store it in world
 	tQuery.data(world.tScene(), 'cannonjsWorld', physicsWorld, true);
 
-	// Step the physics physicsWorld
-	var callback	= world.loop().hook(function(delta, now){
-        	physicsWorld.step(delta);
-	});
-	tQuery.data(world.tScene(), 'cannonjsCb', callback, true);
+	// Step the physics physicsWorld	
+	// world.loop().hook(function(delta, now){
+	// 	physicsWorld.step(delta);
+	// });
+
+	var period	= 1/120;
+	setInterval(function(){
+        	physicsWorld.step(period);		
+	}, period*1000)
 	
 	return this;	// for chained API
 })
@@ -30,13 +34,5 @@ tQuery.World.registerInstance('hasCannonjs', function(){
 })
 
 tQuery.World.registerInstance('removeCannonjs', function(){
-	var world	= this;
-	// unhook callback		
-	var callback	= tQuery.data(world.tScene(), 'cannonjsCb');
-	world.loop().unhook(callback);
-	// clean up data registered in world.tScene()
-	tQuery.removeData(world.tScene(), 'cannonjsWorld', true);
-	tQuery.removeData(world.tScene(), 'cannonjsCb', true);
-	// for chained API
-	return this;
+	console.assert(false, 'not yet implemented')
 })
