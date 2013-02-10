@@ -1,4 +1,4 @@
-tQuery.World.registerInstance('enableCannonjs', function(){
+tQuery.World.registerInstance('addCannonjs', function(){
 	var world	= this;
 
 	// physics world init
@@ -29,7 +29,7 @@ tQuery.World.registerInstance('hasCannonjs', function(){
 	return tQuery.hasData(world.tScene(), 'cannonjsWorld');
 })
 
-tQuery.World.registerInstance('disableCannonjs', function(){
+tQuery.World.registerInstance('removeCannonjs', function(){
 	var world	= this;
 	// unhook callback		
 	var callback	= tQuery.data(world.tScene(), 'cannonjsCb');

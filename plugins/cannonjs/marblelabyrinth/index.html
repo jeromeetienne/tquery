@@ -5,16 +5,21 @@
 <script src="../tquery.object3d.cannonjs.js"></script>
 <body><script>
 require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
-	, 'tquery.webaudio', 'tquery.keyboard', 'tquery.fireball'], function(){
+	, 'tquery.webaudio', 'tquery.keyboard'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 				.shadowMapEnabled(true)
 
 	world.tCamera().position.z	= 15;
 
 	world.removeCameraControls();
+	// world.tCamera().position.z	= 3;
+	// world.tCamera().position.y	= 1;
+	// world.tCamera().position.setLength(5)
+	// world.tCamera().lookAt(new THREE.Vector3(0,0,0))
+	
 	world.tCamera().position.z	= 3;
 	world.tCamera().position.y	= 1;
-	world.tCamera().position.setLength(5)
+	world.tCamera().position.setLength(3)
 	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
 	
 	var cameraContainer	= tQuery.createObject3D().addTo(world)
@@ -23,10 +28,12 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	// enable webaudio
 	WebAudio.isAvailable && world.enableWebAudio();
 	var sounds	= null;
-	if( false && WebAudio.isAvailable ){
+	if( true && WebAudio.isAvailable ){
 		world.getWebAudio().volume(10)
 		sounds	= {};
 		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
+		sounds.bumper	= tQuery.createSound().load('../../assets/sounds/eatghost.mp3');
+		sounds.goal	= tQuery.createSound().load('../../assets/sounds/eatpill.mp3');
 	}
 	var table	= tQuery.createObject3D().addTo(world)
 
@@ -39,12 +46,13 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 		.shadowCamera(12, -12, 8, -8, 0.1, 20)
 		//.shadowCameraVisible(true)
 
-	world.enableCannonjs()
+	world.addCannonjs()
 	var physicsWorld= world.cannonjsWorld();
 	physicsWorld.gravity.set(0,-9.8,0);
 	physicsWorld.solver.iterations = 10;
 
 	var tileW	= 0.2;
+	
 
 if(false){
 	var axis	= tQuery.createAxis().addTo(world)
@@ -84,35 +92,6 @@ if(false){
 // * sync chock with sound
 // * sync with macbook orientation
 
-(function(){
-	var object3D	= tQuery.createSphere().addTo(world)
-				.translateY(0)
-				.geometry()
-					.scaleBy(0.8)
-					.back()
-				.castShadow(true)
-				.receiveShadow(true)
-				.setLambertMaterial()
-					.map('../../assets/images/plywood.jpg')
-					.color(0xaa22aa)
-					.back()
-				.addCannonjs({
-						mass	: 0
-					})
-					.addTo(physicsWorld)
-					.back()
-					
-	var gridX	= 5;
-	var gridZ	= 5;
-	object3D.cannonjs().positionX(gridX * tileW)
-	object3D.cannonjs().positionZ(gridZ * tileW)
-
-	object3D.cannonjs().body().addEventListener("collide",function(event){
-		console.log('bumpercollide')
-		object3D.get(0).material.color.setHex(0xff2222);
-	});
-})();
-	
 var ball	= (function(){
 	var object3D	= tQuery.createPoolBall().addTo(world)
 				.position(-0.85,3,1)
@@ -198,13 +177,25 @@ if(true){
 	addGround(-10, -6, 10, 6)
 	
 	// TODO do an API moveTo(), drawTo()
-	//addBox(-1, -1, 1, 1)
+	//addWall(-1, -1, 1, 1)
 	addWallHori(0, -5, 5)
 	addWallVert(-5, -5, 5)
 	
-	// cursorMoveTo(-10, -10)
-	// cursorDrawTo(-10, -15)
-	//cursor.moveTo(-10,10).drawTo(3, 10)
+
+
+	cursor	.moveTo(-25,-15)
+		.drawTo(-25, 15)
+		.drawTo( 25, 15)
+		.drawTo( 25,-15)
+		.drawTo(-25,-15)
+		
+	cursor	.moveTo(25-7,-15)
+		.drawTo(25-7,-15+10)
+	addHole(25-10, -15+3)
+
+	addGoalFlag(3, 3);
+
+	
 	
 	
 
@@ -219,26 +210,27 @@ if(true){
 		var zMin	= gridZ *tileW - tileW/2;
 		var xMax	= gridX2*tileW + tileW/2;
 		var zMax	= gridZ *tileW + tileW/2;
-		return addBox(xMin, zMin, xMax, zMax)
+		return addWall(xMin, zMin, xMax, zMax)
 	}
 	function addWallVert(gridX, gridZ1, gridZ2){
 		if( gridZ1 > gridZ2 ){
 			var tmp	= gridZ2;
 			gridZ2	= gridZ1;
-			gridZ1	= temp;
+			gridZ1	= tmp;
 		}
 		var xMin	= gridX *tileW - tileW/2;
 		var zMin	= gridZ1*tileW - tileW/2;
 		var xMax	= gridX *tileW + tileW/2;
 		var zMax	= gridZ2*tileW + tileW/2;
-		return addBox(xMin, zMin, xMax, zMax)
+		return addWall(xMin, zMin, xMax, zMax)
 	}
 	
-	function addBox(x1, z1, x2, z2){
+	function addWall(x1, z1, x2, z2){
 		var width	= Math.abs(x2 - x1);
+		var height	= 0.5;
 		var depth	= Math.abs(z2 - z1);
-		var object3D	= tQuery.createCube(width,1,depth).addTo(table)
-					.translateY(0.5)
+		var object3D	= tQuery.createCube(width,height,depth).addTo(table)
+					.translateY(height/2)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
 					.addCannonjs({
@@ -280,6 +272,58 @@ if(true){
 		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
 		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
 		return object3D;
+	}
+	
+	function addHole(gridX, gridZ){
+		var object3D	= tQuery.createSphere().addTo(world)
+			.positionX(gridX * tileW)
+			.positionZ(gridZ * tileW)
+			.geometry()
+				.scaleBy(0.8)
+				.back()
+			.castShadow(true)
+			.receiveShadow(true)
+			.setLambertMaterial()
+				.map('../../assets/images/plywood.jpg')
+				.color(0xaa22aa)
+				.back()
+			.addCannonjs({
+					mass	: 0
+				})
+				.addTo(physicsWorld)
+				.back()
+
+		object3D.cannonjs().body().addEventListener("collide",function(event){
+			console.log('bumpercollide')
+			object3D.get(0).material.color.setHex(0xff2222);
+			sounds && sounds.bumper.play();
+		});
+	}
+	
+	function addGoalFlag(gridX, gridZ){
+		var goalFlag	= tQuery.createPlane().addTo(world)
+			.positionX(gridX * tileW)
+			.positionY(0.01)
+			.positionZ(gridZ * tileW)
+			.geometry()
+				.rotateX(-Math.PI/2)
+				.back()
+			.receiveShadow(true)
+			.setLambertMaterial()
+				.map('images/checkerboard.jpg')
+				.opacity(0.8)
+				.transparent(true)
+				.back()
+			.addCannonjs({
+					mass	: 0
+				})
+				.addTo(physicsWorld)
+				.back()
+		goalFlag.cannonjs().body().addEventListener("collide",function(event){
+			console.log('Goal!!!')
+			goalFlag.get(0).material.color.setHex(0xff2222);
+			sounds && sounds.goal.play();
+		});
 	}
 });
 </script></body>
