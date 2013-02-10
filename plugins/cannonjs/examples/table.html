@@ -36,7 +36,7 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 		.shadowDarkness(0.6)
 		.shadowMap(512*4,512*4)
 		.shadowCamera(12, -12, 8, -8, 0.1, 20)
-		.shadowCameraVisible(true)
+		//.shadowCameraVisible(true)
 
 	world.enableCannonjs()
 	var physicsWorld= world.cannonjsWorld();
@@ -44,7 +44,6 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	physicsWorld.solver.iterations = 10;
 
 	var tileW	= 0.2;
-
 
 if(false){
 	var axis	= tQuery.createAxis().addTo(world)
@@ -86,6 +85,7 @@ if(false){
 
 (function(){
 	var object3D	= tQuery.createSphere().addTo(world)
+				.translateY(0.5)
 				.geometry()
 					.scaleBy(0.8)
 					.back()
