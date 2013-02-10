@@ -1,24 +1,30 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src="vendor/cannon.js/build/cannon.js"></script>
+<script src="../vendor/cannon.js/build/cannon.js"></script>
 <script src="../tquery.world.cannonjs.js"></script>
 <script src="../tquery.object3d.cannonjs.js"></script>
 <body><script>
-require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tquery.webaudio'], function(){
+require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
+	, 'tquery.webaudio', 'tquery.keyboard'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 				.shadowMapEnabled(true)
 
-	world.tCamera().position.z	= 5;
+	world.tCamera().position.z	= 15;
+
+	world.removeCameraControls();
+	world.tCamera().position.z	= 15;
+	world.tCamera().position.y	= 5;
+	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
 
 	// enable webaudio
 	WebAudio.isAvailable && world.enableWebAudio();
 	var sounds	= null;
-	if( WebAudio.isAvailable ){
-		world.getWebAudio().volume(3)
+	if( false && WebAudio.isAvailable ){
+		world.getWebAudio().volume(10)
 		sounds	= {};
 		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
 	}
-	
+	var table	= tQuery.createObject3D().addTo(world)
 
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
@@ -34,6 +40,35 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	physicsWorld.gravity.set(0,-9.8,0);
 	physicsWorld.solver.iterations = 10;
 
+
+	var axis	= tQuery.createAxis().addTo(world)
+				.translateY(1)	
+	world.loop().hook(function(){
+		var rotation	= axis.get(0).rotation;
+		if( tQuery.keyboard().pressed('up') ){
+			rotation.x	+= 0.01;
+		}else if( tQuery.keyboard().pressed('down') ){
+			rotation.x	-= 0.01;
+		}
+		if( tQuery.keyboard().pressed('left') ){
+			rotation.z	+= 0.01;
+		}else if( tQuery.keyboard().pressed('right') ){
+			rotation.z	-= 0.01;
+		}
+		rotation.x	*= 0.99;
+		rotation.z	*= 0.99;
+		
+		var matrix	= new THREE.Matrix4().setRotationFromEuler(rotation.clone().negate());
+		var vector	= tQuery.createVector3(0,-9.81, 0)
+		matrix.multiplyVector3(vector)
+window.matrix	= matrix;
+window.vector	= vector;
+		//vector.applyMatrix4( matrix );
+		physicsWorld.gravity.set(vector.x, vector.y, vector.z);
+
+	});
+
+
 // sounds
 // * granular sound for rolling
 //   * depend on angularVelocity
@@ -47,7 +82,10 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	
 (function(){
 	var object3D	= tQuery.createPoolBall().addTo(world)
-				.setCannonjs()
+				.geometry()
+					.scaleBy(0.8)
+					.back()
+				.addCannonjs()
 					.position(0,10,0.3)
 					.addTo(physicsWorld)
 					.back()
@@ -61,10 +99,11 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 			sound.node.gain.value	= (speed*speed)/75;
 		}
 	});
+	console.log('body', object3D.cannonjs().body())
 })();
 
 	tQuery.createPoolBall().addTo(world)
-		.setCannonjs().addTo(physicsWorld)	
+		.addCannonjs().addTo(physicsWorld)	
 			.position(0, 10, 1.3)
 			.back()
 		.castShadow(true)
@@ -75,7 +114,6 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	// 	var orientation	= tQuery.deviceOrientation();
 	// 	object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
 	// })
-
 
 	var tileW	= 0.2;
 	var cursorX	= 0;
@@ -99,7 +137,7 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	}	
 
 	// add the ground
-	addGround(-15, -15, 15, 15)
+	addGround(-10, -6, 10, 6)
 	
 	// TODO do an API moveTo(), drawTo()
 	//addBox(-1, -1, 1, 1)
@@ -141,11 +179,11 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	function addBox(x1, z1, x2, z2){
 		var width	= Math.abs(x2 - x1);
 		var depth	= Math.abs(z2 - z1);
-		var object3D	= tQuery.createCube(width,1,depth).addTo(world)
+		var object3D	= tQuery.createCube(width,1,depth).addTo(table)
 					.translateY(0.5)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
-					.setCannonjs({
+					.addCannonjs({
 						mass	: 0
 					}).addTo(physicsWorld)
 						.back()
@@ -165,11 +203,11 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation', 'tqu
 	function addGround(x1, z1, x2, z2){
 		var width	= Math.abs(x2 - x1);
 		var depth	= Math.abs(z2 - z1);
-		var object3D	= tQuery.createCube(width,1,depth).addTo(world)
+		var object3D	= tQuery.createCube(width,1,depth).addTo(table)
 					.translateY(-0.5)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
-					.setCannonjs({
+					.addCannonjs({
 						mass	: 0
 					}).addTo(physicsWorld)
 						.back()

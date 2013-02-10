@@ -1,4 +1,4 @@
-tQuery.Object3D.registerInstance('setCannonjs', function(opts){
+tQuery.Object3D.registerInstance('addCannonjs', function(opts){
 	var object3D	= this;
 	var ctx		= new tQuery.Object3D.CannonjsCtx(object3D, opts)
 	ctx.back(object3D)
