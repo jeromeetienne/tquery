@@ -16,17 +16,13 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	var world	= tQuery.createWorld().boilerplate().start()
 				.pageTitle('#info')
 				.shadowMapEnabled(true)
-/*
- * ### TODO
- * * if touch bumper, animation start, disable player controls
- *   * on animation end
- *   * goto start position
- *   * enable controls
- * * if touch bumper, animation start, disable player controls
- *   * on animation end
- *   * goto start position
- *   * enable controls
- */
+
+
+	// create the cube texture
+	var cubeTexture	= tQuery.createCubeTexture('skybox');
+
+	// add a skymap - reuse same texture to save gpu memory
+	tQuery.createSkymap('skybox').addTo(world);
 
 
 	world.tCamera().position.z	= 15;
@@ -38,10 +34,10 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	world.tCamera().position.setLength(10)
 	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
 	
-	world.tCamera().position.z	= 3;
-	world.tCamera().position.y	= 1;
-	world.tCamera().position.setLength(3)
-	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
+	// world.tCamera().position.z	= 3;
+	// world.tCamera().position.y	= 1;
+	// world.tCamera().position.setLength(3)
+	// world.tCamera().lookAt(new THREE.Vector3(0,0,0))
 
 	// world.tCamera().position.z	= 1;
 	// world.tCamera().position.y	= 10;
@@ -60,6 +56,9 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
 		sounds.bumper	= tQuery.createSound().load('../../assets/sounds/eatghost.mp3');
 		sounds.goal	= tQuery.createSound().load('../../assets/sounds/eatpill.mp3');
+		
+		var lib		= ["square",0.0000,0.4000,0.0000,0.0080,0.0000,0.2660,20.0000,669.0000,2400.0000,-0.6220,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.4275,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
+		sounds.spawn	= tQuery.createSound().generateWithJsfx(lib);
 	}
 	var table	= tQuery.createObject3D().addTo(world)
 
@@ -304,7 +303,7 @@ if(true){
 						.back()
 					.setLambertMaterial()
 						.color(0xcccccc)
-						.map('../../assets/images/plywood.jpg')
+						.map('../../assets/images/wood.jpg')
 						.back()
 					.receiveShadow(true)
 					.castShadow(true)
@@ -317,9 +316,10 @@ if(true){
 
 	function addGround(x1, z1, x2, z2){
 		var width	= Math.abs(x2 - x1);
+		var height	= 0.25;
 		var depth	= Math.abs(z2 - z1);
-		var object3D	= tQuery.createCube(width,1,depth).addTo(table)
-					.translateY(-0.5)
+		var object3D	= tQuery.createCube(width,height,depth).addTo(table)
+					.translateY(-height/2)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
 					.addCannonjs({
@@ -349,8 +349,8 @@ if(true){
 			.castShadow(true)
 			.receiveShadow(true)
 			.setLambertMaterial()
-				.map('../../assets/images/plywood.jpg')
-				.color(0xaa22aa)
+				.map('../../assets/images/rocks.jpg')
+				.color(0xaaaaaa)
 				.back()
 			.addCannonjs({
 					mass	: 0
@@ -374,11 +374,13 @@ if(true){
 			});
 			// setup timeout for deinit
 			setTimeout(function(){
+				// undo animatoin
 				ball.scale(1)
 				world.loop().unhook(callback);
 				disablePlayerControls	= false;
+				// spawn
 				ball.cannonjs().position(startPosition.x, startPosition.y, startPosition.z)
-				sounds && sounds.bumper.play();
+				sounds && sounds.spawn.play();
 			}, animationDelay)
 		});
 	}
