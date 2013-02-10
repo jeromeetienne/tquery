@@ -13,6 +13,7 @@ requirejs.config({
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
+			"tquery.fireball": "plugins/fireball/tquery.fireballmaterial",
 			"tquery.fog": "plugins/fog/tquery.world.createfog",
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.gsvpano": "plugins/gsvpano/tquery.gsvpano",
