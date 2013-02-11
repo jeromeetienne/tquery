@@ -12,10 +12,13 @@
 	Use 1 to 4 to change camera position
 </div><script>
 require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
-	, 'tquery.webaudio', 'tquery.keyboard', 'tquery.skymap'], function(){
+	, 'tquery.webaudio', 'tquery.keyboard', 'tquery.skymap', 'tquery.pproc'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 				.pageTitle('#info')
 				.shadowMapEnabled(true)
+
+	// put some post effect
+	tQuery.createEffectComposer().renderPass().vignette(1.2,1).finish();
 
 	// add a skymap - reuse same texture to save gpu memory
 	tQuery.createSkymap('skybox').addTo(world);
@@ -397,7 +400,7 @@ if(true){
 			// init animation
 			var animationDelay	= 1000;			
 			disablePlayerControls	= true;
-			var startAt	= tQuery.now() / 1000;
+			var startAt	= tQuery.now() / 1000; 
 			var callback	= world.loop().hook(function(){
 				var age		= tQuery.now()/1000 - startAt;
 				var angle	= 3 * age * Math.PI * 2 + Math.PI;
