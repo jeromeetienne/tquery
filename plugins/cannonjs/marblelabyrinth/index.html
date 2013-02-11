@@ -1,8 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src="../vendor/cannon.js/build/cannon.js"></script>
-<script src="../tquery.world.cannonjs.js"></script>
-<script src="../tquery.object3d.cannonjs.js"></script>
 <body><div id="info" style="z-index: 2">
 	Marble Labyrinth by
 	<a href='http://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
@@ -14,7 +11,7 @@
 	<br/>
 	Use 1 to 4 to change camera position
 </div><script>
-require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
+require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	, 'tquery.webaudio', 'tquery.keyboard', 'tquery.skymap'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 				.pageTitle('#info')
@@ -56,18 +53,17 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
 	tQuery.createDirectionalLight().addTo(world).position(4,3,4)
-		.addClass('dirlight')
 		.castShadow(true)
-		.shadowDarkness(0.6)
+		.shadowDarkness(0.5)
 		.shadowBias(0.0015)
 		.shadowMap(512*4,512*4)
-		.shadowCamera(6, -6, 4, -3, 0.1, 20)
-		.shadowCameraVisible(true)
+		.shadowCamera(6, -6, 4, -4, 0.1, 20)
+		//.shadowCameraVisible(true)
 
 	world.addCannonjs()
 	var physicsWorld= world.cannonjsWorld();
 	physicsWorld.gravity.set(0,-9.8,0);
-	physicsWorld.solver.iterations = 10;
+	physicsWorld.solver.iterations = 20;
 
 	var tileW	= 0.2;
 	
@@ -264,44 +260,29 @@ if(true){
 	addGround(-35*tileW, -20*tileW, 35*tileW, 20*tileW)
 	
 	addGoalFlag(-3, 6);
-
-	cursor	.moveTo(-25,-14)
-		.drawTo(-25, 14)
-	cursor	.moveTo(-25, 15)
-		.drawTo( 25, 15)
-	cursor	.moveTo( 25, 14)
-		.drawTo( 25,-14)
-	cursor	.moveTo( 25,-15)
-		.drawTo(-25,-15)
-
-	cursor	.moveTo(19,-14)
-		.drawTo(19,-6)
-
-	cursor	.moveTo(24,4)
-		.drawTo(11,4)
-	cursor	.moveTo(10, 4)
-		.drawTo(10,-5)
-	cursor	.moveTo(  9,-5)
-		.drawTo(-12,-5)
-	cursor	.moveTo(-13,-7)
-		.drawTo(-13,-1)
-	cursor	.moveTo(-20,-3)
-		.drawTo(-17,-3)
-	cursor	.moveTo(-21, 4)
-		.drawTo(-21, 7)
-	cursor	.moveTo(-16, 7)
-		.drawTo(-16,10)
-
-
-	cursor	.moveTo(-6,14)
-		.drawTo(-6,3)
-	cursor	.moveTo(-5,3)
-	 	.drawTo(-1,3)
-	cursor	.moveTo( 0,3)
-		.drawTo( 0,8)
 	
-	cursor	.moveTo( 6,11)
-		.drawTo( 9,11)
+
+	cursor	.moveTo(-25,-14).drawTo(-25, 14)
+	cursor	.moveTo(-25, 15).drawTo( 25, 15)
+	cursor	.moveTo( 25, 14).drawTo( 25,-14)
+	cursor	.moveTo( 25,-15).drawTo(-25,-15)
+
+	cursor	.moveTo(19,-14).drawTo(19,-6)
+
+	cursor	.moveTo(24,4).drawTo(11,4)
+	cursor	.moveTo(10, 4).drawTo(10,-5)
+	cursor	.moveTo(  9,-5).drawTo(-12,-5)
+	cursor	.moveTo(-13,-7).drawTo(-13,-1)
+	cursor	.moveTo(-20,-3).drawTo(-17,-3)
+	cursor	.moveTo(-21, 4).drawTo(-21, 7)
+	cursor	.moveTo(-16, 7).drawTo(-16,10)
+
+
+	cursor	.moveTo(-6,14).drawTo(-6,3)
+	cursor	.moveTo(-5,3).drawTo(-1,3)
+	cursor	.moveTo( 0,3).drawTo( 0,8)
+	
+	cursor	.moveTo( 6,11).drawTo( 9,11)
 	
 	addHole(16,-12)
 
@@ -410,8 +391,8 @@ if(true){
 				.back()
 
 		object3D.cannonjs().body().addEventListener("collide",function(event){
-			console.log('bumpercollide')
 			object3D.get(0).material.color.setHex(0xff2222);
+			// play the impact sound
 			sounds && sounds.bumper.play();
 			// init animation
 			var animationDelay	= 1000;			
@@ -423,9 +404,7 @@ if(true){
 				var scale	= 0.7 + Math.cos(angle)*0.3;
 				ball.scale(scale);
 			});
-			console.log('body');
-			console.dir(ball.cannonjs().body());
-
+			// apply impulse to make it jump
 			ball.get(0).updateMatrixWorld();
 			var ballPosition= ball.get(0).matrixWorld.getPosition();
 			var worldPoint	= new CANNON.Vec3(ballPosition.x, ballPosition.y, ballPosition.z);

@@ -39557,6 +39557,7 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
@@ -39596,6 +39597,10 @@ requirejs.config({
 		}
 	},
 	"shim": {
+		"plugins/cannonjs/tquery.object3d.cannonjs": [
+			"plugins/cannonjs/tquery.world.cannonjs",
+			"plugins/cannonjs/vendor/cannon.js/build/cannon"
+		],
 		"plugins/requirejs/confrequire/car.initrequire": [
 			"plugins/car/tquery.car",
 			"plugins/car/Car",
