@@ -4,12 +4,15 @@
 <script src="../tquery.world.cannonjs.js"></script>
 <script src="../tquery.object3d.cannonjs.js"></script>
 <body><div id="info" style="z-index: 2">
-	Marble Labyrinth -
+	Marble Labyrinth by
+	<a href='http://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
 	<br/>
 	<a href='https://github.com/mrdoob/three.js/' target='_blank'>three.js</a> with
 	<a href='http://jeromeetienne.github.com/tquery/' target='_blank'>tQuery API</a> for 3D
 	-
 	<a href='http://schteppe.github.com/cannon.js/' target='_blank'>cannon.js</a> for physics
+	<br/>
+	Use 1 to 4 to change camera position
 </div><script>
 require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 	, 'tquery.webaudio', 'tquery.keyboard', 'tquery.skymap'], function(){
@@ -17,32 +20,17 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 				.pageTitle('#info')
 				.shadowMapEnabled(true)
 
-
-	// create the cube texture
-	var cubeTexture	= tQuery.createCubeTexture('skybox');
-
 	// add a skymap - reuse same texture to save gpu memory
 	tQuery.createSkymap('skybox').addTo(world);
-
 
 	world.tCamera().position.z	= 15;
 
 	world.removeCameraControls();
 
-	world.tCamera().position.z	= 3;
-	world.tCamera().position.y	= 1;
-	world.tCamera().position.setLength(10)
+	world.tCamera().position.y	= 10;
+	world.tCamera().position.z	= 10;
+	world.tCamera().position.setLength(20)
 	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
-	
-	// world.tCamera().position.z	= 3;
-	// world.tCamera().position.y	= 1;
-	// world.tCamera().position.setLength(3)
-	// world.tCamera().lookAt(new THREE.Vector3(0,0,0))
-
-	// world.tCamera().position.z	= 1;
-	// world.tCamera().position.y	= 10;
-	// world.tCamera().position.setLength(10)
-	// world.tCamera().lookAt(new THREE.Vector3(0,0,0))
 	
 	var cameraContainer	= tQuery.createObject3D().addTo(world)
 	cameraContainer.add(world.tCamera())
@@ -67,12 +55,14 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position(6,6,6)
+	tQuery.createDirectionalLight().addTo(world).position(4,3,4)
+		.addClass('dirlight')
 		.castShadow(true)
 		.shadowDarkness(0.6)
+		.shadowBias(0.0015)
 		.shadowMap(512*4,512*4)
-		.shadowCamera(12, -12, 8, -8, 0.1, 20)
-		//.shadowCameraVisible(true)
+		.shadowCamera(6, -6, 4, -3, 0.1, 20)
+		.shadowCameraVisible(true)
 
 	world.addCannonjs()
 	var physicsWorld= world.cannonjsWorld();
@@ -81,7 +71,6 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 
 	var tileW	= 0.2;
 	
-
 if(false){
 	var axis	= tQuery.createAxis().addTo(world)
 				.translateY(1)	
@@ -105,20 +94,21 @@ if(false){
 		matrix.multiplyVector3(vector)
 		//vector.applyMatrix4( matrix );
 		physicsWorld.gravity.set(vector.x, vector.y, vector.z);
-	});	
+	});
 }
 
 
-// sounds
+// ## sounds
 // * granular sound for rolling
 //   * depend on angularVelocity
-// * impact sound
+// * DONE impact sound
 //   * volume depends on velocity
 // ## step
-// * draw maze on paper
-// * convert it in js
-// * sync chock with sound
+// * DONE draw maze on paper
+//   * convert it in js
+// * DONE sync chock with sound
 // * sync with macbook orientation
+
 
 var startPosition	= tQuery.createVector3(+22*tileW, 3, -13*tileW)
 var ball	= (function(){
@@ -143,70 +133,85 @@ var ball	= (function(){
 	sounds && sounds.spawn.play();
 	return object3D;
 })();
+	// if the ball is too low, kill it
+	world.loop().hook(function(delta, now){
+		var position	= ball.cannonjs().body().position;
+		if( position.y < -2 ){
+			ball.cannonjs().position(startPosition.x, startPosition.y, startPosition.z);
+			sounds && sounds.spawn.play();
+		}
+	})
 if(true){
 	var disablePlayerControls	= false;
 	world.loop().hook(function(){
+		// if disablePlayerControls is true, return now
 		if( disablePlayerControls )	return;
+		
+		// compute the force depending on keyboard
+		var keyboard	= tQuery.keyboard();
+		var force	= tQuery.createVector3();
+		if( keyboard.pressed('up') )	force.z	+= -1;
+		if( keyboard.pressed('down') )	force.z	+= +1;
+		if( keyboard.pressed('left') )	force.x	+= -1;
+		if( keyboard.pressed('right') )	force.x	+= +1;
+
+		// rotate the force according to camera position
+		// - thus arrow are relative to what the user see
+		var cameraPos	= world.tCamera().position;
+		var forceAngle	= Math.PI/2 - Math.atan2(cameraPos.z, cameraPos.x);
+		var matrix	= new THREE.Matrix4().makeRotationY( forceAngle );
+		matrix.multiplyVector3(force);
+
+		// apply the force to the center of the ball
 		ball.get(0).updateMatrixWorld();
 		var ballPosition= ball.get(0).matrixWorld.getPosition();
 
+		// do an impulse to the ball
 		var worldPoint	= new CANNON.Vec3(ballPosition.x, ballPosition.y, ballPosition.z);
-		var force	= new CANNON.Vec3(0,0,0);
+		var cforce	= new CANNON.Vec3(force.x, force.y, force.z);
 		var dt		= 1/10;
-		var length	= 1;
-		if( tQuery.keyboard().pressed('up') ){
-			force.z	= -length;
-		}else if( tQuery.keyboard().pressed('down') ){
-			force.z	= +length;
-		}
-		if( tQuery.keyboard().pressed('left') ){
-			force.x	= -length;
-		}else if( tQuery.keyboard().pressed('right') ){
-			force.x	= +length;
-		}
-		var body	= ball.cannonjs().body();
-		body.applyImpulse(worldPoint,force,dt);
+		ball.cannonjs().body().applyImpulse(worldPoint,cforce,dt);
 	});	
 }
-
 
 	world.loop().hook(function(){
 		cameraContainer.position( ball.position() )
 	});
 	
-	var cameraTarget	= tQuery.createObject3D().addTo(cameraContainer);
+	var cameraTarget	= null;
+	var cameraTargets	= [];
 
-	var camera1Target	= tQuery.createObject3D().addTo(cameraContainer)
-		.position(0,1,3)
-	camera1Target.get(0).lookAt(new THREE.Vector3(0,0,0))
-console.log('camera1 rotation', camera1Target.rotation())
+	var object3D	= tQuery(new THREE.Camera()).position(0,1,3)
+	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
+	cameraTargets.push(object3D)
 
-	var camera2Target	= tQuery.createObject3D().addTo(cameraContainer)
-		.position(3,10,1)
-	camera2Target.get(0).lookAt(new THREE.Vector3(0,0,0))
+	var object3D	= tQuery(new THREE.Camera()).position(0,10,5)
+	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
+	cameraTargets.push(object3D)
 
-	var camera3Target	= tQuery.createObject3D().addTo(cameraContainer)
-		.position(1,1,-3)
-	camera3Target.get(0).lookAt(new THREE.Vector3(0,0,0))
+	var object3D	= tQuery(new THREE.Camera()).position(3,3,-3)
+	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
+	cameraTargets.push(object3D)
 
-	var camera4Target	= tQuery.createObject3D().addTo(cameraContainer)
-		.position(-1,1,-3)
-	camera4Target.get(0).lookAt(new THREE.Vector3(0,0,0))
+	var object3D	= tQuery(new THREE.Camera()).position(-3,3,-3)
+	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
+	cameraTargets.push(object3D)
 
-	var cameraTarget	= camera1Target;
+	var cameraTarget	= cameraTargets[1];
 	document.body.addEventListener('keypress', function(event){
 		if( event.keyCode === '1'.charCodeAt(0)){
-			cameraTarget	= camera1Target;
+			cameraTarget	= cameraTargets[0];
 		}else if( event.keyCode === '2'.charCodeAt(0)){
-			cameraTarget	= camera2Target;
+			cameraTarget	= cameraTargets[1];
 		}else if( event.keyCode === '3'.charCodeAt(0)){
-			cameraTarget	= camera3Target;
+			cameraTarget	= cameraTargets[2];
 		}else if( event.keyCode === '4'.charCodeAt(0)){
-			cameraTarget	= camera4Target;
+			cameraTarget	= cameraTargets[3];
 		}
 	});
 
 	world.loop().hook(function(){
+		// tween the position
 		var targetPos	= cameraTarget.get(0).position;
 		var cameraPos	= world.tCamera().position;
 		var damping	= 0.05;
@@ -214,16 +219,13 @@ console.log('camera1 rotation', camera1Target.rotation())
 		cameraPos.y	+= (targetPos.y - cameraPos.y)*damping;
 		cameraPos.z	+= (targetPos.z - cameraPos.z)*damping;
 
-		world.tCamera().lookAt(new THREE.Vector3(0,0,0))
-
-		// var targetRot	= cameraTarget.get(0).rotation;
-		// var cameraRot	= world.tCamera().rotation;
-		// var damping	= 0.05;
-		// cameraRot.x	+= (targetRot.x - cameraRot.x)*damping;
-		// cameraRot.y	+= (targetRot.y - cameraRot.y)*damping;
-		// cameraRot.z	+= (targetRot.z - cameraRot.z)*damping;
-		// world.tCamera().updateMatrix();
-		// world.tCamera().updateMatrixWorld();
+		// tween the rotation
+		var targetRot	= cameraTarget.get(0).rotation;
+		var cameraRot	= world.tCamera().rotation;
+		var damping	= 0.05;
+		cameraRot.x	+= (targetRot.x - cameraRot.x)*damping;
+		cameraRot.y	+= (targetRot.y - cameraRot.y)*damping;
+		cameraRot.z	+= (targetRot.z - cameraRot.z)*damping;
 	});
 
 	// tQuery.createPoolBall().addTo(world)
@@ -231,7 +233,6 @@ console.log('camera1 rotation', camera1Target.rotation())
 	// 		.position(0, 10, 1.3)
 	// 		.back()
 	// 	.castShadow(true)
-
 	// var object	= tQuery.createAxis().addTo(world)
 	// 	.translateY(1)
 	// world.loop().hook(function(){
@@ -344,7 +345,7 @@ console.log('camera1 rotation', camera1Target.rotation())
 		var height	= 0.5;
 		var depth	= Math.abs(z2 - z1);
 		var object3D	= tQuery.createCube(width,height,depth).addTo(table)
-					.translateY(height/2)
+					.translateY(     height/2)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
 					.addCannonjs({
