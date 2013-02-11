@@ -1,0 +1,63 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.webaudio'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	// create a cube
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	// to put microcache in tQuery.core ?
+	// tquery-assetloader
+
+	// see https://github.com/jeromeetienne/MicroCache.js
+	var MicroCache	= function(){
+		var _values	= {};
+		return {
+			get	: function(key){ return _values[key];	},
+			contains: function(key){ return key in _values;	},
+			remove	: function(key){ delete _values[key];	},
+			set	: function(key, value){	_values[key] = value;},
+			values	: function(){ return _values;	},
+			getSet	: function(key, value){
+				if( !this.contains(key) ){
+					this.set(key, typeof value == 'function' ? value() : value )
+				}
+				return this.get(key);
+			}
+		}
+	}
+
+
+/**
+ * experimentation on asset loading
+ * - cache
+ *   - ressource loaded/parsed are loaded once at most
+ * - display only when all is loaded / to avoid the black texture
+ * - what about the case 'loading'
+ *   - aka i init a load of a given asset while it is already loading
+ */
+
+	var cache	= new MicroCache();
+	world.enableWebAudio();
+	
+	tQuery.Flow()
+		.par(function(next){
+			tQuery.createSound().load('../../assets/sounds/kick.wav', function(sound){
+				cache.set('sound.kick', sound)
+				next();
+			});
+		})
+		.par(function(next){
+			THREE.ImageUtils.loadTexture('../../assets/images/water.jpg', undefined, function(texture){
+				cache.set('texture.water', texture)
+				next();						
+			});
+		})
+		.seq(function(next){
+			console.log('all loaded', cache.values());
+		});
+	
+	//assets	= tQuery.createAssetLoader();
+	
+})
+</script></body>
