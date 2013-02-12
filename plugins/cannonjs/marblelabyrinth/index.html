@@ -40,7 +40,7 @@ require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.devic
 	// enable webaudio
 	WebAudio.isAvailable && world.enableWebAudio();
 	var sounds	= null;
-	if( false && WebAudio.isAvailable ){
+	if( true && WebAudio.isAvailable ){
 		world.getWebAudio().volume(10)
 		sounds	= {};
 		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
@@ -376,7 +376,7 @@ if(true){
 		var depth	= Math.abs(z2 - z1);
 		var object3D	= tQuery.createCube(width,height,depth).addTo(table)
 					.addClass('ground')
-					.translateY(-height/2)
+					.translateY(   - height/2)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
 					.addCannonjs({
