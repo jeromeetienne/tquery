@@ -9,7 +9,7 @@ tQuery.registerStatic('createPoolBall', function(opts){
 	opts	= tQuery.extend(opts, {
 		ballDesc	: '8',
 		stripped	: true,
-		textureW	: 512
+		textureW	: 1024
 	});
 	
 	// build texture based on ballDesc

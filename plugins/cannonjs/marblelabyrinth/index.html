@@ -1,4 +1,4 @@
-<!doctype html><title>Minimal tQuery Page</title>
+<!doctype html><title>Marble Labyrinth</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><div id="info" style="z-index: 2">
 	Marble Labyrinth by
@@ -25,6 +25,8 @@ require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.devic
 
 	world.tCamera().position.z	= 15;
 
+	var cache	= new Microcache();
+	
 	world.removeCameraControls();
 
 	world.tCamera().position.y	= 10;
@@ -115,6 +117,7 @@ if(false){
 var startPosition	= tQuery.createVector3(+22*tileW, 3, -13*tileW)
 var ball	= (function(){
 	var object3D	= tQuery.createPoolBall().addTo(world)
+				.id('ball')
 				.position(startPosition)
 				.geometry()
 					.scaleBy(3*tileW)
@@ -124,6 +127,9 @@ var ball	= (function(){
 				.addCannonjs()
 					.addTo(physicsWorld)
 					.back()
+	var url	= '../../assets/images/plywood.jpg';
+	object3D.get(0).material.bumpMap	= THREE.ImageUtils.loadTexture(url);
+	object3D.get(0).material.bumpScale	= 0.0025
 	object3D.cannonjs().body().addEventListener("collide",function(event){
 		var body	= object3D.cannonjs().body();
 		var speed	= body.velocity.norm();
@@ -185,18 +191,23 @@ if(true){
 	var cameraTargets	= [];
 
 	var object3D	= tQuery(new THREE.Camera()).position(0,1,3)
+				.addTo(cameraContainer)
+	object3D.position().setLength(1.5)
 	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
 	cameraTargets.push(object3D)
 
 	var object3D	= tQuery(new THREE.Camera()).position(0,10,5)
+				.addTo(cameraContainer)
 	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
 	cameraTargets.push(object3D)
 
 	var object3D	= tQuery(new THREE.Camera()).position(3,3,-3)
+				.addTo(cameraContainer)
 	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
 	cameraTargets.push(object3D)
 
 	var object3D	= tQuery(new THREE.Camera()).position(-3,3,-3)
+				.addTo(cameraContainer)
 	object3D.get(0).lookAt(new THREE.Vector3(0,0,0))
 	cameraTargets.push(object3D)
 
@@ -214,21 +225,38 @@ if(true){
 	});
 
 	world.loop().hook(function(){
+		var targetObj	= cameraTarget.get(0);
+		var movingObj	= world.tCamera();
+		var sourceObj	= movingObj;
+		
+		targetObj.updateMatrixWorld();
+		movingObj.updateMatrixWorld();
+
 		// tween the position
-		var targetPos	= cameraTarget.get(0).position;
-		var cameraPos	= world.tCamera().position;
+		var targetPos	= targetObj.position;
+		var sourcePos	= movingObj.position;
+
+		// targetPos	= targetObj.matrixWorld.getPosition();
+		// sourcePos	= sourceObj.matrixWorld.getPosition();
+
+		var movingPos	= movingObj.position;
 		var damping	= 0.05;
-		cameraPos.x	+= (targetPos.x - cameraPos.x)*damping;
-		cameraPos.y	+= (targetPos.y - cameraPos.y)*damping;
-		cameraPos.z	+= (targetPos.z - cameraPos.z)*damping;
+		movingPos.x	+= (targetPos.x - sourcePos.x)*damping;
+		movingPos.y	+= (targetPos.y - sourcePos.y)*damping;
+		movingPos.z	+= (targetPos.z - sourcePos.z)*damping;
 
 		// tween the rotation
-		var targetRot	= cameraTarget.get(0).rotation;
-		var cameraRot	= world.tCamera().rotation;
+		var targetRot	= targetObj.rotation;
+		var sourceRot	= movingObj.rotation;
+
+		// targetRot	= targetObj.matrixWorld.getRotation();
+		// sourceRot	= sourceObj.matrixWorld.getRotation();
+
+		var movingRot	= movingObj.rotation;
 		var damping	= 0.05;
-		cameraRot.x	+= (targetRot.x - cameraRot.x)*damping;
-		cameraRot.y	+= (targetRot.y - cameraRot.y)*damping;
-		cameraRot.z	+= (targetRot.z - cameraRot.z)*damping;
+		movingRot.x	+= (targetRot.x - sourceRot.x)*damping;
+		movingRot.y	+= (targetRot.y - sourceRot.y)*damping;
+		movingRot.z	+= (targetRot.z - sourceRot.z)*damping;
 	});	
 })();
 
@@ -340,10 +368,14 @@ if(true){
 	}
 
 	function addGround(x1, z1, x2, z2){
+		var texture	= cache.getSet('texture.plywood', function(){
+			return THREE.ImageUtils.loadTexture('../../assets/images/plywood.jpg')
+		})
 		var width	= Math.abs(x2 - x1);
 		var height	= 0.25;
 		var depth	= Math.abs(z2 - z1);
 		var object3D	= tQuery.createCube(width,height,depth).addTo(table)
+					.addClass('ground')
 					.translateY(-height/2)
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
@@ -351,21 +383,27 @@ if(true){
 						mass	: 0
 					}).addTo(physicsWorld)
 						.back()
-					.setLambertMaterial()
+					.setPhongMaterial()
 						.color(0xffffff)
-						.map('../../assets/images/plywood.jpg')
+						.map(texture)
+						.bumpMap(texture).bumpScale(0.025)
 						.back()
 					.receiveShadow(true)
 					.castShadow(true)
-		object3D.get(0).material.map.repeat.x	= 10;
-		object3D.get(0).material.map.repeat.y	= 10;
+		object3D.get(0).material.map.repeat.x	= 20;
+		object3D.get(0).material.map.repeat.y	= 20;
 		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
 		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
 		return object3D;
 	}
-	
+
+		
 	function addHole(gridX, gridZ){
+		var texture	= cache.getSet('texture.rocks', function(){
+			return THREE.ImageUtils.loadTexture('../../assets/images/rocks.jpg')
+		})
 		var object3D	= tQuery.createSphere().addTo(world)
+			.addClass('hole')
 			.positionX(gridX * tileW)
 			.positionZ(gridZ * tileW)
 			.geometry()
@@ -373,8 +411,10 @@ if(true){
 				.back()
 			.castShadow(true)
 			.receiveShadow(true)
-			.setLambertMaterial()
-				.map('../../assets/images/rocks.jpg')
+			.setPhongMaterial()
+				.map(texture)
+				.bumpMap(texture)
+				.bumpScale(0.01)
 				.color(0xaaaaaa)
 				.back()
 			.addCannonjs({
@@ -470,6 +510,23 @@ if(true){
 				sounds && sounds.spawn.play();
 			}, animationDelay)
 		});
+	}
+	
+	function Microcache(){
+		var _values	= {};
+		return {
+			get	: function(key){ return _values[key];	},
+			contains: function(key){ return key in _values;	},
+			remove	: function(key){ delete _values[key];	},
+			set	: function(key, value){	_values[key] = value;},
+			values	: function(){ return _values;	},
+			getSet	: function(key, value){
+				if( !this.contains(key) ){
+					this.set(key, typeof value == 'function' ? value() : value )
+				}
+				return this.get(key);
+			}
+		}
 	}
 });
 </script></body>
