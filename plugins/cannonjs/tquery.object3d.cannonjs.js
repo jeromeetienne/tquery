@@ -1,3 +1,9 @@
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+
 tQuery.Object3D.registerInstance('addCannonjs', function(opts){
 	console.assert( this.hasCannonjs() === false );
 	var object3D	= this;
@@ -32,65 +38,7 @@ tQuery.Object3D.registerInstance('cannonjs', function(){
 tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 	this._back	= null;	
 	this._object3D	= object3D;
-	object3D.enableCannonjs(opts);
-});
 
-tQuery.Object3D.CannonjsCtx.prototype.destroy = function(){
-};
-
-/**
- * getter/setter for .back()
- */
-tQuery.Object3D.CannonjsCtx.prototype.back = function(value) {
-	if( value === undefined )	return this._back;
-	this._back	= value;
-	return this;
-};
-
-tQuery.Object3D.CannonjsCtx.prototype.body = function(){
-	var body	= this._object3D.cannonjsBody();
-	return body;
-}
-
-tQuery.Object3D.CannonjsCtx.prototype.addTo = function(physicsWorld){
-	var body	= this._object3D.cannonjsBody();
-	physicsWorld.add(body);
-	return this;
-}
-
-tQuery.Object3D.CannonjsCtx.prototype.position = function(x,y,z){
-	var body	= this._object3D.cannonjsBody();
-	body.position.set(x,y,z)
-	return this;
-};
-
-tQuery.Object3D.CannonjsCtx.prototype.positionX = function(value){
-	var body	= this._object3D.cannonjsBody();
-	if( value === undefined )	return body.position.x;
-	body.position.x	= value;
-	return this;
-};
-
-tQuery.Object3D.CannonjsCtx.prototype.positionY = function(value){
-	var body	= this._object3D.cannonjsBody();
-	if( value === undefined )	return body.position.y;
-	body.position.y	= value;
-	return this;
-};
-
-tQuery.Object3D.CannonjsCtx.prototype.positionZ = function(value){
-	var body	= this._object3D.cannonjsBody();
-	if( value === undefined )	return body.position.z;
-	body.position.z	= value;
-	return this;
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-//	obsolet api ... put that in CannonjsCtx					//
-//////////////////////////////////////////////////////////////////////////////////
-
-tQuery.Object3D.registerInstance('enableCannonjs', function(opts){
-	var object3D	= this;
 	var tObject3D	= object3D.get(0);
 	// handle default values
 	opts	= tQuery.extend(opts, {
@@ -134,27 +82,70 @@ tQuery.Object3D.registerInstance('enableCannonjs', function(opts){
         	// update 3d object with physics data
 		body.position.copy(tObject3D.position);
         	body.quaternion.copy(tObject3D.quaternion);
-	});
-	
-	return this;	// for chained API
+	});	
 });
 
-tQuery.Object3D.registerInstance('cannonjsBody', function(){
-	var object3D	= this;
-	var body	= tQuery.data(object3D, 'cannonjsBody');
+tQuery.Object3D.CannonjsCtx.prototype.destroy = function(){
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * getter/setter for .back()
+ */
+tQuery.Object3D.CannonjsCtx.prototype.back = function(value) {
+	if( value === undefined )	return this._back;
+	this._back	= value;
+	return this;
+};
+
+/**
+ * getter for body
+ */
+tQuery.Object3D.CannonjsCtx.prototype.body = function(){
+	var body	= tQuery.data(this._object3D, 'cannonjsBody');
 	return body;
-});
+}
 
-// tQuery.Object3D.registerInstance('hasCannonjs', function(){
-// 	var object3D	= this;
-// 	var body	= tQuery.data(object3D, 'cannonjsBody');
-// 	return body ? true : false;
-// });
+/**
+ * to add this object to the physics world
+ */
+tQuery.Object3D.CannonjsCtx.prototype.addTo = function(physicsWorld){
+	var body	= this.body();
+	physicsWorld.add(body);
+	return this;
+}
 
-tQuery.Object3D.registerInstance('disableCannonjs', function(){
-	console.assert(false, 'not yet implemented')
-	return this;	// for chained API
-});
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
+tQuery.Object3D.CannonjsCtx.prototype.position = function(x,y,z){
+	var body	= this.body();
+	body.position.set(x,y,z)
+	return this;
+};
 
+tQuery.Object3D.CannonjsCtx.prototype.positionX = function(value){
+	var body	= this.body();
+	if( value === undefined )	return body.position.x;
+	body.position.x	= value;
+	return this;
+};
 
+tQuery.Object3D.CannonjsCtx.prototype.positionY = function(value){
+	var body	= this.body();
+	if( value === undefined )	return body.position.y;
+	body.position.y	= value;
+	return this;
+};
+
+tQuery.Object3D.CannonjsCtx.prototype.positionZ = function(value){
+	var body	= this.body();
+	if( value === undefined )	return body.position.z;
+	body.position.z	= value;
+	return this;
+};

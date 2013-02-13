@@ -257,15 +257,15 @@ if(true){
 			cameraTarget	= cameraTargets[3];
 		}
 	});
-world.loop().hook(function(){
-	var tObject3D	= ball.get(0);
-	//tObject3D	= world.tCamera();
-	//tObject3D	= cameraContainer.get(0);
-	tObject3D.updateMatrixWorld();
-	world.tScene().updateMatrixWorld();
-	console.log('targetPos', tObject3D.matrixWorld.getPosition(), tObject3D.position);
-	console.log('position', ball.cannonjs().body().position)
-});
+// world.loop().hook(function(){
+// 	var tObject3D	= ball.get(0);
+// 	//tObject3D	= world.tCamera();
+// 	//tObject3D	= cameraContainer.get(0);
+// 	tObject3D.updateMatrixWorld();
+// 	world.tScene().updateMatrixWorld();
+// 	console.log('targetPos', tObject3D.matrixWorld.getPosition(), tObject3D.position);
+// 	console.log('position', ball.cannonjs().body().position)
+// });
 	world.loop().hook(function(){
 		var targetObj	= cameraTarget.get(0);
 		var movingObj	= world.tCamera();
@@ -418,8 +418,8 @@ world.loop().hook(function(){
 					.translateX(x1 + width/2)
 					.translateZ(z1 + depth/2)
 					.addCannonjs({
-						mass	: 0
-					}).addTo(physicsWorld)
+							mass	: 0
+						}).addTo(physicsWorld)
 						.back()
 					.setPhongMaterial()
 						.color(0xffffff)
@@ -445,7 +445,7 @@ world.loop().hook(function(){
 			.positionX(gridX * tileW)
 			.positionZ(gridZ * tileW)
 			.geometry()
-				.scaleBy(2*tileW)
+				.scaleBy(3*tileW)
 				.back()
 			.castShadow(true).receiveShadow(true)
 			.setPhongMaterial()
@@ -461,7 +461,6 @@ world.loop().hook(function(){
 				.back()
 
 		object3D.cannonjs().body().addEventListener("collide",function(event){
-return;
 			// change the color
 			var tMaterial	= object3D.get(0).material;
 			tMaterial.color.setHex(0xff2222);
@@ -521,7 +520,6 @@ return;
 				.addTo(physicsWorld)
 				.back()
 		goalFlag.cannonjs().body().addEventListener("collide",function(event){
-return;
 			goalFlag.get(0).material.color.setHex(0xff0000);
 			sounds && sounds.goal.play();
 			// init animation
