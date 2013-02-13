@@ -1,4 +1,7 @@
-tQuery.World.registerInstance('addCannonjs', function(){
+tQuery.World.registerInstance('addCannonjs', function(opts){
+	opts		= tQuery.extend(opts, {
+		period	: 1/120;
+	})
 	var world	= this;
 
 	// physics world init
@@ -8,15 +11,10 @@ tQuery.World.registerInstance('addCannonjs', function(){
 	// store it in world
 	tQuery.data(world.tScene(), 'cannonjsWorld', physicsWorld, true);
 
-	// Step the physics physicsWorld	
-	// world.loop().hook(function(delta, now){
-	// 	physicsWorld.step(delta);
-	// });
 
-	var period	= 1/120;
 	setInterval(function(){
         	physicsWorld.step(period);		
-	}, period*1000)
+	}, opts.period*1000)
 	
 	return this;	// for chained API
 })

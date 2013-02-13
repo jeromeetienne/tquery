@@ -9,6 +9,7 @@ tQuery.Object3D.registerInstance('addCannonjs', function(opts){
 });
 
 tQuery.Object3D.registerInstance('removeCannonjs', function(opts){
+	console.assert(false, 'not yet implemented')
 });
 
 tQuery.Object3D.registerInstance('hasCannonjs', function(){
