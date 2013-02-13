@@ -30,7 +30,7 @@ require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.devic
 	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
 
 	// put some post effect
-	tQuery.createEffectComposer().renderPass().vignette().finish();
+//	tQuery.createEffectComposer().renderPass().vignette().finish();
 	
 	// enable webaudio
 	WebAudio.isAvailable && world.enableWebAudio();
@@ -39,18 +39,13 @@ require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.devic
 		world.getWebAudio().volume(10)
 		sounds	= {};
 		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
-		var lib		= ["saw",2.0000,1.0000,0.0000,0.1580,0.0000,0.3620,20.0000,478.0000,2400.0000,0.2000,0.0000,0.3160,17.5264,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
-		sounds.spawn	= tQuery.createSound().generateWithJsfx(lib);
-
-		var lib		= ["square",2.0000,1.0000,0.0000,0.2400,0.0000,0.4200,20.0000,447.0000,2400.0000,0.1960,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0420,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
-		sounds.goal	= tQuery.createSound().generateWithJsfx(lib);
-		
-		var lib		= ["square",0.0000,0.4000,0.0000,0.0080,0.0000,0.2660,20.0000,669.0000,2400.0000,-0.6220,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.4275,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
-		sounds.bumper	= tQuery.createSound().generateWithJsfx(lib);
+		sounds.spawn	= tQuery.createSound().generateWithJsfx(["saw",2.0000,1.0000,0.0000,0.1580,0.0000,0.3620,20.0000,478.0000,2400.0000,0.2000,0.0000,0.3160,17.5264,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]);
+		sounds.goal	= tQuery.createSound().generateWithJsfx(["square",2.0000,1.0000,0.0000,0.2400,0.0000,0.4200,20.0000,447.0000,2400.0000,0.1960,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0420,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]);
+		sounds.bumper	= tQuery.createSound().generateWithJsfx(["square",0.0000,0.4000,0.0000,0.0080,0.0000,0.2660,20.0000,669.0000,2400.0000,-0.6220,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.4275,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]);
 	}
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position(5,3.5,5)
+	tQuery.createDirectionalLight().addTo(world).position(4,3,4)
 		.castShadow(true)
 		.shadowDarkness(0.5)
 		.shadowBias(0.0015)
