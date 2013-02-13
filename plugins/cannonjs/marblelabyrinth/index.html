@@ -1,5 +1,6 @@
 <!doctype html><title>Marble Labyrinth</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/microcache.js"></script>
 <body><div id="info" style="z-index: 2">
 	Marble Labyrinth by
 	<a href='http://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
@@ -17,45 +18,6 @@ require(['tquery.cannonjs', 'tquery.poolball', 'tquery.shadowmap', 'tquery.devic
 				.pageTitle('#info')
 				.shadowMapEnabled(true)
 
-	// put some post effect
-	tQuery.createEffectComposer().renderPass().vignette(1.2,1).finish();
-
-
-(function(){
-return;
-	var width	= 0.5;
-	var height	= 0.5;
-	var depth	= 1;
-	var object3D	= tQuery.createCube(width, height, depth).addTo(world)
-				.addClass('test')
-				.translateX(3.5)
-				.translateY(0.5)
-				.translateZ(-2)
-				.setBasicMaterial()
-					.map('../../assets/images/wood.jpg')
-					.back()
-	var tTexture	= object3D.get(0).material.map;
-	tTexture.wrapS	= THREE.RepeatWrapping;
-	tTexture.wrapT	= THREE.RepeatWrapping;
-	
-	var tGeometry	= object3D.geometry().get(0);
-	console.log('uv', tGeometry.faceVertexUvs[0][0]);
-
-	world.loop().hook(function(){
-		tGeometry.uvsNeedUpdate	= true;	
-	})
-	
-	/**
-	 * - for each of the 6 faces, recompute the UVs 
-	 * - which formula ?
-	 * - depends on the size of the face
-	 * - how to know the size of the face in u and v
-	 */
-})();
-
-	// add a skymap - reuse same texture to save gpu memory
-	tQuery.createSkymap('skybox').addTo(world);
-
 	world.tCamera().position.z	= 15;
 
 	var cache	= new Microcache();
@@ -66,10 +28,10 @@ return;
 	world.tCamera().position.z	= 10;
 	world.tCamera().position.setLength(20)
 	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
-	
-	var cameraContainer	= tQuery.createObject3D().addTo(world)
-	cameraContainer.add(world.tCamera())
 
+	// put some post effect
+	tQuery.createEffectComposer().renderPass().vignette().finish();
+	
 	// enable webaudio
 	WebAudio.isAvailable && world.enableWebAudio();
 	var sounds	= null;
@@ -86,24 +48,31 @@ return;
 		var lib		= ["square",0.0000,0.4000,0.0000,0.0080,0.0000,0.2660,20.0000,669.0000,2400.0000,-0.6220,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.4275,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000];
 		sounds.bumper	= tQuery.createSound().generateWithJsfx(lib);
 	}
-	var table	= tQuery.createObject3D().addTo(world)
-
 	// put some lights
 	tQuery.createAmbientLight().addTo(world).color(0x444444);
-	tQuery.createDirectionalLight().addTo(world).position(4,3,4)
+	tQuery.createDirectionalLight().addTo(world).position(5,3.5,5)
 		.castShadow(true)
 		.shadowDarkness(0.5)
 		.shadowBias(0.0015)
 		.shadowMap(512*4,512*4)
-		.shadowCamera(6, -6, 4, -4, 0.1, 20)
+		.shadowCamera(8, -8, 4, -4, 0.1, 20)
 		//.shadowCameraVisible(true)
 
+	// init cannon.js on our world
 	world.addCannonjs()
 	var physicsWorld= world.cannonjsWorld();
 	physicsWorld.gravity.set(0,-9.8,0);
 	physicsWorld.solver.iterations = 20;
 
+
+	var cameraContainer	= tQuery.createObject3D().addTo(world)
+	cameraContainer.add(world.tCamera())
+
+	var table	= tQuery.createObject3D().addTo(world)
 	var tileW	= 0.2;
+
+	// add a skymap - reuse same texture to save gpu memory
+	tQuery.createSkymap('skybox').addTo(world);
 	
 if( false ){
 	var axis	= tQuery.createAxis().addTo(world)
@@ -133,10 +102,6 @@ if( false ){
 	});
 }
 
-
-// impact bumper to come back on normal color
-
-
 // ## sounds
 // * granular sound for rolling
 //   * depend on angularVelocity
@@ -148,6 +113,12 @@ if( false ){
 // * DONE sync chock with sound
 // * sync with macbook orientation
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		Create the ball							//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 var startPosition	= tQuery.createVector3(+22*tileW, 3, -13*tileW)
 var ball	= (function(){
@@ -175,6 +146,7 @@ var ball	= (function(){
 	sounds && sounds.spawn.play();
 	return object3D;
 })();
+window.ball	= ball;
 	// if the ball is too low, kill it
 	world.loop().hook(function(delta, now){
 		var position	= ball.cannonjs().body().position;
@@ -184,6 +156,10 @@ var ball	= (function(){
 		}
 	})
 if(true){
+	//////////////////////////////////////////////////////////////////////////
+	//		User Controls						//
+	//////////////////////////////////////////////////////////////////////////
+	
 	var disablePlayerControls	= false;
 	world.loop().hook(function(){
 		// if disablePlayerControls is true, return now
@@ -211,7 +187,7 @@ if(true){
 		// do an impulse to the ball
 		var worldPoint	= new CANNON.Vec3(ballPosition.x, ballPosition.y, ballPosition.z);
 		var cforce	= new CANNON.Vec3(force.x, force.y, force.z);
-		var dt		= 1/10;
+		var dt		= 1/5;
 		ball.cannonjs().body().applyImpulse(worldPoint,cforce,dt);
 	});	
 }
@@ -220,6 +196,7 @@ if(true){
 		cameraContainer.position( ball.position() )
 	});
 
+// handle camera tweening
 (function(){
 	var cameraTarget	= null;
 	var cameraTargets	= [];
@@ -257,15 +234,24 @@ if(true){
 			cameraTarget	= cameraTargets[3];
 		}
 	});
-// world.loop().hook(function(){
-// 	var tObject3D	= ball.get(0);
-// 	//tObject3D	= world.tCamera();
-// 	//tObject3D	= cameraContainer.get(0);
-// 	tObject3D.updateMatrixWorld();
-// 	world.tScene().updateMatrixWorld();
-// 	console.log('targetPos', tObject3D.matrixWorld.getPosition(), tObject3D.position);
-// 	console.log('position', ball.cannonjs().body().position)
-// });
+world.loop().hook(function(delta, now){
+ 	var object3D	= ball;
+	var position	= object3D.cannonjs().body().position;
+	//console.log('bally', position.x)
+
+	// world.loop().hook(function(){
+	// 	//tObject3D	= world.tCamera();
+	// 	//tObject3D	= cameraContainer.get(0);
+	// 	var object3D	= ball;
+	// 	var tObject3D	= object3D.get(0);
+	// object3D.cannonjs().update();
+	// tObject3D.updateMatrixWorld();
+
+	//world.tScene().updateMatrixWorld();
+	// console.log('targetPos', tObject3D.matrixWorld.getPosition(), tObject3D.position);
+	//console.log('position', object3D.cannonjs().body().position)
+	//console.log('position', tObject3D.matrixWorld.getPosition())
+});
 	world.loop().hook(function(){
 		var targetObj	= cameraTarget.get(0);
 		var movingObj	= world.tCamera();
@@ -315,7 +301,11 @@ if(true){
 	// })
 
 
-
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		add a level							//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 	// add the ground
 	addGround(-35*tileW, -20*tileW, 35*tileW, 20*tileW)
@@ -351,6 +341,12 @@ if(true){
 	addHole(  2,  8)
 	addHole( 13,  9)
 	
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//		function to build the level					//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
 	function addWallGridLine(gridX1, gridZ1, gridX2, gridZ2){
 		if( gridX1 === gridX2 ){
 			addWallVert(gridX1, gridZ1, gridZ2)
@@ -383,6 +379,10 @@ if(true){
 		return addWall(xMin, zMin, xMax, zMax)
 	}
 	function addWall(x1, z1, x2, z2){
+		var texture	= cache.getSet('texture.wood', function(){
+			return THREE.ImageUtils.loadTexture('../../assets/images/wood.jpg')
+		});
+
 		var width	= Math.abs(x2 - x1);
 		var height	= 0.5;
 		var depth	= Math.abs(z2 - z1);
@@ -396,19 +396,27 @@ if(true){
 						.back()
 					.setLambertMaterial()
 						.color(0xcccccc)
-						.map('../../assets/images/wood.jpg')
+						.map(texture)
 						.back()
 					.receiveShadow(true)
 					.castShadow(true)
 		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
 		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
+		
+		// adapt the UVs to the cube size - to avoid to strech the texture 
+		var faceVertexUvs= object3D.get(0).geometry.faceVertexUvs[0];
+		faceVertexUvs[0].forEach(function(vector){ vector.u *= depth;	})
+		faceVertexUvs[1].forEach(function(vector){ vector.u *= depth;	})
+		faceVertexUvs[4].forEach(function(vector){ vector.u *= width;	})
+		faceVertexUvs[5].forEach(function(vector){ vector.u *= width;	})
+
 		return object3D;
 	}
 
 	function addGround(x1, z1, x2, z2){
 		var texture	= cache.getSet('texture.plywood', function(){
 			return THREE.ImageUtils.loadTexture('../../assets/images/plywood.jpg')
-		})
+		});
 		var width	= Math.abs(x2 - x1);
 		var height	= 0.25;
 		var depth	= Math.abs(z2 - z1);
@@ -546,23 +554,6 @@ if(true){
 				sounds && sounds.spawn.play();
 			}, animationDelay)
 		});
-	}
-	
-	function Microcache(){
-		var _values	= {};
-		return {
-			get	: function(key){ return _values[key];	},
-			contains: function(key){ return key in _values;	},
-			remove	: function(key){ delete _values[key];	},
-			set	: function(key, value){	_values[key] = value;},
-			values	: function(){ return _values;	},
-			getSet	: function(key, value){
-				if( !this.contains(key) ){
-					this.set(key, typeof value == 'function' ? value() : value )
-				}
-				return this.get(key);
-			}
-		}
 	}
 });
 </script></body>

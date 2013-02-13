@@ -1,8 +1,6 @@
-
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
-
 
 tQuery.Object3D.registerInstance('addCannonjs', function(opts){
 	console.assert( this.hasCannonjs() === false );
@@ -39,7 +37,7 @@ tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 	this._back	= null;	
 	this._object3D	= object3D;
 
-	var tObject3D	= object3D.get(0);
+	var tObject3D	= this._object3D.get(0);
 	// handle default values
 	opts	= tQuery.extend(opts, {
 		world	: tQuery.world,
@@ -78,20 +76,28 @@ tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 	// store it in world.tQuery.
 	tQuery.data(object3D, 'cannonjsBody', body, true);
 
-	world.loop().hook(function(delta, now){
-        	// update 3d object with physics data
-		body.position.copy(tObject3D.position);
-        	body.quaternion.copy(tObject3D.quaternion);
-	});	
+	this._callback	= world.loop().hook(function(delta, now){
+		this.update();
+	}.bind(this));	
 });
 
 tQuery.Object3D.CannonjsCtx.prototype.destroy = function(){
+	world.loop().unhook(this._callback);
 };
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Object3D.CannonjsCtx.prototype.update = function(){
+       	// update 3d object with physics data
+	var body	= this.body();
+	var tObject3D	= this._object3D.get(0);
+	body.position.copy(tObject3D.position);
+	body.quaternion.copy(tObject3D.quaternion);
+	return this;
+}
 
 /**
  * getter/setter for .back()

@@ -12,12 +12,12 @@ tQuery.World.registerInstance('addCannonjs', function(opts){
 	tQuery.data(world.tScene(), 'cannonjsWorld', physicsWorld, true);
 
 
-	setInterval(function(){
+	this._timerId	= setInterval(function(){
         	physicsWorld.step(opts.period);		
 	}, opts.period*1000)
 	
 	return this;	// for chained API
-})
+});
 
 tQuery.World.registerInstance('cannonjsWorld', function(){
 	console.assert( this.hasCannonjs() );
@@ -29,8 +29,8 @@ tQuery.World.registerInstance('cannonjsWorld', function(){
 tQuery.World.registerInstance('hasCannonjs', function(){
 	var world	= this;
 	return tQuery.hasData(world.tScene(), 'cannonjsWorld');
-})
+});
 
 tQuery.World.registerInstance('removeCannonjs', function(){
-	console.assert(false, 'not yet implemented')
-})
+	console.assert(false, 'not yet implemented');
+});
