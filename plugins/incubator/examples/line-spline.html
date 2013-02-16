@@ -1,0 +1,48 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var object	= tQuery.createTorus().addTo(world);	
+	
+
+	var points	= [];
+	points.push( tQuery.createVector3(-0.5, 0.5, 0) );
+	points.push( tQuery.createVector3( 0.5, 0.5, 0) );
+	points.push( tQuery.createVector3( 0.5,-0.5, 0) );
+	points.push( tQuery.createVector3(-0.5,-0.5, 0) );
+
+	points.push( tQuery.createVector3(-0.5, 0.5, 0) );
+	points.push( tQuery.createVector3(-0.5, 0.5, 0) );
+
+	var spline	= new THREE.Spline( points );
+	
+	var nSubdivision= 20;
+	var vertices	= [];
+	var colors	= [];
+	for( i = 0; i < points.length * nSubdivision; i++){
+		var index	= i / (points.length * nSubdivision );
+		var position	= spline.getPoint( index );
+		vertices[i]	= new THREE.Vector3( position.x, position.y, position.z );
+		colors[i]	= new THREE.Color( 0xffffff );
+		//colors[ i ].setHSV( 0.6, ( 0.5 + position.y ) / 1, 1.0 );
+		colors[ i ].setHSV( index, 1.0, 1.0 );
+	}
+
+
+	var tMaterial	= new THREE.LineBasicMaterial({
+		//color		: 0xff4444,
+		opacity		: 1,
+		linewidth	: 15, 
+		vertexColors	: THREE.VertexColors
+	});	
+	var tGeometry	= new THREE.Geometry();
+	tGeometry.vertices	= vertices;
+	tGeometry.colors	= colors;
+	
+	var line	= new THREE.Line(tGeometry, tMaterial);
+	world.add(line)	
+});
+</script></body>

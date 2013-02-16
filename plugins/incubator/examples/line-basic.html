@@ -1,0 +1,34 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var object	= tQuery.createTorus().addTo(world);	
+	
+
+	var tMaterial	= new THREE.LineBasicMaterial({
+		color		: 0xff0000,
+		opacity		: 1,
+		linewidth	: 5, 
+		//vertexColors: THREE.VertexColors
+	});	
+	var tGeometry	= new THREE.Geometry();
+
+	var point	= tQuery.createVector3(0,0,0)
+	tGeometry.vertices.push( point );
+
+	var point	= tQuery.createVector3(0,1,0)
+	tGeometry.vertices.push( point );
+	
+	var point	= tQuery.createVector3(1,1,0)
+	tGeometry.vertices.push( point );
+
+	var point	= tQuery.createVector3(1,0,0)
+	tGeometry.vertices.push( point );
+
+	var line	= new THREE.Line(tGeometry, tMaterial);
+	world.add(line)	
+});
+</script></body>
