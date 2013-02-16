@@ -1,25 +1,47 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
-require([], function(){
+require(['tquery.pproc'], function(){
 
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	var object	= tQuery.createTorus().addTo(world);	
-	
+	var object	= tQuery.createTorus().addTo(world)
+				.scaleBy(3);	
+				
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+
+	var composer	= tQuery.createEffectComposer().renderPass();
+//composer.sepia()
+//	composer.bleachbypass()
+	//composer.verticalBlur(1.1)
+	//composer.horizontalBlur(1.1)
+//composer.motionBlur(0.1);
+	//composer.fxaa();
+	//composer.colorify();
+composer.bloom(0.2).vignette().finish();
+
 
 	var points	= [];
-	points.push( tQuery.createVector3(-0.5, 0.5, 0) );
-	points.push( tQuery.createVector3( 0.5, 0.5, 0) );
-	points.push( tQuery.createVector3( 0.5,-0.5, 0) );
-	points.push( tQuery.createVector3(-0.5,-0.5, 0) );
+	points.push( tQuery.createVector3(-0.7, 0.7, 0) );
+	points.push( tQuery.createVector3( 0.7, 0.7, 0) );
+	points.push( tQuery.createVector3( 0.7,-0.7, 0) );
+	points.push( tQuery.createVector3(-0.7,-0.7, 0) );
 
-	points.push( tQuery.createVector3(-0.5, 0.5, 0) );
-	points.push( tQuery.createVector3(-0.5, 0.5, 0) );
+	points.push( tQuery.createVector3(-0.7, 0.7, 0) );
+	points.push( tQuery.createVector3(-0.7, 0.7, 0) );
+	
+	points	= [];
+	for(var i = 0;i < 15; i++){
+		var positionX	= 1 * (Math.random()-0.5)
+		var positionY	= 1 * (Math.random()-0.5)
+		var positionZ	= 1 * (Math.random()-0.5)
+		points.push( tQuery.createVector3(positionX, positionY, positionZ) );
+	}
+	
 
 	var spline	= new THREE.Spline( points );
 	
-	var nSubdivision= 20;
+	var nSubdivision= 30;
 	var vertices	= [];
 	var colors	= [];
 	for( i = 0; i < points.length * nSubdivision; i++){
@@ -28,17 +50,15 @@ require([], function(){
 		vertices[i]	= new THREE.Vector3( position.x, position.y, position.z );
 		colors[i]	= new THREE.Color( 0xffffff );
 		//colors[ i ].setHSV( 0.6, ( 0.5 + position.y ) / 1, 1.0 );
-		colors[ i ].setHSV( index, 1.0, 1.0 );
+		colors[ i ].setHSV( (index*5)%1, 1.0, 1.0 );
 	}
 
 
 	var tMaterial	= new THREE.LineBasicMaterial({
-		//color		: 0xff4444,
-		opacity		: 1,
-		linewidth	: 15, 
+		linewidth	: 5,
 		vertexColors	: THREE.VertexColors
 	});	
-	var tGeometry	= new THREE.Geometry();
+	var tGeometry	= new THREE.Geometry(); 
 	tGeometry.vertices	= vertices;
 	tGeometry.colors	= colors;
 	
