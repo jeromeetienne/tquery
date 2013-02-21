@@ -1,0 +1,37 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();	
+	
+	var target	= tQuery.createAxis().addTo(world);
+	
+	
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	
+	world.loop().hook(function(){
+		var targetObj	= target.get(0);
+		var movingObj	= object.get(0);
+		
+		targetObj.updateMatrixWorld();
+		movingObj.updateMatrixWorld();
+
+		// tween the position
+		var targetPos	= targetObj.matrixWorld.getPosition();
+		var movingPos	= movingObj.matrixWorld.getPosition();
+
+		var damping	= 0.05;
+		movingPos.x	+= (targetPos.x - movingPos.x)*damping;
+		movingPos.y	+= (targetPos.y - movingPos.y)*damping;
+		movingPos.z	+= (targetPos.z - movingPos.z)*damping;
+
+		// // tween the rotation
+		// var targetRot	= targetObj.matrixWorld.getRotation();
+		// var movingRot	= movingObj.matrixWorld.getRotation();
+
+		// var damping	= 0.05;
+		// movingRot.x	+= (targetRot.x - movingRot.x)*damping;
+		// movingRot.y	+= (targetRot.y - movingRot.y)*damping;
+		// movingRot.z	+= (targetRot.z - movingRot.z)*damping;
+	});	
+</script></body>

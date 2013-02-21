@@ -102,6 +102,44 @@ tQuery.registerStatic('MinecraftCharAnimations', function(character){
 		armRotationX	: 0,
 		legRotationX	: 0			
 	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
+
+	// Setup 'circularPunch' animation
+	var delay	= 1/5;
+	animations.add('circularPunch'	, tQuery.createAnimation().pushKeyframe(delay, {
+		armLRotationZ	: 0,
+		armRRotationZ	: 0,
+		armRotationX	: 0,
+		legRotationX	: 0
+	}).pushKeyframe(delay, {
+		armLRotationZ	: 0,
+		armRRotationZ	: 0,
+		armRotationX	: -Math.PI/2,
+		legRotationX	: 0
+	}).pushKeyframe(delay, {
+		armLRotationZ	: 0,
+		armRRotationZ	: 0,
+		armRotationX	: -Math.PI,
+		legRotationX	: 0
+	}).pushKeyframe(delay, {
+		armLRotationZ	: 0,
+		armRRotationZ	: 0,
+		armRotationX	: +Math.PI/2,
+		legRotationX	: 0
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
+
+	// Setup 'rightPunch' animation
+	var angleRange	= Math.PI/2-Math.PI/10;
+	animations.add('rightPunch', tQuery.createAnimation().pushKeyframe(0.1, {
+		armLRotationZ	: +Math.PI/10,
+		armRRotationZ	: -Math.PI/10,
+		armRotationX	: 0,
+		legRotationX	: 0
+	}).pushKeyframe(0.3, {
+		armLRotationZ	: -Math.PI/10,
+		armRRotationZ	: -Math.PI/10,
+		armRotationX	: +Math.PI/2+Math.PI/5,
+		legRotationX	: 0
+	}).propertyTweens(propTweens).onCapture(onCapture).onUpdate(onUpdate));
 });
 
 
