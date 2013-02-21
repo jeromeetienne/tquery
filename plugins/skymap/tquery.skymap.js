@@ -12,7 +12,7 @@ tQuery.registerStatic('createSkymap', function(opts){
 
 	var textureCube	= tQuery.createCubeTexture(opts.textureCube);
 
-	var shader	= THREE.ShaderUtils.lib[ "cube" ];
+	var shader	= THREE.ShaderLib[ "cube" ];
 	shader.uniforms[ "tCube" ].value	= textureCube;
 
 	var material = new THREE.ShaderMaterial({

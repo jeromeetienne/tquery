@@ -118,7 +118,7 @@ buildBundle: buildCore
 	cat vendor/threex/THREEx.screenshot.js		>> build/tquery-bundle.js
 	cat vendor/threex/THREEx.FullScreen.js		>> build/tquery-bundle.js
 	cat vendor/threex.dragpancontrols.js		>> build/tquery-bundle.js
-	cat vendor/three.js/Stats.js			>> build/tquery-bundle.js
+	cat vendor/three.js/stats.min.js		>> build/tquery-bundle.js
 
 minifyBundle: buildBundle
 	echo $(BANNER)	>  build/tquery-bundle.min.js

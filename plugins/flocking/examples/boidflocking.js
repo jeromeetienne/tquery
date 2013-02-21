@@ -50,32 +50,32 @@ var Boid = function() {
 			vector.set( - _width, this.position.y, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( _width, this.position.y, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, - _height, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, _height, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, this.position.y, - _depth );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, this.position.y, _depth );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 		}/* else {
 

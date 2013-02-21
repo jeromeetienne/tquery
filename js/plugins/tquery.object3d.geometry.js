@@ -50,7 +50,7 @@ tQuery.Object3D.registerInstance('translate', function(delta){
 	console.assert(delta instanceof THREE.Vector3, "Object3D.translate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.position.addSelf(delta);
+		object3d.position.add(delta);
 	});
 	// return this, to get chained API	
 	return this;
