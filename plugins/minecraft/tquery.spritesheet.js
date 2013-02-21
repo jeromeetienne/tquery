@@ -50,19 +50,19 @@ tQuery.registerStatic('Spritesheet', function(opts){
 		var tileU	= x;
 		var tileV	= y;
 		
-		uvs[ (0 + rotateBy) % 4 ].u = tileU * tileUvW;
-		uvs[ (0 + rotateBy) % 4 ].v = tileV * tileUvH;
-		uvs[ (1 + rotateBy) % 4 ].u = tileU * tileUvW;
-		uvs[ (1 + rotateBy) % 4 ].v = tileV * tileUvH + h * tileUvH;
-		uvs[ (2 + rotateBy) % 4 ].u = tileU * tileUvW + w * tileUvW;
-		uvs[ (2 + rotateBy) % 4 ].v = tileV * tileUvH + h * tileUvH;
-		uvs[ (3 + rotateBy) % 4 ].u = tileU * tileUvW + w * tileUvW;
-		uvs[ (3 + rotateBy) % 4 ].v = tileV * tileUvH;
+		uvs[ (0 + rotateBy) % 4 ].x = tileU * tileUvW;
+		uvs[ (0 + rotateBy) % 4 ].y = tileV * tileUvH;
+		uvs[ (1 + rotateBy) % 4 ].x = tileU * tileUvW;
+		uvs[ (1 + rotateBy) % 4 ].y = tileV * tileUvH + h * tileUvH;
+		uvs[ (2 + rotateBy) % 4 ].x = tileU * tileUvW + w * tileUvW;
+		uvs[ (2 + rotateBy) % 4 ].y = tileV * tileUvH + h * tileUvH;
+		uvs[ (3 + rotateBy) % 4 ].x = tileU * tileUvW + w * tileUvW;
+		uvs[ (3 + rotateBy) % 4 ].y = tileV * tileUvH;
 		
-		uvs[ (0 + rotateBy) % 4 ].v	= 1 - uvs[ (0 + rotateBy) % 4 ].v;
-		uvs[ (1 + rotateBy) % 4 ].v	= 1 - uvs[ (1 + rotateBy) % 4 ].v;
-		uvs[ (2 + rotateBy) % 4 ].v	= 1 - uvs[ (2 + rotateBy) % 4 ].v;
-		uvs[ (3 + rotateBy) % 4 ].v	= 1 - uvs[ (3 + rotateBy) % 4 ].v;
+		uvs[ (0 + rotateBy) % 4 ].y	= 1 - uvs[ (0 + rotateBy) % 4 ].y;
+		uvs[ (1 + rotateBy) % 4 ].y	= 1 - uvs[ (1 + rotateBy) % 4 ].y;
+		uvs[ (2 + rotateBy) % 4 ].y	= 1 - uvs[ (2 + rotateBy) % 4 ].y;
+		uvs[ (3 + rotateBy) % 4 ].y	= 1 - uvs[ (3 + rotateBy) % 4 ].y;
 	};
 	/**
 	 * Create the geometry of the sprite 'id'. It is cached

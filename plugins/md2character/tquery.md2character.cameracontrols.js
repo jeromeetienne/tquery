@@ -6,7 +6,7 @@ tQuery.MD2Character.registerStatic('CameraControls', function(opts){
 	// handle parameters
 	this._opts	= tQuery.extend(opts, {
 		camera		: tQuery.world.tCamera(),
-		deltaPosition	: new THREE.Vector3(5,2,5).normalize().multiplyScalar(3),
+		deltaPosition	: new THREE.Vector3(5,3,5).normalize().multiplyScalar(3),
 		deltaLookAt	: new THREE.Vector3(0,0.3,0)
 	});
 	// sanity check
@@ -22,7 +22,7 @@ tQuery.MD2Character.CameraControls.prototype.update	= function()
 	if( opts.character.isLoaded() === false )	return;
 	// camera position
 	camera.position.copy(container.position);
-	camera.position.addSelf(opts.deltaPosition);
+	camera.position.add(opts.deltaPosition);
 	// camera lookAt
-	camera.lookAt( container.position.clone().addSelf(opts.deltaLookAt) );
+	camera.lookAt( container.position.clone().add(opts.deltaLookAt) );
 }

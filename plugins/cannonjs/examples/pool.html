@@ -1,12 +1,12 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src="vendor/cannon.js/build/cannon.js"></script>
+<script src="../vendor/cannon.js/build/cannon.js"></script>
 <script src="../tquery.world.cannonjs.js"></script>
 <script src="../tquery.object3d.cannonjs.js"></script>
 <body><script>
-require(['tquery.poolball', 'tquery.shadowmap'. 'tquery.deviceorientation'], function(){
+require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
-				.enableCannonjs()
+				.addCannonjs()
 				.shadowMapEnabled(true)
 
 	world.tCamera().position.z	= 20;
@@ -26,22 +26,22 @@ require(['tquery.poolball', 'tquery.shadowmap'. 'tquery.deviceorientation'], fun
 
 	var ground	= tQuery.createCube(30,1,30).addTo(world)
 				.translateY(-5)
-				.enableCannonjs({
-					mass	: 0
-				})
+				.addCannonjs({
+						mass	: 0
+					}).back()
 				.setLambertMaterial()
-					.color(0xff0000)
+					.color(0x0000ff)
 					.map('../../assets/images/water.jpg')
 					.back()
 				.receiveShadow(true)
-	var body	= ground.cannonjsBody()
+	var body	= ground.cannonjs().body()
 	physicsWorld.add(body);
     	
     	setInterval(function(){
-		var object3D	= tQuery.createPoolBall().addTo(world)
-					.enableCannonjs()
+		var object3D	= tQuery.createSphere().addTo(world)
+					.addCannonjs().back()
 					.castShadow(true)
-		var body	= object3D.cannonjsBody()
+		var body	= object3D.cannonjs().body()
 		physicsWorld.add(body);
 		
 		body.position.set(Math.random()*2-1,5,Math.random()*2-1);

@@ -20,7 +20,7 @@ tQuery.registerStatic('createText', function(text, options){
 	center.y	= ( tGeometry.boundingBox.max.y - tGeometry.boundingBox.min.y ) / 2;
 	center.z	= ( tGeometry.boundingBox.max.z - tGeometry.boundingBox.min.z ) / 2;
 	tGeometry.vertices.forEach(function(vertex){
-		vertex.subSelf(center);
+		vertex.sub(center);
 	});
 	
 	// create a mesh with it

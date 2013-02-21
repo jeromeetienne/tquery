@@ -2270,7 +2270,7 @@ tQuery.Geometry.registerInstance('scaleBy', function(vector3){
 	this.each(function(geometry){
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.multiplySelf(vector3); 
+			vertex.multiply(vector3); 
 		}
 		// mark the vertices as dirty
 		geometry.verticesNeedUpdate = true;
@@ -2357,7 +2357,7 @@ tQuery.Geometry.registerInstance('translate', function(delta){
 		// change all geometry.vertices
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.addSelf(delta); 
+			vertex.add(delta); 
 		}
 		// mark the vertices as dirty
 		geometry.verticesNeedUpdate = true;
@@ -2566,7 +2566,7 @@ tQuery.Object3D.registerInstance('rotate', function(angles){
 	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.addSelf(angles);
+		object3d.rotation.add(angles);
 	})
 	// return this, to get chained API	
 	return this;
@@ -2631,7 +2631,7 @@ tQuery.Object3D.registerInstance('scaleBy', function(ratio){
 	console.assert(ratio instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.scale.multiplySelf(ratio);
+		object3d.scale.multiply(ratio);
 	})
 	// return this, to get chained API	
 	return this;

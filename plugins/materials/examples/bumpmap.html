@@ -49,7 +49,7 @@ return;
 	// tDiffuse.wrapS	= THREE.RepeatWrapping; 
 	// tDiffuse.wrapT	= THREE.RepeatWrapping;
 	// tDiffuse.repeat.set( 0.2, 0.2 );
-	// tDiffuse.anisotropy = 16;
+	tDiffuse.anisotropy = 4;
 
 
 	var url		= "../../assets/images/water.jpg";
@@ -65,7 +65,7 @@ return;
 	// tBumpMap.wrapS	= THREE.RepeatWrapping; 
 	// tBumpMap.wrapT	= THREE.RepeatWrapping;
 	// tBumpMap.repeat.set( 0.2, 0.2 );
-	// tBumpMap.anisotropy = 4;
+	tBumpMap.anisotropy = 4;
 
 	var material	= tQuery.createMeshPhongMaterial({
 		map		: tDiffuse,
