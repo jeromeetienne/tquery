@@ -5,7 +5,7 @@
 <script src="../tquery.terraingenerator.js"></script>
 
 <body><script>
-	var world	= tQuery.createWorld().fullpage().start();
+	var world	= tQuery.createWorld().boilerplate().start();
 
 	var terrain	= tQuery.generateTerrainGeometry({
 		width	: 5,
@@ -18,14 +18,14 @@
 	geometry.rotateX(35*Math.PI/180);
 	//geometry.zoom(2);
 	
-	world.renderer().setClearColorHex( 0x82CAFA, 1 );
+	world.tRenderer().setClearColorHex( 0x82CAFA, 1 );
 	
 	var light	= new THREE.AmbientLight(0x444444);
-	world.scene().add(light);
+	world.tScene().add(light);
 	
 	var light	= new THREE.DirectionalLight(0xFFFFFF, 3);
 	light.position.set(0, 0.6, -1).normalize();
-	world.scene().add(light);
+	world.tScene().add(light);
 	
 
 
