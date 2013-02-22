@@ -10,6 +10,7 @@ requirejs.config({
 			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
+			"tquery.controls": "plugins/controls/tquery.controlswrapper",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
@@ -25,8 +26,10 @@ requirejs.config({
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
+			"tquery.loaders": "plugins/loaders/tquery.loaders",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
+			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
 			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
@@ -67,6 +70,15 @@ requirejs.config({
 		"plugins/car/tquery.car.keyboard": [
 			"plugins/car/tquery.car"
 		],
+		"plugins/controls/tquery.controlswrapper": [
+			"three.js/controls/FirstPersonControls",
+			"three.js/controls/OrbitControls",
+			"three.js/controls/PointerLockControls",
+			"three.js/controls/TrackballControls",
+			"three.js/controls/FlyControls",
+			"three.js/controls/PathControls",
+			"three.js/controls/RollControls"
+		],
 		"plugins/csg/tquery.geometry.csg": [
 			"plugins/csg/csg",
 			"plugins/csg/ThreeCSG",
@@ -93,6 +105,17 @@ requirejs.config({
 		],
 		"plugins/linkify/tquery.mesh.linkify": [
 			"tquery.domevent"
+		],
+		"plugins/loaders/tquery.loaders": [
+			"three.js/loaders/BinaryLoader",
+			"three.js/loaders/MTLLoader",
+			"three.js/loaders/OBJMTLLoader",
+			"three.js/loaders/STLLoader",
+			"three.js/loaders/VTKLoader",
+			"three.js/loaders/ColladaLoader",
+			"three.js/loaders/OBJLoader",
+			"three.js/loaders/PDBLoader",
+			"three.js/loaders/UTF8Loader"
 		],
 		"plugins/requirejs/confrequire/md2character.initrequire": [
 			"plugins/md2character/tquery.md2character",
@@ -127,6 +150,11 @@ requirejs.config({
 		],
 		"plugins/minecraft/tquery.animations": [
 			"plugins/minecraft/tquery.animation"
+		],
+		"plugins/modifiers/tquery.geometry.smooth": [
+			"three.js/modifiers/ExplodeModifier",
+			"three.js/modifiers/SubdivisionModifier",
+			"three.js/modifiers/TessellateModifier"
 		],
 		"plugins/physics/tquery.physijs": [
 			"plugins/physics/vendor/physijs/physi"
