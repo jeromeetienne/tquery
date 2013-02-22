@@ -184,27 +184,6 @@ tQuery.Geometry.registerInstance('center', function(noX, noY, noZ){
 	return this;
 });
 
-/**
- * Smooth the geometry using catmull-clark
- *
- * @param {Number} subdivision the number of subdivision to do
-*/
-tQuery.Geometry.registerInstance('smooth', function(subdivision){
-	// init the modifier
-	var modifier	= new THREE.SubdivisionModifier( subdivision );
-	// apply it to each geometry
-	this.each(function(geometry){
-		// apply it
-		modifier.modify( geometry )
-	
-		// mark the vertices as dirty
-		geometry.verticesNeedUpdate = true;
-		geometry.computeBoundingBox();
-	});
-	// return this, to get chained API	
-	return this;
-});
-
 // some shortcuts
 tQuery.Geometry.registerInstance('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Geometry.registerInstance('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
