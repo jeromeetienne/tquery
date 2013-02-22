@@ -2252,13 +2252,7 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 
 tQuery.Sprite.registerInstance('setSpriteMaterial', function(opts){
 	var material	= tQuery.createSpriteMaterial(opts).back(this);
-console.log('material in setSpriteMaterial1', material)
 	this.material( material.get(0) );
-console.log('material in setSpriteMaterial2', this.material())
-console.log('this', this)
-console.log('tMaterial.id', material.get(0).id)
-console.log('tMaterial.id', this.material().get(0).id)
-
 	return material;
 })
 
@@ -2267,9 +2261,7 @@ tQuery.registerStatic('createSpriteMaterial', function(opts){
 		useScreenCoordinates	: false
 	});
 	var tMaterial	= new THREE.SpriteMaterial(opts);
-console.log('tMaterial.id', tMaterial.id)
 	var material	= new tQuery.SpriteMaterial(tMaterial);
-console.log('tMaterial.id', material.get(0).id)
 	return material;
 });
 
@@ -2497,27 +2489,6 @@ tQuery.Geometry.registerInstance('center', function(noX, noY, noZ){
 		if( noZ )	delta.z	= 0;
 
 		return geometry.translate(delta)
-	});
-	// return this, to get chained API	
-	return this;
-});
-
-/**
- * Smooth the geometry using catmull-clark
- *
- * @param {Number} subdivision the number of subdivision to do
-*/
-tQuery.Geometry.registerInstance('smooth', function(subdivision){
-	// init the modifier
-	var modifier	= new THREE.SubdivisionModifier( subdivision );
-	// apply it to each geometry
-	this.each(function(geometry){
-		// apply it
-		modifier.modify( geometry )
-	
-		// mark the vertices as dirty
-		geometry.verticesNeedUpdate = true;
-		geometry.computeBoundingBox();
 	});
 	// return this, to get chained API	
 	return this;
