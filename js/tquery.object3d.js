@@ -93,11 +93,11 @@ tQuery.Object3D.prototype.geometry	= function(value){
  * @returns {tQuery.Material} return the materials from the tQuery.Object3D
 */
 tQuery.Object3D.prototype.material	= function(){
-	var materials	= [];
+	var tMaterials	= [];
 	this.each(function(object3d){
-		materials.push(object3d.material)
+		tMaterials.push(object3d.material)
 	});
-	return new tQuery.Material(materials);
+	return new tQuery.Material(tMaterials);
 };
 
 

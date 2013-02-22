@@ -39,7 +39,7 @@ tQuery.pluginsInstanceOn(tQuery.Mesh);
 tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case
-	if( value == undefined )	return parent.material.call(this);
+	if( value === undefined )	return parent.material.call(this);
 	// handle parameter polymorphism
 	if( value instanceof tQuery.Material )	value	= value.get(0)
 	// sanity check

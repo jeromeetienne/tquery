@@ -37891,11 +37891,11 @@ tQuery.Object3D.prototype.geometry	= function(value){
  * @returns {tQuery.Material} return the materials from the tQuery.Object3D
 */
 tQuery.Object3D.prototype.material	= function(){
-	var materials	= [];
+	var tMaterials	= [];
 	this.each(function(object3d){
-		materials.push(object3d.material)
+		tMaterials.push(object3d.material)
 	});
-	return new tQuery.Material(materials);
+	return new tQuery.Material(tMaterials);
 };
 
 
@@ -38342,7 +38342,7 @@ tQuery.pluginsInstanceOn(tQuery.Mesh);
 tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case
-	if( value == undefined )	return parent.material.call(this);
+	if( value === undefined )	return parent.material.call(this);
 	// handle parameter polymorphism
 	if( value instanceof tQuery.Material )	value	= value.get(0)
 	// sanity check
@@ -38360,11 +38360,9 @@ tQuery.Mesh.prototype.material	= function(value){
  * @returns {tQuery.Sprite} the create object
 */
 tQuery.registerStatic('createSprite', function(opts){
-	opts		= tQuery.extend(opts, {
-		useScreenCoordinates	: false
-	});
-	var sprite	= new THREE.Sprite(opts);
-	return new tQuery.Sprite(sprite)
+	var tSprite	= new THREE.Sprite(opts);
+	var sprite	= new tQuery.Sprite(tSprite);
+	return sprite;
 })
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -38387,16 +38385,37 @@ tQuery.registerStatic('Sprite', function(elements){
 */
 tQuery.inherit(tQuery.Sprite, tQuery.Object3D);
 
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Sprite);
+
 
 /**
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Sprite, {
-	color			: tQuery.convert.toThreeColor,
-	map			: tQuery.convert.toTexture,
-	useScreenCoordinates	: tQuery.convert.toBoolean
+	rotation	: tQuery.convert.toNumber,
 });
-//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * TODO to remove. this function is crap
+*/
+tQuery.Sprite.prototype.material	= function(value){
+	var parent	= tQuery.Sprite.parent;
+	// handle the getter case
+	if( value === undefined )	return parent.material.call(this);
+	// handle parameter polymorphism
+	if( value instanceof tQuery.Material )	value	= value.get(0)
+	// sanity check
+	console.assert( value instanceof THREE.SpriteMaterial )
+	// handle the setter case
+	this.each(function(tSprite){
+console.log('set material for', tSprite, value)
+		tSprite.material	= value;
+	});
+	return this;	// for the chained API
+}//////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -39450,6 +39469,76 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 
 	metal		: tQuery.convert.toBoolean,
 	perPixel	: tQuery.convert.toBoolean
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Sprite.registerInstance('setSpriteMaterial', function(opts){
+	var material	= tQuery.createSpriteMaterial(opts).back(this);
+console.log('material in setSpriteMaterial1', material)
+	this.material( material.get(0) );
+console.log('material in setSpriteMaterial2', this.material())
+console.log('this', this)
+console.log('tMaterial.id', material.get(0).id)
+console.log('tMaterial.id', this.material().get(0).id)
+
+	return material;
+})
+
+tQuery.registerStatic('createSpriteMaterial', function(opts){
+	opts		= tQuery.extend(opts, {
+		useScreenCoordinates	: false
+	});
+	var tMaterial	= new THREE.SpriteMaterial(opts);
+console.log('tMaterial.id', tMaterial.id)
+	var material	= new tQuery.SpriteMaterial(tMaterial);
+console.log('tMaterial.id', material.get(0).id)
+	return material;
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handle Sprite Material
+ *
+ * @class include THREE.SpriteMaterial. It inherit from {@link tQuery.Material}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.SpriteMaterial} element an instance or array of instance
+*/
+tQuery.SpriteMaterial	= function(elements)
+{
+	// call parent ctor
+	tQuery.SpriteMaterial.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Material
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.SpriteMaterial); });
+};
+
+/**
+ * inherit from tQuery.Material
+*/
+tQuery.inherit(tQuery.SpriteMaterial, tQuery.Material);
+
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.SpriteMaterial, {
+	color			: tQuery.convert.toThreeColor,
+	map			: tQuery.convert.toTexture,
+	useScreenCoordinates	: tQuery.convert.toBoolean,
+	depthTest		: tQuery.convert.toBoolean,
+	sizeAttenuation		: tQuery.convert.toBoolean,
+	scaleByViewport		: tQuery.convert.toBoolean,
 });
 
 
