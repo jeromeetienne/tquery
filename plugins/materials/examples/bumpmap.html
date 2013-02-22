@@ -15,8 +15,8 @@
 		.color(0xaaaaaa);
 	var ligthDir1	= tQuery.createDirectionalLight().addTo(world)
 		.position(1,1,-1).color(0xffffff);
-	// var ligthDir2	= tQuery.createDirectionalLight().addTo(world)
-	// 	.position(-0,1,1).color(0xaa88ff).intensity(2);
+	var ligthDir2	= tQuery.createDirectionalLight().addTo(world)
+		.position(-0,1,1).color(0xaa88ff).intensity(2);
 
 
 
@@ -40,7 +40,7 @@ return;
 	})
 
 	var url		= "../../assets/images/water.jpg";
-	var url		= "../../assets/images/rocks.jpg";
+	//var url		= "../../assets/images/rocks.jpg";
 	//var url		= "../../assets/images/plywood.jpg";
 	//var url		= "../../grassground/images/grasslight-big.jpg";
 	//var url		= "../../planets/images/moon_1024.jpg";
@@ -53,7 +53,7 @@ return;
 
 
 	var url		= "../../assets/images/water.jpg";
-	var url		= "../../assets/images/rocks.jpg";
+	//var url		= "../../assets/images/rocks.jpg";
 //	var url		= "../../assets/images/plywood.jpg";
 //	var url		= "../../grassground/images/grasslight-big.jpg";
 //	var url		= "../../planets/images/moon_1024.jpg";
@@ -68,9 +68,9 @@ return;
 	tBumpMap.anisotropy = 4;
 
 	var material	= tQuery.createMeshPhongMaterial({
-		map		: tDiffuse,
+		//map		: tDiffuse,
 		bumpMap		: tBumpMap,
-		bumpScale	: 0.2,
+		bumpScale	: 0.05,
 		// specular	: 0x88aa88,
 		// shininess	: 50,
 		// shading		: THREE.SmoothShading

@@ -120,7 +120,7 @@
 		for( var i = 0, il = boids.length; i < il; i++ ){
 			var boid	= boids[ i ];
 			vector.z	= boid.position.z;
-			boid.repulse( vector );
+			boid.repulse( vector, 1 );
 		}
 	}, false);
 </script></body>

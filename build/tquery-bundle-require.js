@@ -40401,7 +40401,7 @@ THREEx.DragPanControls.prototype.destroy	= function()
 	this._domElement.removeEventListener( 'touchmove', this._$onTouchMove, false );
 }
 
-THREEx.DragPanControls.prototype.update	= function(event)
+THREEx.DragPanControls.prototype.update	= function()
 {
 	this._object.position.x += ( this._mouseX * this.rangeX - this._object.position.x ) * this.speedX;
 	this._object.position.y += ( this._mouseY * this.rangeY - this._object.position.y ) * this.speedY;
