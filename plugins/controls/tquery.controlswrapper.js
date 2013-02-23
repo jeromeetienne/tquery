@@ -13,7 +13,8 @@ tQuery.registerStatic('createControlsWrapper', function(opts){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * constructor
+ * ControlWrapper offers transparent handling of the rendering loop.
+ * automatic update + pausable. and that for any THREE.Controls
  */
 tQuery.registerStatic('ControlsWrapper', function(opts){
 	// handle parameters
