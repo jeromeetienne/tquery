@@ -1,18 +1,12 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src="../tquery.object3d.coordinate.js"></script>
-<body>
-<style>
-#marker {
-	position	: absolute;
+<body><script>
+require([ 'tquery.minecraft',
+	, 'tquery.grassground'
+	, 'tquery.montainarena'
+], function(){
 
-	background	: red;
-	padding		: 5px;
-}
-</style>
-<div id='marker'>John</div>
-<script>
-require(['tquery.minecraft', 'tquery.grassground', 'tquery.montainarena'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
 	var ground	= tQuery.createGrassGround({
@@ -29,13 +23,18 @@ require(['tquery.minecraft', 'tquery.grassground', 'tquery.montainarena'], funct
 		object3D	: character.object3D(),
 	});
 	
-
 	
 	var marker	= tQuery.createObject3D().addTo( character.object3D() )
 		.positionY(1.2)
-		.addClass('marker')
 
-	var element = document.getElementById('marker')
+	// Create dom element
+	var element	= document.createElement('div')
+	document.body.appendChild(element)
+	element.innerHTML	= 'John';	
+	element.style.position	= 'absolute'
+	element.style.padding	= '5px'
+	element.style.background= 'red'
+	// move it at the object position
 	world.loop().hook(function(){
 		var position	= marker.cssPosition();
 		element.style.left	= (position.x-element.offsetWidth /2)+'px';
