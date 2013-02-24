@@ -20,7 +20,7 @@ require(['tquery.skymap'], function(){
 	world.tCamera().rotation.y	= Math.PI;
 
 	var target	= tQuery.createTorus().addTo(world)
-		.positionX( -20.5)
+		.positionX( -1.5)
 		.rotationX( -Math.PI/2 )
 		.rotationY( -Math.PI/3 )
 
@@ -29,13 +29,26 @@ require(['tquery.skymap'], function(){
 		.position( source.position() )
 		.rotation( source.rotation() )
 
-	var controls	= tQuery.createControlsTween({
+
+	tQuery.createControlsTween({
 		source	: source,
-		target	: target
-	})
-	
-	tQuery.createControlsWrapper({
-		controls	: controls
-	}).start()
+		target	: target,
+		// attempts to get linear displacement
+		// positionTween	: function(source, target){
+		// 	var delta	= target.clone().sub(source)
+		// 	var maxDelta	= 0.01;
+		// 	if( delta.length() > maxDelta )	delta.setLength(maxDelta);
+		// 	return delta;
+		// },
+		// rotationTween	: function(source, target){
+		// 	var delta	= target.clone().sub(source)
+		// 	var maxDelta	= 0.01;
+		// 	if( delta.length() > maxDelta )	delta.setLength(maxDelta);
+		// 	if( delta.x > maxDelta )	delta.x	= maxDelta;
+		// 	if( delta.y > maxDelta )	delta.y	= maxDelta;
+		// 	if( delta.z > maxDelta )	delta.z	= maxDelta;
+		// 	return delta
+		// },
+	}).start();
 })
 </script></body>

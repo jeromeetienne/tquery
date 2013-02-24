@@ -3,26 +3,22 @@ tQuery.registerStatic('createControlsTween', function(opts){
 })
 
 
+
 tQuery.registerStatic('ControlsTween', function(opts){
-		// handle parameters default
+	// call parent constructor
+	tQuery.ControlsTween.parent.constructor.call(this, tQuery.extend(opts, {
+		controls	: this
+	}));
+	// handle parameters default
 	opts	= tQuery.extend(opts, {
-		positionTween	: function(source, target){
-			var delta	= target.clone().sub(source)
-			delta.multiplyScalar(0.01)
-			// var maxDelta	= 0.01;
-			// if( deltaPos.length() > maxDelta )	deltaPos.setLength(maxDelta);
-			return delta;
+		positionTween	: function(source, target, deltaSecond){
+			var damping	= 0.1 * deltaSecond;
+			return target.clone().sub(source).multiplyScalar(damping)
 		},
-		rotationTween	: function(source, target){
-			var delta	= target.clone().sub(source)
-			delta.multiplyScalar(0.01)
-			// var maxDelta	= 0.01;
-			// if( deltaRot.length() > maxDelta )	deltaRot.setLength(maxDelta);
-			// if( deltaRot.x > maxDelta )	deltaRot.x	= maxDelta;
-			// if( deltaRot.y > maxDelta )	deltaRot.y	= maxDelta;
-			// if( deltaRot.z > maxDelta )	deltaRot.z	= maxDelta;
-			return delta
-		}
+		rotationTween	: function(source, target, deltaSecond){
+			var damping	= 0.1 * deltaSecond;
+			return target.clone().sub(source).multiplyScalar(damping)
+		},
 	});
 	// parameter sanity check
 	console.assert( opts.source instanceof tQuery.Object3D )
@@ -34,10 +30,15 @@ tQuery.registerStatic('ControlsTween', function(opts){
 	this._rotationTween	= opts.rotationTween
 });
 
+// inheritance
+tQuery.inherit(tQuery.ControlsTween, tQuery.ControlsWrapper);
+
+
 tQuery.ControlsTween.prototype.update	= function(delta){
+	var deltaSecond	= delta / 1000;
 	var tSource	= this._source.get(0);
 	var tTarget	= this._target.get(0);
-	
+
 	tSource.updateMatrixWorld();
 	tTarget.updateMatrixWorld();
 
@@ -49,12 +50,24 @@ tQuery.ControlsTween.prototype.update	= function(delta){
 
 	var sourcePos	= tQuery.createVector3().getPositionFromMatrix(sourceMat);
 	var targetPos	= tQuery.createVector3().getPositionFromMatrix(targetMat);
-	var deltaPos	= this._positionTween(sourcePos, targetPos)
+	var deltaPos	= this._positionTween(sourcePos, targetPos, deltaSecond)
 	this._source.translate(deltaPos);
 
 	var sourceRot	= tQuery.createVector3().setEulerFromRotationMatrix(sourceMat, sourceEuler)
 	var targetRot	= tQuery.createVector3().setEulerFromRotationMatrix(targetMat, targetEuler)
-	var deltaRot	= this._rotationTween(sourceRot, targetRot)
+	var deltaRot	= this._rotationTween(sourceRot, targetRot, deltaSecond)
 	this._source.rotate(deltaRot);
 }
+
+/**
+ * getter/setter for target
+ * @param  {tQuery.Object3D} value	the target object
+ * @return {tQuery.ControlsTween}       for chained api
+ */
+tQuery.ControlsTween.prototype.target = function(value){
+	if( value === undefined )	return this._target
+	this._target	= value
+	return this;
+};
+
 

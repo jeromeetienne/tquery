@@ -42,7 +42,7 @@ tQuery.ControlsWrapper.prototype.destroy = function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.ControlsWrapper.prototype.start = function() {
-	console.assert( this.isRunning() === false );
+	console.assert( this.isStarted() === false );
 	
 	this._callback	= this._world.loop().hook(function(delta, now){
 		// check if it is paused
@@ -54,12 +54,12 @@ tQuery.ControlsWrapper.prototype.start = function() {
 }
 
 tQuery.ControlsWrapper.prototype.stop = function() {
-	if( this.isRunning() === false )	return
+	if( this.isStarted() === false )	return
 	this._world.loop().unhook(this._callback)		
 	return this;	// for chained API
 }
 
-tQuery.ControlsWrapper.prototype.isRunning = function() {
+tQuery.ControlsWrapper.prototype.isStarted = function() {
 	return this._callback ? true : false
 }
 
