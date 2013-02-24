@@ -1,0 +1,41 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.controlswrapper.js"></script>
+<script src="../tquery.controlstween.js"></script>
+<body><script>
+require(['tquery.skymap'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var source	= tQuery.createTorusKnot().addTo(world)
+		.positionX(  1.5) 
+		.rotationX(  Math.PI/2 )
+		.rotationY( -Math.PI/3 )
+
+	tQuery.createSkymap('mars').addTo(world);
+
+	// Attach the camera to the source
+	world.removeCameraControls();
+	source.add( world.tCamera() );	
+	world.tCamera().position.z	= -3;
+	world.tCamera().rotation.y	= Math.PI;
+
+	var target	= tQuery.createTorus().addTo(world)
+		.positionX( -20.5)
+		.rotationX( -Math.PI/2 )
+		.rotationY( -Math.PI/3 )
+
+	// leave a marker on the source position for debug	
+	tQuery.createTorus().addTo(world)
+		.position( source.position() )
+		.rotation( source.rotation() )
+
+	var controls	= tQuery.createControlsTween({
+		source	: source,
+		target	: target
+	})
+	
+	tQuery.createControlsWrapper({
+		controls	: controls
+	}).start()
+})
+</script></body>

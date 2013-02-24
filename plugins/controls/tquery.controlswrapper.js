@@ -6,7 +6,7 @@
 tQuery.registerStatic('createControlsWrapper', function(opts){
 	var controls	= new tQuery.ControlsWrapper(opts)
 	return controls;
-});
+})
 
 //////////////////////////////////////////////////////////////////////////////////
 //		tQuery.ControlsWrapper						//
@@ -25,23 +25,44 @@ tQuery.registerStatic('ControlsWrapper', function(opts){
 	console.assert(opts.controls, 'controls MUST be set');
 	// set some variables
 	this._world	= opts.world;
+	this._controls	= opts.controls;
+
 	this._paused	= false;
-	// hook the callback
-	var controls	= opts.controls;
-	this._callback	= this._world.loop().hook(function(delta, now){
-		// check if it is paused
-		if( this._paused )	return;
-		// update the wrapped controls
-		controls.update(delta * 1000)
-	}.bind(this))
-});
+})
 
 /**
  * destructor
  */
-tQuery.ControlsWrapper.prototype.destroy = function() {
-	this._world.loop().unhook(this._callback)
-};
+tQuery.ControlsWrapper.prototype.destroy = function(){
+	this.stop()
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		pause handle							//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.ControlsWrapper.prototype.start = function() {
+	console.assert( this.isRunning() === false );
+	
+	this._callback	= this._world.loop().hook(function(delta, now){
+		// check if it is paused
+		if( this._paused )	return;
+		// update the wrapped controls
+		this._controls.update(delta * 1000)
+	}.bind(this))
+	return this;	// for chained API
+}
+
+tQuery.ControlsWrapper.prototype.stop = function() {
+	if( this.isRunning() === false )	return
+	this._world.loop().unhook(this._callback)		
+	return this;	// for chained API
+}
+
+tQuery.ControlsWrapper.prototype.isRunning = function() {
+	return this._callback ? true : false
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		pause handle							//
@@ -54,7 +75,7 @@ tQuery.ControlsWrapper.prototype.destroy = function() {
 tQuery.ControlsWrapper.prototype.pause = function() {
 	this._paused	= this._paused ? false : true;
 	return this;
-};
+}
 
 /**
  * return true if the controls is paused, true otherwise
@@ -62,4 +83,4 @@ tQuery.ControlsWrapper.prototype.pause = function() {
  */
 tQuery.ControlsWrapper.prototype.isPaused = function() {
 	return this._paused;
-};
+}
