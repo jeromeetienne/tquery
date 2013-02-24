@@ -1,0 +1,29 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.object3d.coordinate.js"></script>
+<body>
+<style>
+#marker {
+	position	: absolute;
+	z-index		: 1;
+
+	background	: red;
+	padding		: 5px;
+}
+</style>
+<div id='marker'>John</div>
+<script>
+	var world	= tQuery.createWorld().boilerplate().start();
+//world.removeCameraControls();	
+	var object	= tQuery.createTorusKnot().addTo(world)
+		.positionX(1)
+		.positionY(0.5)
+		
+
+	var element = document.getElementById('marker')
+	world.loop().hook(function(){
+		var position	= object.cssPosition();
+		element.style.left	= (position.x-element.offsetWidth /2)+'px';
+		element.style.top	= (position.y-element.offsetHeight/2)+'px';
+	})
+</script></body>
