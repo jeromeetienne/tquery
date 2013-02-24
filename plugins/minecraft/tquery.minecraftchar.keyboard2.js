@@ -46,8 +46,8 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 			if( distance ){
 				var speed	= new THREE.Vector3(distance, 0, 0);
 				var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
-				matrix.multiplyVector3(speed);
-				model.position.addSelf(speed);
+				speed.applyMatrix4( matrix );
+				model.position.add(speed);
 			}			
 		}else	console.assert(false, 'opts.lateralMove invalid: '+opts.lateralMove);
 
@@ -57,8 +57,8 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 		if( distance ){
 			var speed	= new THREE.Vector3(0, 0, distance);
 			var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
-			matrix.multiplyVector3(speed);
-			model.position.addSelf(speed);
+			speed.applyMatrix4( matrix );
+			model.position.add(speed);
 		}
 		// notify an event of the update
 		this.dispatchEvent('postUpdate', model.position, prevPosition);
