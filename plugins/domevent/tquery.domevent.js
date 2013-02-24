@@ -9,7 +9,7 @@ tQuery.World.registerInstance('enableDomEvent', function(){
 	// sanity check
 	console.assert(this.hasDomEvent() === false);
 	// create THREEx.DomEvent
-	var domEvent	= new THREEx.DomEvent();
+	var domEvent	= new THREEx.DomEvent(undefined, this.tRenderer().domElement);
 	// set the camera in domEvent
 	domEvent.camera(this.tCamera());
 	// create the context
