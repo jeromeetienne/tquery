@@ -6,10 +6,9 @@ tQuery.registerStatic('Pacman', function(opts){
 		color	: '#ffff00',
 		text	: 'pucky',
 		fontSize: '40pt',
-		shaddow	: true,
+		shadow	: true,
 		canvasW	: 512
 	});
-	
 	// sanity check on parameters
 	console.assert( tQuery.Pacman.shapes.indexOf(opts.shape) !== -1 );
 	console.assert( tQuery.Pacman.faces.indexOf(opts.face) !== -1 );
@@ -28,7 +27,6 @@ tQuery.registerStatic('Pacman', function(opts){
 	}
 	
 	var container	= tQuery.createObject3D();
-
 
 	// to get the shape
 	if( opts.shape === 'pacman' ){
@@ -71,19 +69,20 @@ tQuery.registerStatic('Pacman', function(opts){
 	}else	console.assert(false);
 			
 	// add the shadow on the ground
-	var texture	= tQuery.Pacman.createTexture();
-	var canvas	= texture.image;
-	tQuery.Pacman.drawShaddow(canvas)
-	tQuery.createPlane().addTo(container)
-		.addClass('shaddow')
-		.rotationX(-Math.PI/2)
-		.positionY(-0.5)
-		.setLambertMaterial()
-			.map(texture)
-			.opacity(0.5)
-			.back();
-
-	
+	if( opts.shadow ){
+		var texture	= tQuery.Pacman.createTexture();
+		var canvas	= texture.image;
+		tQuery.Pacman.drawShaddow(canvas)
+		tQuery.createPlane().addTo(container)
+			.addClass('shadow')
+			.rotationX(-Math.PI/2)
+			.positionY(-0.5)
+			.setLambertMaterial()
+				.map(texture)
+				.opacity(0.5)
+				.back();
+	}
+	// return the contained
 	return container;
 })
 
@@ -341,7 +340,7 @@ tQuery.Pacman.drawBackground = function(canvas, color){
 };
 
 /**
- * display the shaddow of the smiley in a texture
+ * display the shadow of the smiley in a texture
  *
  * @param {canvasElement} the canvas where we draw
 */
@@ -351,7 +350,7 @@ tQuery.Pacman.drawShaddow = function(canvas, color){
 	var xtx		= tQuery.Pacman.xCanvas.create(ctx);
 
 	
-	ctx.fillStyle	= "#333333";
+	ctx.fillStyle	= "#00ff00";
 
 	var circleW	= 8*w/8;
 	var circleH	= 8*w/8;
@@ -363,7 +362,7 @@ tQuery.Pacman.drawShaddow = function(canvas, color){
 };
 
 /**
- * display the shaddow of the smiley in a texture
+ * display the shadow of the smiley in a texture
  *
  * @param {canvasElement} the canvas where we draw
 */
@@ -377,7 +376,7 @@ tQuery.Pacman.drawTextOnBack	= function(canvas, textData, fontSize){
 	ctx.translate(+3*w/4, w/2-w/32)
 	ctx.font	= "bolder "+fontSize+" Arial";
 	var textW	= ctx.measureText(textData).width;
-	ctx.strokeStyle	= "rgb(0,0,0)";
+	ctx.strokeStyle	= "rgb(0,0,0,0)";
 	//console.log("measutreText", ctx.measureText(textData));
 	ctx.fillText(textData, -textW/2, 0);
 	ctx.restore();
