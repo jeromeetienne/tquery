@@ -80,6 +80,7 @@ tQuery.registerStatic('Pacman', function(opts){
 			.setLambertMaterial()
 				.map(texture)
 				.opacity(0.5)
+				.transparent(true)
 				.back();
 	}
 	// return the contained
@@ -350,7 +351,7 @@ tQuery.Pacman.drawShaddow = function(canvas, color){
 	var xtx		= tQuery.Pacman.xCanvas.create(ctx);
 
 	
-	ctx.fillStyle	= "#00ff00";
+	ctx.fillStyle	= "#333333";
 
 	var circleW	= 8*w/8;
 	var circleH	= 8*w/8;
