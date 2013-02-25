@@ -58,9 +58,9 @@ tQuery.registerStatic('createPoolBall', function(opts){
 */
 tQuery.createPoolBall.draw	= function(canvas, textData, stripped, fillStyle){
 	var ctx		= canvas.getContext( '2d' );
+	var xtx		= tQuery.createPoolBall.xCanvas.create(ctx);
 	var w		= canvas.width;
 	var h		= canvas.height;
-	var canvasX	= tQuery.createPoolBall.canvasX;
 	
 	// base color is white
 	ctx.save();
@@ -83,7 +83,7 @@ tQuery.createPoolBall.draw	= function(canvas, textData, stripped, fillStyle){
 		ctx.fillStyle	= "#FFFFFF";
 		var radiusW	= 0.7 * w/4;
 		var radiusH	= 1.2 * h/4;
-		canvasX.fillEllipse(ctx, -radiusW/2, -radiusH/2, radiusW, radiusH);
+		xtx.fillEllipse(-radiusW/2, -radiusH/2, radiusW, radiusH);
 		ctx.restore();
 
 		// draw text data
@@ -113,7 +113,19 @@ tQuery.createPoolBall.ballTexture	= function( textData, stripped, fillStyle, can
 	return texture;
 };
 
-tQuery.createPoolBall.canvasX	= {
+/**
+ * helper for the canvas2d API to draw circle and ellipse
+ * @type {Object}
+ */
+tQuery.createPoolBall.xCanvas	= {
+	create	: function(ctx){
+		var xCanvas	= tQuery.createPoolBall.xCanvas;
+		return {
+			fillEllipse	: function(aX, aY, aWidth, aHeight){
+				return xCanvas.fillEllipse(ctx, aX, aY, aWidth, aHeight)
+			}
+		}
+	},
 	// Andrea Giammarchi - Mit Style License
 	// Circle methods
 	circle		: function(ctx, aX, aY, aDiameter){
