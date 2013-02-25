@@ -39,21 +39,46 @@ tQuery.registerStatic('Pacman', function(opts){
 	
 	var container	= tQuery.createObject3D();
 
-	var ball	= tQuery.createSphere().addTo(container)
-		.addClass('ball')
-		.setPhongMaterial()
-			.map(texture)
-			.back()
 
-// for ghost
-	ball.positionY(0.25 + 0.125)
-	// build the robe
-	tQuery.createCylinder(0.5, 0.5, 0.75, 64).addTo(container)
-		.addClass('robe')
-		.setLambertMaterial()
-			.color(0xffff00)
-			.back()
-
+	// to get the shape
+	if( opts.shape === 'pacman' ){
+		tQuery.createSphere().addTo(container)
+			.addClass('ball')
+			.setPhongMaterial()
+				.map(texture)
+				.back()
+	}else if( opts.shape === 'ghost' ){
+		// move the ball a little up
+		tQuery.createSphere().addTo(container)
+			.addClass('ball')
+			.setPhongMaterial()
+				.map(texture)
+				.back()
+			.positionY(0.25 + 0.125)
+		// build the robe
+		tQuery.createCylinder(0.5, 0.5, 0.75, 64).addTo(container)
+			.addClass('robe')
+			.setLambertMaterial()
+				.color(0xffff00)
+				.back()
+	}else if( opts.shape === 'eyes' ){
+		tQuery.createSphere().addTo(container)
+			.addClass('eyeR')
+			.scaleBy(0.25)
+			.setPhongMaterial()
+				.map(texture)
+				.back()
+			.positionX(0.25)
+			.positionY(0.25 + 0.125)
+		tQuery.createSphere().addTo(container)
+			.addClass('eyeL')
+			.scaleBy(0.25)
+			.setPhongMaterial()
+				.map(texture)
+				.back()
+			.positionX(-0.25)
+			.positionY(0.25 + 0.125)
+	}else	console.assert(false);
 			
 	// add the shadow on the ground
 	var texture	= tQuery.Pacman.createTexture();
