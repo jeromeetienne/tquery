@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.pacman.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// put some lights	
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,1)
+
+	var pacman	= tQuery.Pacman.create({
+		face	: 'angry',
+		text	: ''
+	}).addTo(world);
+	
+	world.loop().hook(function(delta, now){
+		pacman.rotateY(0.02)
+	})
+
+</script></body> 
