@@ -1,13 +1,3 @@
-// tQuery.Pacman.create( opts)
-// ### opts
-// shape 'pacman' , ghost, eyes
-// Face: happy, hurt, amgry, pupil
-// Color
-// Text
-// FontSize
-// shaddow: true/false
-
-
 tQuery.registerStatic('Pacman', function(opts){
 	// handle default options
 	opts	= tQuery.extend(opts, {
