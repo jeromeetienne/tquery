@@ -34,8 +34,7 @@ tQuery.registerStatic('ControlsTween', function(opts){
 tQuery.inherit(tQuery.ControlsTween, tQuery.ControlsWrapper);
 
 
-tQuery.ControlsTween.prototype.update	= function(delta){
-	var deltaSecond	= delta / 1000;
+tQuery.ControlsTween.prototype.update	= function(delta, now){
 	var tSource	= this._source.get(0);
 	var tTarget	= this._target.get(0);
 
@@ -50,12 +49,12 @@ tQuery.ControlsTween.prototype.update	= function(delta){
 
 	var sourcePos	= tQuery.createVector3().getPositionFromMatrix(sourceMat);
 	var targetPos	= tQuery.createVector3().getPositionFromMatrix(targetMat);
-	var deltaPos	= this._positionTween(sourcePos, targetPos, deltaSecond)
+	var deltaPos	= this._positionTween(sourcePos, targetPos, delta)
 	this._source.translate(deltaPos);
 
 	var sourceRot	= tQuery.createVector3().setEulerFromRotationMatrix(sourceMat, sourceEuler)
 	var targetRot	= tQuery.createVector3().setEulerFromRotationMatrix(targetMat, targetEuler)
-	var deltaRot	= this._rotationTween(sourceRot, targetRot, deltaSecond)
+	var deltaRot	= this._rotationTween(sourceRot, targetRot, delta)
 	this._source.rotate(deltaRot);
 }
 

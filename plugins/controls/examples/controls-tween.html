@@ -15,9 +15,8 @@ require(['tquery.skymap'], function(){
 
 	// Attach the camera to the source
 	world.removeCameraControls();
-	source.add( world.tCamera() );	
-	world.tCamera().position.z	= -3;
-	world.tCamera().rotation.y	= Math.PI;
+	tQuery(world.tCamera()).addTo(source)
+		.positionZ(-3).rotationY(Math.PI)
 
 	var target	= tQuery.createTorus().addTo(world)
 		.positionX( -1.5 )

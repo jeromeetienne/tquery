@@ -19,13 +19,15 @@ tQuery.registerStatic('createControlsWrapper', function(opts){
 tQuery.registerStatic('ControlsWrapper', function(opts){
 	// handle parameters
 	opts	= tQuery.extend(opts, {
-		world	: tQuery.world
+		world		: tQuery.world,
+		millisecond	: false
 	});
 	// sanity check
 	console.assert(opts.controls, 'controls MUST be set');
 	// set some variables
 	this._world	= opts.world;
 	this._controls	= opts.controls;
+	this._opts	= opts;
 
 	this._paused	= false;
 })
@@ -48,7 +50,8 @@ tQuery.ControlsWrapper.prototype.start = function() {
 		// check if it is paused
 		if( this._paused )	return;
 		// update the wrapped controls
-		this._controls.update(delta * 1000)
+		var inMsec	= this._opts.millisecond;
+		this._controls.update(delta * (inMsec ? 1000 : 1), now * (inMsec ? 1000 : 1))		
 	}.bind(this))
 	return this;	// for chained API
 }
