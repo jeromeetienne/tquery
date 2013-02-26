@@ -12,11 +12,11 @@ tQuery.registerStatic('ControlsTween', function(opts){
 	// handle parameters default
 	opts	= tQuery.extend(opts, {
 		positionTween	: function(source, target, deltaSecond){
-			var damping	= 0.1 * deltaSecond;
+			var damping	= 1 * deltaSecond;
 			return target.clone().sub(source).multiplyScalar(damping)
 		},
 		rotationTween	: function(source, target, deltaSecond){
-			var damping	= 0.1 * deltaSecond;
+			var damping	= 1 * deltaSecond;
 			return target.clone().sub(source).multiplyScalar(damping)
 		},
 	});
