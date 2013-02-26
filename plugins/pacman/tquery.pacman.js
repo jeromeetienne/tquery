@@ -32,6 +32,7 @@ tQuery.registerStatic('Pacman', function(opts){
 	if( opts.shape === 'pacman' ){
 		tQuery.createSphere().addTo(container)
 			.addClass('ball')
+			.translateY(0.5)
 			.setPhongMaterial()
 				.map(texture)
 				.back()
@@ -43,9 +44,11 @@ tQuery.registerStatic('Pacman', function(opts){
 				.map(texture)
 				.back()
 			.positionY(0.25 + 0.125)
+			.translateY(0.5)
 		// build the robe
 		tQuery.createCylinder(0.5, 0.5, 0.75, 64).addTo(container)
 			.addClass('robe')
+			.translateY(0.5)
 			.setLambertMaterial()
 				.color(0xffff00)
 				.back()
@@ -58,6 +61,7 @@ tQuery.registerStatic('Pacman', function(opts){
 				.back()
 			.positionX(0.25)
 			.positionY(0.25 + 0.125)
+			.translateY(0.5)
 		tQuery.createSphere().addTo(container)
 			.addClass('eyeL')
 			.scaleBy(0.25)
@@ -66,6 +70,7 @@ tQuery.registerStatic('Pacman', function(opts){
 				.back()
 			.positionX(-0.25)
 			.positionY(0.25 + 0.125)
+			.translateY(0.5)
 	}else	console.assert(false);
 			
 	// add the shadow on the ground
@@ -76,7 +81,6 @@ tQuery.registerStatic('Pacman', function(opts){
 		tQuery.createPlane().addTo(container)
 			.addClass('shadow')
 			.rotationX(-Math.PI/2)
-			.positionY(-0.5)
 			.setLambertMaterial()
 				.map(texture)
 				.opacity(0.5)

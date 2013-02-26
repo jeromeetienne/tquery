@@ -1,0 +1,79 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.pacman.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.simplemaze'
+	, 'tquery.controls'
+	, 'tquery.keyboard'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// put some lights	
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,1)
+
+	// add pacman
+	var pacman	= tQuery.Pacman.create().addTo(world)
+		.translateX(-1.5)
+	world.loop().hook(function(delta, now){
+		pacman.rotateY(0.02)
+	})
+
+	// world.removeCameraControls();
+	// tQuery(world.tCamera()).addTo(pacman).positionY(1.5)
+	// world.tCamera().lookAt(tQuery.createVector3())
+	world.loop().hook(function(delta, now){
+		var camera	= tQuery(world.tCamera())
+		if( camera.positionY() < 3.5 )	camera.positionY(3.5)
+	});
+	
+	// add a skymap
+	tQuery.createSkymap('mars').addTo(world);
+
+	var maze	= tQuery.createSimpleMaze({
+		map	: [
+			'*********',
+			'*   *   *',
+			'*  ** ***',
+			'*       *',
+			'***     *',
+			'*       *',
+			'*********'
+		],
+		enableCeiling	: false
+	}).addTo(world)
+	var maze3D	= maze.object3D();
+
+	// to fix z-fighting with pacman shadow
+	maze3D.positionY(-0.001)
+	
+	// very minimal controls
+	var controls	= {
+		update	: function(delta, now){
+			var keyboard	= tQuery.keyboard();
+			var speed	= 2;
+			if( keyboard.pressed('left') ){
+				pacman.translateX(-speed * delta)
+			}
+			if( keyboard.pressed('right') ){
+				pacman.translateX(+speed * delta)
+			}
+			if( keyboard.pressed('up') ){
+				pacman.translateZ(-speed * delta)
+			}
+			if( keyboard.pressed('down') ){
+				pacman.translateZ(+speed * delta)
+			}
+		}
+	};
+	
+	// wrapper for this controls
+	tQuery.createControlsWrapper({
+		controls	: controls
+	}).start()
+
+})
+</script></body> 
