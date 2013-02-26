@@ -55,7 +55,6 @@ tQuery.Sprite.prototype.material	= function(value){
 	console.assert( value instanceof THREE.SpriteMaterial )
 	// handle the setter case
 	this.each(function(tSprite){
-console.log('set material for', tSprite, value)
 		tSprite.material	= value;
 	});
 	return this;	// for the chained API

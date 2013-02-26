@@ -1,11 +1,12 @@
 requirejs.config({
 	map	: {
 		"*"	: {
-			'tquery.controls'	: 'plugins/controls/tquery.controlswrapper',
+			'tquery.controls'	: 'plugins/controls/tquery.controlstween',
 		}
 	},
 	shim	: {
-		'plugins/controls/tquery.controlswrapper'	: [
+		'plugins/controls/tquery.controlstween'	: [
+			'plugins/controls/tquery.controlswrapper',
 			'three.js/controls/FirstPersonControls',
 			'three.js/controls/OrbitControls',
 			'three.js/controls/PointerLockControls',

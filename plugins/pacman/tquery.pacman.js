@@ -1,4 +1,15 @@
 tQuery.registerStatic('Pacman', function(opts){
+	if( opts === 'pacman' )	opts	= {};
+	if( opts === 'eyes')	opts	= {
+		face	: 'pupil',
+		shape	: 'eyes',
+		text	: '',
+		color	: '#ffffff'
+	}
+	if( opts === 'ghost' )	opts	= {
+		shape	: 'ghost',
+		text	: 'El jeje',
+	}
 	// handle default options
 	opts	= tQuery.extend(opts, {
 		shape	: 'pacman',

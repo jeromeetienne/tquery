@@ -16,6 +16,11 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 	var mapD	= mazeMap.length;
 	var mapW	= mazeMap[0].length;
 	
+	this._map	= opts.map;
+	this._mapW	= mapW;
+	this._mapD	= mapD;
+	this._opts	= opts;
+	
 	// TODO sanitize input
 	// - opts.map especially
 	
@@ -29,6 +34,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 			map	: THREE.ImageUtils.loadTexture( textureUrl )
 		});
 		this._floor	= tQuery.createPlane(material)
+			.addClass('ground')
 			.geometry()
 				.rotateX(-Math.PI/2)
 				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
@@ -44,6 +50,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 			map	: THREE.ImageUtils.loadTexture( textureUrl )
 		});
 		this._ceiling	= tQuery.createPlane(material)
+			.addClass('ceiling')
 			.geometry()
 				.rotateX(Math.PI/2)
 				.scaleBy(opts.squareW*mapW, 1, opts.squareD*mapD)
@@ -68,13 +75,14 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 			// TODO
 			// - merge all those cubes, no upper/lower face
 			tQuery.createCube(material).addTo(this._container)
+				.addClass('wall')
 				.geometry()
 					.scaleBy(opts.squareW, opts.squareH, opts.squareD)
 					.translateY(opts.squareH/2)
 					.computeAll()
 					.back()
 				.translateX((x-mapW/2 + 0.5) * opts.squareW)
-				.translateZ((z-mapD/2 + 0.5) * opts.squareW);
+				.translateZ((z-mapD/2 + 0.5) * opts.squareD);
 		}
 	}
 });
@@ -87,7 +95,42 @@ tQuery.SimpleMaze.prototype.object3D	= function(){
 
 tQuery.SimpleMaze.prototype.map = function(){
 	return this._opts.map;
-};
+}
+
+// TODO this funciton name is crap
+tQuery.SimpleMaze.prototype.getTile = function(tileX, tileZ) {
+	console.assert( tileX >= 0 && tileX < this._mapW )
+	console.assert( tileZ >= 0 && tileZ < this._mapD )
+	var mazeMap	= this._opts.map;
+	var value	= mazeMap[tileZ].charCodeAt(tileX);
+	return value;
+}
+
+// TODO this funciton name is crap
+tQuery.SimpleMaze.prototype.getCoord = function(x, z) {
+	var tileX	= Math.floor(x / this._opts.squareW);
+	var tileZ	= Math.floor(z / this._opts.squareD);
+	var value	= this.getTile(tileX, tileZ)
+	return value;
+}
+
+tQuery.SimpleMaze.prototype.mapWidth = function() {
+	return this._mapW
+}
+
+tQuery.SimpleMaze.prototype.mapDepth = function() {
+	return this._mapD
+}
+
+tQuery.SimpleMaze.prototype.forEach = function(fn) {
+	for(var tileZ = 0; tileZ < this._mapD; tileZ++){
+		for(var tileX = 0; tileX < this._mapW; tileX++){
+			var value	= this._map[tileZ].charCodeAt(tileX);
+			fn(tileX, tileZ, value)
+		}
+	}
+	return this;
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//

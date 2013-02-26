@@ -10,7 +10,7 @@ requirejs.config({
 			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
-			"tquery.controls": "plugins/controls/tquery.controlswrapper",
+			"tquery.controls": "plugins/controls/tquery.controlstween",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
@@ -31,6 +31,7 @@ requirejs.config({
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
 			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
+			"tquery.objectcoord": "plugins/objectcoord/tquery.object3d.coordinate",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
 			"tquery.poolball": "plugins/poolball/tquery.poolball",
@@ -70,7 +71,8 @@ requirejs.config({
 		"plugins/car/tquery.car.keyboard": [
 			"plugins/car/tquery.car"
 		],
-		"plugins/controls/tquery.controlswrapper": [
+		"plugins/controls/tquery.controlstween": [
+			"plugins/controls/tquery.controlswrapper",
 			"three.js/controls/FirstPersonControls",
 			"three.js/controls/OrbitControls",
 			"three.js/controls/PointerLockControls",

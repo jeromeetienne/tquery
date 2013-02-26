@@ -57,6 +57,8 @@ tQuery.mixinAttributes(tQuery.SpriteMaterial, {
 	depthTest		: tQuery.convert.toBoolean,
 	sizeAttenuation		: tQuery.convert.toBoolean,
 	scaleByViewport		: tQuery.convert.toBoolean,
+	
+	fog			: tQuery.convert.toBoolean,
 });
 
 

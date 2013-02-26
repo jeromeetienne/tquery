@@ -38411,7 +38411,6 @@ tQuery.Sprite.prototype.material	= function(value){
 	console.assert( value instanceof THREE.SpriteMaterial )
 	// handle the setter case
 	this.each(function(tSprite){
-console.log('set material for', tSprite, value)
 		tSprite.material	= value;
 	});
 	return this;	// for the chained API
@@ -39463,6 +39462,9 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 	specular	: tQuery.convert.toThreeColor,
 
 	shininess	: tQuery.convert.toNumber,
+
+	envMap		: tQuery.convert.toTexture,
+	refractionRatio	: tQuery.convert.toNumber,
 	
 	bumpMap		: tQuery.convert.toTexture,
 	bumpScale	: tQuery.convert.toNumber,
@@ -39531,6 +39533,8 @@ tQuery.mixinAttributes(tQuery.SpriteMaterial, {
 	depthTest		: tQuery.convert.toBoolean,
 	sizeAttenuation		: tQuery.convert.toBoolean,
 	scaleByViewport		: tQuery.convert.toBoolean,
+	
+	fog			: tQuery.convert.toBoolean,
 });
 
 
