@@ -81,7 +81,7 @@ tQuery.registerStatic('SimpleMaze', function(opts){
 
 tQuery.SimpleMaze.baseUrl	= "../../../plugins/simplemaze/";
 
-tQuery.SimpleMaze.prototype.container	= function(){
+tQuery.SimpleMaze.prototype.object3D	= function(){
 	return this._container;
 }
 
@@ -97,7 +97,7 @@ tQuery.SimpleMaze.prototype.map = function(){
  * Emulate tQuery.Object3D.addTo
 */
 tQuery.SimpleMaze.prototype.addTo	= function(object3D){
-	this.container().addTo(object3D);
+	this.object3D().addTo(object3D);
 	return this;
 }
 
@@ -105,6 +105,6 @@ tQuery.SimpleMaze.prototype.addTo	= function(object3D){
  * Emulate tQuery.Object3D.removeFrom
 */
 tQuery.SimpleMaze.prototype.removeFrom	= function(object3D){
-	this.container().removeFrom(object3D);
+	this.object3D().removeFrom(object3D);
 	return this;
 };
