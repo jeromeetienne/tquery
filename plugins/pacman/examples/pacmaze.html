@@ -38,16 +38,16 @@ require([ 'tquery.skymap'
 		
 //		.intensity(0.1)
 	tQuery.createPointLight().addTo(playerContainer)
-		.color(0x88CC88)
+		.color(0xaaCCaa)
 		.distance(6)
 		.positionY(2)
-//		.intensity(2)
+		.intensity(2)
 
 	// add the fog
 	//world.addFogExp2({density: 0.1});
 	
 	// add a skymap
-	tQuery.createSkymap('skybox').addTo(world);
+//	tQuery.createSkymap('skybox').addTo(world);
 
 	
 
@@ -66,7 +66,7 @@ require([ 'tquery.skymap'
 	
 	var mount3D	= tQuery.createObject3D().addTo(playerContainer)
 		.position(tQuery.createVector3(0, 3, 3).setLength(6))
-	mount3D.get(0).lookAt(tQuery.createVector3())
+	mount3D.get(0).lookAt(tQuery.createVector3(0, 0.5, 0))
 	cameraMounts.push(mount3D)
 	
 	var mount3D	= tQuery.createObject3D().addTo(playerContainer)
@@ -85,7 +85,7 @@ require([ 'tquery.skymap'
 	cameraMounts.push(mount3D)
 
 	
-	var mountIdx	= 2;
+	var mountIdx	= 1;
 	cameraContainer.addTo(cameraMounts[mountIdx])
 	tQuery.keyboard().domElement().addEventListener('keydown', function(){
 		var nMounts	= cameraMounts.length;
