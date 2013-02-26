@@ -58,6 +58,7 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 
 	envMap		: tQuery.convert.toTexture,
 	refractionRatio	: tQuery.convert.toNumber,
+	reflectivity	: tQuery.convert.toNumber,
 	
 	bumpMap		: tQuery.convert.toTexture,
 	bumpScale	: tQuery.convert.toNumber,
