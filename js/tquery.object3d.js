@@ -106,12 +106,20 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.clone	= function(){
 	var clones	= [];
-	this._lists.forEach(function(tObject3d){
+	this.each(function(tObject3d){
 		var clone	= tObject3d.clone();
 		clones.push(clone);
 	})  
 	return tQuery(clones)
 }
+
+tQuery.Object3D.prototype.lookAt = function(position){
+	position	= tQuery.convert.toVector3.apply(null, arguments);
+	this.each(function(tObject3d){
+		tObject3d.lookAt(position)
+	}) 	
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//

@@ -20,6 +20,21 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	return undefined;	// never reached - just to workaround linter complaint
 };
 
+/**
+ * Convert the arguments into a THREE.Vector3
+ * @return {THREE.Vector3} the resulting THREE.Vector3
+ */
+tQuery.convert.toVector3	= function(/* arguments */){
+	// handle parameters
+	if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
+		return arguments[0]
+	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
+		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}else{
+		console.assert(false, "invalid parameter for Vector3");
+	}
+};
+
 tQuery.convert.toNumber	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'number'){
 		return value;
