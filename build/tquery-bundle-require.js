@@ -38949,7 +38949,7 @@ tQuery.registerStatic('createTorus', function(){
 
 tQuery.registerStatic('createTorusKnot', function(){
 	var ctor	= THREE.TorusKnotGeometry;
-	var dflGeometry	= [0.5-0.15, 0.15, 128, 32];
+	var dflGeometry	= [0.27, 0.1, 128, 32];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 

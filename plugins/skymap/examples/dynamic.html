@@ -1,29 +1,40 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
+require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	tQuery.createSphere().addTo(world)
-		.scale(1000)
-		.setBasicMaterial()
-			.map('images/2294472375_24a3b8ef46_o.jpg')
-			.side(THREE.BackSide)
-			.back()
+	tQuery.createSkymap('mars').addTo(world);
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(30)
+		.translateY(-0.001)
+
+
 
 	var cubeCamera	= new THREE.CubeCamera( 0.001, 1000, 256 );
 	// to avoid flickering on the border of the sphere
 	cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
 	
-	var tMaterial	= new THREE.MeshBasicMaterial({
-		envMap	: cubeCamera.renderTarget
-	});
+	var sphere	= tQuery.createSphere().addTo(world).translateY(0.8)
+		.setBasicMaterial({
+				envMap	: cubeCamera.renderTarget
+			})
+			.color(0xffff00)
+			.back()
 
-	var sphere	= tQuery.createSphere(tMaterial).addTo(world)
+
+	// var sphere	= tQuery.createPlane().addTo(world)
+	// 	.setBasicMaterial({
+	// 		envMap	: cubeCamera.renderTarget
+	// 	}).back()
+	// 	.scaleBy(10)
+	// 	.positionY(5)
+	// 	.positionZ(-3)
 
 	tQuery(cubeCamera).addTo(sphere)
-
-	tQuery.createSphere().addTo(world)
-		.positionX( 1)
 
 	world.loop().hook(function(){
 		sphere.visible(false)	// *cough*
@@ -32,4 +43,25 @@
 
 		sphere.visible(true)	// *cough*
 	})
+
+	world.loop().hook(function(delta, now){
+		var angle	= 0.2 * now * Math.PI * 2;
+		sphere.positionY(Math.sin(angle)*0.5 + 0.6)
+			.scale(Math.sin(angle)*0.3 + 1)
+	})
+
+	var character	= tQuery.createMinecraftChar().addTo(world)
+	character.object3D().translateX(-0.7)
+		.rotateY(Math.PI/3)
+
+	var character	= tQuery.createMinecraftChar().addTo(world)
+	character.object3D().translateX(+0.7)
+		.rotateY(-Math.PI/3)
+	
+	var character	= tQuery.createMinecraftChar().addTo(world)
+	character.object3D()
+		.rotateY(Math.PI)
+		.translateX(0.4)
+		.translateZ(+1)
+})
 </script></body>

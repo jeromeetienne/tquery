@@ -8,6 +8,7 @@ require([ 'tquery.skymap'
 	, 'tquery.keyboard'
 	, 'tquery.fog'
 	, 'tquery.controls'
+	, 'tquery.pproc'
 ], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
@@ -21,6 +22,15 @@ require([ 'tquery.skymap'
 	
 	tQuery.Pacman.create('eyes').addTo(world)
 		.translateZ(-3)
+
+	world.addEffectComposer()
+		.bloom(0.2)
+		//.sepia()
+		.motionBlur(0.5)
+		//.film(0.2, 0.5, 648, false)
+		.vignette()
+		//.screen()
+		.finish();
 
 	world.tRenderer().setClearColorHex( 0x000000, 1 );
 
@@ -47,7 +57,7 @@ require([ 'tquery.skymap'
 	//world.addFogExp2({density: 0.1});
 	
 	// add a skymap
-//	tQuery.createSkymap('skybox').addTo(world);
+	//tQuery.createSkymap('skybox').addTo(world);
 
 	
 

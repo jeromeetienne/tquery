@@ -21,7 +21,7 @@ tQuery.registerStatic('createGrassGround', function(opts){
 	texture.anisotropy = opts.anisotropy;
 
 	var object3D	= tQuery.createPlane(opts.width, opts.height, opts.segmentsW, opts.segmentsH)
-		.setPhongMaterial()
+		.setBasicMaterial()
 			.map(texture)
 			.color(0x44FF44)
 			.back()
