@@ -12,27 +12,28 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 	}).addTo(world).scale(30)
 		.translateY(-0.001)
 
-
-
 	var cubeCamera	= new THREE.CubeCamera( 0.001, 1000, 256 );
 	// to avoid flickering on the border of the sphere
 	cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
-	
-	var sphere	= tQuery.createSphere().addTo(world).translateY(0.8)
-		.setBasicMaterial({
-				envMap	: cubeCamera.renderTarget
-			})
+
+
+	// var sphere	= tQuery.createSphere().addTo(world).translateY(0.8)
+	// 	.setBasicMaterial()
+	// 		.envMap(cubeCamera.renderTarget)
+	// 		.color(0xffff00)
+	// 		.back()
+
+
+	// TODO make a better API
+
+	// attempts to make a puddle
+	var sphere	= tQuery.createPlane().addTo(world)
+		.setBasicMaterial()
+			.envMap(cubeCamera.renderTarget)
 			.color(0xffff00)
 			.back()
-
-
-	// var sphere	= tQuery.createPlane().addTo(world)
-	// 	.setBasicMaterial({
-	// 		envMap	: cubeCamera.renderTarget
-	// 	}).back()
-	// 	.scaleBy(10)
-	// 	.positionY(5)
-	// 	.positionZ(-3)
+		.scaleBy(10)
+//		.positionY(5).positionZ(-3)
 
 	tQuery(cubeCamera).addTo(sphere)
 
@@ -44,11 +45,11 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 		sphere.visible(true)	// *cough*
 	})
 
-	world.loop().hook(function(delta, now){
-		var angle	= 0.2 * now * Math.PI * 2;
-		sphere.positionY(Math.sin(angle)*0.5 + 0.6)
-			.scale(Math.sin(angle)*0.3 + 1)
-	})
+	// world.loop().hook(function(delta, now){
+	// 	var angle	= 0.2 * now * Math.PI * 2;
+	// 	sphere.positionY(Math.sin(angle)*0.5 + 0.6)
+	// 		.scale(Math.sin(angle)*0.3 + 1)
+	// })
 
 	var character	= tQuery.createMinecraftChar().addTo(world)
 	character.object3D().translateX(-0.7)

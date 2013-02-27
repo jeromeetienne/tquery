@@ -37691,6 +37691,8 @@ tQuery.convert.toString	= function(value){
 tQuery.convert.toTexture	= function(value){
 	if( arguments.length === 1 && value instanceof THREE.Texture ){
 		return value;
+	}else if( arguments.length === 1 && value instanceof THREE.WebGLRenderTarget ){
+		return value;
 	}else if( arguments.length === 1 && typeof(value) === 'string' ){
 		return THREE.ImageUtils.loadTexture(value);
 	}else if( arguments.length === 1 && (value instanceof Image || value instanceof HTMLCanvasElement) ){
