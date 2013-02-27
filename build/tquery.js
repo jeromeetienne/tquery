@@ -410,6 +410,21 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	return undefined;	// never reached - just to workaround linter complaint
 };
 
+/**
+ * Convert the arguments into a THREE.Vector3
+ * @return {THREE.Vector3} the resulting THREE.Vector3
+ */
+tQuery.convert.toVector3	= function(/* arguments */){
+	// handle parameters
+	if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
+		return arguments[0]
+	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
+		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}else{
+		console.assert(false, "invalid parameter for Vector3");
+	}
+};
+
 tQuery.convert.toNumber	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'number'){
 		return value;
@@ -680,12 +695,20 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.clone	= function(){
 	var clones	= [];
-	this._lists.forEach(function(tObject3d){
+	this.each(function(tObject3d){
 		var clone	= tObject3d.clone();
 		clones.push(clone);
 	})  
 	return tQuery(clones)
 }
+
+tQuery.Object3D.prototype.lookAt = function(position){
+	position	= tQuery.convert.toVector3.apply(null, arguments);
+	this.each(function(tObject3d){
+		tObject3d.lookAt(position)
+	}) 	
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//
@@ -2532,13 +2555,10 @@ tQuery.Object3D.registerInstance('position', function(vector3){
 	// handle the getter
 	if( vector3 === undefined )	return this.get(0).position;
 	// handle parameters
-	if( typeof vector3 === "number" && arguments.length === 3 ){
-		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-	}
-	console.assert(vector3 instanceof THREE.Vector3, "Object3D.position parameter error");
+	vector3	= tQuery.convert.toVector3.apply(null, arguments);
 	// do the operation on each node
-	this.each(function(object3d){
-		object3d.position.copy(vector3);
+	this.each(function(tObject3d){
+		tObject3d.position.copy(vector3);
 	});
 	// return this, to get chained API	
 	return this;
