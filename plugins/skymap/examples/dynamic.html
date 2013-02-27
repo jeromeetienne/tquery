@@ -28,15 +28,13 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 
 	// attempts to make a puddle
 	var sphere	= tQuery.createPlane().addTo(world)
-		
 		.setBasicMaterial()
 			.envMap(cubeCamera.renderTarget)
 			.color(0xffff00)
 			.back()
 		//.scaleBy(10)
-//		.positionY(5).positionZ(-3) 
+		//.positionY(5).positionZ(-3) 
 
-//	tQuery(cubeCamera).addTo(sphere)
 	tQuery(cubeCamera).addTo(sphere)
 
 	world.loop().hook(function(){
@@ -46,31 +44,5 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 
 		sphere.visible(true)	// *cough*
 	})
-
-	// world.loop().hook(function(delta, now){
-	// 	var angle	= 0.2 * now * Math.PI * 2;
-	// 	sphere.positionY(Math.sin(angle)*0.5 + 0.6)
-	// 		.scale(Math.sin(angle)*0.3 + 1)
-	// })
-
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/theflash.png'
-	}).addTo(world)
-	character.object3D().translateX(-0.7)
-		.rotateY(Math.PI/3)
-
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/batman.png'
-	}).addTo(world)
-	character.object3D().translateX(+0.7)
-		.rotateY(-Math.PI/3)
-	
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/Mario.png'
-	}).addTo(world)
-	character.object3D()
-		.rotateY(Math.PI)
-		.translateX(0.4)
-		.translateZ(+1)
 })
 </script></body>

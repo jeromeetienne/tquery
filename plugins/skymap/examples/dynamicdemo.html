@@ -32,7 +32,11 @@ require([ 'tquery.skymap'
 	cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
 
 
-	var sphere	= tQuery.createSphere().addTo(world).translateY(0.8)
+	var sphere	= tQuery.createCube().addTo(world)
+		.translateY(0.8)
+		.geometry()
+			.scaleBy(1/2)
+			.back()
 		.setBasicMaterial()
 			.envMap(cubeCamera.renderTarget)
 			.color(0xffff00)
@@ -76,7 +80,7 @@ require([ 'tquery.skymap'
 		.translateX(Math.cos(angle) * 0.8)
 		.translateZ(Math.sin(angle) * 0.8)
 		.rotateY(Math.PI - angle)
-
+ 
 	// init batman
 	var character	= tQuery.createMinecraftChar({
 		skinUrl	: '../../minecraft/examples/images/batman.png'
