@@ -9,8 +9,8 @@
 	WebAudio.isAvailable && world.enableWebAudio();
 	
 	if( WebAudio.isAvailable ){
-		tQuery.createSound().loop(true).load('sounds/techno.mp3', function(sound){
-			sound.play();
+		tQuery.createSound().load('../../assets/sounds/techno.mp3', function(sound){
+			sound.loop(true).play();
 		});
 	}
 </script></body>

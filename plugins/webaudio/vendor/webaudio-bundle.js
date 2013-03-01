@@ -203,10 +203,24 @@ WebAudio.NodeChainBuilder	= function(audioContext){
 };
 
 /**
+ * creator
+ * 
+ * @param  {webkitAudioContext} 	audioContext the context	
+ * @return {WebAudio.NodeChainBuider}	just created object
+ */
+WebAudio.NodeChainBuilder.create= function(audioContext){
+	return new WebAudio.NodeChainBuilder(audioContext);
+}
+
+/**
  * destructor
 */
 WebAudio.NodeChainBuilder.prototype.destroy	= function(){
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//		getters								//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * getter for the nodes
@@ -229,6 +243,15 @@ WebAudio.NodeChainBuilder.prototype.last	= function(){
 	return this._lastNode;
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * add a node to the chain
+ * @param {[type]} node       [description]
+ * @param {[type]} properties [description]
+ */
 WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 {
 	// update this._bufferSourceDst - needed for .cloneBufferSource()
@@ -251,6 +274,10 @@ WebAudio.NodeChainBuilder.prototype._addNode	= function(node, properties)
 	return this;
 };
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//		creator for each type of nodes					//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Clone the bufferSource. Used just before playing a sound
@@ -286,6 +313,18 @@ WebAudio.NodeChainBuilder.prototype.bufferSource	= function(properties){
 WebAudio.NodeChainBuilder.prototype.mediaStreamSource	= function(stream, properties){
 //	console.assert( stream instanceof LocalMediaStream )
 	var node		= this._context.createMediaStreamSource(stream)
+	this._nodes.bufferSource= node;
+	return this._addNode(node, properties)
+};
+
+/**
+ * add a createMediaElementSource
+ * @param  {HTMLElement} element    the element to add
+ * @param {Object} [properties] properties to set in the created node
+ */
+WebAudio.NodeChainBuilder.prototype.mediaElementSource = function(element, properties){
+	console.assert(element instanceof HTMLAudioElement || element instanceof HTMLVideoElement)
+	var node		= this._context.createMediaElementSource(element)
 	this._nodes.bufferSource= node;
 	return this._addNode(node, properties)
 };
@@ -361,6 +400,10 @@ WebAudio.Sound	= function(webaudio, nodeChain){
 	console.assert(this._panner	, "no panner: not yet supported")
 };
 
+WebAudio.Sound.create	= function(webaudio, nodeChain){
+	return new WebAudio.Sound(webaudio,  nodeChain);
+}
+
 /**
  * destructor
 */
@@ -402,7 +445,11 @@ WebAudio.Sound.prototype.isPlayable	= function(){
  * @param {Number} [time] time when to play the sound
 */
 WebAudio.Sound.prototype.play		= function(time){
+	// handle parameter polymorphism
 	if( time ===  undefined )	time	= 0;
+	// if not yet playable, ignore
+	// - usefull when the sound download isnt yet completed
+	if( this.isPlayable() === false )	return;
 	// clone the bufferSource
 	var clonedNode	= this._chain.cloneBufferSource();
 	// set the noteOn
@@ -570,9 +617,9 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
 	var freqData	= this._privHisto;
 
 	// get the data
-	//analyser.getFloatFrequencyData(freqData)
+	//analyser.getFloatFrequencyData(freqData);
 	analyser.getByteFrequencyData(freqData);
-	//analyser.getByteTimeDomainData(freqData)
+	//analyser.getByteTimeDomainData(freqData);
 
 	/**
 	 * This should be in imageprocessing.js almost
@@ -605,15 +652,21 @@ WebAudio.Sound.prototype.makeHistogram	= function(nBar)
  * Load a sound
  *
  * @param {String} url the url of the sound to load
- * @param {Function} callback function to notify once the url is loaded (optional)
+ * @param {Function} onSuccess function to notify once the url is loaded (optional)
+ * @param {Function} onError function to notify if an error occurs (optional)
 */
-WebAudio.Sound.prototype.load = function(url, callback){
+WebAudio.Sound.prototype.load = function(url, onSuccess, onError){
+	// handle default arguments
+	onError	= onError	|| function(){
+		console.warn("unable to load sound "+url);
+	}
+	// try to load the user	
 	this._loadAndDecodeSound(url, function(buffer){
 		this._source.buffer	= buffer;
-		callback && callback(this);
+		onSuccess && onSuccess(this);
 	}.bind(this), function(){
-		console.warn("unable to load sound "+url);
-	});
+		onError && onError(this);
+	}.bind(this));
 	return this;	// for chained API
 };
 
@@ -699,7 +752,7 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 
 	////////////////////////////////////////////////////////////////////////
 	// set position
-	var position	= matrixWorld.getPosition();
+	var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	this._panner.setPosition(position.x, position.y, position.z);
 
 	////////////////////////////////////////////////////////////////////////
@@ -709,7 +762,7 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 	// zero the translation
 	mOrientation.setPosition({x : 0, y: 0, z: 0});
 	// Multiply the 0,0,1 vector by the world matrix and normalize the result.
-	mOrientation.multiplyVector3(vOrientation);
+	vOrientation.applyMatrix4(mOrientation)
 	vOrientation.normalize();
 	// Set panner orientation
 	this._panner.setOrientation(vOrientation.x, vOrientation.y, vOrientation.z);
@@ -717,11 +770,11 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
 	////////////////////////////////////////////////////////////////////////
 	// set velocity
 	if( this._prevPos === undefined ){
-		this._prevPos	= matrixWorld.getPosition().clone();
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	}else{
-		var position	= matrixWorld.getPosition();
-		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= matrixWorld.getPosition().clone();
+		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		this._panner.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }
@@ -729,6 +782,9 @@ WebAudio.Sound.fn.updateWithMatrix4	= function(matrixWorld, deltaTime){
  * follow a object3D
 */
 WebAudio.Sound.fn.follow	= function(object3d, world){
+	// parameter polymorphism
+	world	= world	|| tQuery.world;
+	// sanity check
 	console.assert( this.isFollowing() === false );
 	// handle parameter
 	if( object3d instanceof tQuery.Object3D ){
@@ -835,24 +891,25 @@ WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 
 	// ensure object3d.matrixWorld is up to date
 	object3d.updateMatrixWorld();
-	
+
+	var matrixWorld	= object3d.matrixWorld;
 	////////////////////////////////////////////////////////////////////////
 	// set position
-	var position	= object3d.matrixWorld.getPosition();
+	var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	context.listener.setPosition(position.x, position.y, position.z);
 
 	////////////////////////////////////////////////////////////////////////
 	// set orientation
-	var mOrientation= object3d.matrixWorld.clone();
+	var mOrientation= matrixWorld.clone();
 	// zero the translation
 	mOrientation.setPosition({x : 0, y: 0, z: 0});
 	// Compute Front vector: Multiply the 0,0,1 vector by the world matrix and normalize the result.
 	var vFront= new THREE.Vector3(0,0,1);
-	mOrientation.multiplyVector3(vFront);
+	vFront.applyMatrix4(mOrientation)
 	vFront.normalize();
 	// Compute UP vector: Multiply the 0,-1,0 vector by the world matrix and normalize the result.
 	var vUp= new THREE.Vector3(0,-1, 0);
-	mOrientation.multiplyVector3(vUp);
+	vUp.applyMatrix4(mOrientation)
 	vUp.normalize();
 	// Set panner orientation
 	context.listener.setOrientation(vFront.x, vFront.y, vFront.z, vUp.x, vUp.y, vUp.z);
@@ -860,11 +917,11 @@ WebAudio.fn._followListenerCb	= function(object3d, deltaTime){
 	////////////////////////////////////////////////////////////////////////
 	// set velocity
 	if( this._prevPos === undefined ){
-		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 	}else{
-		var position	= object3d.matrixWorld.getPosition();
-		var velocity	= position.clone().subSelf(this._prevPos).divideScalar(deltaTime);
-		this._prevPos	= object3d.matrixWorld.getPosition().clone();
+		var position	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
+		var velocity	= position.clone().sub(this._prevPos).divideScalar(deltaTime);
+		this._prevPos	= new THREE.Vector3().getPositionFromMatrix(matrixWorld);
 		context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
 	}
 }

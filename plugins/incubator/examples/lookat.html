@@ -1,0 +1,10 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	tQuery.createAxis().addTo(world)
+		.positionX(1)
+		.lookAt(0,0,0)
+</script></body>

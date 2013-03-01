@@ -1,0 +1,41 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.audiovideotexture.js"></script>
+<body><script>
+require(['tquery.webaudio', 'tquery.videos', 'tquery.domevent'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	//var object	= tQuery.createTorus().addTo(world);
+
+	world.enableDomEvent()
+		.enableWebAudio()
+
+	console.assert(WebAudio.isAvailable);
+
+
+	var avTexture	= tQuery.createAudioVideoTexture('../../assets/videos/sintel.ogv');
+	var object3D	= tQuery.createCube(1.6,0.9,0.2).addTo(world)
+		.setBasicMaterial()
+			.map(avTexture.tTexture())	// To get the video 
+			.back()
+
+	world.loop().hook(function(delta, now){
+		var angle	= 0.4 * now * Math.PI * 2;
+		object3D.positionX( Math.cos(angle)*3 );
+		object3D.positionZ( Math.sin(angle)*3 );
+	})
+
+	object3D.on('click', function(event){
+			var tObject3D	= event.target;
+			var videoElem	= avTexture.video();
+			var notPlaying	= videoElem.paused || videoElem.ended;
+			if(notPlaying)	videoElem.play();
+			else		videoElem.pause();
+		});
+	
+	avTexture.addEventListener('soundReady', function(){
+		console.log('soundReady', arguments)
+		avTexture.sound().follow(object3D)
+	})
+	
+});
+</script></body>

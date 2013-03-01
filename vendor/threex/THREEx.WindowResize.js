@@ -40,7 +40,8 @@ THREEx.WindowResize	= function(renderer, camera){
 		*/
 		stop	: function(){
 			window.removeEventListener('resize', callback);
-		}
+		},
+		resize	: callback,
 	};
 }
 

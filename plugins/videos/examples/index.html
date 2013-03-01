@@ -13,11 +13,11 @@
 	//var texture	= tQuery.createTVSnowTexture();
 	//var texture	= tQuery.createVideoTexture('sintel.ogv');
 
-	var material	= new THREE.MeshBasicMaterial({
-		map	: texture
-	});
 
 	tQuery.createSphere(material).addTo(world)
-		.rotateY(-Math.PI/2);
+		.rotateY(-Math.PI/2)
+		.setBasicMaterial()
+			.map(texture)
+			.back();
 
 </script></body>
