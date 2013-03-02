@@ -6,7 +6,9 @@ THREEx.DeviceOrientationState	= function()
 	// to store the current state
 	this._state	= { x: 0, y: 0, z: 0 };
 
-	this._$callback	= function(event){ this._onDeviceOrientation(event); }.bind(this);
+	this._$callback	= function(event){
+		this._onDeviceOrientation(event);
+	}.bind(this);
 	
 	// bind events
 	// - spec http://dev.w3.org/geo/api/spec-source-orientation.html
@@ -21,6 +23,10 @@ THREEx.DeviceOrientationState.prototype.destroy	= function()
 	// unbind events
 	window.removeEventListener('deviceorientation', this._$callback);
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * to process the keyboard dom event
