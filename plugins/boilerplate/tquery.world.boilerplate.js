@@ -26,7 +26,7 @@ tQuery.World.registerInstance('boilerplate', function(opts){
 tQuery.World.registerInstance('pageTitle', function(element){
 	// handle parameters polymorphism
 	if( typeof(element) === 'string' ){
-		var element	= document.querySelector(element);
+		element	= document.querySelector(element);
 	}
 	// sanity check
 	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
@@ -38,6 +38,19 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	element.style.fontColor	= "white";
 	element.style.paddingTop= "0.5em";
 	element.style.fontFamily= "arial";
+	// for chained API
+	return this;
+});
+
+tQuery.World.registerInstance('devicePixelRatio', function(ratio){
+	// change devicePixelRatio
+	var tRenderer	= this.tRenderer();
+	tRenderer.devicePixelRatio	= ratio;
+
+	// get context
+	var ctx		= tQuery.data(this, '_boilerplateCtx');
+	var windowResize= ctx.windowResize;
+	windowResize.trigger();
 	// for chained API
 	return this;
 });

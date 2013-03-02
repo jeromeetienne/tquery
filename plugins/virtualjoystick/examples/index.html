@@ -1,0 +1,24 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../vendor/virtualjoystick.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	world.devicePixelRatio(1/2)
+	
+	world.removeCameraControls();
+	
+	var joystick	= new VirtualJoystick({
+		container	: document.body,
+		mouseSupport	: true
+	});
+	
+	world.loop().hook(function(delta, now){
+		var displacement	= 1 * delta;
+		if( joystick.up() )	object.translateZ(-displacement)
+		if( joystick.down() )	object.translateZ( displacement)
+		if( joystick.left() )	object.translateX(-displacement)
+		if( joystick.right() )	object.translateX( displacement)
+	});
+</script></body>

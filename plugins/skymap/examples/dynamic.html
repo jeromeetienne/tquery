@@ -51,8 +51,8 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 	})
 	
 	
-	var textureW	= 1024;
-	var textureH	= 1024;
+	var textureW	= 512;
+	var textureH	= 512;
 	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
 		minFilter	: THREE.LinearFilter,
 		magFilter	: THREE.NearestFilter,
@@ -67,17 +67,21 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 		tRenderer.render( world.tScene(), tCamera, rtTexture, true );	
 	})
 	
-	var mirror	= tQuery.createPlane(16/10,9/10).addTo(world)
-	// .scaleXBy(16)
-	// .scaleYBy(9)
-	// .scaleBy(1/10)
+	
+	var mirror	= tQuery.createPlane().addTo(world)
+		.geometry()
+			.scaleBy(2)
+			.back()
 		.translateX(-1.5)
-		.translateZ(-1)
-		.rotateY(Math.PI/3)
+		.translateZ(-1.5)
+		.rotateY(Math.PI/4)
 		.setBasicMaterial()
 			.map(rtTexture)
 			.back()
+
 	tQuery(tCamera).addTo(mirror)
 		.rotateY(Math.PI)
+	tQuery.createAxis().addTo(tCamera)
+	window.tCamera	= tCamera;
 })
 </script></body>
