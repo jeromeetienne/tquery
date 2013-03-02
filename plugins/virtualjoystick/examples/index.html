@@ -11,7 +11,10 @@
 	
 	var joystick	= new VirtualJoystick({
 		container	: document.body,
-		mouseSupport	: true
+		mouseSupport	: true,
+		fireCallback	: function(){
+			object.scaleBy(1.2)
+		}
 	});
 	
 	world.loop().hook(function(delta, now){
