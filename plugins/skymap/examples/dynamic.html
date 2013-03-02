@@ -6,34 +6,27 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 
 	tQuery.createSkymap('mars').addTo(world);
 
-	tQuery.createGrassGround({
-		textureRepeatX	: 10,
-		textureRepeatY	: 10,
-	}).addTo(world).scale(30)
-		.translateY(-0.001)
+	// tQuery.createGrassGround({
+	// 	textureRepeatX	: 10,
+	// 	textureRepeatY	: 10,
+	// }).addTo(world).scale(30)
+	// 	.translateY(-0.001)
 
-	var cubeCamera	= new THREE.CubeCamera( 0.001, 1000, 256 );
+	var cubeCamera	= new THREE.CubeCamera( 0.001, 1000, 1024 );
 	// to avoid flickering on the border of the sphere
 	cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
 
-
-	// var sphere	= tQuery.createSphere().addTo(world).translateY(0.8)
-	// 	.setBasicMaterial()
-	// 		.envMap(cubeCamera.renderTarget)
-	// 		.color(0xffff00)
-	// 		.back()
-
-
-	// TODO make a better API
-
-	// attempts to make a puddle
-	var sphere	= tQuery.createPlane().addTo(world)
+	var sphere	= tQuery.createSphere().addTo(world)
 		.setBasicMaterial()
 			.envMap(cubeCamera.renderTarget)
 			.color(0xffff00)
 			.back()
-		//.scaleBy(10)
-		//.positionY(5).positionZ(-3) 
+			
+	// world.loop().hook(function(delta, now){
+	// 	sphere.rotateY( 0.1 * delta * Math.PI*2)
+	// })
+
+
 
 	tQuery(cubeCamera).addTo(sphere)
 
@@ -44,5 +37,47 @@ require(['tquery.skymap', 'tquery.grassground', 'tquery.minecraft'], function(){
 
 		sphere.visible(true)	// *cough*
 	})
+	
+	
+	var container	= tQuery.createObject3D().addTo(world)
+		.positionY(-0.5)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0, 1)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0,-1)
+	tQuery.createTorusKnot().addTo(container).position( 1, 0, 0).rotateY( Math.PI/2)
+	tQuery.createTorusKnot().addTo(container).position(-1, 0, 0).rotateY(-Math.PI/2)
+	
+	world.loop().hook(function(delta, now){
+		container.rotateY( 0.3 * delta * Math.PI*2)
+	})
+	
+	
+	var textureW	= 1024;
+	var textureH	= 1024;
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
+	});
+	
+	var tCamera	= new THREE.PerspectiveCamera(35, textureW/textureH, 0.01, 10000);
+	
+
+	world.loop().hook(function(delta, now){
+		var tRenderer	= world.tRenderer();
+		tRenderer.render( world.tScene(), tCamera, rtTexture, true );	
+	})
+	
+	var mirror	= tQuery.createPlane(16/10,9/10).addTo(world)
+	// .scaleXBy(16)
+	// .scaleYBy(9)
+	// .scaleBy(1/10)
+		.translateX(-1.5)
+		.translateZ(-1)
+		.rotateY(Math.PI/3)
+		.setBasicMaterial()
+			.map(rtTexture)
+			.back()
+	tQuery(tCamera).addTo(mirror)
+		.rotateY(Math.PI)
 })
 </script></body>

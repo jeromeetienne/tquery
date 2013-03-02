@@ -35,8 +35,9 @@ tQuery.registerStatic('AudioVideoTexture', function(opts){
 	}.bind(this));
 	
 	
-	var webaudio	= this._world.getWebAudio();
+	// wait until the vid is loaded
 	this._video.addEventListener('canplaythrough', function(event){
+		var webaudio	= this._world.getWebAudio();
 		// creating custom nodeChain
 		var nodesChain	= WebAudio.NodeChainBuilder.create(webaudio.context())
 			.mediaElementSource(this._video)

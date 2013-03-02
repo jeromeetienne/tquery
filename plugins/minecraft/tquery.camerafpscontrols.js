@@ -49,7 +49,7 @@ tQuery.registerStatic('CameraFpsControls', function(opts){
 
 tQuery.CameraFpsControls.prototype.update	= function(delta, now){
 	var delta	= this._deltaTarget.get(0).position.clone()
-	delta.subSelf(this._deltaCamera.get(0).position);
+	delta.sub(this._deltaCamera.get(0).position);
 	this._opts.tCamera.lookAt(delta);
 }
 

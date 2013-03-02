@@ -222,6 +222,7 @@ requirejs.config({
 			"plugins/tweenjs/vendor/Tween"
 		],
 		"plugins/videos/tquery.createvideotexture": [
+			"plugins/videos/tquery.audiovideotexture",
 			"plugins/videos/tquery.createwebcamtexture",
 			"plugins/videos/tquery.createtvsnowtexture"
 		],
