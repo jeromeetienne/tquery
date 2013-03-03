@@ -73,7 +73,8 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.keyboard', 'tquery.car', 'tque
 	// You can find more details in ["Casting Shadow"](http://learningthreejs.com/blog/2012/01/20/casting-shadows/) post.
 	// Those parameters can be tricky to tune. It helps if you make the shaddow
 	// camera visible. You can do so with ```.shadowCameraVisible(true)```.
-	tQuery.createDirectionalLight().addTo(world).position(-10, 20, 30).color(0xffffff).intensity(4)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-10, 20, 30).color(0xffffff).intensity(4)
 		.castShadow(true).shadowDarkness(0.8)
 		.shadowMap(512*2,512*2)
 		.shadowCamera(10, -10, 20, -20, 0.1, 50);

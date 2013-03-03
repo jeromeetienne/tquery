@@ -68,8 +68,6 @@ require([ 'tquery.webaudio'
 		prevRotation.copy( character3D.rotation() )
 	}.bind(this), 1000/5);	// Important to be less than framerate - thus you dont misdetect still 
 	
-	var cache	= new tQuery.MicroCache();
-	
 	// create the screen
 	var object3D	= createScreen({
 		//videoUrl	: 'Make your minecraft move - tQuery tips.mp4',
@@ -80,7 +78,7 @@ require([ 'tquery.webaudio'
 
 		videoUrl	: '../../assets/videos/sintel.ogv',
 		title		: 'Sintel Trailer',
-		youtubeUrl	: 'http://www.youtube.com/watch?v=ac7KhViaVqc',
+		//youtubeUrl	: 'http://www.youtube.com/watch?v=ac7KhViaVqc',
 	}).addTo(world)
 
 	
