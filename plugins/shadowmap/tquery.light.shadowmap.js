@@ -17,3 +17,21 @@ tQuery.DirectionalLight.registerInstance('shadowCamera', function(right, left, t
 			.shadowCameraTop(top)
 			.shadowCameraBottom(bottom);
 });
+
+
+tQuery.SpotLight.registerInstance('shadowMap', function(width, height){
+	return this.shadowMapWidth(width).shadowMapHeight(height);
+});
+
+/**
+ * little helper to set all shadowCamera params
+*/
+tQuery.SpotLight.registerInstance('shadowCamera', function(right, left, top, bottom, near, far){
+	if( near !== undefined && far !== undefined ){
+		this.shadowCameraNear(near).shadowCameraFar(far);
+	}
+	return this.shadowCameraRight(right)
+			.shadowCameraLeft(left)
+			.shadowCameraTop(top)
+			.shadowCameraBottom(bottom);
+});
