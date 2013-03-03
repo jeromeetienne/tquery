@@ -118,6 +118,13 @@ tQuery.World.registerInstance('addBoilerplate', function(opts){
 		this.removeBoilerplate();	
 	});
 	
+	
+	// if on mobile, set devicePixelRatio to 1/2
+	// NOTE: assume that having touch event implies a mobile, it may not be true
+	var onMobile	= 'ontouchstart' in window ? true : false;
+	onMobile	&& this.devicePixelRatio(1/2)
+	
+
 	// for chained API
 	return this;
 });
