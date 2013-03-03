@@ -388,6 +388,27 @@ tQuery.MicroeventMixin	= function(destObj){
 	}
 };
 
+/**
+ * https://github.com/jeromeetienne/MicroCache.js
+*/
+tQuery.MicroCache	= function(){
+	var _values	= {};
+	return {
+		get	: function(key){ return _values[key];	},
+		contains: function(key){ return key in _values;	},
+		remove	: function(key){ delete _values[key];	},
+		set	: function(key, value){	_values[key] = value;},
+		values	: function(){ return _values;	},
+		getSet	: function(key, value){
+			if( !this.contains(key) ){
+				this.set(key, typeof value == 'function' ? value() : value )
+			}
+			return this.get(key);
+		}
+	}
+}
+
+
 tQuery.convert	= {};
 
 /**
@@ -1752,6 +1773,11 @@ tQuery.registerStatic('createTorusKnot', function(){
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
+tQuery.registerStatic('createCircle', function(){
+	var ctor	= THREE.CircleGeometry;
+	var dflGeometry	= [0.5, 32];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
 
 tQuery.registerStatic('createVector3', function(x, y, z){
 	return new THREE.Vector3(x, y, z);

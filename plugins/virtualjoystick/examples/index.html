@@ -5,16 +5,9 @@
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorusKnot().addTo(world);
 	
-	world.devicePixelRatio(1/2)
-	
-	world.removeCameraControls();
-	
 	var joystick	= new VirtualJoystick({
 		container	: document.body,
-		mouseSupport	: true,
-		fireCallback	: function(){
-			object.scaleBy(1.2)
-		}
+		mouseSupport	: true
 	});
 	
 	world.loop().hook(function(delta, now){

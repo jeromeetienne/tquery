@@ -4,9 +4,8 @@ var VirtualJoystick	= function(opts)
 	this._container		= opts.container	|| document.body;
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
 	this._baseEl		= opts.baseElement	|| this._buildJoystickBase();
-	this._mouseSupport	= 'mouseSupport' in opts? opts.mouseSupport	: false;
 	this._range		= opts.range		|| 60;
-	this._fireCallback	= opts.fireCallback	|| function(){};
+	this._mouseSupport	= opra.mouseSupport !== undefined ? opts.mouseSupport : false;
 
 	this._container.style.position	= "relative";
 
@@ -124,15 +123,10 @@ VirtualJoystick.prototype._onUp	= function()
 	
 	this._baseX	= this._baseY	= 0;
 	this._stickX	= this._stickY	= 0;
-	
-	if( (Date.now() - this._timestamp)/1000 < 0.5 ){
-		this._fireCallback()
-	}
 }
 
 VirtualJoystick.prototype._onDown	= function(x, y)
 {
-	this._timestamp	= Date.now();
 	this._pressed	= true; 
 	this._baseX	= x;
 	this._baseY	= y;
