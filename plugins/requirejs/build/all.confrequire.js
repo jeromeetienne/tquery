@@ -34,6 +34,7 @@ requirejs.config({
 			"tquery.objectcoord": "plugins/objectcoord/tquery.object3d.coordinate",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
+			"tquery.playerinput": "plugins/playerinput/tquery.playerinput.keyboard",
 			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
 			"tquery.shape": "plugins/shape/tquery.shape",
@@ -164,6 +165,15 @@ requirejs.config({
 		],
 		"plugins/requirejs/confrequire/planets.initrequire": [
 			"plugins/planets/tquery.createplanet"
+		],
+		"plugins/playerinput/tquery.playerinput.keyboard": [
+			"tquery.keyboard",
+			"plugins/playerinput/tquery.playerinput",
+			"plugins/playerinput/tquery.playerinput.virtualjoystick"
+		],
+		"plugins/playerinput/tquery.playerinput.virtualjoystick": [
+			"tquery.virtualjoystick",
+			"plugins/playerinput/tquery.playerinput"
 		],
 		"plugins/pproc/tquery.effectcomposer": [
 			"three.js/shaders/BleachBypassShader",
