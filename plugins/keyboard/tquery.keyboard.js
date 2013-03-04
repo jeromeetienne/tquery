@@ -8,7 +8,8 @@
 		if( !domElement ){
 			domElement	= tQuery.world.tRenderer().domElement;
 			// make it focusable. needed to get keyboard evemt
-			domElement.setAttribute("tabIndex", "0");	
+			domElement.setAttribute("tabIndex", "0");
+			domElement.focus();	
 		}
 		instance 	= instance	|| new THREEx.KeyboardState(domElement);
 		return instance;
