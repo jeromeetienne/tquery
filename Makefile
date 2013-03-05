@@ -136,6 +136,7 @@ buildBundleRequire: buildBundle
 	cat build/tquery-bundle.js		 	 > build/tquery-bundle-require.js
 	cat plugins/requirejs/vendor/require.js		>> build/tquery-bundle-require.js
 	cat plugins/requirejs/build/all.confrequire.js	>> build/tquery-bundle-require.js
+	cat plugins/requirejs/footer.js			>> build/tquery-bundle-require.js
 
 minifyBundleRequire: buildBundleRequire
 	echo $(BANNER)	>  build/tquery-bundle-require.min.js

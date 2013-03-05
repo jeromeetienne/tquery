@@ -38532,7 +38532,7 @@ tQuery.World	= function(opts)
 
  	// create a camera in the scene
 	if( !opts.camera ){
-		this._camera	= new THREE.PerspectiveCamera(90, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
 		this._camera.position.set(0, 0, 3);
 		this._scene.add(this._camera);
 	}else{
@@ -40859,3 +40859,18 @@ requirejs.config({
 		]
 	}
 });
+(function(){
+	var scripts	= document.getElementsByTagName('script');
+	var element	= scripts[scripts.length-1];
+	var baseUrl	= element.getAttribute('data-baseURL');
+	console.log('baseUrl', baseUrl, element);
+	if( baseUrl === null )	return;
+	requirejs.config({
+		paths	: {
+			"build"		: baseUrl+'/build',
+			"plugins"	: baseUrl+'/plugins',
+			"threex"	: baseUrl+'/vendor/threex',
+			"three.js"	: baseUrl+'/vendor/three.js',
+		},
+	});
+})()

@@ -28,6 +28,7 @@ var content	= require('fs').readFileSync('head.confrequire.js', 'utf8')
 filenames.forEach(function(filename){
 	content	+= require('fs').readFileSync('confrequire/'+filename, 'utf8')
 })
+
 // eval every *.confrequire.js config
 eval(content)
 // output the merged options object for requirejs.config()
