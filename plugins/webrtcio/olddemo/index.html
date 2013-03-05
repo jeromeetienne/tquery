@@ -1,0 +1,300 @@
+<!doctype html><title>WebGL Meeting</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='vendor/ColladaLoader.js'></script>
+<base target='_blank'/>
+<script src="../vendor/webrtc.io-client/webrtc.io.js"></script>
+<body><div id='info' style='color: #aaa;'>
+	<span style='font-size: 140%'>WebGL Meeting - Chat with friends in 3D</span>
+	<br/>
+	Video conference with <a href='http://www.webrtc.org' style='color: inherit;'>WebRTC</a>
+	<br/>
+	3D with <a href='http://mrdoob.github.com/three.js/' style='color: inherit;'>three.js</a> thru
+	<a href='http://jeromeetienne.github.com/tquery/' style='color: inherit;'>tQuery API</a>
+	-
+	WebRTC with <a href='https://github.com/webRTC/webRTC.io' style='color: inherit;'>WebRTC.io library</a>
+</div>
+<!-- footer -->
+<div id='footer' style="position: absolute; bottom: 0px; left: 0;border: 0; z-index:1; color: #aaa; width: 100%;text-align: center; background-color: #444; font-weight: bold; height: 28px; font-size: 16px; line-height: 28px; font-family: Verdana, Arial, Helvetica, sans-serif;">
+	<div style='float: right; border-left:thick solid #aaa; padding-left:1em; padding-right: 1em;'>
+		<form action="javascript:void(0)" id='newRoomForm'>
+			<input type='text' placeholder='New Room'/>
+		</form>
+	</div>
+	<span class='joinhere'>
+		Waiting for someone to join: <a href='javascript:void(0)' style='color: inherit;'>n/a</a>
+	</span>
+</div>
+<script>
+var hasWebGL	= tQuery.World.hasWebGL();
+var hasWebRTC	= window.PeerConnection ? true : false;
+
+if( hasWebGL === false || hasWebRTC === false ){
+	(function(){
+		var element	= getWebGLErrorMessage();
+		document.body.appendChild( element );
+		
+		document.getElementById('info').style.display	= 'none';
+		document.getElementById('footer').style.display	= 'none';
+
+		function getWebGLErrorMessage(){
+			var element = document.createElement( 'div' );
+			element.style.fontFamily= 'monospace';
+			element.style.fontSize	= '13px';
+			element.style.fontWeight= 'normal';
+			element.style.textAlign = 'center';
+			element.style.background= '#333';
+			element.style.color	= '#ccc';
+			element.style.padding	= '1.5em';
+			element.style.width	= '400px';
+			element.style.margin	= '5em auto 0';
+			
+			var html	= '';
+			if ( hasWebGL === false ){
+				html	+= window.WebGLRenderingContext ? [
+					'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:inherit">WebGL</a>.<br />',
+					'Find out how to get it <a href="http://get.webgl.org/" style="color:inherit">here</a>.'
+				].join( '\n' ) : [
+					'Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:inherit">WebGL</a>.<br/>',
+					'Find out how to get it <a href="http://get.webgl.org/" style="color:inherit">here</a>.'
+				].join( '\n' );
+			}
+			if( hasWebRTC === false ){
+				html	+= 'Your Browser does not seem to support <a href="http://www.webrtc.org" style="color:inherit">WebRTC</a>.<br />'+
+					'Find out how to get it <a href="http://www.webrtc.org/running-the-demos/" style="color:inherit">here</a>.';
+			}
+			element.innerHTML	= html;
+			return element;
+		};
+	})();
+}
+
+require(['tquery.pproc', 'tquery.checkerboard', 'tquery.fog', 'tquery.shadowmap', 'tquery.text', 'tquery.skymap'], function(){
+
+	if( hasWebGL === false || hasWebRTC === false )	return;
+	
+	var world	= tQuery.createWorld().boilerplate({
+		fullscreen	: false,
+		screenshot	: false
+	}).pageTitle('#info').start();
+
+	document.getElementById('stats').style.bottom = '28px';
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	world.getCameraControls().rangeX	*= 0.3;
+	world.getCameraControls().rangeY	*= 0.05;
+	//tQuery.world.getCameraControls().target.y = -2;
+	// tQuery.world.getCameraControls().target.z = -10;
+
+	// enable shaddow in the renderer
+	world.tRenderer().shadowMapEnabled	= true;
+	world.tRenderer().shadowMapSoft		= true;
+
+	// add the fog
+	world.addFogExp2({density: 0.075});
+	
+	// add a ground
+	tQuery.createCheckerboard({
+		segmentsW	: 20,
+		segmentsH	: 20
+	}).addTo(world).scaleBy(40).translateY(-2).receiveShadow(true);
+	
+	world.addEffectComposer().film(0.25, 0.25, 2*648, false).vignette().finish();
+
+	tQuery.createAmbientLight().addTo(world).color(0x444444);	
+	tQuery.createDirectionalLight().addTo(world)
+		.position( 4, 0, 1)
+		.color(0x0080ff).intensity(1)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-4, 0, 1)
+		.color(0x008080).intensity(1)
+	 tQuery.createDirectionalLight().addTo(world)
+	 	.position( 0, 5, 10)
+		.color(0xffffff).intensity(1)
+		.castShadow(true)
+		.shadowDarkness(0.8)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 30)
+		//.shadowCameraVisible(true)
+
+	var loadedModel	= null;
+	tQuery.Flow().seq(function(next){
+		var loader	= new THREE.ColladaLoader();
+		loader.options.convertUpAxis = true;
+		var modelUrl	= 'models/OldTelevisionSet01/models/Old Television Set 01.dae';
+		loader.load(modelUrl, next);
+	}).seq(function(next, collada){
+		//console.log('ObjectLoaded');
+		loadedModel	= collada.scene;
+		var tvSet	= createTvSet('local');
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		// var tvSet	= createTvSet();
+		next(tvSet);
+	}).seq(function(next, tvSet){
+		// start
+		rtc.createStream({"video": true, "audio": true}, function(stream){
+			var screenPlane	= tQuery('.screen', tvSet);
+			var texture	= screenPlane.get(0).material.map;
+			var videoEl	= texture.image;
+			videoEl.src	= URL.createObjectURL(stream);
+			var loopCb	= world.loop().hook(function(){
+				if( videoEl.readyState === videoEl.HAVE_ENOUGH_DATA ){
+					texture.needsUpdate	= true;
+				}
+			});
+			tvSet.data('loopCb', loopCb)
+		}, function(){
+			console.log('createStream failed', arguments)
+		});
+		
+		
+		// if there are no room, pick one at random
+		if( window.location.hash === '' ){			
+			window.location.hash = 'room-'+Math.floor(Math.random()*10000).toString(16);
+		}
+		// update footer
+		var element	= document.querySelector('#footer .joinhere a');
+		element.href	= element.innerText	= window.location;
+		
+		// connect the server
+		var room	= window.location.hash.slice(1);
+		var serverUrl	= "ws://localhost:8000/";
+		rtc.connect(serverUrl, room);
+
+		rtc.on('disconnect stream', function(socketId) {
+			console.log('remove ' + socketId);
+			var tvSet	= tQuery('#tvSet-'+socketId)
+			var loopCb	= tvSet.data('loopCb', loopCb);
+			world.loop().unhook(loopCb);
+			tvSet.detach();
+			reflowTvSets();
+		});
+
+	        rtc.on('add remote stream', function(stream, socketId) {
+			var tvSet	= createTvSet(socketId)
+			var screenPlane	= tQuery('.screen', tvSet);
+			var texture	= screenPlane.get(0).material.map;
+			var videoEl	= texture.image;
+			videoEl.src	= URL.createObjectURL(stream);
+			var loopCb	= world.loop().hook(function(){
+				if( videoEl.readyState === videoEl.HAVE_ENOUGH_DATA ){
+					texture.needsUpdate	= true;
+				}
+			});
+			tvSet.data('loopCb', loopCb)
+	        });
+	        
+	        var isRandomRoom	= room.match(/^room-/) ? true : false;
+	        if( isRandomRoom === false ){
+	        	var urlsRoot	= 'images/cubemap_mars/mars_';
+			var ext		= 'jpg';
+			var urls	= [
+				urlsRoot + 'positive_x_180.' + ext,
+				urlsRoot + 'negative_x_180.' + ext,
+				urlsRoot + 'positive_y_180.' + ext,
+				urlsRoot + 'negative_y_180.' + ext,
+				urlsRoot + 'positive_z_180.' + ext,
+				urlsRoot + 'negative_z_180.' + ext,
+			];
+			var textEnvMap	= tQuery.createCubeTexture(urls);
+		        tQuery.createText(room, {
+		        	bevelThickness	: 0.1,
+				bevelSize	: 0.03,
+				bevelEnabled	: true,
+		        }).addTo(world)
+		        	.translateY(-0.6)
+		        	.translateZ(-1)
+		        	.scale(1/3)
+				.setPhongMaterial({
+					ambient	: 0xFfffff,
+					color	: 0xffffff,
+					envMap	: textEnvMap
+				}).back()
+		}
+	});
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		UI							//
+	//////////////////////////////////////////////////////////////////////////
+
+
+	document.body.setAttribute("tabIndex", "0");	// make body focusable
+	// handle newRoomForm
+	var newRoomForm	= document.getElementById('newRoomForm')
+	newRoomForm.addEventListener('keydown', function(event){ event.stopPropagation();	});
+
+	newRoomForm.addEventListener('submit', function(){
+		// get room name
+		var roomName	= newRoomForm[0].value;
+		// open a tab to this room
+		var url		= location.protocol+'//'+location.host+location.pathname+'#'+roomName
+		window.open(url, '_blank');
+		// put back the focus on body
+		document.body.focus();		
+	});
+
+	
+	function reflowTvSets(){
+		var tvSets	= tQuery('.tvSet').get();
+		var radiusX	= 5;
+		var radiusZ	= 5;
+		var camPosZ	= 3;
+		var totRange	= 0.5*Math.PI;
+		world.tCamera().position.z	= camPosZ;		
+		tvSets.forEach(function(object3D, index){
+			var base	= 3*Math.PI/2;
+			var oneRange	= totRange/tvSets.length;
+			var angle	= base - totRange/2 + oneRange*index + oneRange/2;
+
+			tQuery(object3D)
+				.positionX(Math.cos(angle) * radiusX)
+				.positionZ(Math.sin(angle) * radiusZ)
+				.rotationY(-angle-Math.PI/2)
+		});
+	}
+
+	
+	function createTvSet(socketId){
+		var scale	= 200;
+		var tvSet	= tQuery(loadedModel).clone()
+					.translateY(-3.5)
+					.scaleBy(1/scale)
+					.id('tvSet-'+socketId)
+					.addClass('tvSet')
+					.addTo(world)
+
+			
+		var videoEl	= document.createElement('video');
+		videoEl.width	= 320;
+		videoEl.height	= 240;
+		videoEl.autoplay= true;
+		var texture	= new THREE.Texture(videoEl);
+		// do a flipX in the video1Texture
+		texture.repeat.set(-1, 1);
+		texture.offset.set( 1, 0);
+		tQuery.createPlane().addTo(tvSet)
+			.position(0, 3.55*scale, 0.8*scale)
+			.scale(2.1*scale, 1.6*scale, 1*scale)
+			.addClass('screen')
+			.setLambertMaterial()
+				.color(0xE1A95F).ambient(0xFFFFFF)
+				.map(texture)
+				.back()
+
+		tQuery('mesh', tvSet).castShadow(true)
+
+		reflowTvSets();
+
+		return tvSet;
+	}
+});
+</script>
+<!-- webrtc logo -->
+<a href="http://www.webrtc.org" style="position: absolute; top: 10px; left: 10px; border: 0; z-index:1;"><img id="logo" alt="WebRTC" src="images/webrtc_black_20p.png"></a>
+<!-- github ribbon -->
+<!-- <a href="https://github.com/jeromeetienne/tquery"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:1;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+ --></body>

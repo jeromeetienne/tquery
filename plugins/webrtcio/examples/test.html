@@ -1,0 +1,30 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../vendor/webrtc.io-client/webrtc.io.js'></script>
+<body><script>
+require(['tquery.videos'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.convert.toTexture.addEventListener('preConvert', function(value){
+return;
+console.log('blabalbal', value)
+		if( value instanceof LocalMediaStream === false ){
+			return undefined;			
+		}
+		// TODO use videotexture plugin instead
+		return createTexture(value)
+	});
+	
+	rtc.createStream({"video": true, "audio": true}, function(stream){
+console.log('blabalbal', stream)
+		var url		= URL.createObjectURL(stream);
+		var texture	= tQuery.createVideoTexture(url);
+		tQuery.createPlane().addTo(world)
+			.setBasicMaterial()
+				.map(texture)
+				.back()
+	}, function(){
+		console.log('createStream failed', arguments)
+	});
+});
+</script></body>
