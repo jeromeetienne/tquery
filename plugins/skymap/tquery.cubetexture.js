@@ -71,3 +71,19 @@ tQuery.TextureCube.WellKnownUrls	= {
 
 	mars			: tQuery.TextureCube.createUrls('mars'			, '.jpg', '../../../plugins/assets/images/textures/cube')
 };
+
+/**
+ * tQuery.convert plugin for textureCube to support those url
+ */
+tQuery.convert.toTextureCube.addEventListener('preConvert', function(args){
+	if( args.length !== 1 )			return undefined;
+	if( typeof(args[0]) !== 'string' )	return undefined;
+	var names	= Object.keys(tQuery.TextureCube.WellKnownUrls);
+	var name	= args[0];
+	if( names.indexOf(name) === -1 )	return undefined;	
+	var texture	= tQuery.createCubeTexture(name);
+	return texture;
+});
+	
+	
+

@@ -5,7 +5,7 @@ var VirtualJoystick	= function(opts)
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
 	this._baseEl		= opts.baseElement	|| this._buildJoystickBase();
 	this._range		= opts.range		|| 60;
-	this._mouseSupport	= opra.mouseSupport !== undefined ? opts.mouseSupport : false;
+	this._mouseSupport	= opts.mouseSupport !== undefined ? opts.mouseSupport : false;
 
 	this._container.style.position	= "relative";
 

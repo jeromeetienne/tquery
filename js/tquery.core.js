@@ -269,8 +269,8 @@ tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
 };
 
-// make it pluginable
-tQuery.pluginsStaticOn(tQuery, tQuery);
+// make it pluginable as static
+tQuery.pluginsStaticOn(tQuery);
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -295,7 +295,7 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		// handle setter
 		if( args !== undefined ){
 			var convertFn	= this._attrProps[name];
-			var value	= convertFn.apply(null, args);
+			var value	= convertFn.apply(convertFn, args);
 			this.each(function(element){
 				element[name]	= value;
 			})
@@ -364,8 +364,10 @@ tQuery.MicroeventMixin	= function(destObj){
 		if( this._events[event] === undefined )	return;
 		var tmpArray	= this._events[event].slice(); 
 		for(var i = 0; i < tmpArray.length; i++){
-			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			var result	= tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			if( result !== undefined )	return result;
 		}
+		return undefined;
 	};
 	
 	// backward compatibility
@@ -382,8 +384,7 @@ tQuery.MicroeventMixin	= function(destObj){
 		return this;	// for chained API
 	}
 	destObj.dispatchEvent		= function(event /* , args... */){
-		this.trigger.apply(this, arguments)
-		return this;
+		return this.trigger.apply(this, arguments)
 	}
 };
 

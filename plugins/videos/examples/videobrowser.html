@@ -33,10 +33,12 @@ require([ 'tquery.webaudio'
 		segmentsH	: 20
 	}).addTo(world).scaleBy(10);
 	
+	var cache	= new tQuery.MicroCache();
 	
 	// create the minecraft character
 	var character	= tQuery.createMinecraftChar().addTo(world)
 	var character3D	= character.object3D()
+		.translateZ(-2)
 	
 	// to enable a tracking camera
 	var cameraControls	= tQuery.createCameraFpsControls({
@@ -70,7 +72,7 @@ require([ 'tquery.webaudio'
 	
 	// create the screen
 	var object3D	= createScreen({
-		//videoUrl	: 'Make your minecraft move - tQuery tips.mp4',
+		videoUrl	: 'Make your minecraft move - tQuery tips.mp4',
 		// videoUrl	: 'http://www.corsproxy.com/dl.dropbox.com/s/oajqik52fv6wfpx/Make%20your%20minecraft%20move%20-%20tQuery%20tips.mp4',
 		// videoUrl	: 'https://dl.dropbox.com/s/oajqik52fv6wfpx/Make%20your%20minecraft%20move%20-%20tQuery%20tips.mp4',
 		title		: 'Make your minecraft move',
@@ -78,7 +80,7 @@ require([ 'tquery.webaudio'
 
 		videoUrl	: '../../assets/videos/sintel.ogv',
 		title		: 'Sintel Trailer',
-		//youtubeUrl	: 'http://www.youtube.com/watch?v=ac7KhViaVqc',
+		youtubeUrl	: 'http://www.youtube.com/watch?v=ac7KhViaVqc',
 	}).addTo(world)
 
 	
@@ -119,9 +121,9 @@ require([ 'tquery.webaudio'
 		if( opts.youtubeUrl ){
 			var material	= cache.getSet('youtubeIcon', function(){
 				return tQuery.createMeshBasicMaterial()
-						.map('youtube_32x32.png')
+						.map('images/youtube_32x32.png')
 			})
-			tQuery.createCube(0.1, 0.1, 0.1).addTo(world)
+			tQuery.createCube(0.1, 0.1, 0.1).addTo(object3D)
 				.translateX(1)
 				.translateY(0.1)
 				.material(material)

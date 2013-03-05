@@ -37496,8 +37496,8 @@ tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
 };
 
-// make it pluginable
-tQuery.pluginsStaticOn(tQuery, tQuery);
+// make it pluginable as static
+tQuery.pluginsStaticOn(tQuery);
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -37522,7 +37522,7 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		// handle setter
 		if( args !== undefined ){
 			var convertFn	= this._attrProps[name];
-			var value	= convertFn.apply(null, args);
+			var value	= convertFn.apply(convertFn, args);
 			this.each(function(element){
 				element[name]	= value;
 			})
@@ -37591,8 +37591,10 @@ tQuery.MicroeventMixin	= function(destObj){
 		if( this._events[event] === undefined )	return;
 		var tmpArray	= this._events[event].slice(); 
 		for(var i = 0; i < tmpArray.length; i++){
-			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			var result	= tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			if( result !== undefined )	return result;
 		}
+		return undefined;
 	};
 	
 	// backward compatibility
@@ -37609,8 +37611,7 @@ tQuery.MicroeventMixin	= function(destObj){
 		return this;	// for chained API
 	}
 	destObj.dispatchEvent		= function(event /* , args... */){
-		this.trigger.apply(this, arguments)
-		return this;
+		return this.trigger.apply(this, arguments)
 	}
 };
 
@@ -37643,6 +37644,12 @@ tQuery.convert	= {};
  * @return {THREE.Color} the resulting color
 */
 tQuery.convert.toThreeColor	= function(/* arguments */){
+console.log('ddd', arguments)
+	// honor the plugins with 'preConvert' event
+	var result	= tQuery.convert.toThreeColor.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	// default convertions
 	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
 		return new THREE.Color(arguments[0]);
 	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
@@ -37656,6 +37663,9 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	}
 	return undefined;	// never reached - just to workaround linter complaint
 };
+// make tQuery.convert.toThreeColor eventable
+tQuery.MicroeventMixin(tQuery.convert.toThreeColor);
+
 
 /**
  * Convert the arguments into a THREE.Vector3
@@ -37724,14 +37734,31 @@ tQuery.convert.toString	= function(value){
 	return undefined;	// never reached - just to workaround linter complaint
 };
 
+tQuery.convert.toTextureCube	= function(/* arguments */){
+	// honor the plugins with 'preConvert' event
+	var result	= this.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	return tQuery.convert.toTexture.apply(tQuery.convert.toTexture, arguments);
+};
+// make tQuery.convert.toTextureCube eventable
+tQuery.MicroeventMixin(tQuery.convert.toTextureCube);
+
 tQuery.convert.toTexture	= function(value){
+	// honor the plugins with 'preConvert' event
+	var result	= this.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+	
+	// default convertions
 	if( arguments.length === 1 && value instanceof THREE.Texture ){
 		return value;
 	}else if( arguments.length === 1 && value instanceof THREE.WebGLRenderTarget ){
 		return value;
 	}else if( arguments.length === 1 && typeof(value) === 'string' ){
 		return THREE.ImageUtils.loadTexture(value);
-	}else if( arguments.length === 1 && (value instanceof Image || value instanceof HTMLCanvasElement) ){
+	}else if( arguments.length === 1 && (value instanceof Image
+						|| value instanceof HTMLVideoElement
+						|| value instanceof HTMLCanvasElement) ){
 		var texture		= new THREE.Texture( value );
 		texture.needsUpdate	= true;
 		return texture;
@@ -37740,6 +37767,11 @@ tQuery.convert.toTexture	= function(value){
 	}
 	return undefined;	// never reached - just to workaround linter complaint
 };
+// make tQuery.convert.toTexture eventable
+tQuery.MicroeventMixin(tQuery.convert.toTexture);
+
+
+
 /**
  * implementation of the tQuery.Node
  *
@@ -38500,7 +38532,7 @@ tQuery.World	= function(opts)
 
  	// create a camera in the scene
 	if( !opts.camera ){
-		this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._camera	= new THREE.PerspectiveCamera(90, opts.renderW / opts.renderH, 0.01, 10000 );
 		this._camera.position.set(0, 0, 3);
 		this._scene.add(this._camera);
 	}else{
@@ -39359,7 +39391,7 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	color			: tQuery.convert.toThreeColor,
 	ambient			: tQuery.convert.toThreeColor,
 	map			: tQuery.convert.toTexture,
-	envMap			: tQuery.convert.toTexture,
+	envMap			: tQuery.convert.toTextureCube,
 	refractionRatio		: tQuery.convert.toNumber,
 	side			: tQuery.convert.identity,
 	wireframe		: tQuery.convert.toBoolean,
@@ -40597,6 +40629,7 @@ requirejs.config({
 			"tquery.objectcoord": "plugins/objectcoord/tquery.object3d.coordinate",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
+			"tquery.playerinput": "plugins/playerinput/tquery.playerinput.keyboard",
 			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
 			"tquery.shape": "plugins/shape/tquery.shape",
@@ -40703,6 +40736,7 @@ requirejs.config({
 			"plugins/minecraft/tquery.minecraftchar",
 			"plugins/minecraft/tquery.minecraftchar.keyboard2",
 			"tquery.keyboard",
+			"plugins/minecraft/tquery.minecraftcharcontrols",
 			"plugins/minecraft/tquery.camerafpscontrols",
 			"plugins/minecraft/tquery.spritesheet",
 			"plugins/minecraft/tquery.minecraftcharanimations",
@@ -40727,6 +40761,15 @@ requirejs.config({
 		],
 		"plugins/requirejs/confrequire/planets.initrequire": [
 			"plugins/planets/tquery.createplanet"
+		],
+		"plugins/playerinput/tquery.playerinput.keyboard": [
+			"tquery.keyboard",
+			"plugins/playerinput/tquery.playerinput",
+			"plugins/playerinput/tquery.playerinput.virtualjoystick"
+		],
+		"plugins/playerinput/tquery.playerinput.virtualjoystick": [
+			"tquery.virtualjoystick",
+			"plugins/playerinput/tquery.playerinput"
 		],
 		"plugins/pproc/tquery.effectcomposer": [
 			"three.js/shaders/BleachBypassShader",

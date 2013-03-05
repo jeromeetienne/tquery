@@ -141,6 +141,7 @@ requirejs.config({
 			"plugins/minecraft/tquery.minecraftchar",
 			"plugins/minecraft/tquery.minecraftchar.keyboard2",
 			"tquery.keyboard",
+			"plugins/minecraft/tquery.minecraftcharcontrols",
 			"plugins/minecraft/tquery.camerafpscontrols",
 			"plugins/minecraft/tquery.spritesheet",
 			"plugins/minecraft/tquery.minecraftcharanimations",

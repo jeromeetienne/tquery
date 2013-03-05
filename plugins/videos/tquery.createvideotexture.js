@@ -6,8 +6,10 @@ tQuery.registerStatic('createVideoTexture', function(opts){
 	if( arguments.length === 1 && typeof opts === 'string' ){
 		opts	= { url : arguments[0] };
 	}
+// TODO handle webrtc stream
 	opts	= tQuery.extend(opts, {
 		loop	: tQuery.world.loop()
+// TODO at the world level
 	});
 	console.assert( opts.url, "url MUST be specified" )
 
@@ -21,7 +23,8 @@ tQuery.registerStatic('createVideoTexture', function(opts){
 
 	// create the texture
 	var texture	= new THREE.Texture( video );
-	
+
+// how do i stop that ?
 	opts.loop.hook(function(){
 		if( video.readyState === video.HAVE_ENOUGH_DATA ){
 			texture.needsUpdate	= true;

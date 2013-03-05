@@ -67,7 +67,7 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	color			: tQuery.convert.toThreeColor,
 	ambient			: tQuery.convert.toThreeColor,
 	map			: tQuery.convert.toTexture,
-	envMap			: tQuery.convert.toTexture,
+	envMap			: tQuery.convert.toTextureCube,
 	refractionRatio		: tQuery.convert.toNumber,
 	side			: tQuery.convert.identity,
 	wireframe		: tQuery.convert.toBoolean,

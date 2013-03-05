@@ -26,6 +26,9 @@
 	var refractionCube	= new THREE.Texture( reflectionCube.image, new THREE.CubeRefractionMapping() );
 	refractionCube.format	= THREE.RGBFormat;
 
+	
+
+
 	tQuery.createTorusKnot().addTo(world)
 		.setBasicMaterial()
 			.envMap(tQuery.createCubeTexture('skybox'))

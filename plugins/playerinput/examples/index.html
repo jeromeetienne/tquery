@@ -15,7 +15,7 @@
 	var object	= tQuery.createTorusKnot().addTo(world);
 
 	world.removeCameraControls();
-	
+
 	var onMobile	= 'ontouchstart' in window ? true : false;
 	var playerInput	= tQuery.createPlayerInput();
 	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)

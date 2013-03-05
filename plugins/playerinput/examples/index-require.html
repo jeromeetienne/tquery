@@ -10,6 +10,7 @@ require(['tquery.playerinput'], function(){
 	
 	var onMobile	= 'ontouchstart' in window ? true : false;
 	var playerInput	= tQuery.createPlayerInput();
+	// TOTO make them compatible one with the others. 
 	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
 	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
 

@@ -3,6 +3,8 @@ tQuery.registerStatic('createMinecraftCharKeyboard2', function(opts){
 });
 
 tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
+	// display obsolete messaage
+	console.warn('tQuery.MinecraftCharKeyboard2 is obsolete. prefere tQuery.MinecraftCharControl')
 	// handle parameters polymorphism
 	if( opts instanceof THREE.Object3D )	opts	= { object3D: opts };
 	if( opts instanceof tQuery.Object3D )	opts	= { object3D: opts.get(0) };
@@ -16,12 +18,6 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 	console.assert( opts.object3D instanceof THREE.Object3D )
 	console.assert( ['strafe', 'rotationY'].indexOf(opts.lateralMove) !== -1 );
 	
-	// init some variable
-	var midiKey	= new tQuery.MidiKeyTween();
-	// just debug
-	// world.loop().hook(function(delta, now){
-	// 	console.log("state", midiKey.state(), 'value', midiKey.value())
-	// });
 	// user control
 	this._$onLoop	= opts.world.loop().hook(function(delta, now){
 		var keyboard	= tQuery.keyboard();
