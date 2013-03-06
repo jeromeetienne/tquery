@@ -8,7 +8,7 @@ tQuery.Object3D.registerInstance('setLavaMaterial', function(opts){
 		uvScale		: new THREE.Vector2( 3.0, 1.0 ),
 		texture1Url	: tQuery.Object3D.prototype.setLavaMaterial.baseUrl+"images/cloud.png",
 		texture2Url	: tQuery.Object3D.prototype.setLavaMaterial.baseUrl+"images/lavatile.jpg",
-		timeSpeed	: 1
+		timeSpeed	: 2
 	})
 	this.each(function(object3d){
 		var uniforms	= {

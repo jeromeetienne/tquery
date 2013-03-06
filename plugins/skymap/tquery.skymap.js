@@ -1,6 +1,7 @@
 tQuery.registerStatic('createSkymap', function(opts){
 	// handle parameters polymorphisms
-	if( typeof(opts) === 'string' )	opts	= {textureCube: opts};
+	if( typeof(opts) === 'string' )		opts	= {textureCube: opts};
+	if( opts instanceof THREE.Texture )	opts	= {textureCube: opts};
 	// handle parameters
 	opts	= tQuery.extend(opts, {
 		cubeW		: 1000,
@@ -11,7 +12,7 @@ tQuery.registerStatic('createSkymap', function(opts){
 
 	var textureCube	= tQuery.createCubeTexture(opts.textureCube);
 
-	var shader	= THREE.ShaderUtils.lib[ "cube" ];
+	var shader	= THREE.ShaderLib[ "cube" ];
 	shader.uniforms[ "tCube" ].value	= textureCube;
 
 	var material = new THREE.ShaderMaterial({

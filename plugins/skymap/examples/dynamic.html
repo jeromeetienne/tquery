@@ -1,0 +1,91 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.grassground'
+	, 'tquery.minecraft'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createSkymap('mars').addTo(world);
+
+	// tQuery.createGrassGround({
+	// 	textureRepeatX	: 10,
+	// 	textureRepeatY	: 10,
+	// }).addTo(world).scale(30)
+	// 	.translateY(-0.001)
+
+	var cubeCamera	= new THREE.CubeCamera( 0.001, 1000, 1024 );
+	// to avoid flickering on the border of the sphere
+	cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
+
+	var sphere	= tQuery.createSphere().addTo(world)
+		.setBasicMaterial()
+			.envMap(cubeCamera.renderTarget)
+			.color(0xffff00)
+			.back()
+			
+	// world.loop().hook(function(delta, now){
+	// 	sphere.rotateY( 0.1 * delta * Math.PI*2)
+	// })
+
+
+
+
+	tQuery(cubeCamera).addTo(sphere)
+
+	world.loop().hook(function(){
+		sphere.visible(false)	// *cough*
+
+		cubeCamera.updateCubeMap( world.tRenderer(), world.tScene() );
+
+		sphere.visible(true)	// *cough*
+	})
+	
+	
+	var container	= tQuery.createObject3D().addTo(world)
+		.positionY(-0.5)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0, 1)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0,-1)
+	tQuery.createTorusKnot().addTo(container).position( 1, 0, 0).rotateY( Math.PI/2)
+	tQuery.createTorusKnot().addTo(container).position(-1, 0, 0).rotateY(-Math.PI/2)
+	
+	world.loop().hook(function(delta, now){
+		container.rotateY( 0.3 * delta * Math.PI*2)
+	})
+	
+	
+	var textureW	= 512;
+	var textureH	= 512;
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
+	});
+	
+	var tCamera	= new THREE.PerspectiveCamera(35, textureW/textureH, 0.01, 10000);
+	
+
+	world.loop().hook(function(delta, now){
+		var tRenderer	= world.tRenderer();
+		tRenderer.render( world.tScene(), tCamera, rtTexture, true );	
+	})
+	
+	
+	var mirror	= tQuery.createPlane().addTo(world)
+		.geometry()
+			.scaleBy(2)
+			.back()
+		.translateX(-1.5)
+		.translateZ(-1.5)
+		.rotateY(Math.PI/4)
+		.setBasicMaterial()
+			.map(rtTexture)
+			.back()
+
+	tQuery(tCamera).addTo(mirror)
+		.rotateY(Math.PI)
+	tQuery.createAxis().addTo(tCamera)
+	window.tCamera	= tCamera;
+})
+</script></body>

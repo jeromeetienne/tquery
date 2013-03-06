@@ -1,0 +1,53 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.controlswrapper.js"></script>
+<script src="../tquery.controlstween.js"></script>
+<body><script>
+require(['tquery.skymap'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var source	= tQuery.createTorusKnot().addTo(world)
+		.positionX(  1.5) 
+		.rotationX(  Math.PI/2 )
+		.rotationY( -Math.PI/3 )
+
+	tQuery.createSkymap('mars').addTo(world);
+
+	// Attach the camera to the source
+	world.removeCameraControls();
+	tQuery(world.tCamera()).addTo(source)
+		.positionZ(-3).rotationY(Math.PI)
+
+	var target	= tQuery.createTorus().addTo(world)
+		.positionX( -1.5 )
+		.rotationX( -Math.PI/2 )
+		.rotationY( -Math.PI/3 )
+
+	// leave a marker on the source position for debug	
+	tQuery.createTorus().addTo(world)
+		.position( source.position() )
+		.rotation( source.rotation() )
+
+
+	tQuery.createControlsTween({
+		source	: source,
+		target	: target,
+		// attempts to get linear displacement
+		// positionTween	: function(source, target){
+		// 	var delta	= target.clone().sub(source)
+		// 	var maxDelta	= 0.01;
+		// 	if( delta.length() > maxDelta )	delta.setLength(maxDelta);
+		// 	return delta;
+		// },
+		// rotationTween	: function(source, target){
+		// 	var delta	= target.clone().sub(source)
+		// 	var maxDelta	= 0.01;
+		// 	if( delta.length() > maxDelta )	delta.setLength(maxDelta);
+		// 	if( delta.x > maxDelta )	delta.x	= maxDelta;
+		// 	if( delta.y > maxDelta )	delta.y	= maxDelta;
+		// 	if( delta.z > maxDelta )	delta.z	= maxDelta;
+		// 	return delta
+		// },
+	}).start();
+})
+</script></body>

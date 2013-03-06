@@ -1,0 +1,285 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../vendor/cannon.js/build/cannon.js"></script>
+<script src="../tquery.world.cannonjs.js"></script>
+<script src="../tquery.object3d.cannonjs.js"></script>
+<body><script>
+require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
+	, 'tquery.webaudio', 'tquery.keyboard', 'tquery.fireball'], function(){
+	var world	= tQuery.createWorld().boilerplate().start()
+				.shadowMapEnabled(true)
+
+	world.tCamera().position.z	= 15;
+
+	world.removeCameraControls();
+	world.tCamera().position.z	= 3;
+	world.tCamera().position.y	= 1;
+	world.tCamera().position.setLength(5)
+	world.tCamera().lookAt(new THREE.Vector3(0,0,0))
+	
+	var cameraContainer	= tQuery.createObject3D().addTo(world)
+	cameraContainer.add(world.tCamera())
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+	var sounds	= null;
+	if( false && WebAudio.isAvailable ){
+		world.getWebAudio().volume(10)
+		sounds	= {};
+		sounds.impact	= tQuery.createSound().load('../../assets/sounds/kick.wav');
+	}
+	var table	= tQuery.createObject3D().addTo(world)
+
+	// put some lights
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(6,6,6)
+		.castShadow(true)
+		.shadowDarkness(0.6)
+		.shadowMap(512*4,512*4)
+		.shadowCamera(12, -12, 8, -8, 0.1, 20)
+		//.shadowCameraVisible(true)
+
+	world.enableCannonjs()
+	var physicsWorld= world.cannonjsWorld();
+	physicsWorld.gravity.set(0,-9.8,0);
+	physicsWorld.solver.iterations = 10;
+
+	var tileW	= 0.2;
+
+if(false){
+	var axis	= tQuery.createAxis().addTo(world)
+				.translateY(1)	
+	world.loop().hook(function(){
+		var rotation	= axis.get(0).rotation;
+		if( tQuery.keyboard().pressed('up') ){
+			rotation.x	+= 0.01;
+		}else if( tQuery.keyboard().pressed('down') ){
+			rotation.x	-= 0.01;
+		}
+		if( tQuery.keyboard().pressed('left') ){
+			rotation.z	+= 0.01;
+		}else if( tQuery.keyboard().pressed('right') ){
+			rotation.z	-= 0.01;
+		}
+		rotation.x	*= 0.99;
+		rotation.z	*= 0.99;
+		
+		var matrix	= new THREE.Matrix4().setRotationFromEuler(rotation.clone().negate());
+		var vector	= tQuery.createVector3(0,-9.81, 0)
+		matrix.multiplyVector3(vector)
+		//vector.applyMatrix4( matrix );
+		physicsWorld.gravity.set(vector.x, vector.y, vector.z);
+	});	
+}
+
+
+// sounds
+// * granular sound for rolling
+//   * depend on angularVelocity
+// * impact sound
+//   * volume depends on velocity
+// ## step
+// * draw maze on paper
+// * convert it in js
+// * sync chock with sound
+// * sync with macbook orientation
+
+(function(){
+	var object3D	= tQuery.createSphere().addTo(world)
+				.translateY(0)
+				.geometry()
+					.scaleBy(0.8)
+					.back()
+				.castShadow(true)
+				.receiveShadow(true)
+				.setLambertMaterial()
+					.map('../../assets/images/plywood.jpg')
+					.color(0xaa22aa)
+					.back()
+				.addCannonjs({
+						mass	: 0
+					})
+					.addTo(physicsWorld)
+					.back()
+					
+	var gridX	= 5;
+	var gridZ	= 5;
+	object3D.cannonjs().positionX(gridX * tileW)
+	object3D.cannonjs().positionZ(gridZ * tileW)
+
+	object3D.cannonjs().body().addEventListener("collide",function(event){
+		console.log('bumpercollide')
+		object3D.get(0).material.color.setHex(0xff2222);
+	});
+})();
+	
+var ball	= (function(){
+	var object3D	= tQuery.createPoolBall().addTo(world)
+				.position(-0.85,3,1)
+				.geometry()
+					.scaleBy(0.8)
+					.back()
+				.castShadow(true)
+				.receiveShadow(true)
+				.addCannonjs()
+					.addTo(physicsWorld)
+					.back()
+	object3D.cannonjs().body().addEventListener("collide",function(event){
+		var body	= object3D.cannonjs().body();
+		var speed	= body.velocity.norm();
+		if( sounds ){
+			var sound	= sounds.impact.play();
+			sound.node.gain.value	= (speed*speed)/75;
+		}
+	});
+	return object3D;
+})();
+if(true){
+	world.loop().hook(function(){
+		var ballPosition= ball.get(0).matrixWorld.getPosition();
+		var worldPoint	= new CANNON.Vec3(ballPosition.x, ballPosition.y, ballPosition.z);
+		var force	= new CANNON.Vec3(0,0,0);
+		var dt		= 1/100;
+		var length	= 10;
+		if( tQuery.keyboard().pressed('up') ){
+			force.z	= -length;
+		}else if( tQuery.keyboard().pressed('down') ){
+			force.z	= +length;
+		}
+		if( tQuery.keyboard().pressed('left') ){
+			force.x	= -length;
+		}else if( tQuery.keyboard().pressed('right') ){
+			force.x	= +length;
+		}
+		var body	= ball.cannonjs().body();
+		body.applyImpulse(worldPoint,force,dt);
+	});	
+}
+
+
+	world.loop().hook(function(){
+		cameraContainer.position( ball.position() )
+	});
+
+	// tQuery.createPoolBall().addTo(world)
+	// 	.addCannonjs().addTo(physicsWorld)	
+	// 		.position(0, 10, 1.3)
+	// 		.back()
+	// 	.castShadow(true)
+
+	// var object	= tQuery.createAxis().addTo(world)
+	// 	.translateY(1)
+	// world.loop().hook(function(){
+	// 	var orientation	= tQuery.deviceOrientation();
+	// 	object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
+	// })
+
+	var cursorX	= 0;
+	var cursorZ	= 0;
+	var cursor	= {
+		moveTo	: function(gridX, gridZ){
+			cursorX	= gridX;
+			cursorZ	= gridZ;
+			return this;
+		},
+		drawTo	: function(gridX, gridZ){
+			if( gridX === cursorX ){
+				addWallVert(gridX, cursorZ, gridZ)
+				cursorZ	= gridZ;	
+			}else if( gridZ === cursorZ ){
+				addWallHori(gridZ, cursorX, gridX)
+				cursorX	= gridX;
+			}else	console.assert(false);
+			return this;
+		}
+	}	
+
+	// add the ground
+	addGround(-10, -6, 10, 6)
+	
+	// TODO do an API moveTo(), drawTo()
+	//addBox(-1, -1, 1, 1)
+	addWallHori(0, -5, 5)
+	addWallVert(-5, -5, 5)
+	
+	// cursorMoveTo(-10, -10)
+	// cursorDrawTo(-10, -15)
+	//cursor.moveTo(-10,10).drawTo(3, 10)
+	
+	
+
+
+	function addWallHori(gridZ, gridX1, gridX2){
+		if( gridX1 > gridX2 ){
+			var tmp	= gridX2;
+			gridX2	= gridX1;
+			gridX1	= tmp;
+		}
+		var xMin	= gridX1*tileW - tileW/2;
+		var zMin	= gridZ *tileW - tileW/2;
+		var xMax	= gridX2*tileW + tileW/2;
+		var zMax	= gridZ *tileW + tileW/2;
+		return addBox(xMin, zMin, xMax, zMax)
+	}
+	function addWallVert(gridX, gridZ1, gridZ2){
+		if( gridZ1 > gridZ2 ){
+			var tmp	= gridZ2;
+			gridZ2	= gridZ1;
+			gridZ1	= temp;
+		}
+		var xMin	= gridX *tileW - tileW/2;
+		var zMin	= gridZ1*tileW - tileW/2;
+		var xMax	= gridX *tileW + tileW/2;
+		var zMax	= gridZ2*tileW + tileW/2;
+		return addBox(xMin, zMin, xMax, zMax)
+	}
+	
+	function addBox(x1, z1, x2, z2){
+		var width	= Math.abs(x2 - x1);
+		var depth	= Math.abs(z2 - z1);
+		var object3D	= tQuery.createCube(width,1,depth).addTo(table)
+					.translateY(0.5)
+					.translateX(x1 + width/2)
+					.translateZ(z1 + depth/2)
+					.addCannonjs({
+						mass	: 0
+					}).addTo(physicsWorld)
+						.back()
+					.setLambertMaterial()
+						.color(0xcccccc)
+						.map('../../assets/images/plywood.jpg')
+						.back()
+					.receiveShadow(true)
+					.castShadow(true)
+		object3D.get(0).material.map.repeat.x	= 10;
+		object3D.get(0).material.map.repeat.Y	= 10;
+		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
+		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
+		return object3D;
+	}
+
+	function addGround(x1, z1, x2, z2){
+		var width	= Math.abs(x2 - x1);
+		var depth	= Math.abs(z2 - z1);
+		var object3D	= tQuery.createCube(width,1,depth).addTo(table)
+					.translateY(-0.5)
+					.translateX(x1 + width/2)
+					.translateZ(z1 + depth/2)
+					.addCannonjs({
+						mass	: 0
+					}).addTo(physicsWorld)
+						.back()
+					.setLambertMaterial()
+						.color(0xffffff)
+						.map('../../assets/images/plywood.jpg')
+						.back()
+					.receiveShadow(true)
+					.castShadow(true)
+		object3D.get(0).material.map.repeat.x	= 10;
+		object3D.get(0).material.map.repeat.Y	= 10;
+		object3D.get(0).material.map.wrapS	= THREE.RepeatWrapping;
+		object3D.get(0).material.map.wrapT	= THREE.RepeatWrapping;
+		return object3D;
+	}
+});
+</script></body>

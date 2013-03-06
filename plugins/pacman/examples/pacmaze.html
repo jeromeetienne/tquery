@@ -1,0 +1,260 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.pacman.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.simplemaze'
+	, 'tquery.controls'
+	, 'tquery.keyboard'
+	, 'tquery.fog'
+	, 'tquery.controls'
+	, 'tquery.pproc'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+
+	// add pacman
+	var playerContainer	= tQuery.createObject3D().addTo(world)
+	var pacman	= tQuery.Pacman.create().addTo(playerContainer)
+	world.loop().hook(function(delta, now){
+		pacman.rotateY(0.02)
+	})
+	
+	tQuery.Pacman.create('eyes').addTo(world)
+		.translateZ(-3)
+
+	world.addEffectComposer()
+		.bloom(0.2)
+		//.sepia()
+		.motionBlur(0.5)
+		//.film(0.2, 0.5, 648, false)
+		.vignette()
+		//.screen()
+		.finish();
+
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+
+	// put some lights	
+	// tQuery.createAmbientLight().addTo(world)
+	// 	.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,0.5,0)
+	 	.color(0xff8866)
+	 	.intensity(2)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-1,0,0)
+	 	.color(0x4444aa)
+	 	.intensity(0.5)
+		
+//		.intensity(0.1)
+	tQuery.createPointLight().addTo(playerContainer)
+		.color(0xaaCCaa)
+		.distance(6)
+		.positionY(2)
+		.intensity(2)
+
+	// add the fog
+	//world.addFogExp2({density: 0.1});
+	
+	// add a skymap
+	//tQuery.createSkymap('skybox').addTo(world);
+
+	
+
+	world.removeCameraControls();
+
+	var cameraContainer	= tQuery.createObject3D().addTo(world)
+	tQuery(world.tCamera()).addTo(cameraContainer)
+		.position(0,0,0).rotation(0,Math.PI,0)
+
+	var cameraMounts= [];
+
+	var mount3D	= tQuery.createObject3D().addTo(playerContainer)
+		.position(tQuery.createVector3(0, 3, 1).setLength(30))
+	mount3D.get(0).lookAt(tQuery.createVector3())
+	cameraMounts.push(mount3D)
+	
+	var mount3D	= tQuery.createObject3D().addTo(playerContainer)
+		.position(tQuery.createVector3(0, 3, 3).setLength(6))
+	mount3D.get(0).lookAt(tQuery.createVector3(0, 0.5, 0))
+	cameraMounts.push(mount3D)
+	
+	var mount3D	= tQuery.createObject3D().addTo(playerContainer)
+		.position(tQuery.createVector3(0, 3, 5).setLength(4))
+	mount3D.get(0).lookAt(tQuery.createVector3(0, 0.5, -1))
+	cameraMounts.push(mount3D)
+	
+	var mount3D	= tQuery.createObject3D().addTo(pacman)
+		.position(tQuery.createVector3(0, 1.5, -3).setLength(3))
+	mount3D.get(0).lookAt(tQuery.createVector3(0, 0.5, 2))
+	cameraMounts.push(mount3D)
+
+	var mount3D	= tQuery.createObject3D().addTo(pacman)
+		.position(tQuery.createVector3(0, 1.5,  3).setLength(3))
+	mount3D.get(0).lookAt(tQuery.createVector3(0, 0.5, 0))
+	cameraMounts.push(mount3D)
+
+	
+	var mountIdx	= 1;
+	cameraContainer.addTo(cameraMounts[mountIdx])
+	tQuery.keyboard().domElement().addEventListener('keydown', function(){
+		var nMounts	= cameraMounts.length;
+		var keyboard	= tQuery.keyboard();
+		if( keyboard.pressed('1') )	mountIdx += -1;
+		if( keyboard.pressed('2') )	mountIdx += +1;
+		mountIdx	= (mountIdx + nMounts) % nMounts;
+		var mount	= cameraMounts[mountIdx];
+		cameraContainer.addTo(mount)		
+	});
+	
+	var maze	= tQuery.createSimpleMaze({
+		map	: [
+'*******************',
+'*        *        *',
+'* ** *** * *** ** *',
+'* ** *** * *** ** *',
+'*                 *',
+'* ** * ***** * ** *',
+'*    *   *   *    *',
+'**** *** * *** ****',
+'**** *       * ****',
+'**** * ** ** * ****',
+'*      *   *      *',
+'**** * ***** * ****',
+'**** *       * ****',
+'**** * ***** * ****',
+'*        *        *',
+'* ** *** * *** ** *',
+'*p *           * p*',
+'** * * ***** * * **',
+'*    *   *   *    *',
+'* ****** * ****** *',
+'*                 *',
+'*******************',
+		],
+		// map	: [
+		// 	'*********',
+		// 	'*   *   *',
+		// 	'*  ** ***',
+		// 	'*       *',
+		// 	'***     *',
+		// 	'*       *',
+		// 	'*********'
+		// ],
+		enableCeiling	: false
+	}).addTo(world)
+	var maze3D	= maze.object3D();
+
+	// TODO should that be done by default
+	// - i think so
+	// - maybe i just pass THREE.* to the tQuery at the end	
+	// - what if not all the elements are of the same time ? a console assert is triggered
+	tQuery.Object3D.registerInstance('elevateType', function(){
+		var tNodes	= this.get();
+		return tQuery(tNodes);
+	})
+
+
+	//var texture	= THREE.ImageUtils.loadTexture('images/BluePaintedTiles.png')
+	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/wood.jpg')
+	//var texture	= THREE.ImageUtils.loadTexture('../../assets/images/plywood.jpg')
+	//var texture	= THREE.ImageUtils.loadTexture('../../assets/images/water.jpg')
+	tQuery('.wall', maze3D).elevateType()
+		.scaleYBy(0.4)
+		.setPhongMaterial()			
+			.map(texture)
+			.envMap(tQuery.createCubeTexture('mars'))
+			.reflectivity(0.4)
+			.bumpMap(texture)
+			.bumpScale(0.02)
+			.back()
+
+//	var texture	= THREE.ImageUtils.loadTexture('images/PaddedOrangeWall.png')
+	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/water.jpg')
+//	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/plywood.jpg')
+//	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/rocks.jpg')
+//	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/wood.jpg')
+	texture.wrapS	= THREE.RepeatWrapping;
+	texture.wrapT	= THREE.RepeatWrapping;
+	texture.repeat.set(maze.mapWidth()/8, maze.mapDepth()/8);
+//	texture.repeat.set(maze.mapWidth(), maze.mapDepth());
+
+	tQuery('.ground', maze3D).elevateType()
+		.setPhongMaterial()
+			.map(texture)
+			.envMap(tQuery.createCubeTexture('mars'))
+			.reflectivity(0.6)
+			.bumpMap(texture)
+			.bumpScale(0.05)
+			.back()
+
+	// to fix z-fighting with pacman shadow
+	maze3D.positionY(-0.003)
+	
+	var material	= tQuery.createSpriteMaterial()
+		.map('images/lensflare0_alpha.png')
+		.fog(true)	// FIXME .fog() doesnt seem to work
+	maze.forEach(function(tileX, tileZ, value){
+		if( value !== ' '.charCodeAt(0) )	return;
+		tQuery.createSprite().addTo(world)
+			.addClass('plainPill')
+			.translateY(0.5)
+			.material(material)		
+			.positionX(tileX + 0.5 - maze.mapWidth()/2)
+			.positionZ(tileZ + 0.5 - maze.mapDepth()/2)
+	})
+
+	var material	= tQuery.createMeshPhongMaterial()
+		.color(0x00ffff)
+		.color(0xffff00)
+		.envMap(tQuery.createCubeTexture('swedishRoyalCastle'))
+		.bumpMap('../../assets/images/water.jpg')
+		.bumpScale(0.005)
+	maze.forEach(function(tileX, tileZ, value){
+		if( value !== 'p'.charCodeAt(0) )	return;
+		var object3D	= tQuery.createSphere().addTo(world)
+			.addClass('energyPill')
+			.material(material)
+			.scaleBy(1/3)
+			.translateY(0.5)
+			.positionX(tileX + 0.5 - maze.mapWidth()/2)
+			.positionZ(tileZ + 0.5 - maze.mapDepth()/2)
+		world.loop().hook(function(delta, now){
+			var angle	= 0.5 * delta * Math.PI * 2; 
+			object3D.rotateY(angle)
+		})
+	})
+
+	// very minimal controls
+	var playerControls	= {
+		update	: function(delta, now){
+			var position	= playerContainer.position().clone();
+			var keyboard	= tQuery.keyboard();
+			var speed	= 3 * delta;
+			
+			if( keyboard.pressed('left') )	position.x -= speed
+			if( keyboard.pressed('right') )	position.x += speed
+			if( keyboard.pressed('up') )	position.z -= speed
+			if( keyboard.pressed('down') )	position.z += speed
+			
+			var coord	= position.clone()
+			coord.x		+= maze.mapWidth()/2;
+			coord.z		+= maze.mapDepth()/2;
+
+			var playerW	= 0.5 - 0.01 /* kindof epsilon */
+			var colliding	= false
+			if( maze.getCoord(coord.x+playerW, coord.z+playerW) === '*'.charCodeAt(0) )	colliding = true;
+			if( maze.getCoord(coord.x+playerW, coord.z-playerW) === '*'.charCodeAt(0) )	colliding = true;
+			if( maze.getCoord(coord.x-playerW, coord.z+playerW) === '*'.charCodeAt(0) )	colliding = true;
+			if( maze.getCoord(coord.x-playerW, coord.z-playerW) === '*'.charCodeAt(0) )	colliding = true;
+colliding = false;
+			if( colliding === false )	playerContainer.position(position)
+		}
+	}
+
+	// wrapper for this controls
+	tQuery.createControlsWrapper({
+		controls	: playerControls
+	}).start()
+})
+</script></body> 

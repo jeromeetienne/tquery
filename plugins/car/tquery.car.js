@@ -191,7 +191,7 @@ tQuery.Car.prototype._addFlare	= function(){
 		var scale	= flare[ 1 ] * this._car.modelScale;
 		var position	= flare[ 2 ];
 
-		var sprite	= new THREE.Sprite( param );
+		var sprite	= new THREE.Sprite( new THREE.SpriteMaterial(param) );
 		sprite.scale.set( scale, scale, scale );
 		sprite.position.set(position[0], position[1], position[2])
 		// add the sprite

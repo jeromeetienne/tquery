@@ -1,0 +1,46 @@
+<!-- initialize the web page and load the library -->
+<!doctype html><title>Chat And Fight 02 - Move Your Body</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+// load tQuery plugins with require.js
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+	// add a ground	
+	var ground  = tQuery.createGrassGround({
+		textureRepeatX  : 5,
+		textureRepeatY  : 5,
+	}).addTo(world).scale(80);
+
+	// add minecraft char
+	var character	= tQuery.createMinecraftChar().addTo(world);
+
+	// add a keyboard control for our character
+	var character3D	= character.object3D();
+	tQuery.createMinecraftCharKeyboard2({
+		object3D: character3D
+	});
+
+	// Create an animation for our character
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	// Make it run
+	bodyAnims.start('run');
+
+	// make it run only if it move		
+	var prevPosition= tQuery.createVector3();
+	world.loop().hook(function(){
+		// compute velocity
+		var velocity	= character3D.position().clone().subSelf(prevPosition);
+		// pick animation based
+		if( velocity.length() ){
+			bodyAnims.start('run')
+		}else{
+			bodyAnims.start('stand')
+		}
+		// update prevRotation
+		prevPosition.copy( character3D.position() );		
+	})
+})
+</script></body>

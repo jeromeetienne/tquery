@@ -1,0 +1,95 @@
+<!--
+### last but not least
+* Add a Reactor Flame
+* what is fireworks.js
+  * render particles in various output
+  * tquery, three.js, canvas2d
+* emitter which emit particles
+* combo emitter which emit particles
+
+* localized sound
+* webaudio api for the win
+-->
+<!doctype html><title>Flying to the moon</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/tquery/ColladaLoader.js"></script>
+<script src="../vendor/fireworks-bundle.js"></script>
+<script src="../vendor/fireworks-comboemitter.js"></script>
+<script src="../vendor/fireworks-comboemitter-flamethrower.js"></script>
+<script src="../tquery.textureutils.js"></script>
+<body><script>
+require(['tquery.skymap', 'tquery.webaudio', 'tquery.lensflare'], function(){
+	// init world
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tCamera().position.z	= -30;
+
+	// create the container for the comboemitter
+	var container	= tQuery.createObject3D().addTo(world)
+
+	// create flame thrower
+	var flamethrower= new Fireworks.ComboEmitter.Flamethrower({
+		webaudio: world.getWebAudio(),	// give it the audio
+		onReady	: function(){
+			flamethrower.start();	// start it once all is loaded
+		}
+	});
+	// add flamethrower to our container
+	container.add( flamethrower.object3D() )
+
+	// make the sound follow this._container
+	WebAudio.isAvailable && flamethrower.sound().volume(0.1).follow(container, world);
+
+
+	// add lensflare in the sun
+	tQuery.createLensFlare().addTo(world) 
+		.position(tQuery.createVector3().set(-15, 24, 30).setLength(500) )
+
+
+	// if webaudio is available in your browser
+	if( WebAudio.isAvailable ){
+		// enable webaudio
+		world.enableWebAudio();
+		// load sound track
+		var url	= 'sounds/flymetothemoon.m4a';
+		tQuery.createSound().load(url, function(sound){
+			sound.loop(true).volume(4).play();
+		});		
+	}
+
+
+	// load the rockets
+	var loader	= new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	var url		= "./models/TINTINROCKET/models/TIN TIN ROCKET.dae"
+	loader.load(url, function( collada ){
+		tQuery(collada.scene).scale(0.2)
+			.rotateX(Math.PI/2).rotateY(Math.PI/3)
+			.translateZ(-5)
+			.addTo(container);
+	});
+	
+	// add lights
+	tQuery.createAmbientLight().addTo(world).color(0x222222);	
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xcccccc).position(1, 1, 1);
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xcccccc).position(-1, 1, -1);
+
+	// add a skymap
+	var skymap	= tQuery.createSkymap('mars').addTo(world);
+
+	// drunk effect
+	world.loop().hook(function(delta, now){
+		var angle	= 0.2 * now * Math.PI/2;
+		// change the position of the rocket
+		var objPosition	= container.get(0).position;
+		objPosition.x	= Math.cos(angle*2)*Math.cos(angle)*20;
+		objPosition.z	= Math.sin(angle)*10;
+		// change the camera position
+		var camPosition	= world.tCamera().position;
+		camPosition.x	= 2 * (Math.sin(angle*2.45)*Math.sin(angle*1.3)*2 - 1);
+		camPosition.y	= -10 + Math.sin(angle*2.45)*Math.sin(angle*1.3)*25;
+		camPosition.z	= -40 + 5 + Math.sin(angle*2)*10;
+	});
+});
+</script></body>

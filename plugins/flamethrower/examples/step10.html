@@ -1,0 +1,30 @@
+<!--
+### load model
+* where to get the model
+* download it
+* load it
+* scale it down
+-->
+<!doctype html><title>Flying to the moon</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/tquery/ColladaLoader.js"></script>
+<body><script>
+require([], function(){
+	// init world
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tCamera().position.z	= -30;
+
+// HERE >>>>>>>
+	// create the container for the comboemitter
+	var container	= tQuery.createObject3D().addTo(world)
+
+	// load the rockets
+	var loader	= new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	var url		= "./models/TINTINROCKET/models/TIN TIN ROCKET.dae"
+	loader.load(url, function( collada ){
+		tQuery(collada.scene).addTo(container)
+			.scale(1/40)
+	});
+});
+</script></body>

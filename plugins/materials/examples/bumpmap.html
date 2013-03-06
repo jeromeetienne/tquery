@@ -9,16 +9,20 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	world.removeCameraControls();
+	// world.removeCameraControls();
 
 	var ligthAmb1	= tQuery.createAmbientLight().addTo(world)
 		.color(0xaaaaaa);
 	var ligthDir1	= tQuery.createDirectionalLight().addTo(world)
-		.position(1,1,-1).color(0x884444);
+		.position(1,1,-1).color(0xffffff);
 	var ligthDir2	= tQuery.createDirectionalLight().addTo(world)
 		.position(-0,1,1).color(0xaa88ff).intensity(2);
+
+
+
 		
 	world.loop().hook(function(delta, now){
+return;
 		var radius	= 1;
 		var angle	= 0.1 * now * Math.PI * 2;
 		ligthDir2.get(0).position.x	= Math.cos(angle*1.3) * radius;
@@ -27,6 +31,7 @@
 	})
 
 	world.loop().hook(function(delta, now){
+return;
 		var radius	= 1;
 		var angle	= 0.3 * now * Math.PI * 2;
 		ligthDir1.get(0).position.x	= Math.cos(angle*1.3) * radius;
@@ -35,20 +40,22 @@
 	})
 
 	var url		= "../../assets/images/water.jpg";
-	var url		= "../../assets/images/plywood.jpg";
-	var url		= "../../grassground/images/grasslight-big.jpg";
+	//var url		= "../../assets/images/rocks.jpg";
+	//var url		= "../../assets/images/plywood.jpg";
+	//var url		= "../../grassground/images/grasslight-big.jpg";
 	//var url		= "../../planets/images/moon_1024.jpg";
 	//var url		= "../../planets/images/earth_atmos_2048.jpg";
 	var tDiffuse	= THREE.ImageUtils.loadTexture(url);
 	// tDiffuse.wrapS	= THREE.RepeatWrapping; 
 	// tDiffuse.wrapT	= THREE.RepeatWrapping;
 	// tDiffuse.repeat.set( 0.2, 0.2 );
-	// tDiffuse.anisotropy = 16;
+	tDiffuse.anisotropy = 4;
 
 
 	var url		= "../../assets/images/water.jpg";
-	var url		= "../../assets/images/plywood.jpg";
-	var url		= "../../grassground/images/grasslight-big.jpg";
+	//var url		= "../../assets/images/rocks.jpg";
+//	var url		= "../../assets/images/plywood.jpg";
+//	var url		= "../../grassground/images/grasslight-big.jpg";
 //	var url		= "../../planets/images/moon_1024.jpg";
 //	var url		= "../../planets/images/earth_atmos_2048.jpg";
 //	var url		= "../../planets/images/earth_clouds_1024.png";
@@ -58,34 +65,25 @@
 	// tBumpMap.wrapS	= THREE.RepeatWrapping; 
 	// tBumpMap.wrapT	= THREE.RepeatWrapping;
 	// tBumpMap.repeat.set( 0.2, 0.2 );
-	// tBumpMap.anisotropy = 4;
+	tBumpMap.anisotropy = 4;
 
 	var material	= tQuery.createMeshPhongMaterial({
-		map		: tDiffuse,
+		//map		: tDiffuse,
 		bumpMap		: tBumpMap,
-		bumpScale	: 0.1,
-		specular	: 0x88aa88,
-		shininess	: 50,
-		shading		: THREE.SmoothShading
+		bumpScale	: 0.05,
+		// specular	: 0x88aa88,
+		// shininess	: 50,
+		// shading		: THREE.SmoothShading
 	});
 
 	var object	= tQuery.createSphere(material.get(0)).addTo(world)
 		.scaleBy(2)
+		.id('ball')
 		//.geometry().smooth().back()
-
-	//////////////////////////////////////////////////////////////////////////
-	// more complex example
-	//////////////////////////////////////////////////////////////////////////
-	// init dat.gui
-	var gui	= new dat.GUI();
-	// add all lights
-	tQuery.DatguiTuner({
-		selector: 'light',
-		gui	: gui
-	});
-	// add the materialss
-	tQuery.DatguiTuner({
-		selector: tQuery('mesh').material().get(),
-		gui	: gui
-	});
+	
+	world.loop().hook(function(delta, now){
+		var angle	= 0.05 * now * Math.PI * 2;
+		object.rotationX(1.3*angle)
+		object.rotationY(  1*angle)
+	})
 </script></body>

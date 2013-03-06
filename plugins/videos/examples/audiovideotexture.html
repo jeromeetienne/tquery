@@ -1,0 +1,30 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.webaudio', 'tquery.videos'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.removeCameraControls().enableWebAudio()
+
+	console.assert(WebAudio.isAvailable);
+	
+	var object3D	= tQuery.createCube(1.6,0.9,0.2).addTo(world)
+	// create the texture
+	var url		= '../../assets/videos/sintel.ogv';
+	var avTexture	= tQuery.createAudioVideoTexture(url);
+	// set it as material
+	object3D.setBasicMaterial()
+		.map(avTexture.tTexture())	// To get the video 
+		.back()
+	// make the sound follow the object
+	avTexture.addEventListener('soundReady', function(){
+		avTexture.sound().follow(object3D)
+	})
+
+	world.loop().hook(function(delta, now){
+		var angle	= 0.15 * now * Math.PI * 2;
+		object3D.positionX( Math.cos(angle)*2.5 );
+		object3D.positionZ( -2 + Math.sin(angle)*4 );
+	})
+});
+</script></body>

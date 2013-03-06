@@ -1,0 +1,115 @@
+<!doctype html><title>Chat And Fight 03 - Lights and Shadows</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<!-- all network scripts -->
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+<script src="http://localhost:4000/examples/client.js"></script>
+<body><script>
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+	// add a ground	
+	var ground  = tQuery.createGrassGround({
+		textureRepeatX  : 10,
+		textureRepeatY  : 10,
+	}).addTo(world).scale(80);
+
+	// add minecraft char
+	var character	= tQuery.createMinecraftChar().addTo(world);
+
+	// add a keyboard control for our character
+	var character3D	= character.object3D();
+	tQuery.createMinecraftCharKeyboard2({
+		object3D: character3D
+	});
+
+	// Create an animation for our character
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	// Make it run
+	bodyAnims.start('run');
+
+	// make it run only if it move		
+	var prevPosition= tQuery.createVector3();
+	world.loop().hook(function(){
+		// compute velocity
+		var velocity	= character3D.position().clone().subSelf(prevPosition);
+		// pick animation based
+		if( velocity.length() ){
+			bodyAnims.start('run')
+		}else{
+			bodyAnims.start('stand')
+		}
+		// update prevRotation
+		prevPosition.copy( character3D.position() );		
+	})
+
+	//////////////////////////////////////////////////////////////////////////
+	//		shadowMap						//
+	//////////////////////////////////////////////////////////////////////////	
+	// enable shadow in the world renderer
+	world.shadowMapEnabled(true);
+	// make minecraft character cast shadow
+	character.castShadow(true);
+	// make ground receive shadow
+	ground.receiveShadow(true);
+	// create a light and make it cast shadow
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.castShadow(true).shadowCameraVisible(true)
+		.shadowDarkness(0.6).shadowMap(1024,1024)
+		.shadowCamera(4, -4, 4, -4, 0.1, 10);
+	// light to follow character
+	world.loop().hook(function(){
+		var delta	= tQuery.createVector3(-1,2,3);
+		var position	= character3D.position().clone().addSelf(delta);
+		light.position(position);
+	})
+	// point the light target to character3D
+	light.get(0).target.position	= character3D.position();
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//		network							//
+	//////////////////////////////////////////////////////////////////////////
+	// init the gameServer
+	var mySourceId	= null;
+	var players	= {};
+
+	// initiate connect with server
+	var serverUrl	= 'http://localhost:4000';
+	var userInfo	= {
+		nickName	: 'Player-'+Math.floor(Math.random()*10000).toString(16),
+	};
+	var gameServer	= new SimpleMMOServer('public', userInfo, serverUrl);
+	// handle event
+	gameServer.addEventListener('connected', function(sourceId, usersInfo){
+		console.log('connected', arguments)
+	});
+
+	gameServer.addEventListener('userJoin', function(data){
+		console.log('userJoin', arguments)
+	});
+
+	gameServer.addEventListener('userLeft', function(data){
+		console.log('userLeft', data)
+	});
+
+	// periodically send the position of the character
+	// - NOTE: not done on requestAnimationFrame as it has to be done even if page isnt visible
+	setInterval(function(){
+		var mesh	= character.object3D('root');
+		var position	= mesh.position();
+		var rotation	= mesh.rotation();
+		gameServer.clientEcho({
+			type	: 'positionChange',
+			position: { x : position.x, y : position.y, z : position.z },
+			rotation: { x : rotation.x, y : rotation.y, z : rotation.z },
+		});
+	}, 0.2 * 1000);
+
+	gameServer.addEventListener('clientEcho', function(data){
+		console.log('clientEcho', JSON.stringify(data, null, '\t'));
+	});
+})
+</script></body>

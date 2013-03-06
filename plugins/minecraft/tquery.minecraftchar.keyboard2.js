@@ -3,25 +3,21 @@ tQuery.registerStatic('createMinecraftCharKeyboard2', function(opts){
 });
 
 tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
-	// handle polymorphism
+	// display obsolete messaage
+	console.warn('tQuery.MinecraftCharKeyboard2 is obsolete. prefere tQuery.MinecraftCharControl')
+	// handle parameters polymorphism
 	if( opts instanceof THREE.Object3D )	opts	= { object3D: opts };
 	if( opts instanceof tQuery.Object3D )	opts	= { object3D: opts.get(0) };
 	if( opts.object3D instanceof tQuery.Object3D )	opts.object3D	= opts.object3D.get(0)
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
-		lateralMove	: 'strafe'
+		lateralMove	: 'rotationY'
 	});
 	// sanity check
 	console.assert( opts.object3D instanceof THREE.Object3D )
 	console.assert( ['strafe', 'rotationY'].indexOf(opts.lateralMove) !== -1 );
 	
-	// init some variable
-	var midiKey	= new tQuery.MidiKeyTween();
-	// just debug
-	// world.loop().hook(function(delta, now){
-	// 	console.log("state", midiKey.state(), 'value', midiKey.value())
-	// });
 	// user control
 	this._$onLoop	= opts.world.loop().hook(function(delta, now){
 		var keyboard	= tQuery.keyboard();
@@ -46,8 +42,8 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 			if( distance ){
 				var speed	= new THREE.Vector3(distance, 0, 0);
 				var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
-				matrix.multiplyVector3(speed);
-				model.position.addSelf(speed);
+				speed.applyMatrix4( matrix );
+				model.position.add(speed);
 			}			
 		}else	console.assert(false, 'opts.lateralMove invalid: '+opts.lateralMove);
 
@@ -57,8 +53,8 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 		if( distance ){
 			var speed	= new THREE.Vector3(0, 0, distance);
 			var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
-			matrix.multiplyVector3(speed);
-			model.position.addSelf(speed);
+			speed.applyMatrix4( matrix );
+			model.position.add(speed);
 		}
 		// notify an event of the update
 		this.dispatchEvent('postUpdate', model.position, prevPosition);

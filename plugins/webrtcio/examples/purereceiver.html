@@ -1,0 +1,28 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../vendor/webrtc.io-client/webrtc.io.js'></script>
+<script src='../tquery.webrtc.js'></script>
+<body><script>
+require(['tquery.videos'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var room	= 'public';
+	var serverUrl	= "ws://localhost:8080/";
+	rtc.connect(serverUrl, room);
+        rtc.on('add remote stream', function(mediaStream, socketId) {
+        	console.log('add socketId', socketId)
+		tQuery.createPlane().addTo(world)
+			.addClass('socketId-'+socketId)
+			.positionX(2 * Math.random()-0.5)
+			.positionY(2 * Math.random()-0.5)
+			.setBasicMaterial()
+				.map(mediaStream)
+				.back()     	
+        });
+	rtc.on('disconnect stream', function(socketId) {
+		var nRemote	= tQuery('.socketId-'+socketId).length;
+		console.log('remove',socketId,'currently', nRemote);
+		tQuery('.socketId-'+socketId).detach();
+	});
+});
+</script></body>

@@ -1,0 +1,114 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.text'
+	, 'tquery.skymap'
+	, 'tquery.pproc'
+	, 'tquery.datguituner'
+	, 'tquery.modifiers'
+	, 'tquery.shadowmap'
+	, 'tquery.grassground'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.shadowMapEnabled(true)
+	
+	world.tCamera().position.z	= 5;
+
+	//tQuery.createSkymap('skybox').addTo(world);
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	
+	tQuery.createAmbientLight().addTo(world).color(0x444444);	
+	tQuery.createDirectionalLight().addTo(world).position(0, 1, 1)
+		.intensity(1)
+		.color(0x888888)
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(3, -3, 2, -2, 0.1, 50)
+		//.shadowCameraVisible(true)
+
+
+	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/wood.jpg')
+	texture.wrapS	= THREE.RepeatWrapping;
+	texture.wrapT	= THREE.RepeatWrapping;
+	texture.repeat.set(2, 2);
+	tQuery.createCube(10,1,10,5,1,5).addTo(world)
+		.geometry()
+			.smooth(1.3)
+			.back()
+		.setPhongMaterial()
+			.map(texture)
+			.envMap(tQuery.createCubeTexture('mars'))
+			.reflectivity(0.2)
+			.bumpMap(texture)
+			.bumpScale(0.3)
+			.back()
+		.translateY(-2)
+		.receiveShadow(true)
+
+	// create the spot
+	var spot	= tQuery.createCylinder(0.3, 0.0001, 0.8).addTo(world)
+		.geometry() 
+			.rotateX(Math.PI/2)
+			.scaleBy(1/2)
+			.smooth(1.3)
+			.back()
+		.setPhongMaterial({
+				ambient		: 0xffffff,
+				color		: 0xffffFF,
+				shininess	: 80,
+				envMap		: tQuery.createCubeTexture('pisa')
+			}).back()
+		.scaleBy(3)
+
+	world.loop().hook(function(delta, now){
+		var angle	= 0.15 * now * Math.PI * 2;	
+		var positionX	= Math.cos(angle*1.0)*3*2;
+		var positionY	= Math.cos(angle*1/4)*1.3 + 1;
+		var positionZ	= Math.sin(angle*1.0)*1.1*4;
+		spot.position(positionX, positionY, positionZ).lookAt(0,0,0)
+	});
+
+	var pointLight	= tQuery.createSpotLight().addTo(spot)
+		.color(0xFF8844)
+		.intensity(4)
+		.castShadow(true)
+		.shadowDarkness(0.6)
+		.shadowMap(512*4,512*4)
+		.shadowCamera(100, -100, 30, -30, 0.1, 20)
+		//.shadowCameraVisible(true)
+
+
+	
+	// world.addEffectComposer()
+	// 	.bleachbypass()
+	// 	.motionBlur(0.5)
+	// 	.film(0.5, 0.25, 648, false)
+	// 	.vignette()
+	// 	.finish();
+
+	// // init dat.gui
+	// var gui	= new dat.GUI();
+	// // add all lights
+	// tQuery.DatguiTuner({
+	// 	selector: 'light',
+	// 	gui	: gui
+	// });
+	// // add the materialss
+	// tQuery.DatguiTuner({
+	// 	selector: tQuery('mesh').material().get(),
+	// 	gui	: gui
+	// });
+	
+	//var text	= tQuery.createSphere(1, 32, 32).addTo(world)
+	var text	= tQuery.createText('LIGHT').addTo(world)
+		.setPhongMaterial()
+			.ambient(0x808080)
+			.shininess(120)
+			.map('../../assets/images/plywood.jpg')
+			.back()
+		.castShadow(true)
+})
+</script></body>
+

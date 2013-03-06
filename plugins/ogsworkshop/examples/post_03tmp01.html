@@ -1,0 +1,91 @@
+<!--
+	Lets put some shaddow
+-->
+
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
+	, 'tquery.shadowmap'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+	// add a ground	
+	var ground  = tQuery.createGrassGround({
+		textureRepeatX  : 10,
+		textureRepeatY  : 10,
+	}).addTo(world).scale(80);
+
+	// add minecraft char
+	var character	= tQuery.createMinecraftChar().addTo(world);
+
+	// add a keyboard control for our character
+	var character3D	= character.object3D();
+	tQuery.createMinecraftCharKeyboard2({
+		object3D: character3D
+	});
+
+	// Create an animation for our character
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	// Make it run
+	bodyAnims.start('run');
+
+	// make it run only if it move		
+	var prevPosition= tQuery.createVector3();
+	world.loop().hook(function(){
+		// compute velocity
+		var velocity	= character3D.position().clone().subSelf(prevPosition);
+		// pick animation based
+		if( velocity.length() ){
+			bodyAnims.start('run')
+		}else{
+			bodyAnims.start('stand')
+		}
+		// update prevRotation
+		prevPosition.copy( character3D.position() );		
+	})
+
+	//////////////////////////////////////////////////////////////////////////
+	//		lights							//
+	//////////////////////////////////////////////////////////////////////////	
+	world.tRenderer().shadowMapEnabled	= true;
+	tQuery('mesh', character.object3D('root')).castShadow(true);
+
+if( false ){
+	tQuery('mesh', character3D).each(function(tObject3D){
+		var tMaterialSrc= tObject3D.material;
+		var tMaterialDst= THREE.MeshLambertMaterial.prototype.clone.apply(tMaterialSrc)
+		
+		//tObject3D.material	= tMaterialDst;
+	});
+}
+
+if( true ){
+	tQuery('mesh', character3D).traverse(function(tObject3D){
+		var tMaterial	= tObject3D.material;
+		var object3D	= new tQuery.Mesh(tObject3D)
+			.setLambertMaterial()
+				.ambient(0x888888)
+				.color(0xcccccc)
+				.map(tMaterial.map)
+				.transparent(tMaterial.transparent)
+				.side(tMaterial.side)
+			.back()
+	});
+}
+
+	ground.receiveShadow(true);
+
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x888888);
+		
+	tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.castShadow(true)
+		.shadowCameraVisible(true)
+		.shadowDarkness(0.8)
+		.shadowMap(1024*2,1024*2)
+		.shadowCamera(8, -8, 8, -8, 0.1, 10)
+})
+</script></body>

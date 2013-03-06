@@ -1,0 +1,31 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+
+<script src='../tquery.playerinput.js'></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+<script src='../tquery.playerinput.keyboard.js'></script>
+
+<script src='../../virtualjoystick/vendor/virtualjoystick.js'></script>
+<script src='../tquery.playerinput.virtualjoystick.js'></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+
+	world.removeCameraControls();
+
+	var onMobile	= 'ontouchstart' in window ? true : false;
+	var playerInput	= tQuery.createPlayerInput();
+	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
+	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
+
+	world.loop().hook(function(delta, now){
+		var displacement	= 1 * delta;
+		if( playerInput.up )	object.translateZ(-displacement)
+		if( playerInput.down )	object.translateZ( displacement)
+		if( playerInput.left )	object.translateX(-displacement)
+		if( playerInput.right )	object.translateX( displacement)
+	});
+</script></body>

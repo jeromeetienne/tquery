@@ -1,0 +1,25 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.playerinput'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	// your code goes here
+	world.removeCameraControls();
+	
+	var onMobile	= 'ontouchstart' in window ? true : false;
+	var playerInput	= tQuery.createPlayerInput();
+	// TOTO make them compatible one with the others. 
+	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
+	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
+
+	world.loop().hook(function(delta, now){
+		var displacement	= 1 * delta;
+		if( playerInput.up )	object.translateZ(-displacement)
+		if( playerInput.down )	object.translateZ( displacement)
+		if( playerInput.left )	object.translateX(-displacement)
+		if( playerInput.right )	object.translateX( displacement)
+	});
+});
+</script></body>

@@ -1,0 +1,12 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.modifiers'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	tQuery.createCube(1, 1, 1, 10, 10).addTo(world)
+		.geometry()
+			.smooth(3)
+			.back()	
+});
+</script></body>

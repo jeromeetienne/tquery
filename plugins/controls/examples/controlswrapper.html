@@ -1,0 +1,21 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.controlswrapper.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+
+	// very minimal controls
+	var controls	= {
+		update	: function(delta, now){
+			var angle	= 0.1 * delta * Math.PI * 2;
+			object.rotateX(angle)
+		}
+	};
+	
+	// wrapper for this controls
+	tQuery.createControlsWrapper({
+		controls	: controls
+	}).start()
+</script></body>

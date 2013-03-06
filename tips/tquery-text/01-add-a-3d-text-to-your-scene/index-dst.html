@@ -1,0 +1,10 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.text'], function(){
+	// create a 3d world, use the boilerplate and start it
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a text
+	tQuery.createText('foo').addTo(world);
+});
+</script></body>

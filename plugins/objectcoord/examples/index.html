@@ -1,0 +1,23 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.object3d.coordinate.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	// create the object to which we will attach the dom element
+	var object	= tQuery.createTorusKnot().addTo(world)
+		.positionX(1)
+		.positionY(0.5)
+		
+	// Create dom element
+	var element	= document.createElement('div')
+	document.body.appendChild(element)
+	element.innerHTML	= 'John';	
+	element.style.position	= 'absolute'
+	// move it at the object position
+	world.loop().hook(function(){
+		var position	= object.cssPosition();
+		element.style.left	= (position.x-element.offsetWidth /2)+'px';
+		element.style.top	= (position.y-element.offsetHeight/2)+'px';
+	})
+</script></body>

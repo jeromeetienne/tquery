@@ -1,0 +1,21 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft', 'tquery.keyboard'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	// your code goes here
+	var character	= tQuery.createMinecraftChar().addTo(world);
+	var controls	= tQuery.createMinecraftCharControls(character);
+	
+	world.loop().hook(function(){
+		var keyboard	= tQuery.keyboard();
+		var input	= controls.input();
+		input.right	= keyboard.pressed('right');
+		input.up	= keyboard.pressed('up');
+		input.left	= keyboard.pressed('left');
+		input.down	= keyboard.pressed('down');
+	})
+});
+</script></body>

@@ -26,13 +26,15 @@
 	var refractionCube	= new THREE.Texture( reflectionCube.image, new THREE.CubeRefractionMapping() );
 	refractionCube.format	= THREE.RGBFormat;
 
-	var material		= new THREE.MeshBasicMaterial({
-		//envMap		: refractionCube,
-		envMap		: tQuery.createCubeTexture('skybox'),
-		refractionRatio	: 0.95,
-		ambient		: 0xFFFFFF,
-		color		: 0xFFFFFF
-	});
 	
-	var object	= tQuery.createSphere(material).addTo(world).scaleBy(3);
+
+
+	tQuery.createTorusKnot().addTo(world)
+		.setBasicMaterial()
+			.envMap(tQuery.createCubeTexture('skybox'))
+			//.envMap(refractionCube)
+			.color(0xFFFFFF)
+			.ambient(0xffffff)
+			.refractionRatio(0.95)
+			.back();
 </script></body>

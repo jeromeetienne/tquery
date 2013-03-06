@@ -1,0 +1,44 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.object3d.coordinate.js"></script>
+<body><script>
+require([ 'tquery.minecraft',
+	, 'tquery.grassground'
+	, 'tquery.montainarena'
+], function(){
+
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var ground	= tQuery.createGrassGround({
+		textureRepeatX	: 20,
+		textureRepeatY	: 20,
+	}).addTo(world)
+		.scale(40)
+
+	tQuery.MontainArena.createBasicArena().addTo(world)
+		.scale(40)
+
+	var character	= tQuery.createMinecraftChar().addTo(world)
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character.object3D(),
+	});
+	
+	
+	var marker	= tQuery.createObject3D().addTo( character.object3D() )
+		.positionY(1.2)
+
+	// Create dom element
+	var element	= document.createElement('div')
+	document.body.appendChild(element)
+	element.innerHTML	= 'John';	
+	element.style.position	= 'absolute'
+	element.style.padding	= '5px'
+	element.style.background= 'red'
+	// move it at the object position
+	world.loop().hook(function(){
+		var position	= marker.cssPosition();
+		element.style.left	= (position.x-element.offsetWidth /2)+'px';
+		element.style.top	= (position.y-element.offsetHeight/2)+'px';
+	})
+})
+</script></body>

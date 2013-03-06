@@ -3,8 +3,8 @@
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	tQuery.createSprite().addTo(world)
-		.map('../../grassground/images/grasslight-big.jpg')
-		.scaleBy(3)
-	
+	var object	= tQuery.createSprite().addTo(world)
+		.setSpriteMaterial()
+			.map('../../grassground/images/grasslight-big.jpg')
+			.back()
 </script></body>

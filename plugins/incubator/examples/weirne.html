@@ -1,0 +1,25 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="http://192.168.0.14:8080/target/target-script-min.js#anonymous"></script>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body>
+<style>
+#element {
+	position: absolute;
+
+	left: 10px;
+	top: 10px;
+
+	background: red;
+	width: 32px;
+	height: 32px;
+}
+</style>
+<div id='element'></div>	
+<script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world)
+		.addClass('object')
+		
+});
+</script></body>

@@ -1,0 +1,72 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.controlswrapper.js"></script>
+<script src="../tquery.controlstween.js"></script>
+<body><div id="info" style="z-index: 2">
+	Example of tquery.controlstween plugin<br/>
+	press 1-4 to change camera position
+</div><script>
+require(['tquery.skymap', 'tquery.keyboard'], function(){
+	var world	= tQuery.createWorld().pageTitle('#info').boilerplate().start();
+
+	tQuery.createSkymap('mars').addTo(world);
+
+	var cameraContainer	= tQuery.createObject3D().addTo(world)
+
+	// Attach the camera to the source
+	world.removeCameraControls();
+	tQuery(world.tCamera()).addTo(cameraContainer)
+		.position(0,0,0).rotation(0,0,0)
+		.rotationY(Math.PI)
+		.positionZ(-3)
+
+	var holders	= []
+
+	var holder	= tQuery.createTorus().addTo(world)
+		.positionX( -1.5 )
+		.rotationX( -Math.PI/2 )
+		.rotationY( -Math.PI/3 )
+	holders.push(holder)
+
+	var holder	= tQuery.createTorus().addTo(world)
+		.positionZ(  1.5 )
+	holders.push(holder)
+
+	var holder	= tQuery.createTorus().addTo(world)
+		.positionX(  1.5 )
+		.rotationY( +Math.PI/3 )
+	holders.push(holder)
+
+	var holder	= tQuery.createTorus().addTo(world)
+		.positionZ( -1.5 )
+		.rotationY( Math.PI )
+	holders.push(holder)
+
+
+	var controls	= tQuery.createControlsTween({
+		source	: cameraContainer,
+		target	: cameraContainer,
+		positionTween	: function(source, target, deltaSecond){
+			var damping	= 3 * deltaSecond;
+			return target.clone().sub(source).multiplyScalar(damping)
+		},
+		rotationTween	: function(source, target, deltaSecond){
+			var damping	= 3 * deltaSecond;
+			return target.clone().sub(source).multiplyScalar(damping)
+		},
+	}).start();
+	
+	world.loop().hook(function(){
+		var keyboard	= tQuery.keyboard();
+		if( keyboard.pressed('1') ){
+			controls.target( holders[0] )
+		}else if( keyboard.pressed('2') ){
+			controls.target( holders[1] )			
+		}else if( keyboard.pressed('3') ){
+			controls.target( holders[2] )			
+		}else if( keyboard.pressed('4') ){
+			controls.target( holders[3] )			
+		}
+	})
+})
+</script></body>

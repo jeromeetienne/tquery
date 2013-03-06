@@ -50,32 +50,32 @@ var Boid = function() {
 			vector.set( - _width, this.position.y, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( _width, this.position.y, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, - _height, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, _height, this.position.z );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, this.position.y, - _depth );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 			vector.set( this.position.x, this.position.y, _depth );
 			vector = this.avoid( vector );
 			vector.multiplyScalar( 5 );
-			_acceleration.addSelf( vector );
+			_acceleration.add( vector );
 
 		}/* else {
 
@@ -97,12 +97,12 @@ var Boid = function() {
 	this.flock = function ( boids ) {
 
 		if ( _goal ) {
-			_acceleration.addSelf( this.reach( _goal, 0.005 ) );
+			_acceleration.add( this.reach( _goal, 0.005 ) );
 		}
 
-		_acceleration.addSelf( this.alignment( boids ) );
-		_acceleration.addSelf( this.cohesion( boids ) );
-		_acceleration.addSelf( this.separation( boids ) );
+		_acceleration.add( this.alignment( boids ) );
+		_acceleration.add( this.cohesion( boids ) );
+		_acceleration.add( this.separation( boids ) );
 	}
 
 	/**
@@ -110,7 +110,7 @@ var Boid = function() {
 	 */
 	this.move = function () {
 		// update velocity with _acceleration
-		this.velocity.addSelf( _acceleration );
+		this.velocity.add( _acceleration );
 		_acceleration.set( 0, 0, 0 );
 		// keep speed <= _maxSpeed
 		var speed = this.velocity.length();
@@ -118,7 +118,7 @@ var Boid = function() {
 			this.velocity.divideScalar( speed / _maxSpeed );
 		}
 		// update position with velocity
-		this.position.addSelf( this.velocity );
+		this.position.add( this.velocity );
 	}
 
 	/**
@@ -140,7 +140,7 @@ var Boid = function() {
 		var steer = new THREE.Vector3();
 
 		steer.copy( this.position );
-		steer.subSelf( target );
+		steer.sub( target );
 
 		steer.multiplyScalar( 1 / this.position.distanceToSquared( target ) );
 
@@ -164,17 +164,17 @@ var Boid = function() {
 		if ( distance >= maxDistance )	return;
 		// compute vector to steer away
 		var steer	= new THREE.Vector3();
-		steer.sub( this.position, target );
+		steer.subVectors( this.position, target );
 		steer.multiplyScalar( 0.5 / distance );
 		// add steer vector
-		_acceleration.addSelf( steer );
+		_acceleration.add( steer );
 	}
 
 	this.reach = function ( target, amount ) {
 
 		var steer = new THREE.Vector3();
 
-		steer.sub( target, this.position );
+		steer.subVectors( target, this.position );
 		steer.multiplyScalar( amount );
 
 		return steer;
@@ -196,7 +196,7 @@ var Boid = function() {
 
 			if ( distance > 0 && distance <= _neighborhoodRadius ) {
 
-				velSum.addSelf( boid.velocity );
+				velSum.add( boid.velocity );
 				count++;
 
 			}
@@ -225,14 +225,14 @@ var Boid = function() {
 			var distance	= boid.position.distanceTo( this.position );
 
 			if( distance > 0 && distance <= _neighborhoodRadius ){
-				posSum.addSelf( boid.position );
+				posSum.add( boid.position );
 				count++;
 			}
 		}
 
 		if( count > 0 )	posSum.divideScalar( count );
 
-		steer.sub( posSum, this.position );
+		steer.subVectors( posSum, this.position );
 
 		var steerLen	= steer.length();
 		if( steerLen > _maxSteerForce ) {
@@ -251,10 +251,10 @@ var Boid = function() {
 			var distance	= boid.position.distanceTo( this.position );
 
 			if( distance > 0 && distance <= _neighborhoodRadius ){
-				repulse.sub( this.position, boid.position );
+				repulse.subVectors( this.position, boid.position );
 				repulse.normalize();
 				repulse.divideScalar( distance );
-				posSum.addSelf( repulse );
+				posSum.add( repulse );
 			}
 		}
 		return posSum;

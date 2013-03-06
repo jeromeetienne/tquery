@@ -6,7 +6,7 @@ tQuery.Mesh.registerInstance('linkify', function(url){
 	// build the underline
 	var underlineH	= size.y / 10;
 	var deltaY	= size.y / 20;
-	var underline	= tQuery.createCube(size.x, underlineH, size.z, mesh.get(0).material)
+	var underline	= tQuery.createCube(size.x, underlineH, size.z)
 			.translateY(-size.y/2 - deltaY - underlineH/2)
 			.addClass('underline')
 	// make it invisible by default

@@ -1,0 +1,68 @@
+<!doctype html><title>Chat And Fight 03 - Lights and Shadows</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+	// add a ground	
+	var ground  = tQuery.createGrassGround({
+		textureRepeatX  : 10,
+		textureRepeatY  : 10,
+	}).addTo(world).scale(80);
+
+	// add minecraft char
+	var character	= tQuery.createMinecraftChar().addTo(world);
+
+	// add a keyboard control for our character
+	var character3D	= character.object3D();
+	tQuery.createMinecraftCharKeyboard2({
+		object3D: character3D
+	});
+
+	// Create an animation for our character
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	// Make it run
+	bodyAnims.start('run');
+
+	// make it run only if it move		
+	var prevPosition= tQuery.createVector3();
+	world.loop().hook(function(){
+		// compute velocity
+		var velocity	= character3D.position().clone().subSelf(prevPosition);
+		// pick animation based
+		if( velocity.length() ){
+			bodyAnims.start('run')
+		}else{
+			bodyAnims.start('stand')
+		}
+		// update prevRotation
+		prevPosition.copy( character3D.position() );		
+	})
+
+	//////////////////////////////////////////////////////////////////////////
+	//		shadowMap						//
+	//////////////////////////////////////////////////////////////////////////	
+	// enable shadow in the world renderer
+	world.shadowMapEnabled(true);
+	// make minecraft character cast shadow
+	character.castShadow(true);
+	// make ground receive shadow
+	ground.receiveShadow(true);
+	// create a light and make it cast shadow
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.castShadow(true).shadowCameraVisible(true)
+		.shadowDarkness(0.6).shadowMap(1024,1024)
+		.shadowCamera(4, -4, 4, -4, 0.1, 10);
+	// light to follow character
+	world.loop().hook(function(){
+		var delta	= tQuery.createVector3(-1,2,3);
+		var position	= character3D.position().clone().addSelf(delta);
+		light.position(position);
+	})
+	// point the light target to character3D
+	light.get(0).target.position	= character3D.position();
+})
+</script></body>

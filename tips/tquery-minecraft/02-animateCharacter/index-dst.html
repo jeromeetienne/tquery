@@ -1,0 +1,20 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft'], function(){
+	// create a 3d world, use the boilerplate and start it
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	// load the minecraft character and add it to the world
+	var character	= tQuery.createMinecraftChar().addTo(world);	
+	var character3D	= character.object3D().translateY(-0.5);
+	
+	// make it run
+	var bodyAnims	= tQuery.createMinecraftCharAnimations(character);
+	bodyAnims.start('run');
+
+	// make it positive :)
+	var headAnims	= tQuery.createMinecraftCharHeadAnimations(character);
+	headAnims.start('yes');
+});
+</script></body>

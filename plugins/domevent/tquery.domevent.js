@@ -9,7 +9,7 @@ tQuery.World.registerInstance('enableDomEvent', function(){
 	// sanity check
 	console.assert(this.hasDomEvent() === false);
 	// create THREEx.DomEvent
-	var domEvent	= new THREEx.DomEvent();
+	var domEvent	= new THREEx.DomEvent(undefined, this.tRenderer().domElement);
 	// set the camera in domEvent
 	domEvent.camera(this.tCamera());
 	// create the context
@@ -60,8 +60,7 @@ tQuery.Object3D.registerInstance('on', function(eventType, callback, world){
 	this.each(function(object3d){
 		domEvent.bind(object3d, eventType, callback, false);
 	});
-	// for chained API
-	return this;	
+	return callback;	
 });
 
 tQuery.Object3D.registerInstance('off', function(eventType, callback, world){
@@ -77,6 +76,7 @@ tQuery.Object3D.registerInstance('off', function(eventType, callback, world){
 	this.each(function(object3d){
 		domEvent.unbind(object3d, eventType, callback, false);
 	});
-	// for chained API
-	return this;
+	return callback;	
 });
+
+

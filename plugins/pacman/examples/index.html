@@ -1,0 +1,40 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.pacman.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// put some lights	
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,1)
+
+	// add pacman
+	var pacman	= tQuery.Pacman.create().addTo(world)
+		.translateX(-1.5);
+	world.loop().hook(function(delta, now){
+		pacman.rotateY(0.02)
+	})
+
+	// add eyes
+	var eyes	= tQuery.Pacman.create({
+		face	: 'pupil',
+		shape	: 'eyes',
+		text	: '',
+		color	: '#ffffff'
+	}).addTo(world);
+	world.loop().hook(function(delta, now){
+		eyes.rotateY(0.02)
+	})
+
+	// add ghost
+	var ghost	= tQuery.Pacman.create({
+		shape	: 'ghost',
+		text	: 'El jeje',
+	}).addTo(world)
+		.translateX(1.5)
+	world.loop().hook(function(delta, now){
+		ghost.rotateY(0.02)
+	})
+</script></body> 

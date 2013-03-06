@@ -1,0 +1,55 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="excanvas.js"></script>
+<script src="Threex.TextureSmiley.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// put some lights	
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,1)
+
+	// build the canvas + texture
+	var canvasW	= 512;
+	var canvas	= document.createElement('canvas');
+	canvas.width	= canvasW;
+	canvas.height	= canvasW;
+	var texture	= new THREE.Texture(canvas);
+	texture.needsUpdate	= true;
+	
+	// clear the previous texture
+	var ctx		= canvas.getContext('2d');
+	ctx.fillStyle	= "#ffff00";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	
+	THREEx.Texture.Smiley.happy(canvas);
+	//THREEx.Texture.Smiley.hurt(canvas);
+	//THREEx.Texture.Smiley.angry(canvas);
+	//THREEx.Texture.Smiley.pupil(canvas);
+
+	THREEx.Texture.Smiley.textOnBack(canvas, 'el jeje', '40pt')
+
+	var object	= tQuery.createSphere().addTo(world)
+		.setLambertMaterial()
+			.map(texture)
+			.back()
+
+	world.loop().hook(function(delta, now){
+		object.rotateY(0.02)
+	})
+
+	// add the shadow on the ground
+	var texture	= THREEx.Texture.Smiley.shaddowTexture();
+	tQuery.createPlane().addTo(object)
+		.rotationX(-Math.PI/2)
+		.positionY(-0.5)
+		.setLambertMaterial()
+			.map(texture)
+			.opacity(0.5)
+			.back();
+	
+</script></body> 

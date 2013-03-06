@@ -1,0 +1,13 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.controls'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	// here is how to plug a three.js to controls the camera
+	var tCamera	= world.tCamera();
+	var controls	= new THREE.OrbitControls( tCamera );
+	world.setCameraControls(controls);
+});
+</script></body>

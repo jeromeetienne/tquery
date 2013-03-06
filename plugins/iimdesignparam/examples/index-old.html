@@ -1,0 +1,112 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="../../domevent/threex.domevent.js"></script>
+<script src="../../domevent/tquery.object3d.domevent.js"></script>
+<script src="../../linkify/tquery.mesh.linkify.js"></script>
+
+<script src="../../text/fonts/gentilis_bold.typeface.js"></script>
+<script src="../../text/fonts/gentilis_regular.typeface.js"></script>
+<script src="../../text/fonts/optimer_bold.typeface.js"></script>
+<script src="../../text/fonts/optimer_regular.typeface.js"></script>
+<script src="../../text/fonts/helvetiker_bold.typeface.js"></script>
+<script src="../../text/fonts/helvetiker_regular.typeface.js"></script>
+<script src="../../text/fonts/droid/droid_sans_regular.typeface.js"></script>
+<script src="../../text/fonts/droid/droid_sans_bold.typeface.js"></script>
+<script src="../../text/fonts/droid/droid_serif_regular.typeface.js"></script>
+<script src="../../text/fonts/droid/droid_serif_bold.typeface.js"></script>
+<script src="../../text/tquery.text.js"></script>
+
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../../keyboard/tquery.keyboard.js"></script>
+
+<script src='../../checkerboard/tquery.checkerboard.js'></script>
+<script src='../../fog/tquery.world.createfog.js'></script>
+
+<script src="../../shape/tquery.shape.js"></script>
+<script src="../../shape/tquery.shape.create.js"></script>
+
+<script src="../../videos/tquery.createvideotexture.js"></script>
+<script src="../../videos/tquery.createwebcamtexture.js"></script>
+<script src="../../videos/tquery.createtvsnowtexture.js"></script>
+
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	//world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
+
+	//world.addFogExp2({density : 0.1});
+	
+	world.tCamera().position.z		+= 2;
+	world.getCameraControls().target.z	+= -2;
+	world.getCameraControls().rangeX	*= 1/10;
+
+	
+	world.loop().hook(function(){
+		var position	= world.tCamera().position;
+		position.y	= Math.max(position.y, 1)
+	});
+
+	tQuery.createAmbientLight().addTo(world).color(0x444444);
+	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world).position(-1,1,1).color(0xffffff).intensity(1);
+
+	var text	= tQuery.createText("tQuery").addTo(world)
+		.scaleBy(1/3)
+		.setLambertMaterial().ambient(0x444444).color(0xEE1289).back()
+		.rotateY(-Math.PI/3)
+		.translateX(1.3)
+		.translateY(0.5)
+	text.linkify('https://github.com/jeromeetienne/tquery/');
+
+	tQuery.createCheckerboard({
+		segmentsW	: 100,	// number of segment in width
+		segmentsH	: 100	// number of segment in Height
+	}).addTo(world).scaleBy(100);
+
+
+	var fish = tQuery.createCube().addTo(world)
+		.setLambertMaterial()
+			.ambient(0xFFFFFF)
+			.color(0xEE1289)
+			.color(0xFFFFFF)
+			.opacity(0.9)
+			.map("../../assets/images/water.jpg")
+			//.map(tQuery.createVideoTexture('../../videos/examples/sintel.ogv'))
+			.color(0xFFFFFF)
+			.opacity(1)
+			.back()
+		.translateY(0.5)
+		.translateZ(-1.5)
+		.id('fish')
+		
+	var turning	= true;
+	fish.on('click', function(){
+		turning	= !turning;
+	})
+
+	tQuery.world.loop().hook(function(delta){
+		if( turning === false )	return;
+		tQuery('#fish').rotateY(90 * delta * Math.PI / 180);
+	});
+
+	//var texture	= tQuery.createWebcamTexture();
+	//var texture	= tQuery.createTVSnowTexture();
+	var texture	= tQuery.createVideoTexture('../../videos/examples/sintel.ogv');
+	tQuery.createCube(1.6,0.9,0.2).addTo(world)
+		.setBasicMaterial().map(texture).back()
+		.translateX(-1.3)
+		.translateY(0.5)
+		.translateZ(-0.4)
+		.rotateY(Math.PI/4)
+		.on('click', function(event){
+			var tObject	= event.target;
+			var videoElem	= tObject.material.map.image;
+			console.log("click on cube", event, tObject.material.map)
+			if( videoElem.paused || videoElem.ended )	videoElem.play();
+			else			videoElem.pause();
+		});
+
+</script></body>
+

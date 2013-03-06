@@ -47,7 +47,6 @@ tQuery.registerStatic('DatguiTuner', function(opts){
 			var folder	= gui.addFolder('DirectionalLight-'+light.id);
 			addColor(folder, light, 'color');
 			folder.add(light, 'intensity');
-			folder.add(light, 'distance');
 		}else if( light instanceof THREE.PointLight ){
 			var folder	= gui.addFolder('PointLight-'+light.id);
 			addColor(folder, light, 'color');

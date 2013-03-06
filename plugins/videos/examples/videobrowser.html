@@ -1,0 +1,137 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><div id="info" style='color: white'>
+	attempt to a video browser in webgl
+</div><script>
+require([ 'tquery.webaudio'
+	, 'tquery.videos'
+	, 'tquery.checkerboard'
+	, 'tquery.minecraft'
+	, 'tquery.domevent'
+	, 'tquery.skymap'
+	, 'tquery.text'
+	, 'tquery.linkify'
+	, 'tquery.pproc'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+
+	//world.removeCameraControls()
+	world.enableWebAudio()
+	world.enableDomEvent()
+
+	world.addEffectComposer().film(0.25, 0.25, 648, false).vignette().finish();
+
+	console.assert(WebAudio.isAvailable);
+
+	var textureCube	= tQuery.createCubeTexture('mars');
+	tQuery.createSkymap({
+		textureCube	: textureCube
+	}).addTo(world);
+	
+	tQuery.createCheckerboard({
+		segmentsW	: 20,
+		segmentsH	: 20
+	}).addTo(world).scaleBy(10);
+	
+	var cache	= new tQuery.MicroCache();
+	
+	// create the minecraft character
+	var character	= tQuery.createMinecraftChar().addTo(world)
+	var character3D	= character.object3D()
+		.translateZ(-2)
+	
+	// to enable a tracking camera
+	var cameraControls	= tQuery.createCameraFpsControls({
+		trackedObject	: character3D,
+		tCamera		: world.tCamera(),
+		deltaCamera	: tQuery.createVector3(0, 1.5, -3).setLength(3),
+	});
+	world.setCameraControls(cameraControls)
+
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character3D,
+	});
+
+	// init bodyAnims
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	bodyAnims.start('stand');
+	
+	// update this._bodyAnim depending on velocity
+	var prevRotation= tQuery.createVector3();
+	var prevPosition= tQuery.createVector3();
+	setInterval(function(){
+		// compute player velocity
+		var velocity	= character3D.position().clone().sub(prevPosition);
+		// set bodyAnim according to velocity value
+		var animName	= velocity.length() ? 'run' : 'stand';
+		bodyAnims.start(animName);
+		// update player.prevPosition/player.prevRotation
+		prevPosition.copy( character3D.position() )
+		prevRotation.copy( character3D.rotation() )
+	}.bind(this), 1000/5);	// Important to be less than framerate - thus you dont misdetect still 
+	
+	// create the screen
+	var object3D	= createScreen({
+		videoUrl	: 'Make your minecraft move - tQuery tips.mp4',
+		// videoUrl	: 'http://www.corsproxy.com/dl.dropbox.com/s/oajqik52fv6wfpx/Make%20your%20minecraft%20move%20-%20tQuery%20tips.mp4',
+		// videoUrl	: 'https://dl.dropbox.com/s/oajqik52fv6wfpx/Make%20your%20minecraft%20move%20-%20tQuery%20tips.mp4',
+		title		: 'Make your minecraft move',
+		youtubeUrl	: 'http://www.youtube.com/watch?v=p6DO_vu7JJg',
+
+		videoUrl	: '../../assets/videos/sintel.ogv',
+		title		: 'Sintel Trailer',
+		youtubeUrl	: 'http://www.youtube.com/watch?v=ac7KhViaVqc',
+	}).addTo(world)
+
+	
+	function createScreen(opts){
+		var object3D	= tQuery.createCube(1.6,0.9,0.2)
+			.geometry()
+				.translateY(0.9 / 2)
+				.back()
+			.castShadow(true)
+		// create the texture
+		var avTexture	= tQuery.createAudioVideoTexture(opts.videoUrl);
+		// pause the video
+		avTexture.video().pause();
+		// set it as material
+		object3D.setBasicMaterial()
+			.map(avTexture.tTexture())	// To get the video 
+			.back()
+		// make the sound follow the object
+		avTexture.addEventListener('soundReady', function(){
+			avTexture.sound().follow(object3D)
+		})
+		// bind the click event
+		object3D.on('click', function(event){
+			var tObject3D	= event.target;
+			var videoElem	= avTexture.video();
+			//console.log("click on cube", event, tObject.material.map)
+			var notPlaying	= videoElem.paused || videoElem.ended;
+			if(notPlaying)	videoElem.play();
+			else		videoElem.pause();
+		});
+		// add the title
+		if( opts.title ){
+			tQuery.createText(opts.title).addTo(object3D)
+				.scale(1/10)
+				.addClass('title')
+				.translateY(1.1)			
+		}
+		if( opts.youtubeUrl ){
+			var material	= cache.getSet('youtubeIcon', function(){
+				return tQuery.createMeshBasicMaterial()
+						.map('images/youtube_32x32.png')
+			})
+			tQuery.createCube(0.1, 0.1, 0.1).addTo(object3D)
+				.translateX(1)
+				.translateY(0.1)
+				.material(material)
+				.linkify(opts.youtubeUrl)			
+		}
+
+		// return the object
+		return object3D	
+	}
+});
+</script></body>

@@ -25,10 +25,12 @@ var THREEx	= THREEx 		|| {};
 */
 THREEx.WindowResize	= function(renderer, camera){
 	var callback	= function(){
+		var renderW	= window.innerWidth;
+		var renderH	= window.innerHeight;
 		// notify the renderer of the size change
-		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setSize( renderW, renderH );
 		// update the camera
-		camera.aspect	= window.innerWidth / window.innerHeight;
+		camera.aspect	= renderW / renderH;
 		camera.updateProjectionMatrix();
 	}
 	// bind the resize event
@@ -40,7 +42,14 @@ THREEx.WindowResize	= function(renderer, camera){
 		*/
 		stop	: function(){
 			window.removeEventListener('resize', callback);
-		}
+		},
+		/**
+		 * to manually trigger a resize
+		 * @type {[type]}
+		 */
+		trigger	: function(){
+			callback();
+		},
 	};
 }
 

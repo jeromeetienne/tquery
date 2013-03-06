@@ -39,7 +39,8 @@ tQuery.registerStatic('createPlanet', function(opts){
 		var normalTex	= THREE.ImageUtils.loadTexture( baseUrl+"images/earth_normal_2048.jpg" );
 		var specularTex	= THREE.ImageUtils.loadTexture( baseUrl+"images/earth_specular_2048.jpg" );
 
-		var shader	= THREE.ShaderUtils.lib[ "normal" ];
+
+		var shader	= THREE.ShaderLib[ "normalmap" ];
 		var uniforms	= THREE.UniformsUtils.clone( shader.uniforms );
 
 		uniforms[ "tNormal" ].value	= normalTex;
@@ -69,7 +70,7 @@ tQuery.registerStatic('createPlanet', function(opts){
 			lights		: true
 		});
 
-		var geometry	= new THREE.SphereGeometry(0.5, 30, 15 );
+		var geometry	= new THREE.SphereGeometry(0.5, 100, 50 );
 		geometry.computeTangents();
 
 		tQuery(geometry, materialNormalMap).addTo(object)

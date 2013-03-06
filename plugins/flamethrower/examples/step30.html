@@ -1,0 +1,51 @@
+<!--
+### add sound in space
+* lets add a sound track
+* pick the song appropriatly
+-->
+<!doctype html><title>Flying to the moon</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/tquery/ColladaLoader.js"></script>
+<body><script>
+require(['tquery.skymap', 'tquery.webaudio'], function(){
+	// init world
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tCamera().position.z	= -30;
+
+// HERE >>>>>>>
+	// if webaudio is available in your browser
+	if( WebAudio.isAvailable ){
+		// enable webaudio
+		world.enableWebAudio();
+		// load sound track
+		var url	= 'sounds/flymetothemoon.m4a';
+		tQuery.createSound().load(url, function(sound){
+			sound.loop(true).volume(4).play();
+		});		
+	}
+
+	// create the container for the comboemitter
+	var container	= tQuery.createObject3D().addTo(world)
+
+	// load the rockets
+	var loader	= new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	var url		= "./models/TINTINROCKET/models/TIN TIN ROCKET.dae"
+	loader.load(url, function( collada ){
+		tQuery(collada.scene).scale(0.2)
+			.rotateX(Math.PI/2).rotateY(Math.PI/3)
+			.translateZ(-5)
+			.addTo(container);
+	});
+	
+	// add lights
+	tQuery.createAmbientLight().addTo(world).color(0x222222);	
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xcccccc).position(1, 1, 1);
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xcccccc).position(-1, 1, -1);
+
+	// add a skymap
+	var skymap	= tQuery.createSkymap('mars').addTo(world);
+});
+</script></body>

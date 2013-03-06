@@ -1,0 +1,33 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="debug-bundle.js"></script>
+<body><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	
+	var v1	= new THREE.Vector3(0,1,0);
+	var v2	= new THREE.Vector3(1,0,0);
+	var v3	= new THREE.Vector3(0,0,0);
+	
+	THREE.Vector3.prototype.addVectors = TypeCheck.fn(THREE.Vector3.prototype.addVectors, 
+		[THREE.Vector3, THREE.Vector3],
+		[THREE.Vector3]);
+	THREE.Vector3.prototype.add = TypeCheck.fn(THREE.Vector3.prototype.add,
+		[THREE.Vector3],
+		[THREE.Vector3]);
+	THREE.Vector3.prototype.subVectors = TypeCheck.fn(THREE.Vector3.prototype.subVectors, 
+		[THREE.Vector3, THREE.Vector3],
+		[THREE.Vector3]);
+	THREE.Vector3.prototype.sub = TypeCheck.fn(THREE.Vector3.prototype.sub,
+		[THREE.Vector3],
+		[THREE.Vector3]);
+	
+	v3.addVectors(v1, v2)
+	v3.add(v1)
+	
+	console.log('v3', v3)
+	
+});
+</script></body>

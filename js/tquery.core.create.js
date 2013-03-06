@@ -34,6 +34,11 @@ tQuery.registerStatic('createLoop', function(world){
 });
 
 
+tQuery.registerStatic('createHemisphereLight', function(){
+	var tLight	= new THREE.HemisphereLight();
+	return new tQuery.HemisphereLight([tLight]);
+});
+
 tQuery.registerStatic('createDirectionalLight', function(){
 	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);
@@ -95,6 +100,18 @@ tQuery.registerStatic('createCube', function(){
 tQuery.registerStatic('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var dflGeometry	= [0.5-0.15, 0.15];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.registerStatic('createTorusKnot', function(){
+	var ctor	= THREE.TorusKnotGeometry;
+	var dflGeometry	= [0.27, 0.1, 128, 32];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.registerStatic('createCircle', function(){
+	var ctor	= THREE.CircleGeometry;
+	var dflGeometry	= [0.5, 32];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
@@ -161,6 +178,5 @@ tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 
 tQuery.registerStatic('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
 });

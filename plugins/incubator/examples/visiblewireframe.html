@@ -1,0 +1,18 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="tquery.object3d.visiblewireframe.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// create a cube
+	var object	= tQuery.createTorus().addTo(world);
+	
+	// add a visible wireframe
+	object.visibleWireframe(true)
+	
+	// remove visible wireframe after 2 seconds
+	setTimeout(function(){
+		object.visibleWireframe(false)
+	}, 2000);
+</script></body>

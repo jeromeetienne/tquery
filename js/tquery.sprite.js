@@ -4,11 +4,9 @@
  * @returns {tQuery.Sprite} the create object
 */
 tQuery.registerStatic('createSprite', function(opts){
-	opts		= tQuery.extend(opts, {
-		useScreenCoordinates	: false
-	});
-	var sprite	= new THREE.Sprite(opts);
-	return new tQuery.Sprite(sprite)
+	var tSprite	= new THREE.Sprite(opts);
+	var sprite	= new tQuery.Sprite(tSprite);
+	return sprite;
 })
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -31,12 +29,33 @@ tQuery.registerStatic('Sprite', function(elements){
 */
 tQuery.inherit(tQuery.Sprite, tQuery.Object3D);
 
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Sprite);
+
 
 /**
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Sprite, {
-	color			: tQuery.convert.toThreeColor,
-	map			: tQuery.convert.toTexture,
-	useScreenCoordinates	: tQuery.convert.toBoolean
+	rotation	: tQuery.convert.toNumber,
 });
+
+/**
+ * TODO to remove. this function is crap
+*/
+tQuery.Sprite.prototype.material	= function(value){
+	var parent	= tQuery.Sprite.parent;
+	// handle the getter case
+	if( value === undefined )	return parent.material.call(this);
+	// handle parameter polymorphism
+	if( value instanceof tQuery.Material )	value	= value.get(0)
+	// sanity check
+	console.assert( value instanceof THREE.SpriteMaterial )
+	// handle the setter case
+	this.each(function(tSprite){
+		tSprite.material	= value;
+	});
+	return this;	// for the chained API
+}

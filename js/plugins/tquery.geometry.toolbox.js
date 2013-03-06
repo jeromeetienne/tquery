@@ -41,7 +41,7 @@ tQuery.Geometry.registerInstance('scaleBy', function(vector3){
 	this.each(function(geometry){
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.multiplySelf(vector3); 
+			vertex.multiply(vector3); 
 		}
 		// mark the vertices as dirty
 		geometry.verticesNeedUpdate = true;
@@ -128,7 +128,7 @@ tQuery.Geometry.registerInstance('translate', function(delta){
 		// change all geometry.vertices
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.addSelf(delta); 
+			vertex.add(delta); 
 		}
 		// mark the vertices as dirty
 		geometry.verticesNeedUpdate = true;
@@ -179,27 +179,6 @@ tQuery.Geometry.registerInstance('center', function(noX, noY, noZ){
 		if( noZ )	delta.z	= 0;
 
 		return geometry.translate(delta)
-	});
-	// return this, to get chained API	
-	return this;
-});
-
-/**
- * Smooth the geometry using catmull-clark
- *
- * @param {Number} subdivision the number of subdivision to do
-*/
-tQuery.Geometry.registerInstance('smooth', function(subdivision){
-	// init the modifier
-	var modifier	= new THREE.SubdivisionModifier( subdivision );
-	// apply it to each geometry
-	this.each(function(geometry){
-		// apply it
-		modifier.modify( geometry )
-	
-		// mark the vertices as dirty
-		geometry.verticesNeedUpdate = true;
-		geometry.computeBoundingBox();
 	});
 	// return this, to get chained API	
 	return this;

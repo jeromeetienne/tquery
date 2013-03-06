@@ -30,6 +30,7 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Object3D);
+tQuery.pluginsStaticOn(tQuery.Object3D);
 
 /**
  * define all acceptable attributes for this class
@@ -56,15 +57,14 @@ tQuery.mixinAttributes(tQuery.Object3D, {
  * 
  * @returns {tQuery.Object3D} return the tQuery.Object3D itself
 */
-tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
-	this.each(function(object3d){
-		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
-			callback(object3d);
+tQuery.Object3D.prototype.traverse	= function(callback){
+	this.each(function(tObject3d){
+		tObject3d.traverse(function(childObject3D){
+			callback(childObject3D, this);
 		});
 	});
 	return this;	// for chained API
 };
-
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -93,11 +93,11 @@ tQuery.Object3D.prototype.geometry	= function(value){
  * @returns {tQuery.Material} return the materials from the tQuery.Object3D
 */
 tQuery.Object3D.prototype.material	= function(){
-	var materials	= [];
+	var tMaterials	= [];
 	this.each(function(object3d){
-		materials.push(object3d.material)
+		tMaterials.push(object3d.material)
 	});
-	return new tQuery.Material(materials);
+	return new tQuery.Material(tMaterials);
 };
 
 
@@ -106,12 +106,20 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.clone	= function(){
 	var clones	= [];
-	this._lists.forEach(function(object3d){
-		var clone	= object3d.clone();
+	this.each(function(tObject3d){
+		var clone	= tObject3d.clone();
 		clones.push(clone);
 	})  
 	return tQuery(clones)
 }
+
+tQuery.Object3D.prototype.lookAt = function(position){
+	position	= tQuery.convert.toVector3.apply(null, arguments);
+	this.each(function(tObject3d){
+		tObject3d.lookAt(position)
+	}) 	
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//

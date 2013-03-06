@@ -1,0 +1,26 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.webaudio'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+
+	// enable webaudio
+	WebAudio.isAvailable && world.enableWebAudio();
+	
+	if( WebAudio.isAvailable ){
+		tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
+			sound.loop(true).play()
+		});
+		
+		
+		// init the library without tQuery plugins to avoid the listener localisation
+		var webaudio	= new WebAudio();
+		// create a sound
+		webaudio.createSound().load('../../assets/sounds/techno.mp3', function(sound){
+			sound.loop(true).play();
+		});
+
+	}
+});
+</script></body>

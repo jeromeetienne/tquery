@@ -1,0 +1,37 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.minecraft'], function(){
+	// create a 3d world, use the boilerplate and start it
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	// load the minecraft character and add it to the world
+	var character	= tQuery.createMinecraftChar().addTo(world);	
+	var character3D	= character.object3D().translateY(-0.5);
+	
+	// ads a keyboard control
+	tQuery.createMinecraftCharKeyboard2({
+		object3D: character3D
+	});
+	
+	// make it run
+	var bodyAnims	= tQuery.createMinecraftCharAnimations(character);
+	bodyAnims.start('run');
+	
+	// make it run only if it move
+	var prevPosition= tQuery.createVector3();
+	world.loop().hook(function(){
+		// compute velocity
+		var position	= character3D.position().clone();
+		var velocity	= position.subSelf(prevPosition);
+		// pick animation based
+		if( velocity.length() ){
+			bodyAnims.start('run')
+		}else{
+			bodyAnims.start('stand')
+		}
+		// update player.prevPosition/player.prevRotation
+		prevPosition.copy( character3D.position() )		
+	});
+});
+</script></body>

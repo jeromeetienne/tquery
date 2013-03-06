@@ -7,12 +7,15 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
+			"tquery.controls": "plugins/controls/tquery.controlstween",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
 			"tquery.deviceorientation": "plugins/deviceorientation/tquery.deviceorientation",
 			"tquery.domevent": "plugins/domevent/tquery.domevent",
+			"tquery.fireball": "plugins/fireball/tquery.fireballmaterial",
 			"tquery.fog": "plugins/fog/tquery.world.createfog",
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.gsvpano": "plugins/gsvpano/tquery.gsvpano",
@@ -20,14 +23,19 @@ requirejs.config({
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
-			"tquery.light": "plugins/light/tquery.light.shadow",
+			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
+			"tquery.loaders": "plugins/loaders/tquery.loaders",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
+			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
 			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
+			"tquery.objectcoord": "plugins/objectcoord/tquery.object3d.coordinate",
 			"tquery.physics": "plugins/physics/tquery.physijs",
 			"tquery.planets": "plugins/requirejs/confrequire/planets.initrequire",
+			"tquery.playerinput": "plugins/playerinput/tquery.playerinput.keyboard",
+			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
@@ -37,11 +45,18 @@ requirejs.config({
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
+			"tquery.virtualjoystick": "plugins/virtualjoystick/vendor/virtualjoystick",
+			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
-			"domReady": "plugins/requirejs/vendor/domReady"
+			"domReady": "plugins/requirejs/vendor/domReady",
+			"tquery.whammy": "plugins/requirejs/confrequire/whammy.initrequire"
 		}
 	},
 	"shim": {
+		"plugins/cannonjs/tquery.object3d.cannonjs": [
+			"plugins/cannonjs/tquery.world.cannonjs",
+			"plugins/cannonjs/vendor/cannon.js/build/cannon"
+		],
 		"plugins/requirejs/confrequire/car.initrequire": [
 			"plugins/car/tquery.car",
 			"plugins/car/Car",
@@ -58,6 +73,16 @@ requirejs.config({
 		"plugins/car/tquery.car.keyboard": [
 			"plugins/car/tquery.car"
 		],
+		"plugins/controls/tquery.controlstween": [
+			"plugins/controls/tquery.controlswrapper",
+			"three.js/controls/FirstPersonControls",
+			"three.js/controls/OrbitControls",
+			"three.js/controls/PointerLockControls",
+			"three.js/controls/TrackballControls",
+			"three.js/controls/FlyControls",
+			"three.js/controls/PathControls",
+			"three.js/controls/RollControls"
+		],
 		"plugins/csg/tquery.geometry.csg": [
 			"plugins/csg/csg",
 			"plugins/csg/ThreeCSG",
@@ -68,7 +93,7 @@ requirejs.config({
 			"plugins/assets/vendor/dat.gui/dat.color"
 		],
 		"plugins/deviceorientation/tquery.deviceorientation": [
-			"threex/threex.DeviceOrientationState"
+			"threex/THREEx.DeviceOrientationState"
 		],
 		"plugins/domevent/tquery.domevent": [
 			"plugins/domevent/threex.domevent"
@@ -84,6 +109,17 @@ requirejs.config({
 		],
 		"plugins/linkify/tquery.mesh.linkify": [
 			"tquery.domevent"
+		],
+		"plugins/loaders/tquery.loaders": [
+			"three.js/loaders/BinaryLoader",
+			"three.js/loaders/MTLLoader",
+			"three.js/loaders/OBJMTLLoader",
+			"three.js/loaders/STLLoader",
+			"three.js/loaders/VTKLoader",
+			"three.js/loaders/ColladaLoader",
+			"three.js/loaders/OBJLoader",
+			"three.js/loaders/PDBLoader",
+			"three.js/loaders/UTF8Loader"
 		],
 		"plugins/requirejs/confrequire/md2character.initrequire": [
 			"plugins/md2character/tquery.md2character",
@@ -104,18 +140,41 @@ requirejs.config({
 			"plugins/minecraft/tquery.midikeytween",
 			"plugins/minecraft/tquery.minecraftchar",
 			"plugins/minecraft/tquery.minecraftchar.keyboard2",
+			"tquery.keyboard",
+			"plugins/minecraft/tquery.minecraftcharcontrols",
 			"plugins/minecraft/tquery.camerafpscontrols",
-			"plugins/minecraft/tquery.animation",
-			"plugins/minecraft/tquery.animations",
 			"plugins/minecraft/tquery.spritesheet",
 			"plugins/minecraft/tquery.minecraftcharanimations",
 			"plugins/minecraft/tquery.minecraftcharheadanimations"
+		],
+		"plugins/minecraft/tquery.minecraftcharanimations": [
+			"plugins/minecraft/tquery.animations"
+		],
+		"plugins/minecraft/tquery.minecraftcharheadanimations": [
+			"plugins/minecraft/tquery.animations"
+		],
+		"plugins/minecraft/tquery.animations": [
+			"plugins/minecraft/tquery.animation"
+		],
+		"plugins/modifiers/tquery.geometry.smooth": [
+			"three.js/modifiers/ExplodeModifier",
+			"three.js/modifiers/SubdivisionModifier",
+			"three.js/modifiers/TessellateModifier"
 		],
 		"plugins/physics/tquery.physijs": [
 			"plugins/physics/vendor/physijs/physi"
 		],
 		"plugins/requirejs/confrequire/planets.initrequire": [
 			"plugins/planets/tquery.createplanet"
+		],
+		"plugins/playerinput/tquery.playerinput.keyboard": [
+			"tquery.keyboard",
+			"plugins/playerinput/tquery.playerinput",
+			"plugins/playerinput/tquery.playerinput.virtualjoystick"
+		],
+		"plugins/playerinput/tquery.playerinput.virtualjoystick": [
+			"tquery.virtualjoystick",
+			"plugins/playerinput/tquery.playerinput"
 		],
 		"plugins/pproc/tquery.effectcomposer": [
 			"three.js/shaders/BleachBypassShader",
@@ -138,6 +197,9 @@ requirejs.config({
 			"three.js/postprocessing/SavePass",
 			"three.js/postprocessing/ShaderPass",
 			"three.js/postprocessing/TexturePass"
+		],
+		"plugins/shadowmap/tquery.light.shadowmap": [
+			"plugins/shadowmap/tquery.world.shadowmap"
 		],
 		"plugins/shape/tquery.shape": [
 			"plugins/shape/tquery.shape.create"
@@ -172,8 +234,33 @@ requirejs.config({
 			"plugins/tweenjs/vendor/Tween"
 		],
 		"plugins/videos/tquery.createvideotexture": [
+			"plugins/videos/tquery.audiovideotexture",
 			"plugins/videos/tquery.createwebcamtexture",
 			"plugins/videos/tquery.createtvsnowtexture"
+		],
+		"plugins/requirejs/confrequire/webaudio.initrequire": [
+			"plugins/webaudio/vendor/webaudio-bundle",
+			"plugins/webaudio/vendor/webaudio.sound.jsfx",
+			"plugins/webaudio/vendor/jsfx/jsfx",
+			"plugins/webaudio/vendor/jsfx/jsfxlib"
+		],
+		"plugins/webaudio/vendor/webaudio.sound.jsfx": [
+			"plugins/webaudio/vendor/webaudio-bundle"
+		],
+		"plugins/webaudio/vendor/jsfx/jsfx": [
+			"plugins/webaudio/vendor/jsfx/audio"
+		],
+		"plugins/webaudio/vendor/jsfx/jsfxlib": [
+			"plugins/webaudio/vendor/jsfx/jsfx"
+		],
+		"plugins/requirejs/confrequire/whammy.initrequire": [
+			"plugins/whammy/vendor/whammy",
+			"plugins/whammy/tquery.whammy",
+			"plugins/whammy/tquery.whammy.bindkeyboard",
+			"plugins/whammy/tquery.whammyUI"
+		],
+		"plugins/whammy/tquery.whammy.bindkeyboard": [
+			"plugins/whammy/tquery.whammy"
 		]
 	}
 });

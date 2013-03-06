@@ -14,7 +14,9 @@ tQuery.registerStatic('Headtrackr', function(opts){
 	this._opts	= opts	= tQuery.extend(opts, {
 		width		: 320,
 		height		: 240,
-		headtrackrOpts	: {}
+		headtrackrOpts	: {
+			calcAngles	: true
+		}
 	});
 	
 	// bind facetrackingEvent

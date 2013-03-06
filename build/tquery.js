@@ -101,6 +101,21 @@ tQuery.data	= function(object, key, value, mustNotExist)
 };
 
 /**
+ * test if the data exist
+ * @param  {Object}  object the object which may or may not contain the data
+ * @param  {string}  key    the key of the data
+ * @return {Boolean}        true if the data exist, false otherwise
+ */
+tQuery.hasData	= function(object, key){
+	// if there is no data at all, return false
+	if( object['_tqData'] === undefined )		return false;
+	// if this data doesnt exist, return false
+	if( object['_tqData'][key] === undefined )	return false;
+	// if all previous test passed, return true
+	return true;
+}
+
+/**
  * Same as jQuery.removeData()
  *
  * @param {Boolean} mustExist if true, ensure the key does exist, default to false
@@ -255,8 +270,8 @@ tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
 };
 
-// make it pluginable
-tQuery.pluginsStaticOn(tQuery, tQuery);
+// make it pluginable as static
+tQuery.pluginsStaticOn(tQuery);
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -268,9 +283,9 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 	// FIXME the inheritance should work now... not sure
 	dstObject.prototype._attrProps	= tQuery.extend(dstObject.prototype._attrProps, properties);
 
-	dstObject.prototype.attr	= function(name, value){
+	dstObject.prototype.attr	= function(name, args){
 		// handle parameters
-		if( name instanceof Object && value === undefined ){
+		if( name instanceof Object && args === undefined ){
 			Object.keys(name).forEach(function(key){
 				this.attr(key, name[key]);
 			}.bind(this));
@@ -279,9 +294,9 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		}else	console.assert(false, 'invalid parameter');
 
 		// handle setter
-		if( value !== undefined ){
+		if( args !== undefined ){
 			var convertFn	= this._attrProps[name];
-			value		= convertFn(value);
+			var value	= convertFn.apply(convertFn, args);
 			this.each(function(element){
 				element[name]	= value;
 			})
@@ -295,8 +310,8 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 
 	// add shortcuts
 	Object.keys(properties).forEach(function(name){
-		dstObject.prototype[name]	= function(value){
-			return this.attr(name, value);
+		dstObject.prototype[name]	= function(/* arguments */){
+			return this.attr(name, arguments);
 		};
 	}.bind(this));
 };
@@ -350,8 +365,10 @@ tQuery.MicroeventMixin	= function(destObj){
 		if( this._events[event] === undefined )	return;
 		var tmpArray	= this._events[event].slice(); 
 		for(var i = 0; i < tmpArray.length; i++){
-			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			var result	= tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			if( result !== undefined )	return result;
 		}
+		return undefined;
 	};
 	
 	// backward compatibility
@@ -368,10 +385,30 @@ tQuery.MicroeventMixin	= function(destObj){
 		return this;	// for chained API
 	}
 	destObj.dispatchEvent		= function(event /* , args... */){
-		this.trigger.apply(this, arguments)
-		return this;
+		return this.trigger.apply(this, arguments)
 	}
 };
+
+/**
+ * https://github.com/jeromeetienne/MicroCache.js
+*/
+tQuery.MicroCache	= function(){
+	var _values	= {};
+	return {
+		get	: function(key){ return _values[key];	},
+		contains: function(key){ return key in _values;	},
+		remove	: function(key){ delete _values[key];	},
+		set	: function(key, value){	_values[key] = value;},
+		values	: function(){ return _values;	},
+		getSet	: function(key, value){
+			if( !this.contains(key) ){
+				this.set(key, typeof value == 'function' ? value() : value )
+			}
+			return this.get(key);
+		}
+	}
+}
+
 
 tQuery.convert	= {};
 
@@ -380,15 +417,42 @@ tQuery.convert	= {};
  * 
  * @return {THREE.Color} the resulting color
 */
-tQuery.convert.toThreeColor	= function(value){
-	if( arguments.length === 1 && typeof(value) === 'number'){
-		return new THREE.Color(value);
-	}else if( arguments.length === 1 && value instanceof THREE.Color ){
-		return value;
+tQuery.convert.toThreeColor	= function(/* arguments */){
+	// honor the plugins with 'preConvert' event
+	var result	= tQuery.convert.toThreeColor.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	// default convertions
+	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
+		return new THREE.Color(arguments[0]);
+	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
+		return arguments[0];
+	}else if( arguments.length === 3 && typeof(arguments[0]) === 'number'
+					&& typeof(arguments[1]) === 'number' 
+					&& typeof(arguments[2]) === 'number' ){
+		return new THREE.Color().setRGB(arguments[0], arguments[1], arguments[2]);
 	}else{
 		console.assert(false, "invalid parameter");
 	}
 	return undefined;	// never reached - just to workaround linter complaint
+};
+// make tQuery.convert.toThreeColor eventable
+tQuery.MicroeventMixin(tQuery.convert.toThreeColor);
+
+
+/**
+ * Convert the arguments into a THREE.Vector3
+ * @return {THREE.Vector3} the resulting THREE.Vector3
+ */
+tQuery.convert.toVector3	= function(/* arguments */){
+	// handle parameters
+	if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
+		return arguments[0]
+	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
+		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}else{
+		console.assert(false, "invalid parameter for Vector3");
+	}
 };
 
 tQuery.convert.toNumber	= function(value){
@@ -443,12 +507,31 @@ tQuery.convert.toString	= function(value){
 	return undefined;	// never reached - just to workaround linter complaint
 };
 
+tQuery.convert.toTextureCube	= function(/* arguments */){
+	// honor the plugins with 'preConvert' event
+	var result	= this.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	return tQuery.convert.toTexture.apply(tQuery.convert.toTexture, arguments);
+};
+// make tQuery.convert.toTextureCube eventable
+tQuery.MicroeventMixin(tQuery.convert.toTextureCube);
+
 tQuery.convert.toTexture	= function(value){
+	// honor the plugins with 'preConvert' event
+	var result	= this.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+	
+	// default convertions
 	if( arguments.length === 1 && value instanceof THREE.Texture ){
+		return value;
+	}else if( arguments.length === 1 && value instanceof THREE.WebGLRenderTarget ){
 		return value;
 	}else if( arguments.length === 1 && typeof(value) === 'string' ){
 		return THREE.ImageUtils.loadTexture(value);
-	}else if( arguments.length === 1 && (value instanceof Image || value instanceof HTMLCanvasElement) ){
+	}else if( arguments.length === 1 && (value instanceof Image
+						|| value instanceof HTMLVideoElement
+						|| value instanceof HTMLCanvasElement) ){
 		var texture		= new THREE.Texture( value );
 		texture.needsUpdate	= true;
 		return texture;
@@ -457,6 +540,11 @@ tQuery.convert.toTexture	= function(value){
 	}
 	return undefined;	// never reached - just to workaround linter complaint
 };
+// make tQuery.convert.toTexture eventable
+tQuery.MicroeventMixin(tQuery.convert.toTexture);
+
+
+
 /**
  * implementation of the tQuery.Node
  *
@@ -528,7 +616,7 @@ tQuery.Node.prototype.back	= function(value)
 tQuery.Node.prototype.data	= function(key, value)
 {
 	// handle the setter case
-	if( value ){
+	if( value !== undefined ){
 		this.each(function(element){
 			tQuery.data(element, key, value);
 		});
@@ -583,6 +671,7 @@ tQuery.inherit(tQuery.Object3D, tQuery.Node);
  * Make it pluginable
 */
 tQuery.pluginsInstanceOn(tQuery.Object3D);
+tQuery.pluginsStaticOn(tQuery.Object3D);
 
 /**
  * define all acceptable attributes for this class
@@ -609,15 +698,14 @@ tQuery.mixinAttributes(tQuery.Object3D, {
  * 
  * @returns {tQuery.Object3D} return the tQuery.Object3D itself
 */
-tQuery.Object3D.prototype.traverseHierarchy	= function(callback){
-	this.each(function(object3d){
-		THREE.SceneUtils.traverseHierarchy(object3d, function(object3d){
-			callback(object3d);
+tQuery.Object3D.prototype.traverse	= function(callback){
+	this.each(function(tObject3d){
+		tObject3d.traverse(function(childObject3D){
+			callback(childObject3D, this);
 		});
 	});
 	return this;	// for chained API
 };
-
 
 //////////////////////////////////////////////////////////////////////////////////
 //		geometry and material						//
@@ -646,11 +734,11 @@ tQuery.Object3D.prototype.geometry	= function(value){
  * @returns {tQuery.Material} return the materials from the tQuery.Object3D
 */
 tQuery.Object3D.prototype.material	= function(){
-	var materials	= [];
+	var tMaterials	= [];
 	this.each(function(object3d){
-		materials.push(object3d.material)
+		tMaterials.push(object3d.material)
 	});
-	return new tQuery.Material(materials);
+	return new tQuery.Material(tMaterials);
 };
 
 
@@ -659,12 +747,20 @@ tQuery.Object3D.prototype.material	= function(){
 */
 tQuery.Object3D.prototype.clone	= function(){
 	var clones	= [];
-	this._lists.forEach(function(object3d){
-		var clone	= object3d.clone();
+	this.each(function(tObject3d){
+		var clone	= tObject3d.clone();
 		clones.push(clone);
 	})  
 	return tQuery(clones)
 }
+
+tQuery.Object3D.prototype.lookAt = function(position){
+	position	= tQuery.convert.toVector3.apply(null, arguments);
+	this.each(function(tObject3d){
+		tObject3d.lookAt(position)
+	}) 	
+	return this;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //			addTo/removeFrom tQuery.World/tQuery.Object3d		//
@@ -1097,7 +1193,7 @@ tQuery.pluginsInstanceOn(tQuery.Mesh);
 tQuery.Mesh.prototype.material	= function(value){
 	var parent	= tQuery.Mesh.parent;
 	// handle the getter case
-	if( value == undefined )	return parent.material.call(this);
+	if( value === undefined )	return parent.material.call(this);
 	// handle parameter polymorphism
 	if( value instanceof tQuery.Material )	value	= value.get(0)
 	// sanity check
@@ -1115,11 +1211,9 @@ tQuery.Mesh.prototype.material	= function(value){
  * @returns {tQuery.Sprite} the create object
 */
 tQuery.registerStatic('createSprite', function(opts){
-	opts		= tQuery.extend(opts, {
-		useScreenCoordinates	: false
-	});
-	var sprite	= new THREE.Sprite(opts);
-	return new tQuery.Sprite(sprite)
+	var tSprite	= new THREE.Sprite(opts);
+	var sprite	= new tQuery.Sprite(tSprite);
+	return sprite;
 })
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1142,16 +1236,36 @@ tQuery.registerStatic('Sprite', function(elements){
 */
 tQuery.inherit(tQuery.Sprite, tQuery.Object3D);
 
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.Sprite);
+
 
 /**
  * define all acceptable attributes for this class
 */
 tQuery.mixinAttributes(tQuery.Sprite, {
-	color			: tQuery.convert.toThreeColor,
-	map			: tQuery.convert.toTexture,
-	useScreenCoordinates	: tQuery.convert.toBoolean
+	rotation	: tQuery.convert.toNumber,
 });
-//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * TODO to remove. this function is crap
+*/
+tQuery.Sprite.prototype.material	= function(value){
+	var parent	= tQuery.Sprite.parent;
+	// handle the getter case
+	if( value === undefined )	return parent.material.call(this);
+	// handle parameter polymorphism
+	if( value instanceof tQuery.Material )	value	= value.get(0)
+	// sanity check
+	console.assert( value instanceof THREE.SpriteMaterial )
+	// handle the setter case
+	this.each(function(tSprite){
+		tSprite.material	= value;
+	});
+	return this;	// for the chained API
+}//////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -1615,6 +1729,11 @@ tQuery.registerStatic('createLoop', function(world){
 });
 
 
+tQuery.registerStatic('createHemisphereLight', function(){
+	var tLight	= new THREE.HemisphereLight();
+	return new tQuery.HemisphereLight([tLight]);
+});
+
 tQuery.registerStatic('createDirectionalLight', function(){
 	var tLight	= new THREE.DirectionalLight();
 	return new tQuery.DirectionalLight([tLight]);
@@ -1676,6 +1795,18 @@ tQuery.registerStatic('createCube', function(){
 tQuery.registerStatic('createTorus', function(){
 	var ctor	= THREE.TorusGeometry;
 	var dflGeometry	= [0.5-0.15, 0.15];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.registerStatic('createTorusKnot', function(){
+	var ctor	= THREE.TorusKnotGeometry;
+	var dflGeometry	= [0.27, 0.1, 128, 32];
+	return this._createMesh(ctor, dflGeometry, arguments)
+});
+
+tQuery.registerStatic('createCircle', function(){
+	var ctor	= THREE.CircleGeometry;
+	var dflGeometry	= [0.5, 32];
 	return this._createMesh(ctor, dflGeometry, arguments)
 });
 
@@ -1742,7 +1873,6 @@ tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 
 tQuery.registerStatic('createAxis', function(){
 	var axis	= new THREE.AxisHelper();
-	axis.scale.multiplyScalar(1/100);
 	return tQuery(axis);
 });
 /**
@@ -1827,6 +1957,46 @@ tQuery.mixinAttributes(tQuery.DirectionalLight, {
 	shadowCameraFar		: tQuery.convert.toNumber
 });
 
+
+
+/**
+ * Handle directional light
+ *
+ * @class include THREE.HemisphereLight. It inherit from {@link tQuery.Light}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.HemisphereLight} element an instance or array of instance
+*/
+tQuery.HemisphereLight	= function(elements)
+{
+	// call parent ctor
+	tQuery.HemisphereLight.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Light
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.HemisphereLight); });
+};
+
+/**
+ * inherit from tQuery.Light
+*/
+tQuery.inherit(tQuery.HemisphereLight, tQuery.Light);
+
+/**
+ * Make it pluginable
+*/
+tQuery.pluginsInstanceOn(tQuery.HemisphereLight);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.HemisphereLight, {
+	intensity	: tQuery.convert.toNumber,
+	distance	: tQuery.convert.toNumber,
+	groundColor	: tQuery.convert.toThreeColor
+});
 
 
 /**
@@ -1918,7 +2088,10 @@ tQuery.mixinAttributes(tQuery.SpotLight, {
 	shadowCameraLeft	: tQuery.convert.toNumber,
 	shadowCameraTop		: tQuery.convert.toNumber,
 	shadowCameraBottom	: tQuery.convert.toNumber,
-	shadowCameraVisible	: tQuery.convert.toBoolean
+	shadowCameraVisible	: tQuery.convert.toBoolean,
+	
+	shadowCameraNear	: tQuery.convert.toNumber,
+	shadowCameraFar		: tQuery.convert.toNumber
 });
 
 
@@ -1991,7 +2164,9 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	color			: tQuery.convert.toThreeColor,
 	ambient			: tQuery.convert.toThreeColor,
 	map			: tQuery.convert.toTexture,
-	envMap			: tQuery.convert.toTexture,
+	envMap			: tQuery.convert.toTextureCube,
+	refractionRatio		: tQuery.convert.toNumber,
+	side			: tQuery.convert.identity,
 	wireframe		: tQuery.convert.toBoolean,
 	wireframeLinewidth	: tQuery.convert.toInteger,
 	wireframeLinecap	: tQuery.convert.toString
@@ -2146,12 +2321,80 @@ tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 	specular	: tQuery.convert.toThreeColor,
 
 	shininess	: tQuery.convert.toNumber,
+
+	envMap		: tQuery.convert.toTexture,
+	refractionRatio	: tQuery.convert.toNumber,
+	reflectivity	: tQuery.convert.toNumber,
 	
 	bumpMap		: tQuery.convert.toTexture,
 	bumpScale	: tQuery.convert.toNumber,
 
 	metal		: tQuery.convert.toBoolean,
 	perPixel	: tQuery.convert.toBoolean
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.Sprite.registerInstance('setSpriteMaterial', function(opts){
+	var material	= tQuery.createSpriteMaterial(opts).back(this);
+	this.material( material.get(0) );
+	return material;
+})
+
+tQuery.registerStatic('createSpriteMaterial', function(opts){
+	opts		= tQuery.extend(opts, {
+		useScreenCoordinates	: false
+	});
+	var tMaterial	= new THREE.SpriteMaterial(opts);
+	var material	= new tQuery.SpriteMaterial(tMaterial);
+	return material;
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handle Sprite Material
+ *
+ * @class include THREE.SpriteMaterial. It inherit from {@link tQuery.Material}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.SpriteMaterial} element an instance or array of instance
+*/
+tQuery.SpriteMaterial	= function(elements)
+{
+	// call parent ctor
+	tQuery.SpriteMaterial.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Material
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.SpriteMaterial); });
+};
+
+/**
+ * inherit from tQuery.Material
+*/
+tQuery.inherit(tQuery.SpriteMaterial, tQuery.Material);
+
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.SpriteMaterial, {
+	color			: tQuery.convert.toThreeColor,
+	map			: tQuery.convert.toTexture,
+	useScreenCoordinates	: tQuery.convert.toBoolean,
+	depthTest		: tQuery.convert.toBoolean,
+	sizeAttenuation		: tQuery.convert.toBoolean,
+	scaleByViewport		: tQuery.convert.toBoolean,
+	
+	fog			: tQuery.convert.toBoolean,
 });
 
 
@@ -2198,7 +2441,7 @@ tQuery.Geometry.registerInstance('scaleBy', function(vector3){
 	this.each(function(geometry){
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.multiplySelf(vector3); 
+			vertex.multiply(vector3); 
 		}
 		// mark the vertices as dirty
 		geometry.verticesNeedUpdate = true;
@@ -2285,7 +2528,7 @@ tQuery.Geometry.registerInstance('translate', function(delta){
 		// change all geometry.vertices
 		for(var i = 0; i < geometry.vertices.length; i++) {
 			var vertex	= geometry.vertices[i];
-			vertex.addSelf(delta); 
+			vertex.add(delta); 
 		}
 		// mark the vertices as dirty
 		geometry.verticesNeedUpdate = true;
@@ -2341,27 +2584,6 @@ tQuery.Geometry.registerInstance('center', function(noX, noY, noZ){
 	return this;
 });
 
-/**
- * Smooth the geometry using catmull-clark
- *
- * @param {Number} subdivision the number of subdivision to do
-*/
-tQuery.Geometry.registerInstance('smooth', function(subdivision){
-	// init the modifier
-	var modifier	= new THREE.SubdivisionModifier( subdivision );
-	// apply it to each geometry
-	this.each(function(geometry){
-		// apply it
-		modifier.modify( geometry )
-	
-		// mark the vertices as dirty
-		geometry.verticesNeedUpdate = true;
-		geometry.computeBoundingBox();
-	});
-	// return this, to get chained API	
-	return this;
-});
-
 // some shortcuts
 tQuery.Geometry.registerInstance('translateX'	, function(delta){ return this.translate(delta, 0, 0);	});
 tQuery.Geometry.registerInstance('translateY'	, function(delta){ return this.translate(0, delta, 0);	});
@@ -2393,13 +2615,10 @@ tQuery.Object3D.registerInstance('position', function(vector3){
 	// handle the getter
 	if( vector3 === undefined )	return this.get(0).position;
 	// handle parameters
-	if( typeof vector3 === "number" && arguments.length === 3 ){
-		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-	}
-	console.assert(vector3 instanceof THREE.Vector3, "Object3D.position parameter error");
+	vector3	= tQuery.convert.toVector3.apply(null, arguments);
 	// do the operation on each node
-	this.each(function(object3d){
-		object3d.position.copy(vector3);
+	this.each(function(tObject3d){
+		tObject3d.position.copy(vector3);
 	});
 	// return this, to get chained API	
 	return this;
@@ -2433,7 +2652,7 @@ tQuery.Object3D.registerInstance('translate', function(delta){
 	console.assert(delta instanceof THREE.Vector3, "Object3D.translate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.position.addSelf(delta);
+		object3d.position.add(delta);
 	});
 	// return this, to get chained API	
 	return this;
@@ -2494,7 +2713,7 @@ tQuery.Object3D.registerInstance('rotate', function(angles){
 	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.addSelf(angles);
+		object3d.rotation.add(angles);
 	})
 	// return this, to get chained API	
 	return this;
@@ -2559,7 +2778,7 @@ tQuery.Object3D.registerInstance('scaleBy', function(ratio){
 	console.assert(ratio instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.scale.multiplySelf(ratio);
+		object3d.scale.multiply(ratio);
 	})
 	// return this, to get chained API	
 	return this;

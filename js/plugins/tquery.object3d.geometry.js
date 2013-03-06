@@ -10,13 +10,10 @@ tQuery.Object3D.registerInstance('position', function(vector3){
 	// handle the getter
 	if( vector3 === undefined )	return this.get(0).position;
 	// handle parameters
-	if( typeof vector3 === "number" && arguments.length === 3 ){
-		vector3	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
-	}
-	console.assert(vector3 instanceof THREE.Vector3, "Object3D.position parameter error");
+	vector3	= tQuery.convert.toVector3.apply(null, arguments);
 	// do the operation on each node
-	this.each(function(object3d){
-		object3d.position.copy(vector3);
+	this.each(function(tObject3d){
+		tObject3d.position.copy(vector3);
 	});
 	// return this, to get chained API	
 	return this;
@@ -50,7 +47,7 @@ tQuery.Object3D.registerInstance('translate', function(delta){
 	console.assert(delta instanceof THREE.Vector3, "Object3D.translate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.position.addSelf(delta);
+		object3d.position.add(delta);
 	});
 	// return this, to get chained API	
 	return this;
@@ -111,7 +108,7 @@ tQuery.Object3D.registerInstance('rotate', function(angles){
 	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.addSelf(angles);
+		object3d.rotation.add(angles);
 	})
 	// return this, to get chained API	
 	return this;
@@ -176,7 +173,7 @@ tQuery.Object3D.registerInstance('scaleBy', function(ratio){
 	console.assert(ratio instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.scale.multiplySelf(ratio);
+		object3d.scale.multiply(ratio);
 	})
 	// return this, to get chained API	
 	return this;

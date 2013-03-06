@@ -15,10 +15,12 @@
 	// bind some event on it
 	tQuery('cube').on('mouseover', function(event){
 		console.log(event.type, "on cube", event)
-	});	
+	});
+
 	tQuery('cube').on('click', function(event){
 		console.log("click on cube", event)
 	});
+
 	tQuery(world.tScene()).on('click', function(event){
 		console.log("click on scene", event);
 	});

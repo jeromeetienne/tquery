@@ -3,12 +3,15 @@
 <script src="birdgeometry.js"></script>
 <script src="boidflocking.js"></script>
 
+<script src='../../js/debug-bundle.js'></script>
+<script src='../../js/three-debug.js'></script>
+
 <body><div id="info">
 	<a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - port of birds demo
 	<br/>
 	Camera: B on bird - N for normal
 </div><script>
-require(['tquery.grassground', 'tquery.light', 'tquery.skymap'], function(){
+require(['tquery.grassground', 'tquery.shadowmap', 'tquery.skymap'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	var object	= tQuery.createTorus().addTo(world);
 

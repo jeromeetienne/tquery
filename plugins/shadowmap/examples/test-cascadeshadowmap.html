@@ -1,0 +1,50 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.grassground'
+	, 'tquery.shadowmap'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	//world.shadowMapEnabled(true)
+	
+	world.tCamera().position.z	= 50;
+
+	var tRenderer	= world.tRenderer()
+	tRenderer.gammaInput = true;
+	tRenderer.gammaOutput = true;
+	//tRenderer.shadowMapEnabled = true;
+
+	//tRenderer.shadowMapCascade = true;
+	tRenderer.shadowMapType = THREE.PCFSoftShadowMap;
+	//tRenderer.shadowMapDebug = true;
+	
+	tQuery.createTorusKnot().addTo(world)
+		.translateY(2)
+		.castShadow(true)
+		.scale(150)
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10*250,
+		textureRepeatY	: 10*250,
+	}).addTo(world).scale(30*250)
+		.receiveShadow(true)
+		
+	var light = new THREE.DirectionalLight( 0xffffff, 2.25 );
+	light.position.set( 200, 450, 500 );
+
+	light.castShadow = true;
+	light.shadowMapWidth		= 1024;
+	light.shadowMapHeight		= 1024;
+	light.shadowMapDarkness		= 0.95;
+	light.shadowCameraVisible	= true;
+
+	light.shadowCascade		= true;
+	light.shadowCascadeCount	= 3;
+	light.shadowCascadeNearZ	= [ -1.000, 0.995, 0.998 ];
+	light.shadowCascadeFarZ		= [  0.995, 0.998, 1.000 ];
+	light.shadowCascadeWidth	= [ 1024, 1024, 1024 ];
+	light.shadowCascadeHeight	= [ 1024, 1024, 1024 ];
+
+	tQuery(light).addTo(world)
+});
+</script></body>

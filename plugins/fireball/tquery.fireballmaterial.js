@@ -23,7 +23,7 @@ tQuery.Object3D.registerInstance('setFireballMaterial', function(opts){
 		});
 
 		object3d.material	= material;
-		world.loop().hook(function(delta, now){
+		opts.world.loop().hook(function(delta, now){
 			uniforms.time.value += opts.speed * delta;
 		});
 	});

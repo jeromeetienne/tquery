@@ -21,7 +21,7 @@ tQuery.registerStatic('createLensFlare', function(opts){
 			flareParams	: []
 		};
 		var color	= new THREE.Color( 0xffffff );
-		THREE.ColorUtils.adjustHSV( color, 0, -0.5, 0.5 );
+		color.offsetHSL( 0, -0.5, 0.5 );
 		
 		// init the textures
 		var baseUrl	= tQuery.createLensFlare.baseUrl;

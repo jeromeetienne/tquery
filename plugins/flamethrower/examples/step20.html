@@ -1,0 +1,39 @@
+<!--
+### Size Me Up
+* put the model in proper place
+* direction and rotation
+* play with color and/or direction if there is time
+-->
+<!doctype html><title>Flying to the moon</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="vendor/tquery/ColladaLoader.js"></script>
+<body><script>
+require([], function(){
+	// init world
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tCamera().position.z	= -30;
+
+	// create the container for the comboemitter
+	var container	= tQuery.createObject3D().addTo(world)
+
+	// load the rockets
+	var loader	= new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	var url		= "./models/TINTINROCKET/models/TIN TIN ROCKET.dae"
+	loader.load(url, function( collada ){
+		tQuery(collada.scene).scale(0.2)
+			.rotateX(Math.PI/2).rotateY(Math.PI/3)
+			.translateZ(-5)
+			.addTo(container);
+	});
+	
+	// add lights
+	tQuery.createAmbientLight().addTo(world).color(0x222222);	
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xcccccc).position(1, 1, 1)
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xcccccc).position(-1, 1, -1)
+
+	
+});
+</script></body>

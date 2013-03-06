@@ -1,0 +1,71 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.pproc'], function(){
+
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var controls	= tQuery.world.getCameraControls();
+	controls.rangeX	*= 1/20;
+	controls.rangeY	*= 1/10;
+	controls.speedX	*= 5;
+	controls.speedY	*= 5;
+
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+
+	tQuery.createEffectComposer().renderPass()
+		.bloom(10)
+		.motionBlur(0.8)
+		.vignette()
+		.finish()
+
+	var points	= [];
+	for(var i = 0;i < 100; i++){
+		var positionX	= 4 * (Math.random()-0.5)
+		var positionY	= 2 * (Math.random()-0.5)
+		var positionZ	= 2 * (Math.random()-0.5)
+		points.push( tQuery.createVector3(positionX, positionY, positionZ) );
+	}
+	
+
+	var spline	= new THREE.Spline( points );
+	
+	var nSubdivision= 20;
+	var vertices	= [];
+	var colors	= [];
+	for( i = 0; i < points.length * nSubdivision; i++){
+		var index	= i / (points.length * nSubdivision );
+		var position	= spline.getPoint( index );
+		vertices[i]	= new THREE.Vector3( position.x, position.y, position.z );
+		colors[i]	= new THREE.Color( 0xffffff );
+		//colors[ i ].setHSV( 0.6, ( 0.25 + position.y ) / -.5, 1.0 );
+		colors[ i ].setHSV( (index*6)%1, 1.0, 1.0 );
+	}
+
+
+	var tGeometry	= new THREE.Geometry(); 
+	tGeometry.vertices	= vertices;
+	tGeometry.colors	= colors;
+
+
+	var tMaterial	= new THREE.LineBasicMaterial({
+		opacity		: 0.7,
+		linewidth	: 5,
+		vertexColors	: THREE.VertexColors,
+	});
+	var line	= new THREE.Line(tGeometry, tMaterial, THREE.LineStrip);
+	
+	// var tMaterial	= new THREE.LineDashedMaterial({
+	// 	opacity		: 0.7,
+	// 	dashSize	: 0.1,
+	// 	gapSize		: 0.1,
+	// 	linewidth	: 7,
+	// 	vertexColors	: THREE.VertexColors,
+	// })
+	// var line	= new THREE.Line(tGeometry, tMaterial, THREE.LinePieces);
+	
+	
+	line.scale.set(2,2,2);
+	world.add(line)	
+});
+</script></body>

@@ -204,10 +204,10 @@ tQuery.registerStatic('MinecraftChar', function(opts){
 		var tileUvW	= 1/64;
 		var tileUvH	= 1/32;
 		var UVs		= tGeometry.faceVertexUvs[0][faceIdx];
-		UVs[0].u = x1 * tileUvW;	UVs[0].v = y1 * tileUvH;
-		UVs[1].u = x1 * tileUvW;	UVs[1].v = y2 * tileUvH;
-		UVs[2].u = x2 * tileUvW;	UVs[2].v = y2 * tileUvH;
-		UVs[3].u = x2 * tileUvW;	UVs[3].v = y1 * tileUvH;		
+		UVs[0].x = x1 * tileUvW;	UVs[0].y = y1 * tileUvH;
+		UVs[1].x = x1 * tileUvW;	UVs[1].y = y2 * tileUvH;
+		UVs[2].x = x2 * tileUvW;	UVs[2].y = y2 * tileUvH;
+		UVs[3].x = x2 * tileUvW;	UVs[3].y = y1 * tileUvH;		
 	}
 });
 
@@ -247,7 +247,7 @@ tQuery.MinecraftChar.prototype.object3D	= function(name){
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		Interface addTo/removeTo					//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -266,3 +266,26 @@ tQuery.MinecraftChar.prototype.removeFrom	= function(object3D){
 	return this;
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Interface ShadowCasting						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * castShaddow setter
+ * @param  {Boolean} value if true, this object will cast shadow, if false, it wont
+ * @return {tQuery.MinecraftChar}	for chained API
+ */
+tQuery.MinecraftChar.prototype.castShadow	= function(value){
+	tQuery('mesh', this.object3D()).castShadow(value);
+	return this;
+};
+
+/**
+ * receiveShaddow setter
+ * @param  {Boolean} value if true, this object will cast shadow, if false, it wont
+ * @return {tQuery.MinecraftChar}	for chained API
+ */
+tQuery.MinecraftChar.prototype.receiveShadow	= function(value){
+	tQuery('mesh', this.object3D()).receiveShaddow(value);
+	return this;	
+};

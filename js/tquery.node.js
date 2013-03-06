@@ -69,7 +69,7 @@ tQuery.Node.prototype.back	= function(value)
 tQuery.Node.prototype.data	= function(key, value)
 {
 	// handle the setter case
-	if( value ){
+	if( value !== undefined ){
 		this.each(function(element){
 			tQuery.data(element, key, value);
 		});

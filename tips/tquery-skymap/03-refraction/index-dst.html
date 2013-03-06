@@ -1,0 +1,24 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.skymap'], function(){
+	// create a 3d world, use the boilerplate and start it
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// create the texture
+	// - NOTE: seems to need a tquery.texture object... this .mapping is ugly
+	var cubeTexture	= tQuery.createCubeTexture('skybox');
+	cubeTexture.mapping = new THREE.CubeRefractionMapping();
+
+	// add a skymap - reuse same texture to save gpu memory
+	tQuery.createSkymap(cubeTexture).addTo(world);
+
+	// use it in the envMap in a object material
+	tQuery.createTorusKnot().addTo(world)
+		.setBasicMaterial()
+			.envMap(cubeTexture)
+			.refractionRatio(0.9)
+			.back();
+});
+</script></body>
+

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns='http://earth.google.com/kml/2.1'>
+<Folder>
+    <name>TIN TIN ROCKET</name>
+    <description><![CDATA[Created with <a href="http://sketchup.google.com/">Google SketchUp 6.4.112</a>]]></description>
+    <DocumentSource>SketchUp</DocumentSource>
+<visibility>1</visibility>
+<LookAt>
+<heading>35.1709</heading>
+<tilt>30.6337</tilt>
+<latitude>41.38237627053204</latitude>
+<longitude>2.182716307603136</longitude>
+<range>-1.#IND</range>
+<altitude>155.5512626093261</altitude>
+</LookAt>
+<Folder>
+<name>Tour</name>
+<Placemark>
+<name>Camera</name>
+<visibility>1</visibility>
+<LookAt>
+<heading>35.1709</heading>
+<tilt>30.6337</tilt>
+<latitude>41.38237627053204</latitude>
+<longitude>2.182716307603136</longitude>
+<range>-1.#IND</range>
+<altitude>155.5512626093261</altitude>
+</LookAt>
+</Placemark>
+</Folder>
+  <Placemark>
+    <name>Model</name>
+    <description><![CDATA[]]></description>
+    <Style id='default'>
+    </Style>
+    <Model>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <Location>
+            <longitude>2.183000000000</longitude>
+            <latitude>41.383000000000</latitude>
+            <altitude>0.000000000000</altitude>
+        </Location>
+        <Orientation>
+            <heading>0</heading>
+            <tilt>0</tilt>
+            <roll>0</roll>
+        </Orientation>
+        <Scale>
+            <x>1.0</x>
+            <y>1.0</y>
+            <z>1.0</z>
+        </Scale>
+        <Link>
+            <href>models/TIN TIN ROCKET.dae</href>
+        </Link>
+    </Model>
+  </Placemark></Folder>
+</kml>

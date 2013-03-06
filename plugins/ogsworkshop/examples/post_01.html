@@ -1,0 +1,20 @@
+<!-- initialize the web page and load the library -->
+<!doctype html><title>Chat And Fight 01 - Let's Build a World</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+// load tQuery plugins with require.js
+require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'], function(){
+	// create world
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a human on it, well a minecraft character
+	tQuery.createMinecraftChar().addTo(world);	
+	// add a skybox
+	tQuery.createSkymap('skybox').addTo(world);
+	// add a ground
+	tQuery.createGrassGround({
+		textureRepeatX  : 5,
+		textureRepeatY  : 5
+	}).addTo(world).scaleBy(80);
+	// quite easy now ?
+})
+</script></body>

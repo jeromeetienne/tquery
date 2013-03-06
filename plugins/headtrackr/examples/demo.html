@@ -39,7 +39,11 @@ require(['tquery.skymap', 'tquery.lensflare', 'tquery.headtrackr'], function(){
 	});
 
 	// create the headTracker
-	var headTracker	= tQuery.createHeadtrackr().debugView(true).start();
+	var headTracker	= tQuery.createHeadtrackr({
+		headtrackrOpts	: {
+			calcAngles	: false
+		}
+	}).debugView(true).start();
 
 	// make the camera move depending on facetrackingEvent
 	headTracker.addEventListener("found", function(event){

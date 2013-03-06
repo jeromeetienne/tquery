@@ -1,0 +1,32 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="../threex.domevent.js"></script>
+<script src="../tquery.domevent.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.removeCameraControls();
+
+	// enable domEvent on this world
+	world.enableDomEvent();
+
+	// create a cube
+	var cube	= tQuery.createCube().addTo(world);
+
+	// bind some event on it
+	cube.on('mouseover', function(event){
+		console.log(event.type, "on cube", event)
+	});
+	cube.on('mouseout', function(event){
+		console.log(event.type, "on cube", event)
+	});
+
+	var callback	= cube.on('click', function(event){
+		console.log(event.type, "on cube", event)
+	});
+
+	setTimeout(function(){
+		console.log('removing click bind')
+		cube.off('click', callback);
+	}, 2000);
+</script></body>

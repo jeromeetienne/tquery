@@ -11,6 +11,8 @@ tQuery.registerStatic('createCameraFpsControls', function(opts){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.registerStatic('CameraFpsControls', function(opts){
+	// handle parameters polymorphism
+	if( opts.trackedObject instanceof tQuery.Object3D )	opts.trackedObject	= opts.trackedObject.get(0);
 	// handle default values
 	opts		= this._opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
@@ -47,7 +49,7 @@ tQuery.registerStatic('CameraFpsControls', function(opts){
 
 tQuery.CameraFpsControls.prototype.update	= function(delta, now){
 	var delta	= this._deltaTarget.get(0).position.clone()
-	delta.subSelf(this._deltaCamera.get(0).position);
+	delta.sub(this._deltaCamera.get(0).position);
 	this._opts.tCamera.lookAt(delta);
 }
 

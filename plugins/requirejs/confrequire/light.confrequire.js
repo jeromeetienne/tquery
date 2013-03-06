@@ -1,7 +1,7 @@
 requirejs.config({
 	map	: {
 		"*"	: {
-			'tquery.light'	: 'plugins/light/tquery.light.shadow',
+			'tquery.shadowmap'	: 'plugins/light/tquery.light.shadow',
 		}
 	},
 });

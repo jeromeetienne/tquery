@@ -63,7 +63,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r53.0";
+tQuery.VERSION	= "r56.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -98,6 +98,21 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// return the value
 	return object['_tqData'][key];
 };
+
+/**
+ * test if the data exist
+ * @param  {Object}  object the object which may or may not contain the data
+ * @param  {string}  key    the key of the data
+ * @return {Boolean}        true if the data exist, false otherwise
+ */
+tQuery.hasData	= function(object, key){
+	// if there is no data at all, return false
+	if( object['_tqData'] === undefined )		return false;
+	// if this data doesnt exist, return false
+	if( object['_tqData'][key] === undefined )	return false;
+	// if all previous test passed, return true
+	return true;
+}
 
 /**
  * Same as jQuery.removeData()
@@ -254,8 +269,8 @@ tQuery.pluginsStaticOn	= function(klass){
 	tQuery._pluginsOn(klass, klass, 'Static');
 };
 
-// make it pluginable
-tQuery.pluginsStaticOn(tQuery, tQuery);
+// make it pluginable as static
+tQuery.pluginsStaticOn(tQuery);
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -267,9 +282,9 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 	// FIXME the inheritance should work now... not sure
 	dstObject.prototype._attrProps	= tQuery.extend(dstObject.prototype._attrProps, properties);
 
-	dstObject.prototype.attr	= function(name, value){
+	dstObject.prototype.attr	= function(name, args){
 		// handle parameters
-		if( name instanceof Object && value === undefined ){
+		if( name instanceof Object && args === undefined ){
 			Object.keys(name).forEach(function(key){
 				this.attr(key, name[key]);
 			}.bind(this));
@@ -278,9 +293,9 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 		}else	console.assert(false, 'invalid parameter');
 
 		// handle setter
-		if( value !== undefined ){
+		if( args !== undefined ){
 			var convertFn	= this._attrProps[name];
-			value		= convertFn(value);
+			var value	= convertFn.apply(convertFn, args);
 			this.each(function(element){
 				element[name]	= value;
 			})
@@ -294,8 +309,8 @@ tQuery.mixinAttributes	= function(dstObject, properties){
 
 	// add shortcuts
 	Object.keys(properties).forEach(function(name){
-		dstObject.prototype[name]	= function(value){
-			return this.attr(name, value);
+		dstObject.prototype[name]	= function(/* arguments */){
+			return this.attr(name, arguments);
 		};
 	}.bind(this));
 };
@@ -349,8 +364,10 @@ tQuery.MicroeventMixin	= function(destObj){
 		if( this._events[event] === undefined )	return;
 		var tmpArray	= this._events[event].slice(); 
 		for(var i = 0; i < tmpArray.length; i++){
-			tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			var result	= tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			if( result !== undefined )	return result;
 		}
+		return undefined;
 	};
 	
 	// backward compatibility
@@ -367,8 +384,28 @@ tQuery.MicroeventMixin	= function(destObj){
 		return this;	// for chained API
 	}
 	destObj.dispatchEvent		= function(event /* , args... */){
-		this.trigger.apply(this, arguments)
-		return this;
+		return this.trigger.apply(this, arguments)
 	}
 };
+
+/**
+ * https://github.com/jeromeetienne/MicroCache.js
+*/
+tQuery.MicroCache	= function(){
+	var _values	= {};
+	return {
+		get	: function(key){ return _values[key];	},
+		contains: function(key){ return key in _values;	},
+		remove	: function(key){ delete _values[key];	},
+		set	: function(key, value){	_values[key] = value;},
+		values	: function(){ return _values;	},
+		getSet	: function(key, value){
+			if( !this.contains(key) ){
+				this.set(key, typeof value == 'function' ? value() : value )
+			}
+			return this.get(key);
+		}
+	}
+}
+
 

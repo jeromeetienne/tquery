@@ -1,0 +1,25 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+
+	tQuery.convert.toThreeColor.addEventListener('preConvert', function(args){
+		if( args.length !== 1 )		return undefined;
+		if( typeof(args[0]) !== 'string' )	return undefined;
+		var colors	= {
+			'pink'	: 0xff00ff
+			// TODO feed this one
+		};
+		var colorName	= args[0]
+		var colorHex	= colors[colorName];
+		return new THREE.Color(colorHex);
+	});
+	
+	tQuery.createTorusKnot().addTo(world)
+		.setBasicMaterial()
+			.color('pink')
+			.back()
+});
+</script></body>

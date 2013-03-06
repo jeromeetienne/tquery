@@ -67,5 +67,23 @@ tQuery.TextureCube.WellKnownUrls	= {
 	park3Med		: tQuery.TextureCube.createUrls('Park3Med'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
 	pisa			: tQuery.TextureCube.createUrls('pisa'			, '.png', '../../../plugins/assets/images/textures/cube'),
 	skybox			: tQuery.TextureCube.createUrls('skybox'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
-	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../../plugins/assets/images/textures/cube')
+	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../../plugins/assets/images/textures/cube'),
+
+	mars			: tQuery.TextureCube.createUrls('mars'			, '.jpg', '../../../plugins/assets/images/textures/cube')
 };
+
+/**
+ * tQuery.convert plugin for textureCube to support those url
+ */
+tQuery.convert.toTextureCube.addEventListener('preConvert', function(args){
+	if( args.length !== 1 )			return undefined;
+	if( typeof(args[0]) !== 'string' )	return undefined;
+	var names	= Object.keys(tQuery.TextureCube.WellKnownUrls);
+	var name	= args[0];
+	if( names.indexOf(name) === -1 )	return undefined;	
+	var texture	= tQuery.createCubeTexture(name);
+	return texture;
+});
+	
+	
+
