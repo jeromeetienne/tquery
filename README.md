@@ -36,6 +36,9 @@ looks like the code below... Quite short.
 
 #### Current
 
+#### Release - r56.0
+* ported to three.js r56
+
 #### Release - r53.0
 * ported to three.js r53
 * plugins/minimal : added a minimal page for requirejs
