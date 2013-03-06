@@ -4,22 +4,12 @@
 <body><script>
 require(['tquery.videos'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-
-	tQuery.convert.toTexture.addEventListener('preConvert', function(value){
-return;
-console.log('blabalbal', value)
-		if( value instanceof LocalMediaStream === false ){
-			return undefined;			
-		}
-		// TODO use videotexture plugin instead
-		return createTexture(value)
-	});
 	
 	rtc.createStream({"video": true, "audio": true}, function(stream){
-console.log('blabalbal', stream)
+console.dir(stream)
 		var url		= URL.createObjectURL(stream);
 		var texture	= tQuery.createVideoTexture(url);
-		tQuery.createPlane().addTo(world)
+		var player	= tQuery.createCube().addTo(world)
 			.setBasicMaterial()
 				.map(texture)
 				.back()

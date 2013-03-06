@@ -8,7 +8,8 @@
 	world.removeCameraControls();
 
 	var joystick	= new VirtualJoystick({
-		container	: document.body,
+		//container	: document.body,
+		container	: world.tRenderer().domElement,
 		mouseSupport	: true
 	});
 	

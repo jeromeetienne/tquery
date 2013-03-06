@@ -418,7 +418,6 @@ tQuery.convert	= {};
  * @return {THREE.Color} the resulting color
 */
 tQuery.convert.toThreeColor	= function(/* arguments */){
-console.log('ddd', arguments)
 	// honor the plugins with 'preConvert' event
 	var result	= tQuery.convert.toThreeColor.dispatchEvent('preConvert', arguments);
 	if( result !== undefined )	return result;

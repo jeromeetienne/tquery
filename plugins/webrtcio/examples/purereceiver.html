@@ -6,20 +6,11 @@
 require(['tquery.videos'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
-	rtc.createStream({'video': true, 'audio': false}, function(mediaStream){
-		tQuery.createPlane().addTo(world)
-			.setBasicMaterial()
-				.map(mediaStream)
-				.back()
-	}, function(){
-		console.log('createStream failed', arguments)
-	});
-
-
 	var room	= 'public';
 	var serverUrl	= "ws://localhost:8080/";
 	rtc.connect(serverUrl, room);
         rtc.on('add remote stream', function(mediaStream, socketId) {
+        	console.log('add socketId', socketId)
 		tQuery.createPlane().addTo(world)
 			.addClass('socketId-'+socketId)
 			.positionX(2 * Math.random()-0.5)
