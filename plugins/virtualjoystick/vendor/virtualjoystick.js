@@ -4,7 +4,6 @@ var VirtualJoystick	= function(opts)
 	this._container		= opts.container	|| document.body;
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
 	this._baseEl		= opts.baseElement	|| this._buildJoystickBase();
-	this._range		= opts.range		|| 60;
 	this._mouseSupport	= opts.mouseSupport !== undefined ? opts.mouseSupport : false;
 
 	this._container.style.position	= "relative";
@@ -74,40 +73,32 @@ VirtualJoystick.prototype.up	= function(){
 	if( this._pressed === false )	return false;
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
-	if( deltaY >= 0 )	return false;
-	if( Math.abs(deltaY) < this._range && Math.abs(deltaY) < Math.abs(deltaX) ){
-		return false;
-	}
+	if( deltaY >= 0 )				return false;
+	if( Math.abs(deltaX) > 2*Math.abs(deltaY) )	return false;
 	return true;
 }
 VirtualJoystick.prototype.down	= function(){
 	if( this._pressed === false )	return false;
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
-	if( deltaY <= 0 )	return false;
-	if( Math.abs(deltaY) < this._range && Math.abs(deltaY) < Math.abs(deltaX) ){
-		return false;
-	}
+	if( deltaY <= 0 )				return false;
+	if( Math.abs(deltaX) > 2*Math.abs(deltaY) )	return false;
 	return true;	
 }
 VirtualJoystick.prototype.right	= function(){
 	if( this._pressed === false )	return false;
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
-	if( deltaX <= 0 )	return false;
-	if( Math.abs(deltaX) < this._range && Math.abs(deltaY) > Math.abs(deltaX) ){
-		return false;
-	}
+	if( deltaX <= 0 )				return false;
+	if( Math.abs(deltaY) > 2*Math.abs(deltaX) )	return false;
 	return true;	
 }
 VirtualJoystick.prototype.left	= function(){
 	if( this._pressed === false )	return false;
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
-	if( deltaX >= 0 )	return false;
-	if( Math.abs(deltaX) < this._range && Math.abs(deltaY) > Math.abs(deltaX) ){
-		return false;
-	}
+	if( deltaX >= 0 )				return false;
+	if( Math.abs(deltaY) > 2*Math.abs(deltaX) )	return false;
 	return true;	
 }
 

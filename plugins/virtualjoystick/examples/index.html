@@ -1,15 +1,16 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 <script src="../vendor/virtualjoystick.js"></script>
-<body><script>
-	var world	= tQuery.createWorld().boilerplate().start();
+<body><div id="info">
+	<span id="result"></span>
+</div><script>
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	var object	= tQuery.createTorusKnot().addTo(world);
 
 	world.removeCameraControls();
 
 	var joystick	= new VirtualJoystick({
-		//container	: document.body,
-		container	: world.tRenderer().domElement,
+		container	: world.tRenderer().domElement.parent,
 		mouseSupport	: true
 	});
 	
@@ -20,4 +21,15 @@
 		if( joystick.left() )	object.translateX(-displacement)
 		if( joystick.right() )	object.translateX( displacement)
 	});
+	setInterval(function(){
+		var outputEl	= document.getElementById('result');
+		outputEl.innerHTML	= '<b>Result:</b> '
+			+ ' dx:'+joystick.deltaX()
+			+ ' dy:'+joystick.deltaY()
+			+ (joystick.right()	? ' right'	: '')
+			+ (joystick.up()	? ' up'		: '')
+			+ (joystick.left()	? ' left'	: '')
+			+ (joystick.down()	? ' down' 	: '');		
+
+	}, 1/30 * 1000);
 </script></body>
