@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.spaceships.js"></script>
+<script src="../tquery.spaceships.shoot.js"></script>
+<body><script>
+require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createDirectionalLight().addTo(world).position(-1,-1,-1)	
+	tQuery.createDirectionalLight().addTo(world).position( 1, 1, 1)	
+
+	tQuery.SpaceShips.createShoot().addTo(world)
+		.translateX( 0.5)
+		.translateZ( 0.3)
+	tQuery.SpaceShips.createShoot().addTo(world)
+		.translateX(-0.5)
+		.translateZ( 0.3)
+	
+	var spaceship	= tQuery.createSpaceShip3().addTo(world)
+	
+})
+</script></body>

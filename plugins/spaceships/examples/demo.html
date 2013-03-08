@@ -6,6 +6,7 @@ require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadow
 	var world	= tQuery.createWorld().boilerplate().start();
 	
 	tQuery.createSkymap('mars').addTo(world)
+
 	world.shadowMapEnabled(true)
 
 	tQuery.createGrassGround({
@@ -31,7 +32,17 @@ require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadow
 		.shadowCamera(30, -30, 2, -2, 0.1, 50)
 		//.shadowCameraVisible(true)
 
-	tQuery.createSpaceShip3().addTo(world)
-		.translateY(0.2)
+	tQuery.loadSpaceShip3().addEventListener('load', function(event){
+		var object	= tQuery(event.content)
+		tQuery('mesh', object).castShadow(true)
+		for(var x = -5; x < +5; x++){
+			for(var z = -10; z < +10; z++){
+				object.clone().addTo(world)
+					.translateX(x * 1.2)
+					.translateY(0.15)
+					.translateZ(z * 1.2)
+			}
+		}		
+	})
 })
 </script></body>
