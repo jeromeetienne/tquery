@@ -37290,7 +37290,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r53.0";
+tQuery.VERSION	= "r56.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -37382,7 +37382,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i])
+		var keepLooping	= callback(arr[i], i)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -37681,6 +37681,21 @@ tQuery.convert.toVector3	= function(/* arguments */){
 	}
 };
 
+/**
+ * Convert the arguments into a THREE.Vector2
+ * @return {THREE.Vector2} the resulting THREE.Vector2
+ */
+tQuery.convert.toVector2	= function(/* arguments */){
+	// handle parameters
+	if( arguments[0] instanceof THREE.Vector2 && arguments.length === 1 ){
+		return arguments[0]
+	}else if( typeof arguments[0] === "number" && arguments.length === 2 ){
+		return new THREE.Vector2(arguments[0], arguments[1]);
+	}else{
+		console.assert(false, "invalid parameter for Vector2");
+	}
+};
+
 tQuery.convert.toNumber	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'number'){
 		return value;
@@ -37749,7 +37764,9 @@ tQuery.convert.toTexture	= function(value){
 	if( result !== undefined )	return result;
 	
 	// default convertions
-	if( arguments.length === 1 && value instanceof THREE.Texture ){
+	if( arguments.length === 1 && value instanceof tQuery.Texture ){
+		return arguments[0].get(0);
+	}else if( arguments.length === 1 && value instanceof THREE.Texture ){
 		return value;
 	}else if( arguments.length === 1 && value instanceof THREE.WebGLRenderTarget ){
 		return value;
@@ -38409,6 +38426,11 @@ tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 */
 tQuery.pluginsInstanceOn(tQuery.Mesh);
 
+// make it eventable
+tQuery.MicroeventMixin(tQuery.Mesh.prototype)
+
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -38944,15 +38966,7 @@ tQuery.registerStatic('createObject3D', function(){
 });
 
 
-/**
- * Create tQuery.loop
- * 
- * @param {tQuery.World} world the world to display (optional)
- * @function
-*/
-tQuery.registerStatic('createLoop', function(world){
-	return new tQuery.Loop(world);
-});
+
 
 
 tQuery.registerStatic('createHemisphereLight', function(){
@@ -39771,7 +39785,6 @@ tQuery.Geometry.registerInstance('rotate', function(angles, order){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
 	console.assert(angles instanceof THREE.Vector3, "Geometry.rotate parameter error");
-
 	// set default rotation order if needed
 	order	= order	|| 'XYZ';
 	// compute transformation matrix
@@ -40014,6 +40027,44 @@ tQuery.Object3D.registerInstance('scaleBy', function(ratio){
 tQuery.Object3D.registerInstance('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
 tQuery.Object3D.registerInstance('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
 tQuery.Object3D.registerInstance('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+/**
+ * Handle light
+ *
+ * @class include THREE.Texture. It inherit from {@link tQuery.Node}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.Light} object an instance or array of instance
+*/
+tQuery.Texture	= function(elements)
+{
+	// call parent ctor
+	tQuery.Texture.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Texture
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Texture); });
+};
+
+// inherit from tQuery.Node
+tQuery.inherit(tQuery.Texture, tQuery.Node);
+
+// make it pluginable as static
+tQuery.pluginsStaticOn(tQuery.Texture);
+
+// Make each instances pluginable
+tQuery.pluginsInstanceOn(tQuery.Texture);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Texture, {
+	offset	: tQuery.convert.toVector2,
+	repeat	: tQuery.convert.toVector2,
+});
+
+
 // backward compatibility only
 tQuery.World.registerInstance('fullpage', function(){
 	console.log("world.fullpage() is obsolete. use world.boilerplate() instead.");

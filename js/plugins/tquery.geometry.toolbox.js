@@ -145,7 +145,6 @@ tQuery.Geometry.registerInstance('rotate', function(angles, order){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
 	console.assert(angles instanceof THREE.Vector3, "Geometry.rotate parameter error");
-
 	// set default rotation order if needed
 	order	= order	|| 'XYZ';
 	// compute transformation matrix

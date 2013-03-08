@@ -7,25 +7,7 @@ require(['tquery.webaudio'], function(){
 	var object	= tQuery.createTorusKnot().addTo(world);
 	
 	// to put microcache in tQuery.core ?
-	// tquery-assetloader
-
-	// see https://github.com/jeromeetienne/MicroCache.js
-	var MicroCache	= function(){
-		var _values	= {};
-		return {
-			get	: function(key){ return _values[key];	},
-			contains: function(key){ return key in _values;	},
-			remove	: function(key){ delete _values[key];	},
-			set	: function(key, value){	_values[key] = value;},
-			values	: function(){ return _values;	},
-			getSet	: function(key, value){
-				if( !this.contains(key) ){
-					this.set(key, typeof value == 'function' ? value() : value )
-				}
-				return this.get(key);
-			}
-		}
-	}
+	// tquery.assetloader
 
 
 /**
@@ -50,11 +32,12 @@ require(['tquery.webaudio'], function(){
 		.par(function(next){
 			THREE.ImageUtils.loadTexture('../../assets/images/water.jpg', undefined, function(texture){
 				cache.set('texture.water', texture)
-				next();						
+				next();				
 			});
 		})
 		.seq(function(next){
 			console.log('all loaded', cache.values());
+			var sound	= cache.get('sound.kick');
 		});
 	
 	//assets	= tQuery.createAssetLoader();

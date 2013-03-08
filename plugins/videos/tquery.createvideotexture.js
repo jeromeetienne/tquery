@@ -2,16 +2,15 @@
  * Create tQuery.Scene
 */
 tQuery.registerStatic('createVideoTexture', function(opts){
-	// handle parameters
+	// arguments polymorphism
 	if( arguments.length === 1 && typeof opts === 'string' ){
 		opts	= { url : arguments[0] };
 	}
-// TODO handle webrtc stream
+	// arguments default values
 	opts	= tQuery.extend(opts, {
 		world	: tQuery.world
-		
-// TODO at the world level
 	});
+	// argument sanity check
 	console.assert( opts.url, "url MUST be specified" )
 
 	// create the video element

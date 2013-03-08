@@ -43,6 +43,21 @@ tQuery.convert.toVector3	= function(/* arguments */){
 	}
 };
 
+/**
+ * Convert the arguments into a THREE.Vector2
+ * @return {THREE.Vector2} the resulting THREE.Vector2
+ */
+tQuery.convert.toVector2	= function(/* arguments */){
+	// handle parameters
+	if( arguments[0] instanceof THREE.Vector2 && arguments.length === 1 ){
+		return arguments[0]
+	}else if( typeof arguments[0] === "number" && arguments.length === 2 ){
+		return new THREE.Vector2(arguments[0], arguments[1]);
+	}else{
+		console.assert(false, "invalid parameter for Vector2");
+	}
+};
+
 tQuery.convert.toNumber	= function(value){
 	if( arguments.length === 1 && typeof(value) === 'number'){
 		return value;
@@ -111,7 +126,9 @@ tQuery.convert.toTexture	= function(value){
 	if( result !== undefined )	return result;
 	
 	// default convertions
-	if( arguments.length === 1 && value instanceof THREE.Texture ){
+	if( arguments.length === 1 && value instanceof tQuery.Texture ){
+		return arguments[0].get(0);
+	}else if( arguments.length === 1 && value instanceof THREE.Texture ){
 		return value;
 	}else if( arguments.length === 1 && value instanceof THREE.WebGLRenderTarget ){
 		return value;

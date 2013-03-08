@@ -14,6 +14,63 @@ tQuery.pluginsStaticOn(tQuery.SpaceShips);
 //		comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.registerStatic('loadSpaceStation', function(){
+	var loader	= new THREE.OBJMTLLoader();
+	loader.addEventListener('load', function( event ){
+		tQuery('mesh', event.content)
+			.geometry()
+				.scaleBy(1/200)
+				.computeAll()
+				.back()
+	});
+	var baseUrl	= tQuery.SpaceShips.baseUrl;
+	var objUrl	= baseUrl + 'models/SpaceStation/SpaceStation.obj';
+	var mtlUrl	= baseUrl + 'models/SpaceStation/SpaceStation.mtl';
+	loader.load(objUrl, mtlUrl);
+	return loader;
+});
+
+tQuery.registerStatic('createSpaceStation', function(){
+	var container	= tQuery.createObject3D()
+	var loader	= tQuery.loadHoverCar()
+	loader.addEventListener('load', function(event){
+		tQuery(event.content).addTo(container)
+	})
+	return container;
+});
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.registerStatic('loadHoverCar', function(){
+	var loader	= new THREE.OBJMTLLoader();
+	loader.addEventListener('load', function( event ){
+		tQuery('mesh', event.content)
+			.geometry()
+				.scaleBy(1/200)
+				.computeAll()
+				.back()
+	});
+	var baseUrl	= tQuery.SpaceShips.baseUrl;
+	var objUrl	= baseUrl + 'models/HoverCar/HoverCar.obj';
+	var mtlUrl	= baseUrl + 'models/HoverCar/HoverCar.mtl';
+	loader.load(objUrl, mtlUrl);
+	return loader;
+});
+
+tQuery.registerStatic('createHoverCar', function(){
+	var container	= tQuery.createObject3D()
+	var loader	= tQuery.loadHoverCar()
+	loader.addEventListener('load', function(event){
+		tQuery(event.content).addTo(container)
+	})
+	return container;
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
 tQuery.registerStatic('loadShuttle01', function(){
 	var loader	= new THREE.OBJMTLLoader();
 	loader.addEventListener('load', function( event ){
@@ -24,8 +81,8 @@ tQuery.registerStatic('loadShuttle01', function(){
 				.back()
 	});
 	var baseUrl	= tQuery.SpaceShips.baseUrl;
-	var objUrl	= baseUrl + 'models/Shuttle01/Shuttle01.obj';
-	var mtlUrl	= baseUrl + 'models/Shuttle01/Shuttle01.mtl';
+	var objUrl	= baseUrl + 'models/spaceships/Shuttle01/Shuttle01.obj';
+	var mtlUrl	= baseUrl + 'models/spaceships/Shuttle01/Shuttle01.mtl';
 	loader.load(objUrl, mtlUrl);
 	return loader;
 });
@@ -53,8 +110,8 @@ tQuery.registerStatic('loadShuttle02', function(){
 				.back()
 	});
 	var baseUrl	= tQuery.SpaceShips.baseUrl;
-	var objUrl	= baseUrl + 'models/Shuttle02/Shuttle02.obj';
-	var mtlUrl	= baseUrl + 'models/Shuttle02/Shuttle02.mtl';
+	var objUrl	= baseUrl + 'models/spaceships/Shuttle02/Shuttle02.obj';
+	var mtlUrl	= baseUrl + 'models/spaceships/Shuttle02/Shuttle02.mtl';
 	loader.load(objUrl, mtlUrl);
 	return loader;
 });
@@ -82,8 +139,8 @@ tQuery.registerStatic('loadSpaceFighter01', function(){
 				.back()
 	});
 	var baseUrl	= tQuery.SpaceShips.baseUrl;
-	var objUrl	= baseUrl + 'models/SpaceFighter01/SpaceFighter01.obj';
-	var mtlUrl	= baseUrl + 'models/SpaceFighter01/SpaceFighter01.mtl';
+	var objUrl	= baseUrl + 'models/spaceships/SpaceFighter01/SpaceFighter01.obj';
+	var mtlUrl	= baseUrl + 'models/spaceships/SpaceFighter01/SpaceFighter01.mtl';
 	loader.load(objUrl, mtlUrl);
 	return loader;
 });
@@ -111,8 +168,8 @@ tQuery.registerStatic('loadSpaceFighter02', function(){
 				.back()
 	});
 	var baseUrl	= tQuery.SpaceShips.baseUrl;
-	var objUrl	= baseUrl + 'models/SpaceFighter02/SpaceFighter02.obj';
-	var mtlUrl	= baseUrl + 'models/SpaceFighter02/SpaceFighter02.mtl';
+	var objUrl	= baseUrl + 'models/spaceships/SpaceFighter02/SpaceFighter02.obj';
+	var mtlUrl	= baseUrl + 'models/spaceships/SpaceFighter02/SpaceFighter02.mtl';
 	loader.load(objUrl, mtlUrl);
 	return loader;
 });
@@ -136,8 +193,8 @@ tQuery.registerStatic('loadSpaceFighter03', function(){
 		tQuery(event.content).scaleBy(1/10)
 	});
 	var baseUrl	= tQuery.SpaceShips.baseUrl;
-	var objUrl	= baseUrl + 'models/SpaceFighter03/SpaceFighter03.obj';
-	var mtlUrl	= baseUrl + 'models/SpaceFighter03/SpaceFighter03.mtl';
+	var objUrl	= baseUrl + 'models/spaceships/SpaceFighter03/SpaceFighter03.obj';
+	var mtlUrl	= baseUrl + 'models/spaceships/SpaceFighter03/SpaceFighter03.mtl';
 	loader.load(objUrl, mtlUrl);
 	return loader;
 });

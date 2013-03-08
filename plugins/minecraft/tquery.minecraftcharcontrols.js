@@ -22,8 +22,8 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 		// keyboard handling		
 		if( opts.lateralMove === 'rotationY' ){
 			// lateral => rotation Y
-			if( input.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;
-			if( input.right )	model.rotation.y -= 0.3 * delta * Math.PI * 2;			
+			if( input.left )	model.rotation.y += 0.1 * delta * Math.PI * 2;
+			if( input.right )	model.rotation.y -= 0.1 * delta * Math.PI * 2;			
 		}else if( opts.lateralMove === 'strafe' ){
 			// lateral => strafe
 			var distance	= 0;

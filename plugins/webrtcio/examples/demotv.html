@@ -6,7 +6,6 @@ require(['tquery.videos'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 	
 	rtc.createStream({"video": true, "audio": true}, function(stream){
-console.dir(stream)
 		var url		= URL.createObjectURL(stream);
 		var texture	= tQuery.createVideoTexture(url);
 		var player	= tQuery.createCube().addTo(world)

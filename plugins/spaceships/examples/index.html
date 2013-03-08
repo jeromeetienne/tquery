@@ -3,21 +3,27 @@
 <script src="../tquery.spaceships.js"></script>
 <script src="../tquery.spaceships.shoot.js"></script>
 <script src="../tquery.spaceships.detonation.js"></script>
-<body><script>
+<body><div id="info">
+	models by <a href="http://www.3drt.com/downloads.htm" target="_blank">3drt</a>
+</div><script>
 require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
-	var world	= tQuery.createWorld().boilerplate().start();
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 
-	world.tCamera().position.z	+= 2;
+	world.tCamera().position.z	+= 1;
 
 	tQuery.createDirectionalLight().addTo(world).position(-1,-1,-1)
 		.intensity(2)
 	tQuery.createDirectionalLight().addTo(world).position( 1, 1, 1)	
+		.intensity(2)
 	
 	tQuery.createSkymap('mars').addTo(world)
+
+	tQuery.createHoverCar().addTo(world).translateY(-1)
 
 	tQuery.createSpaceFighter01().addTo(world).translateY(1)
 	tQuery.createSpaceFighter02().addTo(world).translateY(2)
 	var spaceship	= tQuery.createSpaceFighter03().addTo(world)
+		.addClass('spaceship')
 	tQuery.createShuttle01().addTo(world).translateX(1)
 	tQuery.createShuttle02().addTo(world).translateX(-1)
 

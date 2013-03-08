@@ -1,7 +1,6 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src='../vendor/webrtc.io-client/webrtc.io.js'></script>
-<script src='../tquery.webrtc.js'></script>
 <body><script>
 require(['tquery.videos'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -11,12 +10,14 @@ require(['tquery.videos'], function(){
 	rtc.connect(serverUrl, room);
         rtc.on('add remote stream', function(mediaStream, socketId) {
         	console.log('add socketId', socketId)
+		var url		= URL.createObjectURL(mediaStream);
+		var texture	= tQuery.createVideoTexture(url);
 		tQuery.createPlane().addTo(world)
 			.addClass('socketId-'+socketId)
 			.positionX(2 * Math.random()-0.5)
 			.positionY(2 * Math.random()-0.5)
 			.setBasicMaterial()
-				.map(mediaStream)
+				.map(texture)
 				.back()     	
         });
 	rtc.on('disconnect stream', function(socketId) {

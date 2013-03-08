@@ -23,15 +23,7 @@ tQuery.registerStatic('createObject3D', function(){
 });
 
 
-/**
- * Create tQuery.loop
- * 
- * @param {tQuery.World} world the world to display (optional)
- * @function
-*/
-tQuery.registerStatic('createLoop', function(world){
-	return new tQuery.Loop(world);
-});
+
 
 
 tQuery.registerStatic('createHemisphereLight', function(){
