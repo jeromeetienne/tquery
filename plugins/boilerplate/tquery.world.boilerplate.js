@@ -11,7 +11,7 @@ tQuery.World.registerInstance('boilerplate', function(opts){
 	domElement.style.padding	= "0";
 	domElement.style.overflow	= 'hidden';
 	this.appendTo(domElement);
-	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
+	this.tRenderer().setSize( domElement.offsetWidth, domElement.offsetHeight );
 	
 	// add the boilerplate
 	this.addBoilerplate(opts);
@@ -65,7 +65,7 @@ tQuery.World.registerInstance('addBoilerplate', function(opts){
 		cameraControls	: true,
 		windowResize	: true,
 		screenshot	: true,
-		fullscreen	: true
+		fullscreen	: false
 	});
 	// get the context
 	var ctx	= {};

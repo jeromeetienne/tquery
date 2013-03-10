@@ -55,20 +55,20 @@ tQuery.World	= function(opts)
 
 	// create a renderer
 	if( opts.renderer ){
-		this._renderer	= opts.renderer;
+		this._tRenderer	= opts.renderer;
 	}else if( tQuery.World.hasWebGL() ){
-		this._renderer	= new THREE.WebGLRenderer({
+		this._tRenderer	= new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
 	}else if( !opts.webGLNeeded ){
-		this._renderer	= new THREE.CanvasRenderer();
+		this._tRenderer	= new THREE.CanvasRenderer();
 	}else{
 		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
-	this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-	this._renderer.setSize( opts.renderW, opts.renderH );
+	this._tRenderer.setClearColorHex( 0xBBBBBB, 1 );
+	this._tRenderer.setSize( opts.renderW, opts.renderH );
 };
 
 // make it pluginable
@@ -90,8 +90,8 @@ tQuery.World.prototype.destroy	= function(){
 	// remove this._tCameraControls if needed
 	this.removeCameraControls();
 	// remove renderer element
-	var parent	= this._renderer.domElement.parentElement;
-	parent	&& parent.removeChild(this._renderer.domElement);
+	var parent	= this._tRenderer.domElement.parentElement;
+	parent	&& parent.removeChild(this._tRenderer.domElement);
 	
 	// clear the global if needed
 	if( tQuery.world === this )	tQuery.world = null;
@@ -227,7 +227,7 @@ tQuery.World.prototype.remove	= function(object3d)
  */
 tQuery.World.prototype.appendTo	= function(domElement)
 {
-	domElement.appendChild(this._renderer.domElement)
+	domElement.appendChild(this._tRenderer.domElement)
 	// for chained API
 	return this;
 }
@@ -248,7 +248,7 @@ tQuery.World.prototype.stop	= function(){
 }
 
 tQuery.World.prototype.loop	= function(){ return this._loop;		}
-tQuery.World.prototype.tRenderer= function(){ return this._renderer;		}
+tQuery.World.prototype.tRenderer= function(){ return this._tRenderer;		}
 tQuery.World.prototype.tScene	= function(){ return this._tScene;		}
 tQuery.World.prototype.tCamera	= function(){ return this._tCamera;		}
 tQuery.World.prototype.scene	= function(){ return tQuery(this._tScene);	}
@@ -270,5 +270,5 @@ tQuery.World.prototype.render	= function(delta)
 	// update the cameraControl
 	if( this.hasCameraControls() )	this._tCameraControls.update(delta);
 	// render the scene 
-	if( this._autoRendering )	this._renderer.render( this._tScene, this._tCamera );
+	if( this._autoRendering )	this._tRenderer.render( this._tScene, this._tCamera );
 }

@@ -30,7 +30,6 @@ tQuery.registerStatic('MinecraftChar', function(opts){
 		transparent	: true,
 		side		: THREE.DoubleSide
 	});
-	//tMaterial.overdraw	= true;
 
 	//////////////////////////////////////////////////////////////////////////
 	// define size constant
@@ -254,7 +253,7 @@ tQuery.MinecraftChar.prototype.object3D	= function(name){
  * Emulate tQuery.Object3D.addTo
 */
 tQuery.MinecraftChar.prototype.addTo	= function(object3D){
-	this._model.root.addTo(object3D);
+	this.object3D().addTo(object3D);
 	return this;
 }
 
@@ -262,7 +261,7 @@ tQuery.MinecraftChar.prototype.addTo	= function(object3D){
  * Emulate tQuery.Object3D.removeFrom
 */
 tQuery.MinecraftChar.prototype.removeFrom	= function(object3D){
-	this.object3D('root').removeFrom(object3D);
+	this.object3D().removeFrom(object3D);
 	return this;
 };
 
