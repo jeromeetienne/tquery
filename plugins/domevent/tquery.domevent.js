@@ -89,6 +89,8 @@ tQuery.Object3D.registerInstance('off', function(eventType, callback, world){
 //////////////////////////////////////////////////////////////////////////////////
 
 tQuery.Mesh.registerInstance('addDomEventBoundingBox', function(){
+	// sanity check
+	console.assert( this.hasDomEventBoundingBox() === false )
 	// the boundbing box to detect mouse events - make it invisible
 	var boundingBox	= tQuery.createCube().addTo(this)
 		.addClass('domEventBoundingBox')
@@ -98,6 +100,8 @@ tQuery.Mesh.registerInstance('addDomEventBoundingBox', function(){
 		.visible(false)
 	// store it in the object
 	this.data('domEventBoundingBox', boundingBox)
+	// update boundingbox
+	this.updateDomEventBoundingBox();
 	// return this for chained API
 	return this;
 })
@@ -106,9 +110,15 @@ tQuery.Mesh.registerInstance('updateDomEventBoundingBox', function(){
 	// get bounding box
 	var boundingBox	= this.domEventBoundingBox();
 	// measure mesh size
-	var size	= boundingBox.geometry().computeAll().size();
-	// update boundingBox scale
-	boundingBox.scale(size)
+	var bBoxSize	= this.geometry().computeAll().get(0).boundingBox;
+	// set the position
+	boundingBox.positionX( (bBoxSize.max.x + bBoxSize.min.x)/2 )
+	boundingBox.positionY( (bBoxSize.max.y + bBoxSize.min.y)/2 )
+	boundingBox.positionZ( (bBoxSize.max.z + bBoxSize.min.z)/2 )
+	// set the scale
+	boundingBox.scaleX(bBoxSize.max.x - bBoxSize.min.x)
+	boundingBox.scaleY(bBoxSize.max.y - bBoxSize.min.y)
+	boundingBox.scaleZ(bBoxSize.max.z - bBoxSize.min.z)
 })
 
 tQuery.Mesh.registerInstance('domEventBoundingBox', function(){
