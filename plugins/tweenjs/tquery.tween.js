@@ -12,7 +12,7 @@ tQuery.World.registerInstance('enableTweenUpdater', function(){
 		}
 	}, true);
 	// hook the loopCb
-	this.loop().hook(context.loopCb);
+	this.hook(context.loopCb);
 	return this;	// for chained API
 });
 
@@ -28,7 +28,7 @@ tQuery.World.registerInstance('disableTweenUpdater', function(){
 	// get context
 	var context	= tQuery.data(this, 'tweenUpdaterCtx');
 	// hook the loopCb
-	this.loop().unhook(context.loopCb);
+	this.unhook(context.loopCb);
 	// remove the context
 	tQuery.removeData(this, 'tweenUpdaterCtx', true);
 	return this;	// for chained API

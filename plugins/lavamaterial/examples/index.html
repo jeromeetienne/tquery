@@ -42,7 +42,7 @@
 		.scale(1.5)
 		.setLavaMaterial();
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 1/20 * now * Math.PI * 2;
 		object3d.get(0).rotation.x	= angle*1.13;
 		object3d.get(0).rotation.y	= angle*0.5;

@@ -32,7 +32,7 @@ tQuery.Object3D.registerInstance('setLavaMaterial', function(opts){
 		
 		object3d.material	= material;
 		
-		tQuery.world.loop().hook(function(delta, now){
+		tQuery.world.hook(function(delta, now){
 			uniforms.time.value += opts.timeSpeed * delta;
 		});
 	});

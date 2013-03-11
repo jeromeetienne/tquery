@@ -52,7 +52,7 @@ require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadow
 		object3d.rotation(Math.random() * Math.PI*2)
 		var birthDate	= tQuery.now() / 1000;
 		var maxAge	= 2;
-		var callback	= world.loop().hook(function(delta, now){
+		var callback	= world.hook(function(delta, now){
 			var age		= now - birthDate;
 
 			object3d.translateZ(-delta*6)
@@ -63,7 +63,7 @@ require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadow
 			
 			if( age >= midiTween.maxAge ){
 				object3d.detach()
-				world.loop().unhook(callback)			
+				world.unhook(callback)			
 			}
 		})
 	}, 30);

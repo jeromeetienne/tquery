@@ -32,7 +32,7 @@ tQuery.Whammy.prototype.start	= function(){
 	this._callback	= function(){
 		this._encoder.add(canvas);
 	}.bind(this);
-	this._opts.world.loop().hook(this._callback);
+	this._opts.world.hook(this._callback);
 	return this;	// for chained API
 }
 
@@ -43,7 +43,7 @@ tQuery.Whammy.prototype.isRecording	= function(){
 tQuery.Whammy.prototype.stop	= function(){
 	if( this.isRecording() === false )	return;
 	this._output	= this._encoder.compile();
-	this._opts.world.loop().unhook(this._callback);
+	this._opts.world.unhook(this._callback);
 	this._callback	= null;
 	return this;	// for chained API
 }

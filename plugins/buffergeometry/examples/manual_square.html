@@ -107,7 +107,7 @@
 	var tMesh	= new THREE.Mesh(geometry, material);
 	world.add(tMesh);
 	
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.1 * now * Math.PI * 2;
 		//tMesh.rotation.y	= angle;
 	})

@@ -49,7 +49,7 @@ require(['tquery.poolball', 'tquery.shadowmap', 'tquery.deviceorientation'
 if(false){
 	var axis	= tQuery.createAxis().addTo(world)
 				.translateY(1)	
-	world.loop().hook(function(){
+	world.hook(function(){
 		var rotation	= axis.get(0).rotation;
 		if( tQuery.keyboard().pressed('up') ){
 			rotation.x	+= 0.01;
@@ -135,7 +135,7 @@ var ball	= (function(){
 	return object3D;
 })();
 if(true){
-	world.loop().hook(function(){
+	world.hook(function(){
 		var ballPosition= ball.get(0).matrixWorld.getPosition();
 		var worldPoint	= new CANNON.Vec3(ballPosition.x, ballPosition.y, ballPosition.z);
 		var force	= new CANNON.Vec3(0,0,0);
@@ -157,7 +157,7 @@ if(true){
 }
 
 
-	world.loop().hook(function(){
+	world.hook(function(){
 		cameraContainer.position( ball.position() )
 	});
 
@@ -169,7 +169,7 @@ if(true){
 
 	// var object	= tQuery.createAxis().addTo(world)
 	// 	.translateY(1)
-	// world.loop().hook(function(){
+	// world.hook(function(){
 	// 	var orientation	= tQuery.deviceOrientation();
 	// 	object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
 	// })

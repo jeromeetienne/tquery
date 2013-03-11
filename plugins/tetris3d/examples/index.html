@@ -79,7 +79,7 @@ require(['tquery.keyboard', 'tquery.checkerboard', 'tquery.shadowmap'], function
 		.color(0x00ffff)
 		.intensity(1)
 		.position(0, 1, 0)
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.1 * now * Math.PI * 2;
 		lightPoint0.positionX(Math.cos(angle)*10);
 		lightPoint0.positionZ(Math.sin(angle)*10);
@@ -96,7 +96,7 @@ require(['tquery.keyboard', 'tquery.checkerboard', 'tquery.shadowmap'], function
 		.shadowCamera(20, -20, 20, -20, 0.1, 30)
 		.shadowCameraVisible(true)
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.1 * now * Math.PI * 2;
 		lightDir0.positionX(Math.cos(angle)*10);
 		lightDir0.positionZ(Math.sin(angle)*10);
@@ -104,7 +104,7 @@ require(['tquery.keyboard', 'tquery.checkerboard', 'tquery.shadowmap'], function
 	
 	sounds.soundTrack.follow(lightDir0, world)
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		if( sounds.soundTrack ){
 			var amplitude	= sounds.soundTrack.amplitude(30);
 			var intensity	= Math.max(amplitude - 0.5, 0);
@@ -143,7 +143,7 @@ require(['tquery.keyboard', 'tquery.checkerboard', 'tquery.shadowmap'], function
 
 	// handle keyboard to move the piece
 	var actionable	= true;
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var keyboard	= tQuery.keyboard();
 		// TODO fixme when tQuery.keyboard() get events
 		if( !actionable ){

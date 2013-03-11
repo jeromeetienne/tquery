@@ -25,7 +25,7 @@ require([ 'tquery.skymap'
 			.color(0xffff00)
 			.back()
 			
-	// world.loop().hook(function(delta, now){
+	// world.hook(function(delta, now){
 	// 	sphere.rotateY( 0.1 * delta * Math.PI*2)
 	// })
 
@@ -34,7 +34,7 @@ require([ 'tquery.skymap'
 
 	tQuery(cubeCamera).addTo(sphere)
 
-	world.loop().hook(function(){
+	world.hook(function(){
 		sphere.visible(false)	// *cough*
 
 		cubeCamera.updateCubeMap( world.tRenderer(), world.tScene() );
@@ -50,7 +50,7 @@ require([ 'tquery.skymap'
 	tQuery.createTorusKnot().addTo(container).position( 1, 0, 0).rotateY( Math.PI/2)
 	tQuery.createTorusKnot().addTo(container).position(-1, 0, 0).rotateY(-Math.PI/2)
 	
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		container.rotateY( 0.3 * delta * Math.PI*2)
 	})
 	
@@ -66,7 +66,7 @@ require([ 'tquery.skymap'
 	var tCamera	= new THREE.PerspectiveCamera(35, textureW/textureH, 0.01, 10000);
 	
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var tRenderer	= world.tRenderer();
 		tRenderer.render( world.tScene(), tCamera, rtTexture, true );	
 	})

@@ -123,7 +123,7 @@ require(['tquery.grassground', 'tquery.shadowmap', 'tquery.skymap'], function(){
 	
 
 	// make boid move
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 
 		var vector = new THREE.Vector3(0,0,0)
 		for( var i = 0; i < boids.length; i++ ){

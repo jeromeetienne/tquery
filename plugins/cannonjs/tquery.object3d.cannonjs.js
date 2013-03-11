@@ -76,13 +76,13 @@ tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 	// store it in world.tQuery.
 	tQuery.data(object3D, 'cannonjsBody', body, true);
 
-	this._callback	= world.loop().hook(function(delta, now){
+	this._callback	= world.hook(function(delta, now){
 		this.update();
 	}.bind(this));	
 });
 
 tQuery.Object3D.CannonjsCtx.prototype.destroy = function(){
-	world.loop().unhook(this._callback);
+	world.unhook(this._callback);
 };
 
 

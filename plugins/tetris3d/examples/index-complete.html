@@ -78,7 +78,7 @@ require(['tquery.keyboard', 'tquery.lightsaber', 'tquery.shadowmap'], function()
 	var lightDir0	= tQuery.createDirectionalLight().addTo(world)
 		.position(1,1,-1).color(0xFFFFFF);
 		
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		if( sounds.soundTrack ){
 			var amplitude	= sounds.soundTrack.amplitude();
 			var intensity	= Math.max(amplitude - 0.6, 0);
@@ -89,7 +89,7 @@ require(['tquery.keyboard', 'tquery.lightsaber', 'tquery.shadowmap'], function()
 	var lightDir1	= tQuery.createDirectionalLight().addTo(world)
 		.position(1,1,-1)
 		.color(0xFFFFFF);
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= now * Math.PI*2 / 4;
 		lightDir1.positionX( Math.cos(angle)*3 )
 		lightDir1.positionY( Math.sin(angle*1.4)*3 )
@@ -97,7 +97,7 @@ require(['tquery.keyboard', 'tquery.lightsaber', 'tquery.shadowmap'], function()
 	});
 
 	var saber	= tQuery.createLightSaber().addTo(world);
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		saber.object3D().get(0).position.copy( lightDir1.get(0).position );
 		var target	= new THREE.Vector3(0, 0, 0);
 		saber.object3D().get(0).lookAt(target)
@@ -118,7 +118,7 @@ require(['tquery.keyboard', 'tquery.lightsaber', 'tquery.shadowmap'], function()
 
 	// handle keyboard to move the piece
 	var actionable	= true;
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var keyboard	= tQuery.keyboard();
 		// TODO fixme when tQuery.keyboard() get events
 		if( !actionable ){

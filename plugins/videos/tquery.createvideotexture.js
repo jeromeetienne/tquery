@@ -25,7 +25,7 @@ tQuery.registerStatic('createVideoTexture', function(opts){
 	var texture	= new THREE.Texture( video );
 
 // how do i stop that ?
-	var callback	= opts.world.loop().hook(function(){
+	var callback	= opts.world.hook(function(){
 		if( video.readyState === video.HAVE_ENOUGH_DATA ){
 			texture.needsUpdate	= true;
 		}

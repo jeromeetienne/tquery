@@ -89,7 +89,7 @@
 		world.add( bird );
 	}
 	// make boid move
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		for( var i = 0, il = birds.length; i < il; i++ ){
 			var boid	= boids[ i ];
 			// run this boids

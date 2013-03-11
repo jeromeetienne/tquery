@@ -25,7 +25,7 @@ tQuery.PlayerInput.registerStatic('VirtualJoystick', function(opts){
 	if( input.left === undefined )	input.left	= this._joystick.left()
 	if( input.down === undefined )	input.down	= this._joystick.down()
 	// init callback to update input
-	this._callback	= this._world.loop().hook(function(delta, now){
+	this._callback	= this._world.hook(function(delta, now){
 		if( this._joystick.right() !== input.right ){
 			input.right	= this._joystick.right();
 			input.dispatchEvent('change', 'right', input.right)
@@ -49,7 +49,7 @@ tQuery.PlayerInput.registerStatic('VirtualJoystick', function(opts){
  * explicit destructor
  */
 tQuery.PlayerInput.VirtualJoystick.prototype.destroy	= function(){
-	this._world.loop().unhook(this._callback)
+	this._world.unhook(this._callback)
 	
 	this._joystick.destroy()
 };

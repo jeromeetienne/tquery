@@ -66,7 +66,7 @@
 	var mesh	= tQuery(tGeometry, tMaterial).translateX(-1).addTo(world);
 	console.timeEnd('generate three.js object')
 	
-	//world.loop().hook(function(delta, now){ mesh.rotateX(0.01)	});
+	//world.hook(function(delta, now){ mesh.rotateX(0.01)	});
 
 	console.log('original geometry vertices', tGeometry.vertices.length)
 	console.log('original geometry vertices', tGeometry.faces.length)

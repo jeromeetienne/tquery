@@ -15,7 +15,7 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 	
 	// user control
 	this._input	= {};
-	this._callback	= opts.world.loop().hook(function(delta, now){
+	this._callback	= opts.world.hook(function(delta, now){
 		var model	= opts.object3D;
 		var prevPosition= model.position.clone();
 		var input	= this._input;
@@ -55,7 +55,7 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 tQuery.MicroeventMixin(tQuery.MinecraftCharControls.prototype);
 
 tQuery.MinecraftCharControls.prototype.destroy	= function(){
-	this._opts.world.loop().unhook(this._callback);
+	this._opts.world.unhook(this._callback);
 }
 
 tQuery.registerStatic('createMinecraftCharControls', function(opts){

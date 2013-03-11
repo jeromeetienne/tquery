@@ -17,7 +17,7 @@ tQuery.Material.registerInstance('textureScrolling', function(options){
 	});
 
 	// do the actual animation
-	tQuery.world.loop().hook(function(deltaTime, present){
+	tQuery.world.hook(function(deltaTime, present){
 		this.each(function(tMaterial){
 
 			var tTexture	= tMaterial.map;

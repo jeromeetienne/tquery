@@ -14,7 +14,7 @@
 		mouseSupport	: true
 	});
 	
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var displacement	= 1 * delta;
 		if( joystick.up() )	object.translateZ(-displacement)
 		if( joystick.down() )	object.translateZ( displacement)

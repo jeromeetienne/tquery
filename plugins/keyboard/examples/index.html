@@ -8,7 +8,7 @@
 	var object3d	= tQuery.createTorus().addTo(world);
 	
 	// at every frame
-	world.loop().hook(function(){
+	world.hook(function(){
 		if( tQuery.keyboard().pressed('a') ){
 			object3d.scale(2);
 		}else{

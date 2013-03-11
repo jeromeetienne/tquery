@@ -35,7 +35,7 @@ require([ 'tquery.minecraft',
 	element.style.padding	= '5px'
 	element.style.background= 'red'
 	// move it at the object position
-	world.loop().hook(function(){
+	world.hook(function(){
 		var position	= marker.cssPosition();
 		element.style.left	= (position.x-element.offsetWidth /2)+'px';
 		element.style.top	= (position.y-element.offsetHeight/2)+'px';

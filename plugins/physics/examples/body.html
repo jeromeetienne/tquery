@@ -75,7 +75,7 @@
 		mouseObject.position(forceCenter)
 	});
 	// apply Impulse force on the forceCenter
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		if( !forceCenter )	return;
 		var strength	= 50;
 		for(var i = 0; i < boxes.length; i++){

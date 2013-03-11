@@ -154,7 +154,7 @@
 		ball3d.position(0,0,0);
 	};
 	// handle player keyboard
-	world.loop().hook(function(delta){
+	world.hook(function(delta){
 		var keyboard	= tQuery.keyboard();
 		var speedY	= 2;
 		if( keyboard.pressed('up') )	players['right'].object3d.translateZ(-delta*speedY);
@@ -213,7 +213,7 @@
 	var ball3d	= tQuery.createSphere().addTo(world).scaleBy(ballRadius)
 			.setLambertMaterial().color(0xFFFF00).ambient(0xFFFFFF).map("../../physics/examples/images/rocks.jpg").back()
 			.castShadow(true)
-	world.loop().hook(function(){
+	world.hook(function(){
 		// get ball position
 		var position	= ball3d.get(0).position;
 		// update position
@@ -301,7 +301,7 @@
 	}
 	
 	// update TWEEN with world.loop
-	world.loop().hook(function(){
+	world.hook(function(){
 		TWEEN.update();
 	});
 	

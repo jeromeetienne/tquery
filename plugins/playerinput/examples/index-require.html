@@ -14,7 +14,7 @@ require(['tquery.playerinput'], function(){
 	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
 	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var displacement	= 1 * delta;
 		if( playerInput.up )	object.translateZ(-displacement)
 		if( playerInput.down )	object.translateZ( displacement)

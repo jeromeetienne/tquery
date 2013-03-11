@@ -96,7 +96,7 @@
 	// speed no matter the [fps](http://en.wikipedia.org/wiki/Frame_rate) rate of your computer.
 
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.armR.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
 		character.parts.armL.rotation.x	= 1.4 * Math.cos(angle);
@@ -104,14 +104,14 @@
 
 
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;
 		character.parts.headGroup.rotation.y	= Math.sin(now)/3;
 	}); 
 	
 	// Now we make the legs move to get the character walking... It is essentially the 
 	// same as the arms. 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.legR.rotation.x	= 1.4 * Math.cos(angle);
 		character.parts.legL.rotation.x	= 1.4 * Math.cos(angle + Math.PI);

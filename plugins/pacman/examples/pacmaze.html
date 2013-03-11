@@ -16,7 +16,7 @@ require([ 'tquery.skymap'
 	// add pacman
 	var playerContainer	= tQuery.createObject3D().addTo(world)
 	var pacman	= tQuery.Pacman.create().addTo(playerContainer)
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		pacman.rotateY(0.02)
 	})
 	
@@ -219,7 +219,7 @@ require([ 'tquery.skymap'
 			.translateY(0.5)
 			.positionX(tileX + 0.5 - maze.mapWidth()/2)
 			.positionZ(tileZ + 0.5 - maze.mapDepth()/2)
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			var angle	= 0.5 * delta * Math.PI * 2; 
 			object3D.rotateY(angle)
 		})

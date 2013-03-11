@@ -32,7 +32,7 @@
 			meshes.push(mesh)
 		}
 		// create a loop which make only one mesh visible 
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			// make all sprite invisible by defaults
 			meshes.forEach(function(mesh){
 				mesh.visible(false);

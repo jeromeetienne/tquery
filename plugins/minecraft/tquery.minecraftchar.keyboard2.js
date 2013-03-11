@@ -19,7 +19,7 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 	console.assert( ['strafe', 'rotationY'].indexOf(opts.lateralMove) !== -1 );
 	
 	// user control
-	this._$onLoop	= opts.world.loop().hook(function(delta, now){
+	this._$onLoop	= opts.world.hook(function(delta, now){
 		var keyboard	= tQuery.keyboard();
 		var model	= opts.object3D;
 		var prevPosition= model.position.clone();
@@ -65,7 +65,7 @@ tQuery.registerStatic('MinecraftCharKeyboard2', function(opts){
 tQuery.MicroeventMixin(tQuery.MinecraftCharKeyboard2.prototype);
 
 tQuery.MinecraftCharKeyboard2.prototype.destroy	= function(){
-	opts.world.loop().unhook(this._$onLoop);
+	opts.world.unhook(this._$onLoop);
 }
 
 tQuery.MinecraftCharKeyboard2.prototype.opts	= function(){

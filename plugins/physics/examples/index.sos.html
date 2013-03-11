@@ -54,7 +54,7 @@
 		console.log("this tMesh has been added")
 	})
 
-	world.loop().hook(function(){
+	world.hook(function(){
 		tScene._xScene.simulate(2*1/60, 2);
 	});
 

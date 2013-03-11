@@ -95,7 +95,7 @@ require([
 		// init headAnims
 		var headAnims	= new tQuery.MinecraftCharHeadAnimations(character);
 		headAnims.start('still');		
-		world.loop().hook(function(){
+		world.hook(function(){
 			var keyboard	= tQuery.keyboard();
 			var action	= {
 				left	: keyboard.pressed("left")	|| keyboard.pressed("a") || keyboard.pressed("a"),
@@ -359,7 +359,7 @@ require([
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 		//.shadowCameraVisible(true)
 	// for lightDir1 to follow character
-	world.loop().hook(function(){
+	world.hook(function(){
 		var model	= character.object3D('root');
 		var position	= model.get(0).position;
 		lightDir1.get(0).target.position.copy(model.get(0).position)

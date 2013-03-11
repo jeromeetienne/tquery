@@ -9,7 +9,7 @@ require(['tquery.minecraft', 'tquery.keyboard'], function(){
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	var controls	= tQuery.createMinecraftCharControls(character);
 	
-	world.loop().hook(function(){
+	world.hook(function(){
 		var keyboard	= tQuery.keyboard();
 		var input	= controls.input();
 		input.right	= keyboard.pressed('right');

@@ -8,7 +8,7 @@ require(['tquery.minecraft'], function(){
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	character.object3D('root').translateY(-0.5);	
 	// simple hook
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var mesh	= character.object3D('armR');
 		var angle	= now * Math.PI * 2;
 		mesh.rotationX(Math.sin(angle));

@@ -132,7 +132,7 @@
 	// the scene is rendered. Within this function, we will use ```tQuery.Keyboard```
 	// plugins to test the keyboard. if the key ```s``` is pressed, then use ```character.setSkin()```
 	// to change the skin of the character
-	world.loop().hook(function(){
+	world.hook(function(){
 		var keyboard	= tQuery.keyboard();	// get keyboard instance
 		if( keyboard.pressed("s") ){		// if the key 's' is pressed, change the skin
 			character.setSkin(Math.floor(Math.random()*5));

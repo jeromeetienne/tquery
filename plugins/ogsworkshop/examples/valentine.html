@@ -36,7 +36,7 @@ require(['tquery.shape', 'tquery.text', 'tquery.pproc'], function(){
 			.back()
 
 	// animate all that
-	world.loop().hook(function(deltaTime, present){
+	world.hook(function(deltaTime, present){
 		var angle	= present * 2 * Math.PI;
 		tQuery('#heart').scale( 0.8 + 0.4 * Math.abs(Math.sin(angle)))
 		tQuery('text').rotation( 0, Math.PI/6 * Math.sin(angle), 0 )

@@ -140,7 +140,7 @@ require(['tquery.pproc', 'tquery.checkerboard', 'tquery.fog', 'tquery.shadowmap'
 			var texture	= screenPlane.get(0).material.map;
 			var videoEl	= texture.image;
 			videoEl.src	= URL.createObjectURL(stream);
-			var loopCb	= world.loop().hook(function(){
+			var loopCb	= world.hook(function(){
 				if( videoEl.readyState === videoEl.HAVE_ENOUGH_DATA ){
 					texture.needsUpdate	= true;
 				}
@@ -168,7 +168,7 @@ require(['tquery.pproc', 'tquery.checkerboard', 'tquery.fog', 'tquery.shadowmap'
 			console.log('remove ' + socketId);
 			var tvSet	= tQuery('#tvSet-'+socketId)
 			var loopCb	= tvSet.data('loopCb', loopCb);
-			world.loop().unhook(loopCb);
+			world.unhook(loopCb);
 			tvSet.detach();
 			reflowTvSets();
 		});
@@ -179,7 +179,7 @@ require(['tquery.pproc', 'tquery.checkerboard', 'tquery.fog', 'tquery.shadowmap'
 			var texture	= screenPlane.get(0).material.map;
 			var videoEl	= texture.image;
 			videoEl.src	= URL.createObjectURL(stream);
-			var loopCb	= world.loop().hook(function(){
+			var loopCb	= world.hook(function(){
 				if( videoEl.readyState === videoEl.HAVE_ENOUGH_DATA ){
 					texture.needsUpdate	= true;
 				}

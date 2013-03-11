@@ -15,7 +15,7 @@
 	element.innerHTML	= 'John';	
 	element.style.position	= 'absolute'
 	// move it at the object position
-	world.loop().hook(function(){
+	world.hook(function(){
 		var position	= object.cssPosition();
 		element.style.left	= (position.x-element.offsetWidth /2)+'px';
 		element.style.top	= (position.y-element.offsetHeight/2)+'px';

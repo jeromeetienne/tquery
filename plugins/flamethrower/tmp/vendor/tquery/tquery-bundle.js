@@ -4065,7 +4065,7 @@ tQuery.World.register('addBoilerplate', function(opts){
 		ctx.loopStats	= function(){
 			ctx.stats.update();
 		};
-		this.loop().hook(ctx.loopStats);		
+		this.hook(ctx.loopStats);		
 	}
 
 	// create a camera contol
@@ -4117,7 +4117,7 @@ tQuery.World.register('removeBoilerplate', function(){
 
 	// remove stats.js
 	ctx.stats		&& document.body.removeChild(ctx.stats.domElement );
-	ctx.stats		&& this.loop().unhook(ctx.loopStats);
+	ctx.stats		&& this.unhook(ctx.loopStats);
 	// remove camera
 	ctx.cameraControls	&& this.removeCameraControls()
 	// stop windowResize

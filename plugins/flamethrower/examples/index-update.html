@@ -70,7 +70,7 @@ require(['tquery.webaudio', 'tquery.lensflare', 'tquery.skymap'], function(){
 	tQuery.createDirectionalLight().addTo(world)
 		.color(0xcccccc).position(-1, 1, -1)
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.2 * now * Math.PI/2;
 		// change the position of the rocket
 		var objPosition	= container.get(0).position;

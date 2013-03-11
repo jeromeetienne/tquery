@@ -21,7 +21,7 @@
 	tQuery('#obj')
 		.geometry().computeAll().normalize().center().rotateZ(Math.PI).back();
 	
-	tQuery.world.loop().hook(function(delta){
+	tQuery.world.hook(function(delta){
 		tQuery('#obj').rotateY(90 * delta * Math.PI / 180);
 	});
 </script></body>

@@ -21,7 +21,7 @@ tQuery.PlayerInput.registerStatic('Keyboard', function(opts){
 	if( input.left === undefined )	input.left	= actions.left
 	if( input.down === undefined )	input.down	= actions.down
 	// init callback to update inputPlayer
-	this._callback	= this._world.loop().hook(function(delta, now){
+	this._callback	= this._world.hook(function(delta, now){
 		var actions	= this._actions();
 		if( actions.right !== input.right ){
 			input.right	= actions.right;
@@ -46,7 +46,7 @@ tQuery.PlayerInput.registerStatic('Keyboard', function(opts){
  * explicit destructor
  */
 tQuery.PlayerInput.Keyboard.prototype.destroy	= function(){
-	this._world.loop().unhook(this._callback)
+	this._world.unhook(this._callback)
 	
 	this._joystick.destroy()
 };

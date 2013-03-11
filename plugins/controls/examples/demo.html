@@ -56,7 +56,7 @@ require(['tquery.skymap', 'tquery.keyboard'], function(){
 		},
 	}).start();
 	
-	world.loop().hook(function(){
+	world.hook(function(){
 		var keyboard	= tQuery.keyboard();
 		if( keyboard.pressed('1') ){
 			controls.target( holders[0] )

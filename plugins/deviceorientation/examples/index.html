@@ -8,7 +8,7 @@ require(['tquery.deviceorientation'], function(){
 	
 	world.removeCameraControls();
 	
-	world.loop().hook(function(){
+	world.hook(function(){
 		var orientation	= tQuery.deviceOrientation();
 // TODO put that directly on the THREEx
 // with useragent sniffing for mac detection

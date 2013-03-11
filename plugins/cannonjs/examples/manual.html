@@ -33,7 +33,7 @@ require([], function(){
 	//object.addCannonjsPhysics(bodyCannonjs)
 	//object.removeCannonjsPhysics()
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		// Step the physics physWorld
         	physWorld.step(delta);
         	// update 3d object with physics data

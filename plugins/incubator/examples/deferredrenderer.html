@@ -61,7 +61,7 @@ if( false ){
 			object.rotationY( Math.random() * Math.PI*2 );
 			object.rotationZ( Math.random() * Math.PI*2 );
 
-			world.loop().hook(function(delta, now){
+			world.hook(function(delta, now){
 				object.rotateY(1*0.02);
 				object.rotateX(1*0.015);
 				object.rotateZ(1*0.025);

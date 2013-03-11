@@ -9,7 +9,7 @@
 	creeper.model.scale.setLength(1/20);
 	
 	world.add(creeper.model);
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var time	= now;
 
 		creeper.head.rotation.y = Math.sin(time*3)/5-0.2;

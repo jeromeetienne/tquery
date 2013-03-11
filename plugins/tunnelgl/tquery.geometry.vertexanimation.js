@@ -22,7 +22,7 @@ tQuery.Geometry.registerInstance('vertexAnimation', function(options){
 
 
 	// do the actual animation
-	tQuery.world.loop().hook(function(deltaTime, present){
+	tQuery.world.hook(function(deltaTime, present){
 		this.each(function(tGeometry){
 			for(var i = 0; i < tGeometry.vertices.length; i++) {
 				var origVector3	= tGeometry._origVertices[i];

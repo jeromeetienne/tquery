@@ -46,7 +46,7 @@ tQuery.ControlsWrapper.prototype.destroy = function(){
 tQuery.ControlsWrapper.prototype.start = function() {
 	console.assert( this.isStarted() === false );
 	
-	this._callback	= this._world.loop().hook(function(delta, now){
+	this._callback	= this._world.hook(function(delta, now){
 		// check if it is paused
 		if( this._paused )	return;
 		// update the wrapped controls
@@ -58,7 +58,7 @@ tQuery.ControlsWrapper.prototype.start = function() {
 
 tQuery.ControlsWrapper.prototype.stop = function() {
 	if( this.isStarted() === false )	return
-	this._world.loop().unhook(this._callback)		
+	this._world.unhook(this._callback)		
 	return this;	// for chained API
 }
 
