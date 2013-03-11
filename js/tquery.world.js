@@ -31,7 +31,7 @@ tQuery.World	= function(opts)
 	console.assert( !tQuery.word );
 	tQuery.world	= this;
 
-	this._autoRendering	= true;
+	this._autoRendering	= opts.autoRendering;
 	
 	// create a scene
 	this._tScene	= opts.scene	||(new THREE.Scene());
@@ -245,6 +245,20 @@ tQuery.World.prototype.start	= function(){
 tQuery.World.prototype.stop	= function(){
 	this._loop.stop();
 	return this;	// for chained API
+}
+
+/**
+ * alias on world.loop().hook()
+ */
+tQuery.World.prototype.hook	= function(priority, callback){
+	return this._loop.hook(priority, callback);
+}
+
+/**
+ * alias on world.loop().unhook()
+ */
+tQuery.World.prototype.unhook	= function(priority, callback){
+	return this._loop.unhook(priority, callback);
 }
 
 tQuery.World.prototype.loop	= function(){ return this._loop;		}

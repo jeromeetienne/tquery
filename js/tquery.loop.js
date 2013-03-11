@@ -119,7 +119,7 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
-	// handle parameters
+	// handle arguments polymorphism
 	if( typeof priority === 'function' ){
 		callback	= priority;
 		priority	= this.PRE_RENDER;
