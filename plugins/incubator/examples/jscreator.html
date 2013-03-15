@@ -1,0 +1,45 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<body><script>
+	var Something	= function(a, b){
+		this._foo	= 'bar'+(a+b)
+	}
+	Something.prototype.getFoo	= function(){
+		return this._foo
+	}
+
+	
+	// your code goes here
+	// Something.create = (function() {
+	// 	function F(args) {
+	// 		return Something.apply(this, args);
+	// 	}
+	// 	F.prototype = Something.prototype;
+
+	// 	return function() {
+	// 		return new F(arguments);
+	// 	}
+	// })();
+	
+	mixinCreator	=function(klass, name){
+		klass.create = (function() {
+			function F(args) {
+				return klass.apply(this, args);
+			}
+			F.prototype = klass.prototype;
+
+			return function() {
+				return new F(arguments);
+			}
+		})();
+	};
+
+	mixinCreator(Something, 'Something')
+	//var something	= new Something(1,2)
+	//var something	= Something.create(1,2)
+
+	console.log('foo is', something.getFoo());
+
+	console.assert(something.getFoo() === 'bar3');
+
+	console.dir(something);
+</script></body>
