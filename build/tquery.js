@@ -646,7 +646,6 @@ tQuery.Node.prototype.data	= function(key, value)
 	return undefined
 }
 
-
 /**
  * same as .data() in jquery
 */
@@ -1320,7 +1319,7 @@ tQuery.World	= function(opts)
 	console.assert( !tQuery.word );
 	tQuery.world	= this;
 
-	this._autoRendering	= true;
+	this._autoRendering	= opts.autoRendering;
 	
 	// create a scene
 	this._tScene	= opts.scene	||(new THREE.Scene());
@@ -1536,6 +1535,20 @@ tQuery.World.prototype.stop	= function(){
 	return this;	// for chained API
 }
 
+/**
+ * alias on world.loop().hook()
+ */
+tQuery.World.prototype.hook	= function(priority, callback){
+	return this._loop.hook(priority, callback);
+}
+
+/**
+ * alias on world.loop().unhook()
+ */
+tQuery.World.prototype.unhook	= function(priority, callback){
+	return this._loop.unhook(priority, callback);
+}
+
 tQuery.World.prototype.loop	= function(){ return this._loop;		}
 tQuery.World.prototype.tRenderer= function(){ return this._tRenderer;		}
 tQuery.World.prototype.tScene	= function(){ return this._tScene;		}
@@ -1682,7 +1695,7 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
-	// handle parameters
+	// handle arguments polymorphism
 	if( typeof priority === 'function' ){
 		callback	= priority;
 		priority	= this.PRE_RENDER;
@@ -1730,9 +1743,18 @@ tQuery.registerStatic('createObject3D', function(){
 	return tQuery(object3d);
 });
 
+tQuery.registerStatic('createVector3', function(x, y, z){
+	return new THREE.Vector3(x, y, z);
+});
+
+tQuery.registerStatic('createVector2', function(x, y){
+	return new THREE.Vector2(x, y);
+});
 
 
-
+//////////////////////////////////////////////////////////////////////////////////
+//		create for lights						//
+//////////////////////////////////////////////////////////////////////////////////
 
 tQuery.registerStatic('createHemisphereLight', function(){
 	var tLight	= new THREE.HemisphereLight();
@@ -1813,14 +1835,6 @@ tQuery.registerStatic('createCircle', function(){
 	var ctor	= THREE.CircleGeometry;
 	var dflGeometry	= [0.5, 32];
 	return this._createMesh(ctor, dflGeometry, arguments)
-});
-
-tQuery.registerStatic('createVector3', function(x, y, z){
-	return new THREE.Vector3(x, y, z);
-});
-
-tQuery.registerStatic('createVector2', function(x, y){
-	return new THREE.Vector2(x, y);
 });
 
 tQuery.registerStatic('createSphere', function(){

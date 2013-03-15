@@ -151,6 +151,9 @@ THREE.ColladaLoader = function () {
 
 		}
 
+		// unit conversion
+		scene.scale.multiplyScalar( colladaUnit );
+
 		createAnimations();
 
 		var result = {
@@ -845,10 +848,6 @@ THREE.ColladaLoader = function () {
 		obj.quaternion = props[ 1 ];
 		obj.useQuaternion = true;
 		obj.scale = props[ 2 ];
-
-    // unit conversion
-    obj.position.multiplyScalar(colladaUnit);
-    obj.scale.multiplyScalar(colladaUnit);
 
 		if ( options.centerGeometry && obj.geometry ) {
 
@@ -3114,9 +3113,8 @@ THREE.ColladaLoader = function () {
 
 							var samplerId = cot.texture;
 							var surfaceId = this.effect.sampler[samplerId].source;
-              
 
-							if (surfaceId) {
+							if ( surfaceId ) {
 
 								var surface = this.effect.surface[surfaceId];
 								var image = images[surface.init_from];

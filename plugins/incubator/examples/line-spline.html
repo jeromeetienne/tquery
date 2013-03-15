@@ -39,7 +39,7 @@ require(['tquery.pproc'], function(){
 		vertices[i]	= new THREE.Vector3( position.x, position.y, position.z );
 		colors[i]	= new THREE.Color( 0xffffff );
 		//colors[ i ].setHSV( 0.6, ( 0.25 + position.y ) / -.5, 1.0 );
-		colors[ i ].setHSV( (index*6)%1, 1.0, 1.0 );
+		colors[ i ].setHSL( (index*6)%1, 1.0, 0.5 );
 	}
 
 
