@@ -69,7 +69,7 @@ var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || nav
     try {
       // raises exception if createDataChannel is not supported
       var pc = new PeerConnection(rtc.SERVER, rtc.dataChannelConfig);
-      channel = pc.createDataChannel('supportCheck', {reliable: false});
+      var channel = pc.createDataChannel('supportCheck', {reliable: false});
       channel.close();
       return true;
     } catch(e) {
@@ -245,7 +245,9 @@ var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || nav
             "socketId": socketId,
             "sdp": session_description
             }
-        }));
+        }
+    ));
+    //TODO Unused variable!?
     var offer = pc.remoteDescription;
     });
   };
@@ -304,11 +306,13 @@ var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || nav
 
   rtc.createDataChannel = function(pcOrId, label) {
     if (!rtc.dataChannelSupport) {
+      //TODO this should be an exception
       alert('webRTC data channel is not yet supported in this browser,' +
             ' or you must turn on experimental flags');
       return;
     }
 
+    var id, pc;
     if (typeof(pcOrId) === 'string') {
       id = pcOrId;
       pc = rtc.peerConnections[pcOrId];
@@ -331,8 +335,9 @@ var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || nav
     label = label || 'fileTransfer' || String(id);
 
     // chrome only supports reliable false atm.
-    options = {reliable: false};
+    var options = {reliable: false};
 
+    var channel;
     try {
       console.log('createDataChannel ' + id);
       channel = pc.createDataChannel(label, options);

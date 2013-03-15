@@ -7,13 +7,16 @@ require(['tquery.videos'], function(){
 
 	world.removeCameraControls();
 
-	rtc.createStream({'video': true, 'audio': true}, function(mediaStream){
-		console.log('created stream', arguments)
-		createScreen(mediaStream)
-		reflowScreens();
-	}, function(){
-		console.log('createStream failed', arguments)
-	});
+	if( window.location.hash !== '#nostream' ){
+		rtc.createStream({'video': true, 'audio': true}, function(mediaStream){
+			console.log('created stream', arguments)
+			createScreen(mediaStream)
+			reflowScreens();
+		}, function(){
+			console.log('createStream failed', arguments)
+		});
+	}
+
 
 
 	var room	= 'public';
@@ -22,9 +25,11 @@ require(['tquery.videos'], function(){
 	rtc.on('connect', function(){
 		console.log('connected to server', serverUrl)
 	})
+
 	rtc.on('connections', function(connections){
 		console.log('received connections event', connections)
 	})
+
         rtc.on('add remote stream', function(mediaStream, socketId) {
 		createScreen(mediaStream)
 			.addClass('socketId-'+socketId)
