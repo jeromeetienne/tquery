@@ -31,6 +31,11 @@ tQuery.registerStatic('createVideoTexture', function(opts){
 		}
 	});
 	
+	// FIXME this is a poorly coded
+	texture.poorlyCodedClose	= function(){
+		opts.world.unhook(callback)
+	}
+	
 	return texture;
 });
 

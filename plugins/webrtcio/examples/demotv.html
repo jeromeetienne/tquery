@@ -4,16 +4,70 @@
 <body><script>
 require(['tquery.videos'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-	
-	rtc.createStream({"video": true, "audio": true}, function(stream){
-		var url		= URL.createObjectURL(stream);
-		var texture	= tQuery.createVideoTexture(url);
-		var player	= tQuery.createCube().addTo(world)
-			.setBasicMaterial()
-				.map(texture)
-				.back()
+
+	world.removeCameraControls();
+
+	rtc.createStream({'video': true, 'audio': true}, function(mediaStream){
+		console.log('created stream', arguments)
+		createScreen(mediaStream)
+		reflowScreens();
 	}, function(){
 		console.log('createStream failed', arguments)
 	});
+
+
+	var room	= 'public';
+	var serverUrl	= "ws://localhost:8080/";
+	rtc.connect(serverUrl, room);
+	rtc.on('connect', function(){
+		console.log('connected to server', serverUrl)
+	})
+	rtc.on('connections', function(connections){
+		console.log('received connections event', connections)
+	})
+        rtc.on('add remote stream', function(mediaStream, socketId) {
+		createScreen(mediaStream)
+			.addClass('socketId-'+socketId)
+		reflowScreens();
+        });
+
+	rtc.on('disconnect stream', function(socketId) {
+		var nRemote	= tQuery('.socketId-'+socketId).length;
+		console.log('remove',socketId,'currently', nRemote);
+		// TODO related to 'destroy' event
+		//tQuery('.socketId-'+socketId).destroy();
+	});
+	
+	/**
+	 * adapt screens layout depending on their numbers
+	 */
+	function reflowScreens(){
+		var screens	= tQuery('.screen');
+		var offsetX	= -(screens.length - 1)/2
+		screens.each(function(tObject3D, idx){
+			tObject3D.position.x	= idx + offsetX;
+		})
+	}
+	/**
+	 * create a 3d screen for a mediaStream
+	 * @param  {[type]} mediaStream [description]
+	 * @return {tQuery.Mesh}  the created tQuery.Mesh
+	 */
+	function createScreen(mediaStream){
+		var url		= URL.createObjectURL(mediaStream);
+		var texture	= tQuery.createVideoTexture(url);
+		var screen	= tQuery.createPlane().addTo(world)
+			.addClass('screen')
+			.setBasicMaterial()
+				.map(texture)
+				.back()
+		// FIXME this event isnt really triggered
+		// TODO code that in tQuery.Node
+		screen.addEventListener('destroy', function(){
+			screen.detach();
+			texture.poorlyCodedClose();
+		})
+		return screen;
+	}
 });
 </script></body>

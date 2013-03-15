@@ -40,6 +40,7 @@ require(['tquery.videos'], function(){
 		var nRemote	= tQuery('.socketId-'+socketId).length;
 		console.log('remove',socketId,'currently', nRemote);
 		tQuery('.socketId-'+socketId).detach();
+		// TODO stop the video
 	});
 	
 	function reflowScreens(){
