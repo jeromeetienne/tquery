@@ -10,26 +10,26 @@
 <script src="../../skymap/tquery.skymap.js"></script>
 <script src="../../skymap/tquery.cubetexture.js"></script>
 
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
-<script src="../../../vendor/three.js/shaders/BleachBypassShader.js"></script>
-<script src="../../../vendor/three.js/shaders/BlendShader.js"></script>
-<script src="../../../vendor/three.js/shaders/CopyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FilmShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FXAAShader.js"></script>
-<script src="../../../vendor/three.js/shaders/HorizontalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/SepiaShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VerticalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VignetteShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/TexturePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BleachBypassShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/CopyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/ColorifyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/ColorifyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/FilmShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/FXAAShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/HorizontalBlurShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/SepiaShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/VerticalBlurShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/VignetteShader.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
 
 <body><script>
@@ -53,7 +53,7 @@
 	var tGeometry	= tQuery.createTorus(0.5-0.04, 0.04, 8*2, 32).geometry().scaleBy(4).get(0);
 	var position	= new THREE.Vector3();
 	for(var i = 0; i < 15; i++ ){
-		position.addSelf({
+		position.add({
 			x	: (Math.random()*2-1)*2*0,
 			y	: (Math.random()*2-1)*2*0,
 			z	: 0
@@ -103,7 +103,7 @@
 	world.hook(function(delta, now){
 		var charPosition= character.model.get(0).position
 
-		var position	= charPosition.clone().addSelf(new THREE.Vector3(0, 0.6, 0));
+		var position	= charPosition.clone().add(new THREE.Vector3(0, 0.6, 0));
 		arrow.get(0).position.copy(position);
 		
 		var position	= charPosition.clone();
