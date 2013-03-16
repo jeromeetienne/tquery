@@ -44,6 +44,7 @@ requirejs.config({
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
+			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
 			"tquery.virtualjoystick": "plugins/virtualjoystick/vendor/virtualjoystick",
 			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
@@ -111,15 +112,15 @@ requirejs.config({
 			"tquery.domevent"
 		],
 		"plugins/loaders/tquery.loaders": [
-			"three.js/loaders/BinaryLoader",
-			"three.js/loaders/MTLLoader",
-			"three.js/loaders/OBJMTLLoader",
-			"three.js/loaders/STLLoader",
-			"three.js/loaders/VTKLoader",
-			"three.js/loaders/ColladaLoader",
-			"three.js/loaders/OBJLoader",
-			"three.js/loaders/PDBLoader",
-			"three.js/loaders/UTF8Loader"
+			"three.js/examples/js/loaders/BinaryLoader",
+			"three.js/examples/js/loaders/MTLLoader",
+			"three.js/examples/js/loaders/OBJMTLLoader",
+			"three.js/examples/js/loaders/STLLoader",
+			"three.js/examples/js/loaders/VTKLoader",
+			"three.js/examples/js/loaders/ColladaLoader",
+			"three.js/examples/js/loaders/OBJLoader",
+			"three.js/examples/js/loaders/PDBLoader",
+			"three.js/examples/js/loaders/UTF8Loader"
 		],
 		"plugins/requirejs/confrequire/md2character.initrequire": [
 			"plugins/md2character/tquery.md2character",

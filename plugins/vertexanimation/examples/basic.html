@@ -1,0 +1,17 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.geometry.vertexanimation.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	// your code goes here
+	object.geometry()
+		.vertexAnimation({
+			transform	: function(originPosition, actualPosition, now){
+				var angle	= now*2 + actualPosition.y * 10;
+				actualPosition.x= originPosition.x + Math.cos(angle)*0.1;
+			}
+		})
+		.back();
+</script></body>
