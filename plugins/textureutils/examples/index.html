@@ -1,0 +1,13 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.material.texturescrolling.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	var object	= tQuery.createCube().addTo(world)
+		.setBasicMaterial()
+			.map('../../assets/images/water.jpg')
+			.textureScrolling()
+			.back()
+
+</script></body>
