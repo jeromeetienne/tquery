@@ -32,6 +32,7 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
 	// set element.style
 	element.style.position	= "absolute";
+	element.style.top	= '0px'
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
 	element.style.fontWeight= "bolder";
@@ -41,6 +42,42 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	// for chained API
 	return this;
 });
+
+/**
+ * define a default page title for plugins
+ */
+tQuery.World.registerInstance('defaultPageTitle', function(){
+	var location	= window.location;
+	var matches	= location.pathname.match(/^\/plugins\/([^/]+)\//);
+	var isPlugin	= matches ? true : false;
+	// create the element
+	var element	= document.createElement('div');
+	if( isPlugin ){
+		var pluginName	= isPlugin ? matches[1] : null;
+		element.innerHTML= [
+			'Example of tQuery.'+pluginName+' plugins - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="http://jeromeetienne.github.com/tquery/" target="_blank">tQuery API</a>',
+			'<br/>',
+			'Try it in a ',
+			'<a href="../../../www/live/editor/#U/../../../',
+			location.pathname+'" target="_blank">live editor</a>'
+		].join('\n');			
+	}else{
+		element.innerHTML= [
+			'Example of tQuery - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="http://jeromeetienne.github.com/tquery/" target="_blank">tQuery API</a>',
+		].join('\n');						
+	}
+	document.body.appendChild(element)
+
+	// set it up as page Title
+	this.pageTitle(element)
+	// for chained API
+	return this;
+});
+
 
 tQuery.World.registerInstance('devicePixelRatio', function(ratio){
 	// change devicePixelRatio
