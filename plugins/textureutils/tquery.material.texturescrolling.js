@@ -1,6 +1,8 @@
-tQuery.Material.registerInstance('textureScrolling', function(options){
+// FIXME this should be attached to texture... not material
+
+tQuery.Material.registerInstance('textureScrolling', function(opts){
 	// handle parameters
-	options	= tQuery.extend(options, {
+	opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
 		transform	: function(tTexture){
 			tTexture.offset.x	+= 0.003;
@@ -18,13 +20,13 @@ tQuery.Material.registerInstance('textureScrolling', function(options){
 	});
 
 	// do the actual animation
-	world.hook(function(delta, now){
+	opts.world.hook(function(delta, now){
 		this.each(function(tMaterial){
 
 			var tTexture	= tMaterial.map;
 			if( !tTexture )	return;
 			// 
-			options.transform(tTexture);
+			opts.transform(tTexture);
 			// normalize the offset
 			tTexture.offset.x	%= 1;
 			tTexture.offset.y	%= 1;
