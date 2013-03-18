@@ -1,13 +1,91 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src='../vendor/webrtc.io-client/webrtc.io.js'></script>
+<script src="../vendor/webrtc.io-client/webrtc.io.js"></script>
 <body><script>
-require(['tquery.videos'], function(){
+require([ 'tquery.loaders'
+	, 'tquery.checkerboard'
+	, 'tquery.pproc'
+	, 'tquery.fog'
+	, 'tquery.shadowmap'
+	, 'tquery.videos'
+], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
+	
+	world.shadowMapEnabled(true)
+	world.tCamera().position.y	= 0.75
+	world.tCamera().position.y	= 0.3
+	world.tCamera().position.z	= 1.5
+	//world.tCamera().position.z	= 5
+
+	var target	= world.scene().position().clone().add(tQuery.createVector3(0,0,-1))
+	//var target	= world.scene().position().clone().add(tQuery.createVector3(0,0.25,-0.5))
+	world.tCamera().lookAt(target);
 
 	world.removeCameraControls();
+	
+	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	
+	// add the fog
+	world.addFogExp2({density: 0.15});
 
-	if( window.location.hash !== '#nostream' ){
+	//////////////////////////////////////////////////////////////////////////////////
+	//		add ground							//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	tQuery.createCheckerboard({
+		segmentsW	: 60,
+		segmentsH	: 60
+	}).addTo(world)
+		.scaleBy(20)
+		.receiveShadow(true);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		add some lights							//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(4,2,4)
+		.color(0xcccccc)
+		.castShadow(true)
+			.shadowDarkness(0.8)
+			.shadowMap(512*2,512*2)
+			.shadowCamera(3, -3, 3, -3, 0.1, 30)
+			//.shadowCameraVisible(true)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		load the model							//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var loader	= new THREE.ColladaLoader();
+	var tvSetModel	= null;
+	loader.options.convertUpAxis = true;
+	var modelUrl	= '../olddemo/models/OldTelevisionSet01/models/Old Television Set 01.dae';
+	loader.load(modelUrl, function(collada){
+		tvSetModel	= tQuery(collada.scene);
+		// set castShadow
+		tQuery('mesh', tvSetModel).castShadow(true)
+		// notify everybody
+		onModelLoaded();
+	});
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	
+	var room	= 'public';
+	var serverUrl	= "ws://localhost:8080/";
+	
+	function onModelLoaded(){
+		// connect the server
+		rtc.connect(serverUrl, room);
+		// honot nostream
+		var nostream	= window.location.hash === '#nostream'
+		if( nostream )	return;
+		// create a local stream
 		rtc.createStream({'video': true, 'audio': true}, function(mediaStream){
 			console.log('created stream', arguments)
 			createScreen(mediaStream)
@@ -16,12 +94,7 @@ require(['tquery.videos'], function(){
 			console.log('createStream failed', arguments)
 		});
 	}
-
-
-
-	var room	= 'public';
-	var serverUrl	= "ws://localhost:8080/";
-	rtc.connect(serverUrl, room);
+	
 	rtc.on('connect', function(){
 		console.log('connected to server', serverUrl)
 	})
@@ -49,8 +122,9 @@ require(['tquery.videos'], function(){
 	function reflowScreens(){
 		var screens	= tQuery('.screen');
 		var offsetX	= -(screens.length - 1)/2
+		var width	= 0.7
 		screens.each(function(tObject3D, idx){
-			tObject3D.position.x	= idx + offsetX;
+			tObject3D.position.x	= width * (idx + offsetX);
 		})
 	}
 	/**
@@ -59,20 +133,30 @@ require(['tquery.videos'], function(){
 	 * @return {tQuery.Mesh}  the created tQuery.Mesh
 	 */
 	function createScreen(mediaStream){
+		var container	= tQuery.createObject3D().addTo(world)
+			.addClass('screen')
+			
+		tvSetModel.clone().addTo(container)
+			.positionY(-0.4)
+			.addClass('tvSet')
+
 		var url		= URL.createObjectURL(mediaStream);
 		var texture	= tQuery.createVideoTexture(url);
-		var screen	= tQuery.createPlane().addTo(world)
-			.addClass('screen')
+		tQuery.createPlane().addTo(container)
+			.addClass('plane')
 			.setBasicMaterial()
 				.map(texture)
 				.back()
-		// FIXME this event isnt really triggered
-		// TODO code that in tQuery.Node
-		screen.addEventListener('destroy', function(){
-			screen.detach();
-			texture.poorlyCodedClose();
-		})
-		return screen;
+			.positionY(0.5).positionY(0.31).positionZ(0.16)
+			.scaleX(1/2.2).scaleY(1/2.85)
+				
+		// // FIXME this event isnt really triggered
+		// // TODO code that in tQuery.Node
+		// screen.addEventListener('destroy', function(){
+		// 	screen.detach();
+		// 	texture.poorlyCodedClose();
+		// })
+		return container;
 	}
 });
 </script></body>
