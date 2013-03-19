@@ -10,6 +10,7 @@ requirejs.config({
 			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
+			"tquery.colornames": "plugins/colornames/tquery.colornames",
 			"tquery.controls": "plugins/controls/tquery.controlstween",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
@@ -43,6 +44,7 @@ requirejs.config({
 			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
+			"tquery.textureutils": "plugins/textureutils/tquery.textureutils",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
@@ -50,6 +52,7 @@ requirejs.config({
 			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
 			"domReady": "plugins/requirejs/vendor/domReady",
+			"tquery.webrtcio": "plugins/webrtcio/vendor/webrtc.io-client/webrtc.io",
 			"tquery.whammy": "plugins/requirejs/confrequire/whammy.initrequire"
 		}
 	},
@@ -230,6 +233,9 @@ requirejs.config({
 			"plugins/text/fonts/droid/droid_sans_regular.typeface",
 			"plugins/text/fonts/droid/droid_sans_bold.typeface",
 			"plugins/text/fonts/droid/droid_serif_bold.typeface"
+		],
+		"plugins/textureutils/tquery.textureutils": [
+			"plugins/textureutils/tquery.material.texturescrolling"
 		],
 		"plugins/tweenjs/tquery.tween": [
 			"plugins/tweenjs/vendor/Tween"

@@ -1,4 +1,9 @@
 (function(){
+
+return;	// FIXME this fails on jsfiddle + corsproxy
+	// find something compatible
+
+
 	// get the script dom element which included the library
 	var scripts	= document.getElementsByTagName('script');
 	var scriptEl	= scripts[scripts.length-1];
