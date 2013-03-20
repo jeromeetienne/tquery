@@ -1,12 +1,11 @@
 requirejs.config({
 	map	: {
 		"*"	: {
-			'tquery.loaders'	: 'plugins/loaders/tquery.loaders',
+			'tquery.loaders'	: 'three.js/examples/js/loaders/BinaryLoader',
 		}
 	},
 	shim	: {
-		'plugins/loaders/tquery.loaders'	: [
-			'three.js/examples/js/loaders/BinaryLoader',
+		'three.js/examples/js/loaders/BinaryLoader'	: [
 			'three.js/examples/js/loaders/MTLLoader',
 			'three.js/examples/js/loaders/OBJMTLLoader',
 			'three.js/examples/js/loaders/STLLoader',
