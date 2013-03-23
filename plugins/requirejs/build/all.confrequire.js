@@ -27,7 +27,7 @@ requirejs.config({
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
-			"tquery.loaders": "plugins/loaders/tquery.loaders",
+			"tquery.loaders": "three.js/examples/js/loaders/BinaryLoader",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
@@ -38,6 +38,7 @@ requirejs.config({
 			"tquery.playerinput": "plugins/playerinput/tquery.playerinput.keyboard",
 			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
+			"tquery.renderers": "three.js/examples/js/renderers/CSS3DRenderer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
@@ -114,8 +115,7 @@ requirejs.config({
 		"plugins/linkify/tquery.mesh.linkify": [
 			"tquery.domevent"
 		],
-		"plugins/loaders/tquery.loaders": [
-			"three.js/examples/js/loaders/BinaryLoader",
+		"three.js/examples/js/loaders/BinaryLoader": [
 			"three.js/examples/js/loaders/MTLLoader",
 			"three.js/examples/js/loaders/OBJMTLLoader",
 			"three.js/examples/js/loaders/STLLoader",
@@ -201,6 +201,11 @@ requirejs.config({
 			"three.js/examples/js/postprocessing/SavePass",
 			"three.js/examples/js/postprocessing/ShaderPass",
 			"three.js/examples/js/postprocessing/TexturePass"
+		],
+		"three.js/examples/js/renderers/CSS3DRenderer": [
+			"three.js/examples/js/renderers/SoftwareRenderer",
+			"three.js/examples/js/renderers/SVGRenderer",
+			"three.js/examples/js/renderers/WebGLDeferredRenderer"
 		],
 		"plugins/shadowmap/tquery.light.shadowmap": [
 			"plugins/shadowmap/tquery.world.shadowmap"

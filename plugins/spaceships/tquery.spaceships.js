@@ -32,7 +32,7 @@ tQuery.registerStatic('loadSpaceStation', function(){
 
 tQuery.registerStatic('createSpaceStation', function(){
 	var container	= tQuery.createObject3D()
-	var loader	= tQuery.loadHoverCar()
+	var loader	= tQuery.loadSpaceStation()
 	loader.addEventListener('load', function(event){
 		tQuery(event.content).addTo(container)
 	})

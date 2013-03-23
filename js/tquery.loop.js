@@ -57,6 +57,16 @@ tQuery.Loop.prototype.stop	= function()
 	return this;
 }
 
+tQuery.Loop.prototype.isRunning = function() {
+	return this._timerId ? true : false;
+};
+
+tQuery.Loop.prototype.pauseToggle= function() {
+	if( this.isRunning() )	this.stop()
+	else			this.start();
+	return this;
+};
+
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
 	// loop on request animation loop

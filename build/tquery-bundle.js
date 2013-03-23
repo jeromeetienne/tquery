@@ -37429,6 +37429,8 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	// default convertions
 	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
 		return new THREE.Color(arguments[0]);
+	}else if( arguments.length === 1 && typeof(arguments[0]) === 'string'){
+		return new THREE.Color(arguments[0]);
 	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
 		return arguments[0];
 	}else if( arguments.length === 3 && typeof(arguments[0]) === 'number'
@@ -38636,6 +38638,16 @@ tQuery.Loop.prototype.stop	= function()
 	// for chained API
 	return this;
 }
+
+tQuery.Loop.prototype.isRunning = function() {
+	return this._timerId ? true : false;
+};
+
+tQuery.Loop.prototype.pauseToggle= function() {
+	if( this.isRunning() )	this.stop()
+	else			this.start();
+	return this;
+};
 
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
@@ -39882,6 +39894,7 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
 	// set element.style
 	element.style.position	= "absolute";
+	element.style.top	= '0px'
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
 	element.style.fontWeight= "bolder";
@@ -39891,6 +39904,42 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	// for chained API
 	return this;
 });
+
+/**
+ * define a default page title for plugins
+ */
+tQuery.World.registerInstance('defaultPageTitle', function(){
+	var location	= window.location;
+	var matches	= location.pathname.match(/^\/plugins\/([^/]+)\//);
+	var isPlugin	= matches ? true : false;
+	// create the element
+	var element	= document.createElement('div');
+	if( isPlugin ){
+		var pluginName	= isPlugin ? matches[1] : null;
+		element.innerHTML= [
+			'Example for tQuery.'+pluginName+' plugin - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="../../../" target="_blank">tQuery API</a>',
+			'<br/>',
+			'Try it in a ',
+			'<a href="../../../www/live/editor/#U/../../..',
+			location.pathname+'" target="_blank">live editor</a>'
+		].join('\n');			
+	}else{
+		element.innerHTML= [
+			'Example of tQuery - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="../../../" target="_blank">tQuery API</a>',
+		].join('\n');						
+	}
+	document.body.appendChild(element)
+
+	// set it up as page Title
+	this.pageTitle(element)
+	// for chained API
+	return this;
+});
+
 
 tQuery.World.registerInstance('devicePixelRatio', function(ratio){
 	// change devicePixelRatio

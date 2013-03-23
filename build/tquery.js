@@ -425,6 +425,8 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	// default convertions
 	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
 		return new THREE.Color(arguments[0]);
+	}else if( arguments.length === 1 && typeof(arguments[0]) === 'string'){
+		return new THREE.Color(arguments[0]);
 	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
 		return arguments[0];
 	}else if( arguments.length === 3 && typeof(arguments[0]) === 'number'
@@ -1632,6 +1634,16 @@ tQuery.Loop.prototype.stop	= function()
 	// for chained API
 	return this;
 }
+
+tQuery.Loop.prototype.isRunning = function() {
+	return this._timerId ? true : false;
+};
+
+tQuery.Loop.prototype.pauseToggle= function() {
+	if( this.isRunning() )	this.stop()
+	else			this.start();
+	return this;
+};
 
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {

@@ -1,0 +1,196 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<!-- css for bootstrap -->
+<link href="../vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="../vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+<style>
+body { 
+	background: url(images/earthmoonsun-small.jpg) no-repeat center center fixed; 
+	background-size: cover;
+}
+.score .value	{
+	background-color: black;
+	color		: darkorange;
+	padding		: 5px;
+	padding-left	: 15px;
+	padding-right	: 15px;
+
+	border-radius	: 15px;
+	border		: 2px solid grey;
+}
+i.iconActivable	{
+	background-color: rgba(64,64,64,0.5);
+	padding		: 15px;
+	border-radius	: 90px;
+	line-height	: 100px
+}
+i.iconActivable:hover {
+	cursor	: pointer;
+}
+i.iconActivable.active {
+	color	: darkorange;
+}
+
+.health .value	{
+	color	: FireBrick;
+}
+.speed .value	{
+	color	: FireBrick;
+}
+</style>
+
+<body>
+
+<div class='container-fluid'>
+	<div class='row-fluid'>
+		<div class='span1'>
+			<br/>
+			<h1 class='score'>
+				<span class='value'>349000</span>
+			</h1>
+		</div>
+		<div class='span2 offset9' style='text-align: right;'>
+			<h1 class='health'>
+				<span class='value'>4</span>
+				<i class='icon-plus-sign-alt'></i>
+			</h1>
+			<h1 class='speed'>
+				<span class='value'>414</span>
+				<i class='icon-dashboard'></i>
+			</h1>
+		</div>
+	</div>
+	<div class='row-fluid'>
+		<div class='span2'>
+			<i class='icon-pause icon-4x iconActivable'></i>
+		</div>
+	</div>
+	<div class='row-fluid'>
+		<div class='span2'>
+			<i class='icon-volume-up icon-4x iconActivable'></i>
+		</div>
+	</div>
+</div> <!-- /container -->
+    
+<!-- js for bootstrap -->
+<script src='../vendor/jquery/jquery.min.js'></script>
+<script src='../vendor/bootstrap/js/bootstrap.min.js'></script>
+
+<!-- js for tquery -->
+<script src='../../../build/tquery-bundle-require.js'></script>
+<script>
+require([ 'tquery.fog'
+	, 'tquery.textureutils'
+	, 'tquery.webaudio'
+	, 'tquery.controls'
+], function(){
+	var world	= tQuery.createWorld().boilerplate({
+		stats	: false
+	}).start();
+	
+	world.tRenderer().setClearColorHex(0x000000, 0);
+	// add the fog
+	world.addFogExp2({density: 0.05});
+
+	var tCamera	= world.tCamera();
+	tCamera.fov	= 90;
+	tCamera.updateProjectionMatrix();
+
+
+	// cancel some crap in boilerplate css
+	document.body.style.cssText	= '';	
+	world.tRenderer().domElement.style.cssText	= 'position: absolute; left: 0px; top:0px; overflow: hidden; z-index:-1'
+
+	// // init the library without tQuery plugins to avoid the listener localisation
+	// var webaudio	= new WebAudio();
+	// // create a sound
+	// var soundTrack	= webaudio.createSound()
+	// soundTrack.load('sounds/PIL0T.mp3', function(sound){
+	// 	sound.loop(true).play();
+	// });
+
+
+	// very minimal controls
+if(false){
+	var mouseX	= 0;
+	var mouseY	= 0;
+	window.addEventListener('mousemove', function(event){
+		mouseX = (event.clientX/window.innerWidth )*2 -1;
+		mouseY = (event.clientY/window.innerHeight)*2 -1;
+	})
+	world.setCameraControls({
+		update	: function(delta, now){
+			if( gamePaused )	return;
+			var targetX	= -0.9 * mouseX * tunnelRadius
+			var targetY	= -0.9 * mouseY * tunnelRadius
+			var camera	= world.camera()
+			camera.position().x += 0.025 * (targetX - camera.position().x)
+			camera.position().y += 0.025 * (targetY - camera.position().y)
+		}
+	})	
+}
+	
+	// your code goes here
+	var tunnelDepth	= 60;
+	var tunnelRadius= 2;
+	var gamePaused	= false;
+
+	// create a bonus
+	tQuery.createCube().addTo(world)
+		.scale(1/2)
+		.rotationX(Math.random()*Math.PI*2)
+		.rotationY(Math.random()*Math.PI*2)
+		.rotationZ(Math.random()*Math.PI*2)
+		.setBasicMaterial()
+			.map('images/square-outline-textured.png')
+			.back();
+
+	var url		= 'images/MetalFloorsBare0007_1_thumbhuge.jpg';
+	var url		= '../../assets/images/water.jpg';
+	var texture	= THREE.ImageUtils.loadTexture(url);
+	texture.wrapS	= THREE.RepeatWrapping;
+	texture.wrapT	= THREE.RepeatWrapping;
+	texture.repeat.set(5, 5);
+	tQuery.createCube(tunnelRadius*2, tunnelRadius*2, 0.5).addTo(world)
+		.setBasicMaterial()
+			.map(texture)
+			.back()
+		.translateX(-tunnelRadius*1.5)
+		.translateZ(-2)
+
+	var url		= '../../assets/images/water.jpg';
+	var url		= 'images/MetalFloorsBare0007_1_thumbhuge.jpg';
+	var texture	= THREE.ImageUtils.loadTexture(url);
+	texture.wrapS	= THREE.RepeatWrapping;
+	texture.wrapT	= THREE.RepeatWrapping;
+	texture.repeat.set(5, tunnelDepth/10);
+
+	tQuery.createCylinder(tunnelRadius, tunnelRadius, tunnelDepth, 16, 4, true)
+		.addTo(world)
+		.rotationX(Math.PI/2)
+		.positionZ(world.camera().positionZ()-tunnelDepth/2)
+		.setBasicMaterial()
+			.map(texture)
+			.side(THREE.BackSide)
+			.textureScrolling({
+				transform	: function(tTexture){
+					if( gamePaused )	return;
+					tTexture.offset.y	-= 0.02;
+				}				
+			})
+			.back()
+
+	jQuery('i.icon-pause').on('click', function(event){
+		jQuery(event.target).toggleClass('active')
+		gamePaused	= gamePaused ? false : true;
+	})
+	jQuery('i.icon-volume-up').on('click', function(event){
+		jQuery(event.target).toggleClass('active')
+		
+		var isActive	= jQuery(event.target).hasClass('active')
+		if( isActive )	soundTrack.volume(0)
+		else		soundTrack.volume(1)
+	})
+});
+</script></body>

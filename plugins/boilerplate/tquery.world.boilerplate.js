@@ -55,19 +55,19 @@ tQuery.World.registerInstance('defaultPageTitle', function(){
 	if( isPlugin ){
 		var pluginName	= isPlugin ? matches[1] : null;
 		element.innerHTML= [
-			'Example of tQuery.'+pluginName+' plugins - ',
+			'Example for tQuery.'+pluginName+' plugin - ',
 			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
-			'<a href="http://jeromeetienne.github.com/tquery/" target="_blank">tQuery API</a>',
+			'<a href="../../../" target="_blank">tQuery API</a>',
 			'<br/>',
 			'Try it in a ',
-			'<a href="../../../www/live/editor/#U/../../../',
+			'<a href="../../../www/live/editor/#U/../../..',
 			location.pathname+'" target="_blank">live editor</a>'
 		].join('\n');			
 	}else{
 		element.innerHTML= [
 			'Example of tQuery - ',
 			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
-			'<a href="http://jeromeetienne.github.com/tquery/" target="_blank">tQuery API</a>',
+			'<a href="../../../" target="_blank">tQuery API</a>',
 		].join('\n');						
 	}
 	document.body.appendChild(element)

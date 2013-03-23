@@ -37429,6 +37429,8 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	// default convertions
 	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
 		return new THREE.Color(arguments[0]);
+	}else if( arguments.length === 1 && typeof(arguments[0]) === 'string'){
+		return new THREE.Color(arguments[0]);
 	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
 		return arguments[0];
 	}else if( arguments.length === 3 && typeof(arguments[0]) === 'number'
@@ -38636,6 +38638,16 @@ tQuery.Loop.prototype.stop	= function()
 	// for chained API
 	return this;
 }
+
+tQuery.Loop.prototype.isRunning = function() {
+	return this._timerId ? true : false;
+};
+
+tQuery.Loop.prototype.pauseToggle= function() {
+	if( this.isRunning() )	this.stop()
+	else			this.start();
+	return this;
+};
 
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
@@ -39882,6 +39894,7 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
 	// set element.style
 	element.style.position	= "absolute";
+	element.style.top	= '0px'
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
 	element.style.fontWeight= "bolder";
@@ -39891,6 +39904,42 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	// for chained API
 	return this;
 });
+
+/**
+ * define a default page title for plugins
+ */
+tQuery.World.registerInstance('defaultPageTitle', function(){
+	var location	= window.location;
+	var matches	= location.pathname.match(/^\/plugins\/([^/]+)\//);
+	var isPlugin	= matches ? true : false;
+	// create the element
+	var element	= document.createElement('div');
+	if( isPlugin ){
+		var pluginName	= isPlugin ? matches[1] : null;
+		element.innerHTML= [
+			'Example for tQuery.'+pluginName+' plugin - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="../../../" target="_blank">tQuery API</a>',
+			'<br/>',
+			'Try it in a ',
+			'<a href="../../../www/live/editor/#U/../../..',
+			location.pathname+'" target="_blank">live editor</a>'
+		].join('\n');			
+	}else{
+		element.innerHTML= [
+			'Example of tQuery - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="../../../" target="_blank">tQuery API</a>',
+		].join('\n');						
+	}
+	document.body.appendChild(element)
+
+	// set it up as page Title
+	this.pageTitle(element)
+	// for chained API
+	return this;
+});
+
 
 tQuery.World.registerInstance('devicePixelRatio', function(ratio){
 	// change devicePixelRatio
@@ -40438,6 +40487,7 @@ requirejs.config({
 			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
+			"tquery.colornames": "plugins/colornames/tquery.colornames",
 			"tquery.controls": "plugins/controls/tquery.controlstween",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
@@ -40454,7 +40504,7 @@ requirejs.config({
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
-			"tquery.loaders": "plugins/loaders/tquery.loaders",
+			"tquery.loaders": "three.js/examples/js/loaders/BinaryLoader",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
 			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
@@ -40465,18 +40515,22 @@ requirejs.config({
 			"tquery.playerinput": "plugins/playerinput/tquery.playerinput.keyboard",
 			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
+			"tquery.renderers": "three.js/examples/js/renderers/CSS3DRenderer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
 			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
+			"tquery.textureutils": "plugins/textureutils/tquery.textureutils",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
+			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
 			"tquery.virtualjoystick": "plugins/virtualjoystick/vendor/virtualjoystick",
 			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
 			"domReady": "plugins/requirejs/vendor/domReady",
+			"tquery.webrtcio": "plugins/webrtcio/vendor/webrtc.io-client/webrtc.io",
 			"tquery.whammy": "plugins/requirejs/confrequire/whammy.initrequire"
 		}
 	},
@@ -40538,16 +40592,15 @@ requirejs.config({
 		"plugins/linkify/tquery.mesh.linkify": [
 			"tquery.domevent"
 		],
-		"plugins/loaders/tquery.loaders": [
-			"three.js/loaders/BinaryLoader",
-			"three.js/loaders/MTLLoader",
-			"three.js/loaders/OBJMTLLoader",
-			"three.js/loaders/STLLoader",
-			"three.js/loaders/VTKLoader",
-			"three.js/loaders/ColladaLoader",
-			"three.js/loaders/OBJLoader",
-			"three.js/loaders/PDBLoader",
-			"three.js/loaders/UTF8Loader"
+		"three.js/examples/js/loaders/BinaryLoader": [
+			"three.js/examples/js/loaders/MTLLoader",
+			"three.js/examples/js/loaders/OBJMTLLoader",
+			"three.js/examples/js/loaders/STLLoader",
+			"three.js/examples/js/loaders/VTKLoader",
+			"three.js/examples/js/loaders/ColladaLoader",
+			"three.js/examples/js/loaders/OBJLoader",
+			"three.js/examples/js/loaders/PDBLoader",
+			"three.js/examples/js/loaders/UTF8Loader"
 		],
 		"plugins/requirejs/confrequire/md2character.initrequire": [
 			"plugins/md2character/tquery.md2character",
@@ -40626,6 +40679,11 @@ requirejs.config({
 			"three.js/examples/js/postprocessing/ShaderPass",
 			"three.js/examples/js/postprocessing/TexturePass"
 		],
+		"three.js/examples/js/renderers/CSS3DRenderer": [
+			"three.js/examples/js/renderers/SoftwareRenderer",
+			"three.js/examples/js/renderers/SVGRenderer",
+			"three.js/examples/js/renderers/WebGLDeferredRenderer"
+		],
 		"plugins/shadowmap/tquery.light.shadowmap": [
 			"plugins/shadowmap/tquery.world.shadowmap"
 		],
@@ -40657,6 +40715,9 @@ requirejs.config({
 			"plugins/text/fonts/droid/droid_sans_regular.typeface",
 			"plugins/text/fonts/droid/droid_sans_bold.typeface",
 			"plugins/text/fonts/droid/droid_serif_bold.typeface"
+		],
+		"plugins/textureutils/tquery.textureutils": [
+			"plugins/textureutils/tquery.material.texturescrolling"
 		],
 		"plugins/tweenjs/tquery.tween": [
 			"plugins/tweenjs/vendor/Tween"
@@ -40693,6 +40754,11 @@ requirejs.config({
 	}
 });
 (function(){
+
+return;	// FIXME this fails on jsfiddle + corsproxy
+	// find something compatible
+
+
 	// get the script dom element which included the library
 	var scripts	= document.getElementsByTagName('script');
 	var scriptEl	= scripts[scripts.length-1];
