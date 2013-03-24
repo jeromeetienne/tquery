@@ -21,9 +21,9 @@ tQuery.registerStatic('MirrorPlane', function(opts){
 	
 	// setup the RenderTarget
 	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
-		// minFilter	: THREE.LinearFilter,
-		// magFilter	: THREE.NearestFilter,
-		// format		: THREE.RGBFormat
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
 	});
 
 	// create the mirror plane
