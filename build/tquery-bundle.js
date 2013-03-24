@@ -37851,9 +37851,13 @@ tQuery.Object3D.prototype.add	= function(object3D)
 			})
 		}.bind(this));
 	}else if( object3D instanceof THREE.Object3D ){
-		this.each(function(object1){
-			object1.add(object3D);
-		});
+		if( this.length > 0 ){
+			this.each(function(tObject3D){
+				tObject3D.add(object3D);
+			});
+		}else{
+			this._lists.push(object3D);	
+		}
 	}else	console.assert(false, "invalid parameter");
 	return this;
 }
@@ -39917,14 +39921,18 @@ tQuery.World.registerInstance('defaultPageTitle', function(){
 	if( isPlugin ){
 		var pluginName	= isPlugin ? matches[1] : null;
 		element.innerHTML= [
-			'Example for tQuery.'+pluginName+' plugin - ',
+			'Example for <a href="https://github.com/jeromeetienne/tquery/tree/dev/plugins/'
+				+pluginName
+				+'#readme">'
+				+'tQuery.'+pluginName
+				+'</a> plugin - ',
 			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
 			'<a href="../../../" target="_blank">tQuery API</a>',
 			'<br/>',
 			'Try it in a ',
 			'<a href="../../../www/live/editor/#U/../../..',
 			location.pathname+'" target="_blank">live editor</a>'
-		].join('\n');			
+		].join('\n');
 	}else{
 		element.innerHTML= [
 			'Example of tQuery - ',

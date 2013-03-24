@@ -6,7 +6,7 @@ require([ 'tquery.skymap'
 	, 'tquery.minecraft'
 	, 'tquery.mirror'
 ], function(){
-	var world	= tQuery.createWorld().boilerplate().start()
+	var world	= tQuery.createWorld().boilerplate().defaultPageTitle().start()
 
 	var controls	= tQuery.world.getCameraControls();
 	controls.rangeX	*= 1/5;
@@ -54,7 +54,7 @@ require([ 'tquery.skymap'
 
 	// init flash
 	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/jerome.png'
+		skinUrl	: '../../../plugins/minecraft/examples/images/jetienne.png'
 	}).addTo(container)
 	tQuery.createMinecraftCharAnimations(character).start('walk')
 	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
@@ -66,7 +66,7 @@ require([ 'tquery.skymap'
  
 	// init batman
 	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/batman.png'
+		skinUrl	: '../../../plugins/minecraft/examples/images/batman.png'
 	}).addTo(container)
 	tQuery.createMinecraftCharAnimations(character).start('walk')
 	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
@@ -78,7 +78,7 @@ require([ 'tquery.skymap'
 	
 	// init mario
 	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/Mario.png'
+		skinUrl	: '../../../plugins/minecraft/examples/images/Mario.png'
 	}).addTo(container)
 	tQuery.createMinecraftCharAnimations(character).start('walk')
 	tQuery.createMinecraftCharHeadAnimations(character).start('yes');

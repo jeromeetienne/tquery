@@ -847,9 +847,13 @@ tQuery.Object3D.prototype.add	= function(object3D)
 			})
 		}.bind(this));
 	}else if( object3D instanceof THREE.Object3D ){
-		this.each(function(object1){
-			object1.add(object3D);
-		});
+		if( this.length > 0 ){
+			this.each(function(tObject3D){
+				tObject3D.add(object3D);
+			});
+		}else{
+			this._lists.push(object3D);	
+		}
 	}else	console.assert(false, "invalid parameter");
 	return this;
 }
