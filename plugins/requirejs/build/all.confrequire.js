@@ -30,6 +30,7 @@ requirejs.config({
 			"tquery.loaders": "three.js/examples/js/loaders/BinaryLoader",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
+			"tquery.mirror": "plugins/mirror/tquery.mirrorplane",
 			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
 			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
 			"tquery.objectcoord": "plugins/objectcoord/tquery.object3d.coordinate",
@@ -159,6 +160,10 @@ requirejs.config({
 		],
 		"plugins/minecraft/tquery.animations": [
 			"plugins/minecraft/tquery.animation"
+		],
+		"plugins/mirror/tquery.mirrorplane": [
+			"tquery.objectcoord",
+			"plugins/mirror/tquery.mirrorball"
 		],
 		"plugins/modifiers/tquery.geometry.smooth": [
 			"three.js/examples/js/modifiers/ExplodeModifier",
