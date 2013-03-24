@@ -1,0 +1,92 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.mirrorball.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.checkerboard'	
+	, 'tquery.minecraft'
+//	, 'tquery.mirror'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start()
+
+	var controls	= tQuery.world.getCameraControls();
+	controls.rangeX	*= 1/5;
+	controls.rangeY	*= 1/2.5;
+	controls.target.y	= 0.75;
+	// keep the camera above the ground
+	world.hook(function(delta, now){
+		var camera	= tQuery(world.tCamera())
+		var minHeight	= 0.3;
+		if( camera.positionY() < minHeight )	camera.positionY(minHeight)
+	})
+
+	tQuery.createSkymap('mars').addTo(world);
+
+	tQuery.createCheckerboard({
+		segmentsW	: 20,
+		segmentsH	: 20
+	}).addTo(world).scaleBy(30);
+
+
+	var sphere	= tQuery.createMirrorBall().addTo(world)
+
+	world.hook(function(delta, now){
+		var angle	= 0.3 * now * Math.PI * 2;
+		sphere.positionY(Math.abs(Math.cos(angle)*Math.cos(angle)*1.3) + 1/2 - 0.2)
+		
+		if( sphere.positionY() < 0.5 ){
+			sphere.scaleX(1+1.5*(0.5-sphere.positionY()))
+			sphere.scaleZ(1+1.5*(0.5-sphere.positionY()))
+			sphere.scaleY(1-2*(0.5-sphere.positionY()))
+		}else{
+			sphere.scaleX(1)
+			sphere.scaleZ(1)
+			
+			sphere.scaleY(1)			
+		}
+	})
+
+	
+	var container	= tQuery.createObject3D().addTo(world)
+	world.hook(function(delta, now){
+		var angle	= 0.2 * now*Math.PI*2;
+		container.rotationY(angle)
+	})
+
+	// init flash
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../minecraft/examples/images/jerome.png'
+	}).addTo(container)
+	tQuery.createMinecraftCharAnimations(character).start('walk')
+	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
+	var angle	= 0/3 * Math.PI * 2;
+	character.object3D()
+		.translateX(Math.cos(angle) * 1)
+		.translateZ(Math.sin(angle) * 1)
+		.rotateY(Math.PI - angle)
+ 
+	// init batman
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../minecraft/examples/images/batman.png'
+	}).addTo(container)
+	tQuery.createMinecraftCharAnimations(character).start('walk')
+	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
+	var angle	= 1/3 * Math.PI * 2;
+	character.object3D()
+		.translateX(Math.cos(angle) * 1)
+		.translateZ(Math.sin(angle) * 1)
+		.rotateY(Math.PI - angle)
+	
+	// init mario
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../minecraft/examples/images/Mario.png'
+	}).addTo(container)
+	tQuery.createMinecraftCharAnimations(character).start('walk')
+	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
+	var angle	= 2/3 * Math.PI * 2;
+	character.object3D()
+		.translateX(Math.cos(angle) * 1)
+		.translateZ(Math.sin(angle) * 1)
+		.rotateY(Math.PI - angle)
+})
+</script></body>

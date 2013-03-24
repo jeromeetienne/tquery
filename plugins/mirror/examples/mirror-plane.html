@@ -9,6 +9,10 @@ require([ 'tquery.skymap'
 ], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
 	tQuery.createSkymap('bridge2').addTo(world);
 	var torusKnot	= tQuery.createTorusKnot().addTo(world).position( 0, 0, 1)
 	world.hook(function(delta, now){

@@ -1,105 +1,25 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.mirrorball.js"></script>
 <body><script>
 require([ 'tquery.skymap'
-	, 'tquery.grassground'
-	, 'tquery.minecraft'
 ], function(){
 	var world	= tQuery.createWorld().boilerplate().start()
 
-	var controls	= tQuery.world.getCameraControls();
-	controls.rangeX	*= 1/5;
-	controls.rangeY	*= 1/5;
-	controls.target.y	= 0.75;
-	// keep the camera above the ground
-	world.hook(function(delta, now){
-		var camera	= tQuery(world.tCamera())
-		var minHeight	= 0.2;
-		if( camera.positionY() < minHeight )	camera.positionY(minHeight)
-	})
+	// create the mirror ball
+	var sphere	= tQuery.createMirrorBall().addTo(world)
 
+	// add a skymap
 	tQuery.createSkymap('mars').addTo(world);
-
-	tQuery.createGrassGround({
-		textureRepeatX	: 10,
-		textureRepeatY	: 10,
-	}).addTo(world).scale(30)
-		.translateY(-0.001)
-		.receiveShadow(true)
-
-	var cubeCamera	= new THREE.CubeCamera( 0.001, 1000, 256 );
-	// to avoid flickering on the border of the sphere
-	cubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
-
-
-	var sphere	= tQuery.createSphere().addTo(world)
-		.geometry()
-			.scaleBy(0.75)
-			.back()
-		.setBasicMaterial()
-			.envMap(cubeCamera.renderTarget)
-			.color(0xffff00)
-			.back()
-
-
-	// TODO make a better API
-
-
-	tQuery(cubeCamera).addTo(sphere)
-
-	world.hook(function(){
-		sphere.visible(false)	// *cough*
-
-		cubeCamera.updateCubeMap( world.tRenderer(), world.tScene() );
-
-		sphere.visible(true)	// *cough*
-	})
-
+		
+	// some simple animations to have something dynamic to render
+	var container	= tQuery.createObject3D().addTo(world).positionY(-0.5)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0, 1)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0,-1)
+	tQuery.createTorusKnot().addTo(container).position( 1, 0, 0).rotateY( Math.PI/2)
+	tQuery.createTorusKnot().addTo(container).position(-1, 0, 0).rotateY(-Math.PI/2)
 	world.hook(function(delta, now){
-		var angle	= 0.3 * now * Math.PI * 2;
-		sphere.positionY(Math.abs(Math.cos(angle)*1.3) + 0.75/2)
+		container.rotateY( 0.3 * delta * Math.PI*2)
 	})
-	
-	var container	= tQuery.createObject3D().addTo(world)
-	world.hook(function(delta, now){
-		var angle	= 0.2 * now*Math.PI*2;
-		container.rotationY(angle)
-	})
-
-	// init flash
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/theflash.png'
-	}).addTo(container)
-	tQuery.createMinecraftCharAnimations(character).start('walk')
-	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
-	var angle	= 0/3 * Math.PI * 2;
-	character.object3D()
-		.translateX(Math.cos(angle) * 0.8)
-		.translateZ(Math.sin(angle) * 0.8)
-		.rotateY(Math.PI - angle)
- 
-	// init batman
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/batman.png'
-	}).addTo(container)
-	tQuery.createMinecraftCharAnimations(character).start('walk')
-	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
-	var angle	= 1/3 * Math.PI * 2;
-	character.object3D()
-		.translateX(Math.cos(angle) * 0.8)
-		.translateZ(Math.sin(angle) * 0.8)
-		.rotateY(Math.PI - angle)
-	
-	// init mario
-	var character	= tQuery.createMinecraftChar({
-		skinUrl	: '../../minecraft/examples/images/Mario.png'
-	}).addTo(container)
-	tQuery.createMinecraftCharAnimations(character).start('walk')
-	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
-	var angle	= 2/3 * Math.PI * 2;
-	character.object3D()
-		.translateX(Math.cos(angle) * 0.8)
-		.translateZ(Math.sin(angle) * 0.8)
-		.rotateY(Math.PI - angle)
-})
+});
 </script></body>
