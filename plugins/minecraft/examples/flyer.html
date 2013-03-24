@@ -1,11 +1,10 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 
+<script src="../tquery.minecraftchar.js"></script>
+
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
-
-<script src="../tquery.minecraftchar.js"></script>
-<script src="../tquery.minecraftchar.keyboard.js"></script>
 
 <script src="../../skymap/tquery.skymap.js"></script>
 <script src="../../skymap/tquery.cubetexture.js"></script>
@@ -43,8 +42,6 @@
 	character.parts.armR.rotation.x	= Math.PI/8;
 	character.parts.armR.rotation.z	= Math.PI+Math.PI/8;
 	
-	character.hookKeyboard();
-
 	// Create the skymap
 	var skymap	= tQuery.createSkymap('skybox').addTo(world);
 	skymap.get(0).position	= character.model.get(0).position;
@@ -71,6 +68,12 @@
 		var model	= character.model;
 	
 		model.translateZ(-10*delta)
+		
+		// keyboard handling
+		if( keyboard.pressed("left") )	model.translateX(-4*delta);
+		if( keyboard.pressed("right") )	model.translateX(+4*delta);
+		if( keyboard.pressed("up") )	model.translateY(+4*delta);
+		if( keyboard.pressed("down") )	model.translateY(-4*delta);
 		
 		// keyboard handling
 		if( keyboard.pressed("left") )	charRotationZ	-= delta*Math.PI/3;
