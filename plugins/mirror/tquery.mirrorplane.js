@@ -1,40 +1,36 @@
-<!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle-require.js"></script>
-<body><script>
-require([ 'tquery.skymap'
-	, 'tquery.grassground'
-	, 'tquery.minecraft'
-	, 'tquery.objectcoord'
-], function(){
-	var world	= tQuery.createWorld().boilerplate().start();
+tQuery.registerStatic('MirrorPlane', function(opts){
+	// call parent ctor
+	tQuery.MirrorPlane.parent.constructor.call(this)
 
-	tQuery.createSkymap('bridge2').addTo(world);
-	var torusKnot	= tQuery.createTorusKnot().addTo(world).position( 0, 0, 1)
-	world.hook(function(delta, now){
-		var angle	= 0.3 * now*Math.PI*2;
-		torusKnot.positionX( 1 * Math.cos(angle) )
-		torusKnot.positionZ( 1 * Math.sin(angle) )
-		torusKnot.rotationY( -angle + Math.PI/2 )
-	})
-	
-	//////////////////////////////////////////////////////////////////////////////////
-	//		comment								//
-	//////////////////////////////////////////////////////////////////////////////////
-	
-	var textureW	= 512;
-	var textureH	= 512;
-	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
-		minFilter	: THREE.LinearFilter,
-		magFilter	: THREE.NearestFilter,
-		format		: THREE.RGBFormat
+	// handle arguments default value
+	opts	= tQuery.extend(opts, {
+		world	: tQuery.world,
+		textureW: 512,
+		textureH: 512,
 	});
 
-	var container	= tQuery.createObject3D().addTo(world)
-window.container	= container;
-// FIXME still issue in scaling
+	// set some local variable
+	var world	= opts.world;
+	var textureW	= opts.textureW;
+	var textureH	= opts.textureH;
+
+	// init the container
+	var container	= new THREE.Object3D()
+	this.add(container)
+
+	
+	// setup the RenderTarget
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		// minFilter	: THREE.LinearFilter,
+		// magFilter	: THREE.NearestFilter,
+		// format		: THREE.RGBFormat
+	});
+
+	// create the mirror plane
 	var mirrorPlane	= tQuery.createPlane().addTo(container)
 		.scaleX(1)
 		.scaleY(textureH/textureW)
+		.addClass('plane')
 		.setBasicMaterial()
 			.map(rtTexture)
 			.back()
@@ -49,10 +45,11 @@ window.container	= container;
 	var planeH	= 1 * mirrorPlane.scaleY();
 	var tPlaneCam	= new THREE.PerspectiveCamera(50, planeW/planeH, 0.0001, 10000);
 	var mirrorCamera= tQuery(tPlaneCam).addTo(container)
+		.addClass('camera')
 	
-	if( true ){
+	if( false ){
 		var cameraPerspectiveHelper = new THREE.CameraHelper( mirrorCamera.get(0) );
-		world.tScene().add( cameraPerspectiveHelper ); 
+		world.add( cameraPerspectiveHelper ); 
 		world.hook(function(delta, now){
 			cameraPerspectiveHelper.update();
 		})
@@ -74,7 +71,7 @@ window.container	= container;
 		tRenderer.render(tScene, tCamera, rtTexture, true);	
 	})
 	
-	
+	// update mirrorCamera position based on worldCamera positions	
 	world.hook(function(delta, now){
 		var worldCamera	= world.camera();
 		// update matrix world
@@ -99,5 +96,14 @@ window.container	= container;
 		tMirrorCam.near	= distance;
 		tMirrorCam.updateProjectionMatrix()
 	})
-})
-</script></body>
+});
+
+// inherit from tQuery.Object3D§
+tQuery.inherit(tQuery.MirrorPlane, tQuery.Object3D);
+
+
+tQuery.registerStatic('createMirrorPlane', function(opts){
+	return new tQuery.MirrorPlane(opts)
+});
+
+
