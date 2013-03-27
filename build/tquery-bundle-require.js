@@ -39923,7 +39923,7 @@ tQuery.World.registerInstance('defaultPageTitle', function(){
 		element.innerHTML= [
 			'Example for <a href="https://github.com/jeromeetienne/tquery/tree/dev/plugins/'
 				+pluginName
-				+'#readme">'
+				+'#readme" target="_blank">'
 				+'tQuery.'+pluginName
 				+'</a> plugin - ',
 			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
@@ -40627,15 +40627,12 @@ requirejs.config({
 			"plugins/md2character/tquery.md2character.ratamahatta"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
-			"plugins/minecraft/tquery.midikeytween",
+			"plugins/minecraft/tquery.minecraftplayer",
 			"plugins/minecraft/tquery.minecraftchar",
-			"plugins/minecraft/tquery.minecraftchar.keyboard2",
-			"tquery.keyboard",
 			"plugins/minecraft/tquery.minecraftcharcontrols",
-			"plugins/minecraft/tquery.camerafpscontrols",
-			"plugins/minecraft/tquery.spritesheet",
 			"plugins/minecraft/tquery.minecraftcharanimations",
-			"plugins/minecraft/tquery.minecraftcharheadanimations"
+			"plugins/minecraft/tquery.minecraftcharheadanimations",
+			"plugins/minecraft/tquery.spritesheet"
 		],
 		"plugins/minecraft/tquery.minecraftcharanimations": [
 			"plugins/minecraft/tquery.animations"

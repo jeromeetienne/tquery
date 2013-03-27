@@ -47,20 +47,20 @@ tQuery.registerStatic('MirrorPlane', function(opts){
 	var mirrorCamera= tQuery(tPlaneCam).addTo(container)
 		.addClass('camera')
 	
-	if( false ){
+	if( true ){
 		var cameraPerspectiveHelper = new THREE.CameraHelper( mirrorCamera.get(0) );
 		world.add( cameraPerspectiveHelper ); 
 		world.hook(function(delta, now){
 			cameraPerspectiveHelper.update();
 		})
 
-		// tQuery.createAxis().addTo(mirrorCamera)
-		// var cameraObj	= tQuery.createCube().addTo(mirrorCamera)
-		// 	.scale(1/10)
-		// 	.setBasicMaterial()
-		// 		.wireframe(true)
-		// 		.color('hotpink')
-		// 		.back()		
+		tQuery.createAxis().addTo(mirrorCamera)
+		var cameraObj	= tQuery.createCube().addTo(mirrorCamera)
+			//.scale(1/10)
+			.setBasicMaterial()
+				.wireframe(true)
+				.color('hotpink')
+				.back()		
 	}
 	
 	// Render the scene

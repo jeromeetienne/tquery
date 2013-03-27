@@ -39923,7 +39923,7 @@ tQuery.World.registerInstance('defaultPageTitle', function(){
 		element.innerHTML= [
 			'Example for <a href="https://github.com/jeromeetienne/tquery/tree/dev/plugins/'
 				+pluginName
-				+'#readme">'
+				+'#readme" target="_blank">'
 				+'tQuery.'+pluginName
 				+'</a> plugin - ',
 			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',

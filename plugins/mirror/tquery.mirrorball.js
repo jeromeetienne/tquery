@@ -26,17 +26,32 @@ tQuery.registerStatic('MirrorBall', function(opts){
 			.color('gold')
 			.back()
 	// render the CubeMap 
-	world.hook(function(){
+	var callback	= world.hook(function(){
 		sphere.visible(false)	// *cough*
 
 		tCamera.updateCubeMap( world.tRenderer(), world.tScene() );
 
 		sphere.visible(true)	// *cough*
 	})
+	// unhook callback on destroy
+	this.addEventListener('destroy', function(){ world.unhook(callback)	});
 });
 
-// inherit from tQuery.Object3D§
+// inherit from tQuery.Object3D
 tQuery.inherit(tQuery.MirrorBall, tQuery.Object3D);
+
+// make it eventable
+tQuery.MicroeventMixin(tQuery.MirrorBall.prototype)
+
+/**
+ * explicit destructor
+ */
+tQuery.MirrorBall.prototype.destroy	= function(){
+	// call parent function
+	tQuery.MirrorBall.prototype.destroy.call(this)
+	// dispatch event
+	this.dispatchEvent('destroy')
+};
 
 tQuery.registerStatic('createMirrorBall', function(opts){
 	return new tQuery.MirrorBall(opts)

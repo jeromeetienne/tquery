@@ -142,6 +142,7 @@ requirejs.config({
 			"plugins/md2character/tquery.md2character.ratamahatta"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
+			"plugins/minecraft/tquery.minecraftplayer",
 			"plugins/minecraft/tquery.minecraftchar",
 			"plugins/minecraft/tquery.minecraftcharcontrols",
 			"plugins/minecraft/tquery.minecraftcharanimations",

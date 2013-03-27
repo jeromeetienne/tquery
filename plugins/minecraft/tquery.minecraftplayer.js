@@ -14,7 +14,7 @@ tQuery.registerStatic('MinecraftPlayer', function(opts){
 
 	// getter for the subpart	
 	this.character	= function(){ return character	}
-	this.object3D	= function(){ return character.object3D()	}
+	this.object3D	= function(){ return character.object3D.apply(character, arguments)	}
 	this.controls	= function(){ return controls	}
 	this.bodyAnims	= function(){ return bodyAnims	}
 	this.headAnims	= function(){ return headAnims	}
@@ -32,9 +32,8 @@ tQuery.registerStatic('MinecraftPlayer', function(opts){
 		// update player.previousPos/player.prevRotation
 		previousPos.copy( character3D.position() )
 	});
-	this.addEventListener('destroy', function(){
-		world.unhook(callback)
-	})
+	// unhook callback on destroy
+	this.addEventListener('destroy', function(){ world.unhook(callback)	});
 });
 
 

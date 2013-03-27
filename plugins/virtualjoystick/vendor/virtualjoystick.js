@@ -2,6 +2,7 @@ var VirtualJoystick	= function(opts)
 {
 	opts			= opts			|| {};
 	this._container		= opts.container	|| document.body;
+	this._strokeStyle	= opts.strokeStyle	|| 'cyan';
 	this._stickEl		= opts.stickElement	|| this._buildJoystickStick();
 	this._baseEl		= opts.baseElement	|| this._buildJoystickBase();
 	this._mouseSupport	= opts.mouseSupport !== undefined ? opts.mouseSupport : false;
@@ -17,6 +18,7 @@ var VirtualJoystick	= function(opts)
 	this._stickEl.style.display	= "none";
 	
 	this._pressed	= false;
+	this._touchIdx	= null;
 	this._baseX	= 0;
 	this._baseY	= 0;
 	this._stickX	= 0;
@@ -61,6 +63,33 @@ VirtualJoystick.touchScreenAvailable	= function()
 {
 	return 'createTouch' in document ? true : false;
 }
+
+/**
+ * microevents.js - https://github.com/jeromeetienne/microevent.js
+*/
+;(function(destObj){
+	destObj.addEventListener	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		this._events[event] = this._events[event]	|| [];
+		this._events[event].push(fct);
+		return fct;
+	};
+	destObj.removeEventListener	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		if( event in this._events === false  )	return;
+		this._events[event].splice(this._events[event].indexOf(fct), 1);
+	};
+	destObj.dispatchEvent		= function(event /* , args... */){
+		if(this._events === undefined) 	this._events	= {};
+		if( this._events[event] === undefined )	return;
+		var tmpArray	= this._events[event].slice(); 
+		for(var i = 0; i < tmpArray.length; i++){
+			var result	= tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			if( result !== undefined )	return result;
+		}
+		return undefined
+	};
+})(VirtualJoystick.prototype);
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -124,6 +153,7 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 	this._stickX	= x;
 	this._stickY	= y;
 
+
 	this._stickEl.style.display	= "";
 	this._stickEl.style.left	= (x - this._stickEl.width /2)+"px";
 	this._stickEl.style.top		= (y - this._stickEl.height/2)+"px";
@@ -167,19 +197,45 @@ VirtualJoystick.prototype._onMouseMove	= function(event)
 	return this._onMove(x, y);
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
 VirtualJoystick.prototype._onTouchStart	= function(event)
 {
-	if( event.touches.length != 1 )	return;
+	// if there is already a touch inprogress do nothing
+	if( this._touchIdx !== null )	return;
+
+	// notify event for validation
+	var isValid	= this.dispatchEvent('touchStartValidation', event);
+	if( isValid === false )	return;
 
 	event.preventDefault();
+	// get the first who changed
+	var touch	= event.changedTouches[0];
+	// set the touchIdx of this joystick
+	this._touchIdx	= touch.identifier;
 
-	var x	= event.touches[ 0 ].pageX;
-	var y	= event.touches[ 0 ].pageY;
+	// forward the action
+	var x		= touch.pageX;
+	var y		= touch.pageY;
 	return this._onDown(x, y)
 }
 
 VirtualJoystick.prototype._onTouchEnd	= function(event)
 {
+	// if there is no touch in progress, do nothing
+	if( this._touchIdx === null )	return;
+
+	// try to find our touch event
+	var touchList	= event.changedTouches;
+	for(var i = 0; i < touchList.length && touchList[i].identifier !== this._touchIdx; i++);
+	// if touch event isnt found, 
+	if( i === touchList.length)	return;
+
+	// reset touchIdx - mark it as no-touch-in-progress
+	this._touchIdx	= null;
+
 //??????
 // no preventDefault to get click event on ios
 event.preventDefault();
@@ -189,12 +245,20 @@ event.preventDefault();
 
 VirtualJoystick.prototype._onTouchMove	= function(event)
 {
-	if( event.touches.length != 1 )	return;
+	// if there is no touch in progress, do nothing
+	if( this._touchIdx === null )	return;
+
+	// try to find our touch event
+	var touchList	= event.changedTouches;
+	for(var i = 0; i < touchList.length && touchList[i].identifier !== this._touchIdx; i++ );
+	// if touch event with the proper identifier isnt found, do nothing
+	if( i === touchList.length)	return;
+	var touch	= touchList[i];
 
 	event.preventDefault();
 
-	var x	= event.touches[ 0 ].pageX;
-	var y	= event.touches[ 0 ].pageY;
+	var x		= touch.pageX;
+	var y		= touch.pageY;
 	return this._onMove(x, y)
 }
 
@@ -203,6 +267,9 @@ VirtualJoystick.prototype._onTouchMove	= function(event)
 //		build default stickEl and baseEl				//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * build the canvas for joystick base
+ */
 VirtualJoystick.prototype._buildJoystickBase	= function()
 {
 	var canvas	= document.createElement( 'canvas' );
@@ -211,13 +278,13 @@ VirtualJoystick.prototype._buildJoystickBase	= function()
 	
 	var ctx		= canvas.getContext('2d');
 	ctx.beginPath(); 
-	ctx.strokeStyle = "cyan"; 
+	ctx.strokeStyle = this._strokeStyle; 
 	ctx.lineWidth	= 6; 
 	ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
 	ctx.stroke();	
 
 	ctx.beginPath(); 
-	ctx.strokeStyle	= "cyan"; 
+	ctx.strokeStyle	= this._strokeStyle; 
 	ctx.lineWidth	= 2; 
 	ctx.arc( canvas.width/2, canvas.width/2, 60, 0, Math.PI*2, true); 
 	ctx.stroke();
@@ -225,6 +292,9 @@ VirtualJoystick.prototype._buildJoystickBase	= function()
 	return canvas;
 }
 
+/**
+ * build the canvas for joystick stick
+ */
 VirtualJoystick.prototype._buildJoystickStick	= function()
 {
 	var canvas	= document.createElement( 'canvas' );
@@ -232,23 +302,10 @@ VirtualJoystick.prototype._buildJoystickStick	= function()
 	canvas.height	= 86;
 	var ctx		= canvas.getContext('2d');
 	ctx.beginPath(); 
-	ctx.strokeStyle	= "cyan"; 
+	ctx.strokeStyle	= this._strokeStyle; 
 	ctx.lineWidth	= 6; 
 	ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
 	ctx.stroke();
 	return canvas;
 }
 
-VirtualJoystick.prototype._buildJoystickButton	= function()
-{
-	var canvas	= document.createElement( 'canvas' );
-	canvas.width	= 86;
-	canvas.height	= 86;
-	var ctx		= canvas.getContext('2d');
-	ctx.beginPath(); 
-	ctx.strokeStyle	= "red"; 
-	ctx.lineWidth	= 6; 
-	ctx.arc( canvas.width/2, canvas.width/2, 40, 0, Math.PI*2, true); 
-	ctx.stroke();
-	return canvas;
-}

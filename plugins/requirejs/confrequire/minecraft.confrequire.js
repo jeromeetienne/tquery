@@ -16,6 +16,7 @@ requirejs.config({
 			// 'tquery.keyboard',
 
 
+			'plugins/minecraft/tquery.minecraftplayer',
 			'plugins/minecraft/tquery.minecraftchar',
 
 			'plugins/minecraft/tquery.minecraftcharcontrols',
