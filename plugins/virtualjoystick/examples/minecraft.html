@@ -60,15 +60,16 @@ require([ 'tquery.minecraft'
 	});
 	
 	
-	// // make the head follow the ball
+	// make the head follow the ball
 	var character	= player.character();
-	var target	= tQuery.createCube().addTo( player.object3D() )
+	var target	= tQuery.createObject3D().addTo( player.object3D() )
 				.scaleBy(1/10)
 				.positionY(0.5)
 				.positionZ(1)
 	
 	world.camera().addTo( player.object3D('headGroup') )
 		.position(0, 4/32, -1)
+		.position(1, 4/32, -2)
 		.rotationY(Math.PI)
 		
 	world.hook(function(delta, now){
