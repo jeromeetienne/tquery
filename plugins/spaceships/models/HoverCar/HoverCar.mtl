@@ -1,6 +1,6 @@
 # Blender MTL File: 'None'
 # Material Count: 4
-newmtl Car071_CAR07.JPG
+newmtl Car071_Car07.jpg
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.800000 0.800000 0.800000
@@ -8,10 +8,10 @@ Ks 0.449020 0.449020 0.449020
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd CAR07.JPG
+map_Kd Car07.jpg
 
 
-newmtl Car07_CAR07.JPG
+newmtl Car07_Car07.jpg
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.800000 0.800000 0.800000
@@ -19,10 +19,10 @@ Ks 0.449020 0.449020 0.449020
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd CAR07.JPG
+map_Kd Car07.jpg
 
 
-newmtl Car07e2_CAR07.JPG
+newmtl Car07e2_Car07.jpg
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.432941 0.432941 0.432941
@@ -30,10 +30,10 @@ Ks 0.449020 0.449020 0.449020
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd CAR07.JPG
+map_Kd Car07.jpg
 
 
-newmtl Car07e_CAR07.JPG
+newmtl Car07e_Car07.jpg
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.511373 0.511373 0.511373
@@ -41,6 +41,6 @@ Ks 0.449020 0.449020 0.449020
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd CAR07.JPG
+map_Kd Car07.jpg
 
 
