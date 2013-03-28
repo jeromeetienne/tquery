@@ -149,6 +149,7 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 	var objectCSS 	= new THREE.CSS3DObject( domElement );
 // FIXME here i forced the css3D to be added
 	sceneCSS.add( objectCSS );
+	plane.data('htmlMixerObjectCss', objectCSS)
 
 	objectCSS.scale.copy(opts.cssScale);
 	objectCSS.position	= plane.position();
