@@ -14,7 +14,8 @@ tQuery.registerStatic('createMinecraftChar', function(opts){
 */
 tQuery.registerStatic('MinecraftChar', function(opts){
 	opts	= tQuery.extend(opts, {
-		skinUrl	: tQuery.MinecraftChar.baseUrl + "images/char.png"
+		//skinUrl	: tQuery.MinecraftChar.baseUrl + "images/char.png"
+		skinUrl	: tQuery.MinecraftChar.baseUrl + "images/jetienne.png"
 	});
 	
 	var tTexture	= THREE.ImageUtils.loadTexture( opts.skinUrl );
