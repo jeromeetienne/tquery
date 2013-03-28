@@ -94,7 +94,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 //		Handle the hooks						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Loop.prototype.PRE_RENDER		= 20;
+tQuery.Loop.prototype.PRE_RENDER	= 20;
 tQuery.Loop.prototype.ON_RENDER		= 50;
 tQuery.Loop.prototype.POST_RENDER	= 80;
 

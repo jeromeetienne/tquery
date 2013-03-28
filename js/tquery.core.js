@@ -88,7 +88,7 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
 	// honor mustNotExist
-	if( mustNotExist ){
+	if( mustNotExist || mustNotExist === undefined ){
 		console.assert(object['_tqData'][key] === undefined, "This key already exists "+key);
 	}
 	// set the value if any
