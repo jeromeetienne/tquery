@@ -1,0 +1,81 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../../../vendor/three.js/examples/js/renderers/CSS3DRenderer.js'></script>
+<script src='../tquery.htmlmixer.js'></script>
+<body><style>
+body {
+	background-color: pink;
+}
+</style><script>
+require([ 'tquery.controls'
+	, 'tquery.minecraft'
+	, 'tquery.grassground'
+], function(){
+	var world	= tQuery.createWorld().boilerplate({
+		cameraControls	: false
+	}).start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+
+	var rendererGL	= world.tRenderer();
+	
+
+	// your code goes here
+	var rendererCSS	= new THREE.CSS3DRenderer();
+	rendererCSS.setSize( window.innerWidth, window.innerHeight );
+	rendererCSS.domElement.style.position	= 'absolute';
+	rendererCSS.domElement.style.top	= 0;
+//	rendererCSS.domElement.style.zIndex	= -1;
+	rendererCSS.domElement.style.margin	= 0;
+	rendererCSS.domElement.style.padding	= 0;
+	document.body.appendChild( rendererCSS.domElement );
+//	world.tRenderer().domElement.appendChild( rendererCSS.domElement );
+
+	rendererCSS.domElement.appendChild( world.tRenderer().domElement );
+	rendererGL.domElement.style.zIndex	= 1;
+	rendererGL.domElement.style.position	= 'absolute';
+	rendererGL.domElement.style.top		= 0;
+	
+	var sceneCss = new THREE.Scene();
+	world.hook(function(delta, now){
+		rendererCSS.render( sceneCss, world.tCamera() );
+	})
+
+		
+	var tMaterial	= new THREE.MeshBasicMaterial();
+	tMaterial.color.set('black')
+	tMaterial.opacity	= 0;
+	tMaterial.blending	= THREE.NoBlending;
+	var plane	= tQuery.createPlane(tMaterial).addTo(world)
+		.addClass('plane')
+		.scaleXBy(16/9)
+		.scaleYBy(1)
+		.scaleBy(1)
+
+	var element	= buildSimpleDivElement()
+	//var element	= buildIframeElement()
+	var objectCSS 	= new THREE.CSS3DObject( element );
+	sceneCss.add( objectCSS );
+	objectCSS.scale.set(1/256, 1/256, 1);
+	objectCSS.position	= plane.position();
+	objectCSS.rotation	= plane.rotation();
+
+	element.style.width	= (plane.scaleX()/objectCSS.scale.x)+'px';
+	element.style.height	= (plane.scaleY()/objectCSS.scale.y)+'px';
+
+	function buildSimpleDivElement(){
+		var element	= document.createElement( 'div' );
+		element.style.background = new THREE.Color('green').getStyle();
+		return element;		
+	}
+	function buildIframeElement(url){
+		var element	= document.createElement( 'iframe' );
+		//element.src	= 'http://pacmaze.com/';
+		//element.src	= 'http://www.youtube.com/embed/z9h5_-NcMiQ'
+		//element.src	= 'http://www.youtube.com/embed/IPpGJ9GCOw0';
+		//element.src	="http://embed.ted.com/talks/ramesh_raskar_a_camera_that_takes_one_trillion_frames_per_second.html"
+		//element.src	= 'http://jetienne.com/';
+		//element.src	= 'http://jeromeetienne.github.com/tquery/';
+		return element;				
+	}
+});
+</script></body>

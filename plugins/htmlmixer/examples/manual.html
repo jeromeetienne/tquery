@@ -11,6 +11,7 @@ require(['tquery.controls'], function(){
 //		cameraControls	: false
 	}).start();
 	var object	= tQuery.createTorusKnot().addTo(world);
+
 	//world.tRenderer().setClearColorHex( 0x000000, 0 );
 	
 	var rendererGL	= world.tRenderer();
@@ -38,14 +39,12 @@ require(['tquery.controls'], function(){
 	rendererCSS.setSize( window.innerWidth, window.innerHeight );
 	rendererCSS.domElement.style.position	= 'absolute';
 	rendererCSS.domElement.style.top	= 0;
-//	rendererCSS.domElement.style.zIndex	= -1;
 	document.body.appendChild( rendererCSS.domElement );
-//	world.tRenderer().domElement.appendChild( rendererCSS.domElement );
 
 	rendererCSS.domElement.appendChild( world.tRenderer().domElement );
-	rendererGL.domElement.style.zIndex	= 1;
 	rendererGL.domElement.style.position	= 'absolute';
 	rendererGL.domElement.style.top		= 0;
+	rendererGL.domElement.style.zIndex	= 1;
 	
 	var sceneCss = new THREE.Scene();
 	world.hook(function(delta, now){
