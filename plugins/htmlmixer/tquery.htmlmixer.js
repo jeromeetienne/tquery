@@ -117,6 +117,7 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 	// handle default arguments
 	opts	= tQuery.extend(opts, {
 		domElement	: null,
+		cssScale	: new THREE.Vector3(1/256, 1/256, 1),
 		world		: tQuery.world
 	})
 	// check options type
@@ -149,7 +150,7 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 // FIXME here i forced the css3D to be added
 	sceneCSS.add( objectCSS );
 
-	objectCSS.scale.set(1/256, 1/256, 1);
+	objectCSS.scale.copy(opts.cssScale);
 	objectCSS.position	= plane.position();
 	objectCSS.rotation	= plane.rotation();
 
