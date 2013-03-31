@@ -60,22 +60,29 @@ tQuery.registerStatic('HTMLMixer', function(opts){
 	rendererCSS.domElement.style.top	= 0;
 	rendererCSS.domElement.style.margin	= 0;
 	rendererCSS.domElement.style.padding	= 0;
+//	rendererCSS.domElement.style.zIndex	= -1;
 	document.body.appendChild( rendererCSS.domElement );
 	this._rendererCSS	= rendererCSS;
-// FIXME who handle the resize of the renderer
 
+	// handle the resize
+	var windowResize	= THREEx.WindowResize.bind(rendererCSS, world.camera().get(0));		
+	this.addEventListener('destroy', function(){
+		windowResize.stop()
+	});
 
 	// put the mainRenderer on top
 	var rendererMain	= world.tRenderer();
 	rendererMain.domElement.style.position	= 'absolute';
 	rendererMain.domElement.style.top	= 0;
 	rendererMain.domElement.style.zIndex	= 1;
+//rendererMain.domElement.style.zIndex	= -1;
 	rendererCSS.domElement.appendChild( rendererMain.domElement );
 	this._rendererMain	= rendererMain;
 
 	// create the sceneCSS	
 	var sceneCSS	= new THREE.Scene();
 	this._sceneCSS	= sceneCSS;
+
 
 	// render SceneCSS
 	var callback	= world.loop().hookPostRender(function(delta, now){
@@ -88,7 +95,6 @@ tQuery.registerStatic('HTMLMixer', function(opts){
 
 // make it eventable
 tQuery.MicroeventMixin(tQuery.HTMLMixer.prototype)
-
 
 /**
  * explicit destructor
@@ -109,7 +115,8 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 	if( typeof(arguments[0]) === 'string'){
 		var url	= arguments[0];
 		opts	= { domElement : document.createElement('iframe') };
-		opts.domElement.src	= url;
+		opts.domElement.src		= url;
+		opts.domElement.style.border	= '0';
 	}
 	if( arguments[0] instanceof HTMLElement ){
 		opts	= {domElement	: arguments[0]};
@@ -117,7 +124,7 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 	// handle default arguments
 	opts	= tQuery.extend(opts, {
 		domElement	: null,
-		cssScale	: new THREE.Vector3(1/256, 1/256, 1),
+		cssScale	: new THREE.Vector3(1/512, 1/512, 1),
 		world		: tQuery.world
 	})
 	// check options type
@@ -133,7 +140,6 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 	}
 
 
-
 	var htmlMixer	= world.htmlMixer();
 	var sceneCSS	= htmlMixer.sceneCSS();
 
@@ -143,21 +149,55 @@ tQuery.registerStatic('createHTMLMixerPlane', function(opts){
 	tMaterial.blending	= THREE.NoBlending;
 	var plane	= tQuery.createPlane(tMaterial)
 		.addClass('plane')
-		.scaleXBy(16/9)
+		.scaleXBy(560/315)
 		.scaleYBy(1)
 
 	var objectCSS 	= new THREE.CSS3DObject( domElement );
 // FIXME here i forced the css3D to be added
 	sceneCSS.add( objectCSS );
+	
 	plane.data('htmlMixerObjectCss', objectCSS)
 
-	objectCSS.scale.copy(opts.cssScale);
-	objectCSS.position	= plane.position();
-	objectCSS.rotation	= plane.rotation();
+// should i put that in scene
+	// objectCSS.scale.copy(opts.cssScale);
+	// objectCSS.position	= plane.position();
+	// objectCSS.rotation	= plane.rotation();
 
 // FIXME what if the source plane is scaled ?
-	domElement.style.width	= (plane.scaleX()/objectCSS.scale.x)+'px';
-	domElement.style.height	= (plane.scaleY()/objectCSS.scale.y)+'px';
+	// domElement.width	= (plane.scaleX()/objectCSS.scale.x)+'px';
+	// domElement.height	= (plane.scaleY()/objectCSS.scale.y)+'px';
+
+
+
+	// domElement.width	= (560/opts.cssScale.x)+'px';
+	// domElement.height	= (315/opts.cssScale.y)+'px';
+	// domElement.style.zoom	= '1%';
+console.log('domElement')
+console.dir(domElement)
+
+	domElement.width	= (560*2*0.82/plane.scaleX())+'px';
+	domElement.height	= (315*2*0.82/plane.scaleY())+'px';
+	
+	
+	var worldPosition	= tQuery.createVector3();
+	var worldRotation	= tQuery.createVector3();
+	var worldScale		= tQuery.createVector3();
+
+	world.hook(function(){
+		var tObject3D	= plane.get(0)
+		world.tScene().updateMatrixWorld();
+		var worldMat	= tObject3D.matrixWorld;
+
+		worldPosition.getPositionFromMatrix(worldMat)
+		objectCSS.position.copy(worldPosition)
+	
+		worldRotation.setEulerFromRotationMatrix(worldMat)
+		objectCSS.rotation.copy(worldRotation)
+
+		worldScale.getScaleFromMatrix(worldMat).multiply(opts.cssScale)
+		objectCSS.scale.copy(worldScale)
+	})
 
 	return plane;
 })
+

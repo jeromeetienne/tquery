@@ -6,15 +6,25 @@
 body {
 	background-color: hotpink;
 }
-</style><script>
+</style><div id="info" style='color: white;'>
+	Video Browser for youtube videos
+	-
+	<a href='http://www.youtube.com/watch?v=FY4UQpu1ijM&list=UUDyknKncQDzw7NdqYj2_94A'>direct link</a>
+	<br/>	
+	mario for previous video -  batman for next video
+</div><script>
 require([ 'tquery.controls'
 	, 'tquery.minecraft'
 	, 'tquery.skymap'
 	, 'tquery.grassground'
 	, 'tquery.keyboard'
 	, 'tquery.loaders'
+	, 'tquery.domevent'
 ], function(){
-	var world	= tQuery.createWorld().boilerplate().start();
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	
+	// enable domEvent on this world
+	world.enableDomEvent();	
 
 	// setup camera position
 	world.camera().positionY(1.5).positionZ(3).lookAt(0,1, 0)
@@ -108,6 +118,9 @@ require([ 'tquery.controls'
 		.position(4,2,4)
 		.color(0xcccccc)
 
+	var videoIdx	= 0;
+	var videos	= [];
+
 	var loader	= new THREE.ColladaLoader();
 	loader.options.convertUpAxis = true;
 	var modelUrl	= '../../webrtcio/olddemo/models/OldTelevisionSet01/models/Old Television Set 01.dae';
@@ -118,15 +131,103 @@ require([ 'tquery.controls'
 		
 		var tvSet	= tQuery(collada.scene).addTo(container)
 			.positionY(-0.4)
-		
-// curl "http://gdata.youtube.com/feeds/api/playlists/UUDyknKncQDzw7NdqYj2_94A?alt=json&start-index=1" | json -i| less -R	
+
 		var url		= 'http://www.youtube.com/embed/FY4UQpu1ijM';
-		var url		= 'http://pacmaze.com';
-		if( location.hash )	url = location.hash.substr(1)
-		location.hash	= url;
 		var plane	= tQuery.createHTMLMixerPlane(url).addTo(container)
+			.addClass('screen')
 			.positionY(0.31).positionZ(0.16)
 			.scaleX(1/2.2).scaleY(1/2.85)
+			
+
+		initChannel();	
 	});
+
+	function initChannel(){
+		var request = new XMLHttpRequest()
+		var url = 'http://gdata.youtube.com/feeds/api/playlists/UUDyknKncQDzw7NdqYj2_94A?alt=json&start-index=1';
+		request.open("get", url, true);
+		request.onload  = function(){
+			// parse the feed
+			var response  = JSON.parse(this.responseText)
+			console.dir(response);
+			// extract from the title+embedUrl from the feed
+			response.feed.entry.forEach(function(entry){
+				var video	= {};
+				video.title	= entry.title['$t'];
+				entry['media$group']['media$content'].forEach(function(content){
+					if( content.type !== 'application/x-shockwave-flash') return;
+					video.embedUrl	= content.url;
+				})
+				videos.push(video);
+			})
+			console.log(videos)
+
+			// BUTTON NEXT
+			var buttonNext	= tQuery.createCube().addTo(world)
+				.positionX(+0.4).positionY(0.35).positionZ(1)
+				.scaleX(0.5).scaleY(0.7).scaleZ(0.4)
+				.visible(false)
+				.setBasicMaterial()
+					.wireframe(true)
+					.wireframeLinewidth(3)
+					.color('dodgerblue')
+					.back()
+			buttonNext.on('mouseover', function(){
+				document.body.style.cursor = 'pointer';
+				buttonNext.visible(true)
+			});
+			buttonNext.on('mouseout' , function(){
+				document.body.style.cursor = 'default';
+				buttonNext.visible(false)
+			});
+			buttonNext.on('click', function(event){
+				videoIdx	= (videoIdx+1 + videos.length) % videos.length;
+				setVideoUrl( videoIdx )
+			});
+
+			// BUTTON PREV
+			var buttonPrev	= tQuery.createCube().addTo(world)
+				.positionX(-0.4).positionY(0.35).positionZ(1)
+				.scaleX(0.5).scaleY(0.7).scaleZ(0.4)
+				.visible(false)
+				.setBasicMaterial()
+					.wireframe(true)
+					.wireframeLinewidth(3)
+					.color('dodgerblue')
+					.back()
+			buttonPrev.on('mouseover', function(){
+				document.body.style.cursor = 'pointer';
+				buttonPrev.visible(true)
+			});
+			buttonPrev.on('mouseout' , function(){
+				document.body.style.cursor = 'default';
+				buttonPrev.visible(false)
+			});
+			buttonPrev.on('click', function(event){
+				videoIdx	= (videoIdx-1 + videos.length) % videos.length;
+				setVideoUrl( videoIdx )
+			});
+			
+			// honor location.hash
+			if( location.hash ){
+				response.feed.entry.forEach(function(entry, idx){
+					var title	= location.hash.substr(1);
+					if( entry.title['$t'] !== title )	return;
+					videoIdx	= idx;
+					setVideoUrl(videoIdx)
+				});
+			}
+		}
+		request.send();
+	}
+
+	function setVideoUrl(videoIdx){
+		var video	= videos[videoIdx];
+		var plane	= tQuery('.screen')
+		var objectCSS	= plane.data('htmlMixerObjectCss')
+		var domElement	= objectCSS.element
+		domElement.src	= video.embedUrl;
+		location.hash	= video.title;
+	}
 });
 </script></body>

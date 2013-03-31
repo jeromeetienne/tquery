@@ -21,7 +21,6 @@ require([ 'tquery.controls'
 	//////////////////////////////////////////////////////////////////////////////////
 	//		comment								//
 	//////////////////////////////////////////////////////////////////////////////////
-	
 
 	tQuery.createGrassGround({
 		textureRepeatX	: 10,
@@ -53,10 +52,10 @@ require([ 'tquery.controls'
 		skinUrl	: '../../../plugins/minecraft/images/batman.png'
 	}).addTo(world);
 	character.object3D()
-		.positionX(0.5)
+		.positionX(0)
 		.positionY(-0.3)
-		.positionZ(1)
-		.rotationY(5*Math.PI/4)
+		.positionZ(1.5)
+		.rotationY(4*Math.PI/4)
 	character.parts.legL.rotation.x	= -Math.PI/2;
 	character.parts.legL.rotation.z = +30*Math.PI/180;
 	character.parts.legR.rotation.x	= -Math.PI/2;

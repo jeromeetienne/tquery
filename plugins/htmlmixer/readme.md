@@ -16,3 +16,27 @@ note about html mixer
 6. ok let's dig a hole in webgl rendering
 7. now we put css3d behind webgl
 8. you are done! 
+
+## slota
+1. oh minecraft characters looking at tv! 
+(i like the one look of the one the right)
+TODO screenshot of demo-tvset without player
+It would be so cool if they could look at youtube!
+
+2. lets add a youtube player!
+It is easy to get one with their 
+[embedded api](https://developers.google.com/youtube/player_parameters)
+. 
+
+3. Cool but i dont want it to stay flat... i want it to
+follow the 3d... Lets use 
+[CSS3DRenderer](https://github.com/mrdoob/three.js)
+from the marvelous
+[three.js](http://example.com)
+. It use css 3d transformation to map 
+[normal DOMElement](https://developer.mozilla.org/en/docs/DOM/element)
+to
+[THREE.Object3d](https://github.com/mrdoob/three.js/blob/master/src/core/Object3D.js).
+So we create an iframe and include a youtube player in our CSS3D scene.
+
+4.
