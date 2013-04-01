@@ -58,24 +58,94 @@ body {
 	padding: 10px;
 
 	border-radius: 10px;
-
 	border-color: black;
 	border-style: solid;
 	border-width: 2px;
 }
 #infoFooter .legendButton {
-	font-weight: bold;
-	color: firebrick;
+	font-weight	: bold;
+	color		: firebrick;
+}
+#infoButton {
+	position	: absolute;
+	top		: 10px;
+	left		: 10px;
+	z-index		: 2;
+
+	font-style	: italic;
+	font-size	: 180%;
+	color		: white;
+
+	background	: rgba(0,0,0,0.5);
+
+	padding		: 15px;
+	padding-top	: 5px;
+	padding-bottom	: 5px;
+	
+
+	border-radius	: 1000px;
+	border-color	: #BDBDBD;
+	border-style	: solid;
+	border-width	: 2px;	
+}
+#infoButton:hover {
+	cursor: pointer;
+}
+#infoPopup {
+	position	: absolute;
+	top		: 80px;
+	left		: 10px;
+	z-index		: 2;
+	
+	font-size	: 150%;
+	width: 30%;
+
+	color		: #BDBDBD;
+
+	background	: rgba(0,0,0,0.5);
+
+	padding		: 15px;
+	padding-top	: 5px;
+	padding-bottom	: 5px;
+
+
+	border-radius	: 10px;
+	border-color	: black;
+	border-style	: solid;
+	border-width	: 2px;	
+}
+#infoPopup a {
+	color		: #8888ff;	
 }
 </style><div id="infoHeader">
-	<span class='title'>Video Browser</span>
-</div>
-<div id="infoFooter">
+	<span class='title'>LearningThree.js Video Browser</span>
+</div><div id="infoFooter">
 	<span class='title'>
-		<span class='legendButton'>Left Button</span> for previous
+		<span class='legendButton'>Left Button</span> 
+		For Previous
 		-
-		<span class='legendButton'>Right Button</span> for next
+		For Next
+		<span class='legendButton'>Right Button</span>
 	</span>
+</div><div id='infoButton'>
+i
+</div><div id='infoPopup' style='display: none;'>
+In this tvset, you can look at all the videos from
+<a href='http://learningthreejs.com' target='_blank'>learningthreejs blog</a>.
+
+<br/><br/>
+This is based on the 
+<a href='http://www.youtube.com/watch?v=FY4UQpu1ijM&list=UUDyknKncQDzw7NdqYj2_94A' target='_blank'>youtube channel</a>. 
+and yes what you see is a actual
+youtube player <strong>*inside*</strong> a webgl scene!
+
+<br/><br/>
+You can change videos by clicking on the buttons below the tv set.
+Left button for the previous video, right button for the next video.
+
+<br/><br/>
+You can controls the character who stands on the right.
+Just use the arrows keys.
 </div><script>
 require([ 'tquery.controls'
 	, 'tquery.minecraft'
@@ -86,6 +156,12 @@ require([ 'tquery.controls'
 	, 'tquery.domevent'
 ], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
+	
+	document.querySelector('#infoButton').addEventListener('click', function(event){
+		var element	= document.querySelector('#infoPopup');
+		console.log('display', element.style.display)
+		element.style.display	= element.style.display === 'none' ? 'block' : 'none';
+	});
 	
 	// enable domEvent on this world
 	world.enableDomEvent();	
@@ -196,9 +272,9 @@ require([ 'tquery.controls'
 		var tvSet	= tQuery(collada.scene).addTo(container)
 			.positionY(-0.4)
 
-		var url		= 'http://www.youtube.com/embed/FY4UQpu1ijM';
+		//var url		= 'http://www.youtube.com/embed/FY4UQpu1ijM';
 		var url		= 'http://example.org';
-		var url		= 'http://pacmaze.com';
+		//var url	= 'http://pacmaze.com';
 		var plane	= tQuery.createHTMLMixerPlane(url).addTo(container)
 			.addClass('screen')
 			.positionY(0.31).positionZ(0.16)
@@ -273,6 +349,9 @@ require([ 'tquery.controls'
 				videoIdx	= (videoIdx-1 + videos.length) % videos.length;
 				setVideoUrl( videoIdx )
 			});
+			
+			videoIdx	= 0;
+			setVideoUrl( videoIdx )
 		}
 		request.send();
 	}
