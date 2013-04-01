@@ -84,11 +84,13 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// sanity check
 	console.assert( object, 'invalid parameters' );
 	console.assert( typeof key === 'string', 'invalid parameters');
+	// handle default arguments values
+	if( mustNotExist === undefined && value !== undefined )	mustNotExist = true;
 
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
 	// honor mustNotExist
-	if( mustNotExist || mustNotExist === undefined ){
+	if( mustNotExist ){
 		console.assert(object['_tqData'][key] === undefined, "This key already exists "+key);
 	}
 	// set the value if any
