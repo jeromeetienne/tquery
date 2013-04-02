@@ -47,6 +47,7 @@ requirejs.config({
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.textureutils": "plugins/textureutils/tquery.textureutils",
+			"tquery.tvset": "plugins/tvset/tquery.tvset",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
@@ -243,6 +244,9 @@ requirejs.config({
 		],
 		"plugins/textureutils/tquery.textureutils": [
 			"plugins/textureutils/tquery.material.texturescrolling"
+		],
+		"plugins/tvset/tquery.tvset": [
+			"three.js/examples/js/loaders/ColladaLoader"
 		],
 		"plugins/tweenjs/tquery.tween": [
 			"plugins/tweenjs/vendor/Tween"
