@@ -37089,6 +37089,8 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// sanity check
 	console.assert( object, 'invalid parameters' );
 	console.assert( typeof key === 'string', 'invalid parameters');
+	// handle default arguments values
+	if( mustNotExist === undefined && value !== undefined )	mustNotExist = true;
 
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
@@ -38680,7 +38682,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 //		Handle the hooks						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Loop.prototype.PRE_RENDER		= 20;
+tQuery.Loop.prototype.PRE_RENDER	= 20;
 tQuery.Loop.prototype.ON_RENDER		= 50;
 tQuery.Loop.prototype.POST_RENDER	= 80;
 
@@ -40510,6 +40512,7 @@ requirejs.config({
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
+			"tquery.lightingexamples": "plugins/lightingexamples/tquery.lightingexamples",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
 			"tquery.loaders": "three.js/examples/js/loaders/BinaryLoader",
@@ -40532,6 +40535,7 @@ requirejs.config({
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.textureutils": "plugins/textureutils/tquery.textureutils",
+			"tquery.tvset": "plugins/tvset/tquery.tvset",
 			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
 			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
@@ -40728,6 +40732,9 @@ requirejs.config({
 		],
 		"plugins/textureutils/tquery.textureutils": [
 			"plugins/textureutils/tquery.material.texturescrolling"
+		],
+		"plugins/tvset/tquery.tvset": [
+			"three.js/examples/js/loaders/ColladaLoader"
 		],
 		"plugins/tweenjs/tquery.tween": [
 			"plugins/tweenjs/vendor/Tween"

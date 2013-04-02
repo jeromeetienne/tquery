@@ -85,6 +85,8 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// sanity check
 	console.assert( object, 'invalid parameters' );
 	console.assert( typeof key === 'string', 'invalid parameters');
+	// handle default arguments values
+	if( mustNotExist === undefined && value !== undefined )	mustNotExist = true;
 
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
@@ -1676,7 +1678,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 //		Handle the hooks						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Loop.prototype.PRE_RENDER		= 20;
+tQuery.Loop.prototype.PRE_RENDER	= 20;
 tQuery.Loop.prototype.ON_RENDER		= 50;
 tQuery.Loop.prototype.POST_RENDER	= 80;
 
