@@ -98,7 +98,7 @@ tQuery.registerStatic('MirrorPlane', function(opts){
 	})
 });
 
-// inherit from tQuery.Object3D§
+// inherit from tQuery.Object3D
 tQuery.inherit(tQuery.MirrorPlane, tQuery.Object3D);
 
 
