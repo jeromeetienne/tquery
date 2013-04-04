@@ -26,3 +26,6 @@ var mirror	= tQuery.createMirrorPlane().addTo(world)
   * this is reducable by computing the height of this artefact
   * then pushin mirror camera that much further from the mirror's plane
 
+## about mirror plane and angle compensation
+
+first some definitions

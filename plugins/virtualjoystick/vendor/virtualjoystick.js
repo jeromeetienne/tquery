@@ -153,7 +153,6 @@ VirtualJoystick.prototype._onDown	= function(x, y)
 	this._stickX	= x;
 	this._stickY	= y;
 
-
 	this._stickEl.style.display	= "";
 	this._stickEl.style.left	= (x - this._stickEl.width /2)+"px";
 	this._stickEl.style.top		= (y - this._stickEl.height/2)+"px";
