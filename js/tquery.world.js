@@ -38,7 +38,7 @@ tQuery.World	= function(opts)
 
  	// create a camera in the scene
 	if( !opts.camera ){
-		this._tCamera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._tCamera	= new THREE.PerspectiveCamera(45, opts.renderW / opts.renderH, 0.01, 10000 );
 		this._tCamera.position.set(0, 0, 3);
 		this._tScene.add(this._tCamera);
 	}else{
