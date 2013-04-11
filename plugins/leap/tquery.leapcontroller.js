@@ -31,11 +31,10 @@ tQuery.registerStatic('LeapController', function(opts){
 					emitter	: tQuery.MicroeventMixin({})
 				};
 				var gestureData	= gesturesData[gesture.id]
-				//this.dispatchEvent('gestureTracking', gesture, gestureData)
+				this.dispatchEvent('gestureTracking', gesture, gestureData)
 			}
 			// handle it by state
 			if( gesture.state === 'start' ){
-				this.dispatchEvent('start', gesture, gestureData)
 			}else if( gesture.state === 'update' ){
 				gestureData.emitter.dispatchEvent('update', gesture, gestureData)
 			}else if( gesture.state === 'stop' ){
@@ -48,33 +47,24 @@ tQuery.registerStatic('LeapController', function(opts){
 	}.bind(this));
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		handle finger Tracking						//
+	//		handle pointable Tracking					//
 	//////////////////////////////////////////////////////////////////////////////////		
 	var pointablesData	= {};	
 	this.addEventListener('frame', function(frame) {
 		if( frame.valid !== true )	return;
 		if( !frame.pointables )		return;
-		
 		// remove pointable which are no more present
 		Object.keys(pointablesData).forEach(function(pointableId){
 			// get the eventEmitter for this gesture
 			var pointableData	= pointablesData[pointableId]
-			// test if this pointableID is still in the frame
-			var inFrame	= false;
-			frame.pointables.forEach(function(pointable){
-				if( String(pointable.id) === pointableId ){
-					inFrame	= true;
-				}
-			});
-			// if this pointableId is not more present, delete it
+			// if this pointableId is not more present, notify stop and delete it
+			var inFrame	= pointableId in frame.pointablesMap;
 			if( inFrame === false ){
-				console.log('pointable stop', pointableId)
 				pointableData.emitter.dispatchEvent('stop', pointableId, pointableData)
-				// delete eventEmitter
 				delete pointablesData[pointableId]
 			}
 		});	
-
+		// go thru all pointables present in this frame
 		frame.pointables.forEach(function(pointable){
 			var pointableId	= String(pointable.id)
 			// get the eventEmitter for this gesture
@@ -93,14 +83,59 @@ tQuery.registerStatic('LeapController', function(opts){
 			// handle it by state
 			if( justCreated ){
 				this.dispatchEvent('pointableTracking', pointable, pointableData)
-				console.log('pointable creating', pointableId)
+				//console.log('pointable creating', pointableId)
 			}else{
 				pointableData.emitter.dispatchEvent('update', pointable, pointableData)				
-				console.log('pointable updating', pointableId)
+				//console.log('pointable updating', pointableId)
 			}
 		}.bind(this));
 	}.bind(this));
 
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		handle pointable Tracking					//
+	//////////////////////////////////////////////////////////////////////////////////		
+	var handsData	= {};	
+	this.addEventListener('frame', function(frame) {
+		if( frame.valid !== true )	return;
+		if( !frame.hands )		return;
+		// remove hand which are no more present
+		Object.keys(handsData).forEach(function(handId){
+			// get the eventEmitter for this gesture
+			var handData	= handsData[handId]
+			// if this handId is not more present, notify stop and delete it
+			var inFrame	= handId in frame.handsMap;
+			if( inFrame === false ){
+				handData.emitter.dispatchEvent('stop', handId, handData)
+				delete handsData[handId]
+			}
+		});	
+		// go thru all hands present in this frame
+		frame.hands.forEach(function(hand){
+			var handId	= String(hand.id)
+			// get the eventEmitter for this gesture
+			var handData	= handsData[handId]
+			// create eventEmitter if needed
+			var justCreated	= false;
+			if( handData === undefined ){
+				//console.log('create eventEmitter for', gesture.id)
+				handsData[handId] = {
+					userData: {},
+					emitter	: tQuery.MicroeventMixin({})
+				};
+				var handData	= handsData[handId]
+				justCreated	= true;
+			}
+			// handle it by state
+			if( justCreated ){
+				this.dispatchEvent('handTracking', hand, handData)
+				//console.log('hand creating', handId)
+			}else{
+				handData.emitter.dispatchEvent('update', hand, handData)				
+				//console.log('pointable updating', pointableId)
+			}
+		}.bind(this));
+	}.bind(this));
 });
 
 // make it eventable
