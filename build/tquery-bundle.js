@@ -37393,6 +37393,7 @@ tQuery.MicroeventMixin	= function(destObj){
 	destObj.dispatchEvent		= function(event /* , args... */){
 		return this.trigger.apply(this, arguments)
 	}
+	return destObj;
 };
 
 /**
@@ -37458,6 +37459,8 @@ tQuery.convert.toVector3	= function(/* arguments */){
 		return arguments[0]
 	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
 		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}else if( arguments[0] instanceof Array && arguments.length === 1 ){
+		return new THREE.Vector3(arguments[0][0], arguments[0][1], arguments[0][2]);
 	}else{
 		console.assert(false, "invalid parameter for Vector3");
 	}
@@ -38338,7 +38341,7 @@ tQuery.World	= function(opts)
 
  	// create a camera in the scene
 	if( !opts.camera ){
-		this._tCamera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._tCamera	= new THREE.PerspectiveCamera(45, opts.renderW / opts.renderH, 0.01, 10000 );
 		this._tCamera.position.set(0, 0, 3);
 		this._tScene.add(this._tCamera);
 	}else{
@@ -38766,7 +38769,7 @@ tQuery.registerStatic('createObject3D', function(){
 });
 
 tQuery.registerStatic('createVector3', function(x, y, z){
-	return new THREE.Vector3(x, y, z);
+	return tQuery.convert.toVector3.apply(tQuery.convert, arguments)
 });
 
 tQuery.registerStatic('createVector2', function(x, y){
