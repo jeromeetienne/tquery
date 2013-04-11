@@ -137,10 +137,10 @@ VirtualJoystick.prototype.left	= function(){
 
 VirtualJoystick.prototype._onUp	= function()
 {
-	this._pressed	= false; 
+	this._pressed	= false;
 	this._stickEl.style.display	= "none";
 	this._baseEl.style.display	= "none";
-	
+
 	this._baseX	= this._baseY	= 0;
 	this._stickX	= this._stickY	= 0;
 }
