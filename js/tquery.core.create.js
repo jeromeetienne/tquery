@@ -23,7 +23,7 @@ tQuery.registerStatic('createObject3D', function(){
 });
 
 tQuery.registerStatic('createVector3', function(x, y, z){
-	return new THREE.Vector3(x, y, z);
+	return tQuery.convert.toVector3.apply(tQuery.convert, arguments)
 });
 
 tQuery.registerStatic('createVector2', function(x, y){

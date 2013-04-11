@@ -40,6 +40,8 @@ tQuery.convert.toVector3	= function(/* arguments */){
 		return arguments[0]
 	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
 		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}else if( arguments[0] instanceof Array && arguments.length === 1 ){
+		return new THREE.Vector3(arguments[0][0], arguments[0][1], arguments[0][2]);
 	}else{
 		console.assert(false, "invalid parameter for Vector3");
 	}
