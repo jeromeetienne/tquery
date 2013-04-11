@@ -28,4 +28,19 @@ var mirror	= tQuery.createMirrorPlane().addTo(world)
 
 ## about mirror plane and angle compensation
 
+* all computations are done in local-coordinates space of the mirror
+
 first some definitions
+
+* mirror plane: the THREE.Plane representing the mirror in the scene
+* mirror width: the width of the mirrorPlane
+* mirrorHalfWidth: mirrorWidth divided by 2
+* user camera: the camera thru which the user is looking at the scene
+* mirror camera: the camera of 'what the mirror is seeing'
+  * it has the z-symmetric position of the user camera
+  * it looks at the center of the mirror plane
+  * the near plane intersect the mirror plane
+  * its fov matchs the mirror size
+* angle(mirrorPlane, userCamera): the angle between the mirror plane and the user camera
+  * === angle(mirrorPlane, mirrorCamera)
+ 
