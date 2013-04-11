@@ -51,5 +51,8 @@ require(['tquery.planets'], function(){
 		var angle	= 0.01 * now * Math.PI * 2;
 		cloud.rotationY(-angle); 
 	});
+	
+	// create the starfield
+	tQuery.createStarField().addTo(world)
 });
 </script></body>

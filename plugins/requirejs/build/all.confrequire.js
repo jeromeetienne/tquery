@@ -43,6 +43,7 @@ requirejs.config({
 			"tquery.renderers": "three.js/examples/js/renderers/CSS3DRenderer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
+			"tquery.simpletree": "plugins/simpletree/tquery.simpletree",
 			"tquery.skymap": "plugins/skymap/tquery.skymap",
 			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
@@ -173,7 +174,8 @@ requirejs.config({
 			"plugins/physics/vendor/physijs/physi"
 		],
 		"plugins/requirejs/confrequire/planets.initrequire": [
-			"plugins/planets/tquery.createplanet"
+			"plugins/planets/tquery.createplanet",
+			"plugins/planets/tquery.createstarfield"
 		],
 		"plugins/playerinput/tquery.playerinput.keyboard": [
 			"tquery.keyboard",
