@@ -388,6 +388,7 @@ tQuery.MicroeventMixin	= function(destObj){
 	destObj.dispatchEvent		= function(event /* , args... */){
 		return this.trigger.apply(this, arguments)
 	}
+	return destObj;
 };
 
 /**
