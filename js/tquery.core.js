@@ -179,6 +179,14 @@ tQuery.now	= (function(){
 	else			return function(){ return Date.now;					};	
 })();
 
+/**
+ * same as tQuery.now() but in seconds. later a migration will make .now->.nowMilliseconds
+ * and .nowSeconds()
+ * @return {Number} tQuery.now() in seconds
+ */
+tQuery.nowSeconds	= function(){
+	return tQuery.now() / 1000;
+}
 
 /**
  * Make a child Class inherit from the parent class.
