@@ -3,9 +3,21 @@
  * 
  * @returns {tQuery.Sprite} the create object
 */
-tQuery.registerStatic('createSprite', function(opts){
+tQuery.registerStatic('createSprite', function(opts, material){
+	// handle arguments polymorphism
+	if( arguments.length === 1 && 
+			(  opts instanceof THREE.Material 
+			|| opts instanceof tQuery.Material)
+		){
+		material= tQuery.convert.toThreeMaterial(opts)
+		opts	= undefined
+	}
+	// create object itself
 	var tSprite	= new THREE.Sprite(opts);
 	var sprite	= new tQuery.Sprite(tSprite);
+	// honor material if provided
+	if( material )	sprite.material(material)
+	// return just built sprite
 	return sprite;
 })
 
