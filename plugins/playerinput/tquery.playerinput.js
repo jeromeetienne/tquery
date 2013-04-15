@@ -7,6 +7,7 @@ tQuery.registerStatic('PlayerInput', function(){
 	// - up to the drivers to handle it
 });
 
+
 tQuery.registerStatic('createPlayerInput', function(opts){
 	return new tQuery.PlayerInput(opts)
 });

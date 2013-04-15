@@ -14,7 +14,9 @@
 <script src="../../deviceorientation/tquery.deviceorientation.js"></script>
 <script src="../tquery.playerinput.deviceorientation.js"></script>
 
-<body><script>
+<body>
+<pre id='debug' style='position: absolute; left: 0px; top: 0px; margin: 0px;'></pre>
+<script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorusKnot().addTo(world);
 
@@ -22,10 +24,30 @@
 
 	var onMobile	= 'ontouchstart' in window ? true : false;
 	var playerInput	= tQuery.createPlayerInput();
-	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
-	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
-	true 	&& tQuery.PlayerInput.createDeviceOrientation(playerInput)
+	world.hook(function(){
+		var input	= playerInput
+		// reset each value
+		input.right	= false;
+		input.left	= false;
+		input.up	= false;
+		input.down	= false;
+		input.deltaX	= 0;		// < 0 for left - > 0 for right 
+						// Math.abs(value) === 1 is normal speed
+		input.deltaY	= 0;
+	})
 
+	//onMobile === true	&& 
+	tQuery.PlayerInput.createVirtualJoystick(playerInput)
+	//onMobile === false 	&& 
+	tQuery.PlayerInput.createKeyboard(playerInput)
+	//true 	&& 
+	tQuery.PlayerInput.createDeviceOrientation(playerInput)
+
+	var domElement	= document.querySelector('#debug')
+	world.hook(function(){
+		domElement.innerText	= JSON.stringify(playerInput, null, '\t')
+	});
+	
 	world.hook(function(delta, now){
 		var displacement	= 1 * delta;
 		if( playerInput.up )	object.translateZ(-displacement)
