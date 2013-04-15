@@ -31,12 +31,37 @@ tQuery.MicroeventMixin(tQuery.convert.toThreeColor);
 
 
 /**
+ * Convert the value into a THREE.Material object
+ * 
+ * @return {THREE.Material} the resulting color
+*/
+tQuery.convert.toThreeMaterial	= function(/* arguments */){
+	// honor the plugins with 'preConvert' event
+	var result	= tQuery.convert.toThreeMaterial.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	// default convertions
+	if( arguments.length === 1 && arguments[0] instanceof THREE.Material ){
+		return arguments[0];
+	}else if( arguments.length === 1 && arguments[0] instanceof tQuery.Material ){
+		return arguments[0].get(0);
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+// make tQuery.convert.toThreeMaterial eventable
+tQuery.MicroeventMixin(tQuery.convert.toThreeMaterial);
+
+/**
  * Convert the arguments into a THREE.Vector3
  * @return {THREE.Vector3} the resulting THREE.Vector3
  */
 tQuery.convert.toVector3	= function(/* arguments */){
 	// handle parameters
-	if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
+	if( arguments.length === 0 ){
+		return new THREE.Vector3()
+	}else if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
 		return arguments[0]
 	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
 		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
