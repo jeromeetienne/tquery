@@ -18,7 +18,7 @@ require(['tquery.lightingexamples'], function(){
 	world.hook(function(delta, now){
 		var frame	= controller.lastFrame();
 		if( frame === null || frame.valid !== true )	return;
-		window.frame	= frame;
+		window.frame	= frame; 
 	});
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ require(['tquery.lightingexamples'], function(){
 	//////////////////////////////////////////////////////////////////////////////////
 
 	controller.addEventListener('handTracking', function(hand, data){
-		console.log('hand start', hand.id, hand)
+		//console.log('hand start', hand.id, hand)
 		var userData	= data.userData;
 		
 		// create the container
@@ -141,7 +141,7 @@ require(['tquery.lightingexamples'], function(){
 		// handle stop event
 		data.emitter.addEventListener('stop', function(handId, data){
 			mesh.detach();
-			console.log('hand stop', handId)
+			//console.log('hand stop', handId)
 		})
 	})
 
@@ -150,7 +150,7 @@ require(['tquery.lightingexamples'], function(){
 	//////////////////////////////////////////////////////////////////////////////////
 
 	controller.addEventListener('handTracking', function(hand, data){
-		console.log('hand start', hand.id, hand)
+		//console.log('hand start', hand.id, hand)
 		var userData	= data.userData;
 
 		// create initial mesh
@@ -174,7 +174,7 @@ require(['tquery.lightingexamples'], function(){
 		// handle stop event
 		data.emitter.addEventListener('stop', function(handId, data){
 			mesh.detach();
-			console.log('hand stop', handId)
+			//console.log('hand stop', handId)
 		})
 	})
 
