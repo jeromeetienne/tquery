@@ -37184,6 +37184,14 @@ tQuery.now	= (function(){
 	else			return function(){ return Date.now;					};	
 })();
 
+/**
+ * same as tQuery.now() but in seconds. later a migration will make .now->.nowMilliseconds
+ * and .nowSeconds()
+ * @return {Number} tQuery.now() in seconds
+ */
+tQuery.nowSeconds	= function(){
+	return tQuery.now() / 1000;
+}
 
 /**
  * Make a child Class inherit from the parent class.
@@ -37450,12 +37458,37 @@ tQuery.MicroeventMixin(tQuery.convert.toThreeColor);
 
 
 /**
+ * Convert the value into a THREE.Material object
+ * 
+ * @return {THREE.Material} the resulting color
+*/
+tQuery.convert.toThreeMaterial	= function(/* arguments */){
+	// honor the plugins with 'preConvert' event
+	var result	= tQuery.convert.toThreeMaterial.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	// default convertions
+	if( arguments.length === 1 && arguments[0] instanceof THREE.Material ){
+		return arguments[0];
+	}else if( arguments.length === 1 && arguments[0] instanceof tQuery.Material ){
+		return arguments[0].get(0);
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+// make tQuery.convert.toThreeMaterial eventable
+tQuery.MicroeventMixin(tQuery.convert.toThreeMaterial);
+
+/**
  * Convert the arguments into a THREE.Vector3
  * @return {THREE.Vector3} the resulting THREE.Vector3
  */
 tQuery.convert.toVector3	= function(/* arguments */){
 	// handle parameters
-	if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
+	if( arguments.length === 0 ){
+		return new THREE.Vector3()
+	}else if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
 		return arguments[0]
 	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
 		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
@@ -38246,9 +38279,21 @@ tQuery.Mesh.prototype.material	= function(value){
  * 
  * @returns {tQuery.Sprite} the create object
 */
-tQuery.registerStatic('createSprite', function(opts){
+tQuery.registerStatic('createSprite', function(opts, material){
+	// handle arguments polymorphism
+	if( arguments.length === 1 && 
+			(  opts instanceof THREE.Material 
+			|| opts instanceof tQuery.Material)
+		){
+		material= tQuery.convert.toThreeMaterial(opts)
+		opts	= undefined
+	}
+	// create object itself
 	var tSprite	= new THREE.Sprite(opts);
 	var sprite	= new tQuery.Sprite(tSprite);
+	// honor material if provided
+	if( material )	sprite.material(material)
+	// return just built sprite
 	return sprite;
 })
 
@@ -38658,6 +38703,12 @@ tQuery.Loop.prototype.pauseToggle= function() {
 	return this;
 };
 
+/**
+ * max delta notified by loop callback
+ * @type {Number}
+ */
+tQuery.Loop.maxDelta	= 1/5;
+
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
 	// loop on request animation loop
@@ -38666,9 +38717,18 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
 	// update time values
-	var now		= tQuery.now()/1000;
+	var now		= tQuery.nowSeconds();
+	// init _lastTime if needed
 	if( !this._lastTime )	this._lastTime = now - 1/60;
+	// sanity check - honor tQuery.Loop.maxDelta
+	var minLastTime	= now - tQuery.Loop.maxDelta;
+	if( this._lastTime < minLastTime ){
+		this._lastTime	= minLastTime;
+		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+	}
+	// compute delta
 	var delta	= now - this._lastTime;
+	// update _lastTime
 	this._lastTime	= now;
 
 	// run all the hooks - from lower priority to higher - in order of registration
@@ -39439,6 +39499,7 @@ tQuery.mixinAttributes(tQuery.SpriteMaterial, {
 	scaleByViewport		: tQuery.convert.toBoolean,
 	
 	fog			: tQuery.convert.toBoolean,
+	blending		: tQuery.convert.toNumber
 });
 
 
