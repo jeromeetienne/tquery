@@ -25,7 +25,7 @@ requirejs.config({
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
-			"tquery.lightingexamples": "plugins/lightingexamples/tquery.lightingexamples",
+			"tquery.lightings": "plugins/lightings/tquery.lightings",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
 			"tquery.loaders": "three.js/examples/js/loaders/BinaryLoader",

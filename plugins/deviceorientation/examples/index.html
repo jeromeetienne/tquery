@@ -17,11 +17,11 @@ require(['tquery.deviceorientation'], function(){
 // TODO put that directly on the THREEx
 // - with useragent sniffing for mac detection
 		// for macbook
-		// object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
+		object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
 		// object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
 
 		// for ipad
-		object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
+		// object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
 		
 		// no idea why it is different, nor what is the theorical value
 	})
