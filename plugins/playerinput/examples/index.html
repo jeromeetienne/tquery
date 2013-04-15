@@ -10,6 +10,10 @@
 <script src='../../virtualjoystick/vendor/virtualjoystick.js'></script>
 <script src='../tquery.playerinput.virtualjoystick.js'></script>
 
+<script src="../../../vendor/threex/THREEx.DeviceOrientationState.js"></script>
+<script src="../../deviceorientation/tquery.deviceorientation.js"></script>
+<script src="../tquery.playerinput.deviceorientation.js"></script>
+
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorusKnot().addTo(world);
@@ -20,6 +24,7 @@
 	var playerInput	= tQuery.createPlayerInput();
 	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
 	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
+	true 	&& tQuery.PlayerInput.createDeviceOrientation(playerInput)
 
 	world.hook(function(delta, now){
 		var displacement	= 1 * delta;
