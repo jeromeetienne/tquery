@@ -71,7 +71,7 @@ tQuery.Loop.prototype.pauseToggle= function() {
  * max delta notified by loop callback
  * @type {Number}
  */
-tQuery.Loop.maxDelta	= 1/10;
+tQuery.Loop.maxDelta	= 1/5;
 
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
