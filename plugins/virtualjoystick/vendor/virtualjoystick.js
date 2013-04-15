@@ -7,15 +7,15 @@ var VirtualJoystick	= function(opts)
 	this._baseEl		= opts.baseElement	|| this._buildJoystickBase();
 	this._mouseSupport	= opts.mouseSupport !== undefined ? opts.mouseSupport : false;
 
-	this._container.style.position	= "relative";
+	this._container.style.position	= "relative"
 
-	this._container.appendChild(this._baseEl);
+	this._container.appendChild(this._baseEl)
 	this._baseEl.style.position	= "absolute"
-	this._baseEl.style.display	= "none";
+	this._baseEl.style.display	= "none"
 	
-	this._container.appendChild(this._stickEl);
+	this._container.appendChild(this._stickEl)
 	this._stickEl.style.position	= "absolute"
-	this._stickEl.style.display	= "none";
+	this._stickEl.style.display	= "none"
 	
 	this._pressed	= false;
 	this._touchIdx	= null;
