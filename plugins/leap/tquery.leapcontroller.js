@@ -8,7 +8,9 @@ tQuery.registerStatic('LeapController', function(opts){
 	});
 	
 	
-	this._lastFrame	= null;	
+	this._lastFrame	= null;
+	
+	// store last frame and notify all listener
 	this._controller.loop(function(frame) {
 		this._lastFrame	= frame;
 		this.dispatchEvent('frame', frame)

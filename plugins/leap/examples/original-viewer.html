@@ -25,6 +25,8 @@ require(['tquery.lightings'], function(){
 	//		keytap and screenTap						//
 	//////////////////////////////////////////////////////////////////////////////////
 
+// tQuery.createLeapTapViewer(controller)
+
 	// show keytap gesture - good for debug	
 	controller.addEventListener('gestureTracking', function(gesture, data){
 		var userData	= data.userData;
@@ -64,6 +66,9 @@ require(['tquery.lightings'], function(){
 //		pointable							//
 //////////////////////////////////////////////////////////////////////////////////
 
+
+// tQuery.createLeapViewerPointable(controller)
+
 	controller.addEventListener('pointableTracking', function(pointable, data){
 		//console.log('== start pointable', pointable.id, pointable)
 //return;
@@ -102,6 +107,7 @@ require(['tquery.lightings'], function(){
 	//		hand palm							//
 	//////////////////////////////////////////////////////////////////////////////////
 
+// tQuery.createHandPalmViewer(controller)
 	controller.addEventListener('handTracking', function(hand, data){
 		//console.log('hand start', hand.id, hand)
 		var userData	= data.userData;
@@ -149,6 +155,8 @@ require(['tquery.lightings'], function(){
 	//		hand sphere							//
 	//////////////////////////////////////////////////////////////////////////////////
 
+// tQuery.createLeapHandSphereViewer(controller)
+
 	controller.addEventListener('handTracking', function(hand, data){
 		//console.log('hand start', hand.id, hand)
 		var userData	= data.userData;
@@ -182,6 +190,7 @@ require(['tquery.lightings'], function(){
 //		circle								//
 //////////////////////////////////////////////////////////////////////////////////
 
+// tQuery.create
 	controller.addEventListener('gestureTracking', function(gesture, data){
 		var userData	= data.userData;
 		// keep only circle gesture
@@ -236,7 +245,6 @@ require(['tquery.lightings'], function(){
 	
 	controller.addEventListener('gestureTracking', function(gesture, data){
 		var userData	= data.userData;
-return;
 
 		// keep only circle gesture
 		if( gesture.type !== 'swipe' )		return;
