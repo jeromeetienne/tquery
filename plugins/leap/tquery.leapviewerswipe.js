@@ -1,4 +1,4 @@
-tQuery.registerStatic('LeapSwipeViewer', function(opts){
+tQuery.registerStatic('LeapViewerSwipe', function(opts){
 	// handle arguments polymorphism
 //	if( opts instanceof tQuery.LeapController )	opts	= { controller: opts };
 	// handle arguments default value
@@ -24,10 +24,10 @@ tQuery.registerStatic('LeapSwipeViewer', function(opts){
 		var position	= controller.convertPosition(gesture.position)
 		var length	= position.distanceTo(origin)
 		var direction	= position.clone().sub(origin).normalize()
-		var color	= Math.random() * 0xffffff;
-		var tMesh	= new THREE.ArrowHelper(direction, origin, length, color);
+		var color	= Math.random() * 0xffffff
+		var tMesh	= new THREE.ArrowHelper(direction, origin, length, color)
 		var mesh	= tQuery(tMesh).addTo(world)
-		userData.mesh	= mesh;
+		userData.mesh	= mesh
 
 		// update the mesh as the gesture is updated
 		data.emitter.addEventListener('update', function(gesture, data){
@@ -55,10 +55,10 @@ tQuery.registerStatic('LeapSwipeViewer', function(opts){
 /**
  * explicit destructor
  */
-tQuery.LeapSwipeViewer.prototype.destroy	= function(){
+tQuery.LeapViewerSwipe.prototype.destroy	= function(){
 	console.assert(false, 'not yet implemented')	
 };
 
-tQuery.registerStatic('createLeapSwipeViewer', function(opts){
-	return new tQuery.LeapSwipeViewer(opts)
+tQuery.registerStatic('createLeapViewerSwipe', function(opts){
+	return new tQuery.LeapViewerSwipe(opts)
 });

@@ -1,7 +1,7 @@
 * something to show the hands
   * like the dom-visualiser in leapjs examples
   
-  
+# possible application with the leap
 /**
  * - pierre feuille scisseau
  * - ombre chinoise

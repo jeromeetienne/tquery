@@ -1,4 +1,4 @@
-tQuery.registerStatic('LeapTapViewer', function(opts){
+tQuery.registerStatic('LeapViewerTap', function(opts){
 	// handle arguments polymorphism
 //	if( opts instanceof tQuery.LeapController )	opts	= { controller: opts };
 	// handle arguments default value
@@ -49,10 +49,10 @@ tQuery.registerStatic('LeapTapViewer', function(opts){
 /**
  * explicit destructor
  */
-tQuery.LeapTapViewer.prototype.destroy	= function(){
+tQuery.LeapViewerTap.prototype.destroy	= function(){
 	console.assert(false, 'not yet implemented')	
 };
 
-tQuery.registerStatic('createLeapTapViewer', function(opts){
-	return new tQuery.LeapTapViewer(opts)
+tQuery.registerStatic('createLeapViewerTap', function(opts){
+	return new tQuery.LeapViewerTap(opts)
 });

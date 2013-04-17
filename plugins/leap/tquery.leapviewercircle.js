@@ -1,4 +1,4 @@
-tQuery.registerStatic('LeapCircleViewer', function(opts){
+tQuery.registerStatic('LeapViewerCircle', function(opts){
 	// handle arguments polymorphism
 //	if( opts instanceof tQuery.LeapController )	opts	= { controller: opts };
 	// handle arguments default value
@@ -62,10 +62,10 @@ tQuery.registerStatic('LeapCircleViewer', function(opts){
 /**
  * explicit destructor
  */
-tQuery.LeapCircleViewer.prototype.destroy	= function(){
+tQuery.LeapViewerCircle.prototype.destroy	= function(){
 	console.assert(false, 'not yet implemented')	
 };
 
-tQuery.registerStatic('createLeapCircleViewer', function(opts){
-	return new tQuery.LeapCircleViewer(opts)
+tQuery.registerStatic('createLeapViewerCircle', function(opts){
+	return new tQuery.LeapViewerCircle(opts)
 });

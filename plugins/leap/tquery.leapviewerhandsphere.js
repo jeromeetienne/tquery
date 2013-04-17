@@ -1,4 +1,4 @@
-tQuery.registerStatic('LeapHandSphereViewer', function(opts){
+tQuery.registerStatic('LeapViewerHandSphere', function(opts){
 	// handle arguments polymorphism
 //	if( opts instanceof tQuery.LeapController )	opts	= { controller: opts };
 	// handle arguments default value
@@ -44,10 +44,10 @@ tQuery.registerStatic('LeapHandSphereViewer', function(opts){
 /**
  * explicit destructor
  */
-tQuery.LeapHandSphereViewer.prototype.destroy	= function(){
+tQuery.LeapViewerHandSphere.prototype.destroy	= function(){
 	console.assert(false, 'not yet implemented')	
 };
 
-tQuery.registerStatic('createLeapHandSphereViewer', function(opts){
-	return new tQuery.LeapHandSphereViewer(opts)
+tQuery.registerStatic('createLeapViewerHandSphere', function(opts){
+	return new tQuery.LeapViewerHandSphere(opts)
 });

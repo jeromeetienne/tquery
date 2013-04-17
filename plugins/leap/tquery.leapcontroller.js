@@ -167,9 +167,9 @@ tQuery.LeapController.prototype.lastFrame = function() {
 
 tQuery.LeapController.prototype.convertPosition = function(/* arguments */) {
 	var vector3	= tQuery.createVector3.apply(tQuery, arguments)
-	vector3.x	= (vector3.x -   0)/ 50	
-	vector3.y	= (vector3.y - 250)/ 50
-	vector3.z	= (vector3.z -   0)/ 50	
+	vector3.x	= this.convertDistance(vector3.x -   0)	
+	vector3.y	= this.convertDistance(vector3.y - 250)
+	vector3.z	= this.convertDistance(vector3.z -   0)	
 	return vector3;
 };
 

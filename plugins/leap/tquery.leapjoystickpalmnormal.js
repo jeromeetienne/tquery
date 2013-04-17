@@ -1,4 +1,4 @@
-tQuery.registerStatic('LeapJoystickHandPosition', function(opts){
+tQuery.registerStatic('LeapJoystickPalmNormal', function(opts){
 	// handle arguments polymorphism
 //	if( opts instanceof tQuery.LeapController )	opts	= { controller: opts };
 	// handle arguments default value
@@ -12,7 +12,7 @@ tQuery.registerStatic('LeapJoystickHandPosition', function(opts){
 	var world	= opts.world;
 	var controller	= opts.controller;
 
-	this._object3d	= tQuery.createSphere().addTo(world)
+	this._object3d	= tQuery.createObject3D().addTo(world)
 	var handId	= null;
 	var callback	= world.hook(function(delta, now){
 		var frame	= controller.lastFrame();
@@ -33,6 +33,8 @@ tQuery.registerStatic('LeapJoystickHandPosition', function(opts){
 			console.log('assigning handid', handId)
 		}
 		// 
+// TODO
+// use hand.palmNormal and computation similar to device orientation playerInput
 		var position	= controller.convertPosition(hand.sphereCenter)
 		this._object3d.position(position)
 		
@@ -43,53 +45,53 @@ tQuery.registerStatic('LeapJoystickHandPosition', function(opts){
 });
 
 // make it eventable
-tQuery.MicroeventMixin(tQuery.LeapJoystickHandPosition.prototype)
+tQuery.MicroeventMixin(tQuery.LeapJoystickPalmNormal.prototype)
 
 /**
  * explicit destructor
  */
-tQuery.LeapJoystickHandPosition.prototype.destroy	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.destroy	= function(){
 	this.dispatchEvent('destoy')
 };
 
-tQuery.registerStatic('createLeapJoystickHandPosition', function(opts){
-	return new tQuery.LeapJoystickHandPosition(opts)
+tQuery.registerStatic('createLeapJoystickPalmNormal', function(opts){
+	return new tQuery.LeapJoystickPalmNormal(opts)
 });
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.LeapJoystickHandPosition.prototype.deltaX	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.deltaX	= function(){
 	return this._deltaX;
 };
 
-tQuery.LeapJoystickHandPosition.prototype.deltaY	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.deltaY	= function(){
 	return this._deltaY;
 };
 
-tQuery.LeapJoystickHandPosition.prototype.up	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.up	= function(){
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
 	if( deltaY >= 0 )				return false;
 	if( Math.abs(deltaX) > 2*Math.abs(deltaY) )	return false;
 	return true;
 }
-tQuery.LeapJoystickHandPosition.prototype.down	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.down	= function(){
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
 	if( deltaY <= 0 )				return false;
 	if( Math.abs(deltaX) > 2*Math.abs(deltaY) )	return false;
 	return true;	
 }
-tQuery.LeapJoystickHandPosition.prototype.right	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.right	= function(){
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
 	if( deltaX <= 0 )				return false;
 	if( Math.abs(deltaY) > 2*Math.abs(deltaX) )	return false;
 	return true;	
 }
-tQuery.LeapJoystickHandPosition.prototype.left	= function(){
+tQuery.LeapJoystickPalmNormal.prototype.left	= function(){
 	var deltaX	= this.deltaX();
 	var deltaY	= this.deltaY();
 	if( deltaX >= 0 )				return false;

@@ -1,4 +1,4 @@
-tQuery.registerStatic('LeapPointableViewer', function(opts){
+tQuery.registerStatic('LeapViewerPointable', function(opts){
 	// handle arguments polymorphism
 //	if( opts instanceof tQuery.LeapController )	opts	= { controller: opts };
 	// handle arguments default value
@@ -48,10 +48,10 @@ tQuery.registerStatic('LeapPointableViewer', function(opts){
 /**
  * explicit destructor
  */
-tQuery.LeapPointableViewer.prototype.destroy	= function(){
+tQuery.LeapViewerPointable.prototype.destroy	= function(){
 	console.assert(false, 'not yet implemented')	
 };
 
-tQuery.registerStatic('createLeapPointableViewer', function(opts){
-	return new tQuery.LeapPointableViewer(opts)
+tQuery.registerStatic('createLeapViewerPointable', function(opts){
+	return new tQuery.LeapViewerPointable(opts)
 });

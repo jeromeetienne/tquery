@@ -14,7 +14,11 @@ require(['tquery.leap'], function(){
 	world.camera().translateZ(3)
 	// add a lighting	
 	var controller	= new tQuery.LeapController();
-	var joystick	= tQuery.createLeapHandPositionJoystick({
+	tQuery.createLeapViewerHandPalm({
+		controller	: controller
+	});
+	
+	var joystick	= tQuery.createLeapJoystickPalmNormal({
 		controller	: controller
 	});
 
