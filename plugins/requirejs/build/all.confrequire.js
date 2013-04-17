@@ -23,6 +23,7 @@ requirejs.config({
 			"tquery.headtrackr": "plugins/headtrackr/tquery.headtrackr",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
+			"tquery.leap": "plugins/requirejs/confrequire/leap.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
 			"tquery.lightings": "plugins/lightings/tquery.lightings",
@@ -115,6 +116,17 @@ requirejs.config({
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
+		],
+		"plugins/requirejs/confrequire/leap.initrequire": [
+			"plugins/leap/vendor/leap",
+			"plugins/leap/tquery.leapcontroller",
+			"plugins/leap/tquery.leapjoystickhandposition",
+			"plugins/leap/tquery.leapviewercircle",
+			"plugins/leap/tquery.leapviewerhandpalm",
+			"plugins/leap/tquery.leapviewerhandsphere",
+			"plugins/leap/tquery.leapviewerpointable",
+			"plugins/leap/tquery.leapviewerswipe",
+			"plugins/leap/tquery.leapviewertap"
 		],
 		"plugins/linkify/tquery.mesh.linkify": [
 			"tquery.domevent"

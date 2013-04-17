@@ -1,12 +1,9 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src="../vendor/leap.js"></script>
-<script src="../tquery.leapcontroller.js"></script>
-<script src="../tquery.leaphandjoystick.js"></script>
 <body><div id="info">
 	<span id="result"></span>
 </div><script>
-require([], function(){
+require(['tquery.leap'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	var object	= tQuery.createAxis().addTo(world);
 	
@@ -17,7 +14,7 @@ require([], function(){
 	world.camera().translateZ(3)
 	// add a lighting	
 	var controller	= new tQuery.LeapController();
-	var joystick	= tQuery.createLeapHandJoystick({
+	var joystick	= tQuery.createLeapHandPositionJoystick({
 		controller	: controller
 	});
 
