@@ -36,7 +36,7 @@ tQuery.PlayerInput.registerStatic('DeviceOrientation', function(opts){
 	// initial update
 	onUpdate();
 	// hook rendering loop
-	world.hook(onUpdate);
+	var callback	= world.hook(onUpdate);
 	this.addEventListener('destroy', function(){ world.unhook(callback)	});
 });
 
