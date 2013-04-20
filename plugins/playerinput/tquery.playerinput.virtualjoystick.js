@@ -12,7 +12,7 @@ tQuery.PlayerInput.registerStatic('VirtualJoystick', function(opts){
 		deltaYConvert	: function(value){ return value * 8/window.innerHeight },
 		virtualJoystick	: {
 			container	: document.body,
-			mouseSupport	: true
+			mouseSupport	: false
 		}
 	});
 	// argments sanity check

@@ -30,15 +30,16 @@ tQuery.PlayerInput.registerStatic('DeviceOrientation', function(opts){
 		if( orientation.angleZ() < -threshold )	input.left	= true;
 		if( orientation.angleZ() > +threshold )	input.right	= true;
 
+		// convert orientation.angle?() into input.delta?
 		if( orientation.angleZ() > epsilon ){
 			input.deltaX = opts.deltaXConvert( orientation.angleZ() - epsilon )
-		}else if( orientation.angleZ()) < epsilon ){
+		}else if( orientation.angleZ() < -epsilon ){
 			input.deltaX = opts.deltaXConvert( orientation.angleZ() + epsilon )
 		}
 		if( orientation.angleY() > epsilon ){
 			input.deltaY = opts.deltaYConvert( orientation.angleY() - epsilon )			
-		}else if( orientation.angleY() > epsilon ){
-			input.deltaX = opts.deltaXConvert( orientation.angleZ() + epsilon )
+		}else if( orientation.angleY() < -epsilon ){
+			input.deltaY = opts.deltaYConvert( orientation.angleY() + epsilon )
 		}
 	}
 	// initial update
