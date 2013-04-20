@@ -12,12 +12,13 @@ tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingSphere();
 		tGeometry.computeBoundingBox();
-		//tGeometry.computeCentroids();
+		tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
-		//tGeometry.computeVertexNormals();
+		tGeometry.computeVertexNormals();
 		//tGeometry.computeTangents();
+		
+		
 	});
-
 	// return this, to get chained API	
 	return this;
 });

@@ -6,7 +6,8 @@ requirejs.config({
 	},
 	shim	: {
 		'plugins/tween/tquery.tween'	: [
-			'plugins/tween/vendor/Tween'
+			'plugins/tween/vendor/Tween',
+			'plugins/tween/tquery.miditween'
 		]
 	}
 });

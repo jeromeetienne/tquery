@@ -9,7 +9,7 @@ requirejs.config({
 		'plugins/csg/tquery.geometry.csg'	: [
 			'plugins/csg/csg',
 			'plugins/csg/ThreeCSG',
-			'plugins/csg/tquery.object3d.csg',
+			'plugins/csg/tquery.mesh.csg',
 		]
 	}
 });

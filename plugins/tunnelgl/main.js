@@ -146,7 +146,7 @@ true && world.hook(function(deltaTime, time){
 // TODO make all this happen at the geometry level
 
 // set clearColor
-world.tRenderer().setClearColorHex( 0x000000, 1 );
+world.tRenderer().setClearColor( 0x000000, 1 );
 
 // add a fog
 world.addFogExp2({ density : 0.15 });

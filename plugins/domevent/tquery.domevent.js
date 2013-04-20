@@ -88,7 +88,7 @@ tQuery.Object3D.registerInstance('off', function(eventType, callback, world){
 //		comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Mesh.registerInstance('addDomEventBoundingBox', function(){
+tQuery.Object3D.registerInstance('addDomEventBoundingBox', function(){
 	// sanity check
 	console.assert( this.hasDomEventBoundingBox() === false )
 	// the boundbing box to detect mouse events - make it invisible
@@ -106,7 +106,7 @@ tQuery.Mesh.registerInstance('addDomEventBoundingBox', function(){
 	return this;
 })
 
-tQuery.Mesh.registerInstance('updateDomEventBoundingBox', function(){
+tQuery.Object3D.registerInstance('updateDomEventBoundingBox', function(){
 	// get bounding box
 	var boundingBox	= this.domEventBoundingBox();
 	// measure mesh size
@@ -121,15 +121,15 @@ tQuery.Mesh.registerInstance('updateDomEventBoundingBox', function(){
 	boundingBox.scaleZ(bBoxSize.max.z - bBoxSize.min.z)
 })
 
-tQuery.Mesh.registerInstance('domEventBoundingBox', function(){
+tQuery.Object3D.registerInstance('domEventBoundingBox', function(){
 	return this.data('domEventBoundingBox')
 })
 
-tQuery.Mesh.registerInstance('hasDomEventBoundingBox', function(){
+tQuery.Object3D.registerInstance('hasDomEventBoundingBox', function(){
 	return this.data('domEventBoundingBox') !== undefined;
 })
 
-tQuery.Mesh.registerInstance('removeDomEventBoundingBox', function(){
+tQuery.Object3D.registerInstance('removeDomEventBoundingBox', function(){
 	// get bounding box
 	var boundingBox	= this.domEventBoundingBox();
 	// detach it

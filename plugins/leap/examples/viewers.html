@@ -18,11 +18,11 @@ require(['tquery.lightings'], function(){
 	world.camera().translateZ(3)
 	// add a lighting
 	var lighting	= tQuery.createLighting3Points().addTo(world)
-	var controller	= new tQuery.LeapController();
+	var controller	= tQuery.createLeapController();
 
 	tQuery.createLeapViewerTap({
 		controller	: controller
-	})
+	}) 
 	tQuery.createLeapViewerPointable({
 		controller	: controller
 	})

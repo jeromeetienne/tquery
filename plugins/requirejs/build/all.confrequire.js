@@ -51,7 +51,7 @@ requirejs.config({
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
 			"tquery.textureutils": "plugins/textureutils/tquery.textureutils",
 			"tquery.tvset": "plugins/tvset/tquery.tvset",
-			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
+			"tquery.tween": "plugins/tween/tquery.tween",
 			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
 			"tquery.virtualjoystick": "plugins/virtualjoystick/vendor/virtualjoystick",
@@ -96,7 +96,7 @@ requirejs.config({
 		"plugins/csg/tquery.geometry.csg": [
 			"plugins/csg/csg",
 			"plugins/csg/ThreeCSG",
-			"plugins/csg/tquery.object3d.csg"
+			"plugins/csg/tquery.mesh.csg"
 		],
 		"plugins/datguituner/tquery.datguituner": [
 			"plugins/assets/vendor/dat.gui/dat.gui",
@@ -121,7 +121,6 @@ requirejs.config({
 			"plugins/leap/vendor/leap",
 			"plugins/leap/tquery.leapcontroller",
 			"plugins/leap/tquery.leapjoystickhandposition",
-			"plugins/leap/tquery.leapjoystickpalmnormal",
 			"plugins/leap/tquery.leapviewercircle",
 			"plugins/leap/tquery.leapviewerhandpalm",
 			"plugins/leap/tquery.leapviewerhandsphere",
@@ -193,10 +192,21 @@ requirejs.config({
 		"plugins/playerinput/tquery.playerinput.keyboard": [
 			"tquery.keyboard",
 			"plugins/playerinput/tquery.playerinput",
-			"plugins/playerinput/tquery.playerinput.virtualjoystick"
+			"plugins/playerinput/tquery.playerinput.viewer",
+			"plugins/playerinput/tquery.playerinput.virtualjoystick",
+			"plugins/playerinput/tquery.playerinput.deviceorientation",
+			"plugins/playerinput/tquery.playerinput.leap"
 		],
 		"plugins/playerinput/tquery.playerinput.virtualjoystick": [
 			"tquery.virtualjoystick",
+			"plugins/playerinput/tquery.playerinput"
+		],
+		"plugins/playerinput/tquery.playerinput.deviceorientation": [
+			"tquery.deviceorientation",
+			"plugins/playerinput/tquery.playerinput"
+		],
+		"plugins/playerinput/tquery.playerinput.leap": [
+			"tquery.leap",
 			"plugins/playerinput/tquery.playerinput"
 		],
 		"plugins/pproc/tquery.effectcomposer": [
@@ -264,8 +274,9 @@ requirejs.config({
 		"plugins/tvset/tquery.tvset": [
 			"three.js/examples/js/loaders/ColladaLoader"
 		],
-		"plugins/tweenjs/tquery.tween": [
-			"plugins/tweenjs/vendor/Tween"
+		"plugins/tween/tquery.tween": [
+			"plugins/tween/vendor/Tween",
+			"plugins/tween/tquery.miditween"
 		],
 		"plugins/videos/tquery.createvideotexture": [
 			"plugins/videos/tquery.audiovideotexture",

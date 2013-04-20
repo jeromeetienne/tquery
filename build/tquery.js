@@ -1411,7 +1411,7 @@ tQuery.World	= function(opts)
 		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
-	this._tRenderer.setClearColorHex( 0xBBBBBB, 1 );
+	this._tRenderer.setClearColor( 0xBBBBBB, 1 );
 	this._tRenderer.setSize( opts.renderW, opts.renderH );
 };
 
@@ -2513,12 +2513,13 @@ tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingSphere();
 		tGeometry.computeBoundingBox();
-		//tGeometry.computeCentroids();
+		tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
-		//tGeometry.computeVertexNormals();
+		tGeometry.computeVertexNormals();
 		//tGeometry.computeTangents();
+		
+		
 	});
-
 	// return this, to get chained API	
 	return this;
 });

@@ -10,7 +10,6 @@ requirejs.config({
 			'plugins/leap/tquery.leapcontroller',
 
 			'plugins/leap/tquery.leapjoystickhandposition',
-			'plugins/leap/tquery.leapjoystickpalmnormal',
 
 			'plugins/leap/tquery.leapviewercircle',
 			'plugins/leap/tquery.leapviewerhandpalm',
