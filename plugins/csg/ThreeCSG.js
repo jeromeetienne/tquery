@@ -27,7 +27,7 @@ THREE.CSG = {
 		} else {
 			throw 'Model type not supported.';
 		}
-		rotation_matrix = new THREE.Matrix4( ).setRotationFromEuler( rotation );
+		rotation_matrix = new THREE.Matrix4( ).makeRotationFromEuler( rotation );
 		
 		var polygons = [];
 		for ( i = 0; i < geometry.faces.length; i++ ) {
