@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.loaders', 'tquery.lightings', 'tquery.csg'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// your code goes here
+	tQuery.createLighting3Points().addTo(world)
+	var loader = new THREE.STLLoader();
+	loader.load( '../models/octocat_base.stl' );
+	loader.addEventListener('load', function(event){
+		console.log('event', event)
+		var tGeometry	= event.content;
+		var tMaterial	= new THREE.MeshNormalMaterial();
+		var mesh	= tQuery(tGeometry, tMaterial).addTo(world)
+			.geometry()
+				.center()
+				.normalize()
+				.back()
+	});
+});
+</script></body>
