@@ -52,20 +52,3 @@ tQuery.MicroeventMixin(tQuery.PlayerInput.Keyboard.prototype)
 tQuery.PlayerInput.registerStatic('createKeyboard', function(opts){
 	return new tQuery.PlayerInput.Keyboard(opts)
 });
-
-/**
- * return current actions based on keyboard.pressed
- * compatible with arrow, asdw 
- * @return {[type]} [description]
- */
-tQuery.PlayerInput.Keyboard.prototype._actions = function() {
-	var keyboard	= tQuery.keyboard();
-	var actions	= {
-		left	: keyboard.pressed("left")  || keyboard.pressed("a") || keyboard.pressed("q"),
-		right	: keyboard.pressed("right") || keyboard.pressed("d"),
-		up	: keyboard.pressed("up")    || keyboard.pressed("w") || keyboard.pressed("z"),
-		down	: keyboard.pressed("down")  || keyboard.pressed("s"),
-	};
-	return actions
-};
-

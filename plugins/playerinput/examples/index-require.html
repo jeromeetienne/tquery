@@ -1,25 +1,33 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<body><script>
+<body>
+<pre id='playerInputViewer' style='position: absolute; left: 0px; top: 0px; margin: 0px;'></pre>
+<script>
 require(['tquery.playerinput'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorusKnot().addTo(world);
 	
 	// your code goes here
 	world.removeCameraControls();
-	
+
+
 	var onMobile	= 'ontouchstart' in window ? true : false;
-	var playerInput	= tQuery.createPlayerInput();
-	// TOTO make them compatible one with the others. 
-	onMobile === true	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
+	var playerInput	= tQuery.createPlayerInput()
+	onMobile === false	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
 	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
+	true 			&& tQuery.PlayerInput.createDeviceOrientation(playerInput)
+	// var controller	= tQuery.createLeapController()
+	// true 			&& tQuery.PlayerInput.createLeap({
+	// 	playerInput	: playerInput,
+	// 	controller	: controller
+	// })
+
+	tQuery.PlayerInput.createViewer(playerInput)
 
 	world.hook(function(delta, now){
-		var displacement	= 1 * delta;
-		if( playerInput.up )	object.translateZ(-displacement)
-		if( playerInput.down )	object.translateZ( displacement)
-		if( playerInput.left )	object.translateX(-displacement)
-		if( playerInput.right )	object.translateX( displacement)
+		var inputVector	= playerInput.toVector2().multiplyScalar(delta);
+		object.translateX( inputVector.x )
+		object.translateZ( inputVector.y )
 	});
 });
 </script></body>

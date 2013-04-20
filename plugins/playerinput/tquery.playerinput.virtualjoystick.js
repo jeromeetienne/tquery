@@ -12,7 +12,7 @@ tQuery.PlayerInput.registerStatic('VirtualJoystick', function(opts){
 		deltaYConvert	: function(value){ return value * 8/window.innerHeight },
 		virtualJoystick	: {
 			container	: document.body,
-			mouseSupport	: false
+			mouseSupport	: true
 		}
 	});
 	// argments sanity check
@@ -23,7 +23,12 @@ tQuery.PlayerInput.registerStatic('VirtualJoystick', function(opts){
 	// init joystick
 	var joystick	= new VirtualJoystick(opts.virtualJoystick);
 	this.addEventListener('destroy', function(){ joystick.destroy()	})
-	// init input if needed
+	// initial call
+	onUpdate();
+	// init callback to update input
+	world.hook(onUpdate);
+	this.addEventListener('destroy', function(){ world.unhook(onUpdate)	})
+	// onUpdate function
 	function onUpdate(){
 		if( joystick.left() )	input.left	= joystick.left();
 		if( joystick.right() )	input.right	= joystick.right();
@@ -33,11 +38,6 @@ tQuery.PlayerInput.registerStatic('VirtualJoystick', function(opts){
 		if( joystick.deltaX() )	input.deltaX	= opts.deltaXConvert( joystick.deltaX() );
 		if( joystick.deltaY() )	input.deltaY	= opts.deltaYConvert( joystick.deltaY() );
 	}
-	// initial call
-	onUpdate();
-	// init callback to update input
-	world.hook(onUpdate);
-	this.addEventListener('destroy', function(){ world.unhook(onUpdate)	})
 });
 
 /**

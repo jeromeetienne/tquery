@@ -2,6 +2,7 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 
 <script src='../tquery.playerinput.js'></script>
+<script src='../tquery.playerinput.viewer.js'></script>
 
 <script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
 <script src="../../keyboard/tquery.keyboard.js"></script>
@@ -24,29 +25,23 @@
 
 	var onMobile	= 'ontouchstart' in window ? true : false;
 	var playerInput	= tQuery.createPlayerInput();
-	world.hook(function(){
-		var input	= playerInput
-		// reset each value
-		input.right	= false;
-		input.left	= false;
-		input.up	= false;
-		input.down	= false;
-		input.deltaX	= 0;		// < 0 for left - > 0 for right 
-						// Math.abs(value) === 1 is normal speed
-		input.deltaY	= 0;
-	})
-
 	//onMobile === true	&& 
-	tQuery.PlayerInput.createVirtualJoystick(playerInput)
+	tQuery.PlayerInput.createVirtualJoystick({
+		playerInput	: playerInput,
+		virtualJoystick	: {	// just to get mouseSupport - it helps debug
+			container	: document.body,
+			mouseSupport	: true
+		}
+	})
 	//onMobile === false 	&& 
 	tQuery.PlayerInput.createKeyboard(playerInput)
 	//true 	&& 
 	tQuery.PlayerInput.createDeviceOrientation(playerInput)
 
-	var domElement	= document.querySelector('#debug')
-	world.hook(function(){
-		domElement.innerText	= JSON.stringify(playerInput, null, '\t')
-	});
+	tQuery.PlayerInput.createViewer({
+		querySelector	: '#debug',
+		playerInput	: playerInput	
+	})
 	
 	world.hook(function(delta, now){
 		var displacement	= 1 * delta;

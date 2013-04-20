@@ -7,8 +7,8 @@ tQuery.PlayerInput.registerStatic('DeviceOrientation', function(opts){
 	if( opts instanceof tQuery.PlayerInput )	opts	= { playerInput: opts };
 	// handle arguments default value
 	opts	= tQuery.extend(opts, {
-		deltaXConvert	: function(value){ return Math.tan(value*4.5)	},
-		deltaYConvert	: function(value){ return Math.tan(value*4.5)	},
+		deltaXConvert	: function(value){ return Math.tan(value)	},
+		deltaYConvert	: function(value){ return Math.tan(value)	},
 		angleEpsilon	: 0.1,
 		angleThreshold	: 10*Math.PI/180,
 		world		: tQuery.world
@@ -30,8 +30,16 @@ tQuery.PlayerInput.registerStatic('DeviceOrientation', function(opts){
 		if( orientation.angleZ() < -threshold )	input.left	= true;
 		if( orientation.angleZ() > +threshold )	input.right	= true;
 
-		if( Math.abs(orientation.angleZ()) > epsilon )	input.deltaX = opts.deltaXConvert( orientation.angleZ() )
-		if( Math.abs(orientation.angleY()) > epsilon )	input.deltaY = opts.deltaYConvert( orientation.angleY() )
+		if( orientation.angleZ() > epsilon ){
+			input.deltaX = opts.deltaXConvert( orientation.angleZ() - epsilon )
+		}else if( orientation.angleZ()) < epsilon ){
+			input.deltaX = opts.deltaXConvert( orientation.angleZ() + epsilon )
+		}
+		if( orientation.angleY() > epsilon ){
+			input.deltaY = opts.deltaYConvert( orientation.angleY() - epsilon )			
+		}else if( orientation.angleY() > epsilon ){
+			input.deltaX = opts.deltaXConvert( orientation.angleZ() + epsilon )
+		}
 	}
 	// initial update
 	onUpdate();
