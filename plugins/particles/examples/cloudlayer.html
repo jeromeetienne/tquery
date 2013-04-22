@@ -1,0 +1,40 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.tween'
+	, 'tquery.blueskybackground'
+	, 'tquery.skymap'
+	, 'tquery.lensflare'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world)
+
+	// limit camera range
+	world.getCameraControls().rangeX	*= 0.05;
+	world.getCameraControls().rangeY	*= 0.1;
+	// put the camera a little further
+	world.camera().positionZ( 3 );
+	// put a blue sky in the background
+	world.tRenderer().setClearColor(0x000000, 0)
+	tQuery.addBlueSkyBackground();
+	
+	var skymap	= tQuery.createSkymap('skybox').addTo(world);
+	
+	// your code goes here
+	var texture	= THREE.ImageUtils.loadTexture('../images/cloud10.png')
+	var center	= tQuery.createVector3(0, -1.5, -6);
+	var range	= tQuery.createVector3(20,0.2, 16)
+	var material	= tQuery.createSpriteMaterial()
+				.map(texture)
+				.color('lightgrey')
+	for(var i = 0; i < 150; i++){
+		var sprite	= tQuery.createSprite(material).addTo(world)
+			.positionX(center.x + (Math.random()-0.5)*range.x )
+			.positionY(center.y + (Math.random()-0.5)*range.y )
+			.positionZ(center.z + (Math.random()-0.5)*range.z )
+			.rotation(Math.random() * Math.PI*2)
+			.scale(4 + (Math.random()-0.5)*1 )
+		sprite.addTo(world)
+	}
+});
+</script></body>

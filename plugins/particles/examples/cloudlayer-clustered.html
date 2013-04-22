@@ -1,0 +1,49 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.tween'
+	, 'tquery.blueskybackground'
+	, 'tquery.skymap'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world)
+
+	// put the camera a little further
+	world.camera().positionZ( 4 );
+	// limit camera range
+	world.getCameraControls().rangeX	*= 0.05;
+	world.getCameraControls().rangeY	*= 0.05;
+
+	// put a blue sky in the background
+	world.tRenderer().setClearColor(0x000000, 0)
+	tQuery.addBlueSkyBackground();
+	// add a skymap
+	tQuery.createSkymap('skybox').addTo(world);
+
+	///////////////////////////////////////////////////////////////////////
+	// here start the particles
+	var texture	= THREE.ImageUtils.loadTexture('../images/cloud10.png')
+	var center	= tQuery.createVector3(0, -1.5, -6)
+	var range	= tQuery.createVector3(20,0.2, 16)
+	var rangeCluster= tQuery.createVector3(4, 0.1, 2)
+	var material	= tQuery.createSpriteMaterial()
+				.map(texture)
+				.color('lightgrey')
+	var nClusters	= 30
+	for(var i = 0; i < nClusters; i++){
+		var container	= tQuery.createObject3D().addTo(world)
+			.positionX(center.x + (Math.random()-0.5)*range.x )
+			.positionY(center.y + (Math.random()-0.5)*range.y )
+			.positionZ(center.z + (Math.random()-0.5)*range.z )
+		var nClouds	= 2 + Math.floor( 3*Math.random() )
+		for(var j = 0; j < nClouds; j++){
+			var sprite	= tQuery.createSprite(material).addTo(container)
+				.positionX( (Math.random()-0.5)*rangeCluster.x )
+				.positionY( (Math.random()-0.5)*rangeCluster.y )
+				.positionZ( (Math.random()-0.5)*rangeCluster.z )
+				.rotation(Math.random() * Math.PI*2)
+				.scale(4 + (Math.random()-0.5)*1 )
+		}
+	}
+});
+</script></body>
