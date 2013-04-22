@@ -1,0 +1,72 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.loaders', 'tquery.lightings', 'tquery.csg'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	//world.removeCameraControls();
+
+	tQuery.world.camera().positionZ(1)
+	// your code goes here
+	tQuery.createLighting3Points().addTo(world)
+	var loader = new THREE.STLLoader();
+	loader.load( '../models/octocat_body_and_legs.stl' );
+	loader.addEventListener('load', function(event){
+		console.log('event', event)
+		var tGeometry	= event.content;
+		var tMaterial	= new THREE.MeshNormalMaterial();
+		var meshTotal	= tQuery(tGeometry, tMaterial)
+			.geometry()
+				.center()
+				.normalize()
+				.back()
+		//meshTotal.addTo(world)
+		
+		var container	= tQuery.createObject3D().addTo(world)
+			.rotateY(Math.PI/2)
+		// cut the body		
+		var cubeCutter	= tQuery.createCube()
+			.geometry()
+		 		.scaleXBy(2).scaleYBy(0.4)
+		 		.translateY(-0.4)
+				.back()
+		var body	= meshTotal.intersect(cubeCutter)
+			.geometry()
+				.center()
+				.back()
+
+		// 
+		var cubeCutter	= tQuery.createCube()
+			.geometry()
+		 		.scaleXBy(0.5).scaleYBy(0.15).scaleZBy(0.2)
+		 		.translateX(-0.2).translateY(-0.08)
+				.back()
+		var halfLeg1	= meshTotal.intersect(cubeCutter)
+			.geometry()
+				.center()
+				.back()
+
+		var cubeCutter	= tQuery.createCube()
+			.geometry()
+		 		.scaleXBy(0.5).scaleYBy(0.15).scaleZBy(0.2)
+		 		.translateX(-0.2).translateY(0.08)
+				.back()
+		var halfLeg2	= meshTotal.intersect(cubeCutter)
+			.geometry()
+				.center()
+				.back()
+
+		var fullLeg	= tQuery.createObject3D().addTo(container)
+		halfLeg1.addTo(fullLeg)
+		halfLeg2.addTo(fullLeg)
+			.positionZ(-0.047)
+			.rotateX(Math.PI)
+		
+		fullLeg.rotateZ(Math.PI/2)
+			.positionX(-0.19).positionY(-0.2)
+			.positionZ(0.068).scaleZ(0.75)
+		body.addTo(container)
+			.rotateX(-Math.PI/2)
+		
+	});
+});
+</script></body>

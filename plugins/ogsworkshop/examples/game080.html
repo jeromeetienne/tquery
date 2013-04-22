@@ -70,7 +70,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.keyb
 		.shadowCameraVisible(true)
 
 	// for light to follow character
-	world.loop().hook(function(){
+	world.hook(function(){
 		if( !players[mySourceId] )	return;
 		var player	= players[mySourceId];
 		var character	= player.character;

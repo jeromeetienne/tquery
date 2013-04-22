@@ -28,7 +28,7 @@
 	var object3d	= tQuery.createSphere(0.5, 32, 16, material).addTo(world);
 	object3d.geometry().zoom(2).wobble().back();
 
-	world.loop().hook(function(delta){
+	world.hook(function(delta){
 		var piSecond	= delta * Math.PI;
 		//object3d.rotateY(45*piSecond/180);
 		object3d.rotateZ(45*piSecond/180);

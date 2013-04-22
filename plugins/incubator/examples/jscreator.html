@@ -1,0 +1,62 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<body><script>
+	var Something	= function(a, b){
+		this._foo	= 'bar'+(a+b)
+	}
+	Something.prototype.getFoo	= function(){
+		return this._foo
+	}
+
+	/**
+	 * mixin for the creator pattern
+	 * 
+	 * @TODO make find a proper reference
+	 * 
+	 * @param  {Function} klass the constructor function of the class
+	 * @param  {String|undefined} name  the name of the class
+	 */
+	var mixinCreatorPattern	= function(klass, name){
+		// js code for the creator pattern
+		var jsCode	= [
+			"klass.create = (function() {",
+			"	function F(args) {",
+			"		return klass.apply(this, args);",
+			"	}",
+			"	F.prototype = klass.prototype;",
+			"	return function(){",
+			"		return new F(arguments);",
+			"	}",
+			"})()",
+		].join('\n')
+		// handle klass name default value
+		// - if the name isnt explicitly given, get the name of the constructor function
+		name	= name || klass.name
+		// replace the F class with the proper name
+		jsCode	= name ? jsCode.replace(/F/g, name) : jsCode
+		// eval the code
+		eval(jsCode)
+	};
+
+	mixinCreatorPattern(Something, 'Something')
+//	mixinCreatorPattern(Something)
+
+	var something	= Something.create(2,1)
+
+	console.log('foo is', something.getFoo());
+	console.log('instanceof', something instanceof Something)
+
+	console.assert(something.getFoo() === 'bar3');
+
+	console.dir(something);
+
+/**
+ * * make an actual post for that
+ *   * what are the advantages ?
+ *   * can it be possible to handle object pool ?
+ * * with a npm package
+ * * some mocha tests
+ * * submit to microlib stuff
+ * * find a good name
+ *   * creatorpattern.js ? simple and natural
+ */
+</script></body>

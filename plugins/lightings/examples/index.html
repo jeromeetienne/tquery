@@ -1,0 +1,13 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../tquery.lightings.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createLighting3Points().addTo(world)
+	// your code goes here
+	tQuery.createTorusKnot().addTo(world)
+		.setLambertMaterial()
+			.color('white')
+			.back();
+</script></body>

@@ -64,7 +64,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r53.0";
+tQuery.VERSION	= "r58.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -85,6 +85,8 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// sanity check
 	console.assert( object, 'invalid parameters' );
 	console.assert( typeof key === 'string', 'invalid parameters');
+	// handle default arguments values
+	if( mustNotExist === undefined && value !== undefined )	mustNotExist = true;
 
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
@@ -156,7 +158,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i])
+		var keepLooping	= callback(arr[i], i)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -178,6 +180,14 @@ tQuery.now	= (function(){
 	else			return function(){ return Date.now;					};	
 })();
 
+/**
+ * same as tQuery.now() but in seconds. later a migration will make .now->.nowMilliseconds
+ * and .nowSeconds()
+ * @return {Number} tQuery.now() in seconds
+ */
+tQuery.nowSeconds	= function(){
+	return tQuery.now() / 1000;
+}
 
 /**
  * Make a child Class inherit from the parent class.
@@ -387,6 +397,7 @@ tQuery.MicroeventMixin	= function(destObj){
 	destObj.dispatchEvent		= function(event /* , args... */){
 		return this.trigger.apply(this, arguments)
 	}
+	return destObj;
 };
 
 /**
@@ -425,6 +436,8 @@ tQuery.convert.toThreeColor	= function(/* arguments */){
 	// default convertions
 	if( arguments.length === 1 && typeof(arguments[0]) === 'number'){
 		return new THREE.Color(arguments[0]);
+	}else if( arguments.length === 1 && typeof(arguments[0]) === 'string'){
+		return new THREE.Color(arguments[0]);
 	}else if( arguments.length === 1 && arguments[0] instanceof THREE.Color ){
 		return arguments[0];
 	}else if( arguments.length === 3 && typeof(arguments[0]) === 'number'
@@ -441,17 +454,59 @@ tQuery.MicroeventMixin(tQuery.convert.toThreeColor);
 
 
 /**
+ * Convert the value into a THREE.Material object
+ * 
+ * @return {THREE.Material} the resulting color
+*/
+tQuery.convert.toThreeMaterial	= function(/* arguments */){
+	// honor the plugins with 'preConvert' event
+	var result	= tQuery.convert.toThreeMaterial.dispatchEvent('preConvert', arguments);
+	if( result !== undefined )	return result;
+
+	// default convertions
+	if( arguments.length === 1 && arguments[0] instanceof THREE.Material ){
+		return arguments[0];
+	}else if( arguments.length === 1 && arguments[0] instanceof tQuery.Material ){
+		return arguments[0].get(0);
+	}else{
+		console.assert(false, "invalid parameter");
+	}
+	return undefined;	// never reached - just to workaround linter complaint
+};
+// make tQuery.convert.toThreeMaterial eventable
+tQuery.MicroeventMixin(tQuery.convert.toThreeMaterial);
+
+/**
  * Convert the arguments into a THREE.Vector3
  * @return {THREE.Vector3} the resulting THREE.Vector3
  */
 tQuery.convert.toVector3	= function(/* arguments */){
 	// handle parameters
-	if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
+	if( arguments.length === 0 ){
+		return new THREE.Vector3()
+	}else if( arguments[0] instanceof THREE.Vector3 && arguments.length === 1 ){
 		return arguments[0]
 	}else if( typeof arguments[0] === "number" && arguments.length === 3 ){
 		return new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
+	}else if( arguments[0] instanceof Array && arguments.length === 1 ){
+		return new THREE.Vector3(arguments[0][0], arguments[0][1], arguments[0][2]);
 	}else{
 		console.assert(false, "invalid parameter for Vector3");
+	}
+};
+
+/**
+ * Convert the arguments into a THREE.Vector2
+ * @return {THREE.Vector2} the resulting THREE.Vector2
+ */
+tQuery.convert.toVector2	= function(/* arguments */){
+	// handle parameters
+	if( arguments[0] instanceof THREE.Vector2 && arguments.length === 1 ){
+		return arguments[0]
+	}else if( typeof arguments[0] === "number" && arguments.length === 2 ){
+		return new THREE.Vector2(arguments[0], arguments[1]);
+	}else{
+		console.assert(false, "invalid parameter for Vector2");
 	}
 };
 
@@ -523,7 +578,9 @@ tQuery.convert.toTexture	= function(value){
 	if( result !== undefined )	return result;
 	
 	// default convertions
-	if( arguments.length === 1 && value instanceof THREE.Texture ){
+	if( arguments.length === 1 && value instanceof tQuery.Texture ){
+		return arguments[0].get(0);
+	}else if( arguments.length === 1 && value instanceof THREE.Texture ){
 		return value;
 	}else if( arguments.length === 1 && value instanceof THREE.WebGLRenderTarget ){
 		return value;
@@ -628,7 +685,6 @@ tQuery.Node.prototype.data	= function(key, value)
 	console.assert(this.length === 0);
 	return undefined
 }
-
 
 /**
  * same as .data() in jquery
@@ -829,9 +885,13 @@ tQuery.Object3D.prototype.add	= function(object3D)
 			})
 		}.bind(this));
 	}else if( object3D instanceof THREE.Object3D ){
-		this.each(function(object1){
-			object1.add(object3D);
-		});
+		if( this.length > 0 ){
+			this.each(function(tObject3D){
+				tObject3D.add(object3D);
+			});
+		}else{
+			this._lists.push(object3D);	
+		}
 	}else	console.assert(false, "invalid parameter");
 	return this;
 }
@@ -1183,6 +1243,11 @@ tQuery.inherit(tQuery.Mesh, tQuery.Object3D);
 */
 tQuery.pluginsInstanceOn(tQuery.Mesh);
 
+// make it eventable
+tQuery.MicroeventMixin(tQuery.Mesh.prototype)
+
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -1210,9 +1275,21 @@ tQuery.Mesh.prototype.material	= function(value){
  * 
  * @returns {tQuery.Sprite} the create object
 */
-tQuery.registerStatic('createSprite', function(opts){
+tQuery.registerStatic('createSprite', function(opts, material){
+	// handle arguments polymorphism
+	if( arguments.length === 1 && 
+			(  opts instanceof THREE.Material 
+			|| opts instanceof tQuery.Material)
+		){
+		material= tQuery.convert.toThreeMaterial(opts)
+		opts	= undefined
+	}
+	// create object itself
 	var tSprite	= new THREE.Sprite(opts);
 	var sprite	= new tQuery.Sprite(tSprite);
+	// honor material if provided
+	if( material )	sprite.material(material)
+	// return just built sprite
 	return sprite;
 })
 
@@ -1298,18 +1375,18 @@ tQuery.World	= function(opts)
 	console.assert( !tQuery.word );
 	tQuery.world	= this;
 
-	this._autoRendering	= true;
+	this._autoRendering	= opts.autoRendering;
 	
 	// create a scene
-	this._scene	= opts.scene	||(new THREE.Scene());
+	this._tScene	= opts.scene	||(new THREE.Scene());
 
  	// create a camera in the scene
 	if( !opts.camera ){
-		this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
-		this._camera.position.set(0, 0, 3);
-		this._scene.add(this._camera);
+		this._tCamera	= new THREE.PerspectiveCamera(45, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._tCamera.position.set(0, 0, 3);
+		this._tScene.add(this._tCamera);
 	}else{
-		this._camera	= opts.camera;
+		this._tCamera	= opts.camera;
 	}
 	
 	// create the loop
@@ -1322,20 +1399,20 @@ tQuery.World	= function(opts)
 
 	// create a renderer
 	if( opts.renderer ){
-		this._renderer	= opts.renderer;
+		this._tRenderer	= opts.renderer;
 	}else if( tQuery.World.hasWebGL() ){
-		this._renderer	= new THREE.WebGLRenderer({
+		this._tRenderer	= new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
 	}else if( !opts.webGLNeeded ){
-		this._renderer	= new THREE.CanvasRenderer();
+		this._tRenderer	= new THREE.CanvasRenderer();
 	}else{
 		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
-	this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-	this._renderer.setSize( opts.renderW, opts.renderH );
+	this._tRenderer.setClearColor( 0xBBBBBB, 1 );
+	this._tRenderer.setSize( opts.renderW, opts.renderH );
 };
 
 // make it pluginable
@@ -1354,11 +1431,11 @@ tQuery.World.prototype.destroy	= function(){
 	this._loop.unhookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
-	// remove this._cameraControls if needed
+	// remove this._tCameraControls if needed
 	this.removeCameraControls();
 	// remove renderer element
-	var parent	= this._renderer.domElement.parentElement;
-	parent	&& parent.removeChild(this._renderer.domElement);
+	var parent	= this._tRenderer.domElement.parentElement;
+	parent	&& parent.removeChild(this._tRenderer.domElement);
 	
 	// clear the global if needed
 	if( tQuery.world === this )	tQuery.world = null;
@@ -1421,12 +1498,12 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 // TODO why not a getter/setter here
 tQuery.World.prototype.setCameraControls	= function(control){
 	if( this.hasCameraControls() )	this.removeCameraControls();
-	this._cameraControls	= control;
+	this._tCameraControls	= control;
 	return this;	// for chained API
 };
 
 tQuery.World.prototype.getCameraControls	= function(){
-	return this._cameraControls;
+	return this._tCameraControls;
 };
 
 /**
@@ -1435,7 +1512,7 @@ tQuery.World.prototype.getCameraControls	= function(){
  */
 tQuery.World.prototype.removeCameraControls	= function(){
 	if( this.hasCameraControls() === false )	return this;
-	this._cameraControls	= undefined;
+	this._tCameraControls	= undefined;
 	return this;	// for chained API
 };
 
@@ -1444,7 +1521,7 @@ tQuery.World.prototype.removeCameraControls	= function(){
  * @return {Boolean} true if there is, false otherwise
  */
 tQuery.World.prototype.hasCameraControls	= function(){
-	return this._cameraControls !== undefined ? true : false;
+	return this._tCameraControls !== undefined ? true : false;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1460,10 +1537,10 @@ tQuery.World.prototype.add	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
-			this._scene.add(object3d)			
+			this._tScene.add(object3d)			
 		}.bind(this));
 	}else if( object3d instanceof THREE.Object3D ){
-		this._scene.add(object3d)		
+		this._tScene.add(object3d)		
 	}else	console.assert(false, "invalid type");
 	// for chained API
 	return this;
@@ -1478,10 +1555,10 @@ tQuery.World.prototype.remove	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
-			this._scene.remove(object3d)
+			this._tScene.remove(object3d)
 		}.bind(this));
 	}else if( object3d instanceof THREE.Object3D ){
-		this._scene.remove(object3d)
+		this._tScene.remove(object3d)
 	}else	console.assert(false, "invalid type");
 	// for chained API
 	return this;
@@ -1494,7 +1571,7 @@ tQuery.World.prototype.remove	= function(object3d)
  */
 tQuery.World.prototype.appendTo	= function(domElement)
 {
-	domElement.appendChild(this._renderer.domElement)
+	domElement.appendChild(this._tRenderer.domElement)
 	// for chained API
 	return this;
 }
@@ -1514,21 +1591,26 @@ tQuery.World.prototype.stop	= function(){
 	return this;	// for chained API
 }
 
-tQuery.World.prototype.loop	= function(){ return this._loop;	}
+/**
+ * alias on world.loop().hook()
+ */
+tQuery.World.prototype.hook	= function(priority, callback){
+	return this._loop.hook(priority, callback);
+}
 
-tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
-tQuery.World.prototype.tScene	= function(){ return this._scene;	}
-tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
+/**
+ * alias on world.loop().unhook()
+ */
+tQuery.World.prototype.unhook	= function(priority, callback){
+	return this._loop.unhook(priority, callback);
+}
 
-
-// backward compatible functions to remove
-tQuery.World.prototype.renderer	= function(){  console.trace();console.warn("world.renderer() is ovbslete, use .tRenderer() instead");
-						return this._renderer;	}
-tQuery.World.prototype.camera	= function(){ console.trace();console.warn("world.camera() is obsolete, use .tCamerar() instead");
-						return this._camera;	}
-tQuery.World.prototype.scene	= function(){ console.trace();console.warn("world.scene() is obsolete, use .tScene() instead");
-						return this._scene;	}
-tQuery.World.prototype.get	= function(){ return this._scene;	}
+tQuery.World.prototype.loop	= function(){ return this._loop;		}
+tQuery.World.prototype.tRenderer= function(){ return this._tRenderer;		}
+tQuery.World.prototype.tScene	= function(){ return this._tScene;		}
+tQuery.World.prototype.tCamera	= function(){ return this._tCamera;		}
+tQuery.World.prototype.scene	= function(){ return tQuery(this._tScene);	}
+tQuery.World.prototype.camera	= function(){ return tQuery(this._tCamera);	}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -1544,9 +1626,9 @@ tQuery.World.prototype.autoRendering	= function(value){
 tQuery.World.prototype.render	= function(delta)
 {
 	// update the cameraControl
-	if( this.hasCameraControls() )	this._cameraControls.update(delta);
+	if( this.hasCameraControls() )	this._tCameraControls.update(delta);
 	// render the scene 
-	if( this._autoRendering )	this._renderer.render( this._scene, this._camera );
+	if( this._autoRendering )	this._tRenderer.render( this._tScene, this._tCamera );
 }
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -1607,6 +1689,22 @@ tQuery.Loop.prototype.stop	= function()
 	return this;
 }
 
+tQuery.Loop.prototype.isRunning = function() {
+	return this._timerId ? true : false;
+};
+
+tQuery.Loop.prototype.pauseToggle= function() {
+	if( this.isRunning() )	this.stop()
+	else			this.start();
+	return this;
+};
+
+/**
+ * max delta notified by loop callback
+ * @type {Number}
+ */
+tQuery.Loop.maxDelta	= 1/5;
+
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
 	// loop on request animation loop
@@ -1615,9 +1713,18 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
 	// update time values
-	var now		= tQuery.now()/1000;
+	var now		= tQuery.nowSeconds();
+	// init _lastTime if needed
 	if( !this._lastTime )	this._lastTime = now - 1/60;
+	// sanity check - honor tQuery.Loop.maxDelta
+	var minLastTime	= now - tQuery.Loop.maxDelta;
+	if( this._lastTime < minLastTime ){
+		this._lastTime	= minLastTime;
+		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+	}
+	// compute delta
 	var delta	= now - this._lastTime;
+	// update _lastTime
 	this._lastTime	= now;
 
 	// run all the hooks - from lower priority to higher - in order of registration
@@ -1634,7 +1741,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 //		Handle the hooks						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Loop.prototype.PRE_RENDER		= 20;
+tQuery.Loop.prototype.PRE_RENDER	= 20;
 tQuery.Loop.prototype.ON_RENDER		= 50;
 tQuery.Loop.prototype.POST_RENDER	= 80;
 
@@ -1669,7 +1776,7 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
-	// handle parameters
+	// handle arguments polymorphism
 	if( typeof priority === 'function' ){
 		callback	= priority;
 		priority	= this.PRE_RENDER;
@@ -1717,17 +1824,18 @@ tQuery.registerStatic('createObject3D', function(){
 	return tQuery(object3d);
 });
 
-
-/**
- * Create tQuery.loop
- * 
- * @param {tQuery.World} world the world to display (optional)
- * @function
-*/
-tQuery.registerStatic('createLoop', function(world){
-	return new tQuery.Loop(world);
+tQuery.registerStatic('createVector3', function(x, y, z){
+	return tQuery.convert.toVector3.apply(tQuery.convert, arguments)
 });
 
+tQuery.registerStatic('createVector2', function(x, y){
+	return new THREE.Vector2(x, y);
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		create for lights						//
+//////////////////////////////////////////////////////////////////////////////////
 
 tQuery.registerStatic('createHemisphereLight', function(){
 	var tLight	= new THREE.HemisphereLight();
@@ -1808,14 +1916,6 @@ tQuery.registerStatic('createCircle', function(){
 	var ctor	= THREE.CircleGeometry;
 	var dflGeometry	= [0.5, 32];
 	return this._createMesh(ctor, dflGeometry, arguments)
-});
-
-tQuery.registerStatic('createVector3', function(x, y, z){
-	return new THREE.Vector3(x, y, z);
-});
-
-tQuery.registerStatic('createVector2', function(x, y){
-	return new THREE.Vector2(x, y);
 });
 
 tQuery.registerStatic('createSphere', function(){
@@ -2395,6 +2495,8 @@ tQuery.mixinAttributes(tQuery.SpriteMaterial, {
 	scaleByViewport		: tQuery.convert.toBoolean,
 	
 	fog			: tQuery.convert.toBoolean,
+	opacity			: tQuery.convert.toNumber,
+	blending		: tQuery.convert.toNumber
 });
 
 
@@ -2412,12 +2514,13 @@ tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingSphere();
 		tGeometry.computeBoundingBox();
-		//tGeometry.computeCentroids();
+		tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
-		//tGeometry.computeVertexNormals();
+		tGeometry.computeVertexNormals();
 		//tGeometry.computeTangents();
+		
+		
 	});
-
 	// return this, to get chained API	
 	return this;
 });
@@ -2545,12 +2648,11 @@ tQuery.Geometry.registerInstance('rotate', function(angles, order){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
 	console.assert(angles instanceof THREE.Vector3, "Geometry.rotate parameter error");
-
 	// set default rotation order if needed
 	order	= order	|| 'XYZ';
 	// compute transformation matrix
 	var matrix	= new THREE.Matrix4();
-	matrix.setRotationFromEuler(angles, order);
+	matrix.makeRotationFromEuler(angles, order);
 
 	// change all geometry.vertices
 	this.each(function(geometry){
@@ -2788,3 +2890,41 @@ tQuery.Object3D.registerInstance('scaleBy', function(ratio){
 tQuery.Object3D.registerInstance('scaleXBy'	, function(ratio){ return this.scaleBy(ratio, 1, 1);	});
 tQuery.Object3D.registerInstance('scaleYBy'	, function(ratio){ return this.scaleBy(1, ratio, 1);	});
 tQuery.Object3D.registerInstance('scaleZBy'	, function(ratio){ return this.scaleBy(1, 1, ratio);	});
+/**
+ * Handle light
+ *
+ * @class include THREE.Texture. It inherit from {@link tQuery.Node}
+ * 
+ * @borrows tQuery.Node#get as this.get
+ * @borrows tQuery.Node#each as this.each
+ * @borrows tQuery.Node#back as this.back
+ *
+ * @param {THREE.Light} object an instance or array of instance
+*/
+tQuery.Texture	= function(elements)
+{
+	// call parent ctor
+	tQuery.Texture.parent.constructor.call(this, elements)
+
+	// sanity check - all items MUST be THREE.Texture
+	this._lists.forEach(function(item){ console.assert(item instanceof THREE.Texture); });
+};
+
+// inherit from tQuery.Node
+tQuery.inherit(tQuery.Texture, tQuery.Node);
+
+// make it pluginable as static
+tQuery.pluginsStaticOn(tQuery.Texture);
+
+// Make each instances pluginable
+tQuery.pluginsInstanceOn(tQuery.Texture);
+
+/**
+ * define all acceptable attributes for this class
+*/
+tQuery.mixinAttributes(tQuery.Texture, {
+	offset	: tQuery.convert.toVector2,
+	repeat	: tQuery.convert.toVector2,
+});
+
+

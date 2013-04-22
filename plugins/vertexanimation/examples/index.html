@@ -1,0 +1,31 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.vertexanimation', 'tquery.skymap'], function(){	
+	var world	= tQuery.createWorld().boilerplate().start();
+	// add a skymap
+	tQuery.createSkymap('mars').addTo(world)
+	// setup the object
+	var object	= tQuery.createTorusKnot().addTo(world)
+		.setBasicMaterial()
+			.envMap('skybox')
+			.back()
+		.scaleBy(2)
+	// make the object rotate
+	world.hook(function(delta, now){
+		var angle	= 0 * now*Math.PI*2;
+		object.rotationY(angle)
+	})
+	// animate the object
+	object.geometry()
+		.vertexAnimation({
+			transform	: function(originPos, actualPos, now){
+				var speed	= 2;
+				var angle	= speed*now + originPos.y*10;
+				actualPos.x	= originPos.x + Math.cos(angle)*0.2;
+				actualPos.y	= originPos.y + Math.sin(angle*0.5)*0.1;
+			}
+		})
+		.back();
+})
+</script></body>

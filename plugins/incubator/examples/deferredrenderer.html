@@ -2,42 +2,56 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 
 <!-- needed for defferedRenderer -->
-<script src='../../../vendor/three.js/renderers/WebGLDeferredRenderer.js'></script>
-<script src='../../../vendor/three.js/ShaderDeferred.js'></script>
-<script src='../../../vendor/three.js/shaders/CopyShader.js'></script>
-<script src='../../../vendor/three.js/shaders/FXAAShader.js'></script>
-<script src='../../../vendor/three.js/postprocessing/EffectComposer.js'></script>
-<script src='../../../vendor/three.js/postprocessing/RenderPass.js'></script>
-<script src='../../../vendor/three.js/postprocessing/ShaderPass.js'></script>
-<script src='../../../vendor/three.js/postprocessing/MaskPass.js'></script>
+<script src='../../../vendor/three.js/examples/js/renderers/WebGLDeferredRenderer.js'></script>
+<script src='../../../vendor/three.js/examples/js/ShaderDeferred.js'></script>
+<script src='../../../vendor/three.js/examples/js/shaders/CopyShader.js'></script>
+<script src='../../../vendor/three.js/examples/js/shaders/FXAAShader.js'></script>
+<script src='../../../vendor/three.js/examples/js/postprocessing/EffectComposer.js'></script>
+<script src='../../../vendor/three.js/examples/js/postprocessing/RenderPass.js'></script>
+<script src='../../../vendor/three.js/examples/js/postprocessing/ShaderPass.js'></script>
+<script src='../../../vendor/three.js/examples/js/postprocessing/MaskPass.js'></script>
 	
 <body><script>
 require(['tquery.poolball'], function(){
-	var world	= tQuery.createWorld().boilerplate().start()
 	
 
-if( false ){
-	var tCamera	= world.tCamera();
-	var tRenderer	= world.tRenderer();
-	
+if( true ){
+	// experiment with defered
+	var tRenderer	= new THREE.WebGLDeferredRenderer({
+		width		: window.innerWidth,
+		height		: window.innerHeight,
+		scale		: 0.5,
+		antialias	: true,
+	})
+	var world	= tQuery.createWorld({
+		renderer	: tRenderer
+	}).boilerplate().start()
+	window.camera	= world.tCamera();
+}else if( false ){
+X	var tRenderer	= new THREE.WebGLRenderer({ alpha: false, antialias: false } );
+	var world	= tQuery.createWorld({
+		renderer	: tRenderer
+	}).boilerplate().start()
+	var tRenderer	= world.tRenderer();	
 	window.camera	= world._camera;
-	tRenderer.setClearColorHex( 0x000000, 0 );
+	tRenderer.setClearColor( 0x000000, 0 );
 	tRenderer.autoClear = false;
 	// experiment with defered
 	world._renderer	= new THREE.WebGLDeferredRenderer({
-		width		: tRenderer.domElement.width,
-		height		: tRenderer.domElement.height,
-		scale		: 1,
+		width		: window.innerWidth,
+		height		: window.innerHeight,
+		scale		: 0.5,
 		antialias	: true,
 		renderer	: tRenderer
 	})
 }else{
-	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	var world	= tQuery.createWorld().boilerplate().start()
+	world.tRenderer().setClearColor( 0x000000, 1 );
 }
 
 	// put some lights	
-	// tQuery.createAmbientLight().addTo(world)
-	// 	.color(0xffffff)
+	tQuery.createAmbientLight().addTo(world)
+		.color(0xffffff)
 	tQuery.createDirectionalLight().addTo(world)
 		.position(1,1,1)
 		.color(0xff4444)
@@ -48,7 +62,7 @@ if( false ){
 	world.removeCameraControls();
 	
 	var ballsDesc	= ['cue', 'black', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-	for(var i = 0; i < 20; i++){
+	for(var i = 0; i < 5; i++){
 		(function(){
 			var object	= tQuery.createPoolBall({
 				ballDesc	: ballsDesc[Math.floor(Math.random()*ballsDesc.length)],
@@ -61,7 +75,7 @@ if( false ){
 			object.rotationY( Math.random() * Math.PI*2 );
 			object.rotationZ( Math.random() * Math.PI*2 );
 
-			world.loop().hook(function(delta, now){
+			world.hook(function(delta, now){
 				object.rotateY(1*0.02);
 				object.rotateX(1*0.015);
 				object.rotateZ(1*0.025);

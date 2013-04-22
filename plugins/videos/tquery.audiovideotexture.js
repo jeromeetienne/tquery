@@ -29,7 +29,7 @@ tQuery.registerStatic('AudioVideoTexture', function(opts){
 	// create the texture
 	this._tTexture	= new THREE.Texture( video );
 	// hook a function to update the texture	
-	this._callback	= this._world.loop().hook(function(){
+	this._callback	= this._world.hook(function(){
 		if( video.readyState !== video.HAVE_ENOUGH_DATA )	return;
 		this._tTexture.needsUpdate	= true;
 	}.bind(this));
@@ -50,7 +50,7 @@ tQuery.registerStatic('AudioVideoTexture', function(opts){
 });
 
 tQuery.AudioVideoTexture.prototype.destroy = function() {
-	world.loop().unhook(this._callback)
+	world.unhook(this._callback)
 };
 
 // make it eventable

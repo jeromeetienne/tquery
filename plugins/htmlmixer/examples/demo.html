@@ -1,0 +1,132 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../../../vendor/three.js/examples/js/renderers/CSS3DRenderer.js'></script>
+<script src='../tquery.htmlmixer.js'></script>
+<body><style>
+body {
+	background-color: hotpink;
+}
+</style><script>
+require([ 'tquery.controls'
+	, 'tquery.minecraft'
+	, 'tquery.skymap'
+	, 'tquery.grassground'
+	, 'tquery.keyboard'
+	, 'tquery.loaders'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// setup camera position
+	world.camera().positionY(1.5).positionZ(3).lookAt(0,1, 0)
+
+	// handle camera controls
+	var controls	= world.getCameraControls();
+	controls.rangeX	*= 1/8;
+	controls.rangeY	*= 1/8;
+	controls.target.set(0, 0.5, 0)
+	world.hook(function(){
+		if( world.camera().positionY() < 0.3 ){
+			world.camera().positionY(0.3)
+		}
+	})
+
+	// add a skymap
+	tQuery.createSkymap('mars').addTo(world);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(30);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	// moving player
+	var player	= tQuery.createMinecraftPlayer().addTo(world);
+	world.hook(function(){
+		var keyboard	= tQuery.keyboard();
+		var input	= player.controls().input();
+		input.right	= keyboard.pressed('right');
+		input.up	= keyboard.pressed('up');
+		input.left	= keyboard.pressed('left');
+		input.down	= keyboard.pressed('down');
+	})
+
+	// tQuery.world.camera().positionY(1.5).positionZ(-4).lookAt(0,0.5, 0)
+	// 	.addTo(player.character().object3D())
+	
+	var object3D	= player.character().object3D()
+	object3D.positionX(1.5).positionZ(0)
+		.rotationY(13*Math.PI/8)
+	var character	= player.character()
+
+	// character on the right
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/batman.png'
+	}).addTo(world);
+	character.object3D()
+		.positionX(0.5)
+		.positionY(-0.3)
+		.positionZ(1)
+		.rotationY(5*Math.PI/4)
+	character.parts.legL.rotation.x	= -Math.PI/2;
+	character.parts.legL.rotation.z = +30*Math.PI/180;
+	character.parts.legR.rotation.x	= -Math.PI/2;
+	character.parts.legR.rotation.z = -30*Math.PI/180;
+	character.parts.armR.rotation.x = -30*Math.PI/180;
+	character.parts.armL.rotation.x = -30*Math.PI/180;
+
+	// character on the left
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/Mario.png'
+	}).addTo(world);
+	character.object3D()
+		.positionX(-0.5)
+		.positionY(-0.3)
+		.positionZ(1)
+		.rotationY(3*Math.PI/4)
+	character.parts.legL.rotation.x	= -Math.PI/2;
+	character.parts.legL.rotation.z = +30*Math.PI/180;
+	character.parts.legR.rotation.x	= -Math.PI/2;
+	character.parts.legR.rotation.z = -30*Math.PI/180;
+	character.parts.armR.rotation.x = -30*Math.PI/180;
+	character.parts.armL.rotation.x = -30*Math.PI/180;
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		load the model							//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.position(4,2,4)
+		.color(0xcccccc)
+
+	var loader	= new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	var modelUrl	= '../../webrtcio/olddemo/models/OldTelevisionSet01/models/Old Television Set 01.dae';
+	loader.load(modelUrl, function(collada){
+		var container	= tQuery.createObject3D().addTo(world)
+			.positionZ(-0.5)
+			.scaleBy(3)
+		
+		var tvSet	= tQuery(collada.scene).addTo(container)
+			.positionY(-0.4)
+		
+// curl "http://gdata.youtube.com/feeds/api/playlists/UUDyknKncQDzw7NdqYj2_94A?alt=json&start-index=1" | json -i| less -R	
+		var url		= 'http://www.youtube.com/embed/FY4UQpu1ijM';
+		var url		= 'http://pacmaze.com';
+		if( location.hash )	url = location.hash.substr(1)
+		location.hash	= url;
+		var plane	= tQuery.createHTMLMixerPlane(url).addTo(container)
+			.positionY(0.31).positionZ(0.16)
+			.scaleX(1/2.2).scaleY(1/2.85)
+	});
+});
+</script></body>

@@ -99,7 +99,7 @@ tQuery.createTorus().addTo(world);
 	// make the object3d scale follow container one
 	flamethrower.object3D().scale	= container.get(0).scale;
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.2 * now * Math.PI/2;
 		container.get(0).position.x	= Math.cos(angle*2)*Math.cos(angle)*20;
 		container.get(0).position.z	= Math.sin(angle)*10;

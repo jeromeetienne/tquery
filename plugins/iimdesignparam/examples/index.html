@@ -56,7 +56,7 @@ require(['tquery.text', 'tquery.linkify', 'tquery.checkerboard', 'tquery.videos'
 		turning	= !turning;
 	})
 
-	tQuery.world.loop().hook(function(delta, now){
+	tQuery.world.hook(function(delta, now){
 		if( turning === false )	return;
 		var angleDiff	= 90 * delta * Math.PI / 180;
 		tQuery('#fish').rotateX(angleDiff*2).rotateY(angleDiff).rotateZ(angleDiff*2);

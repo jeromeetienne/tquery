@@ -79,7 +79,7 @@ tQuery.registerStatic('Car', function(opts){
 	this._loopCb	= function(delta){
 		this._car.updateCarModel(delta, this._controlsCar);
 	}.bind(this);
-	this._opts.world.loop().hook(this._loopCb);
+	this._opts.world.hook(this._loopCb);
 
 	// to contains the flares sprite
 	this._flareSprites	= {}
@@ -95,7 +95,7 @@ tQuery.Car.baseUrl	= "../../../plugins/car/";
 
 
 tQuery.Car.prototype.destroy	= function(){
-	this._opts.world.loop().unhook(this._loopCb);
+	this._opts.world.unhook(this._loopCb);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

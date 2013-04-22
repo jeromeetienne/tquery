@@ -63,7 +63,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r56.0";
+tQuery.VERSION	= "r58.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -84,6 +84,8 @@ tQuery.data	= function(object, key, value, mustNotExist)
 	// sanity check
 	console.assert( object, 'invalid parameters' );
 	console.assert( typeof key === 'string', 'invalid parameters');
+	// handle default arguments values
+	if( mustNotExist === undefined && value !== undefined )	mustNotExist = true;
 
 	// init _tqData
 	object['_tqData']	= object['_tqData']	|| {};
@@ -155,7 +157,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i])
+		var keepLooping	= callback(arr[i], i)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -177,6 +179,14 @@ tQuery.now	= (function(){
 	else			return function(){ return Date.now;					};	
 })();
 
+/**
+ * same as tQuery.now() but in seconds. later a migration will make .now->.nowMilliseconds
+ * and .nowSeconds()
+ * @return {Number} tQuery.now() in seconds
+ */
+tQuery.nowSeconds	= function(){
+	return tQuery.now() / 1000;
+}
 
 /**
  * Make a child Class inherit from the parent class.
@@ -386,6 +396,7 @@ tQuery.MicroeventMixin	= function(destObj){
 	destObj.dispatchEvent		= function(event /* , args... */){
 		return this.trigger.apply(this, arguments)
 	}
+	return destObj;
 };
 
 /**

@@ -7,7 +7,7 @@ require(['tquery.keyboard', 'tquery.minecraft'], function(){
 	// create the minecraft character
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	// simple hook
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var mesh	= character.object3D('root');
 		mesh.rotateY(delta * Math.PI*2)
 	});

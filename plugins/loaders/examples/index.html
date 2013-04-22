@@ -1,8 +1,37 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.spaceships.js"></script>
 <body><script>
-require(['tquery.loaders'], function(){
+require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
-	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	tQuery.createSkymap('mars').addTo(world)
+	world.shadowMapEnabled(true)
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(30)
+		.receiveShadow(true)
+
+	tQuery.createAmbientLight().addTo(world)
+		.color(0x444444)
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xaaaaaa)
+		.intensity(2)
+		.position(-1,1,1)	
+
+	tQuery.createDirectionalLight().addTo(world)
+		.color(0xaaaaaa)
+		.intensity(2)
+		.position(1,1,1)	
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*8,512*8)
+		.shadowCamera(30, -30, 2, -2, 0.1, 50)
+		//.shadowCameraVisible(true)
+
+	tQuery.createSpaceShip3().addTo(world)
+		.translateY(0.2)
 })
 </script></body>

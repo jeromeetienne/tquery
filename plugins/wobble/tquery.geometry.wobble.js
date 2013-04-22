@@ -6,7 +6,7 @@ tQuery.Geometry.registerInstance('wobble', function(){
 		THREEx.GeometryWobble.init(geometry);
 		THREEx.GeometryWobble.cpuAxis(geometry, 'x', 4);
 
-		tQuery.world.loop().hook(function(delta, present){
+		tQuery.world.hook(function(delta, present){
 			var piSecond	= present * Math.PI;
 			var phase	= 200 * piSecond / 180;
 			var magnitude	= 0.25;

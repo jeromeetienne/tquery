@@ -167,7 +167,7 @@ tQuery.registerStatic('Spritesheet', function(opts){
 		// draw the loaded image to the canvas
 		context.drawImage(items, 0, 0, canvas.width, canvas.height);
 		// trigger the 'load' event
-		this.trigger("load");
+		this.dispatchEvent("load");
 	}.bind(this);
 	items.src = this._opts.url;
 	

@@ -8,7 +8,7 @@ require(['tquery.keyboard', 'tquery.minecraft'], function(){
 	var character	= tQuery.createMinecraftChar().addTo(world);
 	character.object3D('root').translateY(-0.5);
 	// simple hook
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var mesh	= character.object3D('root');
 		var keyboard	= tQuery.keyboard();
 		if( keyboard.pressed('left') )	mesh.translateX(-1 * delta)

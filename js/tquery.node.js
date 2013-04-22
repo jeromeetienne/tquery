@@ -82,7 +82,6 @@ tQuery.Node.prototype.data	= function(key, value)
 	return undefined
 }
 
-
 /**
  * same as .data() in jquery
 */

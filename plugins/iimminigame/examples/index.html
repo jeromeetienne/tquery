@@ -5,15 +5,15 @@
 <script src="../../keyboard/tquery.keyboard.js"></script>
 
 <script src="../../../vendor/three.js/ShaderExtras.js"></script>
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/TexturePass.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
 
 <script src='../../grassground/tquery.grassground.js'></script>
@@ -154,7 +154,7 @@
 		ball3d.position(0,0,0);
 	};
 	// handle player keyboard
-	world.loop().hook(function(delta){
+	world.hook(function(delta){
 		var keyboard	= tQuery.keyboard();
 		var speedY	= 2;
 		if( keyboard.pressed('up') )	players['right'].object3d.translateZ(-delta*speedY);
@@ -213,7 +213,7 @@
 	var ball3d	= tQuery.createSphere().addTo(world).scaleBy(ballRadius)
 			.setLambertMaterial().color(0xFFFF00).ambient(0xFFFFFF).map("../../physics/examples/images/rocks.jpg").back()
 			.castShadow(true)
-	world.loop().hook(function(){
+	world.hook(function(){
 		// get ball position
 		var position	= ball3d.get(0).position;
 		// update position
@@ -301,7 +301,7 @@
 	}
 	
 	// update TWEEN with world.loop
-	world.loop().hook(function(){
+	world.hook(function(){
 		TWEEN.update();
 	});
 	

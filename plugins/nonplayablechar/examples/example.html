@@ -21,7 +21,7 @@ require(['tquery.grassground', 'tquery.minecraft'], function(){
 	var bot	= new NonPlayableChar();
 	bot.character().addTo(world);
 	
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		bot.update();
 	})
 });

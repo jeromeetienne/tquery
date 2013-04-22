@@ -11,7 +11,7 @@
 
 	object3d.geometry().zoom(2).wobble().back();
 
-	world.loop().hook(function(delta){
+	world.hook(function(delta){
 		var degSecond	= delta * Math.PI / 180;
 		object3d.rotateY(45*degSecond);
 		object3d.rotateZ(45*degSecond);

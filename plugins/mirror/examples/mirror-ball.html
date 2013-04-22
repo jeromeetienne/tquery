@@ -1,0 +1,29 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.mirrorball.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().defaultPageTitle().start()
+
+	// create the mirror ball
+	var sphere	= tQuery.createMirrorBall().addTo(world)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	// add a skymap
+	tQuery.createSkymap('mars').addTo(world);
+		
+	// some simple animations to have something dynamic to render
+	var container	= tQuery.createObject3D().addTo(world).positionY(-0.5)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0, 1)
+	tQuery.createTorusKnot().addTo(container).position( 0, 0,-1)
+	tQuery.createTorusKnot().addTo(container).position( 1, 0, 0).rotateY( Math.PI/2)
+	tQuery.createTorusKnot().addTo(container).position(-1, 0, 0).rotateY(-Math.PI/2)
+	world.hook(function(delta, now){
+		container.rotateY( 0.3 * delta * Math.PI*2)
+	})
+});
+</script></body>

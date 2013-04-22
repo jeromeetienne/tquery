@@ -33,7 +33,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground'
 
 	// make it run only if it move		
 	var prevPosition= tQuery.createVector3();
-	world.loop().hook(function(){
+	world.hook(function(){
 		// compute velocity
 		var velocity	= character3D.position().clone().subSelf(prevPosition);
 		// pick animation based

@@ -1,0 +1,72 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.tween'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+
+	tQuery.createTorus().addTo(world)
+		.translateY(-0.8)
+		.rotateX(Math.PI/2)
+		.scale(1.25)
+//	world.removeCameraControls()
+
+	var texture	= THREE.ImageUtils.loadTexture('../images/cloud10.png')
+	var center	= tQuery.createVector3(0,-0.8, 0)
+	var maxAge	= 2;
+	var age2Friction= (function(){
+		var gradient	= tQuery.createLinearGradient()
+			.push(0.00, 1.00).push(0.50, 1.00)
+			.push(0.70, 0.96).push(1.00, 0.96)
+		return function(age, maxAge){
+			return gradient.get(age/maxAge)
+		}
+	})();
+	var age2Opacity	= tQuery.createTweenMidi(maxAge, 0.05*maxAge, 0.4*maxAge);
+	var lastEmit	= 0;
+	world.hook(function(delta, now){
+		// rate limiter emition
+		var rate = 5;
+		if( rate === 0 || now - lastEmit < 1/rate )	return;
+		lastEmit	= now;
+
+		// create sprite
+		var material	= tQuery.createSpriteMaterial()
+					.map(texture)
+		var sprite	= tQuery.createSprite(material).addTo(world)
+		// start position
+		sprite.position(0,-0.8, 0)
+			.translateX((Math.random()-0.5)*0.1)
+			.translateY((Math.random()-0.5)*0.0001)
+			.translateZ((Math.random()-0.5)*0.1)
+		// set velocity
+		var velocity	= tQuery.createVector3(0, 1, 0)
+		velocity.x	+= (Math.random()-0.5)*0.3;
+		velocity.y	+= (Math.random()-0.5)*0.1;
+		velocity.z	+= (Math.random()-0.5)*0.3;
+		velocity.setLength(1.5 + (Math.random()-0.5)*0.5)
+		// init patterm
+		material.color( 0x010101*Math.floor(255*(Math.random()*0.1+0.3)) );
+		sprite.scale(0.8 + Math.random()*0.2)
+		sprite.rotation(Math.random() * Math.PI*2)
+		material.get(0).opacity	= age2Opacity(0)
+		
+		var birthDate	= now;
+		var callback	= world.hook(function(delta, now){
+			var age	= now - birthDate;
+			if( age >= maxAge ){
+				sprite.detach()
+				world.unhook(callback)
+				return;	
+			}
+			// handle friction
+			velocity.multiplyScalar( age2Friction(age, maxAge) )
+			// move by velocity
+			sprite.translate( velocity.clone().multiplyScalar(delta) )
+			// make it grow
+			sprite.scaleBy( 1.005 )
+			material.get(0).opacity	= age2Opacity(age)
+		})
+	})
+});
+</script></body>

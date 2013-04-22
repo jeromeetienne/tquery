@@ -1,0 +1,42 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.leapcontroller.js"></script>
+<script src="../tquery.leapviewertap.js"></script>
+<script src="../tquery.leapviewerpointable.js"></script>
+<script src="../tquery.leapviewerhandpalm.js"></script>
+<script src="../tquery.leapviewerhandsphere.js"></script>
+<script src="../tquery.leapviewercircle.js"></script>
+<script src="../tquery.leapviewerswipe.js"></script>
+<script src="../vendor/leap.js"></script>
+<body><script>
+require(['tquery.lightings'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createAxis().addTo(world);
+
+	// your code goes here
+	world.removeCameraControls()
+	world.camera().translateZ(3)
+	// add a lighting
+	var lighting	= tQuery.createLighting3Points().addTo(world)
+	var controller	= tQuery.createLeapController();
+
+	tQuery.createLeapViewerTap({
+		controller	: controller
+	}) 
+	tQuery.createLeapViewerPointable({
+		controller	: controller
+	})
+	tQuery.createLeapViewerHandPalm({
+		controller	: controller
+	})
+	tQuery.createLeapViewerHandSphere({
+		controller	: controller
+	})
+	tQuery.createLeapViewerCircle({
+		controller	: controller
+	})
+	tQuery.createLeapViewerSwipe({
+		controller	: controller
+	})
+})
+</script></body>

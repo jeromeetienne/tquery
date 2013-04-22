@@ -3,45 +3,46 @@
 <script src="../tquery.minecraftchar.js"></script>
 <script src="../tquery.spritesheet.js"></script>
 
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
-<script src="../../../vendor/three.js/shaders/BleachBypassShader.js"></script>
-<script src="../../../vendor/three.js/shaders/BlendShader.js"></script>
-<script src="../../../vendor/three.js/shaders/CopyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FilmShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FXAAShader.js"></script>
-<script src="../../../vendor/three.js/shaders/HorizontalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/SepiaShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VerticalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VignetteShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/TexturePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BleachBypassShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/CopyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/ColorifyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/ColorifyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/FilmShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/FXAAShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/HorizontalBlurShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/SepiaShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/VerticalBlurShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/VignetteShader.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
 
 <body><div style="position: absolute; font-size: 200%; right: 0; z-index: 1">
 	<select id="skinSelect" onchange='character.loadSkin(this.value);'>
-		<option value="images/char.png">char</option>
-		<option value="images/3djesus.png">3djesus</option>
-		<option value="images/agentsmith.png">agentsmith</option>
-		<option value="images/batman.png">batman</option>
-		<option value="images/god.png">god</option>
-		<option value="images/Joker.png">Joker</option>
-		<option value="images/Mario.png">Mario</option>
-		<option value="images/martialartist.png">martialartist</option>
-		<option value="images/robocop.png">robocop</option>
-		<option value="images/Sonicthehedgehog.png">Sonic the hedgehog</option>
-		<option value="images/Spiderman.png">Spiderman</option>
-		<option value="images/Superman.png">Superman</option>
-		<option value="images/theflash.png">theflash</option>
-		<option value="images/woody.png">woody</option>
-		<option value="images/Iron-Man-Minecraft-Skin.png">ironman</option>
+		<option value="../images/char.png">char</option>
+		<option value="../images/3djesus.png">3djesus</option>
+		<option value="../images/agentsmith.png">agentsmith</option>
+		<option value="../images/batman.png">batman</option>
+		<option value="../images/god.png">god</option>
+		<option value="../images/Joker.png">Joker</option>
+		<option value="../images/jetienne.png">jetienne</option>
+		<option value="../images/Mario.png">Mario</option>
+		<option value="../images/martialartist.png">martialartist</option>
+		<option value="../images/robocop.png">robocop</option>
+		<option value="../images/Sonicthehedgehog.png">Sonic the hedgehog</option>
+		<option value="../images/Spiderman.png">Spiderman</option>
+		<option value="../images/Superman.png">Superman</option>
+		<option value="../images/theflash.png">theflash</option>
+		<option value="../images/woody.png">woody</option>
+		<option value="../images/Iron-Man-Minecraft-Skin.png">ironman</option>
 	</select>
 </div><script>
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -50,7 +51,7 @@
 	// load the minecraft character
 	// ```character.loadSkin(imageUrl)```
 	var character	= tQuery.createMinecraftChar({
-		skinUrl	: 'images/3djesus.png'
+		skinUrl	: '../images/3djesus.png'
 	}).addTo(world); 
 	// add the model to our world
 	character.object3D('root').translateY(-0.5);
@@ -65,7 +66,7 @@
 
 	// initiate a spritesheet
 	var items	= new tQuery.Spritesheet({
-		url	: 'images/items/items.png',
+		url	: '../images/items/items.png',
 		imgW	: 256,
 		imgH	: 256,
 		spriteW	: 16,
@@ -76,26 +77,26 @@
 		var item	= items.createMesh(2, 6).scaleBy(1/2);
 		item.position(0,-9/35,6/35).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
 
-		var item	= items.createMesh(5, 8).scaleBy(1/2);
-		item.position(0,-12/35,0/35).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
+		var item	= items.createMesh(2, 4).scaleBy(1/2.5);
+		item.position(0,-9/35,7/35).rotation(Math.PI/2,Math.PI/2,Math.PI/4)
 		item.addTo(character.parts.armR);
 	});
 
 	// make the head move
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		character.parts.headGroup.rotation.x	= Math.sin(now*1.5)/3;
 		character.parts.headGroup.rotation.y	= Math.sin(now)/3;
 	}); 
 	
 	// make the legs move
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.legR.rotation.x	= 1.4 * Math.cos(angle);
 		character.parts.legL.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
 	});
 
 	// make the arms move
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 1/2 * now*Math.PI*2;
 		character.parts.armR.rotation.x	= 1.4 * Math.cos(angle + Math.PI);
 		character.parts.armL.rotation.x	= 1.4 * Math.cos(angle);

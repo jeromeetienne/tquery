@@ -1,0 +1,29 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tRenderer().setClearColor( 0xaaaaff, 1 );
+	world.removeCameraControls();
+	
+	// set the far so a small range
+	// - depth material is a value between [0, 1] between near/far
+	// - so object scale + camera near/far are heavily related
+	var tCamera	= world.tCamera();
+	tCamera.far	= 10;
+	tCamera.updateProjectionMatrix();
+	
+	// create an object with MeshDepthMaterial
+	var tMaterial	= new THREE.MeshDepthMaterial()
+	var object	= tQuery.createTorus(tMaterial).addTo(world)
+		.scaleBy(3)
+
+	// animate the object
+	world.hook(function(delta, now){
+		object.rotationY(0.3 * now * Math.PI*2)
+		var angle	= 0.1 * now * Math.PI*2;
+		object.positionX( Math.cos(angle) * 3 )
+		object.positionZ( Math.sin(angle) * 3 - 3 )
+	})	
+});
+</script></body>

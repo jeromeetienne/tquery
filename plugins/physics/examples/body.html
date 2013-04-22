@@ -14,7 +14,7 @@
 
 	world.tRenderer().shadowMapEnabled	= true;
 	world.tRenderer().shadowMapSoft		= true;
-	world.tRenderer().setClearColorHex( 0xffffff, 1 );
+	world.tRenderer().setClearColor( 0xffffff, 1 );
 
 	world.tCamera().position.set( 70, 40, 70 );
 	world.tCamera().lookAt( world.tScene().position );
@@ -75,7 +75,7 @@
 		mouseObject.position(forceCenter)
 	});
 	// apply Impulse force on the forceCenter
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		if( !forceCenter )	return;
 		var strength	= 50;
 		for(var i = 0; i < boxes.length; i++){

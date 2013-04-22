@@ -21,7 +21,7 @@ require(['tquery.webaudio', 'tquery.videos'], function(){
 		avTexture.sound().follow(object3D)
 	})
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.15 * now * Math.PI * 2;
 		object3D.positionX( Math.cos(angle)*2.5 );
 		object3D.positionZ( -2 + Math.sin(angle)*4 );

@@ -1,0 +1,31 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.mirrorplane.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.grassground'
+	, 'tquery.minecraft'
+	, 'tquery.objectcoord'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().defaultPageTitle().start();
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	tQuery.createSkymap('bridge2').addTo(world);
+	var torusKnot	= tQuery.createTorusKnot().addTo(world).position( 0, 0, 1)
+	world.hook(function(delta, now){
+		var angle	= 0.3 * now*Math.PI*2;
+		torusKnot.positionX( 1 * Math.cos(angle) )
+		torusKnot.positionZ( 1 * Math.sin(angle) )
+		torusKnot.rotationY( -angle + Math.PI/2 )
+	})
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var mirror	= tQuery.createMirrorPlane().addTo(world)
+})
+</script></body>

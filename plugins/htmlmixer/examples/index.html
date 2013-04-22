@@ -1,0 +1,92 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../../../vendor/three.js/examples/js/renderers/CSS3DRenderer.js'></script>
+<script src='../tquery.htmlmixer.js'></script>
+<body><style>
+body {
+	background-color: hotpink;
+}
+</style><script>
+require([ 'tquery.controls'
+	, 'tquery.minecraft'
+	, 'tquery.grassground'
+	, 'tquery.keyboard'
+], function(){
+	var world	= tQuery.createWorld().boilerplate({
+		cameraControls	: false
+	}).start();
+	
+	tQuery.world.camera().positionY(2.5).positionZ(4).lookAt(0,0, 0)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(30);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	// moving player
+	var player	= tQuery.createMinecraftPlayer().addTo(world);
+	world.hook(function(){
+		var keyboard	= tQuery.keyboard();
+		var input	= player.controls().input();
+		input.right	= keyboard.pressed('right');
+		input.up	= keyboard.pressed('up');
+		input.left	= keyboard.pressed('left');
+		input.down	= keyboard.pressed('down');
+	})
+	
+	var object3D	= player.character().object3D()
+	object3D.positionX(1.5).positionZ(1)
+		.rotationY(11*Math.PI/8)
+	var character	= player.character()
+
+	// character on the right
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/batman.png'
+	}).addTo(world);
+	character.object3D()
+		.positionX(0)
+		.positionY(-0.3)
+		.positionZ(1.5)
+		.rotationY(4*Math.PI/4)
+	character.parts.legL.rotation.x	= -Math.PI/2;
+	character.parts.legL.rotation.z = +30*Math.PI/180;
+	character.parts.legR.rotation.x	= -Math.PI/2;
+	character.parts.legR.rotation.z = -30*Math.PI/180;
+	character.parts.armR.rotation.x = -30*Math.PI/180;
+	character.parts.armL.rotation.x = -30*Math.PI/180;
+
+	// character on the left
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/mario.png'
+	}).addTo(world);
+	character.object3D()
+		.positionX(-0.5)
+		.positionY(-0.3)
+		.positionZ(1)
+		.rotationY(3*Math.PI/4)
+	character.parts.legL.rotation.x	= -Math.PI/2;
+	character.parts.legL.rotation.z = +30*Math.PI/180;
+	character.parts.legR.rotation.x	= -Math.PI/2;
+	character.parts.legR.rotation.z = -30*Math.PI/180;
+	character.parts.armR.rotation.x = -30*Math.PI/180;
+	character.parts.armL.rotation.x = -30*Math.PI/180;
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	//var url	= 'http://pacmaze.com/';
+	//var url	= 'http://jetienne.com/';
+	var url		= 'http://www.youtube.com/embed/FY4UQpu1ijM';
+	tQuery.createHTMLMixerPlane(url).addTo(world)
+		.positionY(0.5)
+});
+</script></body>

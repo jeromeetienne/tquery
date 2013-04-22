@@ -28,7 +28,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shad
 
 	// make it run only if it move		
 	var prevPosition= tQuery.createVector3();
-	world.loop().hook(function(){
+	world.hook(function(){
 		// compute velocity
 		var velocity	= character3D.position().clone().subSelf(prevPosition);
 		// pick animation based
@@ -57,7 +57,7 @@ require(['tquery.minecraft', 'tquery.skymap', 'tquery.grassground', 'tquery.shad
 		.shadowDarkness(0.6).shadowMap(1024,1024)
 		.shadowCamera(4, -4, 4, -4, 0.1, 10);
 	// light to follow character
-	world.loop().hook(function(){
+	world.hook(function(){
 		var delta	= tQuery.createVector3(-1,2,3);
 		var position	= character3D.position().clone().addSelf(delta);
 		light.position(position);

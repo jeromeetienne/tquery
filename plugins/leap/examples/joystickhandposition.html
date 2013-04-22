@@ -1,0 +1,35 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><div id="info">
+	<span id="result"></span>
+</div><script>
+require(['tquery.leap'], function(){
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+	var object	= tQuery.createAxis().addTo(world);
+	
+	// your code goes here
+
+	world.removeCameraControls();
+
+	world.camera().translateZ(3)
+	// add a lighting	
+	var controller	= new tQuery.LeapController();
+	var joystick	= tQuery.createLeapJoystickHandPosition({
+		controller	: controller
+	});
+	
+	tQuery.createSphere().addTo( joystick.object3D() )
+
+	setInterval(function(){
+		var outputEl	= document.getElementById('result');
+		outputEl.innerHTML	= '<b>Result:</b> '
+			+ ' dx:'+joystick.deltaX().toFixed(3)
+			+ ' dy:'+joystick.deltaY().toFixed(3)
+			+ '<br/>'
+			+ (joystick.right()	? ' right'	: '')
+			+ (joystick.up()	? ' up'		: '')
+			+ (joystick.left()	? ' left'	: '')
+			+ (joystick.down()	? ' down' 	: '');		
+	}, 1/30 * 1000);
+})
+</script></body>

@@ -39,7 +39,7 @@
 	canvas.style.width	= "100%";
 	canvas.style.height	= "100%";
 	document.body.appendChild(canvas);
-	world.loop().hook(function(){
+	world.hook(function(){
 		texture.loadContentsOf(sourceEl);
 		canvas.draw(texture)
 			//.swirl(canvas.width/2, canvas.height/2, 100, -2)

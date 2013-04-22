@@ -178,7 +178,7 @@ tQuery.Animation.prototype.start	= function(){
 	// init the loop callback
 	var startDate	= Date.now()/1000;
 	var duration	= this.duration();
-	this._$loopCb	= this._opts.world.loop().hook(function(){
+	this._$loopCb	= this._opts.world.hook(function(){
 		var age		= Date.now()/1000 - startDate;
 		var position	= this._buildPosition(age)
 		this._onUpdate(position)
@@ -198,6 +198,6 @@ tQuery.Animation.prototype.isRunning	= function(){
  * Stop the animation
 */
 tQuery.Animation.prototype.stop	= function(){
-	this._$loopCb	&& this._opts.world.loop().unhook(this._$loopCb);
+	this._$loopCb	&& this._opts.world.unhook(this._$loopCb);
 	this._$loopCb	= null;
 }

@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.domevent'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.enableDomEvent()
+
+	world.removeCameraControls()
+
+	// your code goes here
+	var object	= tQuery.createTorusKnot().addTo(world)
+	object.addDomEventBoundingBox();
+
+	// to make it visible
+	// object.domEventBoundingBox().visible(true)
+	
+	object.on('click', function(event){
+		console.log('notified', event)
+	})		
+});
+</script></body>

@@ -33,7 +33,7 @@
 	// Change the background color. This confusing line ensure the background of the
 	// 3D scene will be rendered as ```0x000000``` color, aka black. We set a black
 	// background to give an impression of night.
-	world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
+	world.tRenderer().setClearColor( 0x000000, world.tRenderer().getClearAlpha() );
 
 	// ## The Lights 
 
@@ -132,7 +132,7 @@
 	// the scene is rendered. Within this function, we will use ```tQuery.Keyboard```
 	// plugins to test the keyboard. if the key ```s``` is pressed, then use ```character.setSkin()```
 	// to change the skin of the character
-	world.loop().hook(function(){
+	world.hook(function(){
 		var keyboard	= tQuery.keyboard();	// get keyboard instance
 		if( keyboard.pressed("s") ){		// if the key 's' is pressed, change the skin
 			character.setSkin(Math.floor(Math.random()*5));

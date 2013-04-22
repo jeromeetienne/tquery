@@ -21,7 +21,7 @@
 
 
 		
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 return;
 		var radius	= 1;
 		var angle	= 0.1 * now * Math.PI * 2;
@@ -30,7 +30,7 @@ return;
 		ligthDir2.get(0).position.z	= Math.sin(angle) * radius;
 	})
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 return;
 		var radius	= 1;
 		var angle	= 0.3 * now * Math.PI * 2;
@@ -81,7 +81,7 @@ return;
 		.id('ball')
 		//.geometry().smooth().back()
 	
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.05 * now * Math.PI * 2;
 		object.rotationX(1.3*angle)
 		object.rotationY(  1*angle)

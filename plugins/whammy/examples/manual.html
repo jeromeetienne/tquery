@@ -12,7 +12,7 @@ require([], function(){
 	
 	var encoder	= new Whammy.Video(15);
 
-	world.loop().hook(function(){
+	world.hook(function(){
 		var canvas	= world.tRenderer().domElement;
 		encoder.add(canvas);
 	});

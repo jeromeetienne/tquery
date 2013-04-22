@@ -70,14 +70,14 @@ tQuery.RatamahattaMD2Character.prototype.attach	= function(world){
 	world	= world	|| tQuery.world;
 	this._attachedWorld	= world;
 	world.add( this.container() )
-	world.loop().hook(this._$loopCb);	
+	world.hook(this._$loopCb);	
 	return this;	// for chained API
 };
 
 tQuery.RatamahattaMD2Character.prototype.detach	= function(){
 	world	= world || this._attachedWorld;
 	world.remove(this.container())
-	world.loop().unhook(this._$loopCb);
+	world.unhook(this._$loopCb);
 	this._attachedWorld	= null;
 	return this;	// for chained API
 };

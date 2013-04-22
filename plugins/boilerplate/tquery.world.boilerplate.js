@@ -11,7 +11,7 @@ tQuery.World.registerInstance('boilerplate', function(opts){
 	domElement.style.padding	= "0";
 	domElement.style.overflow	= 'hidden';
 	this.appendTo(domElement);
-	this._renderer.setSize( domElement.offsetWidth, domElement.offsetHeight );
+	this.tRenderer().setSize( domElement.offsetWidth, domElement.offsetHeight );
 	
 	// add the boilerplate
 	this.addBoilerplate(opts);
@@ -32,6 +32,7 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	console.assert( element instanceof HTMLElement, ".pageTitle(element) needs a HTMLElement");
 	// set element.style
 	element.style.position	= "absolute";
+	element.style.top	= '0px'
 	element.style.width	= "100%";
 	element.style.textAlign	= "center";
 	element.style.fontWeight= "bolder";
@@ -41,6 +42,46 @@ tQuery.World.registerInstance('pageTitle', function(element){
 	// for chained API
 	return this;
 });
+
+/**
+ * define a default page title for plugins
+ */
+tQuery.World.registerInstance('defaultPageTitle', function(){
+	var location	= window.location;
+	var matches	= location.pathname.match(/^\/plugins\/([^/]+)\//);
+	var isPlugin	= matches ? true : false;
+	// create the element
+	var element	= document.createElement('div');
+	if( isPlugin ){
+		var pluginName	= isPlugin ? matches[1] : null;
+		element.innerHTML= [
+			'Example for <a href="https://github.com/jeromeetienne/tquery/tree/dev/plugins/'
+				+pluginName
+				+'#readme" target="_blank">'
+				+'tQuery.'+pluginName
+				+'</a> plugin - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="../../../" target="_blank">tQuery API</a>',
+			'<br/>',
+			'Try it in a ',
+			'<a href="../../../www/live/editor/#U/../../..',
+			location.pathname+'" target="_blank">live editor</a>'
+		].join('\n');
+	}else{
+		element.innerHTML= [
+			'Example of tQuery - ',
+			'<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a> thru ',
+			'<a href="../../../" target="_blank">tQuery API</a>',
+		].join('\n');						
+	}
+	document.body.appendChild(element)
+
+	// set it up as page Title
+	this.pageTitle(element)
+	// for chained API
+	return this;
+});
+
 
 tQuery.World.registerInstance('devicePixelRatio', function(ratio){
 	// change devicePixelRatio
@@ -65,7 +106,7 @@ tQuery.World.registerInstance('addBoilerplate', function(opts){
 		cameraControls	: true,
 		windowResize	: true,
 		screenshot	: true,
-		fullscreen	: true
+		fullscreen	: false
 	});
 	// get the context
 	var ctx	= {};
@@ -90,7 +131,7 @@ tQuery.World.registerInstance('addBoilerplate', function(opts){
 		ctx.loopStats	= function(){
 			ctx.stats.update();
 		};
-		this.loop().hook(ctx.loopStats);		
+		this.hook(ctx.loopStats);		
 	}
 
 	// create a camera contol
@@ -149,7 +190,7 @@ tQuery.World.registerInstance('removeBoilerplate', function(){
 
 	// remove stats.js
 	ctx.stats		&& document.body.removeChild(ctx.stats.domElement );
-	ctx.stats		&& this.loop().unhook(ctx.loopStats);
+	ctx.stats		&& this.unhook(ctx.loopStats);
 	// remove camera
 	ctx.cameraControls	&& this.removeCameraControls()
 	// stop windowResize

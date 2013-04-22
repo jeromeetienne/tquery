@@ -1,16 +1,21 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
 <script src='../vendor/webrtc.io-client/webrtc.io.js'></script>
-<script src='../tquery.webrtc.js'></script>
 <body><script>
 require(['tquery.videos'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 
+	world.removeCameraControls();
+
 	rtc.createStream({'video': true, 'audio': false}, function(mediaStream){
+		var url		= URL.createObjectURL(mediaStream);
+		var texture	= tQuery.createVideoTexture(url);
 		tQuery.createPlane().addTo(world)
 			.setBasicMaterial()
-				.map(mediaStream)
+				.map(texture)
 				.back()
+			.addClass('screen')
+		reflowScreens();
 	}, function(){
 		console.log('createStream failed', arguments)
 	});
@@ -20,18 +25,30 @@ require(['tquery.videos'], function(){
 	var serverUrl	= "ws://localhost:8080/";
 	rtc.connect(serverUrl, room);
         rtc.on('add remote stream', function(mediaStream, socketId) {
+		var url		= URL.createObjectURL(mediaStream);
+		var texture	= tQuery.createVideoTexture(url);
 		tQuery.createPlane().addTo(world)
 			.addClass('socketId-'+socketId)
-			.positionX(2 * Math.random()-0.5)
-			.positionY(2 * Math.random()-0.5)
+			.addClass('screen')
 			.setBasicMaterial()
-				.map(mediaStream)
-				.back()     	
+				.map(texture)
+				.back()
+		reflowScreens();	
         });
+
 	rtc.on('disconnect stream', function(socketId) {
 		var nRemote	= tQuery('.socketId-'+socketId).length;
 		console.log('remove',socketId,'currently', nRemote);
 		tQuery('.socketId-'+socketId).detach();
+		// TODO stop the video
 	});
+	
+	function reflowScreens(){
+		var screens	= tQuery('.screen');
+		var offsetX	= -(screens.length - 1)/2
+		screens.each(function(tObject3D, idx){
+			tObject3D.position.x	= idx + offsetX;
+		})
+	}
 });
 </script></body>

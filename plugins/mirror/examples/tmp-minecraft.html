@@ -1,0 +1,106 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.checkerboard'
+	, 'tquery.minecraft'
+	, 'tquery.videos'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.camera().positionZ(1)
+	
+	tQuery.createSkymap('mars').addTo(world);
+
+	var container	= tQuery.createObject3D().addTo(world)
+		.translateY(-0.5)
+
+	tQuery.createCheckerboard({
+		segmentsW	: 10,
+		segmentsH	: 10
+	}).addTo(container).scaleBy(10);
+
+	var character	=tQuery.createMinecraftChar().addTo(container)
+	var character3D	= character.object3D()
+	character3D.translateZ(1)
+	
+
+		//////////////////////////////////////////////////////////////////////////
+	// user controls on keyboard						//
+	//////////////////////////////////////////////////////////////////////////
+	tQuery.createMinecraftCharKeyboard2({
+		object3D	: character3D
+	});
+
+	var bodyAnims	= new tQuery.MinecraftCharAnimations(character);
+	var prevPosition	= tQuery.createVector3();
+	world.hook(function(detla, now){
+		var velocity	= character3D.position().clone().sub(prevPosition);
+		if( velocity.length() ){
+			bodyAnims.start('run');
+		}else{
+			bodyAnims.start('stand');
+		}
+		// update player.prevPosition/player.prevRotation
+		prevPosition.copy( character3D.position() )
+	});
+	
+	var texture	= tQuery.createWebcamTexture();
+	//var texture	= tQuery.createTVSnowTexture();
+	//var texture	= tQuery.createVideoTexture('../../assets/videos/sintel.ogv');
+	var screen	= tQuery.createPlane().addTo(character3D)
+		.setBasicMaterial()
+			.map(texture)
+			.back();
+
+	screen.addTo(character.object3D('headGroup'))
+		.scale(8/32)
+		.positionZ(4/32+0.01)
+		.positionY(4/32)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+		
+	
+	var textureW	= 1024;
+	var textureH	= 1024;
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
+	});
+	
+	var mirror	= tQuery.createPlane().addTo(world)
+		.scaleX(1)
+		.scaleY(textureH/textureW)
+		.rotateY(Math.PI)
+		.setBasicMaterial()
+			.map(rtTexture)
+			.side(THREE.BackSide)
+			.back()
+
+
+	var tPlaneCam	= new THREE.PerspectiveCamera(20, textureW/textureH, 0.0001, 10000);
+	var mirrorCamera= tQuery(tPlaneCam).addTo(world)
+	
+	// Render the scene
+	world.hook(function(delta, now){
+		var tRenderer	= world.tRenderer();
+		tRenderer.render(world.tScene(), mirrorCamera.get(0), rtTexture, true);	
+	})
+		
+	world.hook(function(delta, now){
+		mirrorCamera.lookAt(0,0,0)
+		mirrorCamera.positionX( world.camera().positionX() )
+		mirrorCamera.positionY( world.camera().positionY() )
+		mirrorCamera.positionZ(-world.camera().positionZ() )
+		
+		var tCamera	= mirrorCamera.get(0)
+		var distance	= tCamera.position.length();
+		tCamera.fov	= Math.atan2(1/tCamera.aspect, distance)*180/Math.PI;
+		tCamera.near	= distance;
+		tCamera.updateProjectionMatrix();
+	})
+})
+</script></body>

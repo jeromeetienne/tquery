@@ -25,7 +25,7 @@
 	geometry.toMesh().id('origSphere').translateX(1).addTo(world);
 
 	// animate the object
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.5 * now * Math.PI * 2;
 		tQuery('#origSphere').positionX( 0.6 + (1-Math.sin(angle))/4 );
 	});

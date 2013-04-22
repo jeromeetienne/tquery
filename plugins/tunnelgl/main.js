@@ -72,7 +72,7 @@ var playerZ		= 0;
 var playerAz		= 0;
 var playerTitleAngle	= 0;
 
-world.loop().hook(function(deltaTime, time){
+world.hook(function(deltaTime, time){
 	// handle normal player speed
 	playerZ	+= deltaTime * 5;
 
@@ -116,7 +116,7 @@ true && tunnel.geometry().vertexAnimation({
 });
 
 // move the camera 
-true && world.loop().hook(function(deltaTime, time){
+true && world.hook(function(deltaTime, time){
 	var radius	= 0.2;
 	var origin	= {
 		x	: Math.cos(playerAz)*radius,
@@ -130,7 +130,7 @@ true && world.loop().hook(function(deltaTime, time){
 });
 
 // move the player 
-true && world.loop().hook(function(deltaTime, time){
+true && world.hook(function(deltaTime, time){
 	var radius	= 0.4;
 	var origin	= {
 		x	: Math.cos(playerAz)*radius,
@@ -146,7 +146,7 @@ true && world.loop().hook(function(deltaTime, time){
 // TODO make all this happen at the geometry level
 
 // set clearColor
-world.tRenderer().setClearColorHex( 0x000000, 1 );
+world.tRenderer().setClearColor( 0x000000, 1 );
 
 // add a fog
 world.addFogExp2({ density : 0.15 });

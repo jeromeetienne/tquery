@@ -1,0 +1,107 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<!-- css for bootstrap -->
+<link href="../vendor/bootstrap/css/bootstrap-cyborg.css" rel="stylesheet">
+<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<body>
+<style type="text/css">
+	/* Main marketing message and sign up button */
+	.jumbotron {
+		margin: 120px 0;
+		text-align: center;
+		color: white;
+	}
+	.jumbotron h1 {
+		font-size: 100px;
+		line-height: 1;
+	}
+	.jumbotron .btn {
+		font-size: 42px;
+		padding: 28px 48px;
+	}
+	.redglow {
+		text-shadow: 0 0 0.2em #F66, 0 0 0.2em #F22, 0 0 0.4em #F22;
+	}
+	strong {
+		text-shadow: 0 0 0.2em #F66, 0 0 0.2em #F22, 0 0 0.4em #F22;		
+	}
+	.btn:hover {
+		text-shadow: 0 0 0.2em #F66, 0 0 0.2em #F22, 0 0 0.4em #F22;		
+	}
+	/* put image as background */
+/*	body { 
+		background: url(images/earthmoonsun-small.jpg) no-repeat center center fixed; 
+		background-size: cover;
+	}
+*/</style>
+<div class='container'>
+	<!-- Jumbotron -->
+	<div class="jumbotron">
+		<h1><strong>Pacmaze</strong></h1>
+		<p class="lead">
+			You are a <strong class='redglow'>Pacman</strong> trapped in a maze!
+		</p>
+		<p class="lead">
+			Use <strong>Arrows</strong> to move player.
+		</p>
+		<p class="lead">
+			Use <strong>PageUP/PageDown</strong> to move the camera.
+		</p>
+		<hr/>
+	        <div class="row btn-group btn-group-horizontal">
+			<a href='http://mmo3d.jit.su/montain/'
+				class="icon-play btn btn-large btn-primary">
+				Play
+			</a>
+			<a href="#myModalTutorial" role="button" data-toggle="modal" 
+				class="icon-info-sign btn btn-large  btn-info">
+				Tutorial
+			</a>
+			<a href="#myModalAbout" role="button" data-toggle="modal" 
+				class="icon-question-sign btn btn-large btn-info">
+				About
+			</a>
+		</div>
+	</div>
+	<!-- modal About -->
+	<div id="myModalAbout" class="modal hide fade" tabindex="-1" role="dialog" 
+		aria-labelledby="myModalAboutLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			<h3 id="myModalAboutLabel">What about PacMaze</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				One fine body
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+				Close
+			</button>
+		</div>
+	</div>
+	<!-- modal Tutorial -->
+	<div id="myModalTutorial" class="modal hide fade" tabindex="-1" role="dialog" 
+		aria-labelledby="myModalTutorialLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			<h3 id="myModalTutorialLabel">How to play PacMaze</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				With a lot of fun
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+				Close
+			</button>
+		</div>
+	</div>
+
+</div> <!-- /container -->
+    
+<!-- js for bootstrap -->
+<script src='../vendor/jquery/jquery.min.js'></script>
+<script src='../vendor/bootstrap/js/bootstrap.min.js'></script>
+</body>

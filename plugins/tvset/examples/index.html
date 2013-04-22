@@ -1,0 +1,15 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../../../vendor/three.js/examples/js/loaders/ColladaLoader.js'></script>
+<script src="../tquery.tvset.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+
+	tQuery.createAmbientLight().addTo(world).color('white');
+	tQuery.createDirectionalLight().addTo(world).position(1,1,-1).color('white').intensity(2);
+
+	// your code goes here
+	tQuery.createTvSet().addTo(world)
+</script></body>

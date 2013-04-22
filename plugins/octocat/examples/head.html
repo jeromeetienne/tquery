@@ -1,0 +1,50 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.loaders'
+	, 'tquery.lightings'
+	, 'tquery.csg'
+	, 'tquery.skymap'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+//	tQuery.world.camera().positionZ(0.8)
+	// your code goes here
+	tQuery.createLighting3Points().addTo(world)
+	var loader = new THREE.STLLoader();
+	loader.load( '../models/octocat_head.stl' );
+	loader.addEventListener('load', function(event){
+		console.log('event', event)
+		var tGeometry	= event.content;
+		var tMaterial	= new THREE.MeshNormalMaterial();
+		var mesh	= tQuery(tGeometry, tMaterial)
+			.geometry()
+				.center()
+				.normalize()
+				.back()
+		console.log('size', mesh.geometry().size())
+
+		var cubeCutter	= tQuery.createCube().geometry().translateY(-0.5).back()
+		var headFront	= mesh.intersect(cubeCutter)
+			.geometry()
+				.center()
+				.back()
+
+		var cubeCutter	= tQuery.createCube().geometry().translateY(0.5).back()
+		var headBack	= mesh.intersect(cubeCutter)
+			.addClass('headBack')
+			.rotationY(Math.PI)
+			.positionZ(-0.1599).positionY(-0.0053)
+			.geometry()
+				.center()
+				.back()
+		// console.log(headBack)
+
+
+		var container	= tQuery.createObject3D().addTo(world)
+			.rotationY(-Math.PI/2)
+		headBack.addTo(container)
+		headFront.addTo(container)
+	});
+});
+</script></body>

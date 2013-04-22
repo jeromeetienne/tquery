@@ -7,9 +7,11 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.blueskybackground": "plugins/blueskybackground/tquery.addblueskybackground",
 			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
+			"tquery.colornames": "plugins/colornames/tquery.colornames",
 			"tquery.controls": "plugins/controls/tquery.controlstween",
 			"tquery.csg": "plugins/csg/tquery.geometry.csg",
 			"tquery.datguituner": "plugins/datguituner/tquery.datguituner",
@@ -22,13 +24,16 @@ requirejs.config({
 			"tquery.headtrackr": "plugins/headtrackr/tquery.headtrackr",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
+			"tquery.leap": "plugins/requirejs/confrequire/leap.initrequire",
 			"tquery.lensflare": "plugins/requirejs/confrequire/lensflare.initrequire",
 			"tquery.shadowmap": "plugins/shadowmap/tquery.light.shadowmap",
+			"tquery.lightings": "plugins/lightings/tquery.lightings",
 			"tquery.lightsaber": "plugins/lightsaber/tquery.lightsaber",
 			"tquery.linkify": "plugins/linkify/tquery.mesh.linkify",
-			"tquery.loaders": "plugins/loaders/tquery.loaders",
+			"tquery.loaders": "three.js/examples/js/loaders/BinaryLoader",
 			"tquery.md2character": "plugins/requirejs/confrequire/md2character.initrequire",
 			"tquery.minecraft": "plugins/requirejs/confrequire/minecraft.initrequire",
+			"tquery.mirror": "plugins/mirror/tquery.mirrorplane",
 			"tquery.modifiers": "plugins/modifiers/tquery.geometry.smooth",
 			"tquery.montainarena": "plugins/montainarena/tquery.montainarena",
 			"tquery.objectcoord": "plugins/objectcoord/tquery.object3d.coordinate",
@@ -37,18 +42,24 @@ requirejs.config({
 			"tquery.playerinput": "plugins/playerinput/tquery.playerinput.keyboard",
 			"tquery.poolball": "plugins/poolball/tquery.poolball",
 			"tquery.pproc": "plugins/pproc/tquery.effectcomposer",
+			"tquery.renderers": "three.js/examples/js/renderers/CSS3DRenderer",
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
-			"tquery.skymap": "plugins/skymap/tquery.skymap",
+			"tquery.simpletree": "plugins/simpletree/tquery.simpletree",
+			"tquery.skymap": "plugins/requirejs/confrequire/skymap.initrequire",
 			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
-			"tquery.tweenjs": "plugins/tweenjs/tquery.tween",
+			"tquery.textureutils": "plugins/textureutils/tquery.textureutils",
+			"tquery.tvset": "plugins/tvset/tquery.tvset",
+			"tquery.tween": "plugins/tween/tquery.tween",
+			"tquery.vertexanimation": "plugins/vertexanimation/tquery.geometry.vertexanimation",
 			"tquery.videos": "plugins/videos/tquery.createvideotexture",
 			"tquery.virtualjoystick": "plugins/virtualjoystick/vendor/virtualjoystick",
 			"tquery.webaudio": "plugins/requirejs/confrequire/webaudio.initrequire",
 			"webgl-inspector": "plugins/requirejs/confrequire/webglinspector.initrequire",
 			"domReady": "plugins/requirejs/vendor/domReady",
+			"tquery.webrtcio": "plugins/webrtcio/vendor/webrtc.io-client/webrtc.io",
 			"tquery.whammy": "plugins/requirejs/confrequire/whammy.initrequire"
 		}
 	},
@@ -75,18 +86,18 @@ requirejs.config({
 		],
 		"plugins/controls/tquery.controlstween": [
 			"plugins/controls/tquery.controlswrapper",
-			"three.js/controls/FirstPersonControls",
-			"three.js/controls/OrbitControls",
-			"three.js/controls/PointerLockControls",
-			"three.js/controls/TrackballControls",
-			"three.js/controls/FlyControls",
-			"three.js/controls/PathControls",
-			"three.js/controls/RollControls"
+			"three.js/examples/js/controls/FirstPersonControls",
+			"three.js/examples/js/controls/OrbitControls",
+			"three.js/examples/js/controls/PointerLockControls",
+			"three.js/examples/js/controls/TrackballControls",
+			"three.js/examples/js/controls/FlyControls",
+			"three.js/examples/js/controls/PathControls",
+			"three.js/examples/js/controls/RollControls"
 		],
 		"plugins/csg/tquery.geometry.csg": [
 			"plugins/csg/csg",
 			"plugins/csg/ThreeCSG",
-			"plugins/csg/tquery.object3d.csg"
+			"plugins/csg/tquery.mesh.csg"
 		],
 		"plugins/datguituner/tquery.datguituner": [
 			"plugins/assets/vendor/dat.gui/dat.gui",
@@ -107,19 +118,29 @@ requirejs.config({
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"
 		],
+		"plugins/requirejs/confrequire/leap.initrequire": [
+			"plugins/leap/vendor/leap",
+			"plugins/leap/tquery.leapcontroller",
+			"plugins/leap/tquery.leapjoystickhandposition",
+			"plugins/leap/tquery.leapviewercircle",
+			"plugins/leap/tquery.leapviewerhandpalm",
+			"plugins/leap/tquery.leapviewerhandsphere",
+			"plugins/leap/tquery.leapviewerpointable",
+			"plugins/leap/tquery.leapviewerswipe",
+			"plugins/leap/tquery.leapviewertap"
+		],
 		"plugins/linkify/tquery.mesh.linkify": [
 			"tquery.domevent"
 		],
-		"plugins/loaders/tquery.loaders": [
-			"three.js/loaders/BinaryLoader",
-			"three.js/loaders/MTLLoader",
-			"three.js/loaders/OBJMTLLoader",
-			"three.js/loaders/STLLoader",
-			"three.js/loaders/VTKLoader",
-			"three.js/loaders/ColladaLoader",
-			"three.js/loaders/OBJLoader",
-			"three.js/loaders/PDBLoader",
-			"three.js/loaders/UTF8Loader"
+		"three.js/examples/js/loaders/BinaryLoader": [
+			"three.js/examples/js/loaders/MTLLoader",
+			"three.js/examples/js/loaders/OBJMTLLoader",
+			"three.js/examples/js/loaders/STLLoader",
+			"three.js/examples/js/loaders/VTKLoader",
+			"three.js/examples/js/loaders/ColladaLoader",
+			"three.js/examples/js/loaders/OBJLoader",
+			"three.js/examples/js/loaders/PDBLoader",
+			"three.js/examples/js/loaders/UTF8Loader"
 		],
 		"plugins/requirejs/confrequire/md2character.initrequire": [
 			"plugins/md2character/tquery.md2character",
@@ -137,15 +158,12 @@ requirejs.config({
 			"plugins/md2character/tquery.md2character.ratamahatta"
 		],
 		"plugins/requirejs/confrequire/minecraft.initrequire": [
-			"plugins/minecraft/tquery.midikeytween",
+			"plugins/minecraft/tquery.minecraftplayer",
 			"plugins/minecraft/tquery.minecraftchar",
-			"plugins/minecraft/tquery.minecraftchar.keyboard2",
-			"tquery.keyboard",
 			"plugins/minecraft/tquery.minecraftcharcontrols",
-			"plugins/minecraft/tquery.camerafpscontrols",
-			"plugins/minecraft/tquery.spritesheet",
 			"plugins/minecraft/tquery.minecraftcharanimations",
-			"plugins/minecraft/tquery.minecraftcharheadanimations"
+			"plugins/minecraft/tquery.minecraftcharheadanimations",
+			"plugins/minecraft/tquery.spritesheet"
 		],
 		"plugins/minecraft/tquery.minecraftcharanimations": [
 			"plugins/minecraft/tquery.animations"
@@ -156,47 +174,68 @@ requirejs.config({
 		"plugins/minecraft/tquery.animations": [
 			"plugins/minecraft/tquery.animation"
 		],
+		"plugins/mirror/tquery.mirrorplane": [
+			"tquery.objectcoord",
+			"plugins/mirror/tquery.mirrorball"
+		],
 		"plugins/modifiers/tquery.geometry.smooth": [
-			"three.js/modifiers/ExplodeModifier",
-			"three.js/modifiers/SubdivisionModifier",
-			"three.js/modifiers/TessellateModifier"
+			"three.js/examples/js/modifiers/ExplodeModifier",
+			"three.js/examples/js/modifiers/SubdivisionModifier",
+			"three.js/examples/js/modifiers/TessellateModifier"
 		],
 		"plugins/physics/tquery.physijs": [
 			"plugins/physics/vendor/physijs/physi"
 		],
 		"plugins/requirejs/confrequire/planets.initrequire": [
-			"plugins/planets/tquery.createplanet"
+			"plugins/planets/tquery.createplanet",
+			"plugins/planets/tquery.createstarfield"
 		],
 		"plugins/playerinput/tquery.playerinput.keyboard": [
 			"tquery.keyboard",
 			"plugins/playerinput/tquery.playerinput",
-			"plugins/playerinput/tquery.playerinput.virtualjoystick"
+			"plugins/playerinput/tquery.playerinput.viewer",
+			"plugins/playerinput/tquery.playerinput.virtualjoystick",
+			"plugins/playerinput/tquery.playerinput.deviceorientation",
+			"plugins/playerinput/tquery.playerinput.leaphandposition"
 		],
 		"plugins/playerinput/tquery.playerinput.virtualjoystick": [
 			"tquery.virtualjoystick",
 			"plugins/playerinput/tquery.playerinput"
 		],
+		"plugins/playerinput/tquery.playerinput.deviceorientation": [
+			"tquery.deviceorientation",
+			"plugins/playerinput/tquery.playerinput"
+		],
+		"plugins/playerinput/tquery.playerinput.leaphandposition": [
+			"tquery.leap",
+			"plugins/playerinput/tquery.playerinput"
+		],
 		"plugins/pproc/tquery.effectcomposer": [
-			"three.js/shaders/BleachBypassShader",
-			"three.js/shaders/BlendShader",
-			"three.js/shaders/CopyShader",
-			"three.js/shaders/ColorifyShader",
-			"three.js/shaders/ConvolutionShader",
-			"three.js/shaders/FilmShader",
-			"three.js/shaders/FXAAShader",
-			"three.js/shaders/HorizontalBlurShader",
-			"three.js/shaders/SepiaShader",
-			"three.js/shaders/VerticalBlurShader",
-			"three.js/shaders/VignetteShader",
-			"three.js/postprocessing/EffectComposer",
-			"three.js/postprocessing/BloomPass",
-			"three.js/postprocessing/DotScreenPass",
-			"three.js/postprocessing/FilmPass",
-			"three.js/postprocessing/MaskPass",
-			"three.js/postprocessing/RenderPass",
-			"three.js/postprocessing/SavePass",
-			"three.js/postprocessing/ShaderPass",
-			"three.js/postprocessing/TexturePass"
+			"three.js/examples/js/shaders/BleachBypassShader",
+			"three.js/examples/js/shaders/BlendShader",
+			"three.js/examples/js/shaders/CopyShader",
+			"three.js/examples/js/shaders/ColorifyShader",
+			"three.js/examples/js/shaders/ConvolutionShader",
+			"three.js/examples/js/shaders/FilmShader",
+			"three.js/examples/js/shaders/FXAAShader",
+			"three.js/examples/js/shaders/HorizontalBlurShader",
+			"three.js/examples/js/shaders/SepiaShader",
+			"three.js/examples/js/shaders/VerticalBlurShader",
+			"three.js/examples/js/shaders/VignetteShader",
+			"three.js/examples/js/postprocessing/EffectComposer",
+			"three.js/examples/js/postprocessing/BloomPass",
+			"three.js/examples/js/postprocessing/DotScreenPass",
+			"three.js/examples/js/postprocessing/FilmPass",
+			"three.js/examples/js/postprocessing/MaskPass",
+			"three.js/examples/js/postprocessing/RenderPass",
+			"three.js/examples/js/postprocessing/SavePass",
+			"three.js/examples/js/postprocessing/ShaderPass",
+			"three.js/examples/js/postprocessing/TexturePass"
+		],
+		"three.js/examples/js/renderers/CSS3DRenderer": [
+			"three.js/examples/js/renderers/SoftwareRenderer",
+			"three.js/examples/js/renderers/SVGRenderer",
+			"three.js/examples/js/renderers/WebGLDeferredRenderer"
 		],
 		"plugins/shadowmap/tquery.light.shadowmap": [
 			"plugins/shadowmap/tquery.world.shadowmap"
@@ -208,7 +247,8 @@ requirejs.config({
 			"plugins/simplemaze/tquery.simplemaze.pathfinding",
 			"plugins/simplemaze/vendor/pathfinding-browser"
 		],
-		"plugins/skymap/tquery.skymap": [
+		"plugins/requirejs/confrequire/skymap.initrequire": [
+			"plugins/skymap/tquery.skymap",
 			"plugins/skymap/tquery.cubetexture"
 		],
 		"plugins/statsplus/tquery.statsplus": [
@@ -230,8 +270,16 @@ requirejs.config({
 			"plugins/text/fonts/droid/droid_sans_bold.typeface",
 			"plugins/text/fonts/droid/droid_serif_bold.typeface"
 		],
-		"plugins/tweenjs/tquery.tween": [
-			"plugins/tweenjs/vendor/Tween"
+		"plugins/textureutils/tquery.textureutils": [
+			"plugins/textureutils/tquery.material.texturescrolling"
+		],
+		"plugins/tvset/tquery.tvset": [
+			"three.js/examples/js/loaders/ColladaLoader"
+		],
+		"plugins/tween/tquery.tween": [
+			"plugins/tween/vendor/Tween",
+			"plugins/tween/tquery.miditween",
+			"plugins/tween/tquery.lineargradient"
 		],
 		"plugins/videos/tquery.createvideotexture": [
 			"plugins/videos/tquery.audiovideotexture",

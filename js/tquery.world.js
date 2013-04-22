@@ -31,18 +31,18 @@ tQuery.World	= function(opts)
 	console.assert( !tQuery.word );
 	tQuery.world	= this;
 
-	this._autoRendering	= true;
+	this._autoRendering	= opts.autoRendering;
 	
 	// create a scene
-	this._scene	= opts.scene	||(new THREE.Scene());
+	this._tScene	= opts.scene	||(new THREE.Scene());
 
  	// create a camera in the scene
 	if( !opts.camera ){
-		this._camera	= new THREE.PerspectiveCamera(35, opts.renderW / opts.renderH, 0.01, 10000 );
-		this._camera.position.set(0, 0, 3);
-		this._scene.add(this._camera);
+		this._tCamera	= new THREE.PerspectiveCamera(45, opts.renderW / opts.renderH, 0.01, 10000 );
+		this._tCamera.position.set(0, 0, 3);
+		this._tScene.add(this._tCamera);
 	}else{
-		this._camera	= opts.camera;
+		this._tCamera	= opts.camera;
 	}
 	
 	// create the loop
@@ -55,20 +55,20 @@ tQuery.World	= function(opts)
 
 	// create a renderer
 	if( opts.renderer ){
-		this._renderer	= opts.renderer;
+		this._tRenderer	= opts.renderer;
 	}else if( tQuery.World.hasWebGL() ){
-		this._renderer	= new THREE.WebGLRenderer({
+		this._tRenderer	= new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
 	}else if( !opts.webGLNeeded ){
-		this._renderer	= new THREE.CanvasRenderer();
+		this._tRenderer	= new THREE.CanvasRenderer();
 	}else{
 		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
-	this._renderer.setClearColorHex( 0xBBBBBB, 1 );
-	this._renderer.setSize( opts.renderW, opts.renderH );
+	this._tRenderer.setClearColor( 0xBBBBBB, 1 );
+	this._tRenderer.setSize( opts.renderW, opts.renderH );
 };
 
 // make it pluginable
@@ -87,11 +87,11 @@ tQuery.World.prototype.destroy	= function(){
 	this._loop.unhookOnRender(this._$loopCb);
 	// destroy the loop
 	this._loop.destroy();
-	// remove this._cameraControls if needed
+	// remove this._tCameraControls if needed
 	this.removeCameraControls();
 	// remove renderer element
-	var parent	= this._renderer.domElement.parentElement;
-	parent	&& parent.removeChild(this._renderer.domElement);
+	var parent	= this._tRenderer.domElement.parentElement;
+	parent	&& parent.removeChild(this._tRenderer.domElement);
 	
 	// clear the global if needed
 	if( tQuery.world === this )	tQuery.world = null;
@@ -154,12 +154,12 @@ tQuery.World.prototype._addGetWebGLMessage	= function(parent)
 // TODO why not a getter/setter here
 tQuery.World.prototype.setCameraControls	= function(control){
 	if( this.hasCameraControls() )	this.removeCameraControls();
-	this._cameraControls	= control;
+	this._tCameraControls	= control;
 	return this;	// for chained API
 };
 
 tQuery.World.prototype.getCameraControls	= function(){
-	return this._cameraControls;
+	return this._tCameraControls;
 };
 
 /**
@@ -168,7 +168,7 @@ tQuery.World.prototype.getCameraControls	= function(){
  */
 tQuery.World.prototype.removeCameraControls	= function(){
 	if( this.hasCameraControls() === false )	return this;
-	this._cameraControls	= undefined;
+	this._tCameraControls	= undefined;
 	return this;	// for chained API
 };
 
@@ -177,7 +177,7 @@ tQuery.World.prototype.removeCameraControls	= function(){
  * @return {Boolean} true if there is, false otherwise
  */
 tQuery.World.prototype.hasCameraControls	= function(){
-	return this._cameraControls !== undefined ? true : false;
+	return this._tCameraControls !== undefined ? true : false;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -193,10 +193,10 @@ tQuery.World.prototype.add	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
-			this._scene.add(object3d)			
+			this._tScene.add(object3d)			
 		}.bind(this));
 	}else if( object3d instanceof THREE.Object3D ){
-		this._scene.add(object3d)		
+		this._tScene.add(object3d)		
 	}else	console.assert(false, "invalid type");
 	// for chained API
 	return this;
@@ -211,10 +211,10 @@ tQuery.World.prototype.remove	= function(object3d)
 {
 	if( object3d instanceof tQuery.Object3D ){
 		object3d.each(function(object3d){
-			this._scene.remove(object3d)
+			this._tScene.remove(object3d)
 		}.bind(this));
 	}else if( object3d instanceof THREE.Object3D ){
-		this._scene.remove(object3d)
+		this._tScene.remove(object3d)
 	}else	console.assert(false, "invalid type");
 	// for chained API
 	return this;
@@ -227,7 +227,7 @@ tQuery.World.prototype.remove	= function(object3d)
  */
 tQuery.World.prototype.appendTo	= function(domElement)
 {
-	domElement.appendChild(this._renderer.domElement)
+	domElement.appendChild(this._tRenderer.domElement)
 	// for chained API
 	return this;
 }
@@ -247,21 +247,26 @@ tQuery.World.prototype.stop	= function(){
 	return this;	// for chained API
 }
 
-tQuery.World.prototype.loop	= function(){ return this._loop;	}
+/**
+ * alias on world.loop().hook()
+ */
+tQuery.World.prototype.hook	= function(priority, callback){
+	return this._loop.hook(priority, callback);
+}
 
-tQuery.World.prototype.tRenderer= function(){ return this._renderer;	}
-tQuery.World.prototype.tScene	= function(){ return this._scene;	}
-tQuery.World.prototype.tCamera	= function(){ return this._camera;	}
+/**
+ * alias on world.loop().unhook()
+ */
+tQuery.World.prototype.unhook	= function(priority, callback){
+	return this._loop.unhook(priority, callback);
+}
 
-
-// backward compatible functions to remove
-tQuery.World.prototype.renderer	= function(){  console.trace();console.warn("world.renderer() is ovbslete, use .tRenderer() instead");
-						return this._renderer;	}
-tQuery.World.prototype.camera	= function(){ console.trace();console.warn("world.camera() is obsolete, use .tCamerar() instead");
-						return this._camera;	}
-tQuery.World.prototype.scene	= function(){ console.trace();console.warn("world.scene() is obsolete, use .tScene() instead");
-						return this._scene;	}
-tQuery.World.prototype.get	= function(){ return this._scene;	}
+tQuery.World.prototype.loop	= function(){ return this._loop;		}
+tQuery.World.prototype.tRenderer= function(){ return this._tRenderer;		}
+tQuery.World.prototype.tScene	= function(){ return this._tScene;		}
+tQuery.World.prototype.tCamera	= function(){ return this._tCamera;		}
+tQuery.World.prototype.scene	= function(){ return tQuery(this._tScene);	}
+tQuery.World.prototype.camera	= function(){ return tQuery(this._tCamera);	}
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -277,7 +282,7 @@ tQuery.World.prototype.autoRendering	= function(value){
 tQuery.World.prototype.render	= function(delta)
 {
 	// update the cameraControl
-	if( this.hasCameraControls() )	this._cameraControls.update(delta);
+	if( this.hasCameraControls() )	this._tCameraControls.update(delta);
 	// render the scene 
-	if( this._autoRendering )	this._renderer.render( this._scene, this._camera );
+	if( this._autoRendering )	this._tRenderer.render( this._tScene, this._tCamera );
 }

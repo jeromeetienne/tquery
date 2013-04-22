@@ -30,7 +30,7 @@ tQuery.World.registerInstance('enablePhysics', function(opts){
 	// TODO use tQuery.data for that
 	tScene._xScene	= new Physijs.xScene(opts.xScene);
 	
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		tScene._xScene.simulate(delta, opts.maxSteps);
 	}); 
 })

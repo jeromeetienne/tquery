@@ -1,0 +1,42 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+<script src="../vendor/Tween.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus().addTo(world);
+	
+	// define the variables
+	var tweenvars	= {
+		scale	: 1
+	};
+
+	// setup a forward tween
+	var tweenFwd	= new TWEEN.Tween(tweenvars).to({
+		scale	: 4
+	}, 800)
+	.easing(TWEEN.Easing.Bounce.Out)
+	.onUpdate(function(){
+		object.scale(this.scale);
+	});
+
+	// setup a backward tween
+	var tweenBack	= new TWEEN.Tween(tweenvars).to({
+		scale	: 1
+	}, 300).easing(TWEEN.Easing.Linear.None)
+	.onUpdate(function(){
+		// TODO maybe to do something to make that automatic based on the properties
+		object.scale(this.scale);
+	});
+
+	// chain them to make them loop
+	tweenFwd.chain(tweenBack);
+	tweenBack.chain(tweenFwd);
+
+	// start the tweenFwd
+	tweenFwd.start();
+	
+	// update TWEEN with world.loop
+	world.hook(function(){
+		TWEEN.update();
+	});
+</script></body>

@@ -1,0 +1,139 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.skymap'
+	, 'tquery.checkerboard'
+	, 'tquery.minecraft'
+	, 'tquery.mirror'
+	, 'tquery.shadowmap'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().defaultPageTitle().start()
+	world.shadowMapEnabled(true)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		camera								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var controls	= tQuery.world.getCameraControls();
+	controls.rangeX	*= 1/5;
+	controls.rangeY	*= 1/2.5;
+	controls.target.y	= 0.75;
+	// keep the camera above the ground
+	world.hook(function(delta, now){
+		var camera	= tQuery(world.tCamera())
+		var minHeight	= 0.3;
+		if( camera.positionY() < minHeight )	camera.positionY(minHeight)
+	})
+
+	//////////////////////////////////////////////////////////////////////////
+	//		lights							//
+	//////////////////////////////////////////////////////////////////////////
+	tQuery.createAmbientLight().addTo(world)
+		.color(0xFFFFFF);
+	tQuery.createDirectionalLight().addTo(world)
+		.position(1,1,-1).color(0xffffff).intensity(2);
+	var light	= tQuery.createDirectionalLight().addTo(world)
+		.position(-1, 2, 3)
+		.color(0xffffff).intensity(4)
+		.castShadow(true)
+		.shadowDarkness(0.4)
+		.shadowMap(512*2,512*2)
+		.shadowCamera(3, -3, 3, -3, 0.1, 10)
+		//.shadowCameraVisible(true)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		ground								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	tQuery.createSkymap('mars').addTo(world);
+
+	var checkerboard	= tQuery.createCheckerboard({
+		segmentsW	: 20,
+		segmentsH	: 20
+	}).addTo(world)
+		.scaleBy(30)
+		.receiveShadow(true)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		central ball						//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var sphere	= tQuery.createMirrorBall().addTo(world)
+		.castShadow(true)
+	world.hook(function(delta, now){
+		var angle	= 0.3 * now * Math.PI * 2;
+		sphere.positionY(Math.abs(Math.cos(angle)*Math.cos(angle)*1.3) + 1/2 - 0.2)
+		
+		if( sphere.positionY() < 0.5 ){
+			sphere.scaleX(1+1.5*(0.5-sphere.positionY()))
+			sphere.scaleZ(1+1.5*(0.5-sphere.positionY()))
+			sphere.scaleY(1-2*(0.5-sphere.positionY()))
+		}else{
+			sphere.scaleX(1)
+			sphere.scaleY(1)			
+			sphere.scaleZ(1)			
+		}
+	})
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		surrounding balls						//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var nBalls	= 8
+	for(var i = 0; i < nBalls; i++){
+		var angle	= i/nBalls * Math.PI*2
+		tQuery.createMirrorBall().addTo(world)
+			.scaleBy(0.75)
+			.positionX(Math.cos(angle)*1.7)
+			.positionY(0.75/2)
+			.positionZ(Math.sin(angle)*1.7)
+			.castShadow(true)
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		minecraft character						//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var container	= tQuery.createObject3D().addTo(world)
+	world.hook(function(delta, now){
+		var angle	= 0.2 * now*Math.PI*2;
+		container.rotationY(angle)
+	})
+
+	// init flash
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/jetienne.png'
+	}).addTo(container).castShadow(true)
+	tQuery.createMinecraftCharAnimations(character).start('walk')
+	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
+	var angle	= 0/3 * Math.PI * 2;
+	character.object3D()
+		.translateX(Math.cos(angle) * 1)
+		.translateZ(Math.sin(angle) * 1)
+		.rotateY(Math.PI - angle)
+ 
+	// init batman
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/batman.png'
+	}).addTo(container).castShadow(true)
+	tQuery.createMinecraftCharAnimations(character).start('walk')
+	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
+	var angle	= 1/3 * Math.PI * 2;
+	character.object3D()
+		.translateX(Math.cos(angle) * 1)
+		.translateZ(Math.sin(angle) * 1)
+		.rotateY(Math.PI - angle)
+	
+	// init mario
+	var character	= tQuery.createMinecraftChar({
+		skinUrl	: '../../../plugins/minecraft/images/Mario.png'
+	}).addTo(container).castShadow(true)
+	tQuery.createMinecraftCharAnimations(character).start('walk')
+	tQuery.createMinecraftCharHeadAnimations(character).start('yes');
+	var angle	= 2/3 * Math.PI * 2;
+	character.object3D()
+		.translateX(Math.cos(angle) * 1)
+		.translateZ(Math.sin(angle) * 1)
+		.rotateY(Math.PI - angle)
+})
+</script></body>

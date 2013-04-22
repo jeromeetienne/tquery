@@ -42,10 +42,12 @@ tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 	opts	= tQuery.extend(opts, {
 		world	: tQuery.world,
 		mass	: 1,
-		shape	: null
+		shape	: null,
+		material: undefined,
 	});
 	var world	= opts.world;
-	
+	var mass	= opts.mass;
+	var material	= opts.material;
 	
 	tObject3D.useQuaternion	= true;
 
@@ -65,8 +67,7 @@ tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 		var shapeSize	= new CANNON.Vec3(bboxSize.x/2, bboxSize.y/2, bboxSize.z/2)
 		var shape	= new CANNON.Box(shapeSize);
 	}
-	
-	var body	= new CANNON.RigidBody(opts.mass,shape);	
+	var body	= new CANNON.RigidBody(mass, shape, material);	
 
 	// copy position
 	body.position.x	= object3D.positionX();
@@ -76,13 +77,13 @@ tQuery.Object3D.registerStatic('CannonjsCtx', function(object3D, opts){
 	// store it in world.tQuery.
 	tQuery.data(object3D, 'cannonjsBody', body, true);
 
-	this._callback	= world.loop().hook(function(delta, now){
+	this._callback	= world.hook(function(delta, now){
 		this.update();
 	}.bind(this));	
 });
 
 tQuery.Object3D.CannonjsCtx.prototype.destroy = function(){
-	world.loop().unhook(this._callback);
+	world.unhook(this._callback);
 };
 
 

@@ -12,12 +12,13 @@ tQuery.Geometry.registerInstance('computeAll', function(){
 	this.each(function(tGeometry){
 		tGeometry.computeBoundingSphere();
 		tGeometry.computeBoundingBox();
-		//tGeometry.computeCentroids();
+		tGeometry.computeCentroids();
 		tGeometry.computeFaceNormals();
-		//tGeometry.computeVertexNormals();
+		tGeometry.computeVertexNormals();
 		//tGeometry.computeTangents();
+		
+		
 	});
-
 	// return this, to get chained API	
 	return this;
 });
@@ -145,12 +146,11 @@ tQuery.Geometry.registerInstance('rotate', function(angles, order){
 		angles	= new THREE.Vector3(arguments[0], arguments[1], arguments[2]);
 	}
 	console.assert(angles instanceof THREE.Vector3, "Geometry.rotate parameter error");
-
 	// set default rotation order if needed
 	order	= order	|| 'XYZ';
 	// compute transformation matrix
 	var matrix	= new THREE.Matrix4();
-	matrix.setRotationFromEuler(angles, order);
+	matrix.makeRotationFromEuler(angles, order);
 
 	// change all geometry.vertices
 	this.each(function(geometry){

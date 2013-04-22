@@ -6,27 +6,27 @@ requirejs.config({
 	},
 	shim	: {
 		'plugins/pproc/tquery.effectcomposer'	: [
-			'three.js/shaders/BleachBypassShader'	,
-			'three.js/shaders/BlendShader'		,
-			'three.js/shaders/CopyShader'		,
-			'three.js/shaders/ColorifyShader'	,
-			'three.js/shaders/ConvolutionShader'	,
-			'three.js/shaders/FilmShader'		,
-			'three.js/shaders/FXAAShader'		,
-			'three.js/shaders/HorizontalBlurShader'	,
-			'three.js/shaders/SepiaShader'		,
-			'three.js/shaders/VerticalBlurShader'	,
-			'three.js/shaders/VignetteShader'	,
+			'three.js/examples/js/shaders/BleachBypassShader'	,
+			'three.js/examples/js/shaders/BlendShader'		,
+			'three.js/examples/js/shaders/CopyShader'		,
+			'three.js/examples/js/shaders/ColorifyShader'	,
+			'three.js/examples/js/shaders/ConvolutionShader'	,
+			'three.js/examples/js/shaders/FilmShader'		,
+			'three.js/examples/js/shaders/FXAAShader'		,
+			'three.js/examples/js/shaders/HorizontalBlurShader'	,
+			'three.js/examples/js/shaders/SepiaShader'		,
+			'three.js/examples/js/shaders/VerticalBlurShader'	,
+			'three.js/examples/js/shaders/VignetteShader'	,
 
-			'three.js/postprocessing/EffectComposer',
-			'three.js/postprocessing/BloomPass'	,
-			'three.js/postprocessing/DotScreenPass'	,
-			'three.js/postprocessing/FilmPass'	,
-			'three.js/postprocessing/MaskPass'	,
-			'three.js/postprocessing/RenderPass'	,
-			'three.js/postprocessing/SavePass'	,
-			'three.js/postprocessing/ShaderPass'	,
-			'three.js/postprocessing/TexturePass'
+			'three.js/examples/js/postprocessing/EffectComposer'	,
+			'three.js/examples/js/postprocessing/BloomPass'		,
+			'three.js/examples/js/postprocessing/DotScreenPass'	,
+			'three.js/examples/js/postprocessing/FilmPass'		,
+			'three.js/examples/js/postprocessing/MaskPass'		,
+			'three.js/examples/js/postprocessing/RenderPass'	,
+			'three.js/examples/js/postprocessing/SavePass'		,
+			'three.js/examples/js/postprocessing/ShaderPass'	,
+			'three.js/examples/js/postprocessing/TexturePass'
 		]
 	}
 });

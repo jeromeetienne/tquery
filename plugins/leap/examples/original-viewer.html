@@ -1,0 +1,286 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../vendor/leap.js"></script>
+<script src="../tquery.leapcontroller.js"></script>
+<body><script>
+require(['tquery.lightings'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createAxis().addTo(world);
+	
+	// your code goes here
+	world.removeCameraControls();
+	world.camera().translateZ(3)
+	
+	tQuery.createLighting3Points().addTo(world)
+	
+	var controller	= tQuery.createLeapController();
+
+	world.hook(function(delta, now){
+		var frame	= controller.lastFrame();
+		if( frame === null || frame.valid !== true )	return;
+		window.frame	= frame; 
+	});
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		keytap and screenTap						//
+	//////////////////////////////////////////////////////////////////////////////////
+
+// tQuery.createLeapTapViewer(controller)
+
+	// show keytap gesture - good for debug	
+	controller.addEventListener('gestureTracking', function(gesture, data){
+		var userData	= data.userData;
+		// keep only keyTap gesture
+		if( gesture.type !== 'keyTap' && gesture.type !== 'screenTap')		return;
+		// log to debug
+		//console.log('gestureTracking', gesture.id, gesture)
+		// create the sphere for the contact point
+		var color	= new THREE.Color(Math.random() * 0xffffff)
+		var sphere	= tQuery.createSphere(0.15, 16, 16).addTo(world)
+			.scale(1, 1, 1)
+			.setLambertMaterial()
+				.color(color)
+				.back()
+		var position	= controller.convertPosition(gesture.position)
+		sphere.position(position)
+
+		// create the riddle for impact
+		var torus	= tQuery.createTorus(0.15,0.01, 8, 32).addTo(sphere)
+			.setLambertMaterial().color('red').back()
+		if( gesture.type === 'keyTap')	torus.rotateX(Math.PI/2)
+
+		// make the torus grow
+		var callback	= world.hook(function(delta, now){
+			var factor	= 1 + delta * 2;
+			if( gesture.type === 'keyTap')	torus.scaleXBy(factor).scaleZBy(factor)
+			else				torus.scaleXBy(factor).scaleYBy(factor)
+		})
+		// remove it after 300ms
+		setTimeout(function(){
+			world.unhook(callback)
+			sphere.detach();
+		}, 300)
+	})
+
+//////////////////////////////////////////////////////////////////////////////////
+//		pointable							//
+//////////////////////////////////////////////////////////////////////////////////
+
+
+// tQuery.createLeapViewerPointable(controller)
+
+	controller.addEventListener('pointableTracking', function(pointable, data){
+		//console.log('== start pointable', pointable.id, pointable)
+//return;
+		var userData	= data.userData;
+		// create initial mesh
+		var direction	= tQuery.createVector3(pointable.direction)
+		var length	= controller.convertDistance(pointable.length)
+		var position	= controller.convertPosition(pointable.tipPosition)
+		var color	= Math.random() * 0xffffff;
+		var tMesh	= new THREE.ArrowHelper(direction, position, length, color);
+		var mesh	= tQuery(tMesh).addTo(world)
+		userData.mesh	= mesh;
+
+
+		data.emitter.addEventListener('update', function(pointable, data){
+			//console.log('== update pointable', pointable.id)
+			// update position
+			var position	= controller.convertPosition(pointable.tipPosition)
+			mesh.position(position)
+			// update direction
+			var direction	= tQuery.createVector3(pointable.direction)
+			mesh.get(0).setDirection(direction)
+			// update length
+			var length	= controller.convertDistance(pointable.length)
+			mesh.get(0).setLength(length)
+		});
+
+		data.emitter.addEventListener('stop', function(pointableId, data){
+			mesh.detach();
+			//console.log('== stop pointable', pointableId)
+		})
+
+	})
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		hand palm							//
+	//////////////////////////////////////////////////////////////////////////////////
+
+// tQuery.createHandPalmViewer(controller)
+	controller.addEventListener('handTracking', function(hand, data){
+		//console.log('hand start', hand.id, hand)
+		var userData	= data.userData;
+		
+		// create the container
+		var mesh	= tQuery.createObject3D().addTo(world)
+		userData.mesh	= mesh;	
+		// add the ring	
+		var color	= Math.random() * 0xffffff;
+		var ringGeometry= new THREE.RingGeometry(0.7, 1, 32);
+		var ringMaterial= tQuery.createMeshBasicMaterial().color(color).side(THREE.DoubleSide);
+		var circle	= tQuery(ringGeometry, ringMaterial).addTo(mesh)
+		// add the arrow for the normal		
+		var direction	= tQuery.createVector3(0,0,-1)
+		var position	= tQuery.createVector3(0,0,0)
+		var length	= 1;
+		var tMesh	= new THREE.ArrowHelper(direction, position, length, color);
+		var arrow	= tQuery(tMesh).addTo(mesh)
+
+		function onUpdate(hand, data){
+			// update position
+			var position	= controller.convertPosition(hand.palmPosition)
+			mesh.position(position)
+			// update circle radius			
+			var radius	= controller.convertDistance(hand.sphereRadius*0.7)	
+			mesh.scale(radius)
+			// update circle orientation
+			var normal	= tQuery.createVector3(hand.palmNormal);
+			var target	= tQuery.createVector3(hand.palmPosition).sub(normal)
+			target		= controller.convertPosition(target)
+			mesh.lookAt(target)			
+		}
+		// initial update
+		onUpdate(hand, data)
+		// bind update event
+		data.emitter.addEventListener('update', onUpdate.bind(this));	
+		// handle stop event
+		data.emitter.addEventListener('stop', function(handId, data){
+			mesh.detach();
+			//console.log('hand stop', handId)
+		})
+	})
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		hand sphere							//
+	//////////////////////////////////////////////////////////////////////////////////
+
+// tQuery.createLeapHandSphereViewer(controller)
+
+	controller.addEventListener('handTracking', function(hand, data){
+		//console.log('hand start', hand.id, hand)
+		var userData	= data.userData;
+
+		// create initial mesh
+		var color	= Math.random() * 0xffffff;
+		var mesh	= tQuery.createSphere().addTo(world)
+			.setBasicMaterial().color(color).wireframe(true).back()
+		userData.mesh	= mesh;
+
+		function onUpdate(hand, data){
+			// update mesh position		
+			var position	= controller.convertPosition(hand.sphereCenter)
+			mesh.position(position)
+			// update circle radius			
+			var radius	= controller.convertDistance(hand.sphereRadius)	
+			mesh.scale(radius)			
+		}
+		// initial update
+		onUpdate(hand, data)
+		// bind update event
+		data.emitter.addEventListener('update', onUpdate.bind(this));
+		// handle stop event
+		data.emitter.addEventListener('stop', function(handId, data){
+			mesh.detach();
+			//console.log('hand stop', handId)
+		})
+	})
+
+//////////////////////////////////////////////////////////////////////////////////
+//		circle								//
+//////////////////////////////////////////////////////////////////////////////////
+
+// tQuery.create
+	controller.addEventListener('gestureTracking', function(gesture, data){
+		var userData	= data.userData;
+		// keep only circle gesture
+		if( gesture.type !== 'circle' )		return;
+
+		console.log('start gesture', gesture.id, gesture)
+	
+		// create the container
+		var mesh	= tQuery.createObject3D().addTo(world)
+		userData.mesh	= mesh;	
+		// add the ring	
+		var color	= Math.random() * 0xffffff;
+		var ringGeometry= new THREE.RingGeometry(0.7, 1, 32);
+		var ringMaterial= tQuery.createMeshBasicMaterial().color(color).side(THREE.DoubleSide);
+		var circle	= tQuery(ringGeometry, ringMaterial).addTo(mesh)
+
+		// add the arrow for the normal		
+		var direction	= tQuery.createVector3(0,0,1)
+		var position	= tQuery.createVector3(0,0,0)
+		var length	= 1;
+		var tMesh	= new THREE.ArrowHelper(direction, position, length, color);
+		var arrow	= tQuery(tMesh).addTo(mesh)
+
+		function onUpdate(gesture, data){
+			// update position
+			var position	= controller.convertPosition(gesture.center)
+			mesh.position(position)
+			// update circle radius			
+			var radius	= controller.convertDistance(gesture.radius)	
+			mesh.scale(radius)
+			// update circle orientation
+			var normal	= tQuery.createVector3(gesture.normal);
+			var target	= tQuery.createVector3(gesture.center).sub(normal)
+			target		= controller.convertPosition(target)
+			mesh.lookAt(target)			
+		}
+		// initial update
+		onUpdate(gesture, data)
+		// bind update event
+		data.emitter.addEventListener('update', onUpdate.bind(this));	
+		// remove the mesh
+		data.emitter.addEventListener('stop', function(gesture, data){
+			mesh.detach();
+			//console.log('stop', gesture.id)
+		})
+	})
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		swipe								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	controller.addEventListener('gestureTracking', function(gesture, data){
+		var userData	= data.userData;
+
+		// keep only circle gesture
+		if( gesture.type !== 'swipe' )		return;
+
+		//console.log('swipe start', gesture.id, gesture)
+
+		// create initial mesh
+		var origin	= controller.convertPosition(gesture.startPosition)
+		var position	= controller.convertPosition(gesture.position)
+		var length	= position.distanceTo(origin)
+		var direction	= position.clone().sub(origin).normalize()
+		var color	= Math.random() * 0xffffff;
+		var tMesh	= new THREE.ArrowHelper(direction, origin, length, color);
+		var mesh	= tQuery(tMesh).addTo(world)
+		userData.mesh	= mesh;
+
+		// update the mesh as the gesture is updated
+		data.emitter.addEventListener('update', function(gesture, data){
+			//console.log('swipe update', gesture.id)
+			// update position
+			var origin	= controller.convertPosition(gesture.startPosition)
+			mesh.position(origin)
+			// update length
+			var position	= controller.convertPosition(gesture.position)
+			var length	= position.distanceTo(origin)
+			mesh.get(0).setLength( length );
+			// update direction
+			var direction	= position.clone().sub(origin).normalize()
+			mesh.get(0).setDirection( direction );
+		})
+			
+		// remove the mesh
+		data.emitter.addEventListener('stop', function(gesture, data){
+			//console.log('swipe stop', gesture.id)
+			mesh.detach();
+		})
+	})
+})
+</script></body>

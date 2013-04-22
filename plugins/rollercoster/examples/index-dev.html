@@ -20,7 +20,7 @@
 	geometry.debug && mesh.add(geometry.debug);
 	
 	world.removeCameraControls();
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var camera	= world.tCamera();
 		var pct		= (now % 4)/4;
 		var path	= geometry.path;

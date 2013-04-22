@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../vendor/leap.js"></script>
+<script src="../tquery.leapcontroller.js"></script>
+<body><script>
+require(['tquery.lightings'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+		
+	var controller	= tQuery.createLeapController();
+	
+	controller.controller().on('ready', function(){
+		console.log('controller is ready');
+	})
+	controller.controller().on('disconnect', function(){
+		console.log('controller is disconnected');
+	})
+	controller.controller().on('connect', function(){
+		console.log('controller is connected');
+	})
+})
+</script></body>

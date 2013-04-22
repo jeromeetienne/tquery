@@ -1,46 +1,46 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 
-<script src="../../../vendor/three.js/postprocessing/EffectComposer.js"></script>
-<script src="../../../vendor/three.js/postprocessing/BloomPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/DotScreenPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/FilmPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/MaskPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/RenderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/SavePass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/ShaderPass.js"></script>
-<script src="../../../vendor/three.js/postprocessing/TexturePass.js"></script>
-<script src="../../../vendor/three.js/shaders/BleachBypassShader.js"></script>
-<script src="../../../vendor/three.js/shaders/BlendShader.js"></script>
-<script src="../../../vendor/three.js/shaders/CopyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ColorifyShader.js"></script>
-<script src="../../../vendor/three.js/shaders/ConvolutionShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FilmShader.js"></script>
-<script src="../../../vendor/three.js/shaders/FXAAShader.js"></script>
-<script src="../../../vendor/three.js/shaders/HorizontalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/SepiaShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VerticalBlurShader.js"></script>
-<script src="../../../vendor/three.js/shaders/VignetteShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/BloomPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/DotScreenPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/FilmPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/MaskPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/RenderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/SavePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="../../../vendor/three.js/examples/js/postprocessing/TexturePass.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BleachBypassShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/CopyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/ColorifyShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/ConvolutionShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/FilmShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/FXAAShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/HorizontalBlurShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/SepiaShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/VerticalBlurShader.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/VignetteShader.js"></script>
 <script src="../../pproc/tquery.effectcomposer.js"></script>
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
 	var object	= tQuery.createTorus().addTo(world);
 
-	world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
+	//world.addEffectComposer().sepia().film(0.25, 0.25, 648, false).vignette().finish();
 	//world.addEffectComposer().vignette().finish();
 	
-	//var composer	= tQuery.createEffectComposer().renderPass();
-	//composer.sepia()
+	var composer	= tQuery.createEffectComposer().renderPass();
+	composer.sepia()
 	//composer.bleachbypass()
 	//composer.verticalBlur(1.1)
 	//composer.horizontalBlur(1.1)
 	//composer.motionBlur(0.9);
 	//composer.fxaa();
 	//composer.colorify();
-	//composer.bloom(1.2)
-	//composer.film(0.25, 0.25, 648, false)
+	//composer.bloom(0.2)
+	composer.film(0.25, 0.25, 648, false)
 	//composer.screen();
-	//composer.vignette();
-	//composer.finish();
+	composer.vignette();
+	composer.finish();
 </script></body>

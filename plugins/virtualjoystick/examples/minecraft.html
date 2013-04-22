@@ -1,0 +1,87 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require([ 'tquery.minecraft'
+	, 'tquery.virtualjoystick'
+	, 'tquery.checkerboard'
+	, 'tquery.skymap'
+], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	tQuery.createSkymap('mars').addTo(world)
+
+	world.removeCameraControls();
+
+	tQuery.createCheckerboard({
+		segmentsW	: 40,
+		segmentsH	: 40
+	}).addTo(world).scaleBy(40);
+	
+	// your code goes here
+	var player	= tQuery.createMinecraftPlayer().addTo(world);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	var joystickMove	= new VirtualJoystick({
+		container	: world.tRenderer().domElement.parent,
+		mouseSupport	: true,
+		strokeStyle	: 'cyan'
+	});
+	joystickMove.addEventListener('touchStartValidation', function(event){
+		var touch	= event.changedTouches[0];
+		if( touch.pageX < window.innerWidth/2 )	return false;
+		return true
+	});
+	world.hook(function(delta, now){
+		var input	= player.controls().input();
+		input.up	= joystickMove.up();
+		input.down	= joystickMove.down();
+		input.left	= joystickMove.left();
+		input.right	= joystickMove.right();
+	});
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+
+	// one on the right of the screen
+	var joystickHead	= new VirtualJoystick({
+		container	: world.tRenderer().domElement.parent,
+//		mouseSupport	: true,
+		strokeStyle	: 'orange'
+	})
+	joystickHead.addEventListener('touchStartValidation', function(event){
+		var touch	= event.changedTouches[0];
+		if( touch.pageX >= window.innerWidth/2 )	return false;
+		return true
+	});
+	
+	
+	// make the head follow the ball
+	var character	= player.character();
+	var target	= tQuery.createObject3D().addTo( player.object3D() )
+				.scaleBy(1/10)
+				.positionY(0.5)
+				.positionZ(1)
+	
+	world.camera().addTo( player.object3D('headGroup') )
+		.position(0, 4/32, -1)
+		.position(1, 4/32, -2)
+		.rotationY(Math.PI)
+		
+	world.hook(function(delta, now){
+		var object3D	= player.object3D('headGroup')
+		object3D.lookAt(target.position());
+	}); 
+	world.hook(function(delta, now){
+		var speed	= 1 * delta;
+		if( joystickHead.up() )		target.translateY( speed);
+		if( joystickHead.down() )	target.translateY(-speed);
+		if( joystickHead.left() )	target.translateX( speed);
+		if( joystickHead.right() )	target.translateX(-speed);
+	});	
+});
+</script></body>

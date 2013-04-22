@@ -15,15 +15,15 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 	
 	// user control
 	this._input	= {};
-	this._callback	= opts.world.loop().hook(function(delta, now){
+	this._callback	= opts.world.hook(function(delta, now){
 		var model	= opts.object3D;
 		var prevPosition= model.position.clone();
 		var input	= this._input;
 		// keyboard handling		
 		if( opts.lateralMove === 'rotationY' ){
 			// lateral => rotation Y
-			if( input.left )	model.rotation.y += 0.3 * delta * Math.PI * 2;
-			if( input.right )	model.rotation.y -= 0.3 * delta * Math.PI * 2;			
+			if( input.left )	model.rotation.y += 0.1 * delta * Math.PI * 2;
+			if( input.right )	model.rotation.y -= 0.1 * delta * Math.PI * 2;			
 		}else if( opts.lateralMove === 'strafe' ){
 			// lateral => strafe
 			var distance	= 0;
@@ -55,7 +55,7 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 tQuery.MicroeventMixin(tQuery.MinecraftCharControls.prototype);
 
 tQuery.MinecraftCharControls.prototype.destroy	= function(){
-	this._opts.world.loop().unhook(this._callback);
+	this._opts.world.unhook(this._callback);
 }
 
 tQuery.registerStatic('createMinecraftCharControls', function(opts){

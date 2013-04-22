@@ -101,7 +101,7 @@ require([
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 		//.shadowCameraVisible(true)
 	// for lightDir1 to follow character
-	world.loop().hook(function(){
+	world.hook(function(){
 		if( !players[mySourceId] )	return;
 		var player	= players[mySourceId];
 		var model	= player.character.object3D('root');

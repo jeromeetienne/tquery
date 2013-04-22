@@ -9,7 +9,7 @@
 		.setBasicMaterial().color(0x000000).wireframe(true).back();
 
 
-	world.tRenderer().setClearColorHex(0x444444,1);
+	world.tRenderer().setClearColor(0x444444,1);
 	//world.tCamera().position.z	= 2;
 
 	// Now we need to init the spritesheet. 
@@ -17,7 +17,7 @@
 	// one explosion per line, each line containing 17 sprites. 
 	// each sprite is 32 pixels by 32.
 	var spritesheet	= tQuery.createSpritesheet({
-		url	: 'images/items/explosion.png',
+		url	: '../images/items/explosion.png',
 		imgW	: 32*17,
 		imgH	: 32*3,
 		spriteW	: 32,		// the width of each sprite
@@ -32,7 +32,7 @@
 			meshes.push(mesh)
 		}
 		// create a loop which make only one mesh visible 
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			// make all sprite invisible by defaults
 			meshes.forEach(function(mesh){
 				mesh.visible(false);

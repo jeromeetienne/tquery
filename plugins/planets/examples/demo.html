@@ -12,7 +12,7 @@
 require(['tquery.planets'], function(){
 	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
 	// set the world background in black
-	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	world.tRenderer().setClearColor( 0x000000, 1 );
 
 	// make camera controls go smoother
 	var controls	= world.getCameraControls();
@@ -29,7 +29,7 @@ require(['tquery.planets'], function(){
 	// create the moon
 	var moon	= tQuery.createPlanet('moon').addTo(world).scale(1/4)
 	// make the object rotate
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		// handle rotation
 		var angle	= 0.1 * now * Math.PI * 2;
 		moon.rotationY(-angle)
@@ -43,7 +43,7 @@ require(['tquery.planets'], function(){
 	var cloud	= tQuery('.cloud', planet);
 	planet.get(0).eulerOrder = 'XZY';
 	// make the object rotate
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		// handle planet rotation
 		var angle	= 0.05 * now * Math.PI * 2;
 		planet.rotationY(angle).rotationZ(23.1 * Math.PI/180);
@@ -51,5 +51,8 @@ require(['tquery.planets'], function(){
 		var angle	= 0.01 * now * Math.PI * 2;
 		cloud.rotationY(-angle); 
 	});
+	
+	// create the starfield
+	tQuery.createStarField().addTo(world)
 });
 </script></body>

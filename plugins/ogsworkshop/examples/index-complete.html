@@ -104,7 +104,7 @@ require([
 				envMap	: textureCube
 			}).back()
 			.castShadow(true)
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			text.rotateY(0.05 * delta * Math.PI * 2)
 		})
 	}
@@ -147,7 +147,7 @@ require([
 		.shadowCamera(8, -8, 8, -8, 0.1, 10)
 		//.shadowCameraVisible(true)
 	// for light to follow character
-	world.loop().hook(function(){
+	world.hook(function(){
 		if( !players[mySourceId] )	return;
 		var player	= players[mySourceId];
 		var model	= player.character.object3D('root');
@@ -335,7 +335,7 @@ require([
 			//lateralMove	: 'strafe'
 		});
 		
-		world.loop().hook(function(){
+		world.hook(function(){
 			var mesh	= character.object3D('root');
 			var position	= mesh.position();
 			var maxLength	= 16;

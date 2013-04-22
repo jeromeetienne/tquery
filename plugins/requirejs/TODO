@@ -20,7 +20,7 @@
   require(['tquery.keyboard'], function(){
     var world = tQuery.createWorld().boilerplate().start();
     var object = tQuery.createTorus().addTo(world);
-    world.loop().hook(function(delta, now){
+    world.hook(function(delta, now){
       var curScale  = object.get(0).scale.x;
       var dstScale  = tQuery.keyboard().pressed('a') ? 2 : 1;
       object.scale( curScale + (dstScale-curScale)*0.1 );

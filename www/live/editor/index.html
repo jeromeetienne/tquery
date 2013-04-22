@@ -116,6 +116,13 @@
 
 					documents[ 0 ].code = decode( hash.substr( 2 ) );
 
+				} else if ( version == 'U/' ) {
+					
+					var xhReq = new XMLHttpRequest();
+					xhReq.open("GET", hash.substr( 2 ), false);
+					xhReq.send(null);
+					documents[ 0 ].code = xhReq.responseText;
+
 				}
 
 			}

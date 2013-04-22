@@ -48,7 +48,7 @@ release:
 	@echo "   2.2 update tQuery.VERSION variable in js/tquery.core.js"
 	@echo "   2.3 update VERSION file in / directory"
 	@echo "   2.4 make a build 'make build'"
-	@echo "3. On 'dev', commit changes"
+	@echo "3. On 'dev', commit changes" 
 	@echo "   3.1 use 'git commit -a -m 'releasing version r99.9''"
 	@echo "4. Switch to 'master' branch"
 	@echo "   4.1 use 'git checkout master'"
@@ -108,17 +108,17 @@ minifyCore: buildCore
 	@echo size minified + gzip is `gzip -c build/tquery.min.js | wc -c` byte
 
 buildBundle: buildCore
-	echo $(BANNER)			>  build/tquery-bundle.js
-	cat vendor/es5-shim.js		>> build/tquery-bundle.js
-	cat vendor/three.js/three.js	>> build/tquery-bundle.js
-	cat build/tquery.js		>> build/tquery-bundle.js
+	echo $(BANNER)						>  build/tquery-bundle.js
+	cat vendor/es5-shim.js					>> build/tquery-bundle.js
+	cat vendor/three.js/build/three.js			>> build/tquery-bundle.js
+	cat build/tquery.js					>> build/tquery-bundle.js
 	# include boilerplate
-	cat plugins/boilerplate/*.js			>> build/tquery-bundle.js
-	cat vendor/threex/THREEx.WindowResize.js	>> build/tquery-bundle.js
-	cat vendor/threex/THREEx.screenshot.js		>> build/tquery-bundle.js
-	cat vendor/threex/THREEx.FullScreen.js		>> build/tquery-bundle.js
-	cat vendor/threex.dragpancontrols.js		>> build/tquery-bundle.js
-	cat vendor/three.js/stats.min.js		>> build/tquery-bundle.js
+	cat plugins/boilerplate/*.js				>> build/tquery-bundle.js
+	cat vendor/threex/THREEx.WindowResize.js		>> build/tquery-bundle.js
+	cat vendor/threex/THREEx.screenshot.js			>> build/tquery-bundle.js
+	cat vendor/threex/THREEx.FullScreen.js			>> build/tquery-bundle.js
+	cat vendor/threex.dragpancontrols.js			>> build/tquery-bundle.js
+	cat vendor/three.js/examples/js/libs/stats.min.js	>> build/tquery-bundle.js
 	# include the debug.js - temporary
 	# cat plugins/js/debug-bundle.js			>> build/tquery-bundle.js
 	# cat plugins/js/three-debug.js			>> build/tquery-bundle.js

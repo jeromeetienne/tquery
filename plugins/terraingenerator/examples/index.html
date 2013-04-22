@@ -1,7 +1,7 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle.js"></script>
 
-<script src="../../../vendor/three.js/ImprovedNoise.js"></script>
+<script src="../../../vendor/three.js/examples/js/ImprovedNoise.js"></script>
 <script src="../tquery.terraingenerator.js"></script>
 
 <body><script>
@@ -18,7 +18,7 @@
 	geometry.rotateX(35*Math.PI/180);
 	//geometry.zoom(2);
 	
-	world.tRenderer().setClearColorHex( 0x82CAFA, 1 );
+	world.tRenderer().setClearColor( 0x82CAFA, 1 );
 	
 	var light	= new THREE.AmbientLight(0x444444);
 	world.tScene().add(light);

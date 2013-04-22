@@ -4,7 +4,7 @@
 
 <body><script>
 	var world	= tQuery.createWorld().boilerplate().start();
-	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	world.tRenderer().setClearColor( 0x000000, 1 );
 	// create the planet
 	var planet	= tQuery.createPlanet('earthNormal').addTo(world);
 
@@ -16,7 +16,7 @@
 		.intensity(1)
 		.color(0x8888ff)
 	// make the object rotate
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.05 * now * Math.PI * 2;
 		planet.get(0).rotation.y	= angle;
 	});

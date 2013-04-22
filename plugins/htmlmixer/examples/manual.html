@@ -1,0 +1,90 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src='../../../vendor/three.js/examples/js/renderers/CSS3DRenderer.js'></script>
+<body><style>
+body {
+	background-color: green;
+}
+</style><script>
+require(['tquery.controls'], function(){
+	var world	= tQuery.createWorld().boilerplate({
+//		cameraControls	: false
+	}).start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+
+	//world.tRenderer().setClearColor( 0x000000, 0 );
+	
+	var rendererGL	= world.tRenderer();
+	
+	// here is how to plug a three.js to controls the camera
+	// var tCamera	= world.tCamera();
+	// var controls	= new THREE.OrbitControls( tCamera );
+	// world.setCameraControls(controls);
+
+	var tMaterial	= new THREE.MeshBasicMaterial();
+	tMaterial.color.set('black')
+	tMaterial.opacity	= 0;
+	tMaterial.blending	= THREE.NoBlending;
+	var plane	= tQuery.createPlane(tMaterial).addTo(world)
+		.scaleXBy(560/256)
+		.scaleYBy(315/256)
+		
+		
+	world.hook(function(delta, now){
+	//	plane.rotateY(0.01)
+	})
+
+	// your code goes here
+	var rendererCSS	= new THREE.CSS3DRenderer();
+	rendererCSS.setSize( window.innerWidth, window.innerHeight );
+	rendererCSS.domElement.style.position	= 'absolute';
+	rendererCSS.domElement.style.top	= 0;
+	document.body.appendChild( rendererCSS.domElement );
+
+	rendererCSS.domElement.appendChild( world.tRenderer().domElement );
+	rendererGL.domElement.style.position	= 'absolute';
+	rendererGL.domElement.style.top		= 0;
+	rendererGL.domElement.style.zIndex	= 1;
+	
+	var sceneCss = new THREE.Scene();
+	world.hook(function(delta, now){
+		rendererCSS.render( sceneCss, world.tCamera() );
+	})
+
+// API
+if(false){
+	tQuery.createPlaneFromDomElement(element);
+	tQuery.createPlaneFromDomElement(url);
+	// * how to setup the element width ?
+	// * there is a global part at the world level
+	//   * how to handle this ?
+	// * tquery.htmlmixer to mix html with your webgl
+	// * if( world.hasHtmlMix() === false ) world.enableHtmlMix()
+	// * return tQuery.Mesh
+	// * onAdd on this mesh add it to htmlmixer scene
+	// * onRemove on this mesh, remove it from htmlmixer scene
+}
+
+
+	var element	= document.createElement( 'div' );
+	element.style.width	= '1024px';
+	element.style.height	= '768px';
+	// element.style.opacity	= 0.5;
+	element.style.background = new THREE.Color('green').getStyle();
+	var element	= document.createElement( 'iframe' );
+	element.style.width	= '560px';
+	element.style.height	= '315px';
+	//element.src	= 'http://pacmaze.com/';
+	//element.src	= 'http://www.youtube.com/embed/z9h5_-NcMiQ'
+	//element.src	= 'http://www.youtube.com/embed/IPpGJ9GCOw0';
+//	element.src	="http://embed.ted.com/talks/ramesh_raskar_a_camera_that_takes_one_trillion_frames_per_second.html"
+	//element.src	= 'http://jetienne.com/';
+	element.src	= 'http://jeromeetienne.github.com/tquery/';
+	var object 	= new THREE.CSS3DObject( element );
+	object.scale.x	= 1/256;
+	object.scale.y	= 1/256;
+	object.position	= plane.position();
+	object.rotation	= plane.rotation();
+	sceneCss.add( object );
+});
+</script></body>

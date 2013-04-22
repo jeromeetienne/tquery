@@ -9,7 +9,7 @@ require(['tquery.planets'], function(){
 	tQuery.createAmbientLight().addTo(world).color(0xFFFFFF);
 
 	// make the object rotate
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.05 * now * Math.PI * 2;
 		planet.get(0).rotation.y	= angle;
 	});

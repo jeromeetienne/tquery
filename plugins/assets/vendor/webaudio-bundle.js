@@ -664,7 +664,7 @@ WebAudio.Sound.fn.follow	= function(object3d, world){
 	this._followCb		= function(deltaTime){
 		this.updateWithObject3d(object3d, deltaTime);
 	}.bind(this);
-	world.loop().hook(this._followCb);
+	world.hook(this._followCb);
 	// for chained API
 	return this;
 }
@@ -673,7 +673,7 @@ WebAudio.Sound.fn.follow	= function(object3d, world){
  * unfollow the object3D if any
 */
 WebAudio.Sound.fn.unfollow	= function(world){
-	this._world.loop().unhook(this._followCb);
+	this._world.unhook(this._followCb);
 	this._followCb		= null;
 	// for chained API
 	return this;
@@ -740,12 +740,12 @@ WebAudio.fn.followListener	= function(world){
 	this._$followListenerCb	= function(deltaTime){
 		this._followListenerCb(world.camera(), deltaTime);
 	}.bind(this);
-	world.loop().hook(this._$followListenerCb);
+	world.hook(this._$followListenerCb);
 }
 
 WebAudio.fn.unfollowListener	= function(world){
 	// unhook this._updateCb from this.world.loop()
-	world.loop().unhook(this._$followListenerCb);
+	world.unhook(this._$followListenerCb);
 	this._$followListenerCb	= null;
 }
 

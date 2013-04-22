@@ -20,12 +20,12 @@ Fireworks.ComboEmitter.Flamethrower	= function(opts){
 	this._flamejetCtor();
 	WebAudio.isAvailable && this._soundCtor();
 	// update the emitter in rendering loop
-	this._$loopCb	= world.loop().hook(this._loopCb.bind(this));
+	this._$loopCb	= world.hook(this._loopCb.bind(this));
 }
 
 Fireworks.ComboEmitter.Flamethrower.prototype._destroy	= function()
 {
-	world.loop().unhook(this._$loopCb);
+	world.unhook(this._$loopCb);
 	this._flamejetDtor();
 	WebAudio.isAvailable && this._soundDtor();
 }

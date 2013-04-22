@@ -7,13 +7,13 @@ requirejs.config({
 	shim	: {
 		'plugins/controls/tquery.controlstween'	: [
 			'plugins/controls/tquery.controlswrapper',
-			'three.js/controls/FirstPersonControls',
-			'three.js/controls/OrbitControls',
-			'three.js/controls/PointerLockControls',
-			'three.js/controls/TrackballControls',
-			'three.js/controls/FlyControls',
-			'three.js/controls/PathControls',
-			'three.js/controls/RollControls',
+			'three.js/examples/js/controls/FirstPersonControls',
+			'three.js/examples/js/controls/OrbitControls',
+			'three.js/examples/js/controls/PointerLockControls',
+			'three.js/examples/js/controls/TrackballControls',
+			'three.js/examples/js/controls/FlyControls',
+			'three.js/examples/js/controls/PathControls',
+			'three.js/examples/js/controls/RollControls',
 		]
 	}
 });

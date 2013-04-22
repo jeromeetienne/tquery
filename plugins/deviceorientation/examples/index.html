@@ -8,16 +8,20 @@ require(['tquery.deviceorientation'], function(){
 	
 	world.removeCameraControls();
 	
-	world.loop().hook(function(){
+	world.hook(function(){
 		var orientation	= tQuery.deviceOrientation();
+
+// rename the angle based on their original spec name
+
+
 // TODO put that directly on the THREEx
-// with useragent sniffing for mac detection
+// - with useragent sniffing for mac detection
 		// for macbook
-		//object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
-		//object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
+		object.rotation( -orientation.angleY(), orientation.angleX(), orientation.angleZ() );
+		// object.rotation( -orientation.angleY(), 0, orientation.angleZ() );
 
 		// for ipad
-		object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
+		// object.rotation( -orientation.angleZ(), orientation.angleY(), -orientation.angleX() );
 		
 		// no idea why it is different, nor what is the theorical value
 	})

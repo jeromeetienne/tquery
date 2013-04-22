@@ -22,17 +22,18 @@ tQuery.registerStatic('createObject3D', function(){
 	return tQuery(object3d);
 });
 
-
-/**
- * Create tQuery.loop
- * 
- * @param {tQuery.World} world the world to display (optional)
- * @function
-*/
-tQuery.registerStatic('createLoop', function(world){
-	return new tQuery.Loop(world);
+tQuery.registerStatic('createVector3', function(x, y, z){
+	return tQuery.convert.toVector3.apply(tQuery.convert, arguments)
 });
 
+tQuery.registerStatic('createVector2', function(x, y){
+	return new THREE.Vector2(x, y);
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		create for lights						//
+//////////////////////////////////////////////////////////////////////////////////
 
 tQuery.registerStatic('createHemisphereLight', function(){
 	var tLight	= new THREE.HemisphereLight();
@@ -113,14 +114,6 @@ tQuery.registerStatic('createCircle', function(){
 	var ctor	= THREE.CircleGeometry;
 	var dflGeometry	= [0.5, 32];
 	return this._createMesh(ctor, dflGeometry, arguments)
-});
-
-tQuery.registerStatic('createVector3', function(x, y, z){
-	return new THREE.Vector3(x, y, z);
-});
-
-tQuery.registerStatic('createVector2', function(x, y){
-	return new THREE.Vector2(x, y);
 });
 
 tQuery.registerStatic('createSphere', function(){

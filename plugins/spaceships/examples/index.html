@@ -1,0 +1,85 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.spaceships.js"></script>
+<script src="../tquery.spaceships.shoot.js"></script>
+<script src="../tquery.spaceships.detonation.js"></script>
+<body><div id="info">
+	models by <a href="http://www.3drt.com/downloads.htm" target="_blank">3drt</a>
+</div><script>
+require(['tquery.loaders', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowmap'], function(){
+	var world	= tQuery.createWorld().boilerplate().pageTitle('#info').start();
+
+	world.tCamera().position.z	+= 1;
+
+	tQuery.createDirectionalLight().addTo(world).position(-1,-1,-1)
+		.intensity(2)
+	tQuery.createDirectionalLight().addTo(world).position( 1, 1, 1)	
+		.intensity(2)
+	
+	tQuery.createSkymap('mars').addTo(world)
+
+	tQuery.createHoverCar().addTo(world).translateY(-1)
+
+	tQuery.createSpaceFighter01().addTo(world).translateY(1)
+	tQuery.createSpaceFighter02().addTo(world).translateY(2)
+	var spaceship	= tQuery.createSpaceFighter03().addTo(world)
+		.addClass('spaceship')
+	tQuery.createShuttle01().addTo(world).translateX(1)
+	tQuery.createShuttle02().addTo(world).translateX(-1)
+
+	tQuery.SpaceShips.createShoot().addTo(spaceship)
+		.translateX( 0.5)
+		.translateZ( 0.3)
+	tQuery.SpaceShips.createShoot().addTo(spaceship)
+		.translateX(-0.5)
+		.translateZ( 0.3)
+	
+	tQuery.SpaceShips.createDetonation().addTo(spaceship)
+		.translateX(-0.5)
+		.translateZ( 0.1)
+	tQuery.SpaceShips.createDetonation().addTo(spaceship)
+		.translateX( 0.5)
+		.translateZ( 0.1)
+
+	var texture	= THREE.ImageUtils.loadTexture('../images/cloud10.png')	
+	var midiTween	= new MidiTween(2, 0.1, 0.5);
+	setInterval(function(){
+		var material	= tQuery.createSpriteMaterial().map(texture)
+			.color(0xffffff)
+		var object3d	= tQuery.createSprite().addTo(world).material(material)
+			.translateZ(-0.2 + Math.random()*0.1)
+			.scaleBy(0.5)
+		object3d.rotation(Math.random() * Math.PI*2)
+		var birthDate	= tQuery.now() / 1000;
+		var maxAge	= 2;
+		var callback	= world.hook(function(delta, now){
+			var age		= now - birthDate;
+
+			object3d.translateZ(-delta*6)
+			object3d.scaleBy(1 + 1*delta)
+			
+			var opacity	= midiTween.compute(age)
+			material.opacity(opacity)
+			
+			if( age >= midiTween.maxAge ){
+				object3d.detach()
+				world.unhook(callback)			
+			}
+		})
+	}, 30);
+	
+	
+	function MidiTween(maxAge, attackTime, releaseTime){
+		this.maxAge	= maxAge;
+		this.compute	= function(age){
+			if( age < attackTime ){
+				return age / attackTime
+			}else if( age < maxAge - releaseTime ){
+				return 1;
+			}else{
+				return (maxAge - age) / releaseTime
+			}
+		}	
+	}
+})
+</script></body>

@@ -24,7 +24,7 @@ looks like the code below... Quite short.
 
 ```html
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="./tquery-all.js"></script>
+<script src="./tquery-bundle.js"></script>
 <body><script>
     var world   = tQuery.createWorld().boilerplate().start();
     var object  = tQuery.createTorus().addTo(world);
@@ -35,6 +35,12 @@ looks like the code below... Quite short.
 
 
 #### Current
+
+#### Release - r58.0
+* ported to three.js r58
+
+#### Release - r57.0
+* ported to three.js r57
 
 #### Release - r56.0
 * ported to three.js r56

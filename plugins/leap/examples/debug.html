@@ -1,0 +1,83 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../vendor/leap.js"></script>
+<body><script>
+require(['tquery.keyboard'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createAxis().addTo(world);
+	
+	// your code goes here
+
+	world.removeCameraControls();
+
+	var controller	= new Leap.Controller({
+		enableGestures	: true
+	});
+	var leapFrame	= null;
+	controller.loop(function(frame) {
+		leapFrame	= frame;
+		window.leapFrame= leapFrame;
+	});
+
+/**
+ * - pierre feuille scisseau
+ * - ombre chinoise
+ * - basket sport
+ * - bouger des armees sur un plateau
+ * - grab and move
+ * - box sport
+ * - jouer aux billes
+ * - peinture
+ * - shooter avec la main en pistolet
+ * - virtual mouse device
+ */
+	var handSphere	= tQuery.createSphere().addTo(world)
+		.setBasicMaterial()
+			.wireframe(true)
+			.back()
+
+
+	var handId	= null;
+
+	world.hook(function(delta, now){
+		if( leapFrame === null || leapFrame.valid !== true )	return;
+		
+		leapFrame.gestures && leapFrame.gestures.forEach(function(gesture){
+			// if( gesture.type !== 'keyTap' )	return;
+			if( gesture.type !== 'circle' )		return;
+			//if( gesture.state !== 'stop' )		return;
+			console.log(gesture.state)
+		})
+	});
+			
+	world.hook(function(delta, now){
+		if( leapFrame === null )	return;
+		if( leapFrame.valid !== true )	return;
+		
+		
+		
+		if( leapFrame.hands.length < 1)	return;
+
+				
+		
+//console.log('nhand', leapFrame.hands.length)
+		var hand	= leapFrame.hands[0]
+window.hand=hand;
+		handSphere.scale(hand.sphereRadius/10)
+		
+		var position	= tQuery.createVector3(hand.sphereCenter)
+		position.y	-= 200;
+		position.z	-= 400;
+		position.multiplyScalar(1/100)
+		position.y	-= 1;
+		handSphere.position(position)
+		
+		
+		var palmNormal	= tQuery.createVector3(hand.palmNormal)
+		object.lookAt(palmNormal)
+		
+		//var quaternion	= 
+		//var euler = new THREE.Vector3().setEulerFromQuaternion(new THREE.Quaternion().fromAxisAngle(vector, 0))
+	})
+})
+</script></body>

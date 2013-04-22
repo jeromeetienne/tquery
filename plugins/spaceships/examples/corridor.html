@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.loaders'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorusKnot().addTo(world);
+	
+	// your code goes here
+	var loader	= new THREE.OBJMTLLoader();
+	loader.addEventListener('load', function( event ){
+		tQuery('mesh', event.content)
+			.geometry()
+				.scaleBy(1/200)
+				.computeAll()
+				.back()
+	});
+	var baseUrl	= '../';
+	var objUrl	= baseUrl + 'models/corridor/corridorpiece.obj';
+	var mtlUrl	= baseUrl + 'models/corridor/corridorpiece.mtl';
+	loader.load(objUrl, mtlUrl);
+});
+</script></body>

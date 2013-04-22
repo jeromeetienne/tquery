@@ -335,14 +335,14 @@
 		#### how to hook it
 
 		```
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			// your stuff here
 		});
 		```
 		
 		#### in action
 		```
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			var mesh	= character.object3D('root');
 			mesh.rotateY(delta * Math.PI*2)
 		});
@@ -365,7 +365,7 @@
 		#### How to code it
 		
 		```
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			var mesh	= character.object3D('root');
 			var keyboard	= tQuery.keyboard();
 			if( keyboard.pressed('left') )	mesh.translateX(-1 * delta)
@@ -394,7 +394,7 @@
 		#### Make it move [action](../examples/stage042.html)
 		
 		```
-		world.loop().hook(function(delta, now){
+		world.hook(function(delta, now){
 			var mesh	= character.object3D('armR');
 			var angle	= now * Math.PI * 2;
 			mesh.rotationX(Math.sin(angle));

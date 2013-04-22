@@ -52,7 +52,7 @@ require(['tquery.keyboard'], function(){
 	aActor.state	= machine.generateTree(treeJson, aActor, Actor.states);
 window.aActor	= aActor;
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var previous	= aActor.state.identifier;
 		aActor.state	= aActor.state.tick();
 		var current	= aActor.state.identifier;

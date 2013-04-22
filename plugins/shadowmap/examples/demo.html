@@ -16,7 +16,7 @@ require([ 'tquery.text'
 	world.tCamera().position.z	= 5;
 
 	//tQuery.createSkymap('skybox').addTo(world);
-	world.tRenderer().setClearColorHex( 0x000000, 1 );
+	world.tRenderer().setClearColor( 0x000000, 1 );
 	
 	tQuery.createAmbientLight().addTo(world).color(0x444444);	
 	tQuery.createDirectionalLight().addTo(world).position(0, 1, 1)
@@ -62,7 +62,7 @@ require([ 'tquery.text'
 			}).back()
 		.scaleBy(3)
 
-	world.loop().hook(function(delta, now){
+	world.hook(function(delta, now){
 		var angle	= 0.15 * now * Math.PI * 2;	
 		var positionX	= Math.cos(angle*1.0)*3*2;
 		var positionY	= Math.cos(angle*1/4)*1.3 + 1;

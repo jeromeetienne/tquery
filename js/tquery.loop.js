@@ -57,6 +57,22 @@ tQuery.Loop.prototype.stop	= function()
 	return this;
 }
 
+tQuery.Loop.prototype.isRunning = function() {
+	return this._timerId ? true : false;
+};
+
+tQuery.Loop.prototype.pauseToggle= function() {
+	if( this.isRunning() )	this.stop()
+	else			this.start();
+	return this;
+};
+
+/**
+ * max delta notified by loop callback
+ * @type {Number}
+ */
+tQuery.Loop.maxDelta	= 1/5;
+
 tQuery.Loop.prototype._onAnimationFrame	= function()
 {
 	// loop on request animation loop
@@ -65,9 +81,18 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
 	// update time values
-	var now		= tQuery.now()/1000;
+	var now		= tQuery.nowSeconds();
+	// init _lastTime if needed
 	if( !this._lastTime )	this._lastTime = now - 1/60;
+	// sanity check - honor tQuery.Loop.maxDelta
+	var minLastTime	= now - tQuery.Loop.maxDelta;
+	if( this._lastTime < minLastTime ){
+		this._lastTime	= minLastTime;
+		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+	}
+	// compute delta
 	var delta	= now - this._lastTime;
+	// update _lastTime
 	this._lastTime	= now;
 
 	// run all the hooks - from lower priority to higher - in order of registration
@@ -84,7 +109,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 //		Handle the hooks						//
 //////////////////////////////////////////////////////////////////////////////////
 
-tQuery.Loop.prototype.PRE_RENDER		= 20;
+tQuery.Loop.prototype.PRE_RENDER	= 20;
 tQuery.Loop.prototype.ON_RENDER		= 50;
 tQuery.Loop.prototype.POST_RENDER	= 80;
 
@@ -119,7 +144,7 @@ tQuery.Loop.prototype.hook	= function(priority, callback)
 */
 tQuery.Loop.prototype.unhook	= function(priority, callback)
 {
-	// handle parameters
+	// handle arguments polymorphism
 	if( typeof priority === 'function' ){
 		callback	= priority;
 		priority	= this.PRE_RENDER;

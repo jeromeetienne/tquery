@@ -1,0 +1,22 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../tquery.simpletree.js"></script>
+<body><script>
+require(['tquery.grassground', 'tquery.lightings'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	
+	// your code goes here
+	tQuery.createGrassGround({
+		textureRepeatX	: 10,
+		textureRepeatY	: 10,
+	}).addTo(world).scale(12); 
+	
+	tQuery.createLighting3Points().addTo(world)
+
+	for(var i = 0; i < 30; i++){
+		tQuery.createSimpleTree().addTo(world)
+			.positionX(Math.random()*10-5)
+			.positionZ(Math.random()*10-5)
+	}
+})
+</script></body>

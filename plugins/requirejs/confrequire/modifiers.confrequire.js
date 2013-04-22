@@ -6,9 +6,9 @@ requirejs.config({
 	},
 	shim	: {
 		'plugins/modifiers/tquery.geometry.smooth'	: [
-			'three.js/modifiers/ExplodeModifier',
-			'three.js/modifiers/SubdivisionModifier',
-			'three.js/modifiers/TessellateModifier',
+			'three.js/examples/js/modifiers/ExplodeModifier',
+			'three.js/examples/js/modifiers/SubdivisionModifier',
+			'three.js/examples/js/modifiers/TessellateModifier',
 		]
 	}
 });
