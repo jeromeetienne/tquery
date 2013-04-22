@@ -64,7 +64,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r56.0";
+tQuery.VERSION	= "r58.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -2495,6 +2495,7 @@ tQuery.mixinAttributes(tQuery.SpriteMaterial, {
 	scaleByViewport		: tQuery.convert.toBoolean,
 	
 	fog			: tQuery.convert.toBoolean,
+	opacity			: tQuery.convert.toNumber,
 	blending		: tQuery.convert.toNumber
 });
 
@@ -2651,7 +2652,7 @@ tQuery.Geometry.registerInstance('rotate', function(angles, order){
 	order	= order	|| 'XYZ';
 	// compute transformation matrix
 	var matrix	= new THREE.Matrix4();
-	matrix.setRotationFromEuler(angles, order);
+	matrix.makeRotationFromEuler(angles, order);
 
 	// change all geometry.vertices
 	this.each(function(geometry){

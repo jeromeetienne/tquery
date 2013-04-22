@@ -11,13 +11,18 @@ tQuery.registerStatic('LeapJoystickHandPosition', function(opts){
 	// your code goes here
 	var world	= opts.world;
 	var controller	= opts.controller;
+	this._deltaX	= this._deltaY	= 0
 
-	this._object3d	= tQuery.createSphere().addTo(world)
+	this._object3d	= tQuery.createObject3D().addTo(world)
 	var handId	= null;
 	var callback	= world.hook(function(delta, now){
 		var frame	= controller.lastFrame();
+		// if no frame is available, or not a valid frame, return now
 		if( frame === null )		return;
 		if( frame.valid !== true )	return;
+		// reset this._deltaX and this._deltaY
+		this._deltaX	= this._deltaY	= 0
+		// if no hands detected, return now
 		if( frame.hands.length < 1)	return;
 		// try to find the last hand
 		for(var i = 0; i < frame.hands.length; i++){
@@ -32,10 +37,11 @@ tQuery.registerStatic('LeapJoystickHandPosition', function(opts){
 			handId	= hand.id
 			console.log('assigning handid', handId)
 		}
-		// 
+		// convert the sphereCenter into a 3d position
 		var position	= controller.convertPosition(hand.sphereCenter)
+		// set the position of the gizmo
 		this._object3d.position(position)
-		
+		// set the delta
 		this._deltaX	= position.x
 		this._deltaY	= position.z
 	}.bind(this))
@@ -55,6 +61,14 @@ tQuery.LeapJoystickHandPosition.prototype.destroy	= function(){
 tQuery.registerStatic('createLeapJoystickHandPosition', function(opts){
 	return new tQuery.LeapJoystickHandPosition(opts)
 });
+
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+tQuery.LeapJoystickHandPosition.prototype.object3D = function() {
+	return this._object3d;
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//

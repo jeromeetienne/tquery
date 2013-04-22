@@ -1,7 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
 <script src="../../../build/tquery-bundle-require.js"></script>
-<script src="../../assets/vendor/dat.gui/dat.gui.js">		</script>
-<script src="../../assets/vendor/dat.gui/dat.color.js">		</script>
 <body><script>
 require(['tquery.tween'], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
@@ -50,7 +48,6 @@ require(['tquery.tween'], function(){
 		// init patterm
 		sprite.scale	( tweenScale(0) )
 		material.opacity( tweenOpacity(0) )			
-//console.log('color', material.get(0).color);
 
 		var birthDate	= now;
 		var callback	= world.hook(function(delta, now){

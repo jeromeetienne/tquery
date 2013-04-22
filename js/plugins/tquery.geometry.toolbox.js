@@ -150,7 +150,7 @@ tQuery.Geometry.registerInstance('rotate', function(angles, order){
 	order	= order	|| 'XYZ';
 	// compute transformation matrix
 	var matrix	= new THREE.Matrix4();
-	matrix.setRotationFromEuler(angles, order);
+	matrix.makeRotationFromEuler(angles, order);
 
 	// change all geometry.vertices
 	this.each(function(geometry){

@@ -12,7 +12,7 @@ requirejs.config({
 			// not really needed, just to chain the load
 			'plugins/playerinput/tquery.playerinput.virtualjoystick',
 			'plugins/playerinput/tquery.playerinput.deviceorientation',
-			'plugins/playerinput/tquery.playerinput.leap',
+			'plugins/playerinput/tquery.playerinput.leaphandposition',
 		],
 		'plugins/playerinput/tquery.playerinput.virtualjoystick': [
 			'tquery.virtualjoystick',
@@ -22,7 +22,7 @@ requirejs.config({
 			'tquery.deviceorientation',
 			'plugins/playerinput/tquery.playerinput'
 		],
-		'plugins/playerinput/tquery.playerinput.leap': [
+		'plugins/playerinput/tquery.playerinput.leaphandposition': [
 			'tquery.leap',
 			'plugins/playerinput/tquery.playerinput'
 		]

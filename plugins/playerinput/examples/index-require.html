@@ -16,11 +16,14 @@ require(['tquery.playerinput'], function(){
 	onMobile === false	&& tQuery.PlayerInput.createVirtualJoystick(playerInput)
 	onMobile === false 	&& tQuery.PlayerInput.createKeyboard(playerInput)
 	true 			&& tQuery.PlayerInput.createDeviceOrientation(playerInput)
-	// var controller	= tQuery.createLeapController()
-	// true 			&& tQuery.PlayerInput.createLeap({
-	// 	playerInput	: playerInput,
-	// 	controller	: controller
-	// })
+	// 
+	var controller		= tQuery.createLeapController()
+	var leapJoystick	= tQuery.PlayerInput.createLeapHandPosition({
+		playerInput	: playerInput,
+		controller	: controller
+	})
+	tQuery.createSphere().addTo( leapJoystick.joystick().object3D() )
+
 
 	tQuery.PlayerInput.createViewer(playerInput)
 

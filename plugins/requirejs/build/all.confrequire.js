@@ -7,6 +7,7 @@ requirejs.config({
 	},
 	"map": {
 		"*": {
+			"tquery.blueskybackground": "plugins/blueskybackground/tquery.addblueskybackground",
 			"tquery.cannonjs": "plugins/cannonjs/tquery.object3d.cannonjs",
 			"tquery.car": "plugins/requirejs/confrequire/car.initrequire",
 			"tquery.checkerboard": "plugins/checkerboard/tquery.checkerboard",
@@ -45,7 +46,7 @@ requirejs.config({
 			"tquery.shape": "plugins/shape/tquery.shape",
 			"tquery.simplemaze": "plugins/simplemaze/tquery.simplemaze",
 			"tquery.simpletree": "plugins/simpletree/tquery.simpletree",
-			"tquery.skymap": "plugins/skymap/tquery.skymap",
+			"tquery.skymap": "plugins/requirejs/confrequire/skymap.initrequire",
 			"tquery.statsplus": "plugins/statsplus/tquery.statsplus",
 			"tquery.text": "plugins/text/tquery.text",
 			"tquery.text.allfonts": "plugins/text/fonts/droid/droid_serif_regular.typeface",
@@ -195,7 +196,7 @@ requirejs.config({
 			"plugins/playerinput/tquery.playerinput.viewer",
 			"plugins/playerinput/tquery.playerinput.virtualjoystick",
 			"plugins/playerinput/tquery.playerinput.deviceorientation",
-			"plugins/playerinput/tquery.playerinput.leap"
+			"plugins/playerinput/tquery.playerinput.leaphandposition"
 		],
 		"plugins/playerinput/tquery.playerinput.virtualjoystick": [
 			"tquery.virtualjoystick",
@@ -205,7 +206,7 @@ requirejs.config({
 			"tquery.deviceorientation",
 			"plugins/playerinput/tquery.playerinput"
 		],
-		"plugins/playerinput/tquery.playerinput.leap": [
+		"plugins/playerinput/tquery.playerinput.leaphandposition": [
 			"tquery.leap",
 			"plugins/playerinput/tquery.playerinput"
 		],
@@ -246,7 +247,8 @@ requirejs.config({
 			"plugins/simplemaze/tquery.simplemaze.pathfinding",
 			"plugins/simplemaze/vendor/pathfinding-browser"
 		],
-		"plugins/skymap/tquery.skymap": [
+		"plugins/requirejs/confrequire/skymap.initrequire": [
+			"plugins/skymap/tquery.skymap",
 			"plugins/skymap/tquery.cubetexture"
 		],
 		"plugins/statsplus/tquery.statsplus": [
@@ -276,7 +278,8 @@ requirejs.config({
 		],
 		"plugins/tween/tquery.tween": [
 			"plugins/tween/vendor/Tween",
-			"plugins/tween/tquery.miditween"
+			"plugins/tween/tquery.miditween",
+			"plugins/tween/tquery.lineargradient"
 		],
 		"plugins/videos/tquery.createvideotexture": [
 			"plugins/videos/tquery.audiovideotexture",

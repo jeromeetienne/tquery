@@ -41,6 +41,8 @@ tQuery.registerStatic('createCubeTexture', function(opts){
 /** @namespace */
 tQuery.registerStatic('TextureCube', {});
 
+tQuery.TextureCube.baseUrl	= "../../../plugins/skymap/";
+
 /**
  * To create urls compatible with THREE.ImageUtils.loadTextureCube
 */
@@ -56,21 +58,30 @@ tQuery.TextureCube.createUrls	= function(basename, format, rootUrl, posPrefix, n
 	return urls;
 }
 
+tQuery.TextureCube.initWellKnownUrls	= function(){
+	var wellKnownUrls	= {};
+	var rootUrl		= tQuery.TextureCube.baseUrl+'../assets/images/textures/cube';
+	wellKnownUrls['bridge2']		= tQuery.TextureCube.createUrls('Bridge2'		, '.jpg', rootUrl, 'pos', 'neg'),
+	wellKnownUrls['escher']			= tQuery.TextureCube.createUrls('Escher'		, '.jpg', rootUrl),
+	wellKnownUrls['park2']			= tQuery.TextureCube.createUrls('Park2'			, '.jpg', rootUrl, 'pos', 'neg'),
+	wellKnownUrls['park3Med']		= tQuery.TextureCube.createUrls('Park3Med'		, '.jpg', rootUrl),
+	wellKnownUrls['pisa']			= tQuery.TextureCube.createUrls('pisa'			, '.png', rootUrl),
+	wellKnownUrls['skybox']			= tQuery.TextureCube.createUrls('skybox'		, '.jpg', rootUrl),
+	wellKnownUrls['swedishRoyalCastle']	= tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', rootUrl),
+
+	wellKnownUrls['mars']			= tQuery.TextureCube.createUrls('mars'			, '.jpg', rootUrl)
+
+	// copy result
+	tQuery.TextureCube.WellKnownUrls	= wellKnownUrls
+}
+
 /**
  * predefined urls compatible with THREE.ImageUtils.loadTextureCube.
  * They points toward the cube maps in plugins/assets
 */
-tQuery.TextureCube.WellKnownUrls	= {
-	bridge2			: tQuery.TextureCube.createUrls('Bridge2'		, '.jpg', '../../../plugins/assets/images/textures/cube', 'pos', 'neg'),
-	escher			: tQuery.TextureCube.createUrls('Escher'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
-	park2			: tQuery.TextureCube.createUrls('Park2'			, '.jpg', '../../../plugins/assets/images/textures/cube', 'pos', 'neg'),
-	park3Med		: tQuery.TextureCube.createUrls('Park3Med'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
-	pisa			: tQuery.TextureCube.createUrls('pisa'			, '.png', '../../../plugins/assets/images/textures/cube'),
-	skybox			: tQuery.TextureCube.createUrls('skybox'		, '.jpg', '../../../plugins/assets/images/textures/cube'),
-	swedishRoyalCastle	: tQuery.TextureCube.createUrls('SwedishRoyalCastle'	, '.jpg', '../../../plugins/assets/images/textures/cube'),
+tQuery.TextureCube.WellKnownUrls	= {}
 
-	mars			: tQuery.TextureCube.createUrls('mars'			, '.jpg', '../../../plugins/assets/images/textures/cube')
-};
+tQuery.TextureCube.initWellKnownUrls();
 
 /**
  * tQuery.convert plugin for textureCube to support those url

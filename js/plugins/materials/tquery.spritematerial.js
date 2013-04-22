@@ -59,6 +59,7 @@ tQuery.mixinAttributes(tQuery.SpriteMaterial, {
 	scaleByViewport		: tQuery.convert.toBoolean,
 	
 	fog			: tQuery.convert.toBoolean,
+	opacity			: tQuery.convert.toNumber,
 	blending		: tQuery.convert.toNumber
 });
 
