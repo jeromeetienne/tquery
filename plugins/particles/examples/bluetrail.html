@@ -25,7 +25,7 @@ require(['tquery.tween'], function(){
 			return (1 + 2 * tweenMidi(age)) * 0.25
 		}
 	})();
-	var lastEmit	= tQuery.nowSeconds();
+	var lastEmit	= 0;
 	var prevPosition= tQuery.createVector3(object.position());
 	world.hook(function(delta, now){
 		// rate limiter emittion
