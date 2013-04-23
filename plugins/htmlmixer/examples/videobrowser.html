@@ -1,7 +1,5 @@
 <!doctype html><title>Minimal tQuery Page</title>
-<script src="../../../build/tquery-bundle-require.js"></script>
-<script src='../../../vendor/three.js/examples/js/renderers/CSS3DRenderer.js'></script>
-<script src='../tquery.htmlmixer.js'></script>
+<script src="../../../build/tquery-bundle-require.min.js"></script>
 <body><style>
 body {
 	background	: hotpink;
@@ -146,7 +144,8 @@ Left button for the previous video, right button for the next video.
 <br/><br/>
 You can control the character who stands on the right.
 Just use the arrow keys.
-</div><script>
+</div>
+<script>
 require([ 'tquery.controls'
 	, 'tquery.minecraft'
 	, 'tquery.skymap'
@@ -154,6 +153,9 @@ require([ 'tquery.controls'
 	, 'tquery.keyboard'
 	, 'tquery.loaders'
 	, 'tquery.domevent'
+	, 'tquery.renderers'
+	, 'tquery.htmlmixer'
+	, 'tquery.tvset'
 ], function(){
 	var world	= tQuery.createWorld().boilerplate().start();
 	
@@ -307,7 +309,7 @@ require([ 'tquery.controls'
 			// honor location.hash
 			if( location.hash ){
 				response.feed.entry.forEach(function(entry, idx){
-					var title	= location.hash.substr(1);
+					var title	= decodeURIComponent(location.hash.substr(1));
 					if( entry.title['$t'] !== title )	return;
 					videoIdx	= idx;
 					setVideoUrl(videoIdx)
@@ -362,7 +364,7 @@ require([ 'tquery.controls'
 		var objectCSS	= plane.data('htmlMixerObjectCss')
 		var domElement	= objectCSS.element
 		domElement.src	= video.embedUrl;
-		location.hash	= video.title;
+		location.hash	= encodeURIComponent(video.title);
 	}
 });
 </script></body>
