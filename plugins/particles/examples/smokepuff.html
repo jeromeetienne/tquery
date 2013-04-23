@@ -2,13 +2,13 @@
 <script src="../../../build/tquery-bundle-require.js"></script>
 <body><script>
 require(['tquery.tween'], function(){
-	var world	= tQuery.createWorld().boilerplate().start();
+	var world	= tQuery.createWorld().boilerplate().defaultPageTitle().start();
 	
 	world.removeCameraControls()
 	
 	var smokePuff	= (function(){
 		// load the texture
-		var texture	= THREE.ImageUtils.loadTexture('../images/cloud10.png')
+		var texture	= THREE.ImageUtils.loadTexture('../../../plugins/particles/images/cloud10.png')
 		return function(position){
 			// randomize the initial position
 			position	= position.clone();
