@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Tron disk, animated selective glow (Three.js) - Thibaut Despoulain</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background:#000;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+				color: #ccc;
+			}
+			h1 {color: #ccc; }
+			a { color:skyblue }
+			canvas { pointer-events:none; z-index:10; }
+		#d {
+				position: absolute;
+				z-index: 99999;
+				top: 0;
+				right: 20px;
+				text-align: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="d">
+			<h1>Tron disk, animated selective glow (Three.js)</h1>
+			<p>Model &amp; render by <a href="http://bkcore.com">Thibaut Despoulain</a>.
+		</div>
+
+		<script src="js/Three.js"></script>
+		<script src="js/ShaderExtras.js"></script>
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/SavePass.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/Stats.js"></script>
+
+		<script>
+
+			var SCREEN_WIDTH = window.innerWidth;
+			var SCREEN_HEIGHT = window.innerHeight;
+
+			var container,stats;
+
+			var camera, scene, glowscene;
+			var renderer, renderTarget, renderTargetGlow;
+
+			var mesh, zmesh, geometry, pointLight, pmesh;
+
+			var finalcomposer, glowcomposer, hblur, vblur;
+
+			var glowTexSeq, glowTexIndex, glowTexLen, glowTexRef;
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			var render_canvas = 1, render_gl = 1;
+			var has_gl = 0;
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				// MAIN SCENE
+				
+				camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
+				camera.position.z = 140;
+
+				scene = new THREE.Scene();
+				scene.add( new THREE.AmbientLight( 0xffffff ) );
+				pointLight = new THREE.PointLight( 0xffffff );
+				pointLight.position.set( 0, 100, 0 );
+				scene.add( pointLight );
+
+				// RENDERER
+					
+				renderer = new THREE.WebGLRenderer({
+					//antialias: true
+				});
+
+				renderer.autoClear = false;
+				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+				renderer.domElement.style.position = "relative";
+
+				container.appendChild( renderer.domElement );
+
+				has_gl = 1;
+
+				// STATS
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				stats.domElement.style.zIndex = 100;
+				container.appendChild( stats.domElement );
+
+				// LOADER
+
+				var loader = new THREE.JSONLoader(),
+					callbackObj = function( geometry ) { createScene( geometry, 0, 0, 0, 0 ) };
+				loader.load( "tron/trondisk.js", callbackObj );
+
+
+				// GLOW SCENE
+
+				glowscene = new THREE.Scene();
+				glowscene.add( new THREE.AmbientLight( 0xffffff ) );
+				glowcamera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
+				glowcamera.position = camera.position;
+
+				// GLOW TEX SEQUENCE
+				
+				glowTexLen = 20;
+				glowTexIndex = 0;
+				glowTexSeq = [];
+				for(i = 0; i < glowTexLen; i++)
+				{
+					glowTexSeq[i] = THREE.ImageUtils.loadTexture('tron/seq/glowseq_'+i+'.png');
+				}
+
+				// GLOW COMPOSER
+
+				var renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBufer: false };
+				renderTargetGlow = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters );
+				
+				var effectFXAA = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
+				effectFXAA.uniforms[ 'resolution' ].value.set( 1 / SCREEN_WIDTH, 1 / SCREEN_HEIGHT );
+
+				hblur = new THREE.ShaderPass( THREE.ShaderExtras[ "horizontalBlur" ] );
+				vblur = new THREE.ShaderPass( THREE.ShaderExtras[ "verticalBlur" ] );
+
+				var bluriness = 3;
+
+				hblur.uniforms[ 'h' ].value = bluriness / SCREEN_WIDTH;
+				vblur.uniforms[ 'v' ].value = bluriness / SCREEN_HEIGHT;
+
+				var renderModelGlow = new THREE.RenderPass( glowscene, glowcamera );
+
+				glowcomposer = new THREE.EffectComposer( renderer, renderTargetGlow );
+
+				glowcomposer.addPass( renderModelGlow );
+				glowcomposer.addPass( hblur );
+				glowcomposer.addPass( vblur );
+				glowcomposer.addPass( hblur );
+				glowcomposer.addPass( vblur );
+
+				// FINAL COMPOSER
+								
+				var finalshader = {
+					uniforms: {
+						tDiffuse: { type: "t", value: 0, texture: null },
+						tGlow: { type: "t", value: 1, texture: null }
+					},
+
+					vertexShader: [
+						"varying vec2 vUv;",
+
+						"void main() {",
+
+							"vUv = vec2( uv.x, 1.0 - uv.y );",
+							"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+						"}"
+					].join("\n"),
+
+					fragmentShader: [
+						"uniform sampler2D tDiffuse;",
+						"uniform sampler2D tGlow;",
+
+						"varying vec2 vUv;",
+
+						"void main() {",
+
+							"vec4 texel = texture2D( tDiffuse, vUv );",
+							"vec4 glow = texture2D( tGlow, vUv );",
+							"gl_FragColor = texel + vec4(0.5, 0.75, 1.0, 1.0) * glow * 2.0;",
+
+						"}"
+					].join("\n")
+				};
+
+				finalshader.uniforms[ 'tGlow' ].texture = glowcomposer.renderTarget2;
+				
+				var renderModel = new THREE.RenderPass( scene, camera );
+				var finalPass = new THREE.ShaderPass( finalshader );
+				finalPass.needsSwap = true;
+
+				finalPass.renderToScreen = true;
+
+				renderTarget = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters );
+
+				finalcomposer = new THREE.EffectComposer( renderer, renderTarget );
+
+				finalcomposer.addPass( renderModel );
+				finalcomposer.addPass( effectFXAA );
+				finalcomposer.addPass( finalPass );
+
+
+
+			}
+
+			function createScene( geometry, x, y, z, b ) {
+
+				zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial() );
+				zmesh.position.set( x, y, z );
+				zmesh.scale.set( 3, 3, 3 );
+				zmesh.overdraw = true;
+				scene.add( zmesh );
+				
+				var gmat = new THREE.MeshBasicMaterial( { map: glowTexSeq[0] } );
+				var geometryClone = THREE.GeometryUtils.clone( geometry );
+				var gmesh = new THREE.Mesh(geometryClone, gmat);
+				gmesh.position = zmesh.position;
+				gmesh.scale = zmesh.scale;
+				gmesh.overdraw = true;
+				glowscene.add(gmesh);
+				glowTexRef = gmesh;
+			}
+
+			function onDocumentMouseMove(event) {
+
+				mouseX = ( event.clientX - windowHalfX );
+				mouseY = ( event.clientY - windowHalfY );
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			var t = 0.0;
+
+			function render() {
+				t += .01;
+
+				var i = Math.floor(t*2 % glowTexLen);
+				if(i != glowTexIndex)
+				{
+					glowTexIndex = i;
+					glowTexRef.material.map = glowTexSeq[glowTexIndex];
+					console.log(glowTexRef);
+				}
+
+				camera.position.x += ( mouseX/2 - camera.position.x ) * .05;
+				camera.position.y += ( - mouseY/2 - camera.position.y ) * .05;
+
+				camera.lookAt( scene.position );
+				glowcamera.lookAt( scene.position );
+				pointLight.position.set( 0, Math.cos(t)*200, 0 );
+
+				glowcomposer.render( 0.1 );
+				finalcomposer.render( 0.1 );
+			}
+
+			init();
+			animate();
+		</script>
+
+	</body>
+</html>

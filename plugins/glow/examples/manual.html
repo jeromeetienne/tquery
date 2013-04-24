@@ -1,0 +1,82 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<body><script>
+require(['tquery.pproc'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// your code goes here
+	
+	// setup the RenderTarget
+	var textureW	= window.innerWidth;
+	var textureH	= window.innerHeight;
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
+	});
+
+	var tSceneGlow	= new THREE.Scene();
+	var tCameraGlow	= new THREE.PerspectiveCamera(45, textureW/textureH, 0.01, 10000 );
+	tCameraGlow.position	= world.camera().get(0).position;
+	tCameraGlow.rotation	= world.camera().get(0).rotation;
+	tSceneGlow.add(tCameraGlow);
+	THREEx.WindowResize.bind(rtTexture, tCameraGlow)
+
+	torus	= tQuery.createTorus().addTo(tSceneGlow)
+		.scaleBy(2)
+	
+	world.hook(function(delta, now){
+		var tRenderer	= world.tRenderer()
+		var tScene	= tSceneGlow
+		var tCamera	= world.camera().get(0)
+		tRenderer.render(tSceneGlow, tCameraGlow, rtTexture, true);
+	})
+	
+	world.hook(function(delta, now){
+		torus.rotateY(delta * Math.PI * 2 * 1)
+	})
+	
+	var object	= tQuery.createPlane().addTo(world)
+		.scaleBy(2)
+		.setBasicMaterial()
+			.color('pink')
+			//.map(rtTexture)
+			.back();
+
+	var finalShader = {
+		uniforms: {
+			tDiffuse: { type: "t", value: 0, texture: null },
+			tGlow: { type: "t", value: 1, texture: null }
+		},
+		vertexShader: [
+			"varying vec2 vUv;",
+
+			"void main() {",
+				"vUv = uv;",
+				"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+			"}"
+		].join("\n"),
+		fragmentShader: [
+			"uniform sampler2D tDiffuse;",
+			"uniform sampler2D tGlow;",
+			"varying vec2 vUv;",
+			"void main() {",
+				//"vec4 texel = texture2D( tDiffuse, vUv );",
+				"vec4 texel = texture2D( tGlow, vUv );",
+				"gl_FragColor = vec4(0.5, 0.75, 1.0, 1.0) * texel;",
+
+			"}"
+		].join("\n")
+	};
+	finalShader.uniforms[ 'tGlow' ].texture = rtTexture;
+
+	var finalPass	= new THREE.ShaderPass( finalShader );
+//	finalPass.needsSwap = true;
+
+	var composer	= tQuery.createEffectComposer()
+		.renderPass()
+		.plainPass(finalPass)
+		.finish();
+});
+</script></body>
