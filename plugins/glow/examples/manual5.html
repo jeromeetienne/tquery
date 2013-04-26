@@ -1,0 +1,75 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<body><script>
+require(['tquery.pproc', 'tquery.skymap', 'tquery.minecraft', 'tquery.keyboard'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tRenderer().setClearColor('black', 0)
+
+	var ctxColor	= initCtxColor(world)
+	var worldColor	= ctxColor.world
+	var meshColor	= tQuery.createTorus().addTo(worldColor).scaleBy(2)
+	worldColor.hook(function(delta, now){
+		meshColor.rotateY(1*Math.PI*2*delta)
+	})
+
+
+
+	tQuery.createTorus().addTo(world)
+		
+	var composer	= tQuery.createEffectComposer().renderPass()
+			//.vignette()
+
+
+	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/rocks.jpg');
+	var effectBlend	= new THREE.ShaderPass( THREE.BlendShader, 'tDiffuse1');
+	effectBlend.uniforms['tDiffuse2' ].value	= ctxColor.renderTarget;
+	effectBlend.uniforms['mixRatio' ].value		= 0.5;
+	effectBlend.uniforms['opacity' ].value		= 1;
+	composer._tComposer.addPass( effectBlend );
+
+	composer.finish();
+
+
+
+	function initCtxColor(parentWorld){
+
+		// setup the RenderTarget
+		var textureW	= window.innerWidth
+		var textureH	= window.innerHeight
+		var renderTarget= new THREE.WebGLRenderTarget(textureW, textureH, {
+			minFilter	: THREE.LinearFilter,
+			magFilter	: THREE.NearestFilter,
+			format		: THREE.RGBFormat
+		})
+
+		var world	= tQuery.createWorld({
+			renderer	: parentWorld.tRenderer(),
+		});
+		tQuery.world	= parentWorld;
+		parentWorld.loop().hook(function(delta, now){
+			world.loop().tick()
+		});
+
+		var composer	= tQuery.createEffectComposer({
+			world		: world,
+			renderTarget	: renderTarget
+		})
+		composer.renderPass()
+			.sepia()
+		// Without this copy the composer doesnt show the first effects... FIXME i dunno why
+		composer.copy().copy()
+		composer.finish()
+
+console.log('composer', composer)
+
+
+		var exports		= {}
+		exports.renderTarget	= composer.tComposer().readBuffer;		
+		exports.world		= world;
+		return exports;
+	}
+
+
+});
+</script></body>
