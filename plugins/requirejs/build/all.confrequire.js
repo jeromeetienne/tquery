@@ -22,6 +22,7 @@ requirejs.config({
 			"tquery.grassground": "plugins/requirejs/confrequire/grassground.initrequire",
 			"tquery.gsvpano": "plugins/gsvpano/tquery.gsvpano",
 			"tquery.headtrackr": "plugins/headtrackr/tquery.headtrackr",
+			"tquery.htmlmixer": "plugins/htmlmixer/tquery.htmlmixer",
 			"tquery.keyboard": "plugins/keyboard/tquery.keyboard",
 			"tquery.lavamaterial": "plugins/requirejs/confrequire/lavamaterial.initrequire",
 			"tquery.leap": "plugins/requirejs/confrequire/leap.initrequire",
@@ -114,6 +115,9 @@ requirejs.config({
 		],
 		"plugins/headtrackr/tquery.headtrackr": [
 			"plugins/headtrackr/vendor/headtrackr"
+		],
+		"plugins/htmlmixer/tquery.htmlmixer": [
+			"three.js/examples/js/renderers/CSS3DRenderer"
 		],
 		"plugins/keyboard/tquery.keyboard": [
 			"threex/THREEx.KeyboardState"

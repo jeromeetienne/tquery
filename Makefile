@@ -101,10 +101,7 @@ buildCore:
 
 minifyCore: buildCore
 	echo $(BANNER)	>  build/tquery.min.js
-	curl --data-urlencode "js_code@build/tquery.js" 	\
-		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile	\
-		>> build/tquery.min.js
+	uglifyjs build/tquery.js >> build/tquery.min.js
 	@echo size minified + gzip is `gzip -c build/tquery.min.js | wc -c` byte
 
 buildBundle: buildCore
@@ -125,10 +122,7 @@ buildBundle: buildCore
 
 minifyBundle: buildBundle
 	echo $(BANNER)	>  build/tquery-bundle.min.js
-	curl --data-urlencode "js_code@build/tquery-bundle.js" 	\
-		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile	\
-		>> build/tquery-bundle.min.js
+	uglifyjs build/tquery-bundle.js >> build/tquery-bundle.min.js
 	@echo size minified + gzip is `gzip -c build/tquery-bundle.min.js | wc -c` byte
 
 buildBundleRequire: buildBundle
@@ -140,10 +134,7 @@ buildBundleRequire: buildBundle
 
 minifyBundleRequire: buildBundleRequire
 	echo $(BANNER)	>  build/tquery-bundle-require.min.js
-	curl --data-urlencode "js_code@build/tquery-bundle-require.js" 	\
-		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile	\
-		>> build/tquery-bundle-require.min.js
+	uglifyjs build/tquery-bundle-require.js >> build/tquery-bundle-require.min.js
 	@echo size minified + gzip is `gzip -c build/tquery-bundle-require.min.js | wc -c` byte
 
 .PHONY: docs buildCore buildBundle minifyCore minifyBundle

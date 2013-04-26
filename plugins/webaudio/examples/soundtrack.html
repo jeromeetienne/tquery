@@ -12,15 +12,13 @@ require(['tquery.webaudio'], function(){
 		tQuery.createSound().load('../../assets/sounds/eatpill.mp3', function(sound){
 			sound.loop(true).play()
 		});
-		
-		
+
 		// init the library without tQuery plugins to avoid the listener localisation
 		var webaudio	= new WebAudio();
 		// create a sound
 		webaudio.createSound().load('../../assets/sounds/techno.mp3', function(sound){
 			sound.loop(true).play();
 		});
-
 	}
 });
 </script></body>
