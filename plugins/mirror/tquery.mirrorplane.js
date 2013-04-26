@@ -47,7 +47,7 @@ tQuery.registerStatic('MirrorPlane', function(opts){
 	var mirrorCamera= tQuery(tPlaneCam).addTo(container)
 		.addClass('camera')
 	
-	if( true ){
+	if( false ){
 		var cameraPerspectiveHelper = new THREE.CameraHelper( mirrorCamera.get(0) );
 		world.add( cameraPerspectiveHelper ); 
 		world.hook(function(delta, now){
