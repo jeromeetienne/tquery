@@ -157,7 +157,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i], i)
+		var keepLooping	= callback(arr[i], i, arr)
 		if( keepLooping === false )	return false;
 	}
 	return true;
