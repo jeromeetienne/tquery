@@ -80,6 +80,11 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
+	// tick once
+	this.tick();
+}
+
+tQuery.Loop.prototype.tick	= function(){
 	// update time values
 	var now		= tQuery.nowSeconds();
 	// init _lastTime if needed
