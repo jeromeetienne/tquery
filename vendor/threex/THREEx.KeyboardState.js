@@ -42,9 +42,9 @@ THREEx.KeyboardState	= function(domElement)
 	this.modifiers	= {};
 	
 	// create callback to bind/unbind keyboard events
-	var self	= this;
-	this._onKeyDown	= function(event){ self._onKeyChange(event, true); };
-	this._onKeyUp	= function(event){ self._onKeyChange(event, false);};
+	var _this	= this;
+	this._onKeyDown	= function(event){ _this._onKeyChange(event)	}
+	this._onKeyUp	= function(event){ _this._onKeyChange(event)	}
 
 	// bind keyEvents
 	this._domElement.addEventListener("keydown", this._onKeyDown, false);
@@ -80,20 +80,21 @@ THREEx.KeyboardState.ALIAS	= {
 /**
  * to process the keyboard dom event
 */
-THREEx.KeyboardState.prototype._onKeyChange	= function(event, pressed)
+THREEx.KeyboardState.prototype._onKeyChange	= function(event)
 {
 	// log to debug
-	//console.log("onKeyChange", event, pressed, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey, event.metaKey)
+	//console.log("onKeyChange", event, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey, event.metaKey)
 
 	// update this.keyCodes
-	var keyCode		= event.keyCode;
-	this.keyCodes[keyCode]	= pressed;
+	var keyCode		= event.keyCode
+	var pressed		= event.type === 'keyup' ? true : false
+	this.keyCodes[keyCode]	= pressed
 
 	// update this.modifiers
-	this.modifiers['shift']	= event.shiftKey;
-	this.modifiers['ctrl']	= event.ctrlKey;
-	this.modifiers['alt']	= event.altKey;
-	this.modifiers['meta']	= event.metaKey;
+	this.modifiers['shift']	= event.shiftKey
+	this.modifiers['ctrl']	= event.ctrlKey
+	this.modifiers['alt']	= event.altKey
+	this.modifiers['meta']	= event.metaKey
 }
 
 /**
@@ -102,12 +103,11 @@ THREEx.KeyboardState.prototype._onKeyChange	= function(event, pressed)
  * @param {String} keyDesc the description of the key. format : modifiers+key e.g shift+A
  * @returns {Boolean} true if the key is pressed, false otherwise
 */
-THREEx.KeyboardState.prototype.pressed	= function(keyDesc)
-{
+THREEx.KeyboardState.prototype.pressed	= function(keyDesc){
 	var keys	= keyDesc.split("+");
 	for(var i = 0; i < keys.length; i++){
 		var key		= keys[i];
-		var pressed;
+		var pressed	= false;
 		if( THREEx.KeyboardState.MODIFIERS.indexOf( key ) !== -1 ){
 			pressed	= this.modifiers[key];
 		}else if( Object.keys(THREEx.KeyboardState.ALIAS).indexOf( key ) != -1 ){
@@ -119,3 +119,39 @@ THREEx.KeyboardState.prototype.pressed	= function(keyDesc)
 	};
 	return true;
 }
+
+/**
+ * return true if an event match a keyDesc
+ * @param  {KeyboardEvent} event   keyboard event
+ * @param  {String} keyDesc string description of the key
+ * @return {Boolean}         true if the event match keyDesc, false otherwise
+ */
+THREEx.KeyboardState.prototype.eventMatches = function(event, keyDesc) {
+	var aliases	= THREEx.KeyboardState.ALIAS
+	var aliasKeys	= Object.keys(aliases)
+	var keys	= keyDesc.split("+")
+	// log to debug
+	//console.log("eventMatches", event, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey, event.metaKey)
+
+	for(var i = 0; i < keys.length; i++){
+		var key		= keys[i];
+		var pressed	= false;
+		if( key === 'shift' ){
+			pressed	= (event.shiftKey	? true : false)
+		}else if( key === 'ctrl' ){
+			pressed	= (event.ctrlKey	? true : false)
+		}else if( key === 'alt' ){
+			pressed	= (event.altKey		? true : false)
+		}else if( key === 'meta' ){
+			pressed	= (event.metaKey	? true : false)
+		}else if( aliasKeys.indexOf( key ) !== -1 ){
+			pressed	= (event.keyCode === aliases[key] ? true : false);
+		}else if( event.keyCode !== key.toUpperCase().charCodeAt(0) ){
+			pressed	= true;
+		}
+		if( !pressed )	return false;
+	}
+	return true;
+}
+
+

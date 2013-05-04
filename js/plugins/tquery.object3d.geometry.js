@@ -136,8 +136,8 @@ tQuery.Object3D.registerInstance('scale', function(vector3){
 	// sanity check
 	console.assert(vector3 instanceof THREE.Vector3, "Object3D.scale parameter error");
 	// do the operation on each node
-	this.each(function(object3d){
-		object3d.scale.copy(vector3);
+	this.each(function(tObject3d){
+		tObject3d.scale.copy(vector3);
 	});
 	// return this, to get chained API	
 	return this;

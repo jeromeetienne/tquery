@@ -37768,7 +37768,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i], i)
+		var keepLooping	= callback(arr[i], i, arr)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -38562,6 +38562,22 @@ tQuery.Object3D.prototype.remove	= function(object3D)
 //		Handle dom attribute						//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.Object3D.prototype.name	= function(value){
+	// sanity check 
+	console.assert(this.length <= 1, "tQuery.Object3D.id used on multi-elements" );
+	// handle getter
+	if( value === undefined ){
+		if( this.length === 0 )	return undefined;
+		var tObject3d	= this.get(0);
+		return tObject3d.name;
+	}
+	// handle setter
+	if( this.length === 0 )	return undefined;
+	var tObject3d	= this.get(0);
+	tObject3d.name	= value;
+	return this;
+}
+
 /**
  * Getter/Setter for the id of the matched elements
 */
@@ -38719,6 +38735,24 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 			return hasClass ? true : false;
 		}else if( meta === "#" ){
 			return object3d._tqId === suffix ? true : false;
+		}else if( meta === "[" ){
+			var matches	= subItem.match(/\[(.*)([=])(.*)\]/);
+			var key		= matches[1]
+			var operator	= matches[2]
+			var value	= matches[3]
+				.replace(/^['"]/, '')	// remove left "'
+				.replace(/['"]$/, '')	// remove right "'
+			if( key === 'name'){
+				if( operator === '=' ){
+					return object3d.name === value ? true : false;
+				}else{
+					console.assert('operator not handled')
+				}
+			}else{
+				console.assert(false, 'key not handled:', key)
+			}
+			console.assert(false, 'this point should never be reached')
+			return undefined;
 		}else if( subItem === "*" ){
 			return true;
 		}else if( this._selectableGeometries.indexOf(subItem) !== -1 ){	// Handle geometries
@@ -39914,6 +39948,7 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	map			: tQuery.convert.toTexture,
 	envMap			: tQuery.convert.toTextureCube,
 	refractionRatio		: tQuery.convert.toNumber,
+	blending		: tQuery.convert.toNumber,
 	side			: tQuery.convert.identity,
 	wireframe		: tQuery.convert.toBoolean,
 	wireframeLinewidth	: tQuery.convert.toInteger,
@@ -40491,8 +40526,8 @@ tQuery.Object3D.registerInstance('scale', function(vector3){
 	// sanity check
 	console.assert(vector3 instanceof THREE.Vector3, "Object3D.scale parameter error");
 	// do the operation on each node
-	this.each(function(object3d){
-		object3d.scale.copy(vector3);
+	this.each(function(tObject3d){
+		tObject3d.scale.copy(vector3);
 	});
 	// return this, to get chained API	
 	return this;

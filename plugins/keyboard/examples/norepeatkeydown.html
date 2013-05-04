@@ -1,0 +1,38 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle.js"></script>
+
+<script src="../../../vendor/threex/THREEx.KeyboardState.js"></script>
+<script src="../tquery.keyboard.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object3d	= tQuery.createTorus().addTo(world);
+	
+	/**
+	 * ## how to get rid of keyboard auto repeat
+	 * * keydown is repeated automatically due to keyboard autorepeat
+	 * * this is an example of how to handle detect keydown without autorepat
+	 */
+
+	// only on keydown + no repeat
+	var keyboard	= tQuery.keyboard();
+	var wasPressed	= {};
+	keyboard.domElement().addEventListener('keydown', function(event){
+		if( keyboard.eventMatches(event, 'left') && !wasPressed['left'] ){
+			object3d.rotateX(-Math.PI/6)
+			wasPressed['left']	= true;
+		}
+		if( keyboard.eventMatches(event, 'right') && !wasPressed['right']){
+			object3d.rotateX(+Math.PI/6)
+			wasPressed['right']	= true;			
+		}
+	})	
+	// listen on keyup to maintain ```wasPressed``` array
+	keyboard.domElement().addEventListener('keyup', function(event){
+		if( keyboard.eventMatches(event, 'left') ){
+			wasPressed['left']	= false;
+		}
+		if( keyboard.eventMatches(event, 'right') ){
+			wasPressed['right']	= false;
+		}
+	})
+</script></body>
