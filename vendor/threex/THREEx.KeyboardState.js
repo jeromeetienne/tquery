@@ -87,7 +87,7 @@ THREEx.KeyboardState.prototype._onKeyChange	= function(event)
 
 	// update this.keyCodes
 	var keyCode		= event.keyCode
-	var pressed		= event.type === 'keyup' ? true : false
+	var pressed		= event.type === 'keydown' ? true : false
 	this.keyCodes[keyCode]	= pressed
 
 	// update this.modifiers
@@ -106,8 +106,8 @@ THREEx.KeyboardState.prototype._onKeyChange	= function(event)
 THREEx.KeyboardState.prototype.pressed	= function(keyDesc){
 	var keys	= keyDesc.split("+");
 	for(var i = 0; i < keys.length; i++){
-		var key		= keys[i];
-		var pressed	= false;
+		var key		= keys[i]
+		var pressed	= false
 		if( THREEx.KeyboardState.MODIFIERS.indexOf( key ) !== -1 ){
 			pressed	= this.modifiers[key];
 		}else if( Object.keys(THREEx.KeyboardState.ALIAS).indexOf( key ) != -1 ){
