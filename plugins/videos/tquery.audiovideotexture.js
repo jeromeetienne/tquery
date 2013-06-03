@@ -15,7 +15,7 @@ tQuery.registerStatic('AudioVideoTexture', function(opts){
 	// arguments sanity check
 	console.assert( opts.url, "url MUST be specified" )
 
-	this._world	= opts.world;
+	var world	= opts.world;
 
 	// create the video element
 	var video	= document.createElement('video');
@@ -25,19 +25,20 @@ tQuery.registerStatic('AudioVideoTexture', function(opts){
 	video.loop	= true;
 	video.src	= opts.url;
 	this._video	= video
+	this.addEventListener('destroy', function(){ video.pause()	});
 	
 	// create the texture
 	this._tTexture	= new THREE.Texture( video );
 	// hook a function to update the texture	
-	this._callback	= this._world.hook(function(){
+	var callback	= world.hook(function(){
 		if( video.readyState !== video.HAVE_ENOUGH_DATA )	return;
 		this._tTexture.needsUpdate	= true;
 	}.bind(this));
-	
+	this.addEventListener('destroy', function(){ world.unhook(callback)	});
 	
 	// wait until the vid is loaded
 	this._video.addEventListener('canplaythrough', function(event){
-		var webaudio	= this._world.getWebAudio();
+		var webaudio	= world.getWebAudio();
 		// creating custom nodeChain
 		var nodesChain	= WebAudio.NodeChainBuilder.create(webaudio.context())
 			.mediaElementSource(this._video)
@@ -47,11 +48,12 @@ tQuery.registerStatic('AudioVideoTexture', function(opts){
 		// trigger the event
 		this.dispatchEvent('soundReady')
 	}.bind(this));
+	this.addEventListener('destroy', function(){ this._sound.destroy()	}.bind(this));
 });
 
-tQuery.AudioVideoTexture.prototype.destroy = function() {
-	world.unhook(this._callback)
-};
+tQuery.AudioVideoTexture.prototype.destroy = function(){
+	this.dispatchEvent('destroy');
+}
 
 // make it eventable
 tQuery.MicroeventMixin(tQuery.AudioVideoTexture.prototype)
@@ -62,12 +64,13 @@ tQuery.MicroeventMixin(tQuery.AudioVideoTexture.prototype)
 
 tQuery.AudioVideoTexture.prototype.video = function() {
 	return this._video;
-};
+}
 
 tQuery.AudioVideoTexture.prototype.tTexture = function() {
 	return this._tTexture;
-};
+}
 
 tQuery.AudioVideoTexture.prototype.sound = function() {
 	return this._sound;
-};
+}
+
