@@ -75,7 +75,7 @@ tQuery.VERSION	= "r58.0";
  * @param {Object} object the object in which store the data
  * @param {String} key the key/name of the data to get/set
  * @param {*} value the value to set (optional)
- * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to false
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
  * 
  * @returns {*} return the value stored in this object for this key
 */
