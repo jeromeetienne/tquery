@@ -1,0 +1,59 @@
+<!doctype html><title>Minimal tQuery Page</title>
+
+<body><script>
+	Flow()
+		.par(function p0(next){
+			console.log('p0')
+			next()
+		})
+		.seq(function s1(next){
+			console.log('s1')
+			next()			
+		})
+		.par(function p1(next){
+			console.log('p1')
+			next()
+		})
+		.par(function p2(next){
+			console.log('p2')
+			next()
+		})
+		.par(function p3(next){
+			console.log('p3')
+			next()
+		})
+		.seq(function s2(next){
+			console.log('s2')
+			next()			
+		})
+		.seq(function s3(next){
+			console.log('s3')
+			next()			
+		})
+		
+
+/**
+ * Flow control - from https://github.com/jeromeetienne/gowiththeflow.js
+*/
+function Flow(){
+	var self, stack = [], timerId = setTimeout(function(){ console.dir(stack); timerId = null; /*self._next();*/ }, 0);
+	return self = {
+		destroy	: function(){ timerId && clearTimeout(timerId);	},
+		par	: function(callback, isSeq){
+			if(isSeq || !(stack[stack.length-1] instanceof Array)) stack.push([]);
+			stack[stack.length-1].push(callback);
+			return self;
+		},seq	: function(callback){ return self.par(callback, true);	},
+		_next	: function(err, result){
+			var errors = [], results = [], callbacks = stack.shift() || [], nbReturn = callbacks.length, isSeq = nbReturn == 1;
+			callbacks && callbacks.forEach(function(fct, index){
+				fct(function(error, result){
+					errors[index]	= error;
+					results[index]	= result;		
+					if(--nbReturn == 0)	self._next(isSeq?errors[0]:errors, isSeq?results[0]:results)
+				}, err, result)
+			})
+		}
+	}
+};
+</script></body>

@@ -93,7 +93,7 @@ tQuery.Loop.prototype.tick	= function(){
 	var minLastTime	= now - tQuery.Loop.maxDelta;
 	if( this._lastTime < minLastTime ){
 		this._lastTime	= minLastTime;
-		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+		//console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
 	}
 	// compute delta
 	var delta	= now - this._lastTime;

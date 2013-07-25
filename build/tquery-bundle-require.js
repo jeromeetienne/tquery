@@ -37686,7 +37686,7 @@ tQuery.VERSION	= "r58.0";
  * @param {Object} object the object in which store the data
  * @param {String} key the key/name of the data to get/set
  * @param {*} value the value to set (optional)
- * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to false
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
  * 
  * @returns {*} return the value stored in this object for this key
 */
@@ -38308,13 +38308,16 @@ tQuery.Node.prototype.back	= function(value)
 
 /**
  * same as .data() in jquery
+ * @param {String} key the key/name of the data to get/set
+ * @param {*} value the value to set (optional)
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
 */
-tQuery.Node.prototype.data	= function(key, value)
+tQuery.Node.prototype.data	= function(key, value, mustNotExist)
 {
 	// handle the setter case
 	if( value !== undefined ){
 		this.each(function(element){
-			tQuery.data(element, key, value);
+			tQuery.data(element, key, value, mustNotExist);
 		});
 		return this;	// for chained API
 	}
@@ -38935,7 +38938,7 @@ tQuery.Mesh.prototype.material	= function(value){
 	// handle parameter polymorphism
 	if( value instanceof tQuery.Material )	value	= value.get(0)
 	// sanity check
-	console.assert( value instanceof THREE.Material )
+	console.assert( value instanceof THREE.Material || value instanceof THREE.FaceMaterial )
 	// handle the setter case
 	this.each(function(tMesh){
 		tMesh.material	= value;
@@ -39400,7 +39403,7 @@ tQuery.Loop.prototype.tick	= function(){
 	var minLastTime	= now - tQuery.Loop.maxDelta;
 	if( this._lastTime < minLastTime ){
 		this._lastTime	= minLastTime;
-		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+		//console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
 	}
 	// compute delta
 	var delta	= now - this._lastTime;

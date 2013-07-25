@@ -6,12 +6,12 @@ require(['tquery.webaudio', 'tquery.videos'], function(){
 
 	world.removeCameraControls().enableWebAudio()
 
-	console.assert(WebAudio.isAvailable);
+	console.assert(WebAudio.isAvailable)
 	
 	var object3D	= tQuery.createCube(1.6,0.9,0.2).addTo(world)
 	// create the texture
 	var url		= '../../assets/videos/sintel.ogv';
-	var avTexture	= tQuery.createAudioVideoTexture(url);
+	var avTexture	= tQuery.createAudioVideoTexture(url)
 	// set it as material
 	object3D.setBasicMaterial()
 		.map(avTexture.tTexture())	// To get the video 
@@ -26,5 +26,5 @@ require(['tquery.webaudio', 'tquery.videos'], function(){
 		object3D.positionX( Math.cos(angle)*2.5 );
 		object3D.positionZ( -2 + Math.sin(angle)*4 );
 	})
-});
+})
 </script></body>
