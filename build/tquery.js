@@ -2857,7 +2857,9 @@ tQuery.Object3D.registerInstance('rotation', function(vector3){
 	console.assert(vector3 instanceof THREE.Vector3, "Object3D.rotation parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.copy(vector3);
+		object3d.rotation.x	= vector3.x
+		object3d.rotation.y	= vector3.y
+		object3d.rotation.z	= vector3.z
 	})
 	// return this, to get chained API	
 	return this;
@@ -2891,7 +2893,9 @@ tQuery.Object3D.registerInstance('rotate', function(angles){
 	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.add(angles);
+		object3d.rotation.x	+= angles.x
+		object3d.rotation.y	+= angles.y
+		object3d.rotation.z	+= angles.z
 	})
 	// return this, to get chained API	
 	return this;
