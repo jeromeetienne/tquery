@@ -7,7 +7,7 @@
   * availability === null if unknown
   * availability === true if it is available
   * availability === false if not available
-* how to handle progressive
+* how to handle progressive 
 
 ### docs
 * .right/.left are boolean
