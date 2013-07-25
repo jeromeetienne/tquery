@@ -7,6 +7,7 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 	// handle arguments default values
 	this._opts	= opts	= tQuery.extend(opts, {
 		world		: tQuery.world,
+		speed		: 2,
 		lateralMove	: 'rotationY'
 	});
 	// arguments sanity check
@@ -38,8 +39,8 @@ tQuery.registerStatic('MinecraftCharControls', function(opts){
 		}else	console.assert(false, 'opts.lateralMove invalid: '+opts.lateralMove);
 
 		var distance	= 0;
-		if( input.up )		distance	= +2 * delta;
-		if( input.down )	distance	= -2 * delta;
+		if( input.up )		distance	= +opts.speed * delta;
+		if( input.down )	distance	= -opts.speed * delta;
 		if( distance ){
 			var speed	= new THREE.Vector3(0, 0, distance);
 			var matrix	= new THREE.Matrix4().makeRotationY(model.rotation.y);
@@ -57,6 +58,10 @@ tQuery.MicroeventMixin(tQuery.MinecraftCharControls.prototype);
 tQuery.MinecraftCharControls.prototype.destroy	= function(){
 	this._opts.world.unhook(this._callback);
 }
+
+tQuery.MinecraftCharControls.prototype.opts = function() {
+	return this._opts;
+};
 
 tQuery.registerStatic('createMinecraftCharControls', function(opts){
 	return new tQuery.MinecraftCharControls(opts)

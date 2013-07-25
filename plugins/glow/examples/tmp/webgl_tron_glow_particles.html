@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Tron disk, selective glow, particles, icosahedrons (Three.js) - Thibaut Despoulain</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background:#000;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+				color: #ccc;
+			}
+			h1 {color: #ccc; }
+			a { color:skyblue }
+			canvas { pointer-events:none; z-index:10; }
+			#d {
+				position: absolute;
+				z-index: 99999;
+				top: 0;
+				right: 20px;
+				text-align: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="d">
+			<h1>Tron disk, selective glow, particles, icosahedrons (Three.js)</h1>
+			<p>Model &amp; render by <a href="http://bkcore.com">Thibaut Despoulain</a>.
+		</div>
+
+		<script src="js/Three.js"></script>
+		<script src="js/ShaderExtras.js"></script>
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/SavePass.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/Stats.js"></script>
+
+		<script>
+
+			var SCREEN_WIDTH = window.innerWidth;
+			var SCREEN_HEIGHT = window.innerHeight;
+
+			var COLOR1 = 0x77bbff;
+			var COLOR2 = 0x8ec5e5;
+			var COLOR3 = 0x97a8ba;
+
+			var container,stats;
+
+			var camera, target, scene, glowscene;
+			var renderer, renderTarget, renderTargetGlow;
+
+			var mesh, zmesh, geometry, pointLight, pmesh, particles;
+
+			var finalcomposer, glowcomposer, hblur, vblur;
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			var render_canvas = 1, render_gl = 1;
+			var has_gl = 0;
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				// MAIN SCENE
+				
+				camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
+				camera.position.z = 180;
+				
+				target = new THREE.Vector3(0, 40, 0);
+
+				scene = new THREE.Scene();
+				scene.add( new THREE.AmbientLight( 0xffffff ) );
+				pointLight = new THREE.PointLight( COLOR3 );
+				pointLight.position.set( 0, 100, 0 );
+				scene.add( pointLight );
+				cameraLight = new THREE.PointLight( 0x666666 );
+				camera.add(cameraLight);
+
+
+				// GLOW SCENE
+
+				glowscene = new THREE.Scene();
+				glowscene.add( new THREE.AmbientLight( 0xffffff ) );
+				glowcamera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 100000 );
+				glowcamera.position = camera.position;
+
+				// RENDERER
+					
+				renderer = new THREE.WebGLRenderer({
+					//antialias: true
+				});
+
+				renderer.autoClear = false;
+				renderer.sortObjects = true;
+				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+				renderer.domElement.style.position = "relative";
+
+				container.appendChild( renderer.domElement );
+
+				has_gl = 1;
+
+				// STATS
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				stats.domElement.style.zIndex = 100;
+				container.appendChild( stats.domElement );
+
+				// LOADER
+
+				var loader = new THREE.JSONLoader(),
+					callbackObj = function( geometry ) { createScene( geometry, 0, 0, 0, 0 ) };
+				loader.load( "tron/trondisk.js", callbackObj );
+
+				// PARTICLES
+				
+				particles = createParticles();
+
+				// GLOW COMPOSER
+
+				var renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBufer: false };
+				renderTargetGlow = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters );
+
+				//var saveGlowPass = new THREE.SavePass( new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters ) );
+				
+				var effectFXAA = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
+				effectFXAA.uniforms[ 'resolution' ].value.set( 1 / SCREEN_WIDTH, 1 / SCREEN_HEIGHT );
+
+				hblur = new THREE.ShaderPass( THREE.ShaderExtras[ "horizontalBlur" ] );
+				vblur = new THREE.ShaderPass( THREE.ShaderExtras[ "verticalBlur" ] );
+
+				var bluriness = 2;
+
+				hblur.uniforms[ 'h' ].value = bluriness / SCREEN_WIDTH;
+				vblur.uniforms[ 'v' ].value = bluriness / SCREEN_HEIGHT;
+
+				var renderModelGlow = new THREE.RenderPass( glowscene, glowcamera );
+
+				glowcomposer = new THREE.EffectComposer( renderer, renderTargetGlow );
+
+				glowcomposer.addPass( renderModelGlow );
+				//glowcomposer.addPass( saveGlowPass );
+				glowcomposer.addPass( hblur );
+				glowcomposer.addPass( vblur );
+				glowcomposer.addPass( hblur );
+				glowcomposer.addPass( vblur );
+
+				// FINAL COMPOSER
+								
+				var finalshader = {
+					uniforms: {
+						tDiffuse: { type: "t", value: 0, texture: null },
+						tGlow: { type: "t", value: 1, texture: null },
+						//tLumi: { type: "t", value: 2, texture: null }
+					},
+
+					vertexShader: [
+						"varying vec2 vUv;",
+
+						"void main() {",
+
+							"vUv = vec2( uv.x, 1.0 - uv.y );",
+							"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+						"}"
+					].join("\n"),
+
+					fragmentShader: [
+						"uniform sampler2D tDiffuse;",
+						"uniform sampler2D tGlow;",
+						//"uniform sampler2D tLumi;",
+
+						"varying vec2 vUv;",
+
+						"void main() {",
+
+							"vec4 texel = texture2D( tDiffuse, vUv );",
+							"vec4 glow = texture2D( tGlow, vUv );",
+							//"vec4 lumi = texture2D( tLumi, vUv );",
+							"gl_FragColor = texel + vec4(0.5, 0.75, 1.0, 1.0) * glow * 3.0;",
+
+						"}"
+					].join("\n")
+				};
+
+				finalshader.uniforms[ 'tGlow' ].texture = glowcomposer.renderTarget2;
+				//finalshader.uniforms[ 'tLumi' ].texture = saveGlowPass.renderTarget;
+				
+				var renderModel = new THREE.RenderPass( scene, camera );
+
+				var effectFocus = new THREE.ShaderPass( THREE.ShaderExtras[ "focus" ] );
+
+				effectFocus.uniforms[ "screenWidth" ].value = SCREEN_WIDTH;
+				effectFocus.uniforms[ "screenHeight" ].value = SCREEN_HEIGHT;
+
+				var finalPass = new THREE.ShaderPass( finalshader );
+				finalPass.needsSwap = true;
+
+				finalPass.renderToScreen = true;
+
+				renderTarget = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters );
+
+				finalcomposer = new THREE.EffectComposer( renderer, renderTarget );
+
+				finalcomposer.addPass( renderModel );
+				finalcomposer.addPass( effectFXAA );
+				finalcomposer.addPass( effectFocus );
+				finalcomposer.addPass( finalPass );
+
+
+
+			}
+
+			function createScene( geometry, x, y, z, b ) {
+
+				zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial() );
+				zmesh.position.set( x, y, z );
+				zmesh.scale.set( 3, 3, 3 );
+				zmesh.overdraw = true;
+				scene.add( zmesh );
+
+				var gtex = THREE.ImageUtils.loadTexture('tron/trondisk_glow.png');
+				gtex.needsUpdate = true;
+
+				var gmat = new THREE.MeshPhongMaterial( { map: gtex, ambient: 0xffffff, color: 0x000000 } );
+				var gmesh = new THREE.Mesh(geometry, gmat);
+				gmesh.position = zmesh.position;
+				gmesh.scale = zmesh.scale;
+				gmesh.overdraw = true;
+				glowscene.add(gmesh);
+			}
+
+			function createParticles()
+			{
+				var parent = new THREE.Object3D();
+				scene.add( parent );
+
+				// GLOW CONTAINER (used for occluder)
+				var glowparent = new THREE.Object3D();
+				glowparent.position = parent.position;
+				glowparent.rotation = parent.rotation;
+				glowparent.scale = parent.scale;
+				glowscene.add( glowparent );
+
+				/*var cube = new THREE.ParticleSystem( new THREE.PlaneGeometry( 120, 120, 60,60 ), new THREE.ParticleBasicMaterial( { color: 0x77bbff, size: 0.2 } ) );
+				cube.rotation.x = Math.PI/2;
+				cube.position.y = 40;
+				parent.add( cube );*/
+
+
+				// CUBE PARTICLES
+
+				var geometry = new THREE.Geometry();
+				var size = 100;
+				var center = size/2;
+				var step = 4;
+
+				var pixelTex = THREE.ImageUtils.loadTexture( "tron/pixel.png" );
+				pixelTex.minFilter = THREE.NearestFilter;
+				pixelTex.magFilter = THREE.NearestFilter;
+			
+				var material = new THREE.ParticleBasicMaterial( { size: 15, map: pixelTex, blending: THREE.AdditiveBlending, depthTest: true, transparent : true } );
+				material.color.setHex( COLOR1 );
+
+				for ( i = 0; i < size; i += step ) {
+					for( j = 0; j < size; j += step ) {
+
+						//vector = new THREE.Vector3( i-center, Math.random() * size, j-center );
+						vector = new THREE.Vector3( 
+							Math.cos(Math.random()*360)*size/2, 
+							Math.random() * size, 
+							Math.cos(Math.random()*360)*size/2 );
+						geometry.vertices.push( new THREE.Vertex( vector ) );
+					
+					}
+				}
+				var velocities = [];
+				for( i = 0; i < geometry.vertices.length; i++ )
+					velocities[i] = Math.random()*0.08+0.02;
+
+				var cube = new THREE.ParticleSystem( geometry, 
+					//new THREE.ParticleBasicMaterial({size: 0.4, color: COLOR1})
+					material 
+				);
+				cube.position.y = 30;
+				cube.dynamic = true;
+				cube.sortParticles = true;
+				parent.add( cube );
+
+				// GLYPH (BIG ONE)
+
+				var glyph = new THREE.Mesh( 
+					new THREE.IcosahedronGeometry(50, 2),
+					new THREE.MeshBasicMaterial({
+						color: COLOR1,
+						opacity: 1,
+						wireframe: true,
+						wireframeLinewidth: 4
+					})
+				);
+				glyph.position.y = size/2 + 30;
+				parent.add( glyph );
+
+				// GLYPH2 (CORE)
+				var glyph2geom = new THREE.IcosahedronGeometry(35, 1);
+				var glyph2 = new THREE.Mesh( 
+					glyph2geom,
+					new THREE.MeshPhongMaterial({
+						color: COLOR1,
+						specular: COLOR1,
+						shading: THREE.FlatShading,
+						opacity: 0.9,
+						ambient: 0x202830
+					})
+				);
+				glyph2.position.y = size/2 + 30;
+				parent.add( glyph2 );
+				
+
+				// GLYPHE2 WIREFRAME
+				var glyph2wf = new THREE.Mesh( 
+					THREE.GeometryUtils.clone( glyph2geom ),
+					new THREE.MeshBasicMaterial({
+						color: COLOR2,
+						wireframe: true,
+						opacity: 1,
+						wireframeLinewidth: 4
+					})
+				);
+				glyph2wf.position = glyph2.position;
+				glyph2wf.rotation = glyph2.rotation;
+				glyph2wf.scale.x = glyph2wf.scale.y = glyph2wf.scale.z = glyph2.scale.x + 0.01;
+				parent.add( glyph2wf );
+
+				// GLYPHE2 GLOW OCCLUDER
+				var glyph2oc = new THREE.Mesh( 
+					glyph2geom,
+					new THREE.MeshPhongMaterial({
+						color: 0x000000,
+						specular: 0x000000,
+						shading: THREE.FlatShading,
+						opacity: 0.9,
+						ambient: 0x000000
+					})
+				);
+				glyph2oc.position = glyph2.position;
+				glyph2oc.rotation = glyph2.rotation;
+				glyph2oc.scale.x = glyph2oc.scale.y = glyph2oc.scale.z = glyph2.scale.x;
+				glowparent.add( glyph2oc );
+
+				return {
+					container: parent,
+					system: cube,
+					vertices: geometry.vertices,
+					velocities: velocities,
+					size: size,
+					glyph: glyph,
+					glyph2: glyph2
+				};
+			}
+
+			function onDocumentMouseMove(event) {
+
+				mouseX = ( event.clientX - windowHalfX );
+				mouseY = ( event.clientY - windowHalfY );
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			var t = 0.0;
+
+			function render() {
+				t += .01;
+
+				// PARTICLES
+				for( i = 0; i < particles.vertices.length; i++ )
+				{
+					var p = particles.vertices[i];
+					p.position.y += particles.velocities[i];
+					if( p.position.y > particles.size)
+						p.position.y = 0;
+				}
+				//particles.container.rotation.y += 0.002;
+				particles.glyph.rotation.x += 0.004;
+				particles.glyph.rotation.z -= 0.003;
+				particles.glyph2.rotation.x -= 0.004;
+				particles.glyph2.rotation.z += 0.003;
+
+				camera.position.x += ( mouseX/4 - camera.position.x ) * .05;
+				camera.position.y += ( - mouseY/2 +100 - camera.position.y ) * .05;
+
+				camera.lookAt( target );
+				glowcamera.lookAt( target );
+				//pointLight.position.set( 0, Math.cos(t)*200, 0 );
+
+				glowcomposer.render( 0.1 );
+				finalcomposer.render( 0.1 );
+			}
+
+			init();
+			animate();
+		</script>
+
+	</body>
+</html>

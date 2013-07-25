@@ -65,13 +65,16 @@ tQuery.Node.prototype.back	= function(value)
 
 /**
  * same as .data() in jquery
+ * @param {String} key the key/name of the data to get/set
+ * @param {*} value the value to set (optional)
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
 */
-tQuery.Node.prototype.data	= function(key, value)
+tQuery.Node.prototype.data	= function(key, value, mustNotExist)
 {
 	// handle the setter case
 	if( value !== undefined ){
 		this.each(function(element){
-			tQuery.data(element, key, value);
+			tQuery.data(element, key, value, mustNotExist);
 		});
 		return this;	// for chained API
 	}

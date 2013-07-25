@@ -11,7 +11,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowma
 	world.tCamera().position.y	= 5;
 	world.tCamera().position.z	= 15;
 	world.tCamera().position.normalize().setLength(2.5)
-	world.tCamera().lookAt(world.tScene().position.clone().addSelf(new THREE.Vector3(0.5,0.5,0)));
+	world.tCamera().lookAt(world.tScene().position.clone().add(new THREE.Vector3(0.5,0.5,0)));
 
 
 	// add a light with shadow casting
@@ -37,7 +37,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowma
 	}).addTo(world).scaleBy(100).receiveShadow(true);
 
 	var character	= new tQuery.MinecraftChar({
-		skinUrl	: "../../minecraft/examples/images/agentsmith.png"
+		skinUrl	: "../../minecraft/images/agentsmith.png"
 	});
 	var character3D	= character.object3D();
 	character3D.addTo(world)
@@ -55,7 +55,7 @@ require(['tquery.pproc', 'tquery.skymap', 'tquery.grassground', 'tquery.shadowma
 
 	// load the spritesheet
 	var items	= new tQuery.Spritesheet({
-		url	: '../../minecraft/examples/images/items/items.png',
+		url	: '../../minecraft/images/items/items.png',
 		imgW	: 256,
 		imgH	: 256,
 		spriteW	: 16,

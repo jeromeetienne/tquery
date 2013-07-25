@@ -63,7 +63,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r58.0";
+tQuery.VERSION	= "r59.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -75,7 +75,7 @@ tQuery.VERSION	= "r58.0";
  * @param {Object} object the object in which store the data
  * @param {String} key the key/name of the data to get/set
  * @param {*} value the value to set (optional)
- * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to false
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
  * 
  * @returns {*} return the value stored in this object for this key
 */
@@ -157,7 +157,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i], i)
+		var keepLooping	= callback(arr[i], i, arr)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -418,5 +418,34 @@ tQuery.MicroCache	= function(){
 		}
 	}
 }
+
+
+/**
+ * mixin for the creator pattern - From https://github.com/jeromeetienne/creatorpattern.js
+ * 
+ * @param  {Function} klass the constructor function of the class
+ * @param  {String|undefined} name  the name of the class
+ */
+tQuery.mixinCreatorPattern	= function(klass, name){
+	// js code for the creator pattern
+	var jsCode	= [
+		"klass.create = (function() {",
+		"	function F(args) {",
+		"		return klass.apply(this, args);",
+		"	}",
+		"	F.prototype = klass.prototype;",
+		"	return function(){",
+		"		return new F(arguments);",
+		"	}",
+		"})()",
+	].join('\n')
+	// handle klass name default value
+	// - if the name isnt explicitly given, get the name of the constructor function
+	name	= name || klass.name
+	// replace the F class with the proper name
+	jsCode	= name ? jsCode.replace(/F/g, name) : jsCode
+	// eval the code
+	eval(jsCode)
+};
 
 

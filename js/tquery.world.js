@@ -16,7 +16,7 @@ tQuery.World	= function(opts)
 	opts	= tQuery.extend(opts, {
 		renderW		: window.innerWidth,
 		renderH		: window.innerHeight,
-		webGLNeeded	: true, 
+		webGLNeeded	: true,
 		autoRendering	: true,
 		scene		: null,
 		camera		: null,
@@ -61,14 +61,16 @@ tQuery.World	= function(opts)
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
+		this._tRenderer.setClearColor( 0xBBBBBB, 1 );
+		this._tRenderer.setSize( opts.renderW, opts.renderH );
 	}else if( !opts.webGLNeeded ){
 		this._tRenderer	= new THREE.CanvasRenderer();
+		this._tRenderer.setClearColor( 0xBBBBBB, 1 );
+		this._tRenderer.setSize( opts.renderW, opts.renderH );
 	}else{
 		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
-	this._tRenderer.setClearColor( 0xBBBBBB, 1 );
-	this._tRenderer.setSize( opts.renderW, opts.renderH );
 };
 
 // make it pluginable

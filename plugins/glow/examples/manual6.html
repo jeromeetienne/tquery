@@ -1,0 +1,103 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<body><script>
+tQuery.Object3D.registerInstance('mergePosRotScaleOf', function(tObject3D){
+	if( tObject3D instanceof tQuery.Object3D ) tObject3D = tObject3D.get(0)
+	console.assert( tObject3D instanceof THREE.Object3D )
+
+	this.get(0).position	= tObject3D.position
+	this.get(0).rotation	= tObject3D.rotation
+	this.get(0).scale	= tObject3D.scale
+	return this;
+})
+require(['tquery.pproc', 'tquery.skymap', 'tquery.minecraft', 'tquery.keyboard'], function(){
+
+
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tRenderer().setClearColor('black', 0)
+	
+
+	var ctxGlow	= initCtxGlow(world)
+	var worldGlow	= ctxGlow.world
+	tQuery.world	= world
+
+
+	var mesh	= tQuery.createTorus().addTo(world).scaleBy(5)
+	world.hook(function(delta, now){
+		mesh.rotateY(0.5*Math.PI*2*delta)
+	})
+	var cube1	= tQuery.createCube().addTo(world).position(-1, 0, 1)
+	var cube2	= tQuery.createCube().addTo(world).position( 1, 0,-1)
+
+
+	var materialOn	= tQuery.createMeshBasicMaterial().color('white')
+	var materialOff	= tQuery.createMeshBasicMaterial().color('black')
+	
+	var meshGlow	= tQuery.createTorus(materialOn).addTo(worldGlow)
+		.mergePosRotScaleOf(mesh)
+
+	var cube1Glow	= tQuery.createCube(materialOff).addTo(worldGlow)
+		.mergePosRotScaleOf(cube1)
+	
+	var cube2Glow	= tQuery.createCube(materialOff).addTo(worldGlow)
+		.mergePosRotScaleOf(cube2)
+	
+
+
+	var composer	= tQuery.createEffectComposer({
+			world	: world,
+		})
+		.renderPass()
+		.blendPass(ctxGlow.renderTarget)
+		.finish();
+
+
+
+	function initCtxGlow(parentWorld){
+
+		// setup the RenderTarget
+		var textureW	= window.innerWidth
+		var textureH	= window.innerHeight
+		var renderTarget= new THREE.WebGLRenderTarget(textureW, textureH, {
+			minFilter	: THREE.LinearFilter,
+			magFilter	: THREE.NearestFilter,
+			format		: THREE.RGBFormat
+		})
+
+		var world	= tQuery.createWorld({
+			renderer	: parentWorld.tRenderer(),
+			camera		: parentWorld.camera().get(0)
+		});
+		tQuery.world	= parentWorld;
+		parentWorld.loop().hook(function(delta, now){
+			world.loop().tick()
+		});
+
+		var composer	= tQuery.createEffectComposer({
+			world		: world,
+			renderTarget	: renderTarget
+		})
+		composer.renderPass()
+		var blurLevel	= 3
+		composer.horizontalBlur(blurLevel)
+		composer.verticalBlur(blurLevel)
+		composer.horizontalBlur(blurLevel)
+		composer.verticalBlur(blurLevel)
+			// .sepia()
+		// Without this copy the composer doesnt show the first effects... FIXME i dunno why
+		composer.copy().copy()
+		composer.finish()
+
+console.log('composer', composer)
+
+
+		var exports		= {}
+		exports.renderTarget	= composer.tComposer().readBuffer;		
+		exports.world		= world;
+		return exports;
+	}
+
+
+});
+</script></body>

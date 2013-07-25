@@ -1,0 +1,85 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<body><script>
+require(['tquery.pproc', 'tquery.skymap', 'tquery.minecraft', 'tquery.keyboard'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+	//world.removeCameraControls()
+	world.tRenderer().setClearColor( 0x000000, 0 );
+	// your code goes here
+	var composer	= tQuery.createEffectComposer()
+
+	// setup the RenderTarget
+	var textureW	= window.innerWidth;
+	var textureH	= window.innerHeight;
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
+	});
+	var tSceneGlow	= new THREE.Scene();
+	var tCameraGlow	= new THREE.PerspectiveCamera(45, textureW/textureH, 0.01, 10000 );
+	tCameraGlow.position	= world.camera().get(0).position;
+	tCameraGlow.rotation	= world.camera().get(0).rotation;
+	tSceneGlow.add(tCameraGlow);
+
+	var meshGlow	= tQuery.createTorus().addTo(tSceneGlow)
+		.scaleBy(2)
+	
+	// your code goes here
+	var cubeFrontGlow	= tQuery.createCube().addTo(tSceneGlow)
+		.position(-1,0,2)
+	var cubeBackGlow	= tQuery.createCube().addTo(tSceneGlow)
+		.position( 1,0,-2)
+
+	var glowRenderer	= world.tRenderer();
+	world.loop().hookPostRender(function(delta, now){
+		var tScene	= tSceneGlow
+		var tCamera	= world.camera().get(0)
+		glowRenderer.render(tSceneGlow, tCameraGlow, rtTexture, true);
+	})
+
+	var cubeFront	= tQuery.createCube().addTo(world)
+		.setBasicMaterial()
+			.color('black')
+			.back()
+	cubeFront.get(0).position	= cubeFrontGlow.get(0).position
+	var cubeBack	= tQuery.createCube().addTo(world)
+		.setBasicMaterial()
+			.color('black')
+			.back()
+	cubeBack.get(0).position	= cubeBackGlow.get(0).position
+
+
+	var tGeometry	= meshGlow.geometry().get(0).clone()
+	var tMaterial	= tQuery.createMeshBasicMaterial()
+		.color(0x88ccff)
+
+	var object	= tQuery(tGeometry, tMaterial)
+		.addTo(world)
+		.scaleBy(2)
+
+
+	composer.renderPass()
+	composer.copy()
+	var blurLevel	= 3
+	composer.horizontalBlur(blurLevel)
+	composer.verticalBlur(blurLevel)
+	composer.horizontalBlur(blurLevel)
+	composer.verticalBlur(blurLevel)
+	composer.horizontalBlur(blurLevel)
+	composer.verticalBlur(blurLevel)
+
+
+	var texture	= THREE.ImageUtils.loadTexture('../../assets/images/rocks.jpg');
+	var effectBlend	= new THREE.ShaderPass( THREE.BlendShader, 'tDiffuse1');
+	effectBlend.uniforms['tDiffuse2' ].value	= rtTexture;
+	effectBlend.uniforms['mixRatio' ].value		= 0.8;
+	effectBlend.uniforms['opacity' ].value		= 2;
+	composer._tComposer.addPass( effectBlend );
+
+	composer.finish();
+
+	// console.dir(composer.tComposer())
+});
+</script></body>

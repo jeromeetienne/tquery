@@ -1,0 +1,70 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<body><script>
+require(['tquery.pproc'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	world.removeCameraControls()
+	// your code goes here
+
+	// setup the RenderTarget
+	var textureW	= 1024;
+	var textureH	= 1024;
+	var rtTexture	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBAFormat
+	});
+
+	var tSceneGlow	= new THREE.Scene();
+	var tCameraGlow	= new THREE.PerspectiveCamera(45, textureW/textureH, 0.01, 10000 );
+	tCameraGlow.position	= world.camera().get(0).position;
+	tCameraGlow.rotation	= world.camera().get(0).rotation;
+	tSceneGlow.add(tCameraGlow);
+//	THREEx.WindowResize.bind(rtTexture, tCameraGlow)
+
+	torus	= tQuery.createTorus().addTo(tSceneGlow)
+		.scaleBy(2)
+	
+	// var glowRenderer	= new THREE.WebGLRenderer();
+	// //glowRenderer.autoClear = true;
+	// glowRenderer.setSize( textureW, textureH );
+	var glowRenderer	= world.tRenderer();
+console.dir(glowRenderer)
+	world.hook(function(delta, now){
+		var tScene	= tSceneGlow
+		var tCamera	= world.camera().get(0)
+		glowRenderer.autoClear	= true;
+		glowRenderer.render(tSceneGlow, tCameraGlow, rtTexture, true);
+		glowRenderer.autoClear	= false;
+	})
+	
+	world.hook(function(delta, now){
+		torus.rotateY(delta * Math.PI * 2 * 1)
+	})	
+
+	var object	= tQuery.createPlane().addTo(world)
+		.scaleBy(2)
+		.setBasicMaterial()
+			.color('red')
+			//.map(rtTexture)
+			.map('../../assets/images/ash_uvgrid01.jpg')
+			.back()
+
+	var composer	= tQuery.createEffectComposer()
+	 	.renderPass()
+
+
+
+	effectBlend.uniforms[ 'tDiffuse2' ].value = effectSave.renderTarget;
+	effectBlend.uniforms[ 'mixRatio' ].value = 0.65;
+
+	var effect	= new THREE.ShaderPass( blendShader );
+	composer._tComposer.addPass( effect );
+
+	composer.finish();
+
+	// console.dir(composer.tComposer())
+});
+</script></body>

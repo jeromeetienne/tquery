@@ -1,0 +1,20 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<script src="../../../vendor/three.js/examples/js/shaders/BlendShader.js"></script>
+<body><script>
+require(['tquery.pproc'], function(){
+	var world	= tQuery.createWorld().boilerplate().start();
+
+	// setup the RenderTarget
+	var textureW	= 1024;
+	var textureH	= 1024;
+	var rtTextureGlow	= new THREE.WebGLRenderTarget(textureW, textureH, {
+		minFilter	: THREE.LinearFilter,
+		magFilter	: THREE.NearestFilter,
+		format		: THREE.RGBFormat
+	});
+	var torusGlow	= tQuery.createTorus().addTo(tSceneGlow)
+		.scaleBy(2)
+	
+});
+</script></body>

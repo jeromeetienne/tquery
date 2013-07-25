@@ -1,0 +1,66 @@
+<!doctype html><title>Minimal tQuery Page</title>
+<script src="../../../build/tquery-bundle-require.js"></script>
+<body><script>
+require(['tquery.tween'], function(){
+	var world	= tQuery.createWorld().boilerplate().defaultPageTitle().start();
+	
+	world.removeCameraControls()
+	
+	var smokePuff	= (function(){
+		// load the texture
+		var texture	= THREE.ImageUtils.loadTexture('../../../plugins/particles/images/cloud10.png')
+		return function(position){
+			// randomize the initial position
+			position	= position.clone();
+			position.x	+= (Math.random()-0.5)*0.3;
+			position.y	+= (Math.random()-0.5)*0.1;
+			position.z	+= (Math.random()-0.5)*0.3;
+			// init material
+			var material	= tQuery.createSpriteMaterial()
+				.map(texture)
+				.color(0x666666)
+			// init sprite
+			var sprite	= tQuery.createSprite(material).addTo(world)
+				.position(position)
+				.rotation(Math.random() * Math.PI*2)
+			
+			var maxAge	= 1 + Math.random()*0.4;
+			// set velocity
+			var velocity	= tQuery.createVector3(0, 1, 0)
+			velocity.x	+= (Math.random()-0.5)*0.5;
+			velocity.y	+= (Math.random()-0.5)*0.1;
+			velocity.z	+= (Math.random()-0.5)*0.5;
+			velocity.setLength(3 + (Math.random()-0.5)*0.5)
+			// init opacity
+			var age2Opacity	= tQuery.createTweenMidi(maxAge, 0.05*maxAge, 0.4*maxAge);
+			material.opacity( age2Opacity(0) )
+			
+			var birthDate	= tQuery.nowSeconds();
+			var callback	= world.hook(function(delta, now){
+				var age	= now - birthDate;
+				if( age >= maxAge ){
+					sprite.detach()
+					world.unhook(callback)
+					return;	
+				}
+				// handle friction
+				velocity.multiplyScalar( 0.96 )
+				// move by velocity
+				sprite.translate( velocity.clone().multiplyScalar(delta) )
+				// make it grow
+				sprite.scaleBy( 1.005 )
+				// handle opacity
+				material.opacity( age2Opacity(age) )
+			})
+		}
+	})();
+
+	// emit 3 puff every seconds
+	setInterval(function(){
+		var position	= tQuery.createVector3(0,-1,-2)
+		smokePuff(position);
+		smokePuff(position);
+		smokePuff(position);
+	}, 1*1000);
+});
+</script></body>

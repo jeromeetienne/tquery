@@ -26,20 +26,23 @@ tQuery.World.prototype.removeEffectComposer	= function(){
 tQuery.registerStatic('EffectComposer', function(opts){
 	// handle parameters
 	this._opts	= opts	= tQuery.extend(opts, {
-		world	: tQuery.world,
-		back	: null
-	});
-	console.assert(opts.world);
+		world		: tQuery.world,
+		renderTarget	: undefined,
+		back		: null,
+	})
+	console.assert(opts.world)
 
-	var world	= opts.world;
-	var tRenderer	= world.tRenderer();
+	var world	= opts.world
+	var tRenderer	= world.tRenderer()
+	var renderTarget= this._opts.renderTarget
 
-	this._tComposer	= new THREE.EffectComposer( tRenderer );
+	this._tComposer	= new THREE.EffectComposer( tRenderer, renderTarget );
 
 	world.autoRendering(false);
-	tRenderer.autoClear = false;
+	//tRenderer.autoClear = false;
 
 	world.loop().hookOnRender(function(delta, now){
+		// TODO to put back
 		tRenderer.clear();
 		this._tComposer.render(delta);
 	}.bind(this))
@@ -62,7 +65,6 @@ tQuery.EffectComposer.prototype.finish	= function(){
 	if( composer.passes.length === 0 )	return this;
 	
 	composer.passes[composer.passes.length -1 ].renderToScreen	= true;
-
 	return this._opts.back;
 };
 
@@ -71,6 +73,14 @@ tQuery.EffectComposer.prototype.back		= tQuery.EffectComposer.prototype.finish;
 //////////////////////////////////////////////////////////////////////////////////
 //		List of all the Passes						//
 //////////////////////////////////////////////////////////////////////////////////
+
+tQuery.EffectComposer.prototype.plainPass	= function(effect){
+	// add the effect
+	this._tComposer.addPass( effect );
+	return this;	// for chained API
+};
+
+
 
 tQuery.EffectComposer.prototype.renderPass	= function(scene, camera){
 	// handle parameters default values
@@ -165,11 +175,11 @@ tQuery.EffectComposer.prototype.bleachbypass	= function(opacity){
 	return this;	// for chained API
 };
 
-tQuery.EffectComposer.prototype.screen	= function(opacity){
+tQuery.EffectComposer.prototype.copy	= function(opacity){
 	// handle parameters default values
-	opacity	= opacity !== undefined ? opacity	: 0.95;
+	opacity	= opacity !== undefined ? opacity	: 1.0;
 	// create the effect
-	var effect	= new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );
+	var effect	= new THREE.ShaderPass( THREE.CopyShader );
 	// setup the effect
 	effect.uniforms[ "opacity" ].value = opacity;
 	// add the effect
@@ -184,7 +194,7 @@ tQuery.EffectComposer.prototype.horizontalBlur	= function(h){
 	var effect	= new THREE.ShaderPass( THREE.HorizontalBlurShader );
 	// setup the effect
 	// TODO how to handle this renderer size thing
-	effect.uniforms[ 'h' ].value		= h / ( window.innerWidth/2 );
+	effect.uniforms[ 'h' ].value	= h / window.innerWidth;
 	// add the effect
 	this._tComposer.addPass( effect );
 	return this;	// for chained API
@@ -197,11 +207,36 @@ tQuery.EffectComposer.prototype.verticalBlur	= function(v){
 	var effect	= new THREE.ShaderPass( THREE.VerticalBlurShader );
 	// setup the effect
 	// TODO how to handle this renderer size thing
-	effect.uniforms[ 'v' ].value	= v / ( window.innerHeight/2 );
+	effect.uniforms[ 'v' ].value	= v / window.innerHeight;
 	// add the effect
 	this._tComposer.addPass( effect );
 	return this;	// for chained API
 }
+
+tQuery.EffectComposer.prototype.texturePass	= function(texture, opacity){
+	// let default to original function
+	// create the effect
+	var effect	= new THREE.TexturePass(texture, opacity);
+	// add the effect
+	this._tComposer.addPass( effect );
+	return this;	// for chained API
+}
+
+tQuery.EffectComposer.prototype.blendPass	= function(texture, mixRatio, opacity){
+	// handle parameters default values
+	mixRatio	= mixRatio	!== undefined ? mixRatio	: 0.5;
+	opacity		= opacity	!== undefined ? opacity 	: 2.0;
+	// create the effect
+	var pass	= new THREE.ShaderPass( THREE.BlendShader, 'tDiffuse1');
+	// setup the effect
+	pass.uniforms['tDiffuse2' ].value	= texture;
+	pass.uniforms['mixRatio' ].value	= mixRatio;
+	pass.uniforms['opacity' ].value		= opacity;
+	// add the effect
+	this._tComposer.addPass( pass );
+	return this;	// for chained API
+}
+
 
 tQuery.EffectComposer.prototype.motionBlur	= function(mixRatio){
 	// handle parameters default values

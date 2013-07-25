@@ -80,6 +80,11 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
+	// tick once
+	this.tick();
+}
+
+tQuery.Loop.prototype.tick	= function(){
 	// update time values
 	var now		= tQuery.nowSeconds();
 	// init _lastTime if needed
@@ -88,7 +93,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	var minLastTime	= now - tQuery.Loop.maxDelta;
 	if( this._lastTime < minLastTime ){
 		this._lastTime	= minLastTime;
-		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+		//console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
 	}
 	// compute delta
 	var delta	= now - this._lastTime;

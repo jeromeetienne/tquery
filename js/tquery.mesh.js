@@ -48,7 +48,7 @@ tQuery.Mesh.prototype.material	= function(value){
 	// handle parameter polymorphism
 	if( value instanceof tQuery.Material )	value	= value.get(0)
 	// sanity check
-	console.assert( value instanceof THREE.Material )
+	console.assert( value instanceof THREE.Material || value instanceof THREE.FaceMaterial )
 	// handle the setter case
 	this.each(function(tMesh){
 		tMesh.material	= value;

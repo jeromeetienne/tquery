@@ -64,7 +64,7 @@ var tQuery	= function(object, root)
 /**
  * The version of tQuery
 */
-tQuery.VERSION	= "r58.0";
+tQuery.VERSION	= "r59.0";
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -76,7 +76,7 @@ tQuery.VERSION	= "r58.0";
  * @param {Object} object the object in which store the data
  * @param {String} key the key/name of the data to get/set
  * @param {*} value the value to set (optional)
- * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to false
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
  * 
  * @returns {*} return the value stored in this object for this key
 */
@@ -158,7 +158,7 @@ tQuery.removeData	= function(object, key, mustExist)
 */
 tQuery.each	= function(arr, callback){
 	for(var i = 0; i < arr.length; i++){
-		var keepLooping	= callback(arr[i], i)
+		var keepLooping	= callback(arr[i], i, arr)
 		if( keepLooping === false )	return false;
 	}
 	return true;
@@ -421,6 +421,35 @@ tQuery.MicroCache	= function(){
 }
 
 
+/**
+ * mixin for the creator pattern - From https://github.com/jeromeetienne/creatorpattern.js
+ * 
+ * @param  {Function} klass the constructor function of the class
+ * @param  {String|undefined} name  the name of the class
+ */
+tQuery.mixinCreatorPattern	= function(klass, name){
+	// js code for the creator pattern
+	var jsCode	= [
+		"klass.create = (function() {",
+		"	function F(args) {",
+		"		return klass.apply(this, args);",
+		"	}",
+		"	F.prototype = klass.prototype;",
+		"	return function(){",
+		"		return new F(arguments);",
+		"	}",
+		"})()",
+	].join('\n')
+	// handle klass name default value
+	// - if the name isnt explicitly given, get the name of the constructor function
+	name	= name || klass.name
+	// replace the F class with the proper name
+	jsCode	= name ? jsCode.replace(/F/g, name) : jsCode
+	// eval the code
+	eval(jsCode)
+};
+
+
 tQuery.convert	= {};
 
 /**
@@ -669,13 +698,16 @@ tQuery.Node.prototype.back	= function(value)
 
 /**
  * same as .data() in jquery
+ * @param {String} key the key/name of the data to get/set
+ * @param {*} value the value to set (optional)
+ * @param {Boolean} mustNotExist if true, ensure that the key doesnt already exist, optional default to true
 */
-tQuery.Node.prototype.data	= function(key, value)
+tQuery.Node.prototype.data	= function(key, value, mustNotExist)
 {
 	// handle the setter case
 	if( value !== undefined ){
 		this.each(function(element){
-			tQuery.data(element, key, value);
+			tQuery.data(element, key, value, mustNotExist);
 		});
 		return this;	// for chained API
 	}
@@ -923,6 +955,22 @@ tQuery.Object3D.prototype.remove	= function(object3D)
 //		Handle dom attribute						//
 //////////////////////////////////////////////////////////////////////////////////
 
+tQuery.Object3D.prototype.name	= function(value){
+	// sanity check 
+	console.assert(this.length <= 1, "tQuery.Object3D.id used on multi-elements" );
+	// handle getter
+	if( value === undefined ){
+		if( this.length === 0 )	return undefined;
+		var tObject3d	= this.get(0);
+		return tObject3d.name;
+	}
+	// handle setter
+	if( this.length === 0 )	return undefined;
+	var tObject3d	= this.get(0);
+	tObject3d.name	= value;
+	return this;
+}
+
 /**
  * Getter/Setter for the id of the matched elements
 */
@@ -1080,6 +1128,24 @@ tQuery.Object3D._selectItemMatch	= function(object3d, selectItem)
 			return hasClass ? true : false;
 		}else if( meta === "#" ){
 			return object3d._tqId === suffix ? true : false;
+		}else if( meta === "[" ){
+			var matches	= subItem.match(/\[(.*)([=])(.*)\]/);
+			var key		= matches[1]
+			var operator	= matches[2]
+			var value	= matches[3]
+				.replace(/^['"]/, '')	// remove left "'
+				.replace(/['"]$/, '')	// remove right "'
+			if( key === 'name'){
+				if( operator === '=' ){
+					return object3d.name === value ? true : false;
+				}else{
+					console.assert('operator not handled')
+				}
+			}else{
+				console.assert(false, 'key not handled:', key)
+			}
+			console.assert(false, 'this point should never be reached')
+			return undefined;
 		}else if( subItem === "*" ){
 			return true;
 		}else if( this._selectableGeometries.indexOf(subItem) !== -1 ){	// Handle geometries
@@ -1262,7 +1328,7 @@ tQuery.Mesh.prototype.material	= function(value){
 	// handle parameter polymorphism
 	if( value instanceof tQuery.Material )	value	= value.get(0)
 	// sanity check
-	console.assert( value instanceof THREE.Material )
+	console.assert( value instanceof THREE.Material || value instanceof THREE.FaceMaterial )
 	// handle the setter case
 	this.each(function(tMesh){
 		tMesh.material	= value;
@@ -1360,7 +1426,7 @@ tQuery.World	= function(opts)
 	opts	= tQuery.extend(opts, {
 		renderW		: window.innerWidth,
 		renderH		: window.innerHeight,
-		webGLNeeded	: true, 
+		webGLNeeded	: true,
 		autoRendering	: true,
 		scene		: null,
 		camera		: null,
@@ -1405,14 +1471,16 @@ tQuery.World	= function(opts)
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true	// to allow screenshot
 		});
+		this._tRenderer.setClearColor( 0xBBBBBB, 1 );
+		this._tRenderer.setSize( opts.renderW, opts.renderH );
 	}else if( !opts.webGLNeeded ){
 		this._tRenderer	= new THREE.CanvasRenderer();
+		this._tRenderer.setClearColor( 0xBBBBBB, 1 );
+		this._tRenderer.setSize( opts.renderW, opts.renderH );
 	}else{
 		this._addGetWebGLMessage();
 		throw new Error("WebGL required and not available")
 	}
-	this._tRenderer.setClearColor( 0xBBBBBB, 1 );
-	this._tRenderer.setSize( opts.renderW, opts.renderH );
 };
 
 // make it pluginable
@@ -1712,6 +1780,11 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	this._timerId	= requestAnimationFrame( this._onAnimationFrame.bind(this) );
 
+	// tick once
+	this.tick();
+}
+
+tQuery.Loop.prototype.tick	= function(){
 	// update time values
 	var now		= tQuery.nowSeconds();
 	// init _lastTime if needed
@@ -1720,7 +1793,7 @@ tQuery.Loop.prototype._onAnimationFrame	= function()
 	var minLastTime	= now - tQuery.Loop.maxDelta;
 	if( this._lastTime < minLastTime ){
 		this._lastTime	= minLastTime;
-		console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
+		//console.warn('last loop update is older than max', tQuery.Loop.maxDelta.toFixed(3), 'seconds! throttling it to max value.')		
 	}
 	// compute delta
 	var delta	= now - this._lastTime;
@@ -1947,6 +2020,8 @@ tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 	// if the last arguments is a material, use it
 	if( args.length && args[args.length-1] instanceof THREE.Material ){
 		material	= args.pop();
+	}else if( args.length && args[args.length-1] instanceof tQuery.Material ){
+		material	= args.pop().get(0);
 	}
 	
 	// ugly trick to get .apply() to work 
@@ -2266,6 +2341,7 @@ tQuery.mixinAttributes(tQuery.MeshBasicMaterial, {
 	map			: tQuery.convert.toTexture,
 	envMap			: tQuery.convert.toTextureCube,
 	refractionRatio		: tQuery.convert.toNumber,
+	blending		: tQuery.convert.toNumber,
 	side			: tQuery.convert.identity,
 	wireframe		: tQuery.convert.toBoolean,
 	wireframeLinewidth	: tQuery.convert.toInteger,
@@ -2781,7 +2857,9 @@ tQuery.Object3D.registerInstance('rotation', function(vector3){
 	console.assert(vector3 instanceof THREE.Vector3, "Object3D.rotation parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.copy(vector3);
+		object3d.rotation.x	= vector3.x
+		object3d.rotation.y	= vector3.y
+		object3d.rotation.z	= vector3.z
 	})
 	// return this, to get chained API	
 	return this;
@@ -2815,7 +2893,9 @@ tQuery.Object3D.registerInstance('rotate', function(angles){
 	console.assert(angles instanceof THREE.Vector3, "Object3D.rotate parameter error");
 	// do the operation on each node
 	this.each(function(object3d){
-		object3d.rotation.add(angles);
+		object3d.rotation.x	+= angles.x
+		object3d.rotation.y	+= angles.y
+		object3d.rotation.z	+= angles.z
 	})
 	// return this, to get chained API	
 	return this;
@@ -2843,8 +2923,8 @@ tQuery.Object3D.registerInstance('scale', function(vector3){
 	// sanity check
 	console.assert(vector3 instanceof THREE.Vector3, "Object3D.scale parameter error");
 	// do the operation on each node
-	this.each(function(object3d){
-		object3d.scale.copy(vector3);
+	this.each(function(tObject3d){
+		tObject3d.scale.copy(vector3);
 	});
 	// return this, to get chained API	
 	return this;

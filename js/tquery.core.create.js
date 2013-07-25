@@ -145,6 +145,8 @@ tQuery.registerStatic('_createMesh', function(ctor, dflGeometry, args)
 	// if the last arguments is a material, use it
 	if( args.length && args[args.length-1] instanceof THREE.Material ){
 		material	= args.pop();
+	}else if( args.length && args[args.length-1] instanceof tQuery.Material ){
+		material	= args.pop().get(0);
 	}
 	
 	// ugly trick to get .apply() to work 
