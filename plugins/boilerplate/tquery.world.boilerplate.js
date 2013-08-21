@@ -11,7 +11,9 @@ tQuery.World.registerInstance('boilerplate', function(opts){
 	domElement.style.padding	= "0";
 	domElement.style.overflow	= 'hidden';
 	this.appendTo(domElement);
-	this.tRenderer().setSize( domElement.offsetWidth, domElement.offsetHeight );
+	// this.tRenderer().setSize( domElement.offsetWidth, domElement.offsetHeight );
+	// domElement.offsetHeight seems 4px more than window.innerHeight - no idea why 
+	this.tRenderer().setSize( window.innerWidth, window.innerHeight );
 	
 	// add the boilerplate
 	this.addBoilerplate(opts);
