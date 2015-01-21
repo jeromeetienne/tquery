@@ -52,8 +52,8 @@ var StatsMemory = function (){
 
 	// sanity check	- 
 	if( memory.totalJSHeapSize === 0 ){
-		// open -a "/Applications/Google Chrome.app" --args --enable-memory-info
-		console.warn('totalJSHeapSize === 0... for chrome use --enable-memory-info. other browsers dont have this feature.')
+		// open -a "/Applications/Google Chrome.app" --args --enable-precise-memory-info
+		console.warn('totalJSHeapSize === 0... performance.memory is only available in Chrome.')
 	}
 
 	var lastTime	= Date.now();
